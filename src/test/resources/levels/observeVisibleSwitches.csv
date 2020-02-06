@@ -1,0 +1,12 @@
+button0
+button1
+button2
+button3
+button4
+|w,w,w,w,w,w,w
+w,f:b^button0,f,f:b^button1,f,f:b^button2,w
+w,f,w,f,w,f,w
+w,f,f,f:a^agent0,f,f,w
+w,f,w,f,w,f,w
+w,f:b^button3,f,f,f,f:b^button4,w
+w,w,w,w,w,w,w

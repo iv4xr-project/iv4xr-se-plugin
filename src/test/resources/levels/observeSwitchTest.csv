@@ -1,0 +1,5 @@
+button0
+|w,w,w
+w,f:b^button0,w
+w,f:a^agent0,w
+w,w,w
