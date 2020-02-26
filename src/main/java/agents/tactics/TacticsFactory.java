@@ -42,7 +42,7 @@ public class TacticsFactory {
                     if(belief.getGoalLocation().distance(position) > 0.01){
                         belief.mentalMap.applyPath(position, path);
                     }
-                    Observation o = belief.env().moveToward(belief, belief.getNextWayPoint());//move towards the next way point
+                    Observation o = belief.env().moveToward(belief.id, belief.position, belief.getNextWayPoint());//move towards the next way point
                     belief.markObservation(o);
                     return belief;
                 }).on((BeliefState belief) -> {
@@ -70,7 +70,7 @@ public class TacticsFactory {
                     if(belief.getGoalLocation().distance(p.object1) > 0.01){
                         belief.mentalMap.applyPath(p.object1, p.object2);
                     }
-                    Observation o = belief.env().moveToward(belief, belief.getNextWayPoint());//move towards the next way point
+                    Observation o = belief.env().moveToward(belief.id, belief.position, belief.getNextWayPoint());//move towards the next way point
                     belief.markObservation(o);
                     return belief;
                 }).on((BeliefState belief) -> {
@@ -97,7 +97,7 @@ public class TacticsFactory {
     public static Tactic interact(String objectID) {
         Tactic interact = action("Interact").
                 do1((BeliefState belief) -> {
-                    Observation o = belief.env().interactWith(belief, objectID);
+                    Observation o = belief.env().interactWith(belief.id, objectID);
                     belief.markObservation(o);
                     return belief;
                 }).on_((BeliefState belief) -> belief.position != null && belief.canInteract(objectID))
@@ -113,7 +113,7 @@ public class TacticsFactory {
         //this is a wait action which will allow the agent to retrieve an observation
         Tactic observe = action("Observe")
                 .do1((BeliefState belief) -> {
-                    Observation o = belief.env().doNothing(belief);
+                    Observation o = belief.env().observe(belief.id);
                     belief.markObservation(o);
                     return belief;
                 }).lift();
@@ -124,7 +124,7 @@ public class TacticsFactory {
         //this is a wait action which will allow the agent to retrieve an observation
         Tactic observe = action("Observe once")
                 .do1((BeliefState belief) -> {
-                    Observation o = belief.env().doNothing(belief);
+                    Observation o = belief.env().observe(belief.id);
                     belief.markObservation(o);
                     return belief;
                 }).on((BeliefState b) -> !b.didNothingPreviousTurn).lift();
@@ -140,7 +140,7 @@ public class TacticsFactory {
         return action("Share memory")
                 . do1((BeliefState belief)-> {
                     //do an observation
-                    Observation o = belief.env().doNothing(belief);
+                    Observation o = belief.env().observe(belief.id);
                     belief.markObservation(o);
 
                     //send the message
@@ -168,7 +168,7 @@ public class TacticsFactory {
                     }
 
                     //do an observation
-                    Observation o = belief.env().doNothing(belief);
+                    Observation o = belief.env().observe(belief.id);
                     belief.markObservation(o);
                     return belief;
                 })
@@ -186,7 +186,7 @@ public class TacticsFactory {
         return action("Send ping")
                 . do1((BeliefState belief)-> {
                     //do an observation
-                    Observation o = belief.env().doNothing(belief);
+                    Observation o = belief.env().observe(belief.id);
                     belief.markObservation(o);
 
                     //send the message
@@ -209,7 +209,7 @@ public class TacticsFactory {
                     if(m != null) belief.receivedPing = true;
 
                     //do an observation
-                    Observation o = belief.env().doNothing(belief);
+                    Observation o = belief.env().observe(belief.id);
                     belief.markObservation(o);
 
                     //return whether we have received an observation yes or no
@@ -227,7 +227,7 @@ public class TacticsFactory {
                 .do2((BeliefState belief) -> (Tuple<Vec3, Vec3[]> p) -> {
                     //if the agent already has a goal move towards that goal
                     if(belief.getGoalLocation() != null){
-                        Observation o = belief.env().moveToward(belief, belief.getNextWayPoint());//move towards the next way point
+                        Observation o = belief.env().moveToward(belief.id, belief.position,belief.getNextWayPoint());//move towards the next way point
                         belief.markObservation(o);
                     } else {
                         //explore the closest unknown node
@@ -240,7 +240,7 @@ public class TacticsFactory {
                         if(belief.getGoalLocation().distance(p.object1) > 0.01){
                             belief.mentalMap.applyPath(p.object1, p.object2);
                         }
-                        Observation o = belief.env().moveToward(belief, belief.getNextWayPoint());//move towards the next way point
+                        Observation o = belief.env().moveToward(belief.id, belief.position, belief.getNextWayPoint());//move towards the next way point
                         belief.markObservation(o);
                     }
                     return belief;
