@@ -58,43 +58,46 @@ public class GymEnvironment extends SocketEnvironment {
      * This method will make the agent move a certain max distance toward the target
      *
      * @param target: The target the agent wants to move to
-     * @param b:      The belief state of the agent
+     * @param agentId: The ID of the agent (more precisely, the ID of the game-entity controlled by the agent)
+     * @param agentPosition: The agent's current position
      * @return The observation following from the action
      */
-    public Observation moveToward(BeliefState b, Vec3 target) {
-        return moveToward(b, target, false);
+    public Observation moveToward(String agentId, Vec3 agentPosition, Vec3 target) {
+        return moveToward(agentId, agentPosition, target, false);
     }
 
-    public Observation moveToward(BeliefState b, Vec3 target, boolean jump) {
+    public Observation moveToward(String agentId, Vec3 agentPosition, Vec3 target, boolean jump) {
         //define the max distance the agent wants to move ahead between updates
         float maxDist = 2f;
 
         //Calculate where the agent wants to move to
-        Vec3 targetDirection = Vec3.subtract(target, b.position);
+        Vec3 targetDirection = Vec3.subtract(target, agentPosition);
         targetDirection.normalize();
 
         //Check if we can move the full distance ahead
-        double dist = target.distance(b.position);
+        double dist = target.distance(agentPosition);
         if (dist < maxDist) {
             targetDirection.multiply(dist);
         } else {
             targetDirection.multiply(maxDist);
         }
         //add the agent own position to the current coordinates
-        targetDirection.add(b.position);
+        targetDirection.add(agentPosition);
 
         //send the command
-        return getObservation(AgentCommand.moveTowardCommand(b.id, targetDirection, jump));
+        return getObservation(AgentCommand.moveTowardCommand(agentId, targetDirection, jump));
     }
 
-    // send a do nothing command to unity
-    public Observation doNothing(BeliefState b){
-        return getObservation(AgentCommand.doNothing(b.id));
+    /**
+     * This will send a do-nothing command to unity, and return a new Observation.
+     */
+    public Observation observe(String agentId){
+        return getObservation(AgentCommand.doNothing(agentId));
     }
 
     // send an interaction command to unity
-    public Observation interactWith(BeliefState b, String target){
-        return getObservation(AgentCommand.interactCommand(b.id, target));
+    public Observation interactWith(String agentId, String target){
+        return getObservation(AgentCommand.interactCommand(agentId, target));
     }
 
     // press play in Unity

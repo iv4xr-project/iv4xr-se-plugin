@@ -166,7 +166,9 @@ public class BeliefState extends StateWithMessenger {
         for(var e : observation.entities){
             this.addEntity(e); // handle updates / new entities
             // check blocked nodes
-            if (e instanceof InteractiveEntity && !interactiveEntityExists(e.id))
+            if (e instanceof InteractiveEntity && !interactiveEntityExists(e.id)) 
+            	// WP: uh.. is the negation there correct?? Hackish ...so, only Dynamic-interactive entity
+            	// will pass this guard.
                 nodesBlockedByEntity.put(e.id, EntityNodeIntersection.getNodesBlockedByInteractiveEntity((InteractiveEntity) e, mentalMap.pathFinder.navmesh));
         }
 
