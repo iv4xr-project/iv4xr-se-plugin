@@ -17,6 +17,10 @@ import java.util.function.Predicate;
 
 import static nl.uu.cs.aplib.AplibEDSL.*;
 
+import eu.iv4xr.framework.mainConcepts.ObservationEvent.VerdictEvent;
+import eu.iv4xr.framework.mainConcepts.TestAgent;
+import static eu.iv4xr.framework.Iv4xrEDSL.* ;
+
 /**
  * This class will serve as a factory capable of generating goal structures which can be used by the agent
  */
@@ -161,12 +165,32 @@ public class GoalStructureFactory {
      */
     public static GoalStructure inspect(String id, Predicate<Entity> predicate){
         return SEQ(
-                inspect(id).lift(),
-                goal("Evaluate " + id)
-                .toSolve((BeliefState b) -> b.evaluateEntity(id, predicate))
-                .withTactic(FIRSTof(
-                        TacticsFactory.observeOnce(),
-                        ABORT())).lift()
+            inspect(id).lift(),
+            goal("Evaluate " + id)
+            .toSolve((BeliefState b) -> b.evaluateEntity(id, predicate))
+            .withTactic(FIRSTof(
+                    TacticsFactory.observeOnce(),
+                    ABORT())).lift()
+        );
+    }
+    
+    public static GoalStructure checkObjectInvariant(TestAgent agent, String id, String info, Predicate<Entity> predicate){
+        return SEQ(
+            inspect(id).lift(),
+            testgoal("Evaluate " + id, agent)
+            .toSolve((BeliefState b) -> true) // nothing to solve
+            .invariant(agent, 
+            		(BeliefState b) -> {
+            			if (b.evaluateEntity(id, predicate))
+            			   return new VerdictEvent("Object-check " + id, info, true) ;
+            			else 
+            			   return new VerdictEvent("Object-check " + id, info, false) ;
+            			
+            		}
+            		)
+            .withTactic(FIRSTof(
+                    TacticsFactory.observeOnce(),
+                    ABORT())).lift()
         );
     }
 
