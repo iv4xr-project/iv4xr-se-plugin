@@ -1,14 +1,18 @@
 package game;
 
 import helperclasses.Util;
-import org.junit.Test;
+//import org.junit.jupiter.api.Assertions ;
+import org.junit.jupiter.api.Test;
 
 public class PlatformTest {
 
     @Test
     public void ProjectBuildPathTest(){
-        if(Util.fileExists(Platform.PROJECT_BUILD_PATH))
-            System.out.println("AgentFacility for " + Platform.current.toString() + " was found in this repository at: " + Platform.PROJECT_BUILD_PATH);
+    	String labRecruitesExeRootDir = System.getProperty("user.dir") ;
+        if(Util.fileExists(Platform.PathToLabRecruitsExecutable(labRecruitesExeRootDir)))
+            System.out.println("AgentFacility for " + Platform.current.toString() 
+                 + " was found in this repository at: " 
+            	 + Platform.PathToLabRecruitsExecutable(labRecruitesExeRootDir));
         else
             System.out.println("AgentFacility for " + Platform.current.toString() + " is not present in this repository");
     }

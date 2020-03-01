@@ -7,11 +7,9 @@ at Utrecht University within the Software and Game project course.
 
 package helperclasses.datastructures.mesh;
 
-import org.junit.Test;
-
+import static org.junit.jupiter.api.Assertions.* ;
+import org.junit.jupiter.api.Test;
 import java.util.HashMap;
-
-import static org.junit.Assert.*;
 
 public class EdgeTest {
 
@@ -46,10 +44,15 @@ public class EdgeTest {
     /**
      * Test the constructor by passing illegal arguments in the constructor
      */
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testConstructExceptions() {
-        // cannot create edge with the same vertex indices
-        Edge e = new Edge(1, 1);
+    	assertThrows(IllegalArgumentException.class, 
+    		() -> { 
+    			// cannot create edge with the same vertex indices
+    	        Edge e = new Edge(1, 1);
+    		} 
+    	) ;
+        
         /**
          org.junit.Assert.assertThrows(IllegalArgumentException.class, () -> new Edge(1, 1));
          assertThrows(java.lang.IllegalArgumentException.class, () -> new Edge(1, 1));

@@ -8,9 +8,8 @@ at Utrecht University within the Software and Game project course.
 package helperclasses.datastructures.functions;
 
 import helperclasses.datastructures.linq.QArrayList;
-import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.* ;
+import org.junit.jupiter.api.Test;
 
 public class FunctionTest {
 

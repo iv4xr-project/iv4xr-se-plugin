@@ -19,7 +19,7 @@ import nl.uu.cs.aplib.mainConcepts.*;
 import world.BeliefState;
 
 import static eu.iv4xr.framework.Iv4xrEDSL.assertTrue_;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.* ;
 
 // Basic agent that combines movement with interactions to solve Default.csv.
 public class DefaultTest {

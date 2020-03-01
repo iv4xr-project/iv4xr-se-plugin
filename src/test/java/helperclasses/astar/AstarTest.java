@@ -8,9 +8,10 @@ at Utrecht University within the Software and Game project course.
 package helperclasses.astar;
 
 import helperclasses.datastructures.Vec3;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.* ;
+import org.junit.jupiter.api.Assertions ;
+import org.junit.jupiter.api.Test;
 import java.util.HashSet;
-import static org.junit.Assert.*;
 
 /**
  * This class will hold all unit tests for our A* implementation
@@ -69,31 +70,35 @@ public class AstarTest {
     /**
      * Check for a path to an impossible node
      */
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void checkImpossibleTo() {
-        //use our mock graph to test
-        TestGraph graph = new TestGraph();
-
-        //start the pathfinding from node impossible to node 9
-        Astar astar = new Astar(graph, new Vec3(-10, -10, -10), new Vec3(1, 1, 1), new boolean[]{}, new HashSet<>());
-
-        //get the path
-        Integer[] path = astar.getPath();
+    	assertThrows(IllegalArgumentException.class, 
+    		() -> { 
+        		//use our mock graph to test
+    	        TestGraph graph = new TestGraph();
+    	        //start the pathfinding from node impossible to node 9
+    	        Astar astar = new Astar(graph, new Vec3(-10, -10, -10), new Vec3(1, 1, 1), new boolean[]{}, new HashSet<>());
+    	        //get the path
+    	        Integer[] path = astar.getPath();			
+    		}
+    	) ;    
     }
 
     /**
      * Check for a path from an impossible node
      */
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void checkImpossibleFrom() {
-        //use our mock graph to test
-        TestGraph graph = new TestGraph();
-
-        //start the pathfinding from node 1 to node impossible
-        Astar astar = new Astar(graph, new Vec3(1, 1, 1), new Vec3(-10, -10, -10), new boolean[]{}, new HashSet<>());
-
-        //get the path
-        Integer[] path = astar.getPath();
+    	assertThrows(IllegalArgumentException.class, 
+    		() -> { 
+	            //use our mock graph to test
+	            TestGraph graph = new TestGraph();
+	            //start the pathfinding from node 1 to node impossible
+	            Astar astar = new Astar(graph, new Vec3(1, 1, 1), new Vec3(-10, -10, -10), new boolean[]{}, new HashSet<>());
+	            //get the path
+	            Integer[] path = astar.getPath();
+    		} 
+    	) ;
     }
 
     /**

@@ -30,9 +30,10 @@ public class FireHazardAgentDirect {
     @BeforeAll
     static void start() {
         if(USE_SERVER_FOR_TEST){
+        	String labRecruitesExeRootDir = System.getProperty("user.dir") ;
             labRecruitsTestServer =new LabRecruitsTestServer(
                     USE_GRAPHICS,
-                    Platform.PROJECT_BUILD_PATH);
+                    Platform.PathToLabRecruitsExecutable(labRecruitesExeRootDir));
             labRecruitsTestServer.waitForGameToLoad();
         }
     }

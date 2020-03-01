@@ -10,14 +10,12 @@ package pathfinding;
 import helperclasses.astar.Astar;
 import helperclasses.datastructures.Vec3;
 import helperclasses.datastructures.mesh.TriangleMesh;
-import org.junit.Assert;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.* ;
+import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
-
-import static org.junit.Assert.*;
 
 public class TriangleGraphTest {
 
@@ -244,7 +242,7 @@ public class TriangleGraphTest {
         expected.add(2);
         expected.add(3);
 
-        Assert.assertTrue(result.equals(expected));
+        assertTrue(result.equals(expected));
     }
 
     @Test

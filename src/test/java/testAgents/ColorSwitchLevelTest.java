@@ -39,10 +39,11 @@ public class ColorSwitchLevelTest {
 
     @BeforeAll
     static void start() {
+    	String labRecruitesExeRootDir = System.getProperty("user.dir") ;
         if(USE_SERVER_FOR_TEST){
             labRecruitsTestServer =new LabRecruitsTestServer(
                     USE_GRAPHICS,
-                    Platform.PROJECT_BUILD_PATH);
+                    Platform.PathToLabRecruitsExecutable(labRecruitesExeRootDir));
             labRecruitsTestServer.waitForGameToLoad();
         }
     }

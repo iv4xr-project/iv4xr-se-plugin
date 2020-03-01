@@ -16,9 +16,10 @@ import helperclasses.datastructures.Vec3;
 import helperclasses.datastructures.linq.QArrayList;
 import logger.JsonLoggerInstrument;
 import nl.uu.cs.aplib.mainConcepts.GoalStructure;
-import org.junit.Assert;
-import org.junit.jupiter.api.BeforeAll;
+
+import org.junit.jupiter.api.Assertions ;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.AfterAll;
 import world.BeliefState;
 import world.InteractiveEntity;
@@ -36,9 +37,10 @@ public class SimpleUnityTest {
     @BeforeAll
     static void start() {
         if(USE_SERVER_FOR_TEST){
+        	String labRecruitesExeRootDir = System.getProperty("user.dir") ;
             labRecruitsTestServer = new LabRecruitsTestServer(
                     USE_GRAPHICS,
-                    Platform.PROJECT_BUILD_PATH);
+                    Platform.PathToLabRecruitsExecutable(labRecruitesExeRootDir));
             labRecruitsTestServer.waitForGameToLoad();
         }
     }
@@ -73,16 +75,16 @@ public class SimpleUnityTest {
         agent.setGoal(goal);
 
         //goal not achieved yet
-        Assert.assertTrue(goal.getStatus().inProgress());
+        Assertions.assertTrue(goal.getStatus().inProgress());
 
         // Toggle play in Unity
-        Assert.assertTrue(environment.startSimulation());
+        Assertions.assertTrue(environment.startSimulation());
 
         //update one round
         agent.update();
 
         //agent should now know where it is
-        Assert.assertFalse(goal.getStatus().inProgress());
+        Assertions.assertFalse(goal.getStatus().inProgress());
         goal.printGoalStructureStatus();
 
         environment.close();
@@ -112,16 +114,16 @@ public class SimpleUnityTest {
         agent.setGoal(goal);
 
         //goal not achieved yet
-        Assert.assertTrue(goal.getStatus().inProgress());
+        Assertions.assertTrue(goal.getStatus().inProgress());
 
         // Toggle play in Unity
-        Assert.assertTrue(environment.startSimulation());
+        Assertions.assertTrue(environment.startSimulation());
 
         //update one round
         agent.update();
 
         //agent should now know where it is
-        Assert.assertFalse(goal.getStatus().inProgress());
+        Assertions.assertFalse(goal.getStatus().inProgress());
 
         goal.printGoalStructureStatus();
 
@@ -157,16 +159,16 @@ public class SimpleUnityTest {
         agent.setGoal(goal);
 
         //goal not achieved yet
-        Assert.assertTrue(goal.getStatus().inProgress());
+        Assertions.assertTrue(goal.getStatus().inProgress());
 
         // Toggle play in Unity
-        Assert.assertTrue(environment.startSimulation());
+        Assertions.assertTrue(environment.startSimulation());
 
         //update one round
         agent.update();
 
         //agent should now know where it is
-        Assert.assertFalse(goal.getStatus().inProgress());
+        Assertions.assertFalse(goal.getStatus().inProgress());
 
         goal.printGoalStructureStatus();
 
@@ -195,17 +197,17 @@ public class SimpleUnityTest {
         agent.setGoal(goal);
 
         //goal not achieved yet
-        Assert.assertTrue(goal.getStatus().inProgress());
+        Assertions.assertTrue(goal.getStatus().inProgress());
 
         // Toggle play in Unity
-        Assert.assertTrue(environment.startSimulation());
+        Assertions.assertTrue(environment.startSimulation());
 
         //update one round
         while (goal.getStatus().inProgress())
             agent.update();
 
         //agent should now know where it is
-        Assert.assertFalse(goal.getStatus().inProgress());
+        Assertions.assertFalse(goal.getStatus().inProgress());
 
         goal.printGoalStructureStatus();
 

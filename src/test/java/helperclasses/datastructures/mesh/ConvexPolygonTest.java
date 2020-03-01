@@ -8,10 +8,9 @@ at Utrecht University within the Software and Game project course.
 package helperclasses.datastructures.mesh;
 
 import helperclasses.datastructures.Vec3;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.* ;
+import org.junit.jupiter.api.Test;
 import testhelp.PrivateMethod;
-
-import static org.junit.Assert.assertEquals;
 
 public class ConvexPolygonTest {
 

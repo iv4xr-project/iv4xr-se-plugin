@@ -7,9 +7,8 @@ at Utrecht University within the Software and Game project course.
 
 package helperclasses.datastructures;
 
-import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
+import org.junit.jupiter.api.Assertions ;
+import org.junit.jupiter.api.Test;
 
 /*
 This class holds all unit tests of Tuple
@@ -24,7 +23,7 @@ public class TupleTest {
         Tuple<Integer, Boolean> t = new Tuple<>(1, true);
 
         //check if the values are stored
-        assertEquals(Integer.valueOf(1), t.object1);
-        assertEquals(true, t.object2);
+        Assertions.assertEquals(Integer.valueOf(1), t.object1);
+        Assertions.assertEquals(true, t.object2);
     }
 }

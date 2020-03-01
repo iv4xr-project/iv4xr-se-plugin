@@ -8,7 +8,7 @@ at Utrecht University within the Software and Game project course.
 package testhelp;
 
 import helperclasses.datastructures.linq.QArrayList;
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions ;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -50,7 +50,7 @@ public class PrivateMethod<ReturnType> {
 
         } catch (IndexOutOfBoundsException e) {
             // if first(); throws an exception
-            Assert.fail("Method " + methodName + " could not be found! Please use the correct name of the method.");
+        	Assertions.fail("Method " + methodName + " could not be found! Please use the correct name of the method.");
         }
     }
 
@@ -60,11 +60,11 @@ public class PrivateMethod<ReturnType> {
             result = (ReturnType) privateMethod.invoke(this.instance, params);
             return result;
         } catch (ClassCastException e) {
-            Assert.fail("Method " + this.privateMethod.getName() + " does not return an object of this ReturnType! Please make sure you are using the correct generic type or method.");
+        	Assertions.fail("Method " + this.privateMethod.getName() + " does not return an object of this ReturnType! Please make sure you are using the correct generic type or method.");
         } catch (InvocationTargetException e) {
-            Assert.fail("Method " + this.privateMethod.getName() + " could not be invoked! Please use the correct amount and instances of parameters.");
+        	Assertions.fail("Method " + this.privateMethod.getName() + " could not be invoked! Please use the correct amount and instances of parameters.");
         } catch (IllegalAccessException e) {
-            Assert.fail("Method " + this.privateMethod.getName() + " could not be accessed! Please set the setAccessible to public in the test.");
+        	Assertions.fail("Method " + this.privateMethod.getName() + " could not be accessed! Please set the setAccessible to public in the test.");
         }
         return null;
     }

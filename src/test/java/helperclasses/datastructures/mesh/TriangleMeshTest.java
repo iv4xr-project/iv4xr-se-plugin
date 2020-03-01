@@ -8,10 +8,9 @@ at Utrecht University within the Software and Game project course.
 package helperclasses.datastructures.mesh;
 
 import helperclasses.datastructures.Vec3;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.* ;
+import org.junit.jupiter.api.Test;
 import pathfinding.NavMeshContainer;
-
-import static org.junit.Assert.*;
 
 public class TriangleMeshTest {
 
@@ -107,46 +106,59 @@ public class TriangleMeshTest {
     }
 
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void constructorFailInvalidTriangle() {
-        var mesh = new TriangleMesh(
-                new NavMeshContainer(
-                        new int[]{0, 1, 1}, // <--- this will not instantiate to a triangle
-                        new Vec3[]{
-                                new Vec3(2, 0, 3),
-                                new Vec3(4, 0, 0),
-                                new Vec3(-6, 0, -3)
-                        }
-                )
-        );
+    	assertThrows(IllegalArgumentException.class, 
+    		() -> { 
+    	        var mesh = new TriangleMesh(
+    	                new NavMeshContainer(
+    	                        new int[]{0, 1, 1}, // <--- this will not instantiate to a triangle
+    	                        new Vec3[]{
+    	                                new Vec3(2, 0, 3),
+    	                                new Vec3(4, 0, 0),
+    	                                new Vec3(-6, 0, -3)
+    	                        }
+    	                )
+    	        );
+    		} 
+    	) ;
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void constructorFailNonExistingTriangle() {
-        var mesh = new TriangleMesh(
-                new NavMeshContainer(
-                        new int[]{0, 1, 2, 1, 2, 3}, // <--- vertices[3] does not exist
-                        new Vec3[]{
-                                new Vec3(2, 0, 3),
-                                new Vec3(4, 0, 0),
-                                new Vec3(-6, 0, -3)
-                        }
-                )
-        );
+    	assertThrows(IllegalArgumentException.class, 
+    		() -> { 
+    			var mesh = new TriangleMesh(
+    	                new NavMeshContainer(
+    	                        new int[]{0, 1, 2, 1, 2, 3}, // <--- vertices[3] does not exist
+    	                        new Vec3[]{
+    	                                new Vec3(2, 0, 3),
+    	                                new Vec3(4, 0, 0),
+    	                                new Vec3(-6, 0, -3)
+    	                        }
+    	                )
+    	        ); 
+    		} 
+    	) ;
+        
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void constructorFailDuplicateVertex() {
-        var mesh = new TriangleMesh(
-                new NavMeshContainer(
-                        new int[]{0, 1, 2},
-                        new Vec3[]{
-                                new Vec3(2, 0, 3),
-                                new Vec3(4, 0, 0),
-                                new Vec3(2, 0, 3)
-                        }
-                )
-        );
+    	assertThrows(IllegalArgumentException.class, 
+    		() -> { 
+    	        var mesh = new TriangleMesh(
+    	                new NavMeshContainer(
+    	                        new int[]{0, 1, 2},
+    	                        new Vec3[]{
+    	                                new Vec3(2, 0, 3),
+    	                                new Vec3(4, 0, 0),
+    	                                new Vec3(2, 0, 3)
+    	                        }
+    	                )
+    	        ) ;
+    		} 
+    	) ;
     }
 
 
