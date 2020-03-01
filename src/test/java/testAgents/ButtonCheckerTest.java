@@ -12,6 +12,7 @@ import agents.tactics.GoalStructureFactory;
 import agents.tactics.TacticsFactory;
 import environments.EnvironmentConfig;
 import environments.GymEnvironment;
+import eu.iv4xr.framework.mainConcepts.TestDataCollector;
 import helperclasses.datastructures.linq.QArrayList;
 import logger.JsonLoggerInstrument;
 import nl.uu.cs.aplib.mainConcepts.GoalStructure;
@@ -51,99 +52,85 @@ public class ButtonCheckerTest {
 
     @Test
     public void buttonWorksTest(){
+    	
+    	var buttonToTest = "button1" ;
+    	var doorToTest = "door1" ;
 
         // Create an environment
         GymEnvironment environment = new GymEnvironment(new EnvironmentConfig("button1_opens_door1"));
         if(USE_INSTRUMENT)
             environment.registerInstrumenter(new JsonLoggerInstrument()).turnOnDebugInstrumentation();
 
-        environment.startSimulation(); // presses "Play" in the game for you
-
-        // create a belief state
-        var state = new BeliefState();
-        state.id = "agent1"; // matches the ID in the CSV file
-        state.setEnvironment(environment); // attach the environment
-
-        // create the agent (goal and tactics are constructed within ButtonFinderAgent)
-        ButtonCheckerAgent agent = new ButtonCheckerAgent(state, "button1", "door1");
-
-        //goal not achieved yet
-        assertFalse(agent.success());
-
-        // keep updating the agent
-        while (agent.Running()) {
-            agent.update();
+        try {
+	        environment.startSimulation(); // presses "Play" in the game for you
+	
+	        // create a belief state
+	        var state = new BeliefState();
+	        state.id = "agent1"; // matches the ID in the CSV file
+	        state.setEnvironment(environment); // attach the environment
+	
+	        // setting up a test-data collector:
+			var dataCollector = new TestDataCollector();
+	
+	        // create a test agent
+	        var testAgent = new GymAgent(state) ;
+	        
+	        // define the test-goal:
+	        var goal = SEQ(
+	    		MySubGoals.justObserve(),
+	            // observe the button to be inactive and the door to be closed
+	            GoalStructureFactory.inspect(buttonToTest, (Entity e) -> (e instanceof InteractiveEntity) && !((InteractiveEntity) e).isActive),
+	            GoalStructureFactory.inspect(doorToTest, (Entity e) -> (e instanceof InteractiveEntity) && !((InteractiveEntity) e).isActive),
+	            // walk to the button
+	            GoalStructureFactory.reachObject(buttonToTest).lift(),
+	            // press the button
+	            MySubGoals.pressButton(buttonToTest),
+	            
+	            // now we should check that the button is indeed in its active state, and 
+	            // the door is open:
+	            GoalStructureFactory.checkObjectInvariant(testAgent,
+	            		buttonToTest, 
+	            		"button should be active", 
+	            		(Entity e) -> (e instanceof InteractiveEntity) && ((InteractiveEntity) e).isActive),
+	            GoalStructureFactory.checkObjectInvariant(testAgent,
+	            		doorToTest, 
+	            		"door should be open", 
+	            		(Entity e) -> (e instanceof InteractiveEntity) && ((InteractiveEntity) e).isActive)
+	        );
+	        
+	        testAgent . setTestDataCollector(dataCollector) . setGoal(goal) ;
+	
+	        //goal not achieved yet
+	        assertFalse(testAgent.success());
+	
+	        // keep updating the agent
+	        while (goal.getStatus().inProgress()) {
+	        	testAgent.update();
+	        }
+	
+	        // check that we have passed both tests above:
+	        assertTrue(dataCollector.getNumberOfPassVerdictsSeen() == 2) ;
+	        // goal status should be success
+	        assertTrue(testAgent.success());
+	
+	        // close
+	        testAgent.printStatus();
         }
-
-        // goal status should be success
-        assertTrue(agent.success());
-
-        // close
-        agent.printStatus();
-        environment.close();
+        finally { environment.close(); }
     }
 }
 
 /**
- * This agent will succeed if the Entity 'buttonId' is indeed the trigger for the given 'target'
+ * A helper class for constructing support subgoals.
  */
-class ButtonCheckerAgent extends GymAgent {
-
-    private GoalStructure goal;
-
-    public ButtonCheckerAgent(BeliefState state, String buttonId, String target) {
-        super(state);
-
-        goal = buttonTriggersTarget(buttonId, target);
-
-        this.setGoal(goal);
-    }
-
-
-    public boolean Running() {
-        // the agent is still in progress if one of the main goals is still in progress
-        return goal.getStatus().inProgress();
-    }
-
-    private GoalStructure buttonTriggersTarget(String buttonId, String target) {
-        return SEQ(
-                justObserve(),
-                // observe the button to be inactive and the door to be closed
-                GoalStructureFactory.inspect(buttonId, (Entity e) -> (e instanceof InteractiveEntity) && !((InteractiveEntity) e).isActive),
-                GoalStructureFactory.inspect(target, (Entity e) -> (e instanceof InteractiveEntity) && !((InteractiveEntity) e).isActive),
-                // walk to the button
-                GoalStructureFactory.reachObject(buttonId).lift(),
-                // press the button
-                pressButton(buttonId),
-                // observe the button to be active and the door to be open
-                GoalStructureFactory.inspect(buttonId, (Entity e) -> (e instanceof InteractiveEntity) && ((InteractiveEntity) e).isActive),
-                GoalStructureFactory.inspect(target, (Entity e) -> (e instanceof InteractiveEntity) && ((InteractiveEntity) e).isActive)
-        );
-    }
-
-    private GoalStructure justObserve(){
+class MySubGoals {
+	
+	// to just observe the game ... to get information
+    static GoalStructure justObserve(){
         return goal("observe").toSolve((BeliefState b) -> b.position != null).withTactic(TacticsFactory.observe()).lift();
     }
-    // A goal that is reached whenever the buttonId is observed to be pressed (active)
-    private GoalStructure pressButton(String buttonId) {
-        return
-                goal("Press " + buttonId)
-                        .toSolve((BeliefState belief) -> {
-                            // the belief should contain an interactive entity (buttonId) that is observed to be pressed (active)
-                            var interactiveEntities = new QArrayList<>(belief.getAllInteractiveEntities());
-                            return interactiveEntities.contains(entity -> entity.id.equals(buttonId) && entity.isActive);
-                        })
-                        .withTactic(
-                                FIRSTof(
-                                        // try to interact
-                                        TacticsFactory.interact(buttonId),
-                                        // move toward the button if the agent cannot interact
-                                        TacticsFactory.move(buttonId)
-                                )
-                        ).lift();
-    }
-
-    private GoalStructure observeInteractiveEntity(String interactiveEntityId, boolean isActive) {
+    
+    static GoalStructure observeInteractiveEntity(String interactiveEntityId, boolean isActive) {
         String goalName = "Observe that " + interactiveEntityId + " is " + (isActive ? "" : "not ") + "active";
         return goal(goalName)
                 .toSolve((BeliefState belief) -> {
@@ -155,5 +142,41 @@ class ButtonCheckerAgent extends GymAgent {
                 .withTactic(TacticsFactory.observe())
                 .lift()
                 .maxbudget(1);
+    }
+	
+    // A goal that is reached whenever the buttonId is observed to be pressed (active)
+    static GoalStructure pressButton(String buttonId) {
+        return
+        goal("Press " + buttonId)
+            .toSolve((BeliefState belief) -> {
+                // the belief should contain an interactive entity (buttonId) that is observed to be pressed (active)
+                var interactiveEntities = new QArrayList<>(belief.getAllInteractiveEntities());
+                return interactiveEntities.contains(entity -> entity.id.equals(buttonId) && entity.isActive);
+            })
+            .withTactic(
+                FIRSTof(
+                    // try to interact
+                    TacticsFactory.interact(buttonId),
+                    // move toward the button if the agent cannot interact
+                    TacticsFactory.move(buttonId)
+                )
+            ).lift();
+    }
+    
+    // this will be the top level goal
+    static GoalStructure test_thisButton_triggers_thatObject(String buttonId, String target) {
+        return SEQ(
+          justObserve(),
+          // observe the button to be inactive and the door to be closed
+          GoalStructureFactory.inspect(buttonId, (Entity e) -> (e instanceof InteractiveEntity) && !((InteractiveEntity) e).isActive),
+          GoalStructureFactory.inspect(target, (Entity e) -> (e instanceof InteractiveEntity) && !((InteractiveEntity) e).isActive),
+          // walk to the button
+          GoalStructureFactory.reachObject(buttonId).lift(),
+          // press the button
+          pressButton(buttonId),
+          // observe the button to be active and the door to be open
+          GoalStructureFactory.inspect(buttonId, (Entity e) -> (e instanceof InteractiveEntity) && ((InteractiveEntity) e).isActive),
+          GoalStructureFactory.inspect(target, (Entity e) -> (e instanceof InteractiveEntity) && ((InteractiveEntity) e).isActive)
+        );
     }
 }
