@@ -77,22 +77,30 @@ public class ButtonCheckerTest {
 	        
 	        // define the test-goal:
 	        var goal = SEQ(
+	        	// get the first observation:	
 	    		MySubGoals.justObserve(),
-	            // observe the button to be inactive and the door to be closed
+	    		// (0) We first check the pre-condition of this test:
+	            //       Observe that the button is inactive and the door is closed.
+	    		//       If this is the case we continue the test. 
+	    		//       Else it is not sensical to do this test, so we will abort 
+	    		//       (there is something wrong with the scenario setup; this should be fixed first),  
 	            GoalStructureFactory.inspect(buttonToTest, (Entity e) -> (e instanceof InteractiveEntity) && !((InteractiveEntity) e).isActive),
 	            GoalStructureFactory.inspect(doorToTest, (Entity e) -> (e instanceof InteractiveEntity) && !((InteractiveEntity) e).isActive),
-	            // walk to the button
+	            
+	            // now the test itself:
+	            
+	            // (1a) walk to the button
 	            GoalStructureFactory.reachObject(buttonToTest).lift(),
-	            // press the button
+	            // (1b) and then press the button
 	            MySubGoals.pressButton(buttonToTest),
 	            
-	            // now we should check that the button is indeed in its active state, and 
+	            // (2) now we should check that the button is indeed in its active state, and 
 	            // the door is open:
-	            GoalStructureFactory.checkObjectInvariant(testAgent,
+	            GoalStructureFactory.checkEntityInvariant(testAgent,
 	            		buttonToTest, 
 	            		"button should be active", 
 	            		(Entity e) -> (e instanceof InteractiveEntity) && ((InteractiveEntity) e).isActive),
-	            GoalStructureFactory.checkObjectInvariant(testAgent,
+	            GoalStructureFactory.checkEntityInvariant(testAgent,
 	            		doorToTest, 
 	            		"door should be open", 
 	            		(Entity e) -> (e instanceof InteractiveEntity) && ((InteractiveEntity) e).isActive)

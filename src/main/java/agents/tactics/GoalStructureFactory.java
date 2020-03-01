@@ -174,12 +174,23 @@ public class GoalStructureFactory {
         );
     }
     
-    public static GoalStructure checkObjectInvariant(TestAgent agent, String id, String info, Predicate<Entity> predicate){
+    /**
+     * Create a test-goal to check the state of an in-game entity, whether it satisfies the given predicate.
+     * Internally, this goal will first spend one tick to get a fresh observation, then at the next tick it
+     * will do the checking.
+     * 
+     * @param agent  The test agent to do the checking.
+     * @param id     The id of the in-game entity to check.
+     * @param info   Some string describing the check.
+     * @param predicate  The predicate that is expected to hold on the entity.
+     * @return
+     */
+    public static GoalStructure checkEntityInvariant(TestAgent agent, String id, String info, Predicate<Entity> predicate){
         return SEQ(
             inspect(id).lift(),
             testgoal("Evaluate " + id, agent)
             .toSolve((BeliefState b) -> true) // nothing to solve
-            .invariant(agent, 
+            .invariant(agent,                 // something to check :)
             		(BeliefState b) -> {
             			if (b.evaluateEntity(id, predicate))
             			   return new VerdictEvent("Object-check " + id, info, true) ;
