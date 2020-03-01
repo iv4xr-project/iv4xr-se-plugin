@@ -8,13 +8,12 @@ at Utrecht University within the Software and Game project course.
 package helperclasses.world;
 
 import helperclasses.datastructures.Vec3;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.* ;
+import org.junit.jupiter.api.Test;
 import pathfinding.NavMeshContainer;
 import pathfinding.Pathfinder;
 import world.MentalMap;
 import java.util.HashSet;
-
-import static org.junit.Assert.*;
 
 public class MentalMapTest {
     double delta = 0.001;

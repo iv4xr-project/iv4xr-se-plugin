@@ -4,13 +4,12 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import communication.adapters.*;
 import helperclasses.datastructures.Vec3;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions ;
+import org.junit.jupiter.api.Test;
 import world.*;
 
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
-
-import static org.junit.Assert.assertEquals;
 
 public class EntityAdapterTest {
 
@@ -34,8 +33,8 @@ public class EntityAdapterTest {
         Entity[] deserializedEntities = deserializer.fromJson(json, Entity[].class);
 
         for(int i = 0; i < 3; i++){
-            assertEquals(originals[i].getClass(), deserializedEntities[i].getClass());
-            assertEquals(originals[i], deserializedEntities[i]);
+        	Assertions.assertEquals(originals[i].getClass(), deserializedEntities[i].getClass());
+        	Assertions.assertEquals(originals[i], deserializedEntities[i]);
         }
     }
 
@@ -44,12 +43,12 @@ public class EntityAdapterTest {
         Gson gson = new GsonBuilder()
                 .registerTypeHierarchyAdapter(EntityType.class, new EntityTypeAdapter())
                 .create();
-        assertEquals("0", gson.toJson(EntityType.Entity));
-        assertEquals("1", gson.toJson(EntityType.Dynamic));
-        assertEquals("2", gson.toJson(EntityType.Interactive));
-        assertEquals(EntityType.Entity, gson.fromJson(gson.toJson(EntityType.Entity), EntityType.class));
-        assertEquals(EntityType.Dynamic, gson.fromJson(gson.toJson(EntityType.Dynamic), EntityType.class) );
-        assertEquals(EntityType.Interactive, gson.fromJson(gson.toJson(EntityType.Interactive), EntityType.class) );
+        Assertions.assertEquals("0", gson.toJson(EntityType.Entity));
+        Assertions.assertEquals("1", gson.toJson(EntityType.Dynamic));
+        Assertions.assertEquals("2", gson.toJson(EntityType.Interactive));
+        Assertions.assertEquals(EntityType.Entity, gson.fromJson(gson.toJson(EntityType.Entity), EntityType.class));
+        Assertions.assertEquals(EntityType.Dynamic, gson.fromJson(gson.toJson(EntityType.Dynamic), EntityType.class) );
+        Assertions.assertEquals(EntityType.Interactive, gson.fromJson(gson.toJson(EntityType.Interactive), EntityType.class) );
     }
 
     private Entity fill(Entity e, int i){

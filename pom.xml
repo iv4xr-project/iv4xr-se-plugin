@@ -18,6 +18,15 @@
                     <target>10</target>
                 </configuration>
             </plugin>
+
+            <plugin>
+               <artifactId>maven-surefire-plugin</artifactId>
+               <version>2.22.2</version>
+            </plugin>
+            <plugin>
+               <artifactId>maven-failsafe-plugin</artifactId>
+               <version>2.22.2</version>
+            </plugin>
         </plugins>
     </build>
 
@@ -33,17 +42,34 @@
     </repositories>
 
     <dependencies>
+         <!-- dependencies on JUnit-5 for unit testing -->
+         <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.6.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.6.0</version>
+            <scope>test</scope>
+        </dependency>
+        <!--
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.12</version>
+            <version>5.5.2</version>
             <scope>test</scope>
         </dependency>
+      -->
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>1.3.2</version>
         </dependency>
+
+        <!-- dependencies on iv4xr Agent Framework -->
         <dependency>
             <groupId>com.github.iv4XR-project</groupId>
             <artifactId>aplib</artifactId>

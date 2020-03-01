@@ -8,9 +8,8 @@ at Utrecht University within the Software and Game project course.
 package helperclasses.Intersections;
 
 import helperclasses.datastructures.Vec3;
-import org.junit.Test;
-import static org.junit.Assert.*;
-
+import static org.junit.jupiter.api.Assertions.* ;
+import org.junit.jupiter.api.Test;
 /**
  * This class will hold the unit tests for line segment intersections
  */

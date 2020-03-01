@@ -7,7 +7,7 @@ at Utrecht University within the Software and Game project course.
 
 package environments;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class GymEnvironmentTest {
 
@@ -20,7 +20,7 @@ public class GymEnvironmentTest {
      * }
      **/
 
-    @Test
+    // @Test ... to do
     public void testMoveToObject() {
 
     }

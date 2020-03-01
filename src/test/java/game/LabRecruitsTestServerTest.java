@@ -7,8 +7,8 @@ at Utrecht University within the Software and Game project course.
 
 package game;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions ;
+import org.junit.jupiter.api.Test;
 
 public class LabRecruitsTestServerTest {
 
@@ -16,27 +16,28 @@ public class LabRecruitsTestServerTest {
     @Test
     public void binExistsTest() {
 
+    	String labRecruitesExeRootDir = System.getProperty("user.dir") ;
         LabRecruitsTestServer testServer = new LabRecruitsTestServer(
                 false,
-                Platform.PROJECT_BUILD_PATH);
+                Platform.PathToLabRecruitsExecutable(labRecruitesExeRootDir));
 
         // should be false because server is not started yet
-        Assert.assertTrue(testServer.isRunning());
+        Assertions.assertTrue(testServer.isRunning());
 
         testServer.close();
     }
 
     // the game is not present in the root of the repository and should throw an exception
-    @Test(expected = IllegalArgumentException.class)
+    //@Test(expected = IllegalArgumentException.class)
+    @Test
     public void binNotExistsTest() {
-
-        LabRecruitsTestServer testServer = new LabRecruitsTestServer(
-                false,
-                System.getProperty("user.dir") + "LabRecruits.exe");
-
-        // should be false because server is not started yet
-        Assert.assertFalse(testServer.isRunning());
-
-        testServer.close();
+    	Assertions.assertThrows(IllegalArgumentException.class, 
+    		() -> { var testServer = new LabRecruitsTestServer(
+    	                   false,
+    	                   System.getProperty("user.dir") + "LabRecruits.exe") ;
+    		         // should be false because server is not started yet
+    	             Assertions.assertFalse(testServer.isRunning());
+    	             testServer.close(); }
+    	    ) ;  
     }
 }

@@ -7,17 +7,16 @@ at Utrecht University within the Software and Game project course.
 
 package environments;
 
-import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-
+import org.junit.jupiter.api.Assertions ;
+import org.junit.jupiter.api.Test;
 // the class that will be tested
 
 
 public class SocketEnvironmentTest {
 
-    @Test
+	// todo...?
+    //@Test
     public void ask() {
-        assertEquals(1, 1);
+    	Assertions.assertEquals(1, 1);
     }
 }

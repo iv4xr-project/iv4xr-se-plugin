@@ -15,7 +15,7 @@ import environments.GymEnvironment;
 import helperclasses.datastructures.linq.QArrayList;
 import logger.JsonLoggerInstrument;
 import nl.uu.cs.aplib.mainConcepts.GoalStructure;
-import org.junit.Assert;
+import static org.junit.jupiter.api.Assertions.* ;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -34,10 +34,11 @@ public class ButtonCheckerTest {
 
     @BeforeAll
     static void start() {
+    	String labRecruitesExeRootDir = System.getProperty("user.dir") ;
         if(USE_SERVER_FOR_TEST){
             labRecruitsTestServer =new LabRecruitsTestServer(
                     USE_GRAPHICS,
-                    Platform.PROJECT_BUILD_PATH);
+                    Platform.PathToLabRecruitsExecutable(labRecruitesExeRootDir));
             labRecruitsTestServer.waitForGameToLoad();
         }
     }
@@ -67,7 +68,7 @@ public class ButtonCheckerTest {
         ButtonCheckerAgent agent = new ButtonCheckerAgent(state, "button1", "door1");
 
         //goal not achieved yet
-        Assert.assertFalse(agent.success());
+        assertFalse(agent.success());
 
         // keep updating the agent
         while (agent.Running()) {
@@ -75,7 +76,7 @@ public class ButtonCheckerTest {
         }
 
         // goal status should be success
-        Assert.assertTrue(agent.success());
+        assertTrue(agent.success());
 
         // close
         agent.printStatus();

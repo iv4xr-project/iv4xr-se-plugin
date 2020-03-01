@@ -34,10 +34,9 @@ public abstract class Platform {
             throw new IllegalCallerException("AgentFacility does not support this platform!");
     }
 
-    public static String PROJECT_BUILD_PATH = projectBuildPath();
-
-    private static String projectBuildPath(){
-        String path = Paths.get(System.getProperty("user.dir"), "gym", current.toString(), "bin").toAbsolutePath().toString();
+    public static String PathToLabRecruitsExecutable(String LabRecruitsRootDir) {
+        //String path = Paths.get(System.getProperty("user.dir"), "gym", current.toString(), "bin").toAbsolutePath().toString();
+        String path = Paths.get(LabRecruitsRootDir, "gym", current.toString(), "bin").toAbsolutePath().toString();
         switch (current){
             case Windows:
                 return Paths.get(path, "LabRecruits.exe").toAbsolutePath().toString();

@@ -7,9 +7,8 @@ at Utrecht University within the Software and Game project course.
 
 package helperclasses.datastructures;
 
-import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.* ;
+import org.junit.jupiter.api.Test;
 
 /**
  * This class holds all unit tests for Vec3
@@ -229,13 +228,16 @@ public class Vec3Test {
     /**
      * This method will check if the division by zero will throw an error
      */
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void checkDivisionByZero() {
-        //define vector
-        Vec3 v = new Vec3(0, 1, 2.5);
-
-        //divide by zero
-        v.divide(0);
+    	assertThrows(IllegalArgumentException.class, 
+    		() -> { 
+    	        //define vector
+    	        Vec3 v = new Vec3(0, 1, 2.5);
+    	        //divide by zero
+    	        v.divide(0);
+    		; }
+    	) ;
     }
 
     /**
@@ -386,13 +388,16 @@ public class Vec3Test {
     /**
      * Test the normalization of a vector with a size of zero
      */
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void checkNormalisedZero() {
-        //create the zero vector
-        Vec3 v = Vec3.zero();
-
-        //normalise
-        v.normalize();
+    	assertThrows(IllegalArgumentException.class, 
+    		() -> { 
+    			 //create the zero vector
+    	        Vec3 v = Vec3.zero();
+    	        //normalise
+    	        v.normalize();
+    		} 
+    	) ; 
     }
 
     /**

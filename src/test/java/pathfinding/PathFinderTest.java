@@ -8,14 +8,11 @@ at Utrecht University within the Software and Game project course.
 package pathfinding;
 
 import helperclasses.datastructures.Vec3;
-import org.junit.Assert;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.* ;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.HashSet;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 public class PathFinderTest {
 
@@ -81,7 +78,7 @@ public class PathFinderTest {
         Vec3 start = new Vec3(0.25, 0, 0.5);
         Vec3 end = new Vec3(1.75, 0, 1.75);
 
-        Assert.assertArrayEquals(new Integer[]{5, 4, 3, 2, 1, 0}, pathfinder.trianglePath(start, end, SeenNodes(), new HashSet<>()));
+        assertArrayEquals(new Integer[]{5, 4, 3, 2, 1, 0}, pathfinder.trianglePath(start, end, SeenNodes(), new HashSet<>()));
 
         // is reversed
         Vec3[] expectedPath = new Vec3[]{
@@ -90,7 +87,7 @@ public class PathFinderTest {
 
         var actualPath = new Pathfinder(CreateNavmesh()).navigate(start, end, SeenNodes(), new HashSet<>());
 
-        Assert.assertArrayEquals(expectedPath, actualPath);
+        assertArrayEquals(expectedPath, actualPath);
     }
 
     @Test
@@ -101,7 +98,7 @@ public class PathFinderTest {
         Vec3 start = new Vec3(0.75, 0, 1.75);
         Vec3 end = new Vec3(1.25, 0, 2.75);
 
-        Assert.assertArrayEquals(new Integer[]{6, 5, 4, 3}, pathfinder.trianglePath(start, end, SeenNodes(), new HashSet<>()));
+        assertArrayEquals(new Integer[]{6, 5, 4, 3}, pathfinder.trianglePath(start, end, SeenNodes(), new HashSet<>()));
 
         // is reversed
         Vec3[] expectedPath = new Vec3[]{
@@ -114,7 +111,7 @@ public class PathFinderTest {
         for (var c : actualPath)
             System.out.println(c);
 
-        Assert.assertArrayEquals(expectedPath, actualPath);
+        assertArrayEquals(expectedPath, actualPath);
     }
 
     @Test
@@ -125,7 +122,7 @@ public class PathFinderTest {
         Vec3 start = new Vec3(0.75, 0, 0.5);
         Vec3 end = new Vec3(2.25, 0, 0.5);
 
-        Assert.assertArrayEquals(new Integer[]{10, 11, 8, 5, 4, 3, 2, 1}, pathfinder.trianglePath(start, end, SeenNodes(), new HashSet<>()));
+        assertArrayEquals(new Integer[]{10, 11, 8, 5, 4, 3, 2, 1}, pathfinder.trianglePath(start, end, SeenNodes(), new HashSet<>()));
 
         // is reversed
         Vec3[] expectedPath = new Vec3[]{
@@ -140,21 +137,25 @@ public class PathFinderTest {
         for (var c : actualPath)
             System.out.println(c);
 
-        Assert.assertArrayEquals(expectedPath, actualPath);
+        assertArrayEquals(expectedPath, actualPath);
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void testPathfindingErrorWithBlockedNodes(){
-        //init
-        Pathfinder pathfinder = new Pathfinder(CreateNavmesh());
-        //test if we know all nodes
-        Vec3 start = new Vec3(0,0,0);
-        Vec3 end = new Vec3(3, 0, 2);
+    	assertThrows(IllegalStateException.class, 
+    		() -> { 
+    	        //init
+    	        Pathfinder pathfinder = new Pathfinder(CreateNavmesh());
+    	        //test if we know all nodes
+    	        Vec3 start = new Vec3(0,0,0);
+    	        Vec3 end = new Vec3(3, 0, 2);
 
-        //block node 8 to disable the path to node 13
-        HashSet<Integer> blockedNodes = new HashSet<>();
-        blockedNodes.add(8);
+    	        //block node 8 to disable the path to node 13
+    	        HashSet<Integer> blockedNodes = new HashSet<>();
+    	        blockedNodes.add(8);
 
-        var actualPath = new Pathfinder(CreateNavmesh()).navigate(start, end, SeenNodes(), blockedNodes);
+    	        var actualPath = new Pathfinder(CreateNavmesh()).navigate(start, end, SeenNodes(), blockedNodes);
+    		} 
+    	) ;
     }
 }
