@@ -8,7 +8,7 @@ at Utrecht University within the Software and Game project course.
 package world;
 
 import communication.agent.AgentCommandType;
-import environments.GymEnvironment;
+import environments.LabRecruitsEnvironment;
 import helperclasses.Intersections.EntityNodeIntersection;
 import helperclasses.datastructures.Vec3;
 import helperclasses.datastructures.linq.QArrayList;
@@ -43,7 +43,7 @@ public class BeliefState extends StateWithMessenger {
 
     }
 
-    public BeliefState(String id, GymEnvironment env) {
+    public BeliefState(String id, LabRecruitsEnvironment env) {
         this.id = id;
         setEnvironment(env);
     }
@@ -263,8 +263,8 @@ public class BeliefState extends StateWithMessenger {
     }
 
     @Override
-    public GymEnvironment env() {
-        return (GymEnvironment) super.env();
+    public LabRecruitsEnvironment env() {
+        return (LabRecruitsEnvironment) super.env();
     }
 
     @Override

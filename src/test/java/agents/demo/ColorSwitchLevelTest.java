@@ -4,13 +4,13 @@ at Utrecht University within the Software and Game project course.
 
 ©Copyright Utrecht University (Department of Information and Computing Sciences)
 */
-package testAgents;
+package agents.demo;
 
-import agents.GymAgent;
+import agents.LabRecruitsTestAgent;
 import agents.tactics.GoalStructureFactory;
 import agents.tactics.TacticsFactory;
 import environments.EnvironmentConfig;
-import environments.GymEnvironment;
+import environments.LabRecruitsEnvironment;
 import eu.iv4xr.framework.mainConcepts.TestDataCollector;
 import eu.iv4xr.framework.mainConcepts.TestGoal;
 import helperclasses.datastructures.linq.QArrayList;
@@ -25,10 +25,10 @@ import game.Platform;
 import game.LabRecruitsTestServer;
 import world.BeliefState;
 
+import static agents.TestSettings.*;
 import static eu.iv4xr.framework.Iv4xrEDSL.assertTrue_;
 import static nl.uu.cs.aplib.AplibEDSL.SEQ;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static testAgents.TestSettings.*;
 
 /**
  * This class will check if the demo for the color switch level works
@@ -61,13 +61,13 @@ public class ColorSwitchLevelTest {
     public void testColorSwitchDemo() throws InterruptedException{
         ComNode communication = new ComNode();
 
-        var gym = new GymEnvironment(new EnvironmentConfig("CLRSWTCH"));
+        var gym = new LabRecruitsEnvironment(new EnvironmentConfig("CLRSWTCH"));
         if(USE_INSTRUMENT)
             gym.registerInstrumenter(new JsonLoggerInstrument()).turnOnDebugInstrumentation();
 
-        QArrayList<GymAgent> agents = new QArrayList<>(new GymAgent[] {
-                (GymAgent)createButtonPressAgent(gym).registerTo(communication),
-                (GymAgent)createColorScreenCheckAgent(gym).registerTo(communication)
+        QArrayList<LabRecruitsTestAgent> agents = new QArrayList<>(new LabRecruitsTestAgent[] {
+                (LabRecruitsTestAgent)createButtonPressAgent(gym).registerTo(communication),
+                (LabRecruitsTestAgent)createColorScreenCheckAgent(gym).registerTo(communication)
         });
 
         // press play in Unity
@@ -76,7 +76,7 @@ public class ColorSwitchLevelTest {
 
         int tick = 0;
         // run the agent until it solves its goal:
-        while (!agents.allTrue(GymAgent::success)){
+        while (!agents.allTrue(LabRecruitsTestAgent::success)){
 
             System.out.println(PrintColor.GREEN("TICK " + tick + ":"));
 
@@ -107,9 +107,9 @@ public class ColorSwitchLevelTest {
      * This method will define the first agent in the color switch level which will press the buttons and will return to a base position each time
      * @return The agent
      */
-    public static GymAgent createButtonPressAgent(GymEnvironment gym){
+    public static LabRecruitsTestAgent createButtonPressAgent(LabRecruitsEnvironment gym){
         BeliefState state = new BeliefState().setEnvironment(gym);
-        GymAgent agent = new GymAgent(state, "0", "");
+        LabRecruitsTestAgent agent = new LabRecruitsTestAgent(state, "0", "");
 
         //set the goals
         agent.setGoal(SEQ(
@@ -131,9 +131,9 @@ public class ColorSwitchLevelTest {
      * in the color switch level
      * @return The agent
      */
-    public static GymAgent createColorScreenCheckAgent(GymEnvironment gym){
+    public static LabRecruitsTestAgent createColorScreenCheckAgent(LabRecruitsEnvironment gym){
         BeliefState state = new BeliefState().setEnvironment(gym);
-        GymAgent agent = new GymAgent(state, "1", "");
+        LabRecruitsTestAgent agent = new LabRecruitsTestAgent(state, "1", "");
 
         //wait for the ping to check the color screen with the red button
         TestGoal t1 = new TestGoal("Wait for ping").toSolve((BeliefState b) -> {

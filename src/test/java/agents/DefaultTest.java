@@ -5,12 +5,12 @@ at Utrecht University within the Software and Game project course.
 ©Copyright Utrecht University (Department of Information and Computing Sciences)
 */
 
-package testAgents;
+package agents;
 
 import agents.tactics.GoalStructureFactory;
 import agents.tactics.TestGoalFactory;
 import environments.EnvironmentConfig;
-import environments.GymEnvironment;
+import environments.LabRecruitsEnvironment;
 import eu.iv4xr.framework.mainConcepts.TestAgent;
 import eu.iv4xr.framework.mainConcepts.TestDataCollector;
 import helperclasses.datastructures.Vec3;
@@ -29,7 +29,7 @@ public class DefaultTest {
 
         var g = GoalStructureFactory.chainButtonsToGoal("Goal", "Button");
 
-        var agent = new BasicAgent().attachState(new BeliefState().setEnvironment(new GymEnvironment(new EnvironmentConfig("minimal"))));
+        var agent = new BasicAgent().attachState(new BeliefState().setEnvironment(new LabRecruitsEnvironment(new EnvironmentConfig("minimal"))));
         agent.setGoal(g);
 
         while (g.getStatus().inProgress()) {
@@ -42,7 +42,7 @@ public class DefaultTest {
 
     //@Test
     public void defaultTest()  {
-        var game_env = new GymEnvironment(new EnvironmentConfig("minimal"));
+        var game_env = new LabRecruitsEnvironment(new EnvironmentConfig("minimal"));
         var state = new BeliefState().setEnvironment(game_env);
         var agent = new TestAgent().attachState(state);
         state.id = "0";

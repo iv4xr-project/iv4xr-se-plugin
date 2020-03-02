@@ -15,19 +15,21 @@ import pathfinding.Pathfinder;
 import world.BeliefState;
 import world.Observation;
 
-/*
-This is the Gym implementation of JsonEnvironment using SocketEnvironment.
-It is used by Agents to send commands and receive observations
+/**
+ * An implementation of {@link nl.uu.cs.aplib.environments.JsonEnvironment} using 
+ * {@link environments.SocketEnvironment}.
+ * This implementation is dedicated to facilitate the communication between agents
+ * and the Lab Recruits game.
+ * It is used by Agents to send commands and receive observations
 */
-
-public class GymEnvironment extends SocketEnvironment {
+public class LabRecruitsEnvironment extends SocketEnvironment {
 
     public Pathfinder pathFinder;
 
     /**
      * Constructor
      */
-    public GymEnvironment(EnvironmentConfig config) {
+    public LabRecruitsEnvironment(EnvironmentConfig config) {
         super(config.host, config.port);
         // When this application has connected with the environment, an exchange in information takes place:
         // For now, this application sends nothing, and receives a navmesh of the world.
@@ -40,7 +42,7 @@ public class GymEnvironment extends SocketEnvironment {
      * This constructor is used whenever te game is already running and configured
      */
     private static EnvironmentConfig STANDARD_CONFIG = new EnvironmentConfig();
-    public GymEnvironment() {
+    public LabRecruitsEnvironment() {
         super(STANDARD_CONFIG.host, STANDARD_CONFIG.port);
         // When this application has connected with the environment, an exchange in information takes place:
         // For now, this application sends nothing, and receives a navmesh of the world.

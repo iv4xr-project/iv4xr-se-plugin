@@ -5,13 +5,13 @@ at Utrecht University within the Software and Game project course.
 ©Copyright Utrecht University (Department of Information and Computing Sciences)
 */
 
-package testAgents;
+package agents.demo;
 
-import agents.GymAgent;
+import agents.LabRecruitsTestAgent;
 import agents.tactics.GoalStructureFactory;
 import agents.tactics.TacticsFactory;
 import environments.EnvironmentConfig;
-import environments.GymEnvironment;
+import environments.LabRecruitsEnvironment;
 import eu.iv4xr.framework.mainConcepts.TestDataCollector;
 import helperclasses.datastructures.linq.QArrayList;
 import logger.JsonLoggerInstrument;
@@ -26,15 +26,22 @@ import world.BeliefState;
 import world.Entity;
 import world.InteractiveEntity;
 
+import static agents.TestSettings.*;
 import static nl.uu.cs.aplib.AplibEDSL.*;
-import static testAgents.TestSettings.*;
 
+/**
+ * A simple test to demonstrate using iv4xr agents to test the Lab Recruits game.
+ * The level setup is a small room with some buttons and doors. The testing task
+ * is to verify that a button wtih id button1 will open a door with id door1.
+ */
 public class ButtonCheckerTest {
 
     private static LabRecruitsTestServer labRecruitsTestServer;
 
     @BeforeAll
     static void start() {
+    	// Uncomment this to make the game's graphic visible:
+    	// TestSettings.USE_GRAPHICS = true ;
     	String labRecruitesExeRootDir = System.getProperty("user.dir") ;
         if(USE_SERVER_FOR_TEST){
             labRecruitsTestServer =new LabRecruitsTestServer(
@@ -45,11 +52,11 @@ public class ButtonCheckerTest {
     }
 
     @AfterAll
-    static void close() {
-        if(USE_SERVER_FOR_TEST)
-            labRecruitsTestServer.close();
-    }
+    static void close() { if(USE_SERVER_FOR_TEST) labRecruitsTestServer.close(); }
 
+    /**
+     * The demo test: verify that button1 will open door1.
+     */
     @Test
     public void buttonWorksTest(){
     	
@@ -57,12 +64,12 @@ public class ButtonCheckerTest {
     	var doorToTest = "door1" ;
 
         // Create an environment
-        GymEnvironment environment = new GymEnvironment(new EnvironmentConfig("button1_opens_door1"));
+        var environment = new LabRecruitsEnvironment(new EnvironmentConfig("button1_opens_door1"));
         if(USE_INSTRUMENT)
             environment.registerInstrumenter(new JsonLoggerInstrument()).turnOnDebugInstrumentation();
 
         try {
-	        environment.startSimulation(); // presses "Play" in the game for you
+	        environment.startSimulation(); // this will press the "Play" button in the game for you
 	
 	        // create a belief state
 	        var state = new BeliefState();
@@ -73,7 +80,7 @@ public class ButtonCheckerTest {
 			var dataCollector = new TestDataCollector();
 	
 	        // create a test agent
-	        var testAgent = new GymAgent(state) ;
+	        var testAgent = new LabRecruitsTestAgent(state) ;
 	        
 	        // define the test-goal:
 	        var goal = SEQ(
@@ -105,7 +112,7 @@ public class ButtonCheckerTest {
 	            		"door should be open", 
 	            		(Entity e) -> (e instanceof InteractiveEntity) && ((InteractiveEntity) e).isActive)
 	        );
-	        
+	        // attaching the goal and testdata-collector
 	        testAgent . setTestDataCollector(dataCollector) . setGoal(goal) ;
 	
 	        //goal not achieved yet

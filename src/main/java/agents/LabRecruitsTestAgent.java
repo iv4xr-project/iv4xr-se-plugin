@@ -9,17 +9,21 @@ package agents;
 
 import communication.agent.AgentCommand;
 import communication.system.Request;
-import environments.GymEnvironment;
+import environments.LabRecruitsEnvironment;
 import eu.iv4xr.framework.mainConcepts.TestAgent;
 import world.BeliefState;
 
-public class GymAgent extends TestAgent {
+/**
+ * A dedicated sub-class of {@link eu.iv4xr.framework.mainConcepts.TestAgent} to test
+ * the Lab Recruits game.
+ */
+public class LabRecruitsTestAgent extends TestAgent {
 
     /**
      * The constructor for the test agent without an id or role attached to itself
      * @param state: The agent state
      */
-    public GymAgent(BeliefState state) {
+    public LabRecruitsTestAgent(BeliefState state) {
         attachState(state);
     }
 
@@ -29,7 +33,7 @@ public class GymAgent extends TestAgent {
      * @param id: The id of the agent
      * @param role: The role of the agent
      */
-    public GymAgent(BeliefState state, String id, String role) {
+    public LabRecruitsTestAgent(BeliefState state, String id, String role) {
         super(id, role);
         state.id = id;
         attachState(state);
@@ -65,7 +69,7 @@ public class GymAgent extends TestAgent {
         return (BeliefState) this.state;
     }
 
-    public GymEnvironment env(){
+    public LabRecruitsEnvironment env(){
         return getState().env();
     }
 }
