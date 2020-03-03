@@ -27,7 +27,7 @@ public class DefaultTest {
     //@Test
     public void defaultAgent() throws InterruptedException {
 
-        var g = GoalStructureFactory.chainButtonsToGoal("Goal", "Button");
+        var g = GoalStructureFactory.buttonsVisited_thenGoalVisited("Goal", "Button");
 
         var agent = new BasicAgent().attachState(new BeliefState().setEnvironment(new LabRecruitsEnvironment(new EnvironmentConfig("minimal"))));
         agent.setGoal(g);

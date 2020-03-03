@@ -61,12 +61,12 @@ public class MovementTest {
         if(USE_INSTRUMENT)
             environment.registerInstrumenter(new JsonLoggerInstrument()).turnOnDebugInstrumentation();
 
-        QArrayList<LabRecruitsTestAgent> agents = new QArrayList<>(new LabRecruitsTestAgent[] {
-            createAgent("agent0", environment, new Vec3(3, 0, 3)),
-            createAgent("agent1", environment, new Vec3(3, 0, 4)),
-            createAgent("agent2", environment, new Vec3(4, 0, 3)),
-            createAgent("agent3", environment, new Vec3(4, 0, 4))
-        });
+        var ta0 = createAgent("agent0", environment, new Vec3(3, 0, 3));
+        var ta1 = createAgent("agent1", environment, new Vec3(3, 0, 4)) ;
+        var ta2 = createAgent("agent2", environment, new Vec3(4, 0, 3)) ;
+        var ta3 = createAgent("agent3", environment, new Vec3(4, 0, 4)) ;
+        
+        QArrayList<LabRecruitsTestAgent> agents = new QArrayList<>(new LabRecruitsTestAgent[] { ta0,ta1,ta2,ta3 });
          
         try {
 	        // press play in Unity
@@ -80,6 +80,7 @@ public class MovementTest {
 	
 	            // only updates in progress
 	            for(var agent : agents.where(agent -> !agent.success())){
+	            	System.out.println("*** " + agent.getState().id + " @" + agent.getState().position) ;
 	                agent.update();
 	                if(agent.success()) agent.printStatus();
 	            }
@@ -105,7 +106,7 @@ public class MovementTest {
         BeliefState state = new BeliefState().setEnvironment(gym);
         state.id = id;
         LabRecruitsTestAgent agent = new LabRecruitsTestAgent(state);
-        agent.setGoal(GoalStructureFactory.reachPositions(dest));
+        agent.setGoal(GoalStructureFactory.positionsVisited(dest));
         return agent;
     }
 }

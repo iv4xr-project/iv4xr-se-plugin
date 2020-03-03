@@ -19,7 +19,7 @@ public class InteractionAgentTest {
     //@Test
     public void interactionAgent() throws InterruptedException {
 
-        var g = GoalStructureFactory.chainButtonsToGoal("Goal", "button1", "button2", "button3");
+        var g = GoalStructureFactory.buttonsVisited_thenGoalVisited("Goal", "button1", "button2", "button3");
 
         var agent = new BasicAgent().attachState(new BeliefState().setEnvironment(new LabRecruitsEnvironment(new EnvironmentConfig("minimal"))));
         agent.setGoal(g);

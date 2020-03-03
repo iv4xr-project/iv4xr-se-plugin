@@ -30,8 +30,8 @@ public class TacticsFactory {
      * @param position: The position to move to
      * @return The tactic in which the agent will move to the known position
      */
-    public static Tactic move(Vec3 position) {
-        Tactic move = action("Move to " + position.toString())
+    public static Tactic navigateTo(Vec3 position) {
+        Tactic move = action("Navigate to " + position.toString())
                 .do2((BeliefState belief) -> (Vec3[] path) -> {
                     //if there is no path, set the path
                     if(belief.getGoalLocation() == null){
@@ -53,13 +53,14 @@ public class TacticsFactory {
     }
 
     /**
-     * This method will return a tactic in which the agent will move towards an object with a given id. This action is
+     * This method will return a tactic in which the agent will move towards an
+     * in-game entity with a given id. This action is
      * only enabled if the object with this id is present in the belief state
      * @param id: The id of the object to which the agent wants to move
      * @return The tactic in which the agent will try to move to the entity
      */
-    public static Tactic move(String id) {
-        Tactic move = action("Move to " + id)
+    public static Tactic navigateTo(String id) {
+        Tactic move = action("Navigate to " + id)
                 .do2((BeliefState belief) -> (Tuple<Vec3, Vec3[]> p) -> {
                     //if there is no path, set the path
                     if(belief.getGoalLocation() == null){
@@ -91,7 +92,7 @@ public class TacticsFactory {
 
     /**
      * Send an interact command if the agent is close enough
-     * @param objectID The object to interact with
+     * @param objectID The id of the in-game entity to interact with
      * @return A tactic in which the agent will interact with the object
      */
     public static Tactic interact(String objectID) {

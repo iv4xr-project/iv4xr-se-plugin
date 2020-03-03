@@ -19,7 +19,7 @@ public class TestGoalFactory {
         return testgoal("Walk to object '" + id + "'")
                 .toSolve((BeliefState b) -> b.withinRange(id))
                 .withTactic(FIRSTof(
-                        TacticsFactory.move(id),
+                        TacticsFactory.navigateTo(id),
                         TacticsFactory.explore(),
                         TacticsFactory.observe())
                 );
@@ -28,6 +28,6 @@ public class TestGoalFactory {
     public static TestGoal reachPosition(Vec3 position) {
         return testgoal("Walk to position '" + position + "'")
                 .toSolve((BeliefState b) ->  b.withinRange(position))
-                .withTactic(FIRSTof(TacticsFactory.move(position), TacticsFactory.observe()));
+                .withTactic(FIRSTof(TacticsFactory.navigateTo(position), TacticsFactory.observe()));
     }
 }

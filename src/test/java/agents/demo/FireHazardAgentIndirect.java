@@ -96,17 +96,17 @@ public class FireHazardAgentIndirect {
         //You will probably not want to explore to prevent random behaviour. in order to do this set the waypoints close enough to each other
 
         agent.setGoal(SEQ(
-                GoalStructureFactory.reachPositions(new Vec3(6,0,5), new Vec3(8,0,1), new Vec3(13,4,1)),
-                GoalStructureFactory.reachAndInteract("b4.1"),
-                GoalStructureFactory.reachPositions(new Vec3(13,4,3)),
-                GoalStructureFactory.reachAndInteract("b7.1"),
-                GoalStructureFactory.reachPositions(new Vec3(9,4,9), new Vec3(8,4,6), new Vec3(5,4,7)),
-                GoalStructureFactory.reachAndInteract("b8.2"),
-                GoalStructureFactory.reachPositions(new Vec3(1,4,13)),
-                GoalStructureFactory.reachAndInteract("b5.1"),
-                GoalStructureFactory.reachPositions(new Vec3(1,4,22), new Vec3(6,0,22)),
-                GoalStructureFactory.reachAndInteract("b1.1"),
-                GoalStructureFactory.reachPositions(new Vec3(5,0,25))
+                GoalStructureFactory.positionsVisited(new Vec3(6,0,5), new Vec3(8,0,1), new Vec3(13,4,1)),
+                GoalStructureFactory.entityReachedAndInteracted("b4.1"),
+                GoalStructureFactory.positionsVisited(new Vec3(13,4,3)),
+                GoalStructureFactory.entityReachedAndInteracted("b7.1"),
+                GoalStructureFactory.positionsVisited(new Vec3(9,4,9), new Vec3(8,4,6), new Vec3(5,4,7)),
+                GoalStructureFactory.entityReachedAndInteracted("b8.2"),
+                GoalStructureFactory.positionsVisited(new Vec3(1,4,13)),
+                GoalStructureFactory.entityReachedAndInteracted("b5.1"),
+                GoalStructureFactory.positionsVisited(new Vec3(1,4,22), new Vec3(6,0,22)),
+                GoalStructureFactory.entityReachedAndInteracted("b1.1"),
+                GoalStructureFactory.positionsVisited(new Vec3(5,0,25))
                 ));
         return agent;
     }

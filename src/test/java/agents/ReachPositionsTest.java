@@ -24,7 +24,7 @@ public class ReachPositionsTest {
         };
 
         // Make the agent reach each positon sequentially.
-        var g = GoalStructureFactory.reachPositions(positions);
+        var g = GoalStructureFactory.positionsVisited(positions);
 
         var agent = new BasicAgent().attachState(new BeliefState().setEnvironment(new LabRecruitsEnvironment(new EnvironmentConfig("minimal"))));
         agent.setGoal(g);

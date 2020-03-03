@@ -113,15 +113,15 @@ public class ColorSwitchLevelTest {
 
         //set the goals
         agent.setGoal(SEQ(
-                GoalStructureFactory.reachAndInteract("CB3"), //move to the red button and interact with it
-                GoalStructureFactory.sendPing("0", "1").lift(), //send a ping to the other agent
-                GoalStructureFactory.reachAndInteract("CB3"), //move to the red button and interact with it
-                GoalStructureFactory.reachAndInteract("CB1"), //move to the blue button and interact with it
-                GoalStructureFactory.sendPing("0", "1").lift(), //send a ping to the other agent
-                GoalStructureFactory.reachAndInteract("CB1"), //move to the blue button and interact with it
-                GoalStructureFactory.reachAndInteract("CB2"), //move to the green button and interact with it
-                GoalStructureFactory.sendPing("0", "1").lift(), //send a ping to the other agent
-                GoalStructureFactory.reachAndInteract("CB2"))); //move to the green button and interact with it
+                GoalStructureFactory.entityReachedAndInteracted("CB3"), //move to the red button and interact with it
+                GoalStructureFactory.pingSent("0", "1").lift(), //send a ping to the other agent
+                GoalStructureFactory.entityReachedAndInteracted("CB3"), //move to the red button and interact with it
+                GoalStructureFactory.entityReachedAndInteracted("CB1"), //move to the blue button and interact with it
+                GoalStructureFactory.pingSent("0", "1").lift(), //send a ping to the other agent
+                GoalStructureFactory.entityReachedAndInteracted("CB1"), //move to the blue button and interact with it
+                GoalStructureFactory.entityReachedAndInteracted("CB2"), //move to the green button and interact with it
+                GoalStructureFactory.pingSent("0", "1").lift(), //send a ping to the other agent
+                GoalStructureFactory.entityReachedAndInteracted("CB2"))); //move to the green button and interact with it
 
         return agent;
     }

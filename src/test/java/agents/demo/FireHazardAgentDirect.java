@@ -96,7 +96,7 @@ public class FireHazardAgentDirect {
         //You will probably not want to explore to prevent random behaviour. in order to do this set the waypoints close enough to each other
 
         agent.setGoal(SEQ(
-                GoalStructureFactory.reachPositions(new Vec3(6,0,5),
+                GoalStructureFactory.positionsVisited(new Vec3(6,0,5),
                                                     new Vec3(7,0,8),
                                                     new Vec3(7,0,11),
                                                     new Vec3(5,0,11),
@@ -105,8 +105,8 @@ public class FireHazardAgentDirect {
                                                     new Vec3(1,0,18),
                                                     new Vec3(3,0,20),
                                                     new Vec3(6,0,20)),
-                GoalStructureFactory.reachAndInteract("b1.1"),
-                GoalStructureFactory.reachPositions(new Vec3(5,0,25))
+                GoalStructureFactory.entityReachedAndInteracted("b1.1"),
+                GoalStructureFactory.positionsVisited(new Vec3(5,0,25))
                 ));
         return agent;
     }

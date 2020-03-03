@@ -187,11 +187,11 @@ public class SimpleUnityTest {
         var agent = new LabRecruitsTestAgent(new BeliefState("agent0", environment));
 
         GoalStructure goal = SEQ(
-                GoalStructureFactory.reachPosition(new Vec3(1,0,1)).lift(),
-                GoalStructureFactory.inspect("button0", e -> !((InteractiveEntity) e).isActive),
-                GoalStructureFactory.reachAndInteract("button0"),
-                GoalStructureFactory.inspect("button0", e -> ((InteractiveEntity) e).isActive),
-                GoalStructureFactory.reachPosition(new Vec3(1,0,1)).lift()
+                GoalStructureFactory.positionReached(new Vec3(1,0,1)).lift(),
+                GoalStructureFactory.entityInspected("button0", e -> !((InteractiveEntity) e).isActive),
+                GoalStructureFactory.entityReachedAndInteracted("button0"),
+                GoalStructureFactory.entityInspected("button0", e -> ((InteractiveEntity) e).isActive),
+                GoalStructureFactory.positionReached(new Vec3(1,0,1)).lift()
         );
 
         agent.setGoal(goal);
