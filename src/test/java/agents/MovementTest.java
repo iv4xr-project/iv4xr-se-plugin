@@ -8,14 +8,14 @@ at Utrecht University within the Software and Game project course.
 package agents;
 
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Assertions ;
+import static org.junit.jupiter.api.Assertions.* ;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static agents.TestSettings.USE_GRAPHICS;
 import static agents.TestSettings.USE_INSTRUMENT;
 import static agents.TestSettings.USE_SERVER_FOR_TEST;
-import static org.junit.jupiter.api.Assertions.*;
 
 import agents.LabRecruitsTestAgent;
 import agents.tactics.GoalStructureFactory;
@@ -31,6 +31,9 @@ import world.BeliefState;
 
 /**
  * To test simple movement of four agents towards some new positions close by.
+ * The setup is a square room, with four agents, one in each corner. Each 
+ * is given the goal to move to some position somewhere in the center of the
+ * room.
  */
 public class MovementTest {
     // This application starts a single agent
@@ -61,10 +64,14 @@ public class MovementTest {
         if(USE_INSTRUMENT)
             environment.registerInstrumenter(new JsonLoggerInstrument()).turnOnDebugInstrumentation();
 
-        var ta0 = createAgent("agent0", environment, new Vec3(3, 0, 3));
-        var ta1 = createAgent("agent1", environment, new Vec3(3, 0, 4)) ;
-        var ta2 = createAgent("agent2", environment, new Vec3(4, 0, 3)) ;
-        var ta3 = createAgent("agent3", environment, new Vec3(4, 0, 4)) ;
+        var p0 = new Vec3(3, 0, 3) ;
+        var p1 = new Vec3(3, 0, 4) ;
+        var p2 = new Vec3(4, 0, 3) ;
+        var p3 = new Vec3(4, 0, 4) ;
+        var ta0 = createAgent("agent0", environment, p0);
+        var ta1 = createAgent("agent1", environment, p1) ;
+        var ta2 = createAgent("agent2", environment, p2) ;
+        var ta3 = createAgent("agent3", environment, p3) ;
         
         QArrayList<LabRecruitsTestAgent> agents = new QArrayList<>(new LabRecruitsTestAgent[] { ta0,ta1,ta2,ta3 });
          
@@ -92,6 +99,14 @@ public class MovementTest {
 	            	break ;
 	            }
 	        }
+	        System.out.println("*** Distance " + ta0.getState().id + " to dest:" + ta0.getState().position.distance(p0)) ;
+	        System.out.println("*** Distance " + ta1.getState().id + " to dest:" + ta1.getState().position.distance(p1)) ;
+	        System.out.println("*** Distance " + ta2.getState().id + " to dest:" + ta2.getState().position.distance(p2)) ;
+	        System.out.println("*** Distance " + ta3.getState().id + " to dest:" + ta3.getState().position.distance(p3)) ;
+	        assertTrue(ta0.getState().position.distance(p0) < 0.5) ;
+	        assertTrue(ta1.getState().position.distance(p1) < 0.5) ;
+	        assertTrue(ta2.getState().position.distance(p2) < 0.5) ;
+	        assertTrue(ta3.getState().position.distance(p3) < 0.5) ;
         } 
         finally { 
 	        if (!environment.close())
