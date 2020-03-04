@@ -37,7 +37,7 @@ public class BeliefState extends StateWithMessenger {
     private HashMap<String, DynamicEntity> dynamicEntities = new HashMap<>();
     private HashMap<String, InteractiveEntity> interactiveEntities = new HashMap<>();
     public HashSet<Integer> blockedNodes = new HashSet<>();//keep track of nodes which are blocked and can not be used for pathfinding
-    private HashMap<String, Integer[]> nodesBlockedByEntity = new HashMap<>();
+    public HashMap<String, Integer[]> nodesBlockedByEntity = new HashMap<>();
 
     public BeliefState() {
 
@@ -165,11 +165,27 @@ public class BeliefState extends StateWithMessenger {
 
         for(var e : observation.entities){
             this.addEntity(e); // handle updates / new entities
-            // check blocked nodes
-            if (e instanceof InteractiveEntity && !interactiveEntityExists(e.id)) 
-            	// WP: uh.. is the negation there correct?? Hackish ...so, only Dynamic-interactive entity
-            	// will pass this guard.
-                nodesBlockedByEntity.put(e.id, EntityNodeIntersection.getNodesBlockedByInteractiveEntity((InteractiveEntity) e, mentalMap.pathFinder.navmesh));
+            
+            // WP note:
+            // For each entity, below we calculate which navigation nodes which would be
+            // blocked by the entity. However, we should keep in mind that an open door
+            // The fragment below call EntityNodeIntersection.getNodesBlockedByInteractiveEntity
+            // which in turn decide, based on the entity-type/tag if the entity is blocking.
+            // Currently only doors are defined to be blocking. E.g. buttons are not categorized
+            // as blocking.  --> this logic is shaky!!
+            // 
+            // The logic with open doors (which should be unblocking) is implemented
+            // as a post-processing in the call to recalculateBlockedNodes()
+            // a bit further below.
+            
+            //if (e instanceof InteractiveEntity && !interactiveEntityExists(e.id)) 
+            if (e instanceof InteractiveEntity) {
+                    	
+            	Integer[] blocked = EntityNodeIntersection.getNodesBlockedByInteractiveEntity((InteractiveEntity) e, mentalMap.pathFinder.navmesh); 
+            	System.out.println("### calculating blocked nodes by entity " + e.id +  ": " + blocked.length) ;
+            
+                nodesBlockedByEntity.put(e.id,blocked) ;
+            }
         }
 
         //update the seen nodes and position if there exists have a mental map
@@ -211,8 +227,9 @@ public class BeliefState extends StateWithMessenger {
 
         //iterate over all key value pairs
         for(var kv: nodesBlockedByEntity.entrySet())
-            //if a door is not active then it blocks the path
-            if(evaluateInteractiveEntity(kv.getKey(), (InteractiveEntity ie) -> !ie.isActive))
+            // decide which entity can be blocking; if so add its blocked nodes.
+        	// Currently only closed doors are blocking
+            if(evaluateInteractiveEntity(kv.getKey(), (InteractiveEntity ie) -> ie.tag.equals("Door") && !ie.isActive))
                 Collections.addAll(blockedNodes, kv.getValue());
     }
 

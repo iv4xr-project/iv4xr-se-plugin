@@ -8,8 +8,8 @@ at Utrecht University within the Software and Game project course.
 package game;
 
 import agents.LabRecruitsTestAgent;
-import agents.tactics.GoalStructureFactory;
-import agents.tactics.TacticsFactory;
+import agents.tactics.GoalLib;
+import agents.tactics.TacticLib;
 import environments.EnvironmentConfig;
 import environments.LabRecruitsEnvironment;
 import helperclasses.datastructures.Vec3;
@@ -69,7 +69,7 @@ public class SimpleUnityTest {
         GoalStructure goal = goal(config.level_name)
                 .toSolve((BeliefState belief) -> belief.position != null)
                 // the agent should find its position just by observing
-                .withTactic(TacticsFactory.observe())
+                .withTactic(TacticLib.observe())
                 .lift();
 
         agent.setGoal(goal);
@@ -108,7 +108,7 @@ public class SimpleUnityTest {
 
         GoalStructure goal = goal(config.level_name)
                 .toSolve(evaluation)
-                .withTactic(TacticsFactory.observe()) // the agent should be able to see the button by observing
+                .withTactic(TacticLib.observe()) // the agent should be able to see the button by observing
                 .lift();
 
         agent.setGoal(goal);
@@ -153,7 +153,7 @@ public class SimpleUnityTest {
 
         GoalStructure goal = goal(config.level_name)
                 .toSolve(evaluation)
-                .withTactic(TacticsFactory.observe()) // the agent should be able to see the button by observing
+                .withTactic(TacticLib.observe()) // the agent should be able to see the button by observing
                 .lift();
 
         agent.setGoal(goal);
@@ -187,11 +187,11 @@ public class SimpleUnityTest {
         var agent = new LabRecruitsTestAgent(new BeliefState("agent0", environment));
 
         GoalStructure goal = SEQ(
-                GoalStructureFactory.positionReached(new Vec3(1,0,1)).lift(),
-                GoalStructureFactory.entityInspected("button0", e -> !((InteractiveEntity) e).isActive),
-                GoalStructureFactory.entityReachedAndInteracted("button0"),
-                GoalStructureFactory.entityInspected("button0", e -> ((InteractiveEntity) e).isActive),
-                GoalStructureFactory.positionReached(new Vec3(1,0,1)).lift()
+                GoalLib.positionReached(new Vec3(1,0,1)).lift(),
+                GoalLib.entityInspected("button0", e -> !((InteractiveEntity) e).isActive),
+                GoalLib.entityReachedAndInteracted("button0"),
+                GoalLib.entityInspected("button0", e -> ((InteractiveEntity) e).isActive),
+                GoalLib.positionReached(new Vec3(1,0,1)).lift()
         );
 
         agent.setGoal(goal);

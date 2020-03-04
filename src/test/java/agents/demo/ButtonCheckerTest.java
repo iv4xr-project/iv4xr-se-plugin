@@ -8,8 +8,8 @@ at Utrecht University within the Software and Game project course.
 package agents.demo;
 
 import agents.LabRecruitsTestAgent;
-import agents.tactics.GoalStructureFactory;
-import agents.tactics.TacticsFactory;
+import agents.tactics.GoalLib;
+import agents.tactics.TacticLib;
 import environments.EnvironmentConfig;
 import environments.LabRecruitsEnvironment;
 import eu.iv4xr.framework.mainConcepts.TestDataCollector;
@@ -91,23 +91,23 @@ public class ButtonCheckerTest {
 	    		//       If this is the case we continue the test. 
 	    		//       Else it is not sensical to do this test, so we will abort 
 	    		//       (there is something wrong with the scenario setup; this should be fixed first),  
-	            GoalStructureFactory.entityInspected(buttonToTest, (Entity e) -> (e instanceof InteractiveEntity) && !((InteractiveEntity) e).isActive),
-	            GoalStructureFactory.entityInspected(doorToTest, (Entity e) -> (e instanceof InteractiveEntity) && !((InteractiveEntity) e).isActive),
+	            GoalLib.entityInspected(buttonToTest, (Entity e) -> (e instanceof InteractiveEntity) && !((InteractiveEntity) e).isActive),
+	            GoalLib.entityInspected(doorToTest, (Entity e) -> (e instanceof InteractiveEntity) && !((InteractiveEntity) e).isActive),
 	            
 	            // now the test itself:
 	            
 	            // (1a) walk to the button
-	            GoalStructureFactory.entityReached(buttonToTest).lift(),
+	            GoalLib.entityReached(buttonToTest).lift(),
 	            // (1b) and then press the button
 	            MySubGoals.pressButton(buttonToTest),
 	            
 	            // (2) now we should check that the button is indeed in its active state, and 
 	            // the door is open:
-	            GoalStructureFactory.entityInvariantChecked(testAgent,
+	            GoalLib.entityInvariantChecked(testAgent,
 	            		buttonToTest, 
 	            		"button should be active", 
 	            		(Entity e) -> (e instanceof InteractiveEntity) && ((InteractiveEntity) e).isActive),
-	            GoalStructureFactory.entityInvariantChecked(testAgent,
+	            GoalLib.entityInvariantChecked(testAgent,
 	            		doorToTest, 
 	            		"door should be open", 
 	            		(Entity e) -> (e instanceof InteractiveEntity) && ((InteractiveEntity) e).isActive)
@@ -142,7 +142,7 @@ class MySubGoals {
 	
 	// to just observe the game ... to get information
     static GoalStructure justObserve(){
-        return goal("observe").toSolve((BeliefState b) -> b.position != null).withTactic(TacticsFactory.observe()).lift();
+        return goal("observe").toSolve((BeliefState b) -> b.position != null).withTactic(TacticLib.observe()).lift();
     }
     
     static GoalStructure observeInteractiveEntity(String interactiveEntityId, boolean isActive) {
@@ -154,7 +154,7 @@ class MySubGoals {
                     return interactiveEntities.contains(entity -> entity.id.equals(interactiveEntityId) && entity.isActive == isActive);
                 })
                 // in the future this will be swapped by inspect(objectId) for when an object is not within sight
-                .withTactic(TacticsFactory.observe())
+                .withTactic(TacticLib.observe())
                 .lift()
                 .maxbudget(1);
     }
@@ -171,9 +171,9 @@ class MySubGoals {
             .withTactic(
                 FIRSTof(
                     // try to interact
-                    TacticsFactory.interact(buttonId),
+                    TacticLib.interact(buttonId),
                     // move toward the button if the agent cannot interact
-                    TacticsFactory.navigateTo(buttonId)
+                    TacticLib.navigateTo(buttonId)
                 )
             ).lift();
     }
@@ -183,15 +183,15 @@ class MySubGoals {
         return SEQ(
           justObserve(),
           // observe the button to be inactive and the door to be closed
-          GoalStructureFactory.entityInspected(buttonId, (Entity e) -> (e instanceof InteractiveEntity) && !((InteractiveEntity) e).isActive),
-          GoalStructureFactory.entityInspected(target, (Entity e) -> (e instanceof InteractiveEntity) && !((InteractiveEntity) e).isActive),
+          GoalLib.entityInspected(buttonId, (Entity e) -> (e instanceof InteractiveEntity) && !((InteractiveEntity) e).isActive),
+          GoalLib.entityInspected(target, (Entity e) -> (e instanceof InteractiveEntity) && !((InteractiveEntity) e).isActive),
           // walk to the button
-          GoalStructureFactory.entityReached(buttonId).lift(),
+          GoalLib.entityReached(buttonId).lift(),
           // press the button
           pressButton(buttonId),
           // observe the button to be active and the door to be open
-          GoalStructureFactory.entityInspected(buttonId, (Entity e) -> (e instanceof InteractiveEntity) && ((InteractiveEntity) e).isActive),
-          GoalStructureFactory.entityInspected(target, (Entity e) -> (e instanceof InteractiveEntity) && ((InteractiveEntity) e).isActive)
+          GoalLib.entityInspected(buttonId, (Entity e) -> (e instanceof InteractiveEntity) && ((InteractiveEntity) e).isActive),
+          GoalLib.entityInspected(target, (Entity e) -> (e instanceof InteractiveEntity) && ((InteractiveEntity) e).isActive)
         );
     }
 }

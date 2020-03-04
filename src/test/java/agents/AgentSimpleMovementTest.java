@@ -18,7 +18,7 @@ import static agents.TestSettings.USE_INSTRUMENT;
 import static agents.TestSettings.USE_SERVER_FOR_TEST;
 
 import agents.LabRecruitsTestAgent;
-import agents.tactics.GoalStructureFactory;
+import agents.tactics.GoalLib;
 import environments.EnvironmentConfig;
 import helperclasses.datastructures.linq.QArrayList;
 import logger.JsonLoggerInstrument;
@@ -31,11 +31,11 @@ import world.BeliefState;
 
 /**
  * To test simple movement of four agents towards some new positions close by.
- * The setup is a square room, with four agents, one in each corner. Each 
+ * The setup is a plain square room, with four agents, one in each corner. Each 
  * is given the goal to move to some position somewhere in the center of the
  * room.
  */
-public class MovementTest {
+public class AgentSimpleMovementTest {
     // This application starts a single agent
 	
 	private static LabRecruitsTestServer labRecruitsTestServer;
@@ -61,6 +61,8 @@ public class MovementTest {
     public void movementTest() throws InterruptedException {
 
         var environment = new LabRecruitsEnvironment(new EnvironmentConfig("square"));
+        // set this to true if we want to see the commands send through the Environment
+        // USE_INSTRUMENT = true ;
         if(USE_INSTRUMENT)
             environment.registerInstrumenter(new JsonLoggerInstrument()).turnOnDebugInstrumentation();
 
@@ -75,43 +77,41 @@ public class MovementTest {
         
         QArrayList<LabRecruitsTestAgent> agents = new QArrayList<>(new LabRecruitsTestAgent[] { ta0,ta1,ta2,ta3 });
          
-        try {
-	        // press play in Unity
-	        if (! environment.startSimulation())
-	            throw new InterruptedException("Unity refuses to start the Simulation!");
-	
-	        int tick = 0;
-	        while (!agents.allTrue(LabRecruitsTestAgent::success)){
-	        	
-	            System.out.println(PrintColor.GREEN("TICK " + tick + ":"));
-	
-	            // only updates in progress
-	            for(var agent : agents.where(agent -> !agent.success())){
-	            	System.out.println("*** " + agent.getState().id + " @" + agent.getState().position) ;
-	                agent.update();
-	                if(agent.success()) agent.printStatus();
-	            }
-	            Thread.sleep(15);
-	            tick++;
-	            if (tick >= 30) {
-	            	// takes too long, something is wrong..
-	            	Assertions.fail("The agents run too long...") ;
-	            	break ;
-	            }
-	        }
-	        System.out.println("*** Distance " + ta0.getState().id + " to dest:" + ta0.getState().position.distance(p0)) ;
-	        System.out.println("*** Distance " + ta1.getState().id + " to dest:" + ta1.getState().position.distance(p1)) ;
-	        System.out.println("*** Distance " + ta2.getState().id + " to dest:" + ta2.getState().position.distance(p2)) ;
-	        System.out.println("*** Distance " + ta3.getState().id + " to dest:" + ta3.getState().position.distance(p3)) ;
+        // press play in Unity
+        if (! environment.startSimulation())
+            throw new InterruptedException("Unity refuses to start the Simulation!");
+
+        int tick = 0;
+        while (!agents.allTrue(LabRecruitsTestAgent::success)){
+        	
+            System.out.println(PrintColor.GREEN("TICK " + tick + ":"));
+
+            // only updates in progress
+            for(var agent : agents.where(agent -> !agent.success())){
+            	System.out.println("*** " + agent.getState().id + " @" + agent.getState().position) ;
+                agent.update();
+                if(agent.success()) agent.printStatus();
+            }
+            Thread.sleep(15);
+            tick++;
+            if (tick >= 30) {
+            	// takes too long, something is wrong..
+            	Assertions.fail("The agents run too long...") ;
+            	break ;
+            }
+        }
+        System.out.println("*** Distance " + ta0.getState().id + " to dest:" + ta0.getState().position.distance(p0)) ;
+        System.out.println("*** Distance " + ta1.getState().id + " to dest:" + ta1.getState().position.distance(p1)) ;
+        System.out.println("*** Distance " + ta2.getState().id + " to dest:" + ta2.getState().position.distance(p2)) ;
+        System.out.println("*** Distance " + ta3.getState().id + " to dest:" + ta3.getState().position.distance(p3)) ;
 	        assertTrue(ta0.getState().position.distance(p0) < 0.5) ;
 	        assertTrue(ta1.getState().position.distance(p1) < 0.5) ;
 	        assertTrue(ta2.getState().position.distance(p2) < 0.5) ;
 	        assertTrue(ta3.getState().position.distance(p3) < 0.5) ;
-        } 
-        finally { 
+   
 	        if (!environment.close())
 	            throw new InterruptedException("Unity refuses to start the Simulation!");
-        }
+    
     }
 
     /**
@@ -121,7 +121,7 @@ public class MovementTest {
         BeliefState state = new BeliefState().setEnvironment(gym);
         state.id = id;
         LabRecruitsTestAgent agent = new LabRecruitsTestAgent(state);
-        agent.setGoal(GoalStructureFactory.positionsVisited(dest));
+        agent.setGoal(GoalLib.positionsVisited(dest));
         return agent;
     }
 }

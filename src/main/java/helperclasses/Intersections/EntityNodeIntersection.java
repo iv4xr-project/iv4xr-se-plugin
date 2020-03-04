@@ -38,7 +38,7 @@ public class EntityNodeIntersection {
         //check if the entity is blocking
         boolean valid = false;
         for(int i = 0; i< whitelistBlockingEntities.length; i++){
-            if(e.tag.equals(whitelistBlockingEntities[i])) valid = true;
+        	if(e.tag.equals(whitelistBlockingEntities[i])) valid = true;
 
         }
         if(!valid) return new Integer[0];

@@ -14,20 +14,23 @@ import world.BeliefState;
 import static eu.iv4xr.framework.Iv4xrEDSL.testgoal;
 import static nl.uu.cs.aplib.AplibEDSL.FIRSTof;
 
+// WP:
+// this class should be depracated
+//
 public class TestGoalFactory {
-    public static TestGoal reachObject(String id) {
+    public static TestGoal reachObjectxx(String id) {
         return testgoal("Walk to object '" + id + "'")
                 .toSolve((BeliefState b) -> b.withinRange(id))
                 .withTactic(FIRSTof(
-                        TacticsFactory.navigateTo(id),
-                        TacticsFactory.explore(),
-                        TacticsFactory.observe())
+                        TacticLib.navigateTo(id),
+                        TacticLib.explore(),
+                        TacticLib.observe())
                 );
     }
 
-    public static TestGoal reachPosition(Vec3 position) {
+    public static TestGoal reachPositionxx(Vec3 position) {
         return testgoal("Walk to position '" + position + "'")
                 .toSolve((BeliefState b) ->  b.withinRange(position))
-                .withTactic(FIRSTof(TacticsFactory.navigateTo(position), TacticsFactory.observe()));
+                .withTactic(FIRSTof(TacticLib.navigateTo(position), TacticLib.observe()));
     }
 }

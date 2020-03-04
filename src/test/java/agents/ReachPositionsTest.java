@@ -7,7 +7,7 @@ at Utrecht University within the Software and Game project course.
 
 package agents;
 
-import agents.tactics.GoalStructureFactory;
+import agents.tactics.GoalLib;
 import environments.EnvironmentConfig;
 import environments.LabRecruitsEnvironment;
 import helperclasses.datastructures.Vec3;
@@ -24,7 +24,7 @@ public class ReachPositionsTest {
         };
 
         // Make the agent reach each positon sequentially.
-        var g = GoalStructureFactory.positionsVisited(positions);
+        var g = GoalLib.positionsVisited(positions);
 
         var agent = new BasicAgent().attachState(new BeliefState().setEnvironment(new LabRecruitsEnvironment(new EnvironmentConfig("minimal"))));
         agent.setGoal(g);

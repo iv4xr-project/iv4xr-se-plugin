@@ -7,7 +7,7 @@ at Utrecht University within the Software and Game project course.
 
 package agents;
 
-import agents.tactics.GoalStructureFactory;
+import agents.tactics.GoalLib;
 import environments.EnvironmentConfig;
 import environments.LabRecruitsEnvironment;
 import nl.uu.cs.aplib.mainConcepts.BasicAgent;
@@ -19,7 +19,7 @@ public class InteractionAgentTest {
     //@Test
     public void interactionAgent() throws InterruptedException {
 
-        var g = GoalStructureFactory.buttonsVisited_thenGoalVisited("Goal", "button1", "button2", "button3");
+        var g = GoalLib.buttonsVisited_thenGoalVisited("Goal", "button1", "button2", "button3");
 
         var agent = new BasicAgent().attachState(new BeliefState().setEnvironment(new LabRecruitsEnvironment(new EnvironmentConfig("minimal"))));
         agent.setGoal(g);

@@ -32,8 +32,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 
-// Basic agent that combines movement with interactions to solve Default.csv.
-public class DefaultTest {
+/**
+ * Test that agent can navigate to an entity (a button) in a simple maze. The 
+ * maze is made of walls and decorative items such as book cases. These type
+ * of items are static and solid; so they will be substracted from the navigation
+ * mesh.
+ * 
+ */
+public class AgentPathfindingTest {
 	
 	private static LabRecruitsTestServer labRecruitsTestServer;
 
@@ -58,8 +64,6 @@ public class DefaultTest {
     public void defaultAgent() throws InterruptedException {
 
     	var environment = new LabRecruitsEnvironment(new EnvironmentConfig("smallmaze"));
-    	//var environment = new LabRecruitsEnvironment(new EnvironmentConfig("button1_opens_door1_v2"));
-    	//var environment = new LabRecruitsEnvironment(new EnvironmentConfig("square"));
         // set this to true if we want to see the commands send through the Environment
         // USE_INSTRUMENT = true ;
         if(USE_INSTRUMENT)
@@ -69,13 +73,10 @@ public class DefaultTest {
         state.id = "agent1";
         LabRecruitsTestAgent agent = new LabRecruitsTestAgent(state);
         
-        //var g = GoalLib.buttonsVisited_thenGoalVisited("door1", "button1");
-        var g = SEQ(justObserve(),GoalLib.entityReached("button1").lift()) ;
-        //var g = GoalLib.entityReachedAndInteracted("button1") ;
-        
+        var g = GoalLib.entityReached("button1").lift() ;
         agent.setGoal(g) ;
 
-     // press play in Unity
+        // press play in Unity
         if (! environment.startSimulation())
             throw new InterruptedException("Unity refuses to start the Simulation!");
 
@@ -89,50 +90,15 @@ public class DefaultTest {
             	break ;
             }
         }
+        assertTrue(g.getStatus().success()) ;
+        var agent_p = agent.getState().position ;
+        var button_p = agent.getState().getEntity("button1").position ;
+        assertTrue(agent_p.distance(button_p) < 0.5) ;
 
         g.printGoalStructureStatus();
-
+        
         if (!environment.close())
             throw new InterruptedException("Unity refuses to start the Simulation!");
-
     }
     
-    static GoalStructure justObserve(){
-        return goal("observe").toSolve((BeliefState b) -> b.position != null).withTactic(TacticLib.observe()).lift();
-    }
-
-    //@Test
-    public void defaultTest()  {
-        var game_env = new LabRecruitsEnvironment(new EnvironmentConfig("minimal"));
-        var state = new BeliefState().setEnvironment(game_env);
-        var agent = new TestAgent().attachState(state);
-        state.id = "0";
-
-        var goalPosition = new Vec3(7,0,7);
-
-        var info = "Testing Default.csv";
-
-        // Assert button was not pressed when walking to a position.
-        GoalStructure g = null ;
-        /* ******
-        var g = TestGoalFactory.reachPosition(goalPosition)
-                .oracle(agent, (BeliefState b) -> assertTrue_("", info,
-                        b.getInteractiveEntity("Button 1") != null && !b.getInteractiveEntity("Button 1").isActive))
-                .lift();
-        */
-        var dataCollector = new TestDataCollector();
-        agent.setTestDataCollector(dataCollector);
-
-        agent.setGoal(g);
-
-        while (g.getStatus().inProgress()) {
-            agent.update();
-        }
-
-        assertEquals(0, dataCollector.getNumberOfFailVerdictsSeen());
-        assertEquals(1, dataCollector.getNumberOfPassVerdictsSeen());
-        Logging.getAPLIBlogger().info("TEST END.");
-
-        // *** g.printGoalStructureStatus();
-    }
 }

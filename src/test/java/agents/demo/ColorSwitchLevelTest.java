@@ -7,8 +7,8 @@ at Utrecht University within the Software and Game project course.
 package agents.demo;
 
 import agents.LabRecruitsTestAgent;
-import agents.tactics.GoalStructureFactory;
-import agents.tactics.TacticsFactory;
+import agents.tactics.GoalLib;
+import agents.tactics.TacticLib;
 import environments.EnvironmentConfig;
 import environments.LabRecruitsEnvironment;
 import eu.iv4xr.framework.mainConcepts.TestDataCollector;
@@ -113,15 +113,15 @@ public class ColorSwitchLevelTest {
 
         //set the goals
         agent.setGoal(SEQ(
-                GoalStructureFactory.entityReachedAndInteracted("CB3"), //move to the red button and interact with it
-                GoalStructureFactory.pingSent("0", "1").lift(), //send a ping to the other agent
-                GoalStructureFactory.entityReachedAndInteracted("CB3"), //move to the red button and interact with it
-                GoalStructureFactory.entityReachedAndInteracted("CB1"), //move to the blue button and interact with it
-                GoalStructureFactory.pingSent("0", "1").lift(), //send a ping to the other agent
-                GoalStructureFactory.entityReachedAndInteracted("CB1"), //move to the blue button and interact with it
-                GoalStructureFactory.entityReachedAndInteracted("CB2"), //move to the green button and interact with it
-                GoalStructureFactory.pingSent("0", "1").lift(), //send a ping to the other agent
-                GoalStructureFactory.entityReachedAndInteracted("CB2"))); //move to the green button and interact with it
+                GoalLib.entityReachedAndInteracted("CB3"), //move to the red button and interact with it
+                GoalLib.pingSent("0", "1").lift(), //send a ping to the other agent
+                GoalLib.entityReachedAndInteracted("CB3"), //move to the red button and interact with it
+                GoalLib.entityReachedAndInteracted("CB1"), //move to the blue button and interact with it
+                GoalLib.pingSent("0", "1").lift(), //send a ping to the other agent
+                GoalLib.entityReachedAndInteracted("CB1"), //move to the blue button and interact with it
+                GoalLib.entityReachedAndInteracted("CB2"), //move to the green button and interact with it
+                GoalLib.pingSent("0", "1").lift(), //send a ping to the other agent
+                GoalLib.entityReachedAndInteracted("CB2"))); //move to the green button and interact with it
 
         return agent;
     }
@@ -143,7 +143,7 @@ public class ColorSwitchLevelTest {
             }
             return false;
         }).withTactic(
-                TacticsFactory.receivePing()
+                TacticLib.receivePing()
         );
 
         String info1 = "Check if the color screen is red";
@@ -158,7 +158,7 @@ public class ColorSwitchLevelTest {
             }
             return false;
         }).withTactic(
-                TacticsFactory.receivePing()
+                TacticLib.receivePing()
         );
 
         String info2 = "Check if the color screen is blue";
@@ -173,7 +173,7 @@ public class ColorSwitchLevelTest {
             }
             return false;
         }).withTactic(
-                TacticsFactory.receivePing()
+                TacticLib.receivePing()
         );
 
         String info3 = "Check if the color screen is green";

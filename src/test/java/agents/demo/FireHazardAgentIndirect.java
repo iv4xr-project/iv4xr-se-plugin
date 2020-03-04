@@ -7,7 +7,7 @@ at Utrecht University within the Software and Game project course.
 package agents.demo;
 
 import agents.LabRecruitsTestAgent;
-import agents.tactics.GoalStructureFactory;
+import agents.tactics.GoalLib;
 import environments.EnvironmentConfig;
 import environments.LabRecruitsEnvironment;
 import helperclasses.datastructures.Vec3;
@@ -96,17 +96,17 @@ public class FireHazardAgentIndirect {
         //You will probably not want to explore to prevent random behaviour. in order to do this set the waypoints close enough to each other
 
         agent.setGoal(SEQ(
-                GoalStructureFactory.positionsVisited(new Vec3(6,0,5), new Vec3(8,0,1), new Vec3(13,4,1)),
-                GoalStructureFactory.entityReachedAndInteracted("b4.1"),
-                GoalStructureFactory.positionsVisited(new Vec3(13,4,3)),
-                GoalStructureFactory.entityReachedAndInteracted("b7.1"),
-                GoalStructureFactory.positionsVisited(new Vec3(9,4,9), new Vec3(8,4,6), new Vec3(5,4,7)),
-                GoalStructureFactory.entityReachedAndInteracted("b8.2"),
-                GoalStructureFactory.positionsVisited(new Vec3(1,4,13)),
-                GoalStructureFactory.entityReachedAndInteracted("b5.1"),
-                GoalStructureFactory.positionsVisited(new Vec3(1,4,22), new Vec3(6,0,22)),
-                GoalStructureFactory.entityReachedAndInteracted("b1.1"),
-                GoalStructureFactory.positionsVisited(new Vec3(5,0,25))
+                GoalLib.positionsVisited(new Vec3(6,0,5), new Vec3(8,0,1), new Vec3(13,4,1)),
+                GoalLib.entityReachedAndInteracted("b4.1"),
+                GoalLib.positionsVisited(new Vec3(13,4,3)),
+                GoalLib.entityReachedAndInteracted("b7.1"),
+                GoalLib.positionsVisited(new Vec3(9,4,9), new Vec3(8,4,6), new Vec3(5,4,7)),
+                GoalLib.entityReachedAndInteracted("b8.2"),
+                GoalLib.positionsVisited(new Vec3(1,4,13)),
+                GoalLib.entityReachedAndInteracted("b5.1"),
+                GoalLib.positionsVisited(new Vec3(1,4,22), new Vec3(6,0,22)),
+                GoalLib.entityReachedAndInteracted("b1.1"),
+                GoalLib.positionsVisited(new Vec3(5,0,25))
                 ));
         return agent;
     }

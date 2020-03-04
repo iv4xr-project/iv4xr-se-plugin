@@ -21,9 +21,11 @@ import java.util.Arrays;
 import static nl.uu.cs.aplib.AplibEDSL.action;
 
 /**
- * This class will serve as a factory capable of generating tactics which can be used for goals
+ * This class provide a set of standard tactics to interact with the Lab Recruits
+ * game. Tactics are higher-level actions, and are used to solve goals for
+ * aplib agents.
  */
-public class TacticsFactory {
+public class TacticLib {
     /**
      * This method will return a tactic in which the agent will move to a given known position, only enabled if the
      * agent knows its own position
@@ -226,6 +228,7 @@ public class TacticsFactory {
     public static Tactic explore() {
         var explore = action("Explore")
                 .do2((BeliefState belief) -> (Tuple<Vec3, Vec3[]> p) -> {
+                	//System.out.println("### explore") ;
                     //if the agent already has a goal move towards that goal
                     if(belief.getGoalLocation() != null){
                         Observation o = belief.env().moveToward(belief.id, belief.position,belief.getNextWayPoint());//move towards the next way point
@@ -255,6 +258,7 @@ public class TacticsFactory {
                     //check if we can find a path
                     Vec3[] path = belief.navigate(g);
                     if(path == null) return null;
+                    //System.out.println("### find unexplored " + g + ", current pos: " + belief.position) ;
                     return new Tuple(g, path);//return the path finding information
                 }).lift();
         return explore;

@@ -22,9 +22,10 @@ import eu.iv4xr.framework.mainConcepts.TestAgent;
 import static eu.iv4xr.framework.Iv4xrEDSL.* ;
 
 /**
- * This class will serve as a factory capable of generating goal structures which can be used by the agent
+ * This class provide a set of standard useful sub-goals/sub-goal-structures
+ * to be used by test agents to test Lab Recruits.
  */
-public class GoalStructureFactory {
+public class GoalLib {
     /**
      * This method will construct a goal structure in which the agent will move to a known position
      *
@@ -42,9 +43,9 @@ public class GoalStructureFactory {
 
         //define the goal structure
         Goal g = goal.withTactic(FIRSTof(//the tactic used to solve the goal
-                TacticsFactory.navigateTo(goalPosition),//move to the goal position
-                TacticsFactory.explore(),//explore if the goal position is unknown
-                TacticsFactory.observe()));//find the agent's own position
+                TacticLib.navigateTo(goalPosition),//move to the goal position
+                TacticLib.explore(),//explore if the goal position is unknown
+                TacticLib.observe()));//find the agent's own position
         return g;
     }
 
@@ -75,9 +76,9 @@ public class GoalStructureFactory {
 
         //define the goal structure
         Goal g = goal.withTactic(FIRSTof( //the tactic used to solve the goal
-                TacticsFactory.navigateTo(entityId),//try to move to the goal object
-                TacticsFactory.explore(),//find the goal object
-                TacticsFactory.observe()));//find the agent's own position
+                TacticLib.navigateTo(entityId),//try to move to the goal object
+                TacticLib.explore(),//find the goal object
+                TacticLib.observe()));//find the agent's own position
         return g;
     }
 
@@ -114,14 +115,14 @@ public class GoalStructureFactory {
 
         //Set the tactics with which the goals will be solved
         GoalStructure g1 = goal1.withTactic(FIRSTof( //the tactic used to solve the goal
-                TacticsFactory.navigateTo(entityId), //try to move to the object
-                TacticsFactory.explore(), //find the object
-                TacticsFactory.observe(),
+                TacticLib.navigateTo(entityId), //try to move to the object
+                TacticLib.explore(), //find the object
+                TacticLib.observe(),
                 ABORT())) //find the agent's own position
                 .lift();
         GoalStructure g2 = goal2.withTactic(FIRSTof( //the tactic used to solve the goal
-                TacticsFactory.interact(entityId),// interact with the object
-                TacticsFactory.observe(),
+                TacticLib.interact(entityId),// interact with the object
+                TacticLib.observe(),
                 ABORT())) // observe the objects
                 .lift();
 
@@ -153,9 +154,9 @@ public class GoalStructureFactory {
         return goal("Inspect " + id)
                 .toSolve((BeliefState b) -> b.evaluateEntity(id, e -> e.lastUpdated == b.lastUpdated))
                 .withTactic(FIRSTof(
-                        TacticsFactory.navigateTo(id),
-                        TacticsFactory.explore(),
-                        TacticsFactory.observe(),
+                        TacticLib.navigateTo(id),
+                        TacticLib.explore(),
+                        TacticLib.observe(),
                         ABORT()));
     }
 
@@ -171,7 +172,7 @@ public class GoalStructureFactory {
             goal("Evaluate " + id)
             .toSolve((BeliefState b) -> b.evaluateEntity(id, predicate))
             .withTactic(FIRSTof(
-                    TacticsFactory.observeOnce(),
+                    TacticLib.observeOnce(),
                     ABORT())).lift()
         );
     }
@@ -202,7 +203,7 @@ public class GoalStructureFactory {
             		}
             		)
             .withTactic(FIRSTof(
-                    TacticsFactory.observeOnce(),
+                    TacticLib.observeOnce(),
                     ABORT())).lift()
         );
     }
@@ -215,7 +216,7 @@ public class GoalStructureFactory {
      */
     public static GoalStructure memorySent(String id){
         return goal("Share memory").toSolve((BeliefState belief) -> true).withTactic(
-                TacticsFactory.shareMemory(id)
+                TacticLib.shareMemory(id)
         ).lift();
     }
 
@@ -227,7 +228,7 @@ public class GoalStructureFactory {
      */
     public static Goal pingSent(String idFrom, String idTo){
         return new Goal("Send ping").toSolve((BeliefState belief) -> true).withTactic(
-                TacticsFactory.sendPing(idFrom, idTo)
+                TacticLib.sendPing(idFrom, idTo)
         );
     }
 }
