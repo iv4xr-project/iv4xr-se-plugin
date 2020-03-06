@@ -7,9 +7,7 @@ at Utrecht University within the Software and Game project course.
 
 package agents;
 
-import agents.tactics.GoalLib;
-import agents.tactics.TacticLib;
-import agents.tactics.TestGoalFactory;
+import agents.tactics.*;
 import environments.EnvironmentConfig;
 import environments.LabRecruitsEnvironment;
 import eu.iv4xr.framework.mainConcepts.TestAgent;
@@ -22,10 +20,7 @@ import nl.uu.cs.aplib.Logging;
 import nl.uu.cs.aplib.mainConcepts.*;
 import world.BeliefState;
 
-import static agents.TestSettings.USE_GRAPHICS;
-import static agents.TestSettings.USE_INSTRUMENT;
-import static agents.TestSettings.USE_SERVER_FOR_TEST;
-import static eu.iv4xr.framework.Iv4xrEDSL.assertTrue_;
+import static agents.TestSettings.*;
 import static nl.uu.cs.aplib.AplibEDSL.*;
 import static org.junit.jupiter.api.Assertions.* ;
 import org.junit.jupiter.api.Test;
@@ -40,7 +35,7 @@ public class DefaultTest {
     @BeforeAll
     static void start() {
     	// Uncomment this to make the game's graphic visible:
-    	// TestSettings.USE_GRAPHICS = true ;
+    	//TestSettings.USE_GRAPHICS = true ;
     	String labRecruitesExeRootDir = System.getProperty("user.dir") ;
         if(USE_SERVER_FOR_TEST){
             labRecruitsTestServer =new LabRecruitsTestServer(
@@ -54,53 +49,7 @@ public class DefaultTest {
     static void close() { if(USE_SERVER_FOR_TEST) labRecruitsTestServer.close(); }
 
 
-    @Test
-    public void defaultAgent() throws InterruptedException {
-
-    	var environment = new LabRecruitsEnvironment(new EnvironmentConfig("smallmaze"));
-    	//var environment = new LabRecruitsEnvironment(new EnvironmentConfig("button1_opens_door1_v2"));
-    	//var environment = new LabRecruitsEnvironment(new EnvironmentConfig("square"));
-        // set this to true if we want to see the commands send through the Environment
-        // USE_INSTRUMENT = true ;
-        if(USE_INSTRUMENT)
-            environment.registerInstrumenter(new JsonLoggerInstrument()).turnOnDebugInstrumentation();
-
-        BeliefState state = new BeliefState().setEnvironment(environment);
-        state.id = "agent1";
-        LabRecruitsTestAgent agent = new LabRecruitsTestAgent(state);
-        
-        //var g = GoalLib.buttonsVisited_thenGoalVisited("door1", "button1");
-        var g = SEQ(justObserve(),GoalLib.entityReached("button1").lift()) ;
-        //var g = GoalLib.entityReachedAndInteracted("button1") ;
-        
-        agent.setGoal(g) ;
-
-     // press play in Unity
-        if (! environment.startSimulation())
-            throw new InterruptedException("Unity refuses to start the Simulation!");
-
-        int i = 0 ;
-        while (g.getStatus().inProgress()) {
-            agent.update();
-            System.out.println("*** " + i + ", " + agent.getState().id + " @" + agent.getState().position) ;
-            Thread.sleep(30);
-            i++ ;
-            if (i>120) {
-            	break ;
-            }
-        }
-
-        g.printGoalStructureStatus();
-
-        if (!environment.close())
-            throw new InterruptedException("Unity refuses to start the Simulation!");
-
-    }
-    
-    static GoalStructure justObserve(){
-        return goal("observe").toSolve((BeliefState b) -> b.position != null).withTactic(TacticLib.observe()).lift();
-    }
-
+   
     //@Test
     public void defaultTest()  {
         var game_env = new LabRecruitsEnvironment(new EnvironmentConfig("minimal"));

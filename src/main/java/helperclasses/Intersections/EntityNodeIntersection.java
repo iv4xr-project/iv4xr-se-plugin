@@ -30,6 +30,24 @@ public class EntityNodeIntersection {
         double sizeZ = e.extents.z;//size of the square
         Vec3 center = e.center; // the center of the square
 
+        // WP note:
+        // HACK: the original algorithm is problematical because the navigation triangles
+        // are too large; so we may end up blocking too large section of navmesh, leaving
+        // the agent to have no route to its destination.
+        // A possible solution is to spilt the initial navmesh to make the traingle smallers,
+        // at the cost of slowing down path planning.
+        // I currently will just introduce this hack here, that solves the problem,
+        // provided THE ONLY type of entity that is considered as solid is DOOR.
+        // The hack is by making the door width to appear as 0. We also take advantage
+        // that doors in Lab Recruits can only be either parallel to the x-axis, or parallel
+        // to the z-axis.
+        //
+        if (e.tag.equals("Door")) { 
+        	// HACK!
+        	if (sizeX < sizeZ) sizeX = 0d ;
+            else sizeZ = 0d ;
+        }
+             
         //define which objects are blocking
         String[] whitelistBlockingEntities = new String[]{
                 "Door"
@@ -39,7 +57,6 @@ public class EntityNodeIntersection {
         boolean valid = false;
         for(int i = 0; i< whitelistBlockingEntities.length; i++){
         	if(e.tag.equals(whitelistBlockingEntities[i])) valid = true;
-
         }
         if(!valid) return new Integer[0];
 
@@ -57,15 +74,25 @@ public class EntityNodeIntersection {
         //TODO: once the quad tree is implemented use it here to optimize the speed of the program
         List<Integer> blockedNodes = new LinkedList<>();
         //check for each node if it blocks yes or no
+        //System.out.println("oooo " + center.y + " , " + e.extents.y) ;
+        
         for(int i = 0; i < m.faces.length; i++){
             //check if the entity and the navmesh triangle are on the same floor
-            if(Math.abs(m.faces[i].centre.y - entityY) < 0.5){
+        	//System.out.println("zzzz " + entityY + " vs " + m.faces[i].centre.y) ;
+            if(Math.abs(m.faces[i].centre.y - entityY) < 0.55){
                 Vec3[] triangleVertices = getTriangleVertices(m, i);
-
+                //System.out.println("xxxx " + triangleVertices.length) ;
+                
                 //check if they intersect
                 boolean intersect = TrianglePolygonIntersection.isPolygonIntersectingTriangle(
                         triangleVertices[0],triangleVertices[1],triangleVertices[2], points);
-                if(intersect) blockedNodes.add(i);
+                if(intersect) {
+                	//System.out.println("### Found intersection " + e.id + " at " + e.center + " with: ") ;
+                	//System.out.println("        " + triangleVertices[0]) ;
+                	//System.out.println("        " + triangleVertices[1]) ;
+                	//System.out.println("        " + triangleVertices[2]) ;
+                	blockedNodes.add(i);
+                }
             }
         }
         return blockedNodes.toArray(new Integer[blockedNodes.size()]);
