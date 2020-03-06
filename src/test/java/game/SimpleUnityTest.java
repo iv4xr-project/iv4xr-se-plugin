@@ -7,11 +7,11 @@ at Utrecht University within the Software and Game project course.
 
 package game;
 
-import agents.GymAgent;
-import agents.tactics.GoalStructureFactory;
-import agents.tactics.TacticsFactory;
+import agents.LabRecruitsTestAgent;
+import agents.tactics.GoalLib;
+import agents.tactics.TacticLib;
 import environments.EnvironmentConfig;
-import environments.GymEnvironment;
+import environments.LabRecruitsEnvironment;
 import helperclasses.datastructures.Vec3;
 import helperclasses.datastructures.linq.QArrayList;
 import logger.JsonLoggerInstrument;
@@ -26,9 +26,9 @@ import world.InteractiveEntity;
 
 import java.util.function.Predicate;
 
+import static agents.TestSettings.*;
 import static nl.uu.cs.aplib.AplibEDSL.SEQ;
 import static nl.uu.cs.aplib.AplibEDSL.goal;
-import static testAgents.TestSettings.*;
 
 public class SimpleUnityTest {
 
@@ -58,18 +58,18 @@ public class SimpleUnityTest {
                 .replaceSeed(500)
                 .replaceFireSpreadSpeed(2f);
 
-        GymEnvironment environment = new GymEnvironment(config);
+        LabRecruitsEnvironment environment = new LabRecruitsEnvironment(config);
         if(USE_INSTRUMENT)
             environment.registerInstrumenter(new JsonLoggerInstrument()).turnOnDebugInstrumentation();
 
         // create the agent
-        var agent = new GymAgent(new BeliefState("agent0", environment));
+        var agent = new LabRecruitsTestAgent(new BeliefState("agent0", environment));
 
         // The agent wants to know its position
         GoalStructure goal = goal(config.level_name)
                 .toSolve((BeliefState belief) -> belief.position != null)
                 // the agent should find its position just by observing
-                .withTactic(TacticsFactory.observe())
+                .withTactic(TacticLib.observe())
                 .lift();
 
         agent.setGoal(goal);
@@ -95,12 +95,12 @@ public class SimpleUnityTest {
 
         var config = new EnvironmentConfig("observeSwitchTest");
 
-        GymEnvironment environment = new GymEnvironment(config);
+        LabRecruitsEnvironment environment = new LabRecruitsEnvironment(config);
         if(USE_INSTRUMENT)
             environment.registerInstrumenter(new JsonLoggerInstrument()).turnOnDebugInstrumentation();
 
         // create the agent
-        var agent = new GymAgent(new BeliefState("agent0", environment));
+        var agent = new LabRecruitsTestAgent(new BeliefState("agent0", environment));
 
         // Entity list contains an entity with type "Switch" and position (1,0,1)
         Predicate<BeliefState> evaluation = (BeliefState belief) -> new QArrayList<>(belief.getAllInteractiveEntities())
@@ -108,7 +108,7 @@ public class SimpleUnityTest {
 
         GoalStructure goal = goal(config.level_name)
                 .toSolve(evaluation)
-                .withTactic(TacticsFactory.observe()) // the agent should be able to see the button by observing
+                .withTactic(TacticLib.observe()) // the agent should be able to see the button by observing
                 .lift();
 
         agent.setGoal(goal);
@@ -138,12 +138,12 @@ public class SimpleUnityTest {
 
         var config = new EnvironmentConfig("observeVisibleSwitches");
 
-        GymEnvironment environment = new GymEnvironment(config);
+        LabRecruitsEnvironment environment = new LabRecruitsEnvironment(config);
         if(USE_INSTRUMENT)
             environment.registerInstrumenter(new JsonLoggerInstrument()).turnOnDebugInstrumentation();
 
         // create the agent
-        var agent = new GymAgent(new BeliefState("agent0", environment));
+        var agent = new LabRecruitsTestAgent(new BeliefState("agent0", environment));
 
         // Entity list contains an entity with type "Switch" and position (1,0,1)
         Predicate<BeliefState> evaluation = (BeliefState belief) ->
@@ -153,7 +153,7 @@ public class SimpleUnityTest {
 
         GoalStructure goal = goal(config.level_name)
                 .toSolve(evaluation)
-                .withTactic(TacticsFactory.observe()) // the agent should be able to see the button by observing
+                .withTactic(TacticLib.observe()) // the agent should be able to see the button by observing
                 .lift();
 
         agent.setGoal(goal);
@@ -179,19 +179,19 @@ public class SimpleUnityTest {
     public void moveToButton(){
         var config = new EnvironmentConfig("moveToButton");
 
-        GymEnvironment environment = new GymEnvironment(config);
+        LabRecruitsEnvironment environment = new LabRecruitsEnvironment(config);
         if(USE_INSTRUMENT)
             environment.registerInstrumenter(new JsonLoggerInstrument()).turnOnDebugInstrumentation();
 
         // create the agent
-        var agent = new GymAgent(new BeliefState("agent0", environment));
+        var agent = new LabRecruitsTestAgent(new BeliefState("agent0", environment));
 
         GoalStructure goal = SEQ(
-                GoalStructureFactory.reachPosition(new Vec3(1,0,1)).lift(),
-                GoalStructureFactory.inspect("button0", e -> !((InteractiveEntity) e).isActive),
-                GoalStructureFactory.reachAndInteract("button0"),
-                GoalStructureFactory.inspect("button0", e -> ((InteractiveEntity) e).isActive),
-                GoalStructureFactory.reachPosition(new Vec3(1,0,1)).lift()
+                GoalLib.positionReached(new Vec3(1,0,1)).lift(),
+                GoalLib.entityInspected("button0", e -> !((InteractiveEntity) e).isActive),
+                GoalLib.entityReachedAndInteracted("button0"),
+                GoalLib.entityInspected("button0", e -> ((InteractiveEntity) e).isActive),
+                GoalLib.positionReached(new Vec3(1,0,1)).lift()
         );
 
         agent.setGoal(goal);

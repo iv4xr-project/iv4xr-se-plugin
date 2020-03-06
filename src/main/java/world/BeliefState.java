@@ -8,7 +8,7 @@ at Utrecht University within the Software and Game project course.
 package world;
 
 import communication.agent.AgentCommandType;
-import environments.GymEnvironment;
+import environments.LabRecruitsEnvironment;
 import helperclasses.Intersections.EntityNodeIntersection;
 import helperclasses.datastructures.Vec3;
 import helperclasses.datastructures.linq.QArrayList;
@@ -43,7 +43,7 @@ public class BeliefState extends StateWithMessenger {
 
     }
 
-    public BeliefState(String id, GymEnvironment env) {
+    public BeliefState(String id, LabRecruitsEnvironment env) {
         this.id = id;
         setEnvironment(env);
     }
@@ -162,14 +162,34 @@ public class BeliefState extends StateWithMessenger {
         position = observation.agentPosition;
         velocity = observation.velocity;
         lastUpdated++;
+        
+        // check if some interactive entities has changed state; need to check this here before
+        // updating their state into this state (below)
+        var someInteractivityEntity_hasChangedState = anyInteractiveEntityChanged(observation) ;
 
         for(var e : observation.entities){
             this.addEntity(e); // handle updates / new entities
-            // check blocked nodes
-            if (e instanceof InteractiveEntity && !interactiveEntityExists(e.id)) 
-            	// WP: uh.. is the negation there correct?? Hackish ...so, only Dynamic-interactive entity
-            	// will pass this guard.
-                nodesBlockedByEntity.put(e.id, EntityNodeIntersection.getNodesBlockedByInteractiveEntity((InteractiveEntity) e, mentalMap.pathFinder.navmesh));
+            
+            // WP note:
+            // For each entity, below we calculate which navigation nodes which would be
+            // blocked by the entity. However, we should keep in mind that an open door
+            // The fragment below call EntityNodeIntersection.getNodesBlockedByInteractiveEntity
+            // which in turn decide, based on the entity-type/tag if the entity is blocking.
+            // Currently only doors are defined to be blocking. E.g. buttons are not categorized
+            // as blocking.  --> this logic is shaky!!
+            // 
+            // The logic with open doors (which should be unblocking) is implemented
+            // as a post-processing in the call to recalculateBlockedNodes()
+            // a bit further below.
+            
+            //if (e instanceof InteractiveEntity && !interactiveEntityExists(e.id)) 
+            if (e instanceof InteractiveEntity) {
+                    	
+            	Integer[] blocked = EntityNodeIntersection.getNodesBlockedByInteractiveEntity((InteractiveEntity) e, mentalMap.pathFinder.navmesh); 
+            	//System.out.println("### calculating blocked nodes by entity " + e.id +  ": " + blocked.length) ;
+            
+                nodesBlockedByEntity.put(e.id,blocked) ;
+            }
         }
 
         //update the seen nodes and position if there exists have a mental map
@@ -179,9 +199,12 @@ public class BeliefState extends StateWithMessenger {
         }
 
         //check if we need to recalculate the nodes
-        if(anyInteractiveEntityChanged(observation))
+        //if(anyInteractiveEntityChanged(observation))
+        if (someInteractivityEntity_hasChangedState)	{
+        	//System.out.println("### interactive state change detected.!") ;
             //if the blocked nodes needs updating, do so
             recalculateBlockedNodes();
+        }
     }
 
     /**
@@ -210,10 +233,16 @@ public class BeliefState extends StateWithMessenger {
         blockedNodes = new HashSet<>();
 
         //iterate over all key value pairs
-        for(var kv: nodesBlockedByEntity.entrySet())
-            //if a door is not active then it blocks the path
-            if(evaluateInteractiveEntity(kv.getKey(), (InteractiveEntity ie) -> !ie.isActive))
-                Collections.addAll(blockedNodes, kv.getValue());
+        for(var kv: nodesBlockedByEntity.entrySet()) {
+            // decide which entity can be blocking; if so add its blocked nodes.
+        	// Currently only closed doors are blocking
+        	InteractiveEntity ie_ = getInteractiveEntity(kv.getKey()) ;
+        	//System.out.println("xxxx "  + ie_.id + ", tag:" + ie_.tag + ", active: " + ie_.isActive) ;
+            
+            if(evaluateInteractiveEntity(kv.getKey(), (InteractiveEntity ie) -> ie.tag.equals("Door") && !ie.isActive)) {
+            	Collections.addAll(blockedNodes, kv.getValue());
+            }
+        }
     }
 
     /**
@@ -224,8 +253,13 @@ public class BeliefState extends StateWithMessenger {
         //loop over the interactive entities
         for (var newEntity: getInteractables(o.entities)) {
             //check if there is an update of an entity
-            if(evaluateInteractiveEntity(newEntity.id, (InteractiveEntity originalEntity) -> originalEntity.isActive != newEntity.isActive ))
-                return true;
+        	var originalEntity = getInteractiveEntity(newEntity.id) ;
+        	if (originalEntity == null) return true ;
+        	if (originalEntity.isActive != newEntity.isActive) return true ;
+        	// FIX
+        	// This orginal code is incorrect! If the new entity did not exists in the belief, it will be marked as unchanged:
+            //if(evaluateInteractiveEntity(newEntity.id, (InteractiveEntity originalEntity) -> originalEntity.isActive != newEntity.isActive ))
+            //    return true;
         }
         return false;
     }
@@ -263,8 +297,8 @@ public class BeliefState extends StateWithMessenger {
     }
 
     @Override
-    public GymEnvironment env() {
-        return (GymEnvironment) super.env();
+    public LabRecruitsEnvironment env() {
+        return (LabRecruitsEnvironment) super.env();
     }
 
     @Override

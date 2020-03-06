@@ -15,19 +15,21 @@ import pathfinding.Pathfinder;
 import world.BeliefState;
 import world.Observation;
 
-/*
-This is the Gym implementation of JsonEnvironment using SocketEnvironment.
-It is used by Agents to send commands and receive observations
+/**
+ * An implementation of {@link nl.uu.cs.aplib.environments.JsonEnvironment} using 
+ * {@link environments.SocketEnvironment}.
+ * This implementation is dedicated to facilitate the communication between agents
+ * and the Lab Recruits game.
+ * It is used by Agents to send commands and receive observations
 */
-
-public class GymEnvironment extends SocketEnvironment {
+public class LabRecruitsEnvironment extends SocketEnvironment {
 
     public Pathfinder pathFinder;
 
     /**
      * Constructor
      */
-    public GymEnvironment(EnvironmentConfig config) {
+    public LabRecruitsEnvironment(EnvironmentConfig config) {
         super(config.host, config.port);
         // When this application has connected with the environment, an exchange in information takes place:
         // For now, this application sends nothing, and receives a navmesh of the world.
@@ -40,7 +42,7 @@ public class GymEnvironment extends SocketEnvironment {
      * This constructor is used whenever te game is already running and configured
      */
     private static EnvironmentConfig STANDARD_CONFIG = new EnvironmentConfig();
-    public GymEnvironment() {
+    public LabRecruitsEnvironment() {
         super(STANDARD_CONFIG.host, STANDARD_CONFIG.port);
         // When this application has connected with the environment, an exchange in information takes place:
         // For now, this application sends nothing, and receives a navmesh of the world.
@@ -50,7 +52,7 @@ public class GymEnvironment extends SocketEnvironment {
 
     // Initialisation object
 
-    private Observation getObservation(AgentCommand c){
+    private Observation sendAgentCommand_andGetObservation(AgentCommand c){
         return getResponse(Request.command(c));
     }
 
@@ -85,34 +87,40 @@ public class GymEnvironment extends SocketEnvironment {
         targetDirection.add(agentPosition);
 
         //send the command
-        return getObservation(AgentCommand.moveTowardCommand(agentId, targetDirection, jump));
+        return sendAgentCommand_andGetObservation(AgentCommand.moveTowardCommand(agentId, targetDirection, jump));
     }
 
     /**
      * This will send a do-nothing command to unity, and return a new Observation.
      */
     public Observation observe(String agentId){
-        return getObservation(AgentCommand.doNothing(agentId));
+        return sendAgentCommand_andGetObservation(AgentCommand.doNothing(agentId));
     }
 
     // send an interaction command to unity
     public Observation interactWith(String agentId, String target){
-        return getObservation(AgentCommand.interactCommand(agentId, target));
+        return sendAgentCommand_andGetObservation(AgentCommand.interactCommand(agentId, target));
     }
 
-    // press play in Unity
+    /**
+     * Press the "play-button" in Unity. If left unpressed, no simulation/game-play can start.
+     */
     public Boolean startSimulation(){
         return getResponse(Request.startSimulation());
     }
 
+    /**
+     * Press the "pause-button" in Unity. This will pull the Unity-side paused.
+     */
+    public Boolean pauseSimulation(){
+        return getResponse(Request.pauseSimulation());
+    }
+    
     /**
      * this function updates the hazards in Unity, which is specified in EnvironmentConfig
      */
     public Boolean updateHazards(){
         return getResponse(Request.updateEnvironment());
     }
-    // press pause in Unity
-    public Boolean pauseSimulation(){
-        return getResponse(Request.pauseSimulation());
-    }
+
 }

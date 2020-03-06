@@ -4,12 +4,12 @@ at Utrecht University within the Software and Game project course.
 
 ©Copyright Utrecht University (Department of Information and Computing Sciences)
 */
-package testAgents;
+package agents.demo;
 
-import agents.GymAgent;
-import agents.tactics.GoalStructureFactory;
+import agents.LabRecruitsTestAgent;
+import agents.tactics.GoalLib;
 import environments.EnvironmentConfig;
-import environments.GymEnvironment;
+import environments.LabRecruitsEnvironment;
 import helperclasses.datastructures.Vec3;
 import helperclasses.datastructures.linq.QArrayList;
 import logger.JsonLoggerInstrument;
@@ -21,8 +21,8 @@ import game.Platform;
 import game.LabRecruitsTestServer;
 import world.BeliefState;
 
+import static agents.TestSettings.*;
 import static nl.uu.cs.aplib.AplibEDSL.SEQ;
-import static testAgents.TestSettings.*;
 
 public class FireHazardAgentIndirect {
 
@@ -52,9 +52,9 @@ public class FireHazardAgentIndirect {
     //@Test
     public void fireHazardDemo() throws InterruptedException{
         //Add the level to the resources and change the string in the environmentConfig on the next line from Ramps to the new level
-        var gym = (GymEnvironment) new GymEnvironment(new EnvironmentConfig("HZRDIndirect").replaceAgentMovementSpeed(0.2f)).registerInstrumenter(new JsonLoggerInstrument()).turnOnDebugInstrumentation();
+        var gym = (LabRecruitsEnvironment) new LabRecruitsEnvironment(new EnvironmentConfig("HZRDIndirect").replaceAgentMovementSpeed(0.2f)).registerInstrumenter(new JsonLoggerInstrument()).turnOnDebugInstrumentation();
 
-        QArrayList<GymAgent> agents = new QArrayList<>(new GymAgent[] {
+        QArrayList<LabRecruitsTestAgent> agents = new QArrayList<>(new LabRecruitsTestAgent[] {
                 createHazardAgent(gym)
         });
 
@@ -64,7 +64,7 @@ public class FireHazardAgentIndirect {
 
         int tick = 0;
         // run the agent until it solves its goal:
-        while (!agents.allTrue(GymAgent::success)){
+        while (!agents.allTrue(LabRecruitsTestAgent::success)){
 
             System.out.println(PrintColor.GREEN("TICK " + tick + ":"));
 
@@ -86,9 +86,9 @@ public class FireHazardAgentIndirect {
     /**
      * This method will create an agent which will move through the fire hazard level
      */
-    public static GymAgent createHazardAgent(GymEnvironment gym){
+    public static LabRecruitsTestAgent createHazardAgent(LabRecruitsEnvironment gym){
         BeliefState state = new BeliefState().setEnvironment(gym);
-        GymAgent agent = new GymAgent(state, "0", "");
+        LabRecruitsTestAgent agent = new LabRecruitsTestAgent(state, "0", "");
 
         //the goals are in order
         //add move goals with GoalStructureFactory.reachPositions(new Vec3(1,0,1)) it can take either a single or multiple vec3
@@ -96,17 +96,17 @@ public class FireHazardAgentIndirect {
         //You will probably not want to explore to prevent random behaviour. in order to do this set the waypoints close enough to each other
 
         agent.setGoal(SEQ(
-                GoalStructureFactory.reachPositions(new Vec3(6,0,5), new Vec3(8,0,1), new Vec3(13,4,1)),
-                GoalStructureFactory.reachAndInteract("b4.1"),
-                GoalStructureFactory.reachPositions(new Vec3(13,4,3)),
-                GoalStructureFactory.reachAndInteract("b7.1"),
-                GoalStructureFactory.reachPositions(new Vec3(9,4,9), new Vec3(8,4,6), new Vec3(5,4,7)),
-                GoalStructureFactory.reachAndInteract("b8.2"),
-                GoalStructureFactory.reachPositions(new Vec3(1,4,13)),
-                GoalStructureFactory.reachAndInteract("b5.1"),
-                GoalStructureFactory.reachPositions(new Vec3(1,4,22), new Vec3(6,0,22)),
-                GoalStructureFactory.reachAndInteract("b1.1"),
-                GoalStructureFactory.reachPositions(new Vec3(5,0,25))
+                GoalLib.positionsVisited(new Vec3(6,0,5), new Vec3(8,0,1), new Vec3(13,4,1)),
+                GoalLib.entityReachedAndInteracted("b4.1"),
+                GoalLib.positionsVisited(new Vec3(13,4,3)),
+                GoalLib.entityReachedAndInteracted("b7.1"),
+                GoalLib.positionsVisited(new Vec3(9,4,9), new Vec3(8,4,6), new Vec3(5,4,7)),
+                GoalLib.entityReachedAndInteracted("b8.2"),
+                GoalLib.positionsVisited(new Vec3(1,4,13)),
+                GoalLib.entityReachedAndInteracted("b5.1"),
+                GoalLib.positionsVisited(new Vec3(1,4,22), new Vec3(6,0,22)),
+                GoalLib.entityReachedAndInteracted("b1.1"),
+                GoalLib.positionsVisited(new Vec3(5,0,25))
                 ));
         return agent;
     }

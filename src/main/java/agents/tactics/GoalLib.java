@@ -22,16 +22,17 @@ import eu.iv4xr.framework.mainConcepts.TestAgent;
 import static eu.iv4xr.framework.Iv4xrEDSL.* ;
 
 /**
- * This class will serve as a factory capable of generating goal structures which can be used by the agent
+ * This class provide a set of standard useful sub-goals/sub-goal-structures
+ * to be used by test agents to test Lab Recruits.
  */
-public class GoalStructureFactory {
+public class GoalLib {
     /**
      * This method will construct a goal structure in which the agent will move to a known position
      *
      * @param goalPosition: Position to where the agent should move
      * @return The goal structure with a default move tactic which will move the agent to the goal position
      */
-    public static Goal reachPosition(Vec3 goalPosition) {
+    public static Goal positionReached(Vec3 goalPosition) {
         //define the goal
         Goal goal = new Goal("Reach position " + goalPosition.toString()).toSolve((BeliefState belief) -> {
             //check if the agent is close to the goal position
@@ -42,9 +43,9 @@ public class GoalStructureFactory {
 
         //define the goal structure
         Goal g = goal.withTactic(FIRSTof(//the tactic used to solve the goal
-                TacticsFactory.move(goalPosition),//move to the goal position
-                TacticsFactory.explore(),//explore if the goal position is unknown
-                TacticsFactory.observe()));//find the agent's own position
+                TacticLib.navigateTo(goalPosition),//move to the goal position
+                TacticLib.explore(),//explore if the goal position is unknown
+                TacticLib.observe()));//find the agent's own position
         return g;
     }
 
@@ -54,72 +55,74 @@ public class GoalStructureFactory {
      * @param goalPositions: A list of coordinates to which the agent wants to move
      * @return A goal structure in which the agent will try to move sequentially along the goal positions
      */
-    public static GoalStructure reachPositions(Vec3... goalPositions) {
+    public static GoalStructure positionsVisited(Vec3... goalPositions) {
         GoalStructure[] subGoals = new GoalStructure[goalPositions.length];
 
         for (int i = 0; i < goalPositions.length; i++) {
-            subGoals[i] = reachPosition(goalPositions[i]).lift();
+            subGoals[i] = positionReached(goalPositions[i]).lift();
         }
         return SEQ(subGoals);
     }
 
     /**
-     * This method will construct a goal structure in which the agent will move to a object with the given id
+     * This method will construct a goal structure in which the agent will move to the 
+     * in-game entity with the given id
      *
-     * @param goalId: The id of the object to which the agent wants to move to
+     * @param entityId: The id of the entity to which the agent wants to move to
      * @return The goal structure with a default move tactic which will move the agent to the object
      */
-    public static Goal reachObject(String goalId) {
-        Goal goal = new Goal(String.format("Reach object [%s]",goalId)).toSolve((BeliefState belief) -> belief.withinRange(goalId));
+    public static Goal entityReached(String entityId) {
+        Goal goal = new Goal(String.format("Reach object [%s]",entityId)).toSolve((BeliefState belief) -> belief.withinRange(entityId));
 
         //define the goal structure
         Goal g = goal.withTactic(FIRSTof( //the tactic used to solve the goal
-                TacticsFactory.move(goalId),//try to move to the goal object
-                TacticsFactory.explore(),//find the goal object
-                TacticsFactory.observe()));//find the agent's own position
+                TacticLib.navigateTo(entityId),//try to move to the goal object
+                TacticLib.explore(),//find the goal object
+                TacticLib.observe()));//find the agent's own position
         return g;
     }
 
     /**
-     * This method will return a goal structure in which the agent will sequentially move along the goal id's
+     * This method will return a goal structure in which the agent will sequentially move along 
+     * the given entities (specified through their ids).
      *
-     * @param goalIds: A list of object ids to which the agent wants to move
+     * @param entitiesIds: A list of object ids to which the agent wants to move
      * @return A goal structure in which the agent will try to walk along the goal id's
      */
-    public static GoalStructure reachObjects(String... goalIds) {
-        GoalStructure[] subGoals = new GoalStructure[goalIds.length];
+    public static GoalStructure entitiesVisited(String... entitiesIds) {
+        GoalStructure[] subGoals = new GoalStructure[entitiesIds.length];
 
-        for (int i = 0; i < goalIds.length; i++) {
-            subGoals[i] = reachObject(goalIds[i]).lift();
+        for (int i = 0; i < entitiesIds.length; i++) {
+            subGoals[i] = entityReached(entitiesIds[i]).lift();
         }
         return SEQ(subGoals);
     }
 
     /**
-     * Combine movement with interaction to check if an object is activated
+     * Combine movement with interaction to check if an entity is activated
      *
-     * @param objectID The object to walk to and interact with
+     * @param entityId The entity to walk to and interact with
      * @return A goal structure
      * @Incomplete: this goal should check if the object has a given desired state, and perhaps include a position check in the goal predicate itself
      */
-    public static GoalStructure reachAndInteract(String objectID) {
+    public static GoalStructure entityReachedAndInteracted(String entityId) {
         //move to the object
-        Goal goal1 = goal(String.format("Reach [%s]", objectID)).toSolve((BeliefState belief) ->
-                belief.position != null && belief.canInteract(objectID));
+        Goal goal1 = goal(String.format("Reach [%s]", entityId)).toSolve((BeliefState belief) ->
+                belief.position != null && belief.canInteract(entityId));
 
         //interact with the object
-        Goal goal2 = goal(String.format("Interact with [%s]", objectID)).toSolve((BeliefState belief) -> true);
+        Goal goal2 = goal(String.format("Interact with [%s]", entityId)).toSolve((BeliefState belief) -> true);
 
         //Set the tactics with which the goals will be solved
         GoalStructure g1 = goal1.withTactic(FIRSTof( //the tactic used to solve the goal
-                TacticsFactory.move(objectID), //try to move to the object
-                TacticsFactory.explore(), //find the object
-                TacticsFactory.observe(),
+                TacticLib.navigateTo(entityId), //try to move to the object
+                TacticLib.explore(), //find the object
+                TacticLib.observe(),
                 ABORT())) //find the agent's own position
                 .lift();
         GoalStructure g2 = goal2.withTactic(FIRSTof( //the tactic used to solve the goal
-                TacticsFactory.interact(objectID),// interact with the object
-                TacticsFactory.observe(),
+                TacticLib.interact(entityId),// interact with the object
+                TacticLib.observe(),
                 ABORT())) // observe the objects
                 .lift();
 
@@ -133,10 +136,10 @@ public class GoalStructureFactory {
      * @param buttons A collection of objects to interact with
      * @return A sequence of goals moving to and interacting with the given objects
      */
-    public static GoalStructure chainButtonsToGoal(String goal, String... buttons) {
+    public static GoalStructure buttonsVisited_thenGoalVisited(String goal, String... buttons) {
         var gs = new GoalStructure[buttons.length + 1];
-        for (int i = 0; i < buttons.length; i++) gs[i] = reachAndInteract(buttons[i]);
-        gs[buttons.length] = reachObject(goal).lift();
+        for (int i = 0; i < buttons.length; i++) gs[i] = entityReachedAndInteracted(buttons[i]);
+        gs[buttons.length] = entityReached(goal).lift();
 
         return SEQ(gs);
     }
@@ -147,13 +150,13 @@ public class GoalStructureFactory {
      * @param id: entityId
      * @return Goal
      */
-    public static Goal inspect(String id){
+    public static Goal entityInspected(String id){
         return goal("Inspect " + id)
                 .toSolve((BeliefState b) -> b.evaluateEntity(id, e -> e.lastUpdated == b.lastUpdated))
                 .withTactic(FIRSTof(
-                        TacticsFactory.move(id),
-                        TacticsFactory.explore(),
-                        TacticsFactory.observe(),
+                        TacticLib.navigateTo(id),
+                        TacticLib.explore(),
+                        TacticLib.observe(),
                         ABORT()));
     }
 
@@ -163,13 +166,13 @@ public class GoalStructureFactory {
      * @param id: entityId
      * @return Goal
      */
-    public static GoalStructure inspect(String id, Predicate<Entity> predicate){
+    public static GoalStructure entityInspected(String id, Predicate<Entity> predicate){
         return SEQ(
-            inspect(id).lift(),
+            entityInspected(id).lift(),
             goal("Evaluate " + id)
             .toSolve((BeliefState b) -> b.evaluateEntity(id, predicate))
             .withTactic(FIRSTof(
-                    TacticsFactory.observeOnce(),
+                    TacticLib.observeOnce(),
                     ABORT())).lift()
         );
     }
@@ -185,9 +188,9 @@ public class GoalStructureFactory {
      * @param predicate  The predicate that is expected to hold on the entity.
      * @return
      */
-    public static GoalStructure checkEntityInvariant(TestAgent agent, String id, String info, Predicate<Entity> predicate){
+    public static GoalStructure entityInvariantChecked(TestAgent agent, String id, String info, Predicate<Entity> predicate){
         return SEQ(
-            inspect(id).lift(),
+            entityInspected(id).lift(),
             testgoal("Evaluate " + id, agent)
             .toSolve((BeliefState b) -> true) // nothing to solve
             .invariant(agent,                 // something to check :)
@@ -200,7 +203,7 @@ public class GoalStructureFactory {
             		}
             		)
             .withTactic(FIRSTof(
-                    TacticsFactory.observeOnce(),
+                    TacticLib.observeOnce(),
                     ABORT())).lift()
         );
     }
@@ -211,9 +214,9 @@ public class GoalStructureFactory {
      * @param id: The id of the sending agent
      * @return A goal structure which will be concluded when the agent shared its memory once
      */
-    public static GoalStructure shareMemory(String id){
+    public static GoalStructure memorySent(String id){
         return goal("Share memory").toSolve((BeliefState belief) -> true).withTactic(
-                TacticsFactory.shareMemory(id)
+                TacticLib.shareMemory(id)
         ).lift();
     }
 
@@ -223,9 +226,9 @@ public class GoalStructureFactory {
      * @param idTo: The id of the receiving agent
      * @return A goal structure which will be concluded when the agent send a ping to the target agent
      */
-    public static Goal sendPing(String idFrom, String idTo){
+    public static Goal pingSent(String idFrom, String idTo){
         return new Goal("Send ping").toSolve((BeliefState belief) -> true).withTactic(
-                TacticsFactory.sendPing(idFrom, idTo)
+                TacticLib.sendPing(idFrom, idTo)
         );
     }
 }

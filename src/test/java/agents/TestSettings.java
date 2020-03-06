@@ -1,4 +1,4 @@
-package testAgents;
+package agents;
 
 public class TestSettings {
 

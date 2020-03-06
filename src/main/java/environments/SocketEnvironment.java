@@ -136,13 +136,17 @@ public class SocketEnvironment extends Environment {
     }
 
     /**
-     * This method calls Environment.sendCommand which in turn will call SocketEnvironment.sendCommand_
-     * It will also cast the json back to type T
+     * This method provides a higher level wrapper over Environment.sendCommand. It
+     * calls Environment.sendCommand which in turn will call SocketEnvironment.sendCommand_
+     * It will also cast the json back to type T.
      * @param req
      * @param <T> any response type, make sure Unity actually sends this object back
      * @return response
      */
     public <T> T getResponse(Request<T> req) {
+    	// WP note:
+    	// the actual id of the agent and the id of its target (if it interacts with 
+    	// something) are put inside the req object ... :|
         String json = (String) sendCommand("APlib", "Unity", "request", gson.toJson(req));
         // we do not have to cast to T, since req.responseType is of type Class<T>
         //System.out.println(json);

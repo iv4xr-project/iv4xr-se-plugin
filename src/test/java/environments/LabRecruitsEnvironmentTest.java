@@ -9,7 +9,7 @@ package environments;
 
 import org.junit.jupiter.api.Test;
 
-public class GymEnvironmentTest {
+public class LabRecruitsEnvironmentTest {
 
     /**
      * @Test public void testReachObject() {

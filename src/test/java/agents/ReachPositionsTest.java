@@ -5,11 +5,11 @@ at Utrecht University within the Software and Game project course.
 ©Copyright Utrecht University (Department of Information and Computing Sciences)
 */
 
-package testAgents;
+package agents;
 
-import agents.tactics.GoalStructureFactory;
+import agents.tactics.GoalLib;
 import environments.EnvironmentConfig;
-import environments.GymEnvironment;
+import environments.LabRecruitsEnvironment;
 import helperclasses.datastructures.Vec3;
 import nl.uu.cs.aplib.mainConcepts.BasicAgent;
 import world.BeliefState;
@@ -24,9 +24,9 @@ public class ReachPositionsTest {
         };
 
         // Make the agent reach each positon sequentially.
-        var g = GoalStructureFactory.reachPositions(positions);
+        var g = GoalLib.positionsVisited(positions);
 
-        var agent = new BasicAgent().attachState(new BeliefState().setEnvironment(new GymEnvironment(new EnvironmentConfig("minimal"))));
+        var agent = new BasicAgent().attachState(new BeliefState().setEnvironment(new LabRecruitsEnvironment(new EnvironmentConfig("minimal"))));
         agent.setGoal(g);
 
         while (g.getStatus().inProgress()) {
