@@ -39,14 +39,7 @@ public class BeliefState extends StateWithMessenger {
     public HashSet<Integer> blockedNodes = new HashSet<>();//keep track of nodes which are blocked and can not be used for pathfinding
     private HashMap<String, Integer[]> nodesBlockedByEntity = new HashMap<>();
 
-    public BeliefState() {
-
-    }
-
-    public BeliefState(String id, LabRecruitsEnvironment env) {
-        this.id = id;
-        setEnvironment(env);
-    }
+    public BeliefState() { }
 
     public Collection<Entity> getAllEntities() { return allEntities.values(); }
     public Collection<DynamicEntity> getAllDynamicEntities() { return dynamicEntities.values(); }

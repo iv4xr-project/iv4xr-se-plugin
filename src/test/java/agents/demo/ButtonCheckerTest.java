@@ -8,6 +8,7 @@ at Utrecht University within the Software and Game project course.
 package agents.demo;
 
 import agents.LabRecruitsTestAgent;
+import agents.TestSettings;
 import agents.tactics.GoalLib;
 import agents.tactics.TacticLib;
 import environments.EnvironmentConfig;
@@ -15,8 +16,12 @@ import environments.LabRecruitsEnvironment;
 import eu.iv4xr.framework.mainConcepts.TestDataCollector;
 import helperclasses.datastructures.linq.QArrayList;
 import logger.JsonLoggerInstrument;
+import nl.uu.cs.aplib.mainConcepts.Environment;
 import nl.uu.cs.aplib.mainConcepts.GoalStructure;
 import static org.junit.jupiter.api.Assertions.* ;
+
+import java.util.Scanner;
+
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -41,18 +46,17 @@ public class ButtonCheckerTest {
     @BeforeAll
     static void start() {
     	// Uncomment this to make the game's graphic visible:
-    	// TestSettings.USE_GRAPHICS = true ;
+    	//TestSettings.USE_GRAPHICS = true ;
     	String labRecruitesExeRootDir = System.getProperty("user.dir") ;
-        if(USE_SERVER_FOR_TEST){
-            labRecruitsTestServer =new LabRecruitsTestServer(
-                    USE_GRAPHICS,
-                    Platform.PathToLabRecruitsExecutable(labRecruitesExeRootDir));
-            labRecruitsTestServer.waitForGameToLoad();
-        }
+    	labRecruitsTestServer = TestSettings.start_LabRecruitsTestServer(labRecruitesExeRootDir) ;
     }
 
     @AfterAll
-    static void close() { if(USE_SERVER_FOR_TEST) labRecruitsTestServer.close(); }
+    static void close() { if(labRecruitsTestServer!=null) labRecruitsTestServer.close(); }
+    
+    void instrument(Environment env) {
+    	env.registerInstrumenter(new JsonLoggerInstrument()).turnOnDebugInstrumentation();
+    }
 
     /**
      * The demo test: verify that button1 will open door1.
@@ -65,27 +69,25 @@ public class ButtonCheckerTest {
 
         // Create an environment
         var environment = new LabRecruitsEnvironment(new EnvironmentConfig("button1_opens_door1"));
-        if(USE_INSTRUMENT)
-            environment.registerInstrumenter(new JsonLoggerInstrument()).turnOnDebugInstrumentation();
+        if(USE_INSTRUMENT) instrument(environment) ;
 
         try {
+        	if(TestSettings.USE_GRAPHICS) {
+        		System.out.println("You can drag then game window elsewhere for beter viewing. Then hit RETURN to continue.") ;
+        		new Scanner(System.in) . nextLine() ;
+        	}
+        	
 	        environment.startSimulation(); // this will press the "Play" button in the game for you
 	
-	        // create a belief state
-	        var state = new BeliefState();
-	        state.id = "agent1"; // matches the ID in the CSV file
-	        state.setEnvironment(environment); // attach the environment
-	
-	        // setting up a test-data collector:
-			var dataCollector = new TestDataCollector();
-	
 	        // create a test agent
-	        var testAgent = new LabRecruitsTestAgent(state) ;
+	        var testAgent = new LabRecruitsTestAgent("agent1") // matches the ID in the CSV file
+        		    . attachState(new BeliefState())
+        		    . attachEnvironment(environment);
 	        
 	        // define the test-goal:
 	        var goal = SEQ(
 	        	// get the first observation:	
-	    		MySubGoals.justObserve(),
+	    		MyGoalLib.justObserve(),
 	    		// (0) We first check the pre-condition of this test:
 	            //       Observe that the button is inactive and the door is closed.
 	    		//       If this is the case we continue the test. 
@@ -99,7 +101,7 @@ public class ButtonCheckerTest {
 	            // (1a) walk to the button
 	            GoalLib.entityReached(buttonToTest).lift(),
 	            // (1b) and then press the button
-	            MySubGoals.pressButton(buttonToTest),
+	            MyGoalLib.pressButton(buttonToTest),
 	            
 	            // (2) now we should check that the button is indeed in its active state, and 
 	            // the door is open:
@@ -113,6 +115,7 @@ public class ButtonCheckerTest {
 	            		(Entity e) -> (e instanceof InteractiveEntity) && ((InteractiveEntity) e).isActive)
 	        );
 	        // attaching the goal and testdata-collector
+	        var dataCollector = new TestDataCollector();
 	        testAgent . setTestDataCollector(dataCollector) . setGoal(goal) ;
 	
 	        //goal not achieved yet
@@ -138,7 +141,7 @@ public class ButtonCheckerTest {
 /**
  * A helper class for constructing support subgoals.
  */
-class MySubGoals {
+class MyGoalLib {
 	
 	// to just observe the game ... to get information
     static GoalStructure justObserve(){

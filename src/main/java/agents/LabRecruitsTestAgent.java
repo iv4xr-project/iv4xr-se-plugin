@@ -19,24 +19,30 @@ import world.BeliefState;
  */
 public class LabRecruitsTestAgent extends TestAgent {
 
+	
     /**
-     * The constructor for the test agent without an id or role attached to itself
-     * @param state: The agent state
+     * The constructor for the test agent.
      */
-    public LabRecruitsTestAgent(BeliefState state) {
-        attachState(state);
+	public LabRecruitsTestAgent(String id) {
+		super(id,null) ;
     }
-
+	
     /**
-     * The constructor for the test agent with an id or role attached to itself (this is required for agent communication)
-     * @param state: The agent state
-     * @param id: The id of the agent
-     * @param role: The role of the agent
+     * The constructor for the test agent with an id or role attached to itself (this is required for agent communication).
      */
-    public LabRecruitsTestAgent(BeliefState state, String id, String role) {
+    public LabRecruitsTestAgent(String id, String role) {
         super(id, role);
-        state.id = id;
-        attachState(state);
+    }
+    
+    public LabRecruitsTestAgent attachState(BeliefState state) {
+    	state.id = this.id ;
+    	super.attachState(state);
+    	return this ;
+    }
+    
+    public LabRecruitsTestAgent attachEnvironment(LabRecruitsEnvironment env) {
+    	super.attachEnvironment(env) ;
+    	return this ;
     }
 
     public boolean success(){

@@ -207,6 +207,29 @@ public class GoalLib {
                     ABORT())).lift()
         );
     }
+    
+    /**
+     * Create a test-goal to check the state of the game, whether it satisfies the given predicate.
+     * Internally, this goal will first spend one tick to get a fresh observation, then at the next tick it
+     * will do the checking.
+     */ 
+    public static GoalStructure invariantChecked(TestAgent agent, String info, Predicate<BeliefState> predicate){
+        return SEQ(
+            testgoal("Evaluate " + info, agent)
+            .toSolve((BeliefState b) -> true) // nothing to solve
+            .invariant(agent,                 // something to check :)
+            		(BeliefState b) -> {
+            			if (predicate.test(b))
+            			   return new VerdictEvent("Inv-check", info, true) ;
+            			else 
+            			   return new VerdictEvent("Inv-check" , info, false) ;
+            		    }
+            		)
+            .withTactic(FIRSTof(
+                    TacticLib.observeOnce(),
+                    ABORT())).lift()
+        );
+    }
 
     /**
      * This goal structure will cause the agent to share its memory once with all connected agents in the broadcast

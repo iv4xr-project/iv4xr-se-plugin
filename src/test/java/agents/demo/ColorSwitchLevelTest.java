@@ -7,6 +7,7 @@ at Utrecht University within the Software and Game project course.
 package agents.demo;
 
 import agents.LabRecruitsTestAgent;
+import agents.TestSettings;
 import agents.tactics.GoalLib;
 import agents.tactics.TacticLib;
 import environments.EnvironmentConfig;
@@ -17,6 +18,7 @@ import helperclasses.datastructures.linq.QArrayList;
 import logger.JsonLoggerInstrument;
 import logger.PrintColor;
 import nl.uu.cs.aplib.Logging;
+import nl.uu.cs.aplib.mainConcepts.Environment;
 import nl.uu.cs.aplib.multiAgentSupport.ComNode;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -30,6 +32,8 @@ import static eu.iv4xr.framework.Iv4xrEDSL.assertTrue_;
 import static nl.uu.cs.aplib.AplibEDSL.SEQ;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.Scanner;
+
 /**
  * This class will check if the demo for the color switch level works
  */
@@ -39,19 +43,17 @@ public class ColorSwitchLevelTest {
 
     @BeforeAll
     static void start() {
+    	// Uncomment this to make the game's graphic visible:
+    	// TestSettings.USE_GRAPHICS = true ;
     	String labRecruitesExeRootDir = System.getProperty("user.dir") ;
-        if(USE_SERVER_FOR_TEST){
-            labRecruitsTestServer =new LabRecruitsTestServer(
-                    USE_GRAPHICS,
-                    Platform.PathToLabRecruitsExecutable(labRecruitesExeRootDir));
-            labRecruitsTestServer.waitForGameToLoad();
-        }
+    	labRecruitsTestServer = TestSettings.start_LabRecruitsTestServer(labRecruitesExeRootDir) ;
     }
 
     @AfterAll
-    static void close() {
-        if(USE_SERVER_FOR_TEST)
-            labRecruitsTestServer.close();
+    static void close() { if(labRecruitsTestServer!=null) labRecruitsTestServer.close(); }
+    
+    void instrument(Environment env) {
+    	env.registerInstrumenter(new JsonLoggerInstrument()).turnOnDebugInstrumentation();
     }
 
     /**
@@ -61,17 +63,21 @@ public class ColorSwitchLevelTest {
     public void testColorSwitchDemo() throws InterruptedException{
         ComNode communication = new ComNode();
 
-        var gym = new LabRecruitsEnvironment(new EnvironmentConfig("CLRSWTCH"));
-        if(USE_INSTRUMENT)
-            gym.registerInstrumenter(new JsonLoggerInstrument()).turnOnDebugInstrumentation();
+        var env = new LabRecruitsEnvironment(new EnvironmentConfig("CLRSWTCH"));
+        if(USE_INSTRUMENT) instrument(env) ;
 
         QArrayList<LabRecruitsTestAgent> agents = new QArrayList<>(new LabRecruitsTestAgent[] {
-                (LabRecruitsTestAgent)createButtonPressAgent(gym).registerTo(communication),
-                (LabRecruitsTestAgent)createColorScreenCheckAgent(gym).registerTo(communication)
+                (LabRecruitsTestAgent)createButtonPressAgent(env).registerTo(communication),
+                (LabRecruitsTestAgent)createColorScreenCheckAgent(env).registerTo(communication)
         });
 
+    	if(TestSettings.USE_GRAPHICS) {
+    		System.out.println("You can drag then game window elsewhere for beter viewing. Then hit RETURN to continue.") ;
+    		new Scanner(System.in) . nextLine() ;
+    	}
+    	
         // press play in Unity
-        if (! gym.startSimulation())
+        if (! env.startSimulation())
             throw new InterruptedException("Unity refuses to start the Simulation!");
 
         int tick = 0;
@@ -99,7 +105,7 @@ public class ColorSwitchLevelTest {
 
         Logging.getAPLIBlogger().info("DEMO END.");
 
-        if (!gym.close())
+        if (!env.close())
             throw new InterruptedException("Unity refuses to close the Simulation!");
     }
 
@@ -107,10 +113,11 @@ public class ColorSwitchLevelTest {
      * This method will define the first agent in the color switch level which will press the buttons and will return to a base position each time
      * @return The agent
      */
-    public static LabRecruitsTestAgent createButtonPressAgent(LabRecruitsEnvironment gym){
-        BeliefState state = new BeliefState().setEnvironment(gym);
-        LabRecruitsTestAgent agent = new LabRecruitsTestAgent(state, "0", "");
-
+    public static LabRecruitsTestAgent createButtonPressAgent(LabRecruitsEnvironment env){
+        LabRecruitsTestAgent agent = new LabRecruitsTestAgent("0","")
+        		                     . attachState(new BeliefState())
+        		                     . attachEnvironment(env);
+ 
         //set the goals
         agent.setGoal(SEQ(
                 GoalLib.entityReachedAndInteracted("CB3"), //move to the red button and interact with it
@@ -131,9 +138,10 @@ public class ColorSwitchLevelTest {
      * in the color switch level
      * @return The agent
      */
-    public static LabRecruitsTestAgent createColorScreenCheckAgent(LabRecruitsEnvironment gym){
-        BeliefState state = new BeliefState().setEnvironment(gym);
-        LabRecruitsTestAgent agent = new LabRecruitsTestAgent(state, "1", "");
+    public static LabRecruitsTestAgent createColorScreenCheckAgent(LabRecruitsEnvironment env){
+        LabRecruitsTestAgent agent = new LabRecruitsTestAgent("1", "")
+        		                     . attachState(new BeliefState())
+                                     . attachEnvironment(env);
 
         //wait for the ping to check the color screen with the red button
         TestGoal t1 = new TestGoal("Wait for ping").toSolve((BeliefState b) -> {

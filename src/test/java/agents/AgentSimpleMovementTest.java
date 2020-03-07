@@ -27,6 +27,7 @@ import game.LabRecruitsTestServer;
 import game.Platform;
 import helperclasses.datastructures.Vec3;
 import logger.PrintColor;
+import nl.uu.cs.aplib.mainConcepts.Environment;
 import world.BeliefState;
 
 /**
@@ -36,36 +37,26 @@ import world.BeliefState;
  * room.
  */
 public class AgentSimpleMovementTest {
-    // This application starts a single agent
-	
-	private static LabRecruitsTestServer labRecruitsTestServer;
+    
+	private static LabRecruitsTestServer labRecruitsTestServer = null ;
 
     @BeforeAll
     static void start() {
     	// Uncomment this to make the game's graphic visible:
     	// TestSettings.USE_GRAPHICS = true ;
     	String labRecruitesExeRootDir = System.getProperty("user.dir") ;
-        if(USE_SERVER_FOR_TEST){
-            labRecruitsTestServer =new LabRecruitsTestServer(
-                    USE_GRAPHICS,
-                    Platform.PathToLabRecruitsExecutable(labRecruitesExeRootDir));
-            labRecruitsTestServer.waitForGameToLoad();
-        }
+    	labRecruitsTestServer = TestSettings.start_LabRecruitsTestServer(labRecruitesExeRootDir) ;
     }
 
     @AfterAll
-    static void close() { if(USE_SERVER_FOR_TEST) labRecruitsTestServer.close(); }
-
-
+    static void close() { if(labRecruitsTestServer!=null) labRecruitsTestServer.close(); }
+    
+    
     @Test
     public void movementTest() throws InterruptedException {
 
         var environment = new LabRecruitsEnvironment(new EnvironmentConfig("square"));
-        // set this to true if we want to see the commands send through the Environment
-        // USE_INSTRUMENT = true ;
-        if(USE_INSTRUMENT)
-            environment.registerInstrumenter(new JsonLoggerInstrument()).turnOnDebugInstrumentation();
-
+        
         var p0 = new Vec3(3, 0, 3) ;
         var p1 = new Vec3(3, 0, 4) ;
         var p2 = new Vec3(4, 0, 3) ;
@@ -104,23 +95,22 @@ public class AgentSimpleMovementTest {
         System.out.println("*** Distance " + ta1.getState().id + " to dest:" + ta1.getState().position.distance(p1)) ;
         System.out.println("*** Distance " + ta2.getState().id + " to dest:" + ta2.getState().position.distance(p2)) ;
         System.out.println("*** Distance " + ta3.getState().id + " to dest:" + ta3.getState().position.distance(p3)) ;
-	        assertTrue(ta0.getState().position.distance(p0) < 0.5) ;
-	        assertTrue(ta1.getState().position.distance(p1) < 0.5) ;
-	        assertTrue(ta2.getState().position.distance(p2) < 0.5) ;
-	        assertTrue(ta3.getState().position.distance(p3) < 0.5) ;
+        assertTrue(ta0.getState().position.distance(p0) < 0.5) ;
+        assertTrue(ta1.getState().position.distance(p1) < 0.5) ;
+        assertTrue(ta2.getState().position.distance(p2) < 0.5) ;
+        assertTrue(ta3.getState().position.distance(p3) < 0.5) ;
    
-	        if (!environment.close())
-	            throw new InterruptedException("Unity refuses to start the Simulation!");
-    
+	    if (!environment.close())
+	        throw new InterruptedException("Unity refuses to close the Simulation!");
     }
 
     /**
      * Create a fresh test-agent, with a single goal to move to the given destination.
      */
-    private static LabRecruitsTestAgent createAgent(String id, LabRecruitsEnvironment gym, Vec3 dest){
-        BeliefState state = new BeliefState().setEnvironment(gym);
-        state.id = id;
-        LabRecruitsTestAgent agent = new LabRecruitsTestAgent(state);
+    private static LabRecruitsTestAgent createAgent(String id, LabRecruitsEnvironment env, Vec3 dest){
+        LabRecruitsTestAgent agent = new LabRecruitsTestAgent(id)
+        		                    . attachState(new BeliefState())
+        		                    . attachEnvironment(env) ;
         agent.setGoal(GoalLib.positionsVisited(dest));
         return agent;
     }

@@ -15,6 +15,9 @@ import world.BeliefState;
 import static agents.TestSettings.*;
 import static nl.uu.cs.aplib.AplibEDSL.*;
 import static org.junit.jupiter.api.Assertions.* ;
+
+import java.util.Scanner;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -37,19 +40,15 @@ public class Explore_2_Test {
     @BeforeAll
     static void start() {
     	// Uncomment this to make the game's graphic visible:
-    	//TestSettings.USE_GRAPHICS = true ;
+    	// TestSettings.USE_GRAPHICS = true ;
     	String labRecruitesExeRootDir = System.getProperty("user.dir") ;
-        if(USE_SERVER_FOR_TEST){
-            labRecruitsTestServer =new LabRecruitsTestServer(
-                    USE_GRAPHICS,
-                    Platform.PathToLabRecruitsExecutable(labRecruitesExeRootDir));
-            labRecruitsTestServer.waitForGameToLoad();
-        }
+       	labRecruitsTestServer = TestSettings.start_LabRecruitsTestServer(labRecruitesExeRootDir) ;
     }
 
     @AfterAll
     static void close() { if(USE_SERVER_FOR_TEST) labRecruitsTestServer.close(); }
 
+    
     /**
      * Test that the agent can continue to explore despite a nearby closed-room.
      */
@@ -58,19 +57,19 @@ public class Explore_2_Test {
 
     	var environment = new LabRecruitsEnvironment(new EnvironmentConfig("button1_opens_door1_v2"));
     	
-    	// set this to true if we want to see the commands send through the Environment
-        // USE_INSTRUMENT = true ;
-        if(USE_INSTRUMENT)
-            environment.registerInstrumenter(new JsonLoggerInstrument()).turnOnDebugInstrumentation();
-
-        BeliefState state = new BeliefState().setEnvironment(environment);
-        state.id = "agent1";
-        LabRecruitsTestAgent agent = new LabRecruitsTestAgent(state);
+        LabRecruitsTestAgent agent = new LabRecruitsTestAgent("agent1")
+        		                     . attachState(new BeliefState())
+        		                     . attachEnvironment(environment) ;
         
         var g = GoalLib.entityReachedAndInteracted("button1") ;
         
         agent.setGoal(g) ;
 
+    	if(TestSettings.USE_GRAPHICS) {
+    		System.out.println("You can drag then game window elsewhere for beter viewing. Then hit RETURN to continue.") ;
+    		new Scanner(System.in) . nextLine() ;
+    	}
+    	
         // press play in Unity
         if (! environment.startSimulation())
             throw new InterruptedException("Unity refuses to start the Simulation!");
@@ -87,7 +86,7 @@ public class Explore_2_Test {
         }
         
         assertTrue(g.getStatus().success()) ;
-        var agent_p = agent.getState().position ;
+        var agent_p  = agent.getState().position ;
         var button_p = agent.getState().getEntity("button1").position ;
         assertTrue(agent_p.distance(button_p) < 0.5) ;
 

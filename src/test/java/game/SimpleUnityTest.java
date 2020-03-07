@@ -63,7 +63,9 @@ public class SimpleUnityTest {
             environment.registerInstrumenter(new JsonLoggerInstrument()).turnOnDebugInstrumentation();
 
         // create the agent
-        var agent = new LabRecruitsTestAgent(new BeliefState("agent0", environment));
+        var agent = new LabRecruitsTestAgent("agent0")
+        		    . attachState(new BeliefState())
+        		    . attachEnvironment(environment);
 
         // The agent wants to know its position
         GoalStructure goal = goal(config.level_name)
@@ -100,7 +102,9 @@ public class SimpleUnityTest {
             environment.registerInstrumenter(new JsonLoggerInstrument()).turnOnDebugInstrumentation();
 
         // create the agent
-        var agent = new LabRecruitsTestAgent(new BeliefState("agent0", environment));
+        var agent = new LabRecruitsTestAgent("agent0")
+        		    . attachState(new BeliefState())
+        		    . attachEnvironment(environment);
 
         // Entity list contains an entity with type "Switch" and position (1,0,1)
         Predicate<BeliefState> evaluation = (BeliefState belief) -> new QArrayList<>(belief.getAllInteractiveEntities())
@@ -143,7 +147,9 @@ public class SimpleUnityTest {
             environment.registerInstrumenter(new JsonLoggerInstrument()).turnOnDebugInstrumentation();
 
         // create the agent
-        var agent = new LabRecruitsTestAgent(new BeliefState("agent0", environment));
+        var agent = new LabRecruitsTestAgent("agent0")
+    		        . attachState(new BeliefState())
+    		        . attachEnvironment(environment);
 
         // Entity list contains an entity with type "Switch" and position (1,0,1)
         Predicate<BeliefState> evaluation = (BeliefState belief) ->
@@ -184,7 +190,9 @@ public class SimpleUnityTest {
             environment.registerInstrumenter(new JsonLoggerInstrument()).turnOnDebugInstrumentation();
 
         // create the agent
-        var agent = new LabRecruitsTestAgent(new BeliefState("agent0", environment));
+        var agent = new LabRecruitsTestAgent("agent0")
+    		        . attachState(new BeliefState())
+    		        . attachEnvironment(environment);
 
         GoalStructure goal = SEQ(
                 GoalLib.positionReached(new Vec3(1,0,1)).lift(),
