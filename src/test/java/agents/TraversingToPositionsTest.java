@@ -25,6 +25,8 @@ import static nl.uu.cs.aplib.AplibEDSL.* ;
 import world.BeliefState;
 
 // Creates an agent that walks a preset route.
+
+
 public class TraversingToPositionsTest {
 	
 	private static LabRecruitsTestServer labRecruitsTestServer = null ;

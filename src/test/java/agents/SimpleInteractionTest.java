@@ -30,7 +30,10 @@ import world.BeliefState;
 import world.Entity;
 import world.InteractiveEntity;
 
-// Basic agent that combines movement with interactions to solve IntegrationTest.csv.
+/**
+ * In this test we are given a simple small room with a button close by and a door.
+ * We want to verify that interacting with the button will indeed open the door.
+ */
 public class SimpleInteractionTest {
 	
 	private static LabRecruitsTestServer labRecruitsTestServer;

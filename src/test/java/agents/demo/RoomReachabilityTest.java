@@ -36,17 +36,24 @@ import static nl.uu.cs.aplib.AplibEDSL.*;
 
 /**
  * A simple test to demonstrate using iv4xr agents to test the Lab Recruits game.
- * The level setup is a small room with some buttons and doors. The testing task
- * is to verify that a button wtih id button1 will open a door with id door1.
+ * The testing task is to verify that the closet in the east is reachable from
+ * the player initial position, which it is if the door guarding it can be opened.
+ * This in turn requires a series of switches and other doors to be opened.
+ * 
+ * ISSUE to be solved!!
+ *    * When the agent believes that a door is closed, it will refuse to navigate
+ *      to it (because it is not reachable according to its nav-map).
+ *      We need instead navigate to a position close to it to observe it.
+ *    * Agent can get stuck in a bending corner!
  */
-public class ButtonCheckerTest {
+public class RoomReachabilityTest {
 
     private static LabRecruitsTestServer labRecruitsTestServer;
 
     @BeforeAll
     static void start() {
     	// Uncomment this to make the game's graphic visible:
-    	//TestSettings.USE_GRAPHICS = true ;
+    	TestSettings.USE_GRAPHICS = true ;
     	String labRecruitesExeRootDir = System.getProperty("user.dir") ;
     	labRecruitsTestServer = TestSettings.start_LabRecruitsTestServer(labRecruitesExeRootDir) ;
     }
@@ -59,16 +66,16 @@ public class ButtonCheckerTest {
     }
 
     /**
-     * The demo test: verify that button1 will open door1.
+     * A test to verify that the east closet is reachable.
      */
-    @Test
-    public void buttonWorksTest(){
+    //@Test
+    public void closetReachableTest() throws InterruptedException {
     	
     	var buttonToTest = "button1" ;
     	var doorToTest = "door1" ;
 
         // Create an environment
-        var environment = new LabRecruitsEnvironment(new EnvironmentConfig("button1_opens_door1"));
+        var environment = new LabRecruitsEnvironment(new EnvironmentConfig("buttons_doors_1"));
         if(USE_INSTRUMENT) instrument(environment) ;
 
         try {
@@ -86,32 +93,31 @@ public class ButtonCheckerTest {
 	        
 	        // define the test-goal:
 	        var goal = SEQ(
-	        	// get the first observation:	
-	    		MyGoalLib.justObserve(),
-	    		// (0) We first check the pre-condition of this test:
-	            //       Observe that the button is inactive and the door is closed.
-	    		//       If this is the case we continue the test. 
-	    		//       Else it is not sensical to do this test, so we will abort 
-	    		//       (there is something wrong with the scenario setup; this should be fixed first),  
-	            GoalLib.entityInspected(buttonToTest, (Entity e) -> (e instanceof InteractiveEntity) && !((InteractiveEntity) e).isActive),
-	            GoalLib.entityInspected(doorToTest, (Entity e) -> (e instanceof InteractiveEntity) && !((InteractiveEntity) e).isActive),
-	            
-	            // now the test itself:
-	            
-	            // (1a) walk to the button
-	            GoalLib.entityReached(buttonToTest).lift(),
-	            // (1b) and then press the button
-	            MyGoalLib.pressButton(buttonToTest),
-	            
-	            // (2) now we should check that the button is indeed in its active state, and 
-	            // the door is open:
-	            GoalLib.entityInvariantChecked(testAgent,
-	            		buttonToTest, 
-	            		"button should be active", 
+		        GoalLib.entityReachedAndInteracted("button1"),
+                GoalLib.entityReached("button2").lift(),
+	        	GoalLib.entityReached("door1").lift(),
+	        	GoalLib.entityInvariantChecked(testAgent,
+	            		"door1", 
+	            		"door1 should be open", 
 	            		(Entity e) -> (e instanceof InteractiveEntity) && ((InteractiveEntity) e).isActive),
-	            GoalLib.entityInvariantChecked(testAgent,
-	            		doorToTest, 
-	            		"door should be open", 
+	        	
+	        	GoalLib.entityReachedAndInteracted("button3"),
+	        	GoalLib.entityReached("door2").lift(),
+	        	GoalLib.entityInvariantChecked(testAgent,
+	            		"door2", 
+	            		"door2 should be open", 
+	            		(Entity e) -> (e instanceof InteractiveEntity) && ((InteractiveEntity) e).isActive),
+	        	GoalLib.entityReachedAndInteracted("button4"),
+	        	GoalLib.entityReached("door1").lift(),
+	        	GoalLib.entityInvariantChecked(testAgent,
+	            		"door1", 
+	            		"door1 should be open", 
+	            		(Entity e) -> (e instanceof InteractiveEntity) && ((InteractiveEntity) e).isActive),
+	        	GoalLib.entityReached("button1").lift(),
+	        	GoalLib.entityReached("door3").lift(),
+	        	GoalLib.entityInvariantChecked(testAgent,
+	            		"door3", 
+	            		"door3 should be open", 
 	            		(Entity e) -> (e instanceof InteractiveEntity) && ((InteractiveEntity) e).isActive)
 	        );
 	        // attaching the goal and testdata-collector
@@ -121,13 +127,17 @@ public class ButtonCheckerTest {
 	        //goal not achieved yet
 	        assertFalse(testAgent.success());
 	
+	        int i = 0 ;
 	        // keep updating the agent
 	        while (goal.getStatus().inProgress()) {
+	        	System.out.println("*** " + i + ", " + testAgent.getState().id + " @" + testAgent.getState().position) ;
+	            Thread.sleep(30);
+	            i++ ; 
 	        	testAgent.update();
 	        }
 	
 	        // check that we have passed both tests above:
-	        assertTrue(dataCollector.getNumberOfPassVerdictsSeen() == 2) ;
+	        assertTrue(dataCollector.getNumberOfPassVerdictsSeen() == 4) ;
 	        // goal status should be success
 	        assertTrue(testAgent.success());
 	

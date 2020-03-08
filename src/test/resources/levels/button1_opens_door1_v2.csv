@@ -5,7 +5,7 @@ w,f,w,w,f:b^button2,w,f,f,w,f,w
 w,f,f,f,f,f,f,f,w,f,w
 w,w,f:d>n^door1,w,w,f,f,f,w,f,f:d>w^door2
 w,w,f,f,w,f,f,f,f,f,w
-w,f,f,f:b^button3,w,f,f,f,f:npc^darwin,f,w
+w,f,f,f:b^button3,w,f,f,f,f,f,w
 w,w,w,w,w,w,w,w,w,w,w
 |w,w,w,w,w,w,w,w,w,w,w
 w,,,,,w,,,w,,w
