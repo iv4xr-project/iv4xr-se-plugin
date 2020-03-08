@@ -53,7 +53,7 @@ public class RoomReachabilityTest {
     @BeforeAll
     static void start() {
     	// Uncomment this to make the game's graphic visible:
-    	TestSettings.USE_GRAPHICS = true ;
+    	// TestSettings.USE_GRAPHICS = true ;
     	String labRecruitesExeRootDir = System.getProperty("user.dir") ;
     	labRecruitsTestServer = TestSettings.start_LabRecruitsTestServer(labRecruitesExeRootDir) ;
     }
@@ -68,7 +68,7 @@ public class RoomReachabilityTest {
     /**
      * A test to verify that the east closet is reachable.
      */
-    //@Test
+    @Test
     public void closetReachableTest() throws InterruptedException {
     	
     	var buttonToTest = "button1" ;
@@ -108,6 +108,7 @@ public class RoomReachabilityTest {
 	            		"door2 should be open", 
 	            		(Entity e) -> (e instanceof InteractiveEntity) && ((InteractiveEntity) e).isActive),
 	        	GoalLib.entityReachedAndInteracted("button4"),
+	        	GoalLib.entityReached("button3").lift(),
 	        	GoalLib.entityReached("door1").lift(),
 	        	GoalLib.entityInvariantChecked(testAgent,
 	            		"door1", 

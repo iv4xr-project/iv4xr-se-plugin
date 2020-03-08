@@ -14,6 +14,7 @@ import nl.uu.cs.aplib.mainConcepts.Tactic;
 import nl.uu.cs.aplib.multiAgentSupport.Acknowledgement;
 import nl.uu.cs.aplib.multiAgentSupport.Message;
 import world.BeliefState;
+import world.InteractiveEntity;
 import world.Observation;
 
 import java.util.Arrays;
@@ -90,6 +91,12 @@ public class TacticLib {
                     return new Tuple(e.position, path);//return the path finding information
                 }).lift();
         return move;
+    }
+    
+    
+    void calculateDoorAlternativePositions(InteractiveEntity door) {
+    	var center = door.center ;
+    	boolean onXdirection = door.extents.x > door.extents.z ;
     }
 
     /**
