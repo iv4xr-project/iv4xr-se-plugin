@@ -108,7 +108,7 @@ public class GoalLib {
     public static GoalStructure entityReachedAndInteracted(String entityId) {
         //move to the object
         Goal goal1 = goal(String.format("Reach [%s]", entityId)).toSolve((BeliefState belief) ->
-                belief.position != null && belief.canInteract(entityId));
+                belief.position != null && belief.canInteractWith(entityId));
 
         //interact with the object
         Goal goal2 = goal(String.format("Interact with [%s]", entityId)).toSolve((BeliefState belief) -> true);

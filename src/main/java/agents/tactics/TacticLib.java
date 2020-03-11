@@ -50,7 +50,7 @@ public class TacticLib {
                     return belief;
                 }).on((BeliefState belief) -> {
                     if(belief.position == null) return null;//guard
-                    return belief.navigate(position);//find a path towards the target position
+                    return belief.cachedFindPathTo(position);//find a path towards the target position
                 }).lift();
         return move;
     }
@@ -84,7 +84,7 @@ public class TacticLib {
                         if(ie != null) e = ie;
                     }
                     if(belief.position == null || e == null) return null;//guard
-                    Vec3[] path = belief.navigate(e.position);
+                    Vec3[] path = belief.cachedFindPathTo(e.position);
 
                     if(path == null) return null;//if there is no path return null
 
@@ -110,7 +110,7 @@ public class TacticLib {
                     Observation o = belief.env().interactWith(belief.id, objectID);
                     belief.markObservation(o);
                     return belief;
-                }).on_((BeliefState belief) -> belief.position != null && belief.canInteract(objectID))
+                }).on_((BeliefState belief) -> belief.position != null && belief.canInteractWith(objectID))
                 .lift();
         return interact;
     }
@@ -229,31 +229,38 @@ public class TacticLib {
     }
 
     /**
-     * This method will return a tactic in which the agent will explore the world
-     * @return The tactic in which the agent will seek the object
+     * This method will return a tactic in which the agent will "explore" the world.
+     * The tactic will locate the nearest reachable navigation node which the agent
+     * has not discovered yet, and drive the agent to go there.
      */
     public static Tactic explore() {
         var explore = action("Explore")
                 .do2((BeliefState belief) -> (Tuple<Vec3, Vec3[]> p) -> {
                 	//System.out.println("### explore") ;
-                    //if the agent already has a goal move towards that goal
                     if(belief.getGoalLocation() != null){
-                        Observation o = belief.env().moveToward(belief.id, belief.position,belief.getNextWayPoint());//move towards the next way point
-                        belief.markObservation(o);
+                    	// reset the path if the goal has changed:
+                    	if(belief.getGoalLocation().distance(p.object1) > 0.01){
+                            belief.mentalMap.applyPath(p.object1, p.object2);
+                        }	
                     } else {
-                        //explore the closest unknown node
-                        //if there is no path, set the path
-                        if(belief.getGoalLocation() == null){
-                            belief.mentalMap.applyPath(p.object1, p.object2);
-                        }
-
-                        //only reset the path if the goal has changed
-                        if(belief.getGoalLocation().distance(p.object1) > 0.01){
-                            belief.mentalMap.applyPath(p.object1, p.object2);
-                        }
-                        Observation o = belief.env().moveToward(belief.id, belief.position, belief.getNextWayPoint());//move towards the next way point
-                        belief.markObservation(o);
+                    	//if the agent does not have a goal, set the given path p as the goal to follow
+                    	
+                    	// WP: this check is unnecessary... suprressing it
+                        //    explore the closest unknown node
+                        //    if there is no path, set the path
+                        //if(belief.getGoalLocation() == null){
+                        belief.mentalMap.applyPath(p.object1, p.object2);
+                        
+                        // WP : this won't change since we have already applied the path above! 
+                        // Moving it to the then branch:
+                        //    only reset the path if the goal has changed
+                        //if(belief.getGoalLocation().distance(p.object1) > 0.01){
+                        //    belief.mentalMap.applyPath(p.object1, p.object2);
+                        //}
                     }
+                    //move towards the next way point
+                    Observation o = belief.env().moveToward(belief.id, belief.position,belief.getNextWayPoint());
+                    belief.markObservation(o);
                     return belief;
                 }).on((BeliefState belief) -> {
                     //guard if the position of the agent is not known
@@ -263,7 +270,7 @@ public class TacticLib {
                     if(g == null) return null;
 
                     //check if we can find a path
-                    Vec3[] path = belief.navigate(g);
+                    Vec3[] path = belief.cachedFindPathTo(g);
                     if(path == null) return null;
                     //System.out.println("### find unexplored " + g + ", current pos: " + belief.position) ;
                     return new Tuple(g, path);//return the path finding information
