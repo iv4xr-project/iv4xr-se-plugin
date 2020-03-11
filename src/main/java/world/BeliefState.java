@@ -49,6 +49,8 @@ public class BeliefState extends StateWithMessenger {
      */
     public HashSet<Integer> blockedNodes = new HashSet<>();
     private HashMap<String, Integer[]> nodesBlockedByEntity = new HashMap<>();
+    
+    List<Vec3> recentPositions = new LinkedList<>() ;
 
     public BeliefState() { }
 
@@ -252,6 +254,31 @@ public class BeliefState extends StateWithMessenger {
      */
     public Vec3[] cachedFindPathTo(Vec3 q) {
         return mentalMap.navigate(position, q, blockedNodes);
+    }
+    
+    /**
+     * This method will make the agent move a certain (small) max distance toward the given position.
+     */
+    public Observation moveToward(Vec3 q) {
+    	var o = env().moveToward(this.id, this.position, q) ;
+    	recentPositions.add(o.agentPosition) ;
+    	if (recentPositions.size()>3) recentPositions.remove(0) ;
+    	return o ;
+    }
+    
+    /**
+     * True if the agent is "stuck" with respect to the given position q. "Stuck" is
+     * defined as follows. Let p0,p1.p3 be the three most recent (and registered)
+     * positions of the agent, with p0 being the oldest. It is stuck if the distance
+     * between p0 and p1 and p0 and p3 are at most 0.05, and the distance between p0 and
+     * q is larger than 1.0.
+     */
+    public boolean isStuck(Vec3 q) {
+    	if(recentPositions.size()<3) return false ;
+    	Vec3 p0 = recentPositions.get(0) ;
+    	return p0.distance(recentPositions.get(1)) <= 0.05
+    		   &&  p0.distance(recentPositions.get(2)) <= 0.05
+    	       && p0.distance(q) > 1.0 ;
     }
 
     /**

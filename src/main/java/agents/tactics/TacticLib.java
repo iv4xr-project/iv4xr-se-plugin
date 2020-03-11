@@ -27,12 +27,17 @@ import static nl.uu.cs.aplib.AplibEDSL.action;
  * aplib agents.
  */
 public class TacticLib {
-    /**
-     * This method will return a tactic in which the agent will move to a given known position, only enabled if the
-     * agent knows its own position
-     * @param position: The position to move to
-     * @return The tactic in which the agent will move to the known position
-     */
+   
+	/**
+	 * This method will return a tactic in which the agent will move towards a given
+	 * position. This action is if the agent believes that there is a path (through
+	 * the navigation-map maintained by the agent) to the entity. Note that in
+	 * reality the entity may turn out to be unreachable. The agent will try to
+	 * detect if it gets stuck (e.g. if the position turns out to be unreachable),
+	 * in which case it will check again if a path to the position exists, according
+	 * to the latest information it has. If so, the agent will follow this path, and
+	 * else the tactic is not enabled.
+	 */
     public static Tactic navigateTo(Vec3 position) {
         Tactic move = action("Navigate to " + position.toString())
                 .do2((BeliefState belief) -> (Vec3[] path) -> {
@@ -40,13 +45,22 @@ public class TacticLib {
                     if(belief.getGoalLocation() == null){
                         belief.mentalMap.applyPath(position, path);
                     }
-
-                    //only reset the path if the goal has changed
-                    if(belief.getGoalLocation().distance(position) > 0.01){
-                        belief.mentalMap.applyPath(position, path);
+                    else {
+                    	//reset the path if the goal has changed
+                        if(belief.getGoalLocation().distance(position) > 0.01){
+                            belief.mentalMap.applyPath(position, path);
+                        }
                     }
-                    Observation o = belief.env().moveToward(belief.id, belief.position, belief.getNextWayPoint());//move towards the next way point
+                    //move towards the next way point
+                    Observation o = belief.moveToward(belief.getNextWayPoint());
                     belief.markObservation(o);
+                    if (belief.isStuck(position)) {
+                    	// if the agent seems to be stuck, this is likely because
+                    	// its belief of which part of the map is navigable has become
+                    	// obsolete. We will clear the goal-position. The next round
+                    	// will recalculate a new path to the destination.
+                    	belief.mentalMap.clearGoalLocation(); 
+                    }
                     return belief;
                 }).on((BeliefState belief) -> {
                     if(belief.position == null) return null;//guard
@@ -55,13 +69,17 @@ public class TacticLib {
         return move;
     }
 
-    /**
-     * This method will return a tactic in which the agent will move towards an
-     * in-game entity with a given id. This action is
-     * only enabled if the object with this id is present in the belief state
-     * @param id: The id of the object to which the agent wants to move
-     * @return The tactic in which the agent will try to move to the entity
-     */
+	/**
+	 * This method will return a tactic in which the agent will move towards an
+	 * in-game entity with a given id. This action is only enabled if the object
+	 * with this id is present in the belief state, and furthermore the agent
+	 * believes that there is a path (through the navigation-map maintained by the
+	 * agent) to the entity. Note that in reality the entity may turn out to be
+	 * unreachable. The agent will try to detect if it gets stuck (e.g. if the
+	 * entity turns out to be unreachable), in which case it will check again if
+	 * a path to the entity exists, according to the latest information it has.
+	 * If so, the agent will follow this path, and else the tactic is not enabled.
+	 */
     public static Tactic navigateTo(String id) {
         Tactic move = action("Navigate to " + id)
                 .do2((BeliefState belief) -> (Tuple<Vec3, Vec3[]> p) -> {
@@ -69,25 +87,28 @@ public class TacticLib {
                     if(belief.getGoalLocation() == null){
                         belief.mentalMap.applyPath(p.object1, p.object2);
                     }
-
-                    //only reset the path if the goal has changed
-                    if(belief.getGoalLocation().distance(p.object1) > 0.01){
-                        belief.mentalMap.applyPath(p.object1, p.object2);
+                    else {
+                    	//reset the path if the goal has changed
+                        if(belief.getGoalLocation().distance(p.object1) > 0.01){
+                            belief.mentalMap.applyPath(p.object1, p.object2);
+                        }
                     }
                     Observation o = belief.env().moveToward(belief.id, belief.position, belief.getNextWayPoint());//move towards the next way point
                     belief.markObservation(o);
+                    if (belief.isStuck(p.object1)) {
+                    	// if the agent seems to be stuck, this is likely because
+                    	// its belief of which part of the map is navigable has become
+                    	// obsolete. We will clear the goal-position. The next round
+                    	// will recalculate a new path to the destination.
+                    	belief.mentalMap.clearGoalLocation(); 
+                    }
                     return belief;
                 }).on((BeliefState belief) -> {
+                	if(belief.position == null) return null ;
                     var e = belief.getEntity(id);
-                    if (e == null) {
-                        var ie = belief.getInteractiveEntity(id);
-                        if(ie != null) e = ie;
-                    }
-                    if(belief.position == null || e == null) return null;//guard
+                    if (e == null) return null ; //guard
                     Vec3[] path = belief.cachedFindPathTo(e.position);
-
                     if(path == null) return null;//if there is no path return null
-
                     return new Tuple(e.position, path);//return the path finding information
                 }).lift();
         return move;
@@ -110,7 +131,8 @@ public class TacticLib {
                     Observation o = belief.env().interactWith(belief.id, objectID);
                     belief.markObservation(o);
                     return belief;
-                }).on_((BeliefState belief) -> belief.position != null && belief.canInteractWith(objectID))
+                })
+                .on_((BeliefState belief) -> belief.position != null && belief.canInteractWith(objectID))
                 .lift();
         return interact;
     }

@@ -93,6 +93,15 @@ public class MentalMap {
         if(goalLocation == null) return null;
         return new Vec3(goalLocation);
     }
+    
+    /** 
+     * Set the goal location and the path to it to null.
+     */
+    public void clearGoalLocation() {
+    	goalLocation = null ;
+    	path = null ;
+    	currentWayPoint = -1 ;
+    }
 
     /**
      * Update the current wayPoint if a new wayPoint has been reached
