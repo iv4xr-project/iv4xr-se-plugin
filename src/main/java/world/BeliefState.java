@@ -280,6 +280,59 @@ public class BeliefState extends StateWithMessenger {
     		   &&  p0.distance(recentPositions.get(2)) <= 0.05
     	       && p0.distance(q) > 1.0 ;
     }
+    
+    /**
+     * Clear the tracking of the agent's most recent positions. This tracking is done to detect
+     * if the agent gets stuck.
+     */
+    public void clearStuckTrackingInfo() {
+    	recentPositions.clear();
+    }
+    
+    /**
+     * Check if the agent is located close to a door. If so, the door is returned, and otherwise null.
+     * "Close" is being defined as within a distance of 0.6 unit.
+     */
+    public InteractiveEntity atDoor() {
+    	var doors = knownDoors() ;
+    	for (var d : doors) {
+    		if (position.distance(d.position) <= CLOSE_RANGE) return d ;
+    	}
+    	return null ;
+    }
+    
+    private static double sign_(double x) {
+    	if (x>0) return 1 ;
+    	if (x<0) return -1 ;
+    	return 0 ;
+    }
+    
+    /**
+     * If the agent gets stuck in an bending corner (because the navigation algorithm does not
+     * take agent's dimension into account... :| ), this method tries to find a position close 
+     * to the agent, which can unstuck agent. The agent can travel to this new position, which
+     * will move it past the stucking corner.
+     * 
+     * If such a position can be found, it is returned. Else null is returned.
+     * 
+     * Note that the method simply checks if there is a navigation polygon that contains this
+     * unstuck position. It doesn't check if this position is actually reachable from the agent's
+     * current position.
+     */
+    public Vec3 unstuck() {
+    	var unstuck_distance = UNIT_DISTANCE * 0.5 ;
+    	var x_orientation = sign_(velocity.x) ;  // 1 if the agent is facing eastly, and -1 if westly
+    	var z_orientation = sign_(velocity.y) ;  // 1 if the agent is facing northly, and -1 if southly
+    	// try E/W unstuck first:
+    	var p = new Vec3(position.x + unstuck_distance*x_orientation,position.y,position.z) ;
+    	if (mentalMap.getContainingPolygon(p) != null) return p ; 
+    	// try N/S unstuck:
+    	p = new Vec3(position.x,position.y,position.z + unstuck_distance*z_orientation) ;
+    	if (mentalMap.getContainingPolygon(p) != null) return p ; 
+    	// can't find an unstuck option...
+    	return null ;
+    }
+    
 
     /**
      * Get the goal location of the agent.
@@ -304,7 +357,7 @@ public class BeliefState extends StateWithMessenger {
      *
      * @param observation: The observation used to update the belief state.
      */
-    public void markObservation(Observation observation) {
+    public void updateBelief(Observation observation) {
 
         //check if the observation is not null
         if (observation == null) throw new IllegalArgumentException("Null observation received");
@@ -424,6 +477,8 @@ public class BeliefState extends StateWithMessenger {
     }
     
     public static final float IN_RANGE = 0.4f ;
+    public static final float CLOSE_RANGE = 0.6f ;
+    public static final float UNIT_DISTANCE = 1f ;
 
     /**
      * True if the entity time stamp (its last update) is the same as the agent's.

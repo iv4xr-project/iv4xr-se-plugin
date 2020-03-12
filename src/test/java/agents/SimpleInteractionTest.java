@@ -65,13 +65,13 @@ public class SimpleInteractionTest {
         
         // define the test-goal:
         var goal = SEQ(
-            GoalLib.entityReachedAndInteracted("button1"),
+            GoalLib.entityIsInteracted("button1"),
             GoalLib.entityInvariantChecked(testAgent,
             		"button1", 
             		"button1 should be active", 
             		(Entity e) -> (e instanceof InteractiveEntity) && ((InteractiveEntity) e).isActive),
 
-            GoalLib.entityReached("door1").lift(),
+            GoalLib.entityIsInRange("door1").lift(),
             GoalLib.entityInvariantChecked(testAgent,
             		"door1", 
             		"door1 should be open", 

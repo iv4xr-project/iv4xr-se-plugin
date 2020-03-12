@@ -93,29 +93,29 @@ public class RoomReachabilityTest {
 	        
 	        // define the test-goal:
 	        var goal = SEQ(
-		        GoalLib.entityReachedAndInteracted("button1"),
-                GoalLib.entityReached("button2").lift(),
-	        	GoalLib.entityReached("door1").lift(),
+		        GoalLib.entityIsInteracted("button1"),
+                GoalLib.entityIsInRange("button2").lift(),
+	        	GoalLib.entityIsInRange("door1").lift(),
 	        	GoalLib.entityInvariantChecked(testAgent,
 	            		"door1", 
 	            		"door1 should be open", 
 	            		(Entity e) -> (e instanceof InteractiveEntity) && ((InteractiveEntity) e).isActive),
 	        	
-	        	GoalLib.entityReachedAndInteracted("button3"),
-	        	GoalLib.entityReached("door2").lift(),
+	        	GoalLib.entityIsInteracted("button3"),
+	        	GoalLib.entityIsInRange("door2").lift(),
 	        	GoalLib.entityInvariantChecked(testAgent,
 	            		"door2", 
 	            		"door2 should be open", 
 	            		(Entity e) -> (e instanceof InteractiveEntity) && ((InteractiveEntity) e).isActive),
-	        	GoalLib.entityReachedAndInteracted("button4"),
-	        	GoalLib.entityReached("button3").lift(),
-	        	GoalLib.entityReached("door1").lift(),
+	        	GoalLib.entityIsInteracted("button4"),
+	        	GoalLib.entityIsInRange("button3").lift(),
+	        	GoalLib.entityIsInRange("door1").lift(),
 	        	GoalLib.entityInvariantChecked(testAgent,
 	            		"door1", 
 	            		"door1 should be open", 
 	            		(Entity e) -> (e instanceof InteractiveEntity) && ((InteractiveEntity) e).isActive),
-	        	GoalLib.entityReached("button1").lift(),
-	        	GoalLib.entityReached("door3").lift(),
+	        	GoalLib.entityIsInRange("button1").lift(),
+	        	GoalLib.entityIsInRange("door3").lift(),
 	        	GoalLib.entityInvariantChecked(testAgent,
 	            		"door3", 
 	            		"door3 should be open", 
@@ -200,7 +200,7 @@ class MyGoalLib {
           GoalLib.entityInspected(buttonId, (Entity e) -> (e instanceof InteractiveEntity) && !((InteractiveEntity) e).isActive),
           GoalLib.entityInspected(target, (Entity e) -> (e instanceof InteractiveEntity) && !((InteractiveEntity) e).isActive),
           // walk to the button
-          GoalLib.entityReached(buttonId).lift(),
+          GoalLib.entityIsInRange(buttonId).lift(),
           // press the button
           pressButton(buttonId),
           // observe the button to be active and the door to be open

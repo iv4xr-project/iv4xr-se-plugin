@@ -53,20 +53,37 @@ public class TacticLib {
                     }
                     //move towards the next way point
                     Observation o = belief.moveToward(belief.getNextWayPoint());
-                    belief.markObservation(o);
-                    if (belief.isStuck(position)) {
-                    	// if the agent seems to be stuck, this is likely because
-                    	// its belief of which part of the map is navigable has become
-                    	// obsolete. We will clear the goal-position. The next round
-                    	// will recalculate a new path to the destination.
-                    	belief.mentalMap.clearGoalLocation(); 
-                    }
+                    belief.updateBelief(o);
+                    // handle when the agent gets stuck:
+                    if (belief.isStuck(position)) tryToUnstuck(belief) ;
                     return belief;
                 }).on((BeliefState belief) -> {
                     if(belief.position == null) return null;//guard
                     return belief.cachedFindPathTo(position);//find a path towards the target position
                 }).lift();
         return move;
+    }
+    
+    // to be called when the agent seems to get stuck; this will try to unstuck the
+    // agent in the next few updates:
+    private static void tryToUnstuck(BeliefState belief) {
+    	if (belief.atDoor() != null) {
+    		// if the agent is stuck at a door, that is probably because the door is closed,
+    		// and the agent's belief is outdated. To unstuck, we clear the agent goal-
+    		// position and the calculated path to to, to force fresh path calculation
+    		// at the next update:
+    		belief.mentalMap.clearGoalLocation(); 
+    	}
+    	else {
+    		// else the agent is likely to be be stuck. Try to get a nearby position
+    		// the agent can move to to unstuck itself:
+    		var unstuckPosition = belief.unstuck() ;
+    		if (unstuckPosition != null) {
+    			belief.mentalMap.insertNewWayPoint(unstuckPosition);
+    		}
+    		// else .... for now do nothing :| 
+    	}
+    	belief.clearStuckTrackingInfo();
     }
 
 	/**
@@ -94,14 +111,9 @@ public class TacticLib {
                         }
                     }
                     Observation o = belief.env().moveToward(belief.id, belief.position, belief.getNextWayPoint());//move towards the next way point
-                    belief.markObservation(o);
-                    if (belief.isStuck(p.object1)) {
-                    	// if the agent seems to be stuck, this is likely because
-                    	// its belief of which part of the map is navigable has become
-                    	// obsolete. We will clear the goal-position. The next round
-                    	// will recalculate a new path to the destination.
-                    	belief.mentalMap.clearGoalLocation(); 
-                    }
+                    belief.updateBelief(o);
+                    // handle when the agent gets stuck:
+                    if (belief.isStuck(p.object1)) tryToUnstuck(belief) ;
                     return belief;
                 }).on((BeliefState belief) -> {
                 	if(belief.position == null) return null ;
@@ -129,7 +141,7 @@ public class TacticLib {
         Tactic interact = action("Interact").
                 do1((BeliefState belief) -> {
                     Observation o = belief.env().interactWith(belief.id, objectID);
-                    belief.markObservation(o);
+                    belief.updateBelief(o);
                     return belief;
                 })
                 .on_((BeliefState belief) -> belief.position != null && belief.canInteractWith(objectID))
@@ -146,7 +158,7 @@ public class TacticLib {
         Tactic observe = action("Observe")
                 .do1((BeliefState belief) -> {
                     Observation o = belief.env().observe(belief.id);
-                    belief.markObservation(o);
+                    belief.updateBelief(o);
                     return belief;
                 }).lift();
         return observe;
@@ -157,7 +169,7 @@ public class TacticLib {
         Tactic observe = action("Observe once")
                 .do1((BeliefState belief) -> {
                     Observation o = belief.env().observe(belief.id);
-                    belief.markObservation(o);
+                    belief.updateBelief(o);
                     return belief;
                 }).on((BeliefState b) -> !b.didNothingPreviousTurn).lift();
         return observe;
@@ -173,7 +185,7 @@ public class TacticLib {
                 . do1((BeliefState belief)-> {
                     //do an observation
                     Observation o = belief.env().observe(belief.id);
-                    belief.markObservation(o);
+                    belief.updateBelief(o);
 
                     //send the message
                     Acknowledgement a = belief.messenger().send(id,0, Message.MsgCastType.BROADCAST, "","MemoryShare", (Integer[])belief.mentalMap.getKnownVerticesById()) ;
@@ -201,7 +213,7 @@ public class TacticLib {
 
                     //do an observation
                     Observation o = belief.env().observe(belief.id);
-                    belief.markObservation(o);
+                    belief.updateBelief(o);
                     return belief;
                 })
                 .on_((BeliefState S) -> S.messenger().has(M -> M.getMsgName().equals("MemoryShare")))//check if there is a memory share available
@@ -219,7 +231,7 @@ public class TacticLib {
                 . do1((BeliefState belief)-> {
                     //do an observation
                     Observation o = belief.env().observe(belief.id);
-                    belief.markObservation(o);
+                    belief.updateBelief(o);
 
                     //send the message
                     Acknowledgement a = belief.messenger().send(idFrom,0, Message.MsgCastType.SINGLECAST, idTo,"Ping", "") ;
@@ -242,7 +254,7 @@ public class TacticLib {
 
                     //do an observation
                     Observation o = belief.env().observe(belief.id);
-                    belief.markObservation(o);
+                    belief.updateBelief(o);
 
                     //return whether we have received an observation yes or no
                     return belief;
@@ -282,7 +294,7 @@ public class TacticLib {
                     }
                     //move towards the next way point
                     Observation o = belief.env().moveToward(belief.id, belief.position,belief.getNextWayPoint());
-                    belief.markObservation(o);
+                    belief.updateBelief(o);
                     return belief;
                 }).on((BeliefState belief) -> {
                     //guard if the position of the agent is not known

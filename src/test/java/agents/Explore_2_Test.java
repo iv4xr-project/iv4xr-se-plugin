@@ -61,7 +61,7 @@ public class Explore_2_Test {
         		                     . attachState(new BeliefState())
         		                     . attachEnvironment(environment) ;
         
-        var g = GoalLib.entityReachedAndInteracted("button1") ;
+        var g = GoalLib.entityIsInteracted("button1") ;
         
         agent.setGoal(g) ;
 

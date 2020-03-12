@@ -119,7 +119,7 @@ public class FireHazardAgentDirect {
                                                     new Vec3(1,0,18),
                                                     new Vec3(3,0,20),
                                                     new Vec3(6,0,20)),
-                GoalLib.entityReachedAndInteracted("b1.1"),
+                GoalLib.entityIsInteracted("b1.1"),
                 GoalLib.positionsVisited(new Vec3(5,0,25))
                 ));
         return agent;

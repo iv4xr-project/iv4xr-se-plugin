@@ -110,7 +110,7 @@ public class EntityNodeIntersection {
      * @param id: The id of the triangle
      * @return The vertices of the triangle
      */
-    private static Vec3[] getTriangleVertices(TriangleMesh m, int id){
+    public static Vec3[] getTriangleVertices(TriangleMesh m, int id){
         //get the vertices from a triangle
         HashSet<Integer> indices = new LinkedHashSet<>();
         for(int i = 0; i < m.faces[id].edgeIndices.length; i++){

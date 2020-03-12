@@ -66,7 +66,7 @@ public class Explore_1_Test {
         		                     . attachState(new BeliefState())
         		                     . attachEnvironment(environment) ;
         
-        var g = GoalLib.entityReached("button1").lift() ;
+        var g = GoalLib.entityIsInRange("button1").lift() ;
         agent.setGoal(g) ;
 
         // press play in Unity

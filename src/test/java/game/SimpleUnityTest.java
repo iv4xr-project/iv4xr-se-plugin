@@ -195,11 +195,11 @@ public class SimpleUnityTest {
     		        . attachEnvironment(environment);
 
         GoalStructure goal = SEQ(
-                GoalLib.positionReached(new Vec3(1,0,1)).lift(),
+                GoalLib.positionIsInRange(new Vec3(1,0,1)).lift(),
                 GoalLib.entityInspected("button0", e -> !((InteractiveEntity) e).isActive),
-                GoalLib.entityReachedAndInteracted("button0"),
+                GoalLib.entityIsInteracted("button0"),
                 GoalLib.entityInspected("button0", e -> ((InteractiveEntity) e).isActive),
-                GoalLib.positionReached(new Vec3(1,0,1)).lift()
+                GoalLib.positionIsInRange(new Vec3(1,0,1)).lift()
         );
 
         agent.setGoal(goal);
