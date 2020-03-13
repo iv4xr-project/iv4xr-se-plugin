@@ -132,10 +132,11 @@ public class MentalMap {
     
     public void insertNewWayPoint(Vec3 p) {
     	Vec3[] newPath = new Vec3[path.length + 1] ;
-    	for (int k=0; k<currentWayPoint; k++) newPath[k] = path[k] ;
-    	newPath[currentWayPoint] = p ;
-    	for (int k=currentWayPoint+1; k<newPath.length; k++) newPath[k] = path[k-1] ;
+    	for (int k=0; k<=currentWayPoint; k++) newPath[k] = path[k] ;
+    	newPath[currentWayPoint+1] = p ;
+    	for (int k=currentWayPoint+1; k<path.length; k++) newPath[k+1] = path[k] ;
     	path = newPath ;
+    	currentWayPoint++ ;
      }
 
     /**

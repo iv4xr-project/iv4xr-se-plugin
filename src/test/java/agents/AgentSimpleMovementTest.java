@@ -28,6 +28,7 @@ import game.Platform;
 import helperclasses.datastructures.Vec3;
 import logger.PrintColor;
 import nl.uu.cs.aplib.mainConcepts.Environment;
+import static nl.uu.cs.aplib.AplibEDSL.* ;
 import world.BeliefState;
 
 /**
@@ -75,7 +76,7 @@ public class AgentSimpleMovementTest {
         int tick = 0;
         while (!agents.allTrue(LabRecruitsTestAgent::success)){
         	
-            System.out.println(PrintColor.GREEN("TICK " + tick + ":"));
+            System.out.println("TICK " + tick );
 
             // only updates in progress
             for(var agent : agents.where(agent -> !agent.success())){
@@ -111,7 +112,9 @@ public class AgentSimpleMovementTest {
         LabRecruitsTestAgent agent = new LabRecruitsTestAgent(id)
         		                    . attachState(new BeliefState())
         		                    . attachEnvironment(env) ;
-        agent.setGoal(GoalLib.positionsVisited(dest));
+        
+        agent.setGoal(SEQ(GoalLib.justObserve().lift()
+        		         ,GoalLib.positionsVisited(dest)));
         return agent;
     }
 }

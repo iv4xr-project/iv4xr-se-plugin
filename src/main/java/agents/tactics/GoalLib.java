@@ -7,9 +7,11 @@ at Utrecht University within the Software and Game project course.
 
 package agents.tactics;
 
+import helperclasses.datastructures.Tuple;
 import helperclasses.datastructures.Vec3;
 import nl.uu.cs.aplib.mainConcepts.Goal;
 import nl.uu.cs.aplib.mainConcepts.GoalStructure;
+import nl.uu.cs.aplib.mainConcepts.Tactic;
 import world.BeliefState;
 import world.Entity;
 
@@ -26,6 +28,15 @@ import static eu.iv4xr.framework.Iv4xrEDSL.* ;
  * to be used by test agents to test Lab Recruits.
  */
 public class GoalLib {
+	
+	
+	public static Goal justObserve() {
+		Goal g = new Goal("Just making an observation") 
+				. toSolve(b -> true) 
+				.withTactic(TacticLib.observe()) ;
+		return g ;
+	}
+	
     /**
      * This method will construct a goal in which the agent will move to a known position.
      * The goal is solved if the position is "in-range" from the agent.
@@ -75,7 +86,7 @@ public class GoalLib {
      * The goal fails if the agent no longer believes that the entity is reachable.
      */
     public static Goal entityIsInRange(String entityId) {
-        Goal goal = new Goal(String.format("This entity is in-range: ",entityId)).toSolve((BeliefState belief) -> belief.withinRange(entityId));
+        Goal goal = new Goal(String.format("This entity is in-range: [%s]",entityId)).toSolve((BeliefState belief) -> belief.withinRange(entityId));
 
         //define the goal structure
         Goal g = goal.withTactic(FIRSTof( //the tactic used to solve the goal
@@ -84,6 +95,67 @@ public class GoalLib {
                 ABORT()));
         return g;
     }
+    
+    
+    private static boolean inCloseRange(BeliefState belief, String entityId) {
+    	if (belief.position==null) return false ;
+    	var e = belief.getEntity(entityId) ;
+    	if (e==null) return false ;
+    	return belief.position.distance(e.position) <= BeliefState.UNIT_DISTANCE  ;
+    }
+    
+    public static GoalStructure entityIsInRange_smarter(String entityId) {
+        Goal goalE = goal(String.format("East vicinity of this entity is in-range: [%s]",entityId))
+        		    . toSolve((BeliefState belief) -> inCloseRange(belief,entityId));
+        var goalW = goal(String.format("West vicinity of this entity is in-range: [%s]",entityId))
+        		   . toSolve((BeliefState belief) -> inCloseRange(belief,entityId));
+        var goalN = goal(String.format("North vicinity of this entity is in-range: [%s]",entityId))
+        		    . toSolve((BeliefState belief) -> inCloseRange(belief,entityId));
+        var goalS = goal(String.format("South vicinity of this entity is in-range: [%s]",entityId))
+        		   . toSolve((BeliefState belief) -> inCloseRange(belief,entityId));
+        
+        double shift = 0.7*BeliefState.UNIT_DISTANCE ;
+        
+        var g1 = FIRSTof(
+        		    goalE . withTactic(FIRSTof(navigateToVicinity(entityId, new Vec3(shift,0,0)), 
+        		    		           ABORT()))
+        		          . lift(),
+        		    goalW . withTactic(FIRSTof(navigateToVicinity(entityId, new Vec3(-shift,0,0)),
+        		    		           ABORT()))
+        		          . lift(),
+        		    goalN . withTactic(FIRSTof(navigateToVicinity(entityId, new Vec3(0,0,shift)),
+        		    		           ABORT()))
+        		          . lift(),
+        		    goalS . withTactic(FIRSTof(navigateToVicinity(entityId, new Vec3(0,0,-shift)),
+        		    		           ABORT()))
+        		          . lift()
+        		  ) ;
+        
+        var goal = FIRSTof(
+        		     entityIsInRange(entityId).lift(),
+        		     SEQ(g1, entityIsInRange(entityId).lift())
+        		   ) ;
+        
+        return goal ;
+    }
+
+    private static Tactic navigateToVicinity(String id, Vec3 shift) {
+    	// replace the guard with this one:
+    	return TacticLib.actionNavigateTo(id)
+    		   . on((BeliefState belief) -> { 
+    			    if(belief.position == null) return null ;
+    		        var e = belief.getEntity(id);
+    		        if (e == null) return null ; //guard
+    		        // have to clone shift to avoid unintended accumulating plus:
+    		        var newPosition = new Vec3(shift.x,shift.y,shift.z) ;
+    		        newPosition.add(e.position);
+    		        //System.out.println(">>>> " + id + " @" + e.position) ;
+    		        Vec3[] path = belief.cachedFindPathTo(newPosition);
+    		        if(path == null) return null;//if there is no path return null
+    		        return new Tuple(newPosition, path) ;
+    		   }).lift() ;
+    }
+    
 
     /**
      * This method will return a goal structure in which the agent will sequentially move along 
@@ -201,7 +273,7 @@ public class GoalLib {
     public static GoalStructure entityInvariantChecked(TestAgent agent, String id, String info, Predicate<Entity> predicate){
         return SEQ(
             entityInspected(id).lift(),
-            testgoal("Evaluate " + id, agent)
+            testgoal("Invariant check " + id, agent)
             .toSolve((BeliefState b) -> true) // nothing to solve
             .invariant(agent,                 // something to check :)
             		(BeliefState b) -> {

@@ -7,6 +7,8 @@ at Utrecht University within the Software and Game project course.
 
 package agents.demo;
 
+
+
 import agents.LabRecruitsTestAgent;
 import agents.TestSettings;
 import agents.tactics.GoalLib;
@@ -53,7 +55,7 @@ public class RoomReachabilityTest {
     @BeforeAll
     static void start() {
     	// Uncomment this to make the game's graphic visible:
-    	// TestSettings.USE_GRAPHICS = true ;
+    	TestSettings.USE_GRAPHICS = true ;
     	String labRecruitesExeRootDir = System.getProperty("user.dir") ;
     	labRecruitsTestServer = TestSettings.start_LabRecruitsTestServer(labRecruitesExeRootDir) ;
     }
@@ -93,9 +95,9 @@ public class RoomReachabilityTest {
 	        
 	        // define the test-goal:
 	        var goal = SEQ(
+	            GoalLib.justObserve().lift(),
 		        GoalLib.entityIsInteracted("button1"),
-                GoalLib.entityIsInRange("button2").lift(),
-	        	GoalLib.entityIsInRange("door1").lift(),
+                GoalLib.entityIsInRange_smarter("door1"),
 	        	GoalLib.entityInvariantChecked(testAgent,
 	            		"door1", 
 	            		"door1 should be open", 
@@ -108,14 +110,15 @@ public class RoomReachabilityTest {
 	            		"door2 should be open", 
 	            		(Entity e) -> (e instanceof InteractiveEntity) && ((InteractiveEntity) e).isActive),
 	        	GoalLib.entityIsInteracted("button4"),
-	        	GoalLib.entityIsInRange("button3").lift(),
-	        	GoalLib.entityIsInRange("door1").lift(),
+	        	//GoalLib.entityIsInRange("button3").lift(),
+	        	//GoalLib.entityIsInRange("door1").lift(),
+	        	GoalLib.entityIsInRange_smarter("door1"),
 	        	GoalLib.entityInvariantChecked(testAgent,
 	            		"door1", 
 	            		"door1 should be open", 
 	            		(Entity e) -> (e instanceof InteractiveEntity) && ((InteractiveEntity) e).isActive),
-	        	GoalLib.entityIsInRange("button1").lift(),
-	        	GoalLib.entityIsInRange("door3").lift(),
+	        	//GoalLib.entityIsInRange("button1").lift(),
+	        	GoalLib.entityIsInRange_smarter("door3"),
 	        	GoalLib.entityInvariantChecked(testAgent,
 	            		"door3", 
 	            		"door3 should be open", 
@@ -135,7 +138,11 @@ public class RoomReachabilityTest {
 	            Thread.sleep(30);
 	            i++ ; 
 	        	testAgent.update();
+	        	if (i>1) {
+	        		break ;
+	        	}
 	        }
+	        goal.printGoalStructureStatus();
 	
 	        // check that we have passed both tests above:
 	        assertTrue(dataCollector.getNumberOfPassVerdictsSeen() == 4) ;
@@ -149,63 +156,3 @@ public class RoomReachabilityTest {
     }
 }
 
-/**
- * A helper class for constructing support subgoals.
- */
-class MyGoalLib {
-	
-	// to just observe the game ... to get information
-    static GoalStructure justObserve(){
-        return goal("observe").toSolve((BeliefState b) -> b.position != null).withTactic(TacticLib.observe()).lift();
-    }
-    
-    static GoalStructure observeInteractiveEntity(String interactiveEntityId, boolean isActive) {
-        String goalName = "Observe that " + interactiveEntityId + " is " + (isActive ? "" : "not ") + "active";
-        return goal(goalName)
-                .toSolve((BeliefState belief) -> {
-                    System.out.println(goalName);
-                    var interactiveEntities = new QArrayList<>(belief.getAllInteractiveEntities());
-                    return interactiveEntities.contains(entity -> entity.id.equals(interactiveEntityId) && entity.isActive == isActive);
-                })
-                // in the future this will be swapped by inspect(objectId) for when an object is not within sight
-                .withTactic(TacticLib.observe())
-                .lift()
-                .maxbudget(1);
-    }
-	
-    // A goal that is reached whenever the buttonId is observed to be pressed (active)
-    static GoalStructure pressButton(String buttonId) {
-        return
-        goal("Press " + buttonId)
-            .toSolve((BeliefState belief) -> {
-                // the belief should contain an interactive entity (buttonId) that is observed to be pressed (active)
-                var interactiveEntities = new QArrayList<>(belief.getAllInteractiveEntities());
-                return interactiveEntities.contains(entity -> entity.id.equals(buttonId) && entity.isActive);
-            })
-            .withTactic(
-                FIRSTof(
-                    // try to interact
-                    TacticLib.interact(buttonId),
-                    // move toward the button if the agent cannot interact
-                    TacticLib.navigateTo(buttonId)
-                )
-            ).lift();
-    }
-    
-    // this will be the top level goal
-    static GoalStructure test_thisButton_triggers_thatObject(String buttonId, String target) {
-        return SEQ(
-          justObserve(),
-          // observe the button to be inactive and the door to be closed
-          GoalLib.entityInspected(buttonId, (Entity e) -> (e instanceof InteractiveEntity) && !((InteractiveEntity) e).isActive),
-          GoalLib.entityInspected(target, (Entity e) -> (e instanceof InteractiveEntity) && !((InteractiveEntity) e).isActive),
-          // walk to the button
-          GoalLib.entityIsInRange(buttonId).lift(),
-          // press the button
-          pressButton(buttonId),
-          // observe the button to be active and the door to be open
-          GoalLib.entityInspected(buttonId, (Entity e) -> (e instanceof InteractiveEntity) && ((InteractiveEntity) e).isActive),
-          GoalLib.entityInspected(target, (Entity e) -> (e instanceof InteractiveEntity) && ((InteractiveEntity) e).isActive)
-        );
-    }
-}

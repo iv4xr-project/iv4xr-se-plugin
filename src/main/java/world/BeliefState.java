@@ -226,11 +226,8 @@ public class BeliefState extends StateWithMessenger {
     
     // add
     private void addEntity(Entity newEntity){
-        // set the right tick
+        // set the right tick ... so the new entity will get the most recent timestamp:
         newEntity.lastUpdated = this.lastUpdated;
-        // only store newer entities
-        if(this.evaluateEntity(newEntity.id, original -> original.lastUpdated >= newEntity.lastUpdated))
-            return;
         // add to the entity list
         entities.put(newEntity.id, newEntity);
     }
@@ -277,8 +274,8 @@ public class BeliefState extends StateWithMessenger {
     	if(recentPositions.size()<3) return false ;
     	Vec3 p0 = recentPositions.get(0) ;
     	return p0.distance(recentPositions.get(1)) <= 0.05
-    		   &&  p0.distance(recentPositions.get(2)) <= 0.05
-    	       && p0.distance(q) > 1.0 ;
+    		   &&  p0.distance(recentPositions.get(2)) <= 0.05 ;
+         //    && p0.distance(q) > 1.0 ;
     }
     
     /**
@@ -322,12 +319,13 @@ public class BeliefState extends StateWithMessenger {
     public Vec3 unstuck() {
     	var unstuck_distance = UNIT_DISTANCE * 0.5 ;
     	var x_orientation = sign_(velocity.x) ;  // 1 if the agent is facing eastly, and -1 if westly
-    	var z_orientation = sign_(velocity.y) ;  // 1 if the agent is facing northly, and -1 if southly
+    	var z_orientation = sign_(velocity.z) ;  // 1 if the agent is facing northly, and -1 if southly
+    	System.out.println("### calling unstuck()") ;
     	// try E/W unstuck first:
-    	var p = new Vec3(position.x + unstuck_distance*x_orientation,position.y,position.z) ;
+    	var p = new Vec3(position.x + unstuck_distance*x_orientation, position.y, position.z) ;
     	if (mentalMap.getContainingPolygon(p) != null) return p ; 
     	// try N/S unstuck:
-    	p = new Vec3(position.x,position.y,position.z + unstuck_distance*z_orientation) ;
+    	p = new Vec3(position.x, position.y, position.z + unstuck_distance*z_orientation) ;
     	if (mentalMap.getContainingPolygon(p) != null) return p ; 
     	// can't find an unstuck option...
     	return null ;

@@ -9,7 +9,6 @@ package agents;
 
 import agents.tactics.GoalLib;
 import agents.tactics.TacticLib;
-import agents.tactics.TestGoalFactory;
 import environments.EnvironmentConfig;
 import environments.LabRecruitsEnvironment;
 import eu.iv4xr.framework.mainConcepts.TestAgent;
@@ -45,7 +44,7 @@ public class Explore_1_Test {
     @BeforeAll
     static void start() {
     	// Uncomment this to make the game's graphic visible:
-    	// TestSettings.USE_GRAPHICS = true ;
+        // TestSettings.USE_GRAPHICS = true ;
     	String labRecruitesExeRootDir = System.getProperty("user.dir") ;
        	labRecruitsTestServer = TestSettings.start_LabRecruitsTestServer(labRecruitesExeRootDir) ;
     }
@@ -66,7 +65,8 @@ public class Explore_1_Test {
         		                     . attachState(new BeliefState())
         		                     . attachEnvironment(environment) ;
         
-        var g = GoalLib.entityIsInRange("button1").lift() ;
+        var g = SEQ(GoalLib.justObserve().lift(),
+        		    GoalLib.entityIsInRange("button1").lift()) ;
         agent.setGoal(g) ;
 
         // press play in Unity

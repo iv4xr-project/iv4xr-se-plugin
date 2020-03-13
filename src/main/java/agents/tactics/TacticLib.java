@@ -10,16 +10,17 @@ package agents.tactics;
 import communication.agent.AgentCommandType;
 import helperclasses.datastructures.Tuple;
 import helperclasses.datastructures.Vec3;
+import nl.uu.cs.aplib.mainConcepts.Action;
 import nl.uu.cs.aplib.mainConcepts.Tactic;
 import nl.uu.cs.aplib.multiAgentSupport.Acknowledgement;
 import nl.uu.cs.aplib.multiAgentSupport.Message;
 import world.BeliefState;
-import world.InteractiveEntity;
+import world.*;
 import world.Observation;
 
 import java.util.Arrays;
 
-import static nl.uu.cs.aplib.AplibEDSL.action;
+import static nl.uu.cs.aplib.AplibEDSL.*;
 
 /**
  * This class provide a set of standard tactics to interact with the Lab Recruits
@@ -55,7 +56,10 @@ public class TacticLib {
                     Observation o = belief.moveToward(belief.getNextWayPoint());
                     belief.updateBelief(o);
                     // handle when the agent gets stuck:
-                    if (belief.isStuck(position)) tryToUnstuck(belief) ;
+                    if (belief.isStuck(position)) {
+                    	System.out.println("#### STUCK") ;
+                    	tryToUnstuck(belief) ;
+                    }
                     return belief;
                 }).on((BeliefState belief) -> {
                     if(belief.position == null) return null;//guard
@@ -69,9 +73,11 @@ public class TacticLib {
     private static void tryToUnstuck(BeliefState belief) {
     	if (belief.atDoor() != null) {
     		// if the agent is stuck at a door, that is probably because the door is closed,
-    		// and the agent's belief is outdated. To unstuck, we clear the agent goal-
+    		// and the agent's belief is outdated. We will clear the agent goal-
     		// position and the calculated path to to, to force fresh path calculation
-    		// at the next update:
+    		// at the next update. This may unstuck the agent, if there is another path to the
+    		// target. But if there is no path, this will basically cause the tactic that calls
+    		// this to be disabled at the next update.
     		belief.mentalMap.clearGoalLocation(); 
     	}
     	else {
@@ -97,8 +103,10 @@ public class TacticLib {
 	 * a path to the entity exists, according to the latest information it has.
 	 * If so, the agent will follow this path, and else the tactic is not enabled.
 	 */
-    public static Tactic navigateTo(String id) {
-        Tactic move = action("Navigate to " + id)
+    public static Tactic navigateTo(String id) { return actionNavigateTo(id).lift(); }
+    
+    public static Action actionNavigateTo(String id) {
+        Action move = action("Navigate to " + id)
                 .do2((BeliefState belief) -> (Tuple<Vec3, Vec3[]> p) -> {
                     //if there is no path, set the path
                     if(belief.getGoalLocation() == null){
@@ -122,10 +130,9 @@ public class TacticLib {
                     Vec3[] path = belief.cachedFindPathTo(e.position);
                     if(path == null) return null;//if there is no path return null
                     return new Tuple(e.position, path);//return the path finding information
-                }).lift();
+                }) ;
         return move;
     }
-    
     
     void calculateDoorAlternativePositions(InteractiveEntity door) {
     	var center = door.center ;

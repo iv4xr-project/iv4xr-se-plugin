@@ -40,7 +40,7 @@ public class Explore_2_Test {
     @BeforeAll
     static void start() {
     	// Uncomment this to make the game's graphic visible:
-    	//TestSettings.USE_GRAPHICS = true ;
+    	// TestSettings.USE_GRAPHICS = true ;
     	String labRecruitesExeRootDir = System.getProperty("user.dir") ;
        	labRecruitsTestServer = TestSettings.start_LabRecruitsTestServer(labRecruitesExeRootDir) ;
     }
@@ -61,7 +61,8 @@ public class Explore_2_Test {
         		                     . attachState(new BeliefState())
         		                     . attachEnvironment(environment) ;
         
-        var g = GoalLib.entityIsInteracted("button1") ;
+        var g = SEQ(GoalLib.justObserve().lift(),
+        		    GoalLib.entityIsInteracted("button1")) ;
         
         agent.setGoal(g) ;
 
