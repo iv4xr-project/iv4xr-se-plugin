@@ -27,8 +27,7 @@ import world.InteractiveEntity;
 import java.util.function.Predicate;
 
 import static agents.TestSettings.*;
-import static nl.uu.cs.aplib.AplibEDSL.SEQ;
-import static nl.uu.cs.aplib.AplibEDSL.goal;
+import static nl.uu.cs.aplib.AplibEDSL.*;
 
 public class SimpleUnityTest {
 
@@ -106,12 +105,12 @@ public class SimpleUnityTest {
         		    . attachState(new BeliefState())
         		    . attachEnvironment(environment);
 
-        // Entity list contains an entity with type "Switch" and position (1,0,1)
-        Predicate<BeliefState> evaluation = (BeliefState belief) -> new QArrayList<>(belief.getAllInteractiveEntities())
-                .contains(entity -> entity.id.equals("button0") && entity.position.equals(new Vec3(1, 0, 1)));
-
         GoalStructure goal = goal(config.level_name)
-                .toSolve(evaluation)
+                .toSolve((BeliefState belief) 
+                		  -> 
+                          belief.knownEntities().size() == 1
+                          && belief.getEntity("button0") != null 
+                          && belief.getEntity("button0").position.equals(new Vec3(1, 0, 1)))
                 .withTactic(TacticLib.observe()) // the agent should be able to see the button by observing
                 .lift();
 
@@ -151,14 +150,12 @@ public class SimpleUnityTest {
     		        . attachState(new BeliefState())
     		        . attachEnvironment(environment);
 
-        // Entity list contains an entity with type "Switch" and position (1,0,1)
-        Predicate<BeliefState> evaluation = (BeliefState belief) ->
-                belief.getAllInteractiveEntities().size() == 1 &&
-                new QArrayList<>(belief.getAllInteractiveEntities())
-                        .contains(entity -> entity.id.equals("button1") && entity.position.equals(new Vec3(3, 0, 1)));
-
         GoalStructure goal = goal(config.level_name)
-                .toSolve(evaluation)
+                .toSolve((BeliefState belief) 
+              		  -> 
+                   belief.knownEntities().size() == 1
+                   && belief.getEntity("button1") != null 
+                   && belief.getEntity("button1").position.equals(new Vec3(3, 0, 1)))
                 .withTactic(TacticLib.observe()) // the agent should be able to see the button by observing
                 .lift();
 
@@ -172,7 +169,7 @@ public class SimpleUnityTest {
 
         //update one round
         agent.update();
-
+        
         //agent should now know where it is
         Assertions.assertFalse(goal.getStatus().inProgress());
 

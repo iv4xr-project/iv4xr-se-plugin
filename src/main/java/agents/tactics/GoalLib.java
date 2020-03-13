@@ -97,23 +97,45 @@ public class GoalLib {
     }
     
     
-    private static boolean inCloseRange(BeliefState belief, String entityId) {
+    /**
+     * This is used by the method entityIsInRange_smarter below. It defined when
+     * the agent is close enough to make a fresh observation. The distance should
+     * be larger than the "vicinity" distance, but close enough to make sure that
+     * the agent will actually have line of sight to the entity.
+     * The setting of these two distances are a bit SENSITIVE.
+     */
+    private static boolean inClosexxxRange(BeliefState belief, String entityId) {
     	if (belief.position==null) return false ;
     	var e = belief.getEntity(entityId) ;
     	if (e==null) return false ;
     	return belief.position.distance(e.position) <= BeliefState.UNIT_DISTANCE  ;
     }
     
+    /**
+     * Use this goal to approach a door which according to the current belief is closed,
+     * but the agent has a reason to suspect that it might be open now (e.g. because
+     * it just pushed on a button that it thinks might open the door).
+     * The agent cannot literally navigate to the door, because this would be prohibited
+     * by its current navigation graph (which will say that the door is unreachable, and
+     * therefore cannot provide a path to it).
+     * Instead, this goal will check if there is a point in the VICINITY of the door that
+     * are reachable (for now this is either a point some vicinity-distance E/W/N or S
+     * of the position/center of the door. If such a vicinity-point can be found, the
+     * agent will navigate to that point. It will actually stop a bit before that point,
+     * in just enough distance (decided by inClosexxxRange) to make an updated observation
+     * on the state of the door (whether it is open or close).
+     */
     public static GoalStructure entityIsInRange_smarter(String entityId) {
         Goal goalE = goal(String.format("East vicinity of this entity is in-range: [%s]",entityId))
-        		    . toSolve((BeliefState belief) -> inCloseRange(belief,entityId));
+        		    . toSolve((BeliefState belief) -> inClosexxxRange(belief,entityId));
         var goalW = goal(String.format("West vicinity of this entity is in-range: [%s]",entityId))
-        		   . toSolve((BeliefState belief) -> inCloseRange(belief,entityId));
+        		   . toSolve((BeliefState belief) -> inClosexxxRange(belief,entityId));
         var goalN = goal(String.format("North vicinity of this entity is in-range: [%s]",entityId))
-        		    . toSolve((BeliefState belief) -> inCloseRange(belief,entityId));
+        		    . toSolve((BeliefState belief) -> inClosexxxRange(belief,entityId));
         var goalS = goal(String.format("South vicinity of this entity is in-range: [%s]",entityId))
-        		   . toSolve((BeliefState belief) -> inCloseRange(belief,entityId));
+        		   . toSolve((BeliefState belief) -> inClosexxxRange(belief,entityId));
         
+        // the setting of this parameter is sensitive; 0.7 seems to work
         double shift = 0.7*BeliefState.UNIT_DISTANCE ;
         
         var g1 = FIRSTof(
