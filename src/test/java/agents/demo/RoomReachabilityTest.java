@@ -135,7 +135,7 @@ public class RoomReachabilityTest {
 	        // keep updating the agent
 	        while (goal.getStatus().inProgress()) {
 	        	System.out.println("*** " + i + ", " + testAgent.getState().id + " @" + testAgent.getState().position) ;
-	            Thread.sleep(30);
+	            Thread.sleep(50);
 	            i++ ; 
 	        	testAgent.update();
 	        	if (i>400) {

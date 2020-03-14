@@ -84,14 +84,19 @@ public class ColorSwitchLevelTest {
         // run the agent until it solves its goal:
         while (!agents.allTrue(LabRecruitsTestAgent::success)){
 
-            System.out.println(PrintColor.GREEN("TICK " + tick + ":"));
+            System.out.print("** " + tick + ":");
 
             // only updates in progress
             for(var agent : agents.where(agent -> !agent.success())){
                 agent.update();
+                if (agent.getState().id.equals("0")) 
+                	System.out.println(" agent-0 @" + agent.getState().position) ;
                 if(agent.success()){
                     agent.printStatus();
                 }
+            }
+            if (tick > 100) {
+            	break ;
             }
             Thread.sleep(30);
             tick++;
@@ -120,6 +125,7 @@ public class ColorSwitchLevelTest {
  
         //set the goals
         agent.setGoal(SEQ(
+        		GoalLib.justObserve().lift(),
                 GoalLib.entityIsInteracted("CB3"), //move to the red button and interact with it
                 GoalLib.pingSent("0", "1").lift(), //send a ping to the other agent
                 GoalLib.entityIsInteracted("CB3"), //move to the red button and interact with it

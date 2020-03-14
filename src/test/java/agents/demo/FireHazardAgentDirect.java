@@ -56,7 +56,7 @@ public class FireHazardAgentDirect {
      * 
      * BROKEN!! Fix this the agent get stuck.
      */
-    //@Test
+    @Test
     public void fireHazardDemo() throws InterruptedException{
         //Add the level to the resources and change the string in the environmentConfig on the next line from Ramps to the new level
         var env = new LabRecruitsEnvironment(new EnvironmentConfig("HZRDDirect").replaceAgentMovementSpeed(0.2f));
