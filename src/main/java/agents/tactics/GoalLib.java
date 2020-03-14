@@ -55,6 +55,10 @@ public class GoalLib {
         Goal g = goal.withTactic(FIRSTof(//the tactic used to solve the goal
                 TacticLib.navigateTo(goalPosition),//move to the goal position
                 TacticLib.explore(), //explore if the goal position is unknown
+                // adding a strategy to handle explore-blind-corner:
+                SEQ(TacticLib.forcePastExploreBlindCorner(),
+                        FIRSTof(TacticLib.navigateTo(goalPosition),
+                                ABORT())),
                 ABORT())) ;
         return g;
     }
@@ -92,6 +96,10 @@ public class GoalLib {
         Goal g = goal.withTactic(FIRSTof( //the tactic used to solve the goal
                 TacticLib.navigateTo(entityId),//try to move to the entity
                 TacticLib.explore(),//find the entity
+                // adding a strategy to handle explore-blind-corner:
+                SEQ(TacticLib.forcePastExploreBlindCorner(),
+                        FIRSTof(TacticLib.navigateTo(entityId),
+                                ABORT())),
                 ABORT()));
         return g;
     }
@@ -219,11 +227,13 @@ public class GoalLib {
         GoalStructure g1 = goal1.withTactic(FIRSTof( //the tactic used to solve the goal
                 TacticLib.navigateTo(entityId), //try to move to the enitity
                 TacticLib.explore(), //find the entity
+                // handling explore-blind corner:
                 SEQ(TacticLib.forcePastExploreBlindCorner(),
                     FIRSTof(TacticLib.navigateTo(entityId),
                             ABORT())),
                 ABORT())) //find the agent's own position
                 .lift();
+        
         GoalStructure g2 = goal2.withTactic(FIRSTof( //the tactic used to solve the goal
                 TacticLib.interact(entityId),// interact with the entity
                 ABORT())) // observe the objects
@@ -262,6 +272,7 @@ public class GoalLib {
                 .withTactic(FIRSTof(
                         TacticLib.navigateTo(id),
                         TacticLib.explore(),
+                        // handling explore-blind corner:
                         SEQ(TacticLib.forcePastExploreBlindCorner(),
                             FIRSTof(TacticLib.navigateTo(id),
                             		ABORT())),

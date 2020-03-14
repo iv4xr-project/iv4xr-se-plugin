@@ -116,9 +116,13 @@ public class TacticLib {
     		   . do1((BeliefState belief) -> { 
     			    var unstuckPosition = belief.unstuck() ;
     			    System.out.println("#### invoking forcePastExploreBlindCorner") ;
-    			    System.out.println("#### agent velocity " + belief.velocity) ;
-    			    System.out.println("#### unstuck option " + unstuckPosition) ;   
-    			    Observation o = belief.moveToward(unstuckPosition) ;
+    			    System.out.println("#### agent velocity " + belief.derived_lastNonZeroXZVelocity()) ;
+    			    System.out.println("#### unstuck option " + unstuckPosition) ;  
+    			    Observation o ;
+    			    if (unstuckPosition!=null)
+    			    	o = belief.moveToward(unstuckPosition) ;
+    			    else 
+    			    	o = belief.env().observe(belief.id) ;
     			    belief.updateBelief(o);
     			    return belief ; 
     			 })
