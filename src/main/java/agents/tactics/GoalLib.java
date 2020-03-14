@@ -219,6 +219,9 @@ public class GoalLib {
         GoalStructure g1 = goal1.withTactic(FIRSTof( //the tactic used to solve the goal
                 TacticLib.navigateTo(entityId), //try to move to the enitity
                 TacticLib.explore(), //find the entity
+                SEQ(TacticLib.forcePastExploreBlindCorner(),
+                    FIRSTof(TacticLib.navigateTo(entityId),
+                            ABORT())),
                 ABORT())) //find the agent's own position
                 .lift();
         GoalStructure g2 = goal2.withTactic(FIRSTof( //the tactic used to solve the goal
@@ -228,6 +231,8 @@ public class GoalLib {
 
         return SEQ(g1, g2);
     }
+    
+
 
     /**
      * Interact with a variable number of buttons sequentially before moving to the goal
@@ -257,6 +262,9 @@ public class GoalLib {
                 .withTactic(FIRSTof(
                         TacticLib.navigateTo(id),
                         TacticLib.explore(),
+                        SEQ(TacticLib.forcePastExploreBlindCorner(),
+                            FIRSTof(TacticLib.navigateTo(id),
+                            		ABORT())),
                         ABORT()));
     }
 

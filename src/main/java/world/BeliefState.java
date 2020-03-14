@@ -132,6 +132,38 @@ public class BeliefState extends StateWithMessenger {
     
     public Integer age(String id) { return age(getEntity(id)) ; }
     
+    /**
+     * Like derivedLastVelocity(), but if it tries to get the last known
+     * and non-zero XZ-velocity that can be inferred from tracked positions.
+     * Note: the agent track the last 4 positions, as far as these are
+     * available. An unstuck routine may clear these tracked positions.
+     */
+    public Vec3 derived_lastNonZeroXZVelocity() {
+    	int N = recentPositions.size() ;
+    	if (N<2) return null ;
+    	//System.out.println("#### #recentPositions=" + N) ;
+    	for(int k=N; k>1; k--) {
+    		Vec3 q = new Vec3(recentPositions.get(k-1)) ;
+        	q.subtract(recentPositions.get(k-2)) ;
+        	if (q.x != 0 || q.z != 0) return q ;
+    	}
+    	return null ;
+    }
+    
+	/**
+	 * Well ... the "velocity" field turns out to be always zero. So for now, this
+	 * method will calculate "derived" last velocity, based on the difference
+	 * between the last two tracked positions of the agent. Note that this is an
+	 * approximation, and moreover is not always available (e.g. if we just clear
+	 * the tracking).
+	 */
+    public Vec3 derivedVelocity() {
+    	int N = recentPositions.size() ;
+    	if (N<2) return null ;
+    	Vec3 q = new Vec3(recentPositions.get(N-1)) ;
+    	q.subtract(recentPositions.get(N-2)) ;
+    	return q ;
+    }
 
     public Integer[] getNodesBlockedByEntity(String id){
         return nodesBlockedByEntity.getOrDefault(id, new Integer[]{});
@@ -259,22 +291,24 @@ public class BeliefState extends StateWithMessenger {
     public Observation moveToward(Vec3 q) {
     	var o = env().moveToward(this.id, this.position, q) ;
     	recentPositions.add(o.agentPosition) ;
-    	if (recentPositions.size()>3) recentPositions.remove(0) ;
+    	// keep track the last FOUR positions
+    	if (recentPositions.size()>4) recentPositions.remove(0) ;
     	return o ;
     }
     
     /**
      * True if the agent is "stuck" with respect to the given position q. "Stuck" is
-     * defined as follows. Let p0,p1.p3 be the three most recent (and registered)
+     * defined as follows. Let p0,p1.p3 be the THREE most recent (and registered)
      * positions of the agent, with p0 being the oldest. It is stuck if the distance
      * between p0 and p1 and p0 and p3 are at most 0.05, and the distance between p0 and
      * q is larger than 1.0.
      */
     public boolean isStuck(Vec3 q) {
-    	if(recentPositions.size()<3) return false ;
-    	Vec3 p0 = recentPositions.get(0) ;
-    	return p0.distance(recentPositions.get(1)) <= 0.05
-    		   &&  p0.distance(recentPositions.get(2)) <= 0.05 ;
+    	int N = recentPositions.size() ;
+    	if(N<3) return false ;
+    	Vec3 p0 = recentPositions.get(N-3) ;
+    	return p0.distance(recentPositions.get(N-2)) <= 0.05
+    		   &&  p0.distance(recentPositions.get(N-1)) <= 0.05 ;
          //    && p0.distance(q) > 1.0 ;
     }
     
@@ -318,15 +352,24 @@ public class BeliefState extends StateWithMessenger {
      */
     public Vec3 unstuck() {
     	var unstuck_distance = UNIT_DISTANCE * 0.5 ;
-    	var x_orientation = sign_(velocity.x) ;  // 1 if the agent is facing eastly, and -1 if westly
-    	var z_orientation = sign_(velocity.z) ;  // 1 if the agent is facing northly, and -1 if southly
-    	System.out.println("### calling unstuck()") ;
+    	// use derived velocity...
+    	var velocity_ = derived_lastNonZeroXZVelocity() ;
+    	if (velocity_ == null) return null ;
+    	var x_orientation = sign_(velocity_.x) ;  // 1 if the agent is facing eastly, and -1 if westly
+    	var z_orientation = sign_(velocity_.z) ;  // 1 if the agent is facing northly, and -1 if southly
+    	// System.out.println("#### calling unstuck()") ;
     	// try E/W unstuck first:
-    	var p = new Vec3(position.x + unstuck_distance*x_orientation, position.y, position.z) ;
-    	if (mentalMap.getContainingPolygon(p) != null) return p ; 
+    	if (x_orientation != 0) {
+    		var p = new Vec3(position.x + unstuck_distance*x_orientation, position.y, position.z) ;
+    		if (mentalMap.getContainingPolygon(p) != null) return p ; 
+        	//if (mentalMap.pathFinder.graph.vecToNode(p) != null) return p ;
+    	}
     	// try N/S unstuck:
-    	p = new Vec3(position.x, position.y, position.z + unstuck_distance*z_orientation) ;
-    	if (mentalMap.getContainingPolygon(p) != null) return p ; 
+    	if (z_orientation != 0) {
+    		var p = new Vec3(position.x, position.y, position.z + unstuck_distance*z_orientation) ;
+        	if (mentalMap.getContainingPolygon(p) != null) return p ; 
+        	//if (mentalMap.pathFinder.graph.vecToNode(p) != null) return p ;	
+    	}
     	// can't find an unstuck option...
     	return null ;
     }

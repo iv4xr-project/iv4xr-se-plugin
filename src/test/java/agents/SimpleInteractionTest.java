@@ -65,6 +65,7 @@ public class SimpleInteractionTest {
         
         // define the test-goal:
         var goal = SEQ(
+        	GoalLib.justObserve().lift(),
             GoalLib.entityIsInteracted("button1"),
             GoalLib.entityInvariantChecked(testAgent,
             		"button1", 

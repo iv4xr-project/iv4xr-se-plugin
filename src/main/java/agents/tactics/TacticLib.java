@@ -57,7 +57,6 @@ public class TacticLib {
                     belief.updateBelief(o);
                     // handle when the agent gets stuck:
                     if (belief.isStuck(position)) {
-                    	System.out.println("#### STUCK") ;
                     	tryToUnstuck(belief) ;
                     }
                     return belief;
@@ -68,9 +67,11 @@ public class TacticLib {
         return move;
     }
     
+    
     // to be called when the agent seems to get stuck; this will try to unstuck the
     // agent in the next few updates:
     private static void tryToUnstuck(BeliefState belief) {
+    	System.out.println("#### STUCK @" + belief.position + ", V=" + belief.derived_lastNonZeroXZVelocity()) ;
     	if (belief.atDoor() != null) {
     		// if the agent is stuck at a door, that is probably because the door is closed,
     		// and the agent's belief is outdated. We will clear the agent goal-
@@ -78,19 +79,54 @@ public class TacticLib {
     		// at the next update. This may unstuck the agent, if there is another path to the
     		// target. But if there is no path, this will basically cause the tactic that calls
     		// this to be disabled at the next update.
+    		System.out.println("#### stuck reason: probably door. Forcing a new path calculation...") ;
     		belief.mentalMap.clearGoalLocation(); 
     	}
     	else {
     		// else the agent is likely to be be stuck. Try to get a nearby position
     		// the agent can move to to unstuck itself:
+    		System.out.println("#### stuck reason: probably cannot get past a turn-corner.") ;
     		var unstuckPosition = belief.unstuck() ;
     		if (unstuckPosition != null) {
+    			System.out.println("#### forcing a move past the corner...to " + unstuckPosition) ;        		
     			belief.mentalMap.insertNewWayPoint(unstuckPosition);
     		}
-    		// else .... for now do nothing :| 
+    		else {
+    			// else .... for now do nothing :|
+        		System.out.println("#### unfortunately cannot find a solution...") ; 
+    		}	       			
     	}
     	belief.clearStuckTrackingInfo();
     }
+    
+    /***
+     * Sometimes the agent can become stuck in a turn around corner while
+     * it is searching for a position or entity. When the entity is not on
+     * the known map, the search is typically combined with exploration.
+     * It can be the case, that in a turn around corner the agent has seen
+     * the last navigation polygons, and therefore it has no more node to
+     * explore,  but its line of sight to the target is blocked, and 
+     * therefore it mistakenly concludes that the entity could not exist.
+     * 
+     * This tactic will try to puch the agent to move a little bit past the
+     * stuck corner.
+     */
+    public static Tactic forcePastExploreBlindCorner() {
+    	return action("Trying to force the agent to get past an explore-blind-corner")
+    		   . do1((BeliefState belief) -> { 
+    			    var unstuckPosition = belief.unstuck() ;
+    			    System.out.println("#### invoking forcePastExploreBlindCorner") ;
+    			    System.out.println("#### agent velocity " + belief.velocity) ;
+    			    System.out.println("#### unstuck option " + unstuckPosition) ;   
+    			    Observation o = belief.moveToward(unstuckPosition) ;
+    			    belief.updateBelief(o);
+    			    return belief ; 
+    			 })
+    		   . on(belief -> true)
+    		   . lift() ;
+    }
+    
+    
 
 	/**
 	 * This method will return a tactic in which the agent will move towards an
@@ -118,10 +154,12 @@ public class TacticLib {
                             belief.mentalMap.applyPath(p.object1, p.object2);
                         }
                     }
-                    Observation o = belief.env().moveToward(belief.id, belief.position, belief.getNextWayPoint());//move towards the next way point
+                    Observation o = belief.moveToward(belief.getNextWayPoint());//move towards the next way point
                     belief.updateBelief(o);
                     // handle when the agent gets stuck:
-                    if (belief.isStuck(p.object1)) tryToUnstuck(belief) ;
+                    if (belief.isStuck(p.object1)) {
+                    	tryToUnstuck(belief) ;
+                    }
                     return belief;
                 }).on((BeliefState belief) -> {
                 	if(belief.position == null) return null ;
@@ -300,7 +338,7 @@ public class TacticLib {
                         //}
                     }
                     //move towards the next way point
-                    Observation o = belief.env().moveToward(belief.id, belief.position,belief.getNextWayPoint());
+                    Observation o = belief.moveToward(belief.getNextWayPoint());
                     belief.updateBelief(o);
                     return belief;
                 }).on((BeliefState belief) -> {
@@ -308,11 +346,17 @@ public class TacticLib {
                     if(belief.position == null) return null;
                     //get the location of the closest unexplored node
                     Vec3 g = belief.getUnknownNeighbourClosestTo(belief.position, belief.position);
-                    if(g == null) return null;
+                    if(g == null) {
+                    	System.out.println("### cannot find new node; agent is @" + belief.position) ;
+                    	return null;
+                    }
 
                     //check if we can find a path
                     Vec3[] path = belief.cachedFindPathTo(g);
-                    if(path == null) return null;
+                    if(path == null) {
+                    	System.out.println("### cannot find path; agent is @" + belief.position) ;
+                    	return null;
+                    }
                     //System.out.println("### find unexplored " + g + ", current pos: " + belief.position) ;
                     return new Tuple(g, path);//return the path finding information
                 }).lift();

@@ -40,7 +40,7 @@ public class Explore_2_Test {
     @BeforeAll
     static void start() {
     	// Uncomment this to make the game's graphic visible:
-    	// TestSettings.USE_GRAPHICS = true ;
+    	//TestSettings.USE_GRAPHICS = true ;
     	String labRecruitesExeRootDir = System.getProperty("user.dir") ;
        	labRecruitsTestServer = TestSettings.start_LabRecruitsTestServer(labRecruitesExeRootDir) ;
     }
@@ -78,20 +78,22 @@ public class Explore_2_Test {
         int i = 0 ;
         while (g.getStatus().inProgress()) {
             agent.update();
-            System.out.println("*** " + i + ", " + agent.getState().id + " @" + agent.getState().position) ;
-            Thread.sleep(30);
+            System.out.println("*** " + i + ", " + agent.getState().id 
+            		           + " @" + agent.getState().position
+            		           + " V=" + agent.getState().derivedVelocity()) ;
+            Thread.sleep(50);
             i++ ;
             if (i>90) {
             	break ;
             }
         }
         
+        g.printGoalStructureStatus();
+        
         assertTrue(g.getStatus().success()) ;
         var agent_p  = agent.getState().position ;
         var button_p = agent.getState().getEntity("button1").position ;
         assertTrue(agent_p.distance(button_p) < 0.5) ;
-
-        g.printGoalStructureStatus();
 
         if (!environment.close())
             throw new InterruptedException("Unity refuses to start the Simulation!");
