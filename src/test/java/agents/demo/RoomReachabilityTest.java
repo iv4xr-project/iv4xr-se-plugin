@@ -86,15 +86,13 @@ public class RoomReachabilityTest {
         		new Scanner(System.in) . nextLine() ;
         	}
         	
-	        environment.startSimulation(); // this will press the "Play" button in the game for you
-	
 	        // create a test agent
 	        var testAgent = new LabRecruitsTestAgent("agent1") // matches the ID in the CSV file
         		    . attachState(new BeliefState())
         		    . attachEnvironment(environment);
 	        
-	        // define the test-goal:
-	        var goal = SEQ(
+	        // define the testing-task:
+	        var testingTask = SEQ(
 	            GoalLib.justObserve().lift(),
 		        GoalLib.entityIsInteracted("button1"),
                 GoalLib.entityIsInRange_smarter("door1"),
@@ -126,14 +124,16 @@ public class RoomReachabilityTest {
 	        );
 	        // attaching the goal and testdata-collector
 	        var dataCollector = new TestDataCollector();
-	        testAgent . setTestDataCollector(dataCollector) . setGoal(goal) ;
+	        testAgent . setTestDataCollector(dataCollector) . setGoal(testingTask) ;
 	
+	        
+	        environment.startSimulation(); // this will press the "Play" button in the game for you
 	        //goal not achieved yet
 	        assertFalse(testAgent.success());
 	
 	        int i = 0 ;
 	        // keep updating the agent
-	        while (goal.getStatus().inProgress()) {
+	        while (testingTask.getStatus().inProgress()) {
 	        	System.out.println("*** " + i + ", " + testAgent.getState().id + " @" + testAgent.getState().position) ;
 	            Thread.sleep(50);
 	            i++ ; 
@@ -142,13 +142,12 @@ public class RoomReachabilityTest {
 	        		break ;
 	        	}
 	        }
-	        goal.printGoalStructureStatus();
+	        testingTask.printGoalStructureStatus();
 	
 	        // check that we have passed both tests above:
 	        assertTrue(dataCollector.getNumberOfPassVerdictsSeen() == 4) ;
 	        // goal status should be success
 	        assertTrue(testAgent.success());
-	
 	        // close
 	        testAgent.printStatus();
         }

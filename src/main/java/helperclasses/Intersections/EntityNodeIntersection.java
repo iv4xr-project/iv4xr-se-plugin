@@ -85,7 +85,7 @@ public class EntityNodeIntersection {
         for(int i = 0; i < m.faces.length; i++){
             //check if the entity and the navmesh triangle are on the same floor
         	//System.out.println("zzzz " + entityY + " vs " + m.faces[i].centre.y) ;
-            if(Math.abs(m.faces[i].centre.y - entityY) < 0.55){
+            if(Math.abs(m.faces[i].centre.y - entityY) < 0.55){ // 0.5 is too small
                 Vec3[] triangleVertices = getTriangleVertices(m, i);
                 //System.out.println("xxxx " + triangleVertices.length) ;
                 

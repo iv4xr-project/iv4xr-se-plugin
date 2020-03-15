@@ -354,7 +354,20 @@ public class BeliefState extends StateWithMessenger {
     	var unstuck_distance = UNIT_DISTANCE * 0.5 ;
     	// use derived velocity...
     	var velocity_ = derived_lastNonZeroXZVelocity() ;
-    	if (velocity_ == null) return null ;
+    	if (velocity_ == null) {
+    		// movement vector is unknown ... try one of these:
+    		/*
+    		var p = new Vec3(position.x + unstuck_distance, position.y, position.z) ;
+    		if (mentalMap.getContainingPolygon(p) != null) return p ; 
+    		p = new Vec3(position.x - unstuck_distance, position.y, position.z) ;
+    		if (mentalMap.getContainingPolygon(p) != null) return p ; 
+    		p = new Vec3(position.x, position.y, position.z +  unstuck_distance) ;
+    		if (mentalMap.getContainingPolygon(p) != null) return p ; 
+    		p = new Vec3(position.x, position.y, position.z -  unstuck_distance) ;
+    		if (mentalMap.getContainingPolygon(p) != null) return p ; 
+    		*/
+    		return null ;
+    	}
     	var x_orientation = sign_(velocity_.x) ;  // 1 if the agent is facing eastly, and -1 if westly
     	var z_orientation = sign_(velocity_.z) ;  // 1 if the agent is facing northly, and -1 if southly
     	// System.out.println("#### calling unstuck()") ;

@@ -11,6 +11,9 @@ import communication.agent.AgentCommand;
 import communication.system.Request;
 import environments.LabRecruitsEnvironment;
 import eu.iv4xr.framework.mainConcepts.TestAgent;
+import eu.iv4xr.framework.mainConcepts.TestDataCollector;
+import nl.uu.cs.aplib.mainConcepts.GoalStructure;
+import nl.uu.cs.aplib.multiAgentSupport.ComNode;
 import world.BeliefState;
 
 /**
@@ -42,6 +45,24 @@ public class LabRecruitsTestAgent extends TestAgent {
     
     public LabRecruitsTestAgent attachEnvironment(LabRecruitsEnvironment env) {
     	super.attachEnvironment(env) ;
+    	return this ;
+    }
+    
+    @Override
+    public LabRecruitsTestAgent setGoal(GoalStructure g) {
+    	super.setGoal(g) ;
+    	return this ;
+    }
+    
+    @Override
+    public LabRecruitsTestAgent registerTo(ComNode comNode) {
+    	super.registerTo(comNode) ;
+    	return this ;
+    }
+    
+    @Override
+    public LabRecruitsTestAgent setTestDataCollector(TestDataCollector dc) {
+    	super.setTestDataCollector(dc) ;
     	return this ;
     }
 

@@ -42,6 +42,7 @@ public class TacticLib {
     public static Tactic navigateTo(Vec3 position) {
         Tactic move = action("Navigate to " + position.toString())
                 .do2((BeliefState belief) -> (Vec3[] path) -> {
+                	//System.out.println("### tactic NavigateTo " + position) ;
                     //if there is no path, set the path
                     if(belief.getGoalLocation() == null){
                         belief.mentalMap.applyPath(position, path);
@@ -67,6 +68,27 @@ public class TacticLib {
         return move;
     }
     
+    public static Tactic originalNavigateTo(Vec3 position) {
+        Tactic move = action("Move to " + position.toString())
+                .do2((BeliefState belief) -> (Vec3[] path) -> {
+                    //if there is no path, set the path
+                    if(belief.getGoalLocation() == null){
+                        belief.mentalMap.applyPath(position, path);
+                    }
+
+                    //only reset the path if the goal has changed
+                    if(belief.getGoalLocation().distance(position) > 0.01){
+                        belief.mentalMap.applyPath(position, path);
+                    }
+                    Observation o = belief.moveToward(belief.getNextWayPoint());//move towards the next way point
+                    belief.updateBelief(o);
+                    return belief;
+                }).on((BeliefState belief) -> {
+                    if(belief.position == null) return null;//guard
+                    return belief.cachedFindPathTo(position);//find a path towards the target position
+                }).lift();
+        return move;
+    }
     
     // to be called when the agent seems to get stuck; this will try to unstuck the
     // agent in the next few updates:
@@ -319,7 +341,7 @@ public class TacticLib {
     public static Tactic explore() {
         var explore = action("Explore")
                 .do2((BeliefState belief) -> (Tuple<Vec3, Vec3[]> p) -> {
-                	//System.out.println("### explore") ;
+                	//System.out.println("### tactic explore") ;
                     if(belief.getGoalLocation() != null){
                     	// reset the path if the goal has changed:
                     	if(belief.getGoalLocation().distance(p.object1) > 0.01){

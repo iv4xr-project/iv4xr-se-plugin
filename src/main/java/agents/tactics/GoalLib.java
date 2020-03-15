@@ -62,6 +62,23 @@ public class GoalLib {
                 ABORT())) ;
         return g;
     }
+    
+    public static Goal originalPositionIsInRange(Vec3 goalPosition) {
+        //define the goal
+        Goal goal = new Goal("Reach position " + goalPosition.toString()).toSolve((BeliefState belief) -> {
+            //check if the agent is close to the goal position
+            return belief.withinRange(goalPosition);
+            //if (belief.position == null) return false;
+            //return goalPosition.distance(belief.position) < 0.4;
+        });
+
+        //define the goal structure
+        Goal g = goal.withTactic(FIRSTof(//the tactic used to solve the goal
+                TacticLib.originalNavigateTo(goalPosition),//move to the goal position
+                TacticLib.explore(),//explore if the goal position is unknown
+                TacticLib.observe()));//find the agent's own position
+        return g;
+    }
 
     /**
      * This method will return a goal structure in which the agent will sequentially move along 
