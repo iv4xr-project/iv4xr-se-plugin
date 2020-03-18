@@ -48,7 +48,7 @@ public class BeliefState extends StateWithMessenger {
      * keep track of nodes which are blocked and can not be used for pathfinding
      */
     public HashSet<Integer> blockedNodes = new HashSet<>();
-    private HashMap<String, Integer[]> nodesBlockedByEntity = new HashMap<>();
+    public HashMap<String, Integer[]> nodesBlockedByEntity = new HashMap<>();
     
     List<Vec3> recentPositions = new LinkedList<>() ;
 
