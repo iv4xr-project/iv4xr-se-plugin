@@ -179,7 +179,7 @@ public class SimpleUnityTest {
     }
 
     @Test
-    public void moveToButton(){
+    public void moveToButton() throws InterruptedException {
         var config = new EnvironmentConfig("moveToButton");
 
         LabRecruitsEnvironment environment = new LabRecruitsEnvironment(config);
@@ -192,10 +192,11 @@ public class SimpleUnityTest {
     		        . attachEnvironment(environment);
 
         GoalStructure goal = SEQ(
+        		GoalLib.justObserve().lift(),
                 GoalLib.positionIsInRange(new Vec3(1,0,1)).lift(),
-                GoalLib.entityInspected("button0", e -> !((InteractiveEntity) e).isActive),
+                GoalLib.entityInspected("button0", e -> e instanceof InteractiveEntity && !((InteractiveEntity) e).isActive),
                 GoalLib.entityIsInteracted("button0"),
-                GoalLib.entityInspected("button0", e -> ((InteractiveEntity) e).isActive),
+                GoalLib.entityInspected("button0", e -> e instanceof InteractiveEntity && ((InteractiveEntity) e).isActive),
                 GoalLib.positionIsInRange(new Vec3(1,0,1)).lift()
         );
 
@@ -207,9 +208,16 @@ public class SimpleUnityTest {
         // Toggle play in Unity
         Assertions.assertTrue(environment.startSimulation());
 
-        //update one round
-        while (goal.getStatus().inProgress())
+        int i = 0 ;
+        while (goal.getStatus().inProgress()) {
             agent.update();
+            System.out.println("*** " + i + ": " + agent.getState().id + " @" + agent.getState().position) ;
+            if (i>50) {
+            	   break ;
+            }
+            Thread.sleep(30);
+            i++ ;
+        }
 
         //agent should now know where it is
         Assertions.assertFalse(goal.getStatus().inProgress());

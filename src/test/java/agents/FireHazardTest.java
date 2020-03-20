@@ -33,7 +33,7 @@ public class FireHazardTest {
     static void close() { if(labRecruitsTestServer!=null) labRecruitsTestServer.close(); }
     
 
-    @Test
+    //@Test
     public void testFire1() throws InterruptedException {
     	
     	var environment = new LabRecruitsEnvironment(new EnvironmentConfig("firetest"));

@@ -189,7 +189,7 @@ public class BeliefState extends StateWithMessenger {
     // predicates
     public boolean evaluateEntity(String id, Predicate<Entity> predicate) {
     	Entity e  = getEntity(id) ;
-    	if (id==null) return false ;
+    	if (e==null) return false ;
         return predicate.test(e);
     }
     

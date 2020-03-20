@@ -27,6 +27,9 @@ import static agents.TestSettings.USE_SERVER_FOR_TEST;
 import static eu.iv4xr.framework.Iv4xrEDSL.assertTrue_;
 import static nl.uu.cs.aplib.AplibEDSL.*;
 import static org.junit.jupiter.api.Assertions.* ;
+
+import java.util.Scanner;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -44,7 +47,7 @@ public class Explore_1_Test {
     @BeforeAll
     static void start() {
     	// Uncomment this to make the game's graphic visible:
-        // TestSettings.USE_GRAPHICS = true ;
+        //TestSettings.USE_GRAPHICS = true ;
     	String labRecruitesExeRootDir = System.getProperty("user.dir") ;
        	labRecruitsTestServer = TestSettings.start_LabRecruitsTestServer(labRecruitesExeRootDir) ;
     }
@@ -68,6 +71,11 @@ public class Explore_1_Test {
         var g = SEQ(GoalLib.justObserve().lift(),
         		    GoalLib.entityIsInRange("button1").lift()) ;
         agent.setGoal(g) ;
+        
+    	if(TestSettings.USE_GRAPHICS) {
+    		System.out.println("You can drag then game window elsewhere for beter viewing. Then hit RETURN to continue.") ;
+    		new Scanner(System.in) . nextLine() ;
+    	}
 
         // press play in Unity
         if (! environment.startSimulation())
