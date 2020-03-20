@@ -7,6 +7,7 @@ at Utrecht University within the Software and Game project course.
 package agents.demo;
 
 import agents.LabRecruitsTestAgent;
+import agents.TestSettings;
 import agents.tactics.GoalLib;
 import environments.EnvironmentConfig;
 import environments.LabRecruitsEnvironment;
@@ -14,6 +15,8 @@ import helperclasses.datastructures.Vec3;
 import helperclasses.datastructures.linq.QArrayList;
 import logger.JsonLoggerInstrument;
 import logger.PrintColor;
+import nl.uu.cs.aplib.mainConcepts.Environment;
+
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -24,42 +27,52 @@ import world.BeliefState;
 import static agents.TestSettings.*;
 import static nl.uu.cs.aplib.AplibEDSL.SEQ;
 
+import java.util.Scanner;
+
 public class FireHazardAgentIndirect {
 
     private static LabRecruitsTestServer labRecruitsTestServer;
 
     @BeforeAll
     static void start() {
-    	
-        if(USE_SERVER_FOR_TEST){
-        	String labRecruitesExeRootDir = System.getProperty("user.dir") ;
-            labRecruitsTestServer =new LabRecruitsTestServer(
-                    USE_GRAPHICS,
-                    Platform.PathToLabRecruitsExecutable(labRecruitesExeRootDir));
-            labRecruitsTestServer.waitForGameToLoad();
-        }
+    	// Uncomment this to make the game's graphic visible:
+    	// TestSettings.USE_GRAPHICS = true ;
+       	String labRecruitesExeRootDir = System.getProperty("user.dir") ;
+    	labRecruitsTestServer = TestSettings.start_LabRecruitsTestServer(labRecruitesExeRootDir) ; 
     }
 
     @AfterAll
     static void close() {
-        if(USE_SERVER_FOR_TEST)
-            labRecruitsTestServer.close();
+        if(labRecruitsTestServer!=null) labRecruitsTestServer.close();
+    }
+    
+    void instrument(Environment env) {
+    	env.registerInstrumenter(new JsonLoggerInstrument()).turnOnDebugInstrumentation();
     }
 
     /**
-     * This demo will tests if an agent can escape the fire hazard level
+     * This demo will tests if an agent can escape the fire hazard level.
+     * First of the issues is that hazard overwrite each other, so only one
+     * is visible to the agent. Working on this.
+     * 
+     * BROKEN fix this!
      */
     //@Test
     public void fireHazardDemo() throws InterruptedException{
         //Add the level to the resources and change the string in the environmentConfig on the next line from Ramps to the new level
-        var gym = (LabRecruitsEnvironment) new LabRecruitsEnvironment(new EnvironmentConfig("HZRDIndirect").replaceAgentMovementSpeed(0.2f)).registerInstrumenter(new JsonLoggerInstrument()).turnOnDebugInstrumentation();
+        var env = (LabRecruitsEnvironment) new LabRecruitsEnvironment(new EnvironmentConfig("HZRDIndirect").replaceAgentMovementSpeed(0.2f)).registerInstrumenter(new JsonLoggerInstrument()).turnOnDebugInstrumentation();
 
         QArrayList<LabRecruitsTestAgent> agents = new QArrayList<>(new LabRecruitsTestAgent[] {
-                createHazardAgent(gym)
+                createHazardAgent(env)
         });
 
+    	if(TestSettings.USE_GRAPHICS) {
+    		System.out.println("You can drag then game window elsewhere for beter viewing. Then hit RETURN to continue.") ;
+    		new Scanner(System.in) . nextLine() ;
+    	}
+    	
         // press play in Unity
-        if (! gym.startSimulation())
+        if (! env.startSimulation())
             throw new InterruptedException("Unity refuses to start the Simulation!");
 
         int tick = 0;
@@ -79,16 +92,17 @@ public class FireHazardAgentIndirect {
             tick++;
         }
 
-        if (!gym.close())
+        if (!env.close())
             throw new InterruptedException("Unity refuses to close the Simulation!");
     }
 
     /**
      * This method will create an agent which will move through the fire hazard level
      */
-    public static LabRecruitsTestAgent createHazardAgent(LabRecruitsEnvironment gym){
-        BeliefState state = new BeliefState().setEnvironment(gym);
-        LabRecruitsTestAgent agent = new LabRecruitsTestAgent(state, "0", "");
+    public static LabRecruitsTestAgent createHazardAgent(LabRecruitsEnvironment env){
+        LabRecruitsTestAgent agent = new LabRecruitsTestAgent("0", "")
+                                     . attachState(new BeliefState())
+                                     . attachEnvironment(env);
 
         //the goals are in order
         //add move goals with GoalStructureFactory.reachPositions(new Vec3(1,0,1)) it can take either a single or multiple vec3
@@ -97,15 +111,15 @@ public class FireHazardAgentIndirect {
 
         agent.setGoal(SEQ(
                 GoalLib.positionsVisited(new Vec3(6,0,5), new Vec3(8,0,1), new Vec3(13,4,1)),
-                GoalLib.entityReachedAndInteracted("b4.1"),
+                GoalLib.entityIsInteracted("b4.1"),
                 GoalLib.positionsVisited(new Vec3(13,4,3)),
-                GoalLib.entityReachedAndInteracted("b7.1"),
+                GoalLib.entityIsInteracted("b7.1"),
                 GoalLib.positionsVisited(new Vec3(9,4,9), new Vec3(8,4,6), new Vec3(5,4,7)),
-                GoalLib.entityReachedAndInteracted("b8.2"),
+                GoalLib.entityIsInteracted("b8.2"),
                 GoalLib.positionsVisited(new Vec3(1,4,13)),
-                GoalLib.entityReachedAndInteracted("b5.1"),
+                GoalLib.entityIsInteracted("b5.1"),
                 GoalLib.positionsVisited(new Vec3(1,4,22), new Vec3(6,0,22)),
-                GoalLib.entityReachedAndInteracted("b1.1"),
+                GoalLib.entityIsInteracted("b1.1"),
                 GoalLib.positionsVisited(new Vec3(5,0,25))
                 ));
         return agent;

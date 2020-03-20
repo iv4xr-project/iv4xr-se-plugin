@@ -7,6 +7,9 @@ at Utrecht University within the Software and Game project course.
 
 package world;
 
+import helperclasses.Intersections.EntityNodeIntersection;
+import helperclasses.Intersections.PointTriangleIntersection;
+import helperclasses.Intersections.TrianglePolygonIntersection;
 import helperclasses.datastructures.Vec3;
 import helperclasses.datastructures.linq.QArrayList;
 import pathfinding.Pathfinder;
@@ -93,6 +96,15 @@ public class MentalMap {
         if(goalLocation == null) return null;
         return new Vec3(goalLocation);
     }
+    
+    /** 
+     * Set the goal location and the path to it to null.
+     */
+    public void clearGoalLocation() {
+    	goalLocation = null ;
+    	path = null ;
+    	currentWayPoint = -1 ;
+    }
 
     /**
      * Update the current wayPoint if a new wayPoint has been reached
@@ -117,6 +129,15 @@ public class MentalMap {
         }
         return oldWayPoint != currentWayPoint;
     }
+    
+    public void insertNewWayPoint(Vec3 p) {
+    	Vec3[] newPath = new Vec3[path.length + 1] ;
+    	for (int k=0; k<=currentWayPoint; k++) newPath[k] = path[k] ;
+    	newPath[currentWayPoint+1] = p ;
+    	for (int k=currentWayPoint+1; k<path.length; k++) newPath[k+1] = path[k] ;
+    	path = newPath ;
+    	currentWayPoint++ ;
+     }
 
     /**
      * This method update the seen nodes based on a list of seen nodes
@@ -195,6 +216,19 @@ public class MentalMap {
     }
 
     public boolean[] getKnownVertices(){ return knownVertices;}
+    
+    /**
+     * Get the navigation polygon (triangle) that contains the given position q. If one exists, the method
+     * returns its corners. Else null is returned.
+     */
+    public Vec3[] getContainingPolygon(Vec3 q) {
+    	for(int i = 0; i < pathFinder.navmesh.faces.length; i++){
+    		var corners = EntityNodeIntersection.getTriangleVertices(pathFinder.navmesh,i) ;
+    		boolean contained = PointTriangleIntersection.isPointIntersectingTriangle(corners[0], corners[1], corners[2], q) ;
+            if(contained) return corners ;
+    	}
+    	return null ;
+    }
 
 
 }

@@ -28,8 +28,8 @@ public class EntityNodeIntersection {
     public static Integer[] getNodesBlockedByInteractiveEntity(InteractiveEntity e, TriangleMesh m){
         double sizeX = e.extents.x;//size of the square
         double sizeZ = e.extents.z;//size of the square
-        Vec3 center = e.center; // the center of the square
-
+        Vec3 center = new Vec3(e.center.x, e.center.y, e.center.z) ;
+       
         // WP note:
         // HACK: the original algorithm is problematical because the navigation triangles
         // are too large; so we may end up blocking too large section of navmesh, leaving
@@ -38,14 +38,20 @@ public class EntityNodeIntersection {
         // at the cost of slowing down path planning.
         // I currently will just introduce this hack here, that solves the problem,
         // provided THE ONLY type of entity that is considered as solid is DOOR.
-        // The hack is by making the door width to appear as 0. We also take advantage
-        // that doors in Lab Recruits can only be either parallel to the x-axis, or parallel
-        // to the z-axis.
+        // The hack is by making the door bounding to appear as 0. 
+        // I also discover that the "center" of the door is not literally its center;
+        // rather, its "position" X and Z coord is the X/Y center. 
+        // So ... I add 0.5 to center.x to move it to the actual center.
         //
+        // For example a door center = (9.5,1,6) and its "position" is (10,0,6).
+        // so.. in the calculaition below, I add 0.5 to x.center:
         if (e.tag.equals("Door")) { 
         	// HACK!
-        	if (sizeX < sizeZ) sizeX = 0d ;
-            else sizeZ = 0d ;
+        	//if (sizeX < sizeZ) sizeX = 0d ;
+            //else sizeZ = 0d ;
+        	center.x += 0.5 ;
+        	sizeX = 0 ;
+        	sizeZ = 0 ;
         }
              
         //define which objects are blocking
@@ -79,7 +85,7 @@ public class EntityNodeIntersection {
         for(int i = 0; i < m.faces.length; i++){
             //check if the entity and the navmesh triangle are on the same floor
         	//System.out.println("zzzz " + entityY + " vs " + m.faces[i].centre.y) ;
-            if(Math.abs(m.faces[i].centre.y - entityY) < 0.55){
+            if(Math.abs(m.faces[i].centre.y - entityY) < 0.55){ // 0.5 is too small
                 Vec3[] triangleVertices = getTriangleVertices(m, i);
                 //System.out.println("xxxx " + triangleVertices.length) ;
                 
@@ -104,7 +110,7 @@ public class EntityNodeIntersection {
      * @param id: The id of the triangle
      * @return The vertices of the triangle
      */
-    private static Vec3[] getTriangleVertices(TriangleMesh m, int id){
+    public static Vec3[] getTriangleVertices(TriangleMesh m, int id){
         //get the vertices from a triangle
         HashSet<Integer> indices = new LinkedHashSet<>();
         for(int i = 0; i < m.faces[id].edgeIndices.length; i++){

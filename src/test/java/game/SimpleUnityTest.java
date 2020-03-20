@@ -27,8 +27,7 @@ import world.InteractiveEntity;
 import java.util.function.Predicate;
 
 import static agents.TestSettings.*;
-import static nl.uu.cs.aplib.AplibEDSL.SEQ;
-import static nl.uu.cs.aplib.AplibEDSL.goal;
+import static nl.uu.cs.aplib.AplibEDSL.*;
 
 public class SimpleUnityTest {
 
@@ -63,7 +62,9 @@ public class SimpleUnityTest {
             environment.registerInstrumenter(new JsonLoggerInstrument()).turnOnDebugInstrumentation();
 
         // create the agent
-        var agent = new LabRecruitsTestAgent(new BeliefState("agent0", environment));
+        var agent = new LabRecruitsTestAgent("agent0")
+        		    . attachState(new BeliefState())
+        		    . attachEnvironment(environment);
 
         // The agent wants to know its position
         GoalStructure goal = goal(config.level_name)
@@ -100,14 +101,16 @@ public class SimpleUnityTest {
             environment.registerInstrumenter(new JsonLoggerInstrument()).turnOnDebugInstrumentation();
 
         // create the agent
-        var agent = new LabRecruitsTestAgent(new BeliefState("agent0", environment));
-
-        // Entity list contains an entity with type "Switch" and position (1,0,1)
-        Predicate<BeliefState> evaluation = (BeliefState belief) -> new QArrayList<>(belief.getAllInteractiveEntities())
-                .contains(entity -> entity.id.equals("button0") && entity.position.equals(new Vec3(1, 0, 1)));
+        var agent = new LabRecruitsTestAgent("agent0")
+        		    . attachState(new BeliefState())
+        		    . attachEnvironment(environment);
 
         GoalStructure goal = goal(config.level_name)
-                .toSolve(evaluation)
+                .toSolve((BeliefState belief) 
+                		  -> 
+                          belief.knownEntities().size() == 1
+                          && belief.getEntity("button0") != null 
+                          && belief.getEntity("button0").position.equals(new Vec3(1, 0, 1)))
                 .withTactic(TacticLib.observe()) // the agent should be able to see the button by observing
                 .lift();
 
@@ -143,16 +146,16 @@ public class SimpleUnityTest {
             environment.registerInstrumenter(new JsonLoggerInstrument()).turnOnDebugInstrumentation();
 
         // create the agent
-        var agent = new LabRecruitsTestAgent(new BeliefState("agent0", environment));
-
-        // Entity list contains an entity with type "Switch" and position (1,0,1)
-        Predicate<BeliefState> evaluation = (BeliefState belief) ->
-                belief.getAllInteractiveEntities().size() == 1 &&
-                new QArrayList<>(belief.getAllInteractiveEntities())
-                        .contains(entity -> entity.id.equals("button1") && entity.position.equals(new Vec3(3, 0, 1)));
+        var agent = new LabRecruitsTestAgent("agent0")
+    		        . attachState(new BeliefState())
+    		        . attachEnvironment(environment);
 
         GoalStructure goal = goal(config.level_name)
-                .toSolve(evaluation)
+                .toSolve((BeliefState belief) 
+              		  -> 
+                   belief.knownEntities().size() == 1
+                   && belief.getEntity("button1") != null 
+                   && belief.getEntity("button1").position.equals(new Vec3(3, 0, 1)))
                 .withTactic(TacticLib.observe()) // the agent should be able to see the button by observing
                 .lift();
 
@@ -166,7 +169,7 @@ public class SimpleUnityTest {
 
         //update one round
         agent.update();
-
+        
         //agent should now know where it is
         Assertions.assertFalse(goal.getStatus().inProgress());
 
@@ -176,7 +179,7 @@ public class SimpleUnityTest {
     }
 
     @Test
-    public void moveToButton(){
+    public void moveToButton() throws InterruptedException {
         var config = new EnvironmentConfig("moveToButton");
 
         LabRecruitsEnvironment environment = new LabRecruitsEnvironment(config);
@@ -184,14 +187,17 @@ public class SimpleUnityTest {
             environment.registerInstrumenter(new JsonLoggerInstrument()).turnOnDebugInstrumentation();
 
         // create the agent
-        var agent = new LabRecruitsTestAgent(new BeliefState("agent0", environment));
+        var agent = new LabRecruitsTestAgent("agent0")
+    		        . attachState(new BeliefState())
+    		        . attachEnvironment(environment);
 
         GoalStructure goal = SEQ(
-                GoalLib.positionReached(new Vec3(1,0,1)).lift(),
-                GoalLib.entityInspected("button0", e -> !((InteractiveEntity) e).isActive),
-                GoalLib.entityReachedAndInteracted("button0"),
-                GoalLib.entityInspected("button0", e -> ((InteractiveEntity) e).isActive),
-                GoalLib.positionReached(new Vec3(1,0,1)).lift()
+        		GoalLib.justObserve().lift(),
+                GoalLib.positionIsInRange(new Vec3(1,0,1)).lift(),
+                GoalLib.entityInspected("button0", e -> e instanceof InteractiveEntity && !((InteractiveEntity) e).isActive),
+                GoalLib.entityIsInteracted("button0"),
+                GoalLib.entityInspected("button0", e -> e instanceof InteractiveEntity && ((InteractiveEntity) e).isActive),
+                GoalLib.positionIsInRange(new Vec3(1,0,1)).lift()
         );
 
         agent.setGoal(goal);
@@ -202,9 +208,16 @@ public class SimpleUnityTest {
         // Toggle play in Unity
         Assertions.assertTrue(environment.startSimulation());
 
-        //update one round
-        while (goal.getStatus().inProgress())
+        int i = 0 ;
+        while (goal.getStatus().inProgress()) {
             agent.update();
+            System.out.println("*** " + i + ": " + agent.getState().id + " @" + agent.getState().position) ;
+            if (i>50) {
+            	   break ;
+            }
+            Thread.sleep(30);
+            i++ ;
+        }
 
         //agent should now know where it is
         Assertions.assertFalse(goal.getStatus().inProgress());

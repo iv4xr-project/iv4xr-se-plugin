@@ -17,6 +17,7 @@ import nl.uu.cs.aplib.mainConcepts.Environment;
 
 import java.util.*;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * Stores agent knowledge of the agent itself, the entities it has observed, what parts of the
@@ -27,97 +28,251 @@ public class BeliefState extends StateWithMessenger {
     public String id;
     public Vec3 position;
     public Vec3 velocity;
+    /**
+     * In-game entities that the agent is aware of. Represented as a mapping from
+     * their ids.
+     */
+    private HashMap<String, Entity> entities = new HashMap<>();
+    //private HashMap<String, DynamicEntity> dynamicEntities = new HashMap<>();
+    //private HashMap<String, InteractiveEntity> interactiveEntities = new HashMap<>();
     public MentalMap mentalMap;
 
     public int lastUpdated = -1;
     public boolean didNothingPreviousTurn;
 
-    // entities mapped by id
-    private HashMap<String, Entity> allEntities = new HashMap<>();
-    private HashMap<String, DynamicEntity> dynamicEntities = new HashMap<>();
-    private HashMap<String, InteractiveEntity> interactiveEntities = new HashMap<>();
-    public HashSet<Integer> blockedNodes = new HashSet<>();//keep track of nodes which are blocked and can not be used for pathfinding
-    private HashMap<String, Integer[]> nodesBlockedByEntity = new HashMap<>();
-
-    public BeliefState() {
-
-    }
-
-    public BeliefState(String id, LabRecruitsEnvironment env) {
-        this.id = id;
-        setEnvironment(env);
-    }
-
-    public Collection<Entity> getAllEntities() { return allEntities.values(); }
-    public Collection<DynamicEntity> getAllDynamicEntities() { return dynamicEntities.values(); }
-    public Collection<InteractiveEntity> getAllInteractiveEntities() { return interactiveEntities.values(); }
-
-
+    
     public Boolean receivedPing = false;//store whether the agent has an unhandled ping
+
+    
+    /**
+     * keep track of nodes which are blocked and can not be used for pathfinding
+     */
+    public HashSet<Integer> blockedNodes = new HashSet<>();
+    public HashMap<String, Integer[]> nodesBlockedByEntity = new HashMap<>();
+    
+    List<Vec3> recentPositions = new LinkedList<>() ;
+
+    public BeliefState() { }
+
+    public Collection<Entity> knownEntities() { return entities.values(); }
+    public Collection<DynamicEntity> knownDynamicEntities() { 
+    	return entities.values().stream()
+    			. filter(e -> e instanceof DynamicEntity)
+    			. map(e -> (DynamicEntity) e)
+    			. collect(Collectors.toList()) ;
+    }
+    
+    public Collection<InteractiveEntity> knownInteractiveEntities() { 
+    	return entities.values().stream()
+    			. filter(e -> e instanceof InteractiveEntity)
+    			. map(e -> (InteractiveEntity) e)
+    			. collect(Collectors.toList()) ;
+    }
+    
+    public boolean isDoor(Entity e) {
+    	return (e != null && e instanceof InteractiveEntity) && e.tag.equals("Door") ;
+    }
+    
+    /**
+     * Check if the entity is a button. Currently it is assumed to be a button if ... 
+     * its id starts with b or B :|
+     */
+    public boolean isButton(Entity e) {
+    	return (e !=null && e instanceof InteractiveEntity) && (e.id.startsWith("b") || e.id.startsWith("B")) ;
+    }
+    
+    // lexicographically comparing e1 and e2 based on its age and distance:
+    private int compareAgeDist(Entity e1, Entity e2) {
+    	var c1 = Integer.compare(age(e1),age(e2)) ;
+    	if (c1 != 0) return c1 ;
+    	return Double.compare(distanceTo(e1),distanceTo(e2)) ;
+    }
+    
+    /**
+     * Return all the buttons in the agent's belief.
+     */
+    public List<InteractiveEntity> knownButtons() { 
+    	return knownInteractiveEntities().stream()    	
+    			. filter(e -> isButton(e))
+    			. collect(Collectors.toList()) ;		
+    }
+
+    /**
+     * Return all the buttons in the agent's belief, sorted in ascending age
+     * (so, from the most recently updated to the oldest) and distance.
+     */
+    public List<InteractiveEntity> knownButtons_sortedByAgeAndDistance() { 
+    	var buttons = knownButtons() ;
+    	buttons.sort((b1,b2) -> compareAgeDist(b1,b2)) ;
+    	return buttons ;
+    }
+    
+    /**
+     * Return all the doors in the agent's belief.
+     */
+    public List<InteractiveEntity> knownDoors() { 
+    	return knownInteractiveEntities().stream()    	
+    			. filter(e -> isDoor(e))
+    			. collect(Collectors.toList()) ;
+    }
+
+    public List<InteractiveEntity> knownDoors_sortedByAgeAndDistance() { 
+    	var doors = knownDoors() ;
+    	doors.sort((b1,b2) -> compareAgeDist(b1,b2)) ;
+    	return doors ;
+    }
+    
+    /**
+     * Return how many update rounds in the past, since the entity's last update.
+     */
+    public Integer age(Entity e) {
+    	if (e==null) return null ;
+    	return this.lastUpdated - e.lastUpdated ;
+    }
+    
+    public Integer age(String id) { return age(getEntity(id)) ; }
+    
+    /**
+     * Like derivedLastVelocity(), but if it tries to get the last known
+     * and non-zero XZ-velocity that can be inferred from tracked positions.
+     * Note: the agent track the last 4 positions, as far as these are
+     * available. An unstuck routine may clear these tracked positions.
+     */
+    public Vec3 derived_lastNonZeroXZVelocity() {
+    	int N = recentPositions.size() ;
+    	if (N<2) return null ;
+    	//System.out.println("#### #recentPositions=" + N) ;
+    	for(int k=N; k>1; k--) {
+    		Vec3 q = new Vec3(recentPositions.get(k-1)) ;
+        	q.subtract(recentPositions.get(k-2)) ;
+        	if (q.x != 0 || q.z != 0) return q ;
+    	}
+    	return null ;
+    }
+    
+	/**
+	 * Well ... the "velocity" field turns out to be always zero. So for now, this
+	 * method will calculate "derived" last velocity, based on the difference
+	 * between the last two tracked positions of the agent. Note that this is an
+	 * approximation, and moreover is not always available (e.g. if we just clear
+	 * the tracking).
+	 */
+    public Vec3 derivedVelocity() {
+    	int N = recentPositions.size() ;
+    	if (N<2) return null ;
+    	Vec3 q = new Vec3(recentPositions.get(N-1)) ;
+    	q.subtract(recentPositions.get(N-2)) ;
+    	return q ;
+    }
 
     public Integer[] getNodesBlockedByEntity(String id){
         return nodesBlockedByEntity.getOrDefault(id, new Integer[]{});
     }
 
-    // search functions
+    /**
+     * True if an entity with the given id exists in the agent's belief.
+     */
     public boolean entityExists(String id) {
-        return allEntities.containsKey(id);
+        return getEntity(id) != null ;
     }
-    public boolean dynamicEntityExists(String id){
-        return dynamicEntities.containsKey(id);
-    }
-    public boolean interactiveEntityExists(String id){
-        return interactiveEntities.containsKey(id);
-    }
-
+ 
     public Entity getEntity(String id) {
-        return allEntities.getOrDefault(id, null);
+        return entities.getOrDefault(id, null);
     }
     public InteractiveEntity getInteractiveEntity(String id){
-        return interactiveEntities.getOrDefault(id, null);
+    	return (InteractiveEntity) getEntity(id) ;
     }
     public DynamicEntity getDynamicEntity(String id){
-        return dynamicEntities.getOrDefault(id, null);
+    	return (DynamicEntity) getEntity(id) ;
     }
 
     // predicates
     public boolean evaluateEntity(String id, Predicate<Entity> predicate) {
-        return entityExists(id) && predicate.test(getEntity(id));
+    	Entity e  = getEntity(id) ;
+    	if (e==null) return false ;
+        return predicate.test(e);
     }
+    
     public boolean evaluateInteractiveEntity(String id, Predicate<InteractiveEntity> predicate){
-        return interactiveEntityExists(id) && predicate.test(getInteractiveEntity(id));
+    	return evaluateEntity(id, e -> 
+    	e instanceof InteractiveEntity && predicate.test((InteractiveEntity) e)) ;
     }
-    public boolean evaluateDynamicEntity(String id, Predicate<DynamicEntity> predicate){
-        return dynamicEntityExists(id) && predicate.test(getDynamicEntity(id));
+    
+    /***
+     * Check if a button is active (in its "on" state).
+     */
+    public boolean isOn(InteractiveEntity button) {
+    	return button!= null && button.isActive ;
     }
 
+    public boolean isOn(String id) { return isOn(getInteractiveEntity(id)) ; }
+    
+    /**
+     * Check if a door is active/open.
+     */
+    public boolean isOpen(InteractiveEntity door) {
+    	return door != null && door.isActive ;
+    }
+
+    public boolean isOpen(String id) { return isOpen(getInteractiveEntity(id)) ; }
+    
+	/**
+	 * Calculate the straight line distance from the agent to an entity, without
+	 * regard if the entity is actually reachable.
+	 */
+    public double distanceTo(Entity e) {
+    	if (e==null) return Double.POSITIVE_INFINITY ;
+    	return position.distance(e.position) ;
+    }
+    
+    public double distanceTo(String id) { return distanceTo(getEntity(id)) ; }
+    
+	/**
+	 * Check if the agent belief there is a path from its current location to the
+	 * entity e. If so, a path is returned, and else null. Do note that
+	 * path-checking can be expensive.
+	 */
+    public Vec3[] canReach(Entity e) {
+    	if (e==null) return null ;
+    	return canReach(e.position) ;
+    }
+    
+	/**
+	 * Check if the agent believes that given position is reachable. That is, if a
+	 * navigation route to the position, through its nav-graph, exists. If this is
+	 * so, the route/path is returned. Be aware that this might be an expensive
+	 * query as it trigger a fresh path finding calculation.
+	 */    
+    public Vec3[] canReach(Vec3 q) {
+    	return findPathTo(q) ;
+    }
+    
+	/**
+	 * Check if the agent believes that given position is reachable. That is, if a
+	 * navigation route to the position, through its nav-graph, exists. If this is
+	 * so, the route/path is returned. Be aware that this might be an expensive
+	 * query as it trigger a fresh path finding calculation.
+	 */ 
+    public Vec3[] canReach(String id) { return canReach(getEntity(id)) ; }
+    
+    
     // add
     private void addEntity(Entity newEntity){
-
-        // set the right tick
+        // set the right tick ... so the new entity will get the most recent timestamp:
         newEntity.lastUpdated = this.lastUpdated;
-
-        // only store newer entities
-        if(this.evaluateEntity(newEntity.id, original -> original.lastUpdated >= newEntity.lastUpdated))
-            return;
-
-        // add to all entity list
-        allEntities.put(newEntity.id, newEntity);
-        // add the Dynamic/Interactive entities when needed
-        if(newEntity instanceof DynamicEntity)
-            dynamicEntities.put(newEntity.id, (DynamicEntity) newEntity);
-        else if (newEntity instanceof InteractiveEntity)
-            interactiveEntities.put(newEntity.id, (InteractiveEntity) newEntity);
+        // add to the entity list
+        entities.put(newEntity.id, newEntity);
     }
 
-    /**
-     * Invoke the mental map to find a path.
-     *
-     * @param goal: The position where the agent wants to move to.
-     * @return The path found
-     */
-    public Vec3[] navigateForce(Vec3 goal) {
-        return mentalMap.navigateForce(position, goal, blockedNodes);
+	/**
+	 * Invoke the mental map to find a path. This triggers a fresh path calculation
+	 * to make sure that the latest belief is used.
+	 *
+	 * @param goal: The position where the agent wants to move to.
+	 * @return The path found
+	 */
+    public Vec3[] findPathTo(Vec3 q) {
+        return mentalMap.navigateForce(position, q, blockedNodes);
     }
 
     /**
@@ -126,9 +281,112 @@ public class BeliefState extends StateWithMessenger {
      * @param goal: The position where the agent wants to move to.
      * @return The path found or the already stored path if the goal location is equal to the previous goal location
      */
-    public Vec3[] navigate(Vec3 goal) {
-        return mentalMap.navigate(position, goal, blockedNodes);
+    public Vec3[] cachedFindPathTo(Vec3 q) {
+        return mentalMap.navigate(position, q, blockedNodes);
     }
+    
+    /**
+     * This method will make the agent move a certain (small) max distance toward the given position.
+     */
+    public Observation moveToward(Vec3 q) {
+    	var o = env().moveToward(this.id, this.position, q) ;
+    	recentPositions.add(o.agentPosition) ;
+    	// keep track the last FOUR positions
+    	if (recentPositions.size()>4) recentPositions.remove(0) ;
+    	return o ;
+    }
+    
+    /**
+     * True if the agent is "stuck" with respect to the given position q. "Stuck" is
+     * defined as follows. Let p0,p1.p3 be the THREE most recent (and registered)
+     * positions of the agent, with p0 being the oldest. It is stuck if the distance
+     * between p0 and p1 and p0 and p3 are at most 0.05, and the distance between p0 and
+     * q is larger than 1.0.
+     */
+    public boolean isStuck(Vec3 q) {
+    	int N = recentPositions.size() ;
+    	if(N<3) return false ;
+    	Vec3 p0 = recentPositions.get(N-3) ;
+    	return p0.distance(recentPositions.get(N-2)) <= 0.05
+    		   &&  p0.distance(recentPositions.get(N-1)) <= 0.05 ;
+         //    && p0.distance(q) > 1.0 ;
+    }
+    
+    /**
+     * Clear the tracking of the agent's most recent positions. This tracking is done to detect
+     * if the agent gets stuck.
+     */
+    public void clearStuckTrackingInfo() {
+    	recentPositions.clear();
+    }
+    
+    /**
+     * Check if the agent is located close to a door. If so, the door is returned, and otherwise null.
+     * "Close" is being defined as within a distance of 0.6 unit.
+     */
+    public InteractiveEntity atDoor() {
+    	var doors = knownDoors() ;
+    	for (var d : doors) {
+    		if (position.distance(d.position) <= CLOSE_RANGE) return d ;
+    	}
+    	return null ;
+    }
+    
+    private static double sign_(double x) {
+    	if (x>0) return 1 ;
+    	if (x<0) return -1 ;
+    	return 0 ;
+    }
+    
+    /**
+     * If the agent gets stuck in an bending corner (because the navigation algorithm does not
+     * take agent's dimension into account... :| ), this method tries to find a position close 
+     * to the agent, which can unstuck agent. The agent can travel to this new position, which
+     * will move it past the stucking corner.
+     * 
+     * If such a position can be found, it is returned. Else null is returned.
+     * 
+     * Note that the method simply checks if there is a navigation polygon that contains this
+     * unstuck position. It doesn't check if this position is actually reachable from the agent's
+     * current position.
+     */
+    public Vec3 unstuck() {
+    	var unstuck_distance = UNIT_DISTANCE * 0.5 ;
+    	// use derived velocity...
+    	var velocity_ = derived_lastNonZeroXZVelocity() ;
+    	if (velocity_ == null) {
+    		// movement vector is unknown ... try one of these:
+    		/*
+    		var p = new Vec3(position.x + unstuck_distance, position.y, position.z) ;
+    		if (mentalMap.getContainingPolygon(p) != null) return p ; 
+    		p = new Vec3(position.x - unstuck_distance, position.y, position.z) ;
+    		if (mentalMap.getContainingPolygon(p) != null) return p ; 
+    		p = new Vec3(position.x, position.y, position.z +  unstuck_distance) ;
+    		if (mentalMap.getContainingPolygon(p) != null) return p ; 
+    		p = new Vec3(position.x, position.y, position.z -  unstuck_distance) ;
+    		if (mentalMap.getContainingPolygon(p) != null) return p ; 
+    		*/
+    		return null ;
+    	}
+    	var x_orientation = sign_(velocity_.x) ;  // 1 if the agent is facing eastly, and -1 if westly
+    	var z_orientation = sign_(velocity_.z) ;  // 1 if the agent is facing northly, and -1 if southly
+    	// System.out.println("#### calling unstuck()") ;
+    	// try E/W unstuck first:
+    	if (x_orientation != 0) {
+    		var p = new Vec3(position.x + unstuck_distance*x_orientation, position.y, position.z) ;
+    		if (mentalMap.getContainingPolygon(p) != null) return p ; 
+        	//if (mentalMap.pathFinder.graph.vecToNode(p) != null) return p ;
+    	}
+    	// try N/S unstuck:
+    	if (z_orientation != 0) {
+    		var p = new Vec3(position.x, position.y, position.z + unstuck_distance*z_orientation) ;
+        	if (mentalMap.getContainingPolygon(p) != null) return p ; 
+        	//if (mentalMap.pathFinder.graph.vecToNode(p) != null) return p ;	
+    	}
+    	// can't find an unstuck option...
+    	return null ;
+    }
+    
 
     /**
      * Get the goal location of the agent.
@@ -153,7 +411,7 @@ public class BeliefState extends StateWithMessenger {
      *
      * @param observation: The observation used to update the belief state.
      */
-    public void markObservation(Observation observation) {
+    public void updateBelief(Observation observation) {
 
         //check if the observation is not null
         if (observation == null) throw new IllegalArgumentException("Null observation received");
@@ -222,8 +480,10 @@ public class BeliefState extends StateWithMessenger {
      * @param id: the object to look for.
      * @return whether the object is within reach of the agent.
      */
-    public boolean canInteract(String id) {
-        return interactiveEntityExists(id) && getInteractiveEntity(id).canInteract(position);
+    public boolean canInteractWith(String id) {
+    	var e = getInteractiveEntity(id) ;
+    	if (e==null) return false ;
+        return e.canInteract(position);
     }
 
     /**
@@ -239,7 +499,7 @@ public class BeliefState extends StateWithMessenger {
         	InteractiveEntity ie_ = getInteractiveEntity(kv.getKey()) ;
         	//System.out.println("xxxx "  + ie_.id + ", tag:" + ie_.tag + ", active: " + ie_.isActive) ;
             
-            if(evaluateInteractiveEntity(kv.getKey(), (InteractiveEntity ie) -> ie.tag.equals("Door") && !ie.isActive)) {
+            if(evaluateInteractiveEntity(kv.getKey(), ie -> ie.tag.equals("Door") && !ie.isActive)) {
             	Collections.addAll(blockedNodes, kv.getValue());
             }
         }
@@ -269,16 +529,39 @@ public class BeliefState extends StateWithMessenger {
                 .where((Entity e) -> e instanceof InteractiveEntity)
                 .select((Entity e) -> (InteractiveEntity) e);
     }
+    
+    public static final float IN_RANGE = 0.4f ;
+    public static final float CLOSE_RANGE = 0.6f ;
+    public static final float UNIT_DISTANCE = 1f ;
 
-    public boolean entityIsUpToDate(String id){
-        return evaluateEntity(id, e -> e.lastUpdated == this.lastUpdated);
+    /**
+     * True if the entity time stamp (its last update) is the same as the agent's.
+     */
+    public boolean entityIsUpToDate(Entity e){
+    	return e!=null && e.lastUpdated == this.lastUpdated ;
     }
-    public boolean withinRange(Vec3 destination){
-        return withinRange(destination, 0.4f);
+    
+    public boolean entityIsUpToDate(String id){ return entityIsUpToDate(getEntity(id)) ; }
+    
+
+    /**
+     * True if the given position q is "within range" (in close vicinity) of the
+     * agent. (right now it is 0.4 distance unit)
+     */
+    public boolean withinRange(Vec3 q){
+        return withinRange(q, IN_RANGE);
     }
-    public boolean withinRange(String id){
-        return evaluateEntity(id, e -> withinRange(e.position, 0.4f));
+    
+    /**
+     * True if the entity is "within range" (in close vicinity) of the
+     * agent. (right now it is 0.4 distance unit)
+     */
+    public boolean withinRange(Entity e){
+    	return e != null && withinRange(e.position);
     }
+    
+    public boolean withinRange(String id){ return withinRange(getEntity(id)) ; }
+    
     private boolean withinRange(Vec3 destination, float range){
         return this.position != null && this.position.distanceSquared(destination) < range * range;
     }
@@ -288,7 +571,7 @@ public class BeliefState extends StateWithMessenger {
         StringBuilder sb = new StringBuilder();
         String sep = ", ";
         sb.append("BeliefState\n [ ");
-        for (var e : allEntities.values()) {
+        for (var e : entities.values()) {
             sb.append("\n\t");
             sb.append(e.toString());
         }

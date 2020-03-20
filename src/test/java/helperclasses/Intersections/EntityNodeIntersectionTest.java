@@ -49,7 +49,8 @@ public class EntityNodeIntersectionTest {
         //create the entity
         InteractiveEntity e = new InteractiveEntity();
         e.isActive = false;
-        e.center = new Vec3(2,0.5,1);
+        //e.center = new Vec3(2,0.5,1);   
+        e.center = new Vec3(1.5,0.5,1); // applying -0.5 on v.x due to the Door-hack.
         e.extents = new Vec3( 0.2, 0.5, 0.2);
         e.tag = "Door";
 
@@ -69,7 +70,8 @@ public class EntityNodeIntersectionTest {
         //create the entity
         InteractiveEntity e = new InteractiveEntity();
         e.isActive = false;
-        e.center = new Vec3(5,0.5,5);
+        // e.center = new Vec3(5,0.5,5);
+        e.center = new Vec3(4.5,0.5,5); // applying -0.5 on v.x due to the Door-hack.
         e.extents = new Vec3( 0.2, 0.5, 0.2);
         e.tag = "Door";
 
@@ -88,7 +90,8 @@ public class EntityNodeIntersectionTest {
         //create the entity
         InteractiveEntity e = new InteractiveEntity();
         e.isActive = false;
-        e.center = new Vec3(3,0.5,3);
+        //e.center = new Vec3(3,0.5,3);
+        e.center = new Vec3(2.5,0.5,3); // applying -0.5 on v.x due to the Door-hack.
         e.extents = new Vec3( 0.2, 0.5, 0.2);
         e.tag = "Door";
 
@@ -109,7 +112,8 @@ public class EntityNodeIntersectionTest {
         //create the entity
         InteractiveEntity e = new InteractiveEntity();
         e.isActive = false;
-        e.center = new Vec3(2,3.5,2);
+        //e.center = new Vec3(2,3.5,2);
+        e.center = new Vec3(1.5,3.5,2); // applying -0.5 on v.x due to the Door-hack.   
         e.extents = new Vec3( 0.2, 0.5, 0.2);
         e.tag = "Door";
 
