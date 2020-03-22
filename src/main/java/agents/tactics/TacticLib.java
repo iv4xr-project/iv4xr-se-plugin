@@ -16,7 +16,7 @@ import nl.uu.cs.aplib.multiAgentSupport.Acknowledgement;
 import nl.uu.cs.aplib.multiAgentSupport.Message;
 import world.BeliefState;
 import world.*;
-import world.Observation;
+import world.LegacyObservation;
 
 import java.util.Arrays;
 
@@ -54,7 +54,7 @@ public class TacticLib {
                         }
                     }
                     //move towards the next way point
-                    Observation o = belief.moveToward(belief.getNextWayPoint());
+                    LegacyObservation o = belief.moveToward(belief.getNextWayPoint());
                     belief.updateBelief(o);
                     // handle when the agent gets stuck:
                     if (belief.isStuck(position)) {
@@ -80,7 +80,7 @@ public class TacticLib {
                     if(belief.getGoalLocation().distance(position) > 0.01){
                         belief.mentalMap.applyPath(position, path);
                     }
-                    Observation o = belief.moveToward(belief.getNextWayPoint());//move towards the next way point
+                    LegacyObservation o = belief.moveToward(belief.getNextWayPoint());//move towards the next way point
                     belief.updateBelief(o);
                     return belief;
                 }).on((BeliefState belief) -> {
@@ -140,7 +140,7 @@ public class TacticLib {
     			    System.out.println("#### invoking forcePastExploreBlindCorner") ;
     			    System.out.println("#### agent velocity " + belief.derived_lastNonZeroXZVelocity()) ;
     			    System.out.println("#### unstuck option " + unstuckPosition) ;  
-    			    Observation o ;
+    			    LegacyObservation o ;
     			    if (unstuckPosition!=null)
     			    	o = belief.moveToward(unstuckPosition) ;
     			    else 
@@ -180,7 +180,7 @@ public class TacticLib {
                             belief.mentalMap.applyPath(p.object1, p.object2);
                         }
                     }
-                    Observation o = belief.moveToward(belief.getNextWayPoint());//move towards the next way point
+                    LegacyObservation o = belief.moveToward(belief.getNextWayPoint());//move towards the next way point
                     belief.updateBelief(o);
                     // handle when the agent gets stuck:
                     if (belief.isStuck(p.object1)) {
@@ -198,7 +198,7 @@ public class TacticLib {
         return move;
     }
     
-    void calculateDoorAlternativePositions(InteractiveEntity door) {
+    void calculateDoorAlternativePositions(LegacyInteractiveEntity door) {
     	var center = door.center ;
     	boolean onXdirection = door.extents.x > door.extents.z ;
     }
@@ -211,7 +211,7 @@ public class TacticLib {
     public static Tactic interact(String objectID) {
         Tactic interact = action("Interact").
                 do1((BeliefState belief) -> {
-                    Observation o = belief.env().interactWith(belief.id, objectID);
+                    LegacyObservation o = belief.env().interactWith(belief.id, objectID);
                     belief.updateBelief(o);
                     return belief;
                 })
@@ -228,7 +228,7 @@ public class TacticLib {
         //this is a wait action which will allow the agent to retrieve an observation
         Tactic observe = action("Observe")
                 .do1((BeliefState belief) -> {
-                    Observation o = belief.env().observe(belief.id);
+                    LegacyObservation o = belief.env().observe(belief.id);
                     belief.updateBelief(o);
                     return belief;
                 }).lift();
@@ -239,7 +239,7 @@ public class TacticLib {
         //this is a wait action which will allow the agent to retrieve an observation
         Tactic observe = action("Observe once")
                 .do1((BeliefState belief) -> {
-                    Observation o = belief.env().observe(belief.id);
+                    LegacyObservation o = belief.env().observe(belief.id);
                     belief.updateBelief(o);
                     return belief;
                 }).on((BeliefState b) -> !b.didNothingPreviousTurn).lift();
@@ -255,7 +255,7 @@ public class TacticLib {
         return action("Share memory")
                 . do1((BeliefState belief)-> {
                     //do an observation
-                    Observation o = belief.env().observe(belief.id);
+                    LegacyObservation o = belief.env().observe(belief.id);
                     belief.updateBelief(o);
 
                     //send the message
@@ -283,7 +283,7 @@ public class TacticLib {
                     }
 
                     //do an observation
-                    Observation o = belief.env().observe(belief.id);
+                    LegacyObservation o = belief.env().observe(belief.id);
                     belief.updateBelief(o);
                     return belief;
                 })
@@ -301,7 +301,7 @@ public class TacticLib {
         return action("Send ping")
                 . do1((BeliefState belief)-> {
                     //do an observation
-                    Observation o = belief.env().observe(belief.id);
+                    LegacyObservation o = belief.env().observe(belief.id);
                     belief.updateBelief(o);
 
                     //send the message
@@ -324,7 +324,7 @@ public class TacticLib {
                     if(m != null) belief.receivedPing = true;
 
                     //do an observation
-                    Observation o = belief.env().observe(belief.id);
+                    LegacyObservation o = belief.env().observe(belief.id);
                     belief.updateBelief(o);
 
                     //return whether we have received an observation yes or no
@@ -364,7 +364,7 @@ public class TacticLib {
                         //}
                     }
                     //move towards the next way point
-                    Observation o = belief.moveToward(belief.getNextWayPoint());
+                    LegacyObservation o = belief.moveToward(belief.getNextWayPoint());
                     belief.updateBelief(o);
                     return belief;
                 }).on((BeliefState belief) -> {

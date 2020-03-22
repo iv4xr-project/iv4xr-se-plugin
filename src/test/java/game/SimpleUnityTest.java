@@ -22,7 +22,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.AfterAll;
 import world.BeliefState;
-import world.InteractiveEntity;
+import world.LegacyInteractiveEntity;
 
 import java.util.function.Predicate;
 
@@ -194,9 +194,9 @@ public class SimpleUnityTest {
         GoalStructure goal = SEQ(
         		GoalLib.justObserve().lift(),
                 GoalLib.positionIsInRange(new Vec3(1,0,1)).lift(),
-                GoalLib.entityInspected("button0", e -> e instanceof InteractiveEntity && !((InteractiveEntity) e).isActive),
+                GoalLib.entityInspected("button0", e -> e instanceof LegacyInteractiveEntity && !((LegacyInteractiveEntity) e).isActive),
                 GoalLib.entityIsInteracted("button0"),
-                GoalLib.entityInspected("button0", e -> e instanceof InteractiveEntity && ((InteractiveEntity) e).isActive),
+                GoalLib.entityInspected("button0", e -> e instanceof LegacyInteractiveEntity && ((LegacyInteractiveEntity) e).isActive),
                 GoalLib.positionIsInRange(new Vec3(1,0,1)).lift()
         );
 

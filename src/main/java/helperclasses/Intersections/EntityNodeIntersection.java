@@ -9,7 +9,7 @@ package helperclasses.Intersections;
 
 import helperclasses.datastructures.Vec3;
 import helperclasses.datastructures.mesh.TriangleMesh;
-import world.InteractiveEntity;
+import world.LegacyInteractiveEntity;
 
 import java.util.*;
 
@@ -25,7 +25,7 @@ public class EntityNodeIntersection {
      * @param m: The triangle mesh
      * @return The nodes which are blocked
      */
-    public static Integer[] getNodesBlockedByInteractiveEntity(InteractiveEntity e, TriangleMesh m){
+    public static Integer[] getNodesBlockedByInteractiveEntity(LegacyInteractiveEntity e, TriangleMesh m){
         double sizeX = e.extents.x;//size of the square
         double sizeZ = e.extents.z;//size of the square
         Vec3 center = new Vec3(e.center.x, e.center.y, e.center.z) ;

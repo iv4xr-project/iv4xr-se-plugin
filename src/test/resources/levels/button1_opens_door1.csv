@@ -1,4 +1,4 @@
-button1,door1
+button1,door1,,,,,
 |w,w,w,w,w,w,w
 w,f,f,f,f,f,w
 w,f,f:a^agent1,f,f:b^button1,f,w

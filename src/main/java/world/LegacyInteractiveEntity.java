@@ -11,15 +11,22 @@ import helperclasses.datastructures.Vec3;
 
 import java.util.List;
 
-public class InteractiveEntity extends Entity {
+import eu.iv4xr.framework.world.WorldEntity;
+
+/**
+ * Represeration of interactive entity.
+ * This is the legacy representation as originally provided by the LabRecruits 
+ * developers. This will be translated to iv4xr's WorldEntity.
+ */
+public class LegacyInteractiveEntity extends LegacyEntity {
 
     public boolean isActive;
     public List<String> connectedObjects;
     public Vec3 center; // Bounding box position
     public Vec3 extents; // Half size
 
-    public InteractiveEntity(){
-        super(EntityType.Interactive);
+    public LegacyInteractiveEntity(){
+        super(LegacyEntityType.Interactive);
     }
 
     public boolean canInteract(Vec3 point) {
@@ -31,9 +38,9 @@ public class InteractiveEntity extends Entity {
     }
 
     @Override
-    public boolean update(Entity e){
-        if(e instanceof InteractiveEntity && super.update(e)){
-            InteractiveEntity ie = (InteractiveEntity) e;
+    public boolean update(LegacyEntity e){
+        if(e instanceof LegacyInteractiveEntity && super.update(e)){
+            LegacyInteractiveEntity ie = (LegacyInteractiveEntity) e;
             this.isActive = ie.isActive;
             this.center = ie.center;
             this.extents = ie.extents;
@@ -44,13 +51,14 @@ public class InteractiveEntity extends Entity {
 
     @Override
     public boolean equals(Object other){
-        if(!(other instanceof InteractiveEntity))
+        if(!(other instanceof LegacyInteractiveEntity))
             return false;
-        InteractiveEntity o = (InteractiveEntity) other;
+        LegacyInteractiveEntity o = (LegacyInteractiveEntity) other;
         return     this.isActive == o.isActive
                 && this.connectedObjects.equals(o.connectedObjects)
                 && this.center.equals(o.center)
                 && this.extents.equals(o.extents)
                 && super.equals(other);
     }
+  
 }

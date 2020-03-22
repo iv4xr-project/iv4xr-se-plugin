@@ -13,7 +13,7 @@ import nl.uu.cs.aplib.mainConcepts.Goal;
 import nl.uu.cs.aplib.mainConcepts.GoalStructure;
 import nl.uu.cs.aplib.mainConcepts.Tactic;
 import world.BeliefState;
-import world.Entity;
+import world.LegacyEntity;
 
 import java.util.function.Predicate;
 
@@ -306,7 +306,7 @@ public class GoalLib {
      * @param id: entityId
      * @return Goal
      */
-    public static GoalStructure entityInspected(String id, Predicate<Entity> predicate){
+    public static GoalStructure entityInspected(String id, Predicate<LegacyEntity> predicate){
         return SEQ(
             entityInspected(id).lift(),
             goal("Evaluate " + id)
@@ -328,7 +328,7 @@ public class GoalLib {
      * @param predicate  The predicate that is expected to hold on the entity.
      * @return
      */
-    public static GoalStructure entityInvariantChecked(TestAgent agent, String id, String info, Predicate<Entity> predicate){
+    public static GoalStructure entityInvariantChecked(TestAgent agent, String id, String info, Predicate<LegacyEntity> predicate){
         return SEQ(
             entityInspected(id).lift(),
             testgoal("Invariant check " + id, agent)

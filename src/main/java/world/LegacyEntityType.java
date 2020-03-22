@@ -7,7 +7,7 @@ at Utrecht University within the Software and Game project course.
 
 package world;
 
-public enum EntityType {
+public enum LegacyEntityType {
     Entity,
     Dynamic,
     Interactive

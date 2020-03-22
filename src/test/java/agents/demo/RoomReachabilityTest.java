@@ -30,8 +30,8 @@ import org.junit.jupiter.api.Test;
 import game.Platform;
 import game.LabRecruitsTestServer;
 import world.BeliefState;
-import world.Entity;
-import world.InteractiveEntity;
+import world.LegacyEntity;
+import world.LegacyInteractiveEntity;
 
 import static agents.TestSettings.*;
 import static nl.uu.cs.aplib.AplibEDSL.*;
@@ -99,14 +99,14 @@ public class RoomReachabilityTest {
 	        	GoalLib.entityInvariantChecked(testAgent,
 	            		"door1", 
 	            		"door1 should be open", 
-	            		(Entity e) -> (e instanceof InteractiveEntity) && ((InteractiveEntity) e).isActive),
+	            		(LegacyEntity e) -> (e instanceof LegacyInteractiveEntity) && ((LegacyInteractiveEntity) e).isActive),
 	        	
 	        	GoalLib.entityIsInteracted("button3"),
 	        	GoalLib.entityIsInRange("door2").lift(),
 	        	GoalLib.entityInvariantChecked(testAgent,
 	            		"door2", 
 	            		"door2 should be open", 
-	            		(Entity e) -> (e instanceof InteractiveEntity) && ((InteractiveEntity) e).isActive),
+	            		(LegacyEntity e) -> (e instanceof LegacyInteractiveEntity) && ((LegacyInteractiveEntity) e).isActive),
 	        	GoalLib.entityIsInteracted("button4"),
 	        	//GoalLib.entityIsInRange("button3").lift(),
 	        	//GoalLib.entityIsInRange("door1").lift(),
@@ -114,13 +114,13 @@ public class RoomReachabilityTest {
 	        	GoalLib.entityInvariantChecked(testAgent,
 	            		"door1", 
 	            		"door1 should be open", 
-	            		(Entity e) -> (e instanceof InteractiveEntity) && ((InteractiveEntity) e).isActive),
+	            		(LegacyEntity e) -> (e instanceof LegacyInteractiveEntity) && ((LegacyInteractiveEntity) e).isActive),
 	        	//GoalLib.entityIsInRange("button1").lift(),
 	        	GoalLib.entityIsInRange_smarter("door3"),
 	        	GoalLib.entityInvariantChecked(testAgent,
 	            		"door3", 
 	            		"door3 should be open", 
-	            		(Entity e) -> (e instanceof InteractiveEntity) && ((InteractiveEntity) e).isActive)
+	            		(LegacyEntity e) -> (e instanceof LegacyInteractiveEntity) && ((LegacyInteractiveEntity) e).isActive)
 	        );
 	        // attaching the goal and testdata-collector
 	        var dataCollector = new TestDataCollector();

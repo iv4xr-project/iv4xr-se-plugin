@@ -7,25 +7,25 @@ import world.*;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 
-public class EntityAdapter implements JsonDeserializer<Entity>, JsonSerializer<Entity> {
+public class EntityAdapter implements JsonDeserializer<LegacyEntity>, JsonSerializer<LegacyEntity> {
 
     /**
      * This deserializer should deserialize Entities based on their type
      */
     @Override
-    public Entity deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+    public LegacyEntity deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         JsonObject obj = json.getAsJsonObject();
 
-        Entity entity;
-        switch ((EntityType) context.deserialize(obj.get("type"), EntityType.class)){
+        LegacyEntity entity;
+        switch ((LegacyEntityType) context.deserialize(obj.get("type"), LegacyEntityType.class)){
             case Dynamic:
-                entity =  new DynamicEntity();
+                entity =  new LegacyDynamicEntity();
                 break;
             case Interactive:
-                entity =  new InteractiveEntity();
+                entity =  new LegacyInteractiveEntity();
                 break;
             default:
-                entity = new Entity(EntityType.Entity);
+                entity = new LegacyEntity(LegacyEntityType.Entity);
                 break;
         }
 
@@ -36,10 +36,10 @@ public class EntityAdapter implements JsonDeserializer<Entity>, JsonSerializer<E
 
         switch (entity.type){
             case Dynamic:
-                ((DynamicEntity) entity).velocity = context.deserialize(obj.get("velocity"), Vec3.class);
+                ((LegacyDynamicEntity) entity).velocity = context.deserialize(obj.get("velocity"), Vec3.class);
                 break;
             case Interactive:
-                InteractiveEntity ie = (InteractiveEntity) entity;
+                LegacyInteractiveEntity ie = (LegacyInteractiveEntity) entity;
                 ie.isActive = obj.get("isActive").getAsBoolean();
                 ie.connectedObjects = Arrays.asList(context.deserialize(obj.get("connectedObjects"), String[].class));
                 ie.center = context.deserialize(obj.get("center"), Vec3.class);
@@ -53,9 +53,9 @@ public class EntityAdapter implements JsonDeserializer<Entity>, JsonSerializer<E
      * This serializer should serialize Entities normally, but entity types should be a number
      */
     @Override
-    public JsonElement serialize(Entity src, Type typeOfSrc, JsonSerializationContext context) {
+    public JsonElement serialize(LegacyEntity src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject obj = new JsonObject();
-        obj.add("type", context.serialize(src.type, EntityType.class));
+        obj.add("type", context.serialize(src.type, LegacyEntityType.class));
         obj.add("id", context.serialize(src.id));
         obj.add("tag", context.serialize(src.tag));
         obj.add("position", context.serialize(src.position));
@@ -63,10 +63,10 @@ public class EntityAdapter implements JsonDeserializer<Entity>, JsonSerializer<E
 
         switch (src.type){
             case Dynamic:
-                obj.add("velocity", context.serialize(((DynamicEntity) src).velocity));
+                obj.add("velocity", context.serialize(((LegacyDynamicEntity) src).velocity));
                 break;
             case Interactive:
-                InteractiveEntity ie = (InteractiveEntity) src;
+                LegacyInteractiveEntity ie = (LegacyInteractiveEntity) src;
                 obj.add("isActive", context.serialize(ie.isActive));
                 obj.add("connectedObjects", context.serialize(ie.connectedObjects));
                 obj.add("center", context.serialize(ie.center));

@@ -11,14 +11,18 @@ import helperclasses.datastructures.Vec3;
 
 import java.util.List;
 
-/// Summary of what an agent's character can see
-public class Observation {
+/**
+ * Summary of what an agent's character can see.
+ * This is the legacy representation as originally provided by the LabRecruits 
+ * developers. This will be translated to iv4xr's WorldModel.
+ */ 
+public class LegacyObservation {
 
     public int tick; // The game tick when this observation was taken.
     public String agentID;
     public Vec3 agentPosition;
     public Vec3 velocity;
-    public List<Entity> entities;
+    public List<LegacyEntity> entities;
     public int[] navMeshIndices;
     public boolean didNothing;
 }

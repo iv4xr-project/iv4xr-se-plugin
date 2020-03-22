@@ -11,8 +11,8 @@ import helperclasses.datastructures.mesh.TriangleMesh;
 import static org.junit.jupiter.api.Assertions.* ;
 import org.junit.jupiter.api.Test;
 import pathfinding.NavMeshContainer;
-import world.Entity;
-import world.InteractiveEntity;
+import world.LegacyEntity;
+import world.LegacyInteractiveEntity;
 
 
 public class EntityNodeIntersectionTest {
@@ -47,7 +47,7 @@ public class EntityNodeIntersectionTest {
         TriangleMesh m = setup();
 
         //create the entity
-        InteractiveEntity e = new InteractiveEntity();
+        LegacyInteractiveEntity e = new LegacyInteractiveEntity();
         e.isActive = false;
         //e.center = new Vec3(2,0.5,1);   
         e.center = new Vec3(1.5,0.5,1); // applying -0.5 on v.x due to the Door-hack.
@@ -68,7 +68,7 @@ public class EntityNodeIntersectionTest {
         TriangleMesh m = setup();
 
         //create the entity
-        InteractiveEntity e = new InteractiveEntity();
+        LegacyInteractiveEntity e = new LegacyInteractiveEntity();
         e.isActive = false;
         // e.center = new Vec3(5,0.5,5);
         e.center = new Vec3(4.5,0.5,5); // applying -0.5 on v.x due to the Door-hack.
@@ -88,7 +88,7 @@ public class EntityNodeIntersectionTest {
         TriangleMesh m = setup();
 
         //create the entity
-        InteractiveEntity e = new InteractiveEntity();
+        LegacyInteractiveEntity e = new LegacyInteractiveEntity();
         e.isActive = false;
         //e.center = new Vec3(3,0.5,3);
         e.center = new Vec3(2.5,0.5,3); // applying -0.5 on v.x due to the Door-hack.
@@ -110,7 +110,7 @@ public class EntityNodeIntersectionTest {
         TriangleMesh m = setup();
 
         //create the entity
-        InteractiveEntity e = new InteractiveEntity();
+        LegacyInteractiveEntity e = new LegacyInteractiveEntity();
         e.isActive = false;
         //e.center = new Vec3(2,3.5,2);
         e.center = new Vec3(1.5,3.5,2); // applying -0.5 on v.x due to the Door-hack.   

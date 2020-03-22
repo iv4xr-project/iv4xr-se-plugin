@@ -32,7 +32,7 @@ public class BeliefState extends StateWithMessenger {
      * In-game entities that the agent is aware of. Represented as a mapping from
      * their ids.
      */
-    private HashMap<String, Entity> entities = new HashMap<>();
+    private HashMap<String, LegacyEntity> entities = new HashMap<>();
     //private HashMap<String, DynamicEntity> dynamicEntities = new HashMap<>();
     //private HashMap<String, InteractiveEntity> interactiveEntities = new HashMap<>();
     public MentalMap mentalMap;
@@ -54,35 +54,35 @@ public class BeliefState extends StateWithMessenger {
 
     public BeliefState() { }
 
-    public Collection<Entity> knownEntities() { return entities.values(); }
-    public Collection<DynamicEntity> knownDynamicEntities() { 
+    public Collection<LegacyEntity> knownEntities() { return entities.values(); }
+    public Collection<LegacyDynamicEntity> knownDynamicEntities() { 
     	return entities.values().stream()
-    			. filter(e -> e instanceof DynamicEntity)
-    			. map(e -> (DynamicEntity) e)
+    			. filter(e -> e instanceof LegacyDynamicEntity)
+    			. map(e -> (LegacyDynamicEntity) e)
     			. collect(Collectors.toList()) ;
     }
     
-    public Collection<InteractiveEntity> knownInteractiveEntities() { 
+    public Collection<LegacyInteractiveEntity> knownInteractiveEntities() { 
     	return entities.values().stream()
-    			. filter(e -> e instanceof InteractiveEntity)
-    			. map(e -> (InteractiveEntity) e)
+    			. filter(e -> e instanceof LegacyInteractiveEntity)
+    			. map(e -> (LegacyInteractiveEntity) e)
     			. collect(Collectors.toList()) ;
     }
     
-    public boolean isDoor(Entity e) {
-    	return (e != null && e instanceof InteractiveEntity) && e.tag.equals("Door") ;
+    public boolean isDoor(LegacyEntity e) {
+    	return (e != null && e instanceof LegacyInteractiveEntity) && e.tag.equals("Door") ;
     }
     
     /**
      * Check if the entity is a button. Currently it is assumed to be a button if ... 
      * its id starts with b or B :|
      */
-    public boolean isButton(Entity e) {
-    	return (e !=null && e instanceof InteractiveEntity) && (e.id.startsWith("b") || e.id.startsWith("B")) ;
+    public boolean isButton(LegacyEntity e) {
+    	return (e !=null && e instanceof LegacyInteractiveEntity) && (e.id.startsWith("b") || e.id.startsWith("B")) ;
     }
     
     // lexicographically comparing e1 and e2 based on its age and distance:
-    private int compareAgeDist(Entity e1, Entity e2) {
+    private int compareAgeDist(LegacyEntity e1, LegacyEntity e2) {
     	var c1 = Integer.compare(age(e1),age(e2)) ;
     	if (c1 != 0) return c1 ;
     	return Double.compare(distanceTo(e1),distanceTo(e2)) ;
@@ -91,7 +91,7 @@ public class BeliefState extends StateWithMessenger {
     /**
      * Return all the buttons in the agent's belief.
      */
-    public List<InteractiveEntity> knownButtons() { 
+    public List<LegacyInteractiveEntity> knownButtons() { 
     	return knownInteractiveEntities().stream()    	
     			. filter(e -> isButton(e))
     			. collect(Collectors.toList()) ;		
@@ -101,7 +101,7 @@ public class BeliefState extends StateWithMessenger {
      * Return all the buttons in the agent's belief, sorted in ascending age
      * (so, from the most recently updated to the oldest) and distance.
      */
-    public List<InteractiveEntity> knownButtons_sortedByAgeAndDistance() { 
+    public List<LegacyInteractiveEntity> knownButtons_sortedByAgeAndDistance() { 
     	var buttons = knownButtons() ;
     	buttons.sort((b1,b2) -> compareAgeDist(b1,b2)) ;
     	return buttons ;
@@ -110,13 +110,13 @@ public class BeliefState extends StateWithMessenger {
     /**
      * Return all the doors in the agent's belief.
      */
-    public List<InteractiveEntity> knownDoors() { 
+    public List<LegacyInteractiveEntity> knownDoors() { 
     	return knownInteractiveEntities().stream()    	
     			. filter(e -> isDoor(e))
     			. collect(Collectors.toList()) ;
     }
 
-    public List<InteractiveEntity> knownDoors_sortedByAgeAndDistance() { 
+    public List<LegacyInteractiveEntity> knownDoors_sortedByAgeAndDistance() { 
     	var doors = knownDoors() ;
     	doors.sort((b1,b2) -> compareAgeDist(b1,b2)) ;
     	return doors ;
@@ -125,7 +125,7 @@ public class BeliefState extends StateWithMessenger {
     /**
      * Return how many update rounds in the past, since the entity's last update.
      */
-    public Integer age(Entity e) {
+    public Integer age(LegacyEntity e) {
     	if (e==null) return null ;
     	return this.lastUpdated - e.lastUpdated ;
     }
@@ -176,32 +176,32 @@ public class BeliefState extends StateWithMessenger {
         return getEntity(id) != null ;
     }
  
-    public Entity getEntity(String id) {
+    public LegacyEntity getEntity(String id) {
         return entities.getOrDefault(id, null);
     }
-    public InteractiveEntity getInteractiveEntity(String id){
-    	return (InteractiveEntity) getEntity(id) ;
+    public LegacyInteractiveEntity getInteractiveEntity(String id){
+    	return (LegacyInteractiveEntity) getEntity(id) ;
     }
-    public DynamicEntity getDynamicEntity(String id){
-    	return (DynamicEntity) getEntity(id) ;
+    public LegacyDynamicEntity getDynamicEntity(String id){
+    	return (LegacyDynamicEntity) getEntity(id) ;
     }
 
     // predicates
-    public boolean evaluateEntity(String id, Predicate<Entity> predicate) {
-    	Entity e  = getEntity(id) ;
+    public boolean evaluateEntity(String id, Predicate<LegacyEntity> predicate) {
+    	LegacyEntity e  = getEntity(id) ;
     	if (e==null) return false ;
         return predicate.test(e);
     }
     
-    public boolean evaluateInteractiveEntity(String id, Predicate<InteractiveEntity> predicate){
+    public boolean evaluateInteractiveEntity(String id, Predicate<LegacyInteractiveEntity> predicate){
     	return evaluateEntity(id, e -> 
-    	e instanceof InteractiveEntity && predicate.test((InteractiveEntity) e)) ;
+    	e instanceof LegacyInteractiveEntity && predicate.test((LegacyInteractiveEntity) e)) ;
     }
     
     /***
      * Check if a button is active (in its "on" state).
      */
-    public boolean isOn(InteractiveEntity button) {
+    public boolean isOn(LegacyInteractiveEntity button) {
     	return button!= null && button.isActive ;
     }
 
@@ -210,7 +210,7 @@ public class BeliefState extends StateWithMessenger {
     /**
      * Check if a door is active/open.
      */
-    public boolean isOpen(InteractiveEntity door) {
+    public boolean isOpen(LegacyInteractiveEntity door) {
     	return door != null && door.isActive ;
     }
 
@@ -220,7 +220,7 @@ public class BeliefState extends StateWithMessenger {
 	 * Calculate the straight line distance from the agent to an entity, without
 	 * regard if the entity is actually reachable.
 	 */
-    public double distanceTo(Entity e) {
+    public double distanceTo(LegacyEntity e) {
     	if (e==null) return Double.POSITIVE_INFINITY ;
     	return position.distance(e.position) ;
     }
@@ -232,7 +232,7 @@ public class BeliefState extends StateWithMessenger {
 	 * entity e. If so, a path is returned, and else null. Do note that
 	 * path-checking can be expensive.
 	 */
-    public Vec3[] canReach(Entity e) {
+    public Vec3[] canReach(LegacyEntity e) {
     	if (e==null) return null ;
     	return canReach(e.position) ;
     }
@@ -257,7 +257,7 @@ public class BeliefState extends StateWithMessenger {
     
     
     // add
-    private void addEntity(Entity newEntity){
+    private void addEntity(LegacyEntity newEntity){
         // set the right tick ... so the new entity will get the most recent timestamp:
         newEntity.lastUpdated = this.lastUpdated;
         // add to the entity list
@@ -288,7 +288,7 @@ public class BeliefState extends StateWithMessenger {
     /**
      * This method will make the agent move a certain (small) max distance toward the given position.
      */
-    public Observation moveToward(Vec3 q) {
+    public LegacyObservation moveToward(Vec3 q) {
     	var o = env().moveToward(this.id, this.position, q) ;
     	recentPositions.add(o.agentPosition) ;
     	// keep track the last FOUR positions
@@ -324,7 +324,7 @@ public class BeliefState extends StateWithMessenger {
      * Check if the agent is located close to a door. If so, the door is returned, and otherwise null.
      * "Close" is being defined as within a distance of 0.6 unit.
      */
-    public InteractiveEntity atDoor() {
+    public LegacyInteractiveEntity atDoor() {
     	var doors = knownDoors() ;
     	for (var d : doors) {
     		if (position.distance(d.position) <= CLOSE_RANGE) return d ;
@@ -411,11 +411,11 @@ public class BeliefState extends StateWithMessenger {
      *
      * @param observation: The observation used to update the belief state.
      */
-    public void updateBelief(Observation observation) {
+    public void updateBelief(LegacyObservation observation) {
 
         //check if the observation is not null
         if (observation == null) throw new IllegalArgumentException("Null observation received");
-
+        
         didNothingPreviousTurn = observation.didNothing;
         position = observation.agentPosition;
         velocity = observation.velocity;
@@ -441,9 +441,9 @@ public class BeliefState extends StateWithMessenger {
             // a bit further below.
             
             //if (e instanceof InteractiveEntity && !interactiveEntityExists(e.id)) 
-            if (e instanceof InteractiveEntity) {
+            if (e instanceof LegacyInteractiveEntity) {
                     	
-            	Integer[] blocked = EntityNodeIntersection.getNodesBlockedByInteractiveEntity((InteractiveEntity) e, mentalMap.pathFinder.navmesh); 
+            	Integer[] blocked = EntityNodeIntersection.getNodesBlockedByInteractiveEntity((LegacyInteractiveEntity) e, mentalMap.pathFinder.navmesh); 
             	//System.out.println("### calculating blocked nodes by entity " + e.id +  ": " + blocked.length) ;
             
                 nodesBlockedByEntity.put(e.id,blocked) ;
@@ -496,7 +496,7 @@ public class BeliefState extends StateWithMessenger {
         for(var kv: nodesBlockedByEntity.entrySet()) {
             // decide which entity can be blocking; if so add its blocked nodes.
         	// Currently only closed doors are blocking
-        	InteractiveEntity ie_ = getInteractiveEntity(kv.getKey()) ;
+        	LegacyInteractiveEntity ie_ = getInteractiveEntity(kv.getKey()) ;
         	//System.out.println("xxxx "  + ie_.id + ", tag:" + ie_.tag + ", active: " + ie_.isActive) ;
             
             if(evaluateInteractiveEntity(kv.getKey(), ie -> ie.tag.equals("Door") && !ie.isActive)) {
@@ -509,7 +509,7 @@ public class BeliefState extends StateWithMessenger {
      * Check if any interactive entity has changed status
      * @return A boolean whether a recalculate is needed
      */
-    private boolean anyInteractiveEntityChanged(Observation o){
+    private boolean anyInteractiveEntityChanged(LegacyObservation o){
         //loop over the interactive entities
         for (var newEntity: getInteractables(o.entities)) {
             //check if there is an update of an entity
@@ -524,10 +524,10 @@ public class BeliefState extends StateWithMessenger {
         return false;
     }
 
-    private Iterable<InteractiveEntity> getInteractables(List<Entity> list){
+    private Iterable<LegacyInteractiveEntity> getInteractables(List<LegacyEntity> list){
         return new QArrayList<>(list)
-                .where((Entity e) -> e instanceof InteractiveEntity)
-                .select((Entity e) -> (InteractiveEntity) e);
+                .where((LegacyEntity e) -> e instanceof LegacyInteractiveEntity)
+                .select((LegacyEntity e) -> (LegacyInteractiveEntity) e);
     }
     
     public static final float IN_RANGE = 0.4f ;
@@ -537,7 +537,7 @@ public class BeliefState extends StateWithMessenger {
     /**
      * True if the entity time stamp (its last update) is the same as the agent's.
      */
-    public boolean entityIsUpToDate(Entity e){
+    public boolean entityIsUpToDate(LegacyEntity e){
     	return e!=null && e.lastUpdated == this.lastUpdated ;
     }
     
@@ -556,7 +556,7 @@ public class BeliefState extends StateWithMessenger {
      * True if the entity is "within range" (in close vicinity) of the
      * agent. (right now it is 0.4 distance unit)
      */
-    public boolean withinRange(Entity e){
+    public boolean withinRange(LegacyEntity e){
     	return e != null && withinRange(e.position);
     }
     
