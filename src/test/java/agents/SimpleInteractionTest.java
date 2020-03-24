@@ -21,6 +21,7 @@ import agents.tactics.TacticLib;
 import environments.EnvironmentConfig;
 import environments.LabRecruitsEnvironment;
 import eu.iv4xr.framework.mainConcepts.TestDataCollector;
+import eu.iv4xr.framework.world.WorldEntity;
 import game.LabRecruitsTestServer;
 import helperclasses.datastructures.linq.QArrayList;
 import nl.uu.cs.aplib.mainConcepts.BasicAgent;
@@ -77,13 +78,13 @@ public class SimpleInteractionTest {
             GoalLib.entityInvariantChecked(testAgent,
             		"button1", 
             		"button1 should be active", 
-            		(LegacyEntity e) -> (e instanceof LegacyInteractiveEntity) && ((LegacyInteractiveEntity) e).isActive),
+            		(WorldEntity e) -> e.getBooleanProperty("isOn")),
 
             GoalLib.entityIsInRange("door1").lift(),
             GoalLib.entityInvariantChecked(testAgent,
             		"door1", 
             		"door1 should be open", 
-            		(LegacyEntity e) -> (e instanceof LegacyInteractiveEntity) && ((LegacyInteractiveEntity) e).isActive)
+            		(WorldEntity e) -> e.getBooleanProperty("isOpen"))
             
         );
         // attaching the goal and testdata-collector

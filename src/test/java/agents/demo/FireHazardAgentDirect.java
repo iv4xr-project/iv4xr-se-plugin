@@ -109,7 +109,7 @@ public class FireHazardAgentDirect {
         while (testingTask.getStatus().inProgress()){
 
             System.out.println("** " + tick + ": agent @"
-            		+ agent.getState().position
+            		+ agent.getState().worldmodel.position
             		+ ", V=" + agent.getState().derivedVelocity());
 
             agent.update();

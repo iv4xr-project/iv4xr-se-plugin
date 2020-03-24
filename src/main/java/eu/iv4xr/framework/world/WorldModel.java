@@ -36,10 +36,38 @@ public class WorldModel {
 		return elements.get(id) ;
 	}
 		
-	public void addEntity(WorldEntity e) {
-		if (e==null) return ;
-		var old = elements.put(e.id,e) ;
-		e.linkPreviousState(old);
+	/**
+	 * Add a non-null entity e into this WorldModel, if it is NOT there already. If it already exists, we check
+	 * if e's state is different from its old state as recorded in the WorldModel. If so, we will
+	 * replace the old state with e, and link old as its previous state.
+	 * 
+	 * Either way, the stored e will get the timestamp of this WorldModel.
+	 * 
+	 * If e is added, this method will return e again (with updated timestamp). Else it returns the 
+	 * entity representing its old state.
+	 */
+	public WorldEntity addEntity(WorldEntity e) {
+		if (e==null) throw new IllegalArgumentException("Trying to add a null entity to a World Model.") ;
+		e.assignTimeStamp(timestamp);
+		var old = elements.get(e.id) ;
+		if (old==null) {
+			elements.put(e.id,e) ;
+			return e ;
+		}
+		else {
+			// check first if there is a state change
+			if (e.hasSameState(old)) {
+				// keep old; just update its timestamp:
+				old.assignTimeStamp(timestamp);
+				return old ;
+			}
+			else {
+				// the entity has changes its state
+				elements.put(e.id,e) ;
+				e.linkPreviousState(old);
+				return e ;
+			}
+		}
 	}
 
 

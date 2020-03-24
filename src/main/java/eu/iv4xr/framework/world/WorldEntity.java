@@ -61,20 +61,36 @@ public class WorldEntity {
 		return a.equals(b) ;
 	}
 	
-	public boolean hasSameState(WorldEntity e) {
-		if (! (equal_(position,e.position)
-				   && equal_(velocity,e.velocity)
-				   && properties.size() == e.properties.size()
-				   && equal_(extent,e.extent)))
+	/**
+	 * Let e be non-null and represent the same entity as this entity (they have the same ID), but
+	 * its state is possibly different than this entity. This method checks if both entity have
+	 * the same state.
+	 * 
+	 * Dynamic entity is assumed not to change state. Else this method first check the hash-value
+	 * of both entities. If they are the same, this method performs deep comparison of position,
+	 * velocity, properties, and sub-entities. This might be a bit expensive; override this method
+	 * if a faster implementation is wanted.
+	 */
+	public boolean hasSameState(WorldEntity old) {
+		
+		// non-dynamic entity cannot change state:
+		if (!this.dynamic) return true ;	
+		// else:
+		if (this.hashCode() != old.hashCode()) return false ;
+		
+		if (! (equal_(position,old.position)
+				   && equal_(velocity,old.velocity)
+				   && properties.size() == old.properties.size()
+				   && equal_(extent,old.extent)))
 		    return false ;
 		for (var P : properties.entrySet()) {
-			var q = e.properties.get(P.getKey()) ;
+			var q = old.properties.get(P.getKey()) ;
 			if (! P.getValue().equals(q)) return false ;
 		}
 		// so the entities have the same properties.. let's now check the children 
-		if (this.elements.size() != e.elements.size()) return false ;
+		if (this.elements.size() != old.elements.size()) return false ;
 		for (var elem_ : elements.entrySet()) {
-			var elem2 = e.elements.get(elem_.getKey()) ;
+			var elem2 = old.elements.get(elem_.getKey()) ;
 			if (elem2 == null) return false ;
 			var elem1 = elem_.getValue() ;
 			if (!elem1.hasSameState(elem2)) return false ;
@@ -148,10 +164,27 @@ public class WorldEntity {
 	}
 	
 	/**
+	 * Determine if the given position p is close enough to this entity to allow an agent
+	 * which is located at p to interact with the entity. This should be implemented
+	 * by the subclass. So, override this.
+	 */
+	public boolean isWithinInteractionDistance(Vec3 p) {
+		throw new UnsupportedOperationException() ;
+	}
+	
+	/**
 	 * If true then this entity is a moving entity. This is defined as having a
 	 * non-null velocity. Note that the entity may still have a zero velocity;
 	 * but it will still be classified as "moving".
 	 */
 	public boolean isMovingEntity() { return velocity !=null ; }
+	
+	/**
+	 * The hashcode of this Entity.
+	 */
+	@Override
+	public int hashCode() {
+		return Objects.hash(position,velocity,extent,properties,elements) ;
+	}
 
 }

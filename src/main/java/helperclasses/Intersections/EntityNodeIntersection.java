@@ -9,9 +9,12 @@ package helperclasses.Intersections;
 
 import helperclasses.datastructures.Vec3;
 import helperclasses.datastructures.mesh.TriangleMesh;
+import world.LabEntity;
 import world.LegacyInteractiveEntity;
 
 import java.util.*;
+
+import eu.iv4xr.framework.world.WorldEntity;
 
 /**
  * This class holds the logic for intersections between entities and nodes
@@ -20,16 +23,23 @@ public class EntityNodeIntersection {
     private static TriangleMesh m;
 
     /**
-     * This method will determine which nodes are blocked by a given entity
-     * @param e: The interactive entity
+     * This method will determine which nodes are blocked by a given entity. The entity
+     * is assumed to be non-null and blocking.
+     * @param e: The entity
      * @param m: The triangle mesh
      * @return The nodes which are blocked
      */
-    public static Integer[] getNodesBlockedByInteractiveEntity(LegacyInteractiveEntity e, TriangleMesh m){
-        double sizeX = e.extents.x;//size of the square
-        double sizeZ = e.extents.z;//size of the square
-        Vec3 center = new Vec3(e.center.x, e.center.y, e.center.z) ;
-       
+    public static Integer[] getNodesBlockedByInteractiveEntity(WorldEntity e, TriangleMesh m){
+        //double sizeX = e.extents.x;//size of the square
+        //double sizeZ = e.extents.z;//size of the square
+        //Vec3 center = new Vec3(e.center.x, e.center.y, e.center.z) ;
+    	Vec3 center = new Vec3(((LabEntity)  e).getFloorPosition()) ;
+        // for now we set their x and y sizes to be 0 ... so we will be effectively only identify which 
+        // polygon contains the center-point of the entity.
+        // TODO: fix this when we have a more refined nav-graph by NGWY
+        double sizeX = 0 ;
+        double sizeZ = 0 ;
+        
         // WP note:
         // HACK: the original algorithm is problematical because the navigation triangles
         // are too large; so we may end up blocking too large section of navmesh, leaving
@@ -45,26 +55,15 @@ public class EntityNodeIntersection {
         //
         // For example a door center = (9.5,1,6) and its "position" is (10,0,6).
         // so.. in the calculaition below, I add 0.5 to x.center:
-        if (e.tag.equals("Door")) { 
+        //if (e.type.equals("Door")) { 
         	// HACK!
         	//if (sizeX < sizeZ) sizeX = 0d ;
             //else sizeZ = 0d ;
-        	center.x += 0.5 ;
-        	sizeX = 0 ;
-        	sizeZ = 0 ;
-        }
-             
-        //define which objects are blocking
-        String[] whitelistBlockingEntities = new String[]{
-                "Door"
-        };
+        	//center.x += 0.5 ; 
+        	//sizeX = 0 ;
+        	//sizeZ = 0 ;
+        //}
 
-        //check if the entity is blocking
-        boolean valid = false;
-        for(int i = 0; i< whitelistBlockingEntities.length; i++){
-        	if(e.tag.equals(whitelistBlockingEntities[i])) valid = true;
-        }
-        if(!valid) return new Integer[0];
 
         //construct the 4 point rectangle which will form a bounding rectangle on the floor level
         Vec3[] points = new Vec3[]{
@@ -75,7 +74,8 @@ public class EntityNodeIntersection {
         };
 
         //get the y coordinate of the bottom of the entity
-        double entityY = center.y - e.extents.y;
+        //double entityY = center.y - e.extent.y;
+        double entityY = center.y ;
 
         //TODO: once the quad tree is implemented use it here to optimize the speed of the program
         List<Integer> blockedNodes = new LinkedList<>();

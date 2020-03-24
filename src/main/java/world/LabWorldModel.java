@@ -16,6 +16,8 @@ public class LabWorldModel extends WorldModel {
 	 */
 	public int[] visibleNavigationNodes ; 
 	
+	public boolean didNothingPreviousGameTurn ;
+	
 	public LabWorldModel() { super() ; }
 	
 	@Override
@@ -23,6 +25,12 @@ public class LabWorldModel extends WorldModel {
 		return (LabEntity) super.getElement(id) ;
 	}
 
+	/** 
+	 * Return the center position of the agent, with the y-position shifted to the floor level.
+	 */
+	public Vec3 getFloorPosition() {
+		return new Vec3(position.x,position.y -  extent.y, position.z) ;
+	}
 	
    /**
      * To convert various types of LabRecruits legacy-entities to WorldEntities.
@@ -66,7 +74,7 @@ public class LabWorldModel extends WorldModel {
     		type = e.tag ;
     		var lenty = new LabEntity(myid,type,true,true) ;
     		lenty.position = new Vec3(e.position.x, e.position.y, e.position.z) ;
-    		lenty.extent   = new Vec3(0.5, 0, 0.5) ;
+    		lenty.extent   = new Vec3(0.5, 0.2, 0.5) ;
     		lenty.properties.put("isOn", iteractive_e.isActive) ;
     		lenty.timestamp = e.lastUpdated ;
         	return lenty ;
@@ -117,6 +125,7 @@ public class LabWorldModel extends WorldModel {
      * To convert legacy-observation represebting what an agent sees to iv4xr WorldModel (WOM).
      */
     public static LabWorldModel toWorldModel(LegacyObservation obs) {
+    	if (obs==null) return null ;
     	var wom = new LabWorldModel() ;
     	wom.agentId = obs.agentID ;
     	wom.position = new Vec3(obs.agentPosition) ;
@@ -124,6 +133,7 @@ public class LabWorldModel extends WorldModel {
     	wom.extent = new Vec3(0.2,0.75,0.2) ;
     	wom.timestamp = obs.tick ;
     	wom.velocity = obs.velocity ;
+    	wom.didNothingPreviousGameTurn = obs.didNothing ;
     	for(LegacyEntity e : obs.entities) wom.addEntity(toWorldEntity(e)) ;
     	wom.visibleNavigationNodes = obs.navMeshIndices ;
     	return wom ;

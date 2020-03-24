@@ -11,6 +11,7 @@ import helperclasses.datastructures.mesh.TriangleMesh;
 import static org.junit.jupiter.api.Assertions.* ;
 import org.junit.jupiter.api.Test;
 import pathfinding.NavMeshContainer;
+import world.LabEntity;
 import world.LegacyEntity;
 import world.LegacyInteractiveEntity;
 
@@ -47,12 +48,12 @@ public class EntityNodeIntersectionTest {
         TriangleMesh m = setup();
 
         //create the entity
-        LegacyInteractiveEntity e = new LegacyInteractiveEntity();
-        e.isActive = false;
+        var e = new LabEntity("id","bla",false,false);
         //e.center = new Vec3(2,0.5,1);   
-        e.center = new Vec3(1.5,0.5,1); // applying -0.5 on v.x due to the Door-hack.
-        e.extents = new Vec3( 0.2, 0.5, 0.2);
-        e.tag = "Door";
+        //e.center = new Vec3(1.5,0.5,1); // applying -0.5 on v.x due to the Door-hack.
+        e.position = new Vec3(2,0.5,1);   
+        e.extent = new Vec3( 0.2, 0.5, 0.2);
+        //e.tag = "Door";
 
         //get the intersecting nodes
         Integer[] blockedNodes = EntityNodeIntersection.getNodesBlockedByInteractiveEntity(e,m);
@@ -68,12 +69,12 @@ public class EntityNodeIntersectionTest {
         TriangleMesh m = setup();
 
         //create the entity
-        LegacyInteractiveEntity e = new LegacyInteractiveEntity();
-        e.isActive = false;
+        var e = new LabEntity("id","bla",false,false);
         // e.center = new Vec3(5,0.5,5);
-        e.center = new Vec3(4.5,0.5,5); // applying -0.5 on v.x due to the Door-hack.
-        e.extents = new Vec3( 0.2, 0.5, 0.2);
-        e.tag = "Door";
+        //e.center = new Vec3(4.5,0.5,5); // applying -0.5 on v.x due to the Door-hack.
+        e.position = new Vec3(5,0.5,5);
+        e.extent = new Vec3( 0.2, 0.5, 0.2);
+        //e.tag = "Door";
 
         //get the intersecting nodes
         Integer[] blockedNodes = EntityNodeIntersection.getNodesBlockedByInteractiveEntity(e,m);
@@ -88,12 +89,12 @@ public class EntityNodeIntersectionTest {
         TriangleMesh m = setup();
 
         //create the entity
-        LegacyInteractiveEntity e = new LegacyInteractiveEntity();
-        e.isActive = false;
+        var e = new LabEntity("id","bla",false,false);
         //e.center = new Vec3(3,0.5,3);
-        e.center = new Vec3(2.5,0.5,3); // applying -0.5 on v.x due to the Door-hack.
-        e.extents = new Vec3( 0.2, 0.5, 0.2);
-        e.tag = "Door";
+        //e.center = new Vec3(2.5,0.5,3); // applying -0.5 on v.x due to the Door-hack.
+        e.position = new Vec3(3,0.5,3);
+        e.extent = new Vec3( 0.2, 0.5, 0.2);
+        //e.tag = "Door";
 
         //get the intersecting nodes
         Integer[] blockedNodes = EntityNodeIntersection.getNodesBlockedByInteractiveEntity(e,m);
@@ -110,12 +111,12 @@ public class EntityNodeIntersectionTest {
         TriangleMesh m = setup();
 
         //create the entity
-        LegacyInteractiveEntity e = new LegacyInteractiveEntity();
-        e.isActive = false;
+        var e = new LabEntity("id","bla",false,false);
         //e.center = new Vec3(2,3.5,2);
-        e.center = new Vec3(1.5,3.5,2); // applying -0.5 on v.x due to the Door-hack.   
-        e.extents = new Vec3( 0.2, 0.5, 0.2);
-        e.tag = "Door";
+        //e.center = new Vec3(1.5,3.5,2); // applying -0.5 on v.x due to the Door-hack.   
+        e.position = new Vec3(2,3.5,2);
+        e.extent = new Vec3( 0.2, 0.5, 0.2);
+        //e.tag = "Door";
 
         //get the intersecting nodes
         Integer[] blockedNodes = EntityNodeIntersection.getNodesBlockedByInteractiveEntity(e,m);

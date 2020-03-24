@@ -31,9 +31,9 @@ public class TacticLib {
    
 	/**
 	 * This method will return a tactic in which the agent will move towards a given
-	 * position. This action is if the agent believes that there is a path (through
-	 * the navigation-map maintained by the agent) to the entity. Note that in
-	 * reality the entity may turn out to be unreachable. The agent will try to
+	 * position. This action is enabled if the agent believes that there is a path (through
+	 * the navigation-graph maintained by the agent) to the entity. Note that in
+	 * reality the position may turn out to be unreachable. The agent will try to
 	 * detect if it gets stuck (e.g. if the position turns out to be unreachable),
 	 * in which case it will check again if a path to the position exists, according
 	 * to the latest information it has. If so, the agent will follow this path, and
@@ -54,7 +54,7 @@ public class TacticLib {
                         }
                     }
                     //move towards the next way point
-                    LegacyObservation o = belief.moveToward(belief.getNextWayPoint());
+                    LabWorldModel o = belief.moveToward(belief.getNextWayPoint());
                     belief.updateBelief(o);
                     // handle when the agent gets stuck:
                     if (belief.isStuck(position)) {
@@ -62,7 +62,7 @@ public class TacticLib {
                     }
                     return belief;
                 }).on((BeliefState belief) -> {
-                    if(belief.position == null) return null;//guard
+                    if(belief.worldmodel.position == null) return null;//guard
                     return belief.cachedFindPathTo(position);//find a path towards the target position
                 }).lift();
         return move;
@@ -80,11 +80,11 @@ public class TacticLib {
                     if(belief.getGoalLocation().distance(position) > 0.01){
                         belief.mentalMap.applyPath(position, path);
                     }
-                    LegacyObservation o = belief.moveToward(belief.getNextWayPoint());//move towards the next way point
+                    LabWorldModel o = belief.moveToward(belief.getNextWayPoint());//move towards the next way point
                     belief.updateBelief(o);
                     return belief;
                 }).on((BeliefState belief) -> {
-                    if(belief.position == null) return null;//guard
+                    if(belief.worldmodel.position == null) return null;//guard
                     return belief.cachedFindPathTo(position);//find a path towards the target position
                 }).lift();
         return move;
@@ -93,7 +93,7 @@ public class TacticLib {
     // to be called when the agent seems to get stuck; this will try to unstuck the
     // agent in the next few updates:
     private static void tryToUnstuck(BeliefState belief) {
-    	System.out.println("#### STUCK @" + belief.position + ", V=" + belief.derived_lastNonZeroXZVelocity()) ;
+    	System.out.println("#### STUCK @" + belief.worldmodel.position + ", V=" + belief.derived_lastNonZeroXZVelocity()) ;
     	if (belief.atDoor() != null) {
     		// if the agent is stuck at a door, that is probably because the door is closed,
     		// and the agent's belief is outdated. We will clear the agent goal-
@@ -140,7 +140,7 @@ public class TacticLib {
     			    System.out.println("#### invoking forcePastExploreBlindCorner") ;
     			    System.out.println("#### agent velocity " + belief.derived_lastNonZeroXZVelocity()) ;
     			    System.out.println("#### unstuck option " + unstuckPosition) ;  
-    			    LegacyObservation o ;
+    			    LabWorldModel o ;
     			    if (unstuckPosition!=null)
     			    	o = belief.moveToward(unstuckPosition) ;
     			    else 
@@ -180,7 +180,7 @@ public class TacticLib {
                             belief.mentalMap.applyPath(p.object1, p.object2);
                         }
                     }
-                    LegacyObservation o = belief.moveToward(belief.getNextWayPoint());//move towards the next way point
+                    LabWorldModel o = belief.moveToward(belief.getNextWayPoint());//move towards the next way point
                     belief.updateBelief(o);
                     // handle when the agent gets stuck:
                     if (belief.isStuck(p.object1)) {
@@ -188,20 +188,16 @@ public class TacticLib {
                     }
                     return belief;
                 }).on((BeliefState belief) -> {
-                	if(belief.position == null) return null ;
-                    var e = belief.getEntity(id);
+                	if(belief.worldmodel.position == null) return null ;
+                    var e = (LabEntity) belief.getEntity(id);
                     if (e == null) return null ; //guard
-                    Vec3[] path = belief.cachedFindPathTo(e.position);
+                    Vec3[] path = belief.cachedFindPathTo(e.getFloorPosition());
                     if(path == null) return null;//if there is no path return null
-                    return new Tuple(e.position, path);//return the path finding information
+                    return new Tuple(e.getFloorPosition(), path);//return the path finding information
                 }) ;
         return move;
     }
     
-    void calculateDoorAlternativePositions(LegacyInteractiveEntity door) {
-    	var center = door.center ;
-    	boolean onXdirection = door.extents.x > door.extents.z ;
-    }
 
     /**
      * Send an interact command if the agent is close enough
@@ -211,11 +207,11 @@ public class TacticLib {
     public static Tactic interact(String objectID) {
         Tactic interact = action("Interact").
                 do1((BeliefState belief) -> {
-                    LegacyObservation o = belief.env().interactWith(belief.id, objectID);
+                	LabWorldModel o = belief.env().interactWith(belief.id, objectID);
                     belief.updateBelief(o);
                     return belief;
                 })
-                .on_((BeliefState belief) -> belief.position != null && belief.canInteractWith(objectID))
+                .on_((BeliefState belief) -> belief.worldmodel.position != null && belief.isWIthinInteractionDistanceWith(objectID))
                 .lift();
         return interact;
     }
@@ -228,7 +224,7 @@ public class TacticLib {
         //this is a wait action which will allow the agent to retrieve an observation
         Tactic observe = action("Observe")
                 .do1((BeliefState belief) -> {
-                    LegacyObservation o = belief.env().observe(belief.id);
+                	LabWorldModel o = belief.env().observe(belief.id);
                     belief.updateBelief(o);
                     return belief;
                 }).lift();
@@ -239,10 +235,10 @@ public class TacticLib {
         //this is a wait action which will allow the agent to retrieve an observation
         Tactic observe = action("Observe once")
                 .do1((BeliefState belief) -> {
-                    LegacyObservation o = belief.env().observe(belief.id);
+                	LabWorldModel o = belief.env().observe(belief.id);
                     belief.updateBelief(o);
                     return belief;
-                }).on((BeliefState b) -> !b.didNothingPreviousTurn).lift();
+                }).on((BeliefState b) -> !b.worldmodel.didNothingPreviousGameTurn).lift();
         return observe;
     }
 
@@ -255,7 +251,7 @@ public class TacticLib {
         return action("Share memory")
                 . do1((BeliefState belief)-> {
                     //do an observation
-                    LegacyObservation o = belief.env().observe(belief.id);
+                	LabWorldModel o = belief.env().observe(belief.id);
                     belief.updateBelief(o);
 
                     //send the message
@@ -283,7 +279,7 @@ public class TacticLib {
                     }
 
                     //do an observation
-                    LegacyObservation o = belief.env().observe(belief.id);
+                    LabWorldModel o = belief.env().observe(belief.id);
                     belief.updateBelief(o);
                     return belief;
                 })
@@ -301,7 +297,7 @@ public class TacticLib {
         return action("Send ping")
                 . do1((BeliefState belief)-> {
                     //do an observation
-                    LegacyObservation o = belief.env().observe(belief.id);
+                	LabWorldModel o = belief.env().observe(belief.id);
                     belief.updateBelief(o);
 
                     //send the message
@@ -324,7 +320,7 @@ public class TacticLib {
                     if(m != null) belief.receivedPing = true;
 
                     //do an observation
-                    LegacyObservation o = belief.env().observe(belief.id);
+                    LabWorldModel o = belief.env().observe(belief.id);
                     belief.updateBelief(o);
 
                     //return whether we have received an observation yes or no
@@ -341,7 +337,7 @@ public class TacticLib {
     public static Tactic explore() {
         var explore = action("Explore")
                 .do2((BeliefState belief) -> (Tuple<Vec3, Vec3[]> p) -> {
-                	//System.out.println("### tactic explore") ;
+                	//System.out.println("### tactic explore to " + p) ;
                     if(belief.getGoalLocation() != null){
                     	// reset the path if the goal has changed:
                     	if(belief.getGoalLocation().distance(p.object1) > 0.01){
@@ -364,23 +360,23 @@ public class TacticLib {
                         //}
                     }
                     //move towards the next way point
-                    LegacyObservation o = belief.moveToward(belief.getNextWayPoint());
+                    LabWorldModel o = belief.moveToward(belief.getNextWayPoint());
                     belief.updateBelief(o);
                     return belief;
                 }).on((BeliefState belief) -> {
                     //guard if the position of the agent is not known
-                    if(belief.position == null) return null;
+                    if(belief.worldmodel.position == null) return null;
                     //get the location of the closest unexplored node
-                    Vec3 g = belief.getUnknownNeighbourClosestTo(belief.position, belief.position);
+                    Vec3 g = belief.getUnknownNeighbourClosestTo(belief.worldmodel.getFloorPosition(), belief.worldmodel.getFloorPosition());
                     if(g == null) {
-                    	System.out.println("### cannot find new node; agent is @" + belief.position) ;
+                    	System.out.println("### cannot find new node; agent is @" + belief.worldmodel.position) ;
                     	return null;
                     }
 
                     //check if we can find a path
                     Vec3[] path = belief.cachedFindPathTo(g);
                     if(path == null) {
-                    	System.out.println("### cannot find path; agent is @" + belief.position) ;
+                    	System.out.println("### cannot find path; agent is @" + belief.worldmodel.position) ;
                     	return null;
                     }
                     //System.out.println("### find unexplored " + g + ", current pos: " + belief.position) ;

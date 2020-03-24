@@ -11,6 +11,7 @@ import logger.JsonLoggerInstrument;
 import nl.uu.cs.aplib.Logging;
 import nl.uu.cs.aplib.mainConcepts.*;
 import world.BeliefState;
+import world.LabEntity;
 
 import static agents.TestSettings.*;
 import static nl.uu.cs.aplib.AplibEDSL.*;
@@ -79,11 +80,11 @@ public class Explore_2_Test {
         while (g.getStatus().inProgress()) {
             agent.update();
             System.out.println("*** " + i + ", " + agent.getState().id 
-            		           + " @" + agent.getState().position
+            		           + " @" + agent.getState().worldmodel.position
             		           + " V=" + agent.getState().derivedVelocity()) ;
             Thread.sleep(50);
             i++ ;
-            if (i>90) {
+            if (i>100) {
             	break ;
             }
         }
@@ -91,8 +92,8 @@ public class Explore_2_Test {
         g.printGoalStructureStatus();
         
         assertTrue(g.getStatus().success()) ;
-        var agent_p  = agent.getState().position ;
-        var button_p = agent.getState().getEntity("button1").position ;
+        var agent_p  = agent.getState().worldmodel.getFloorPosition() ;
+        var button_p = ((LabEntity) agent.getState().getEntity("button1")).getFloorPosition() ;
         assertTrue(agent_p.distance(button_p) < 0.5) ;
 
         if (!environment.close())

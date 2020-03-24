@@ -16,6 +16,7 @@ import agents.tactics.TacticLib;
 import environments.EnvironmentConfig;
 import environments.LabRecruitsEnvironment;
 import eu.iv4xr.framework.mainConcepts.TestDataCollector;
+import eu.iv4xr.framework.world.WorldEntity;
 import helperclasses.datastructures.linq.QArrayList;
 import logger.JsonLoggerInstrument;
 import nl.uu.cs.aplib.mainConcepts.Environment;
@@ -99,14 +100,14 @@ public class RoomReachabilityTest {
 	        	GoalLib.entityInvariantChecked(testAgent,
 	            		"door1", 
 	            		"door1 should be open", 
-	            		(LegacyEntity e) -> (e instanceof LegacyInteractiveEntity) && ((LegacyInteractiveEntity) e).isActive),
+	            		(WorldEntity e) -> e.getBooleanProperty("isOpen")),
 	        	
 	        	GoalLib.entityIsInteracted("button3"),
 	        	GoalLib.entityIsInRange("door2").lift(),
 	        	GoalLib.entityInvariantChecked(testAgent,
 	            		"door2", 
 	            		"door2 should be open", 
-	            		(LegacyEntity e) -> (e instanceof LegacyInteractiveEntity) && ((LegacyInteractiveEntity) e).isActive),
+	            		(WorldEntity e) -> e.getBooleanProperty("isOpen")),
 	        	GoalLib.entityIsInteracted("button4"),
 	        	//GoalLib.entityIsInRange("button3").lift(),
 	        	//GoalLib.entityIsInRange("door1").lift(),
@@ -114,13 +115,13 @@ public class RoomReachabilityTest {
 	        	GoalLib.entityInvariantChecked(testAgent,
 	            		"door1", 
 	            		"door1 should be open", 
-	            		(LegacyEntity e) -> (e instanceof LegacyInteractiveEntity) && ((LegacyInteractiveEntity) e).isActive),
+	            		(WorldEntity e) -> e.getBooleanProperty("isOpen")),
 	        	//GoalLib.entityIsInRange("button1").lift(),
 	        	GoalLib.entityIsInRange_smarter("door3"),
 	        	GoalLib.entityInvariantChecked(testAgent,
 	            		"door3", 
 	            		"door3 should be open", 
-	            		(LegacyEntity e) -> (e instanceof LegacyInteractiveEntity) && ((LegacyInteractiveEntity) e).isActive)
+	            		(WorldEntity e) -> e.getBooleanProperty("isOpen"))
 	        );
 	        // attaching the goal and testdata-collector
 	        var dataCollector = new TestDataCollector();
@@ -134,7 +135,7 @@ public class RoomReachabilityTest {
 	        int i = 0 ;
 	        // keep updating the agent
 	        while (testingTask.getStatus().inProgress()) {
-	        	System.out.println("*** " + i + ", " + testAgent.getState().id + " @" + testAgent.getState().position) ;
+	        	System.out.println("*** " + i + ", " + testAgent.getState().id + " @" + testAgent.getState().worldmodel.position) ;
 	            Thread.sleep(50);
 	            i++ ; 
 	        	testAgent.update();

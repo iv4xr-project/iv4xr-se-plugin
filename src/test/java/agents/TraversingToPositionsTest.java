@@ -64,13 +64,17 @@ public class TraversingToPositionsTest {
         // Make the agent reach each positon sequentially.
         var g = SEQ(GoalLib.justObserve().lift(),
         		    GoalLib.positionsVisited(p1),
-        		    GoalLib.invariantChecked(agent,"p1 is reached", (BeliefState s) -> s.position.distance(p1) < 0.5), 
+        		    GoalLib.invariantChecked(agent,"p1 is reached", 
+        		    		(BeliefState s) -> s.worldmodel.getFloorPosition().distance(p1) < 0.5), 
         		    GoalLib.positionsVisited(p2),
-        		    GoalLib.invariantChecked(agent,"p2 is reached", (BeliefState s) -> s.position.distance(p2) < 0.5), 
+        		    GoalLib.invariantChecked(agent,"p2 is reached", 
+        		    		(BeliefState s) -> s.worldmodel.getFloorPosition().distance(p2) < 0.5), 
         		    GoalLib.positionsVisited(p3),
-        		    GoalLib.invariantChecked(agent,"p3 is reached", (BeliefState s) -> s.position.distance(p3) < 0.5), 
+        		    GoalLib.invariantChecked(agent,"p3 is reached", 
+        		    		(BeliefState s) -> s.worldmodel.getFloorPosition().distance(p3) < 0.5), 
         		    GoalLib.positionsVisited(p4),
-        		    GoalLib.invariantChecked(agent,"p4 is reached", (BeliefState s) -> s.position.distance(p4) < 0.5) 
+        		    GoalLib.invariantChecked(agent,"p4 is reached", 
+        		    		(BeliefState s) -> s.worldmodel.getFloorPosition().distance(p4) < 0.5) 
         		);
         
         var dataCollector = new TestDataCollector() ;
@@ -80,7 +84,7 @@ public class TraversingToPositionsTest {
         while (g.getStatus().inProgress()) {
             agent.update();
             i++ ;
-            System.out.println("*** " + i + ", " + agent.getState().id + " @" + agent.getState().position) ;
+            System.out.println("*** " + i + ", " + agent.getState().id + " @" + agent.getState().worldmodel.position) ;
             Thread.sleep(30);
         }
         g.printGoalStructureStatus();

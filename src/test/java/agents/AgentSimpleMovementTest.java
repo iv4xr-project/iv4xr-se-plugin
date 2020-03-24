@@ -80,7 +80,7 @@ public class AgentSimpleMovementTest {
 
             // only updates in progress
             for(var agent : agents.where(agent -> !agent.success())){
-            	System.out.println("*** " + agent.getState().id + " @" + agent.getState().position) ;
+            	System.out.println("*** " + agent.getState().id + " @" + agent.getState().worldmodel.position) ;
                 agent.update();
                 if(agent.success()) agent.printStatus();
             }
@@ -92,14 +92,18 @@ public class AgentSimpleMovementTest {
             	break ;
             }
         }
-        System.out.println("*** Distance " + ta0.getState().id + " to dest:" + ta0.getState().position.distance(p0)) ;
-        System.out.println("*** Distance " + ta1.getState().id + " to dest:" + ta1.getState().position.distance(p1)) ;
-        System.out.println("*** Distance " + ta2.getState().id + " to dest:" + ta2.getState().position.distance(p2)) ;
-        System.out.println("*** Distance " + ta3.getState().id + " to dest:" + ta3.getState().position.distance(p3)) ;
-        assertTrue(ta0.getState().position.distance(p0) < 0.5) ;
-        assertTrue(ta1.getState().position.distance(p1) < 0.5) ;
-        assertTrue(ta2.getState().position.distance(p2) < 0.5) ;
-        assertTrue(ta3.getState().position.distance(p3) < 0.5) ;
+        System.out.println("*** Distance " + ta0.getState().id + " to dest:" 
+                           + ta0.getState().worldmodel.getFloorPosition().distance(p0)) ;
+        System.out.println("*** Distance " + ta1.getState().id + " to dest:" 
+                           + ta1.getState().worldmodel.getFloorPosition().distance(p1)) ;
+        System.out.println("*** Distance " + ta2.getState().id + " to dest:" 
+                           + ta2.getState().worldmodel.getFloorPosition().distance(p2)) ;
+        System.out.println("*** Distance " + ta3.getState().id + " to dest:" 
+                           + ta3.getState().worldmodel.getFloorPosition().distance(p3)) ;
+        assertTrue(ta0.getState().worldmodel.getFloorPosition().distance(p0) < 0.5) ;
+        assertTrue(ta1.getState().worldmodel.getFloorPosition().distance(p1) < 0.5) ;
+        assertTrue(ta2.getState().worldmodel.getFloorPosition().distance(p2) < 0.5) ;
+        assertTrue(ta3.getState().worldmodel.getFloorPosition().distance(p3) < 0.5) ;
    
 	    if (!environment.close())
 	        throw new InterruptedException("Unity refuses to close the Simulation!");

@@ -9,6 +9,7 @@ package world;
 
 import communication.agent.AgentCommandType;
 import environments.LabRecruitsEnvironment;
+import eu.iv4xr.framework.world.WorldEntity;
 import helperclasses.Intersections.EntityNodeIntersection;
 import helperclasses.datastructures.Vec3;
 import helperclasses.datastructures.linq.QArrayList;
@@ -26,21 +27,24 @@ import java.util.stream.Collectors;
 public class BeliefState extends StateWithMessenger {
 
     public String id;
-    public Vec3 position;
-    public Vec3 velocity;
+    //public Vec3 position;
+    //public Vec3 velocity;
+    
     /**
-     * In-game entities that the agent is aware of. Represented as a mapping from
-     * their ids.
+     * To keep track entities the agent has knowledge about (not necessarily up to date knowledge).
      */
-    private HashMap<String, LegacyEntity> entities = new HashMap<>();
-    //private HashMap<String, DynamicEntity> dynamicEntities = new HashMap<>();
-    //private HashMap<String, InteractiveEntity> interactiveEntities = new HashMap<>();
+    public LabWorldModel worldmodel = new LabWorldModel() ;
+
+    //private HashMap<String, LegacyEntity> entities = new HashMap<>();
+    
+    /**
+     * This keep track of the world's map that is known (has been explored) by the agent.
+     */
     public MentalMap mentalMap;
 
-    public int lastUpdated = -1;
-    public boolean didNothingPreviousTurn;
-
-    
+    //public int lastUpdated = -1;
+    //public boolean didNothingPreviousTurn;
+  
     public Boolean receivedPing = false;//store whether the agent has an unhandled ping
 
     
@@ -54,36 +58,13 @@ public class BeliefState extends StateWithMessenger {
 
     public BeliefState() { }
 
-    public Collection<LegacyEntity> knownEntities() { return entities.values(); }
-    public Collection<LegacyDynamicEntity> knownDynamicEntities() { 
-    	return entities.values().stream()
-    			. filter(e -> e instanceof LegacyDynamicEntity)
-    			. map(e -> (LegacyDynamicEntity) e)
-    			. collect(Collectors.toList()) ;
-    }
+    public Collection<WorldEntity> knownEntities() { return worldmodel.elements.values(); }
     
-    public Collection<LegacyInteractiveEntity> knownInteractiveEntities() { 
-    	return entities.values().stream()
-    			. filter(e -> e instanceof LegacyInteractiveEntity)
-    			. map(e -> (LegacyInteractiveEntity) e)
-    			. collect(Collectors.toList()) ;
-    }
     
-    public boolean isDoor(LegacyEntity e) {
-    	return (e != null && e instanceof LegacyInteractiveEntity) && e.tag.equals("Door") ;
-    }
-    
-    /**
-     * Check if the entity is a button. Currently it is assumed to be a button if ... 
-     * its id starts with b or B :|
-     */
-    public boolean isButton(LegacyEntity e) {
-    	return (e !=null && e instanceof LegacyInteractiveEntity) && (e.id.startsWith("b") || e.id.startsWith("B")) ;
-    }
     
     // lexicographically comparing e1 and e2 based on its age and distance:
-    private int compareAgeDist(LegacyEntity e1, LegacyEntity e2) {
-    	var c1 = Integer.compare(age(e1),age(e2)) ;
+    private int compareAgeDist(WorldEntity e1, WorldEntity e2) {
+    	var c1 = Long.compare(age(e1),age(e2)) ;
     	if (c1 != 0) return c1 ;
     	return Double.compare(distanceTo(e1),distanceTo(e2)) ;
     }
@@ -91,9 +72,9 @@ public class BeliefState extends StateWithMessenger {
     /**
      * Return all the buttons in the agent's belief.
      */
-    public List<LegacyInteractiveEntity> knownButtons() { 
-    	return knownInteractiveEntities().stream()    	
-    			. filter(e -> isButton(e))
+    public List<WorldEntity> knownButtons() { 
+    	return knownEntities().stream()    	
+    			. filter(e -> e.type.equals("Switch"))
     			. collect(Collectors.toList()) ;		
     }
 
@@ -101,7 +82,7 @@ public class BeliefState extends StateWithMessenger {
      * Return all the buttons in the agent's belief, sorted in ascending age
      * (so, from the most recently updated to the oldest) and distance.
      */
-    public List<LegacyInteractiveEntity> knownButtons_sortedByAgeAndDistance() { 
+    public List<WorldEntity> knownButtons_sortedByAgeAndDistance() { 
     	var buttons = knownButtons() ;
     	buttons.sort((b1,b2) -> compareAgeDist(b1,b2)) ;
     	return buttons ;
@@ -110,27 +91,27 @@ public class BeliefState extends StateWithMessenger {
     /**
      * Return all the doors in the agent's belief.
      */
-    public List<LegacyInteractiveEntity> knownDoors() { 
-    	return knownInteractiveEntities().stream()    	
-    			. filter(e -> isDoor(e))
+    public List<WorldEntity> knownDoors() { 
+    	return knownEntities().stream()    	
+    			. filter(e -> e.type.equals("Door"))
     			. collect(Collectors.toList()) ;
     }
 
-    public List<LegacyInteractiveEntity> knownDoors_sortedByAgeAndDistance() { 
+    public List<WorldEntity> knownDoors_sortedByAgeAndDistance() { 
     	var doors = knownDoors() ;
     	doors.sort((b1,b2) -> compareAgeDist(b1,b2)) ;
     	return doors ;
     }
     
     /**
-     * Return how many update rounds in the past, since the entity's last update.
+     * Return how much time in the past, since the entity's last update.
      */
-    public Integer age(LegacyEntity e) {
+    public Long age(WorldEntity e) {
     	if (e==null) return null ;
-    	return this.lastUpdated - e.lastUpdated ;
+    	return this.worldmodel.timestamp - e.timestamp ;
     }
     
-    public Integer age(String id) { return age(getEntity(id)) ; }
+    public Long age(String id) { return age(getEntity(id)) ; }
     
     /**
      * Like derivedLastVelocity(), but if it tries to get the last known
@@ -169,60 +150,43 @@ public class BeliefState extends StateWithMessenger {
         return nodesBlockedByEntity.getOrDefault(id, new Integer[]{});
     }
 
-    /**
-     * True if an entity with the given id exists in the agent's belief.
-     */
-    public boolean entityExists(String id) {
-        return getEntity(id) != null ;
-    }
- 
-    public LegacyEntity getEntity(String id) {
-        return entities.getOrDefault(id, null);
-    }
-    public LegacyInteractiveEntity getInteractiveEntity(String id){
-    	return (LegacyInteractiveEntity) getEntity(id) ;
-    }
-    public LegacyDynamicEntity getDynamicEntity(String id){
-    	return (LegacyDynamicEntity) getEntity(id) ;
+    public WorldEntity getEntity(String id) { 
+        return worldmodel.getElement(id) ;
     }
 
+
     // predicates
-    public boolean evaluateEntity(String id, Predicate<LegacyEntity> predicate) {
-    	LegacyEntity e  = getEntity(id) ;
+    public boolean evaluateEntity(String id, Predicate<WorldEntity> predicate) {
+    	WorldEntity e  = getEntity(id) ;
     	if (e==null) return false ;
         return predicate.test(e);
-    }
-    
-    public boolean evaluateInteractiveEntity(String id, Predicate<LegacyInteractiveEntity> predicate){
-    	return evaluateEntity(id, e -> 
-    	e instanceof LegacyInteractiveEntity && predicate.test((LegacyInteractiveEntity) e)) ;
     }
     
     /***
      * Check if a button is active (in its "on" state).
      */
-    public boolean isOn(LegacyInteractiveEntity button) {
-    	return button!= null && button.isActive ;
+    public boolean isOn(WorldEntity button) {
+    	return button!= null && button.getBooleanProperty("isOn") ;
     }
 
-    public boolean isOn(String id) { return isOn(getInteractiveEntity(id)) ; }
+    public boolean isOn(String id) { return isOn(getEntity(id)) ; }
     
     /**
      * Check if a door is active/open.
      */
-    public boolean isOpen(LegacyInteractiveEntity door) {
-    	return door != null && door.isActive ;
+    public boolean isOpen(WorldEntity door) {
+    	return door != null && door.getBooleanProperty("isOpen") ;
     }
 
-    public boolean isOpen(String id) { return isOpen(getInteractiveEntity(id)) ; }
+    public boolean isOpen(String id) { return isOpen(getEntity(id)) ; }
     
 	/**
 	 * Calculate the straight line distance from the agent to an entity, without
 	 * regard if the entity is actually reachable.
 	 */
-    public double distanceTo(LegacyEntity e) {
+    public double distanceTo(WorldEntity e) {
     	if (e==null) return Double.POSITIVE_INFINITY ;
-    	return position.distance(e.position) ;
+    	return worldmodel.position.distance(e.position) ;
     }
     
     public double distanceTo(String id) { return distanceTo(getEntity(id)) ; }
@@ -232,9 +196,9 @@ public class BeliefState extends StateWithMessenger {
 	 * entity e. If so, a path is returned, and else null. Do note that
 	 * path-checking can be expensive.
 	 */
-    public Vec3[] canReach(LegacyEntity e) {
+    public Vec3[] canReach(WorldEntity e) {
     	if (e==null) return null ;
-    	return canReach(e.position) ;
+    	return canReach(((LabEntity) e).getFloorPosition()) ;
     }
     
 	/**
@@ -255,24 +219,16 @@ public class BeliefState extends StateWithMessenger {
 	 */ 
     public Vec3[] canReach(String id) { return canReach(getEntity(id)) ; }
     
-    
-    // add
-    private void addEntity(LegacyEntity newEntity){
-        // set the right tick ... so the new entity will get the most recent timestamp:
-        newEntity.lastUpdated = this.lastUpdated;
-        // add to the entity list
-        entities.put(newEntity.id, newEntity);
-    }
 
 	/**
 	 * Invoke the mental map to find a path. This triggers a fresh path calculation
 	 * to make sure that the latest belief is used.
-	 *
+	 * 
 	 * @param goal: The position where the agent wants to move to.
 	 * @return The path found
 	 */
     public Vec3[] findPathTo(Vec3 q) {
-        return mentalMap.navigateForce(position, q, blockedNodes);
+        return mentalMap.navigateForce(worldmodel.getFloorPosition(), q, blockedNodes);
     }
 
     /**
@@ -282,15 +238,15 @@ public class BeliefState extends StateWithMessenger {
      * @return The path found or the already stored path if the goal location is equal to the previous goal location
      */
     public Vec3[] cachedFindPathTo(Vec3 q) {
-        return mentalMap.navigate(position, q, blockedNodes);
+        return mentalMap.navigate(worldmodel.getFloorPosition(), q, blockedNodes);
     }
     
     /**
      * This method will make the agent move a certain (small) max distance toward the given position.
      */
-    public LegacyObservation moveToward(Vec3 q) {
-    	var o = env().moveToward(this.id, this.position, q) ;
-    	recentPositions.add(o.agentPosition) ;
+    public LabWorldModel moveToward(Vec3 q) {
+    	var o = env().moveToward(this.id, worldmodel.getFloorPosition(), q) ;
+    	recentPositions.add(o.getFloorPosition()) ;
     	// keep track the last FOUR positions
     	if (recentPositions.size()>4) recentPositions.remove(0) ;
     	return o ;
@@ -309,7 +265,7 @@ public class BeliefState extends StateWithMessenger {
     	Vec3 p0 = recentPositions.get(N-3) ;
     	return p0.distance(recentPositions.get(N-2)) <= 0.05
     		   &&  p0.distance(recentPositions.get(N-1)) <= 0.05 ;
-         //    && p0.distance(q) > 1.0 ;
+         //    && p0.distance(q) > 1.0 ;   should first translate p0 to the on-floor coordinate!
     }
     
     /**
@@ -324,10 +280,10 @@ public class BeliefState extends StateWithMessenger {
      * Check if the agent is located close to a door. If so, the door is returned, and otherwise null.
      * "Close" is being defined as within a distance of 0.6 unit.
      */
-    public LegacyInteractiveEntity atDoor() {
+    public WorldEntity atDoor() {
     	var doors = knownDoors() ;
     	for (var d : doors) {
-    		if (position.distance(d.position) <= CLOSE_RANGE) return d ;
+    		if (worldmodel.position.distance(d.position) <= CLOSE_RANGE) return d ;
     	}
     	return null ;
     }
@@ -373,13 +329,15 @@ public class BeliefState extends StateWithMessenger {
     	// System.out.println("#### calling unstuck()") ;
     	// try E/W unstuck first:
     	if (x_orientation != 0) {
-    		var p = new Vec3(position.x + unstuck_distance*x_orientation, position.y, position.z) ;
+    		var p = worldmodel.getFloorPosition() ;
+    		p.x += unstuck_distance*x_orientation ;
     		if (mentalMap.getContainingPolygon(p) != null) return p ; 
         	//if (mentalMap.pathFinder.graph.vecToNode(p) != null) return p ;
     	}
     	// try N/S unstuck:
     	if (z_orientation != 0) {
-    		var p = new Vec3(position.x, position.y, position.z + unstuck_distance*z_orientation) ;
+    		var p = worldmodel.getFloorPosition() ;
+    		p.z = unstuck_distance*z_orientation ;
         	if (mentalMap.getContainingPolygon(p) != null) return p ; 
         	//if (mentalMap.pathFinder.graph.vecToNode(p) != null) return p ;	
     	}
@@ -411,58 +369,74 @@ public class BeliefState extends StateWithMessenger {
      *
      * @param observation: The observation used to update the belief state.
      */
-    public void updateBelief(LegacyObservation observation) {
-
+    public void updateBelief(LabWorldModel observation) {
         //check if the observation is not null
         if (observation == null) throw new IllegalArgumentException("Null observation received");
+           
+        // increase the time stamp:
+        worldmodel.increaseTimeStamp() ;
         
-        didNothingPreviousTurn = observation.didNothing;
-        position = observation.agentPosition;
-        velocity = observation.velocity;
-        lastUpdated++;
+        // odd the newly seen entities, or incorporate their change:
+        List<WorldEntity> freshOrChangedEntities = new LinkedList<>() ;
+        for(WorldEntity e : observation.elements.values()) {
+        	var f = worldmodel.addEntity(e) ;
+        	if (e==f) {
+        		// so.. e was added; so it is fresh or changes
+        		freshOrChangedEntities.add(e) ;
+        	}
+        }
+        // we will now swap the world models:
+        observation.timestamp = worldmodel.timestamp ;
+        observation.elements = worldmodel.elements ;
+        worldmodel = observation ;
         
-        // check if some interactive entities has changed state; need to check this here before
-        // updating their state into this state (below)
-        var someInteractivityEntity_hasChangedState = anyInteractiveEntityChanged(observation) ;
-
-        for(var e : observation.entities){
-            this.addEntity(e); // handle updates / new entities
-            
-            // WP note:
-            // For each entity, below we calculate which navigation nodes which would be
-            // blocked by the entity. However, we should keep in mind that an open door
-            // The fragment below call EntityNodeIntersection.getNodesBlockedByInteractiveEntity
-            // which in turn decide, based on the entity-type/tag if the entity is blocking.
-            // Currently only doors are defined to be blocking. E.g. buttons are not categorized
-            // as blocking.  --> this logic is shaky!!
-            // 
-            // The logic with open doors (which should be unblocking) is implemented
-            // as a post-processing in the call to recalculateBlockedNodes()
-            // a bit further below.
-            
-            //if (e instanceof InteractiveEntity && !interactiveEntityExists(e.id)) 
-            if (e instanceof LegacyInteractiveEntity) {
-                    	
-            	Integer[] blocked = EntityNodeIntersection.getNodesBlockedByInteractiveEntity((LegacyInteractiveEntity) e, mentalMap.pathFinder.navmesh); 
-            	//System.out.println("### calculating blocked nodes by entity " + e.id +  ": " + blocked.length) ;
-            
-                nodesBlockedByEntity.put(e.id,blocked) ;
-            }
+        // recalculating navigation nodes that become blocked or unblocked:
+        boolean refreshNeeded = false ;
+        for (var e : freshOrChangedEntities) {
+        	switch(e.type) {
+        	  case "Door" : {
+        	 	 var blocked = nodesBlockedByEntity.get(e.id) ;
+        		 if (blocked==null && e.isBlocking()) {
+        			// ADD blocked nodes!
+        			blocked = EntityNodeIntersection.getNodesBlockedByInteractiveEntity(e, mentalMap.pathFinder.navmesh); 
+        			// if (blocked.length > 0 ) don't bother with this guard.. more efficient without
+        			nodesBlockedByEntity.put(e.id,blocked) ; 
+        			refreshNeeded = true ;
+        		 } 
+        		 else if (blocked!=null && ! e.isBlocking())  {
+        			 // the door is open, clear the blocked nodes!
+        		 	nodesBlockedByEntity.remove(e.id) ;
+        		 	refreshNeeded = true ;
+        		 }
+        		 else {
+        			// else no need to change 
+        		 }
+        		 break ;
+        	  }
+        	  case "ColorScreen" : // fall through
+        	  case "Goal" : {
+        		 var blocked = nodesBlockedByEntity.get(e.id) ;
+         		 if (blocked==null) {
+         			// ADD blocked nodes!
+         			blocked = EntityNodeIntersection.getNodesBlockedByInteractiveEntity(e, mentalMap.pathFinder.navmesh); 
+         			nodesBlockedByEntity.put(e.id,blocked) ;
+         			refreshNeeded = true ;
+         		 } 
+         		 else {
+         			 // no need to change
+         		 }
+         		 break ;
+        	  }
+        	}
         }
-
-        //update the seen nodes and position if there exists have a mental map
-        if(mentalMap != null) {
-            mentalMap.updateKnownVertices(observation.navMeshIndices);
-            mentalMap.updateCurrentWayPoint(position);
+        if (refreshNeeded) {
+        	blockedNodes.clear(); 
+            for(var blocked: nodesBlockedByEntity.values()) Collections.addAll(blockedNodes,blocked); 
         }
-
-        //check if we need to recalculate the nodes
-        //if(anyInteractiveEntityChanged(observation))
-        if (someInteractivityEntity_hasChangedState)	{
-        	//System.out.println("### interactive state change detected.!") ;
-            //if the blocked nodes needs updating, do so
-            recalculateBlockedNodes();
-        }
+                  
+        //add the newly found part, if there is any, of the world map to the mental-map
+        mentalMap.updateKnownVertices(worldmodel.visibleNavigationNodes);
+        mentalMap.updateCurrentWayPoint(worldmodel.getFloorPosition());
     }
 
     /**
@@ -480,73 +454,20 @@ public class BeliefState extends StateWithMessenger {
      * @param id: the object to look for.
      * @return whether the object is within reach of the agent.
      */
-    public boolean canInteractWith(String id) {
-    	var e = getInteractiveEntity(id) ;
+    public boolean isWIthinInteractionDistanceWith(String id) {
+    	var e = getEntity(id) ;
     	if (e==null) return false ;
-        return e.canInteract(position);
+        return e.isWithinInteractionDistance(worldmodel.getFloorPosition());
     }
 
-    /**
-     * update the blocked nodes set according to the nodes blocked by entity list
-     */
-    private void recalculateBlockedNodes(){
-        blockedNodes = new HashSet<>();
-
-        //iterate over all key value pairs
-        for(var kv: nodesBlockedByEntity.entrySet()) {
-            // decide which entity can be blocking; if so add its blocked nodes.
-        	// Currently only closed doors are blocking
-        	LegacyInteractiveEntity ie_ = getInteractiveEntity(kv.getKey()) ;
-        	//System.out.println("xxxx "  + ie_.id + ", tag:" + ie_.tag + ", active: " + ie_.isActive) ;
-            
-            if(evaluateInteractiveEntity(kv.getKey(), ie -> ie.tag.equals("Door") && !ie.isActive)) {
-            	Collections.addAll(blockedNodes, kv.getValue());
-            }
-        }
-    }
-
-    /**
-     * Check if any interactive entity has changed status
-     * @return A boolean whether a recalculate is needed
-     */
-    private boolean anyInteractiveEntityChanged(LegacyObservation o){
-        //loop over the interactive entities
-        for (var newEntity: getInteractables(o.entities)) {
-            //check if there is an update of an entity
-        	var originalEntity = getInteractiveEntity(newEntity.id) ;
-        	if (originalEntity == null) return true ;
-        	if (originalEntity.isActive != newEntity.isActive) return true ;
-        	// FIX
-        	// This orginal code is incorrect! If the new entity did not exists in the belief, it will be marked as unchanged:
-            //if(evaluateInteractiveEntity(newEntity.id, (InteractiveEntity originalEntity) -> originalEntity.isActive != newEntity.isActive ))
-            //    return true;
-        }
-        return false;
-    }
-
-    private Iterable<LegacyInteractiveEntity> getInteractables(List<LegacyEntity> list){
-        return new QArrayList<>(list)
-                .where((LegacyEntity e) -> e instanceof LegacyInteractiveEntity)
-                .select((LegacyEntity e) -> (LegacyInteractiveEntity) e);
-    }
-    
     public static final float IN_RANGE = 0.4f ;
     public static final float CLOSE_RANGE = 0.6f ;
     public static final float UNIT_DISTANCE = 1f ;
 
     /**
-     * True if the entity time stamp (its last update) is the same as the agent's.
-     */
-    public boolean entityIsUpToDate(LegacyEntity e){
-    	return e!=null && e.lastUpdated == this.lastUpdated ;
-    }
-    
-    public boolean entityIsUpToDate(String id){ return entityIsUpToDate(getEntity(id)) ; }
-    
-
-    /**
      * True if the given position q is "within range" (in close vicinity) of the
-     * agent. (right now it is 0.4 distance unit)
+     * agent. (right now it is 0.4 distance unit). This q is assumed to be an
+     * on-floor position.
      */
     public boolean withinRange(Vec3 q){
         return withinRange(q, IN_RANGE);
@@ -556,14 +477,14 @@ public class BeliefState extends StateWithMessenger {
      * True if the entity is "within range" (in close vicinity) of the
      * agent. (right now it is 0.4 distance unit)
      */
-    public boolean withinRange(LegacyEntity e){
-    	return e != null && withinRange(e.position);
+    public boolean withinRange(WorldEntity e){
+    	return e != null && withinRange(((LabEntity) e).getFloorPosition());
     }
     
     public boolean withinRange(String id){ return withinRange(getEntity(id)) ; }
     
     private boolean withinRange(Vec3 destination, float range){
-        return this.position != null && this.position.distanceSquared(destination) < range * range;
+        return worldmodel.position != null && worldmodel.getFloorPosition().distanceSquared(destination) < range * range;
     }
 
     @Override
@@ -571,7 +492,7 @@ public class BeliefState extends StateWithMessenger {
         StringBuilder sb = new StringBuilder();
         String sep = ", ";
         sb.append("BeliefState\n [ ");
-        for (var e : entities.values()) {
+        for (var e : worldmodel.elements.values()) {
             sb.append("\n\t");
             sb.append(e.toString());
         }
