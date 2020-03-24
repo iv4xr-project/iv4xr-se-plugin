@@ -14,10 +14,10 @@ import communication.adapters.EntityTypeAdapter;
 import communication.system.Request;
 import logger.PrintColor;
 import nl.uu.cs.aplib.mainConcepts.Environment;
-import world.DynamicEntity;
-import world.Entity;
-import world.EntityType;
-import world.InteractiveEntity;
+import world.LegacyDynamicEntity;
+import world.LegacyEntity;
+import world.LegacyEntityType;
+import world.LegacyInteractiveEntity;
 
 import java.io.*;
 import java.lang.reflect.Modifier;
@@ -33,8 +33,8 @@ public class SocketEnvironment extends Environment {
     private static Gson gson = new GsonBuilder()
             .serializeNulls()
             .excludeFieldsWithModifiers(Modifier.TRANSIENT)
-            .registerTypeAdapter(EntityType.class, new EntityTypeAdapter())
-            .registerTypeHierarchyAdapter(Entity.class, new EntityAdapter())
+            .registerTypeAdapter(LegacyEntityType.class, new EntityTypeAdapter())
+            .registerTypeHierarchyAdapter(LegacyEntity.class, new EntityAdapter())
             .create();
 
     SocketEnvironment(String host, int port) {

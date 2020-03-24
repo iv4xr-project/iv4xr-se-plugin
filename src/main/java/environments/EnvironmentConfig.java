@@ -25,7 +25,7 @@ public class EnvironmentConfig {
     public float fire_spread = 0.02f;
     public float jump_force = 0.18f;
     public float view_distance = 10f;
-    public float light_intensity = 1f;
+    public float light_intensity = 1f; // does not seem to work ... TODO
 
     public ArrayList<Tuple<String, String>> add_links = new ArrayList<>();
     public ArrayList<Tuple<String, String>> remove_links = new ArrayList<>();

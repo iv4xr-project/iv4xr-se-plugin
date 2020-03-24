@@ -62,7 +62,7 @@ public class FireHazardTest {
         int i = 0 ;
         while (g.getStatus().inProgress()) {
             agent.update();
-            System.out.println("*** " + i + ": " + agent.getState().id + " @" + agent.getState().position) ;
+            System.out.println("*** " + i + ": " + agent.getState().id + " @" + agent.getState().worldmodel.position) ;
             if (i==1) {
             	System.out.println("check...") ;
             }

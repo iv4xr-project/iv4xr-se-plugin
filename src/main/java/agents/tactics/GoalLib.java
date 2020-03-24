@@ -13,7 +13,8 @@ import nl.uu.cs.aplib.mainConcepts.Goal;
 import nl.uu.cs.aplib.mainConcepts.GoalStructure;
 import nl.uu.cs.aplib.mainConcepts.Tactic;
 import world.BeliefState;
-import world.Entity;
+import world.LabEntity;
+import world.LegacyEntity;
 
 import java.util.function.Predicate;
 
@@ -21,6 +22,8 @@ import static nl.uu.cs.aplib.AplibEDSL.*;
 
 import eu.iv4xr.framework.mainConcepts.ObservationEvent.VerdictEvent;
 import eu.iv4xr.framework.mainConcepts.TestAgent;
+import eu.iv4xr.framework.world.WorldEntity;
+
 import static eu.iv4xr.framework.Iv4xrEDSL.* ;
 
 /**
@@ -130,10 +133,10 @@ public class GoalLib {
      * The setting of these two distances are a bit SENSITIVE.
      */
     private static boolean inClosexxxRange(BeliefState belief, String entityId) {
-    	if (belief.position==null) return false ;
-    	var e = belief.getEntity(entityId) ;
+    	if (belief.worldmodel.position==null) return false ;
+    	var e = (LabEntity) belief.getEntity(entityId) ;
     	if (e==null) return false ;
-    	return belief.position.distance(e.position) <= BeliefState.UNIT_DISTANCE  ;
+    	return belief.worldmodel.getFloorPosition().distance(e.getFloorPosition()) <= BeliefState.UNIT_DISTANCE  ;
     }
     
     /**
@@ -190,12 +193,12 @@ public class GoalLib {
     	// replace the guard with this one:
     	return TacticLib.actionNavigateTo(id)
     		   . on((BeliefState belief) -> { 
-    			    if(belief.position == null) return null ;
-    		        var e = belief.getEntity(id);
+    			    if(belief.worldmodel.position == null) return null ;
+    		        var e = (LabEntity) belief.getEntity(id);
     		        if (e == null) return null ; //guard
     		        // have to clone shift to avoid unintended accumulating plus:
     		        var newPosition = new Vec3(shift.x,shift.y,shift.z) ;
-    		        newPosition.add(e.position);
+    		        newPosition.add(e.getFloorPosition());
     		        //System.out.println(">>>> " + id + " @" + e.position) ;
     		        Vec3[] path = belief.cachedFindPathTo(newPosition);
     		        if(path == null) return null;//if there is no path return null
@@ -235,14 +238,14 @@ public class GoalLib {
     public static GoalStructure entityIsInteracted(String entityId) {
         //move to the object
         Goal goal1 = goal(String.format("This entity is in interaction distance: [%s]", entityId)).toSolve((BeliefState belief) ->
-                belief.position != null && belief.canInteractWith(entityId));
+                belief.worldmodel.position != null && belief.isWIthinInteractionDistanceWith(entityId));
 
         //interact with the object
         Goal goal2 = goal(String.format("This entity is interacted: [%s]", entityId)).toSolve((BeliefState belief) -> true);
 
         //Set the tactics with which the goals will be solved
         GoalStructure g1 = goal1.withTactic(FIRSTof( //the tactic used to solve the goal
-                TacticLib.navigateTo(entityId), //try to move to the enitity
+                TacticLib.navigateTo(entityId), //try to move to the entity
                 TacticLib.explore(), //find the entity
                 // handling explore-blind corner:
                 SEQ(TacticLib.forcePastExploreBlindCorner(),
@@ -285,7 +288,7 @@ public class GoalLib {
      */
     public static Goal entityInspected(String id){
         return goal("This entity is inpected: " + id)
-                .toSolve((BeliefState b) -> b.evaluateEntity(id, e -> e.lastUpdated == b.lastUpdated))
+                .toSolve((BeliefState b) -> b.evaluateEntity(id, e -> b.age(e) == 0))
                 .withTactic(FIRSTof(
                         TacticLib.navigateTo(id),
                         TacticLib.explore(),
@@ -306,7 +309,7 @@ public class GoalLib {
      * @param id: entityId
      * @return Goal
      */
-    public static GoalStructure entityInspected(String id, Predicate<Entity> predicate){
+    public static GoalStructure entityInspected(String id, Predicate<WorldEntity> predicate){
         return SEQ(
             entityInspected(id).lift(),
             goal("Evaluate " + id)
@@ -328,7 +331,7 @@ public class GoalLib {
      * @param predicate  The predicate that is expected to hold on the entity.
      * @return
      */
-    public static GoalStructure entityInvariantChecked(TestAgent agent, String id, String info, Predicate<Entity> predicate){
+    public static GoalStructure entityInvariantChecked(TestAgent agent, String id, String info, Predicate<WorldEntity> predicate){
         return SEQ(
             entityInspected(id).lift(),
             testgoal("Invariant check " + id, agent)

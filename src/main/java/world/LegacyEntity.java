@@ -7,30 +7,33 @@ at Utrecht University within the Software and Game project course.
 
 package world;
 
+import eu.iv4xr.framework.world.WorldEntity;
 import helperclasses.datastructures.Vec3;
 
 /**
  * A representation of an object in the game world. Only a few fields are exposed.
+ * This is the legacy representation as originally provided by the LabRecruits 
+ * developers. This will be translated to iv4xr's WorldEntity.
  */
-public class Entity {
+public class LegacyEntity {
 
-    public EntityType type;
+    public LegacyEntityType type;
     public String tag;
     public String id;
     public Vec3 position;
     public int lastUpdated = -1;
     public String property = "";
 
-    public Entity(EntityType type){
+    public LegacyEntity(LegacyEntityType type){
         this.type = type;
     }
 
-    public Entity(){
-        this.type = EntityType.Entity;
+    public LegacyEntity(){
+        this.type = LegacyEntityType.Entity;
     }
 
     // update references rather than overwrite them, because there are a lot of lists that just contain references
-    public boolean update(Entity e){
+    public boolean update(LegacyEntity e){
         // do not update older versions
         if(!this.id.equals(e.id) || lastUpdated >= e.lastUpdated)
             return false;
@@ -53,9 +56,9 @@ public class Entity {
 
     @Override
     public boolean equals(Object other){
-        if(!(other instanceof Entity))
+        if(!(other instanceof LegacyEntity))
             return false;
-        Entity o = (Entity) other;
+        LegacyEntity o = (LegacyEntity) other;
         return     this.tag.equals(o.tag)
                 && this.property.equals(o.property)
                 && this.type.equals(o.type)

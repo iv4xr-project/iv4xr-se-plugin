@@ -18,19 +18,19 @@ public class EntityAdapterTest {
 
         // copy from SocketEnvironment
         Gson deserializer = new GsonBuilder()
-                .registerTypeAdapter(EntityType.class, new EntityTypeAdapter())
-                .registerTypeHierarchyAdapter(Entity.class, new EntityAdapter())
+                .registerTypeAdapter(LegacyEntityType.class, new EntityTypeAdapter())
+                .registerTypeHierarchyAdapter(LegacyEntity.class, new EntityAdapter())
                 .create();
 
-        Entity[] originals = new Entity[] {
-                fill(new Entity(EntityType.Entity), 1),
-                fill(new DynamicEntity(), 2),
-                fill(new InteractiveEntity(), 3)
+        LegacyEntity[] originals = new LegacyEntity[] {
+                fill(new LegacyEntity(LegacyEntityType.Entity), 1),
+                fill(new LegacyDynamicEntity(), 2),
+                fill(new LegacyInteractiveEntity(), 3)
         };
 
         String json = deserializer.toJson(originals);
 
-        Entity[] deserializedEntities = deserializer.fromJson(json, Entity[].class);
+        LegacyEntity[] deserializedEntities = deserializer.fromJson(json, LegacyEntity[].class);
 
         for(int i = 0; i < 3; i++){
         	Assertions.assertEquals(originals[i].getClass(), deserializedEntities[i].getClass());
@@ -41,17 +41,17 @@ public class EntityAdapterTest {
     @Test
     public void EntityTypeAdapterTest(){
         Gson gson = new GsonBuilder()
-                .registerTypeHierarchyAdapter(EntityType.class, new EntityTypeAdapter())
+                .registerTypeHierarchyAdapter(LegacyEntityType.class, new EntityTypeAdapter())
                 .create();
-        Assertions.assertEquals("0", gson.toJson(EntityType.Entity));
-        Assertions.assertEquals("1", gson.toJson(EntityType.Dynamic));
-        Assertions.assertEquals("2", gson.toJson(EntityType.Interactive));
-        Assertions.assertEquals(EntityType.Entity, gson.fromJson(gson.toJson(EntityType.Entity), EntityType.class));
-        Assertions.assertEquals(EntityType.Dynamic, gson.fromJson(gson.toJson(EntityType.Dynamic), EntityType.class) );
-        Assertions.assertEquals(EntityType.Interactive, gson.fromJson(gson.toJson(EntityType.Interactive), EntityType.class) );
+        Assertions.assertEquals("0", gson.toJson(LegacyEntityType.Entity));
+        Assertions.assertEquals("1", gson.toJson(LegacyEntityType.Dynamic));
+        Assertions.assertEquals("2", gson.toJson(LegacyEntityType.Interactive));
+        Assertions.assertEquals(LegacyEntityType.Entity, gson.fromJson(gson.toJson(LegacyEntityType.Entity), LegacyEntityType.class));
+        Assertions.assertEquals(LegacyEntityType.Dynamic, gson.fromJson(gson.toJson(LegacyEntityType.Dynamic), LegacyEntityType.class) );
+        Assertions.assertEquals(LegacyEntityType.Interactive, gson.fromJson(gson.toJson(LegacyEntityType.Interactive), LegacyEntityType.class) );
     }
 
-    private Entity fill(Entity e, int i){
+    private LegacyEntity fill(LegacyEntity e, int i){
         e.position = new Vec3(i);
         e.tag = "tag" + i;
         e.id = "id" + i;
@@ -59,14 +59,14 @@ public class EntityAdapterTest {
 
     }
 
-    private DynamicEntity fill(DynamicEntity e, int i){
-        fill((Entity)e, i);
+    private LegacyDynamicEntity fill(LegacyDynamicEntity e, int i){
+        fill((LegacyEntity)e, i);
         e.velocity = new Vec3(i, i, i);
         return e;
     }
 
-    private InteractiveEntity fill(InteractiveEntity e, int i){
-        fill((Entity)e, i);
+    private LegacyInteractiveEntity fill(LegacyInteractiveEntity e, int i){
+        fill((LegacyEntity)e, i);
         e.extents = new Vec3(i, i, i);
         e.center = new Vec3(i, i, i);
         e.connectedObjects = new ArrayList<>();

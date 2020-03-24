@@ -9,19 +9,24 @@ package world;
 
 import helperclasses.datastructures.Vec3;
 
-// A representation of a dynamic object in the world.
-public class DynamicEntity extends Entity {
+/**
+ * A representation of a "dynamic" object in the world. 
+ * This is the legacy representation as originally provided by the LabRecruits 
+ * developers. This will be translated to iv4xr's WorldEntity.
+ *
+ */
+public class LegacyDynamicEntity extends LegacyEntity {
 
     public Vec3 velocity;
 
-    public DynamicEntity(){
-        super(EntityType.Dynamic);
+    public LegacyDynamicEntity(){
+        super(LegacyEntityType.Dynamic);
     }
 
     @Override
-    public boolean update(Entity e){
-        if(e instanceof DynamicEntity && super.update(e)){
-            this.velocity = ((DynamicEntity) e).velocity;
+    public boolean update(LegacyEntity e){
+        if(e instanceof LegacyDynamicEntity && super.update(e)){
+            this.velocity = ((LegacyDynamicEntity) e).velocity;
             return true;
         }
         return false;
@@ -34,9 +39,9 @@ public class DynamicEntity extends Entity {
 
     @Override
     public boolean equals(Object other){
-        if(!(other instanceof DynamicEntity))
+        if(!(other instanceof LegacyDynamicEntity))
             return false;
-        DynamicEntity o = (DynamicEntity) other;
+        LegacyDynamicEntity o = (LegacyDynamicEntity) other;
         return this.velocity.equals(o.velocity) && super.equals(other);
     }
 }

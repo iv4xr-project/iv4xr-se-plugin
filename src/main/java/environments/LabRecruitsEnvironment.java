@@ -13,7 +13,8 @@ import helperclasses.datastructures.Vec3;
 import pathfinding.NavMeshContainer;
 import pathfinding.Pathfinder;
 import world.BeliefState;
-import world.Observation;
+import world.LabWorldModel;
+import world.LegacyObservation;
 
 /**
  * An implementation of {@link nl.uu.cs.aplib.environments.JsonEnvironment} using 
@@ -52,8 +53,11 @@ public class LabRecruitsEnvironment extends SocketEnvironment {
 
     // Initialisation object
 
-    private Observation sendAgentCommand_andGetObservation(AgentCommand c){
-        return getResponse(Request.command(c));
+    private LabWorldModel sendAgentCommand_andGetObservation(AgentCommand c){
+    	LegacyObservation obs = getResponse(Request.command(c)); 
+    	// covert the obtained observation to a WorldModel:
+    	var wom = LabWorldModel.toWorldModel(obs) ;
+        return wom ;
     }
 
     /**
@@ -64,11 +68,11 @@ public class LabRecruitsEnvironment extends SocketEnvironment {
      * @param agentPosition: The agent's current position
      * @return The observation following from the action
      */
-    public Observation moveToward(String agentId, Vec3 agentPosition, Vec3 target) {
+    public LabWorldModel moveToward(String agentId, Vec3 agentPosition, Vec3 target) {
         return moveToward(agentId, agentPosition, target, false);
     }
 
-    public Observation moveToward(String agentId, Vec3 agentPosition, Vec3 target, boolean jump) {
+    public LabWorldModel moveToward(String agentId, Vec3 agentPosition, Vec3 target, boolean jump) {
         //define the max distance the agent wants to move ahead between updates
         float maxDist = 2f;
 
@@ -93,12 +97,12 @@ public class LabRecruitsEnvironment extends SocketEnvironment {
     /**
      * This will send a do-nothing command to unity, and return a new Observation.
      */
-    public Observation observe(String agentId){
+    public LabWorldModel observe(String agentId){
         return sendAgentCommand_andGetObservation(AgentCommand.doNothing(agentId));
     }
 
     // send an interaction command to unity
-    public Observation interactWith(String agentId, String target){
+    public LabWorldModel interactWith(String agentId, String target){
         return sendAgentCommand_andGetObservation(AgentCommand.interactCommand(agentId, target));
     }
 

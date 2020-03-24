@@ -89,7 +89,7 @@ public class LabRecruitsTestAgent extends TestAgent {
     }
 
     public void refresh() {
-        getState().updateBelief(env().getResponse(Request.command(AgentCommand.doNothing(getState().id))));
+        getState().updateBelief(env().observe(getState().id));
     }
 
     public BeliefState getState(){

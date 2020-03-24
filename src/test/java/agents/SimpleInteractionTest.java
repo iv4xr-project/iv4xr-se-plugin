@@ -21,14 +21,15 @@ import agents.tactics.TacticLib;
 import environments.EnvironmentConfig;
 import environments.LabRecruitsEnvironment;
 import eu.iv4xr.framework.mainConcepts.TestDataCollector;
+import eu.iv4xr.framework.world.WorldEntity;
 import game.LabRecruitsTestServer;
 import helperclasses.datastructures.linq.QArrayList;
 import nl.uu.cs.aplib.mainConcepts.BasicAgent;
 import nl.uu.cs.aplib.mainConcepts.GoalStructure;
 import static nl.uu.cs.aplib.AplibEDSL.* ;
 import world.BeliefState;
-import world.Entity;
-import world.InteractiveEntity;
+import world.LegacyEntity;
+import world.LegacyInteractiveEntity;
 
 /**
  * In this test we are given a simple small room with a button close by and a door.
@@ -41,7 +42,7 @@ public class SimpleInteractionTest {
     @BeforeAll
     static void start() {
     	// Uncomment this to make the game's graphic visible:
-    	//TestSettings.USE_GRAPHICS = true ;
+    	// TestSettings.USE_GRAPHICS = true ;
     	String labRecruitesExeRootDir = System.getProperty("user.dir") ;
     	labRecruitsTestServer = TestSettings.start_LabRecruitsTestServer(labRecruitesExeRootDir) ;
     }
@@ -54,8 +55,15 @@ public class SimpleInteractionTest {
     public void interactionAgent() throws InterruptedException {
 
         // Create an environment
-        var environment = new LabRecruitsEnvironment(new EnvironmentConfig("button1_opens_door1"));
+    	var config = new EnvironmentConfig("button1_opens_door1") ;
+    	// config.light_intensity = 0f ; this does not seem to work
+        var environment = new LabRecruitsEnvironment(config);
     	
+        if(TestSettings.USE_GRAPHICS) {
+    		System.out.println("You can drag then game window elsewhere for beter viewing. Then hit RETURN to continue.") ;
+    		new Scanner(System.in) . nextLine() ;
+    	}
+        
         environment.startSimulation(); // this will press the "Play" button in the game for you
 
         // create a test agent
@@ -70,13 +78,13 @@ public class SimpleInteractionTest {
             GoalLib.entityInvariantChecked(testAgent,
             		"button1", 
             		"button1 should be active", 
-            		(Entity e) -> (e instanceof InteractiveEntity) && ((InteractiveEntity) e).isActive),
+            		(WorldEntity e) -> e.getBooleanProperty("isOn")),
 
             GoalLib.entityIsInRange("door1").lift(),
             GoalLib.entityInvariantChecked(testAgent,
             		"door1", 
             		"door1 should be open", 
-            		(Entity e) -> (e instanceof InteractiveEntity) && ((InteractiveEntity) e).isActive)
+            		(WorldEntity e) -> e.getBooleanProperty("isOpen"))
             
         );
         // attaching the goal and testdata-collector

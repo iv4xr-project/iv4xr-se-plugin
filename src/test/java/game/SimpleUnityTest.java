@@ -22,7 +22,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.AfterAll;
 import world.BeliefState;
-import world.InteractiveEntity;
+import world.LegacyInteractiveEntity;
 
 import java.util.function.Predicate;
 
@@ -68,7 +68,7 @@ public class SimpleUnityTest {
 
         // The agent wants to know its position
         GoalStructure goal = goal(config.level_name)
-                .toSolve((BeliefState belief) -> belief.position != null)
+                .toSolve((BeliefState belief) -> belief.worldmodel.position != null)
                 // the agent should find its position just by observing
                 .withTactic(TacticLib.observe())
                 .lift();
@@ -194,9 +194,10 @@ public class SimpleUnityTest {
         GoalStructure goal = SEQ(
         		GoalLib.justObserve().lift(),
                 GoalLib.positionIsInRange(new Vec3(1,0,1)).lift(),
-                GoalLib.entityInspected("button0", e -> e instanceof InteractiveEntity && !((InteractiveEntity) e).isActive),
+                //GoalLib.entityIsInRange("button0").lift(),
+                GoalLib.entityInspected("button0", e -> ! e.getBooleanProperty("isOn")),
                 GoalLib.entityIsInteracted("button0"),
-                GoalLib.entityInspected("button0", e -> e instanceof InteractiveEntity && ((InteractiveEntity) e).isActive),
+                GoalLib.entityInspected("button0", e -> e.getBooleanProperty("isOn")),
                 GoalLib.positionIsInRange(new Vec3(1,0,1)).lift()
         );
 
@@ -211,19 +212,20 @@ public class SimpleUnityTest {
         int i = 0 ;
         while (goal.getStatus().inProgress()) {
             agent.update();
-            System.out.println("*** " + i + ": " + agent.getState().id + " @" + agent.getState().position) ;
-            if (i>50) {
+            System.out.println("*** " + i + ": " + agent.getState().id + " @" + agent.getState().worldmodel.position) ;
+            if (i>90) {
             	   break ;
             }
             Thread.sleep(30);
             i++ ;
         }
+        
+        goal.printGoalStructureStatus();
+
 
         //agent should now know where it is
         Assertions.assertFalse(goal.getStatus().inProgress());
-
-        goal.printGoalStructureStatus();
-
+        
         environment.close();
     }
 }

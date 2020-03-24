@@ -1,19 +1,19 @@
 package communication.adapters;
 
 import com.google.gson.*;
-import world.EntityType;
+import world.LegacyEntityType;
 
 import java.lang.reflect.Type;
 
-public class EntityTypeAdapter implements JsonDeserializer<EntityType>, JsonSerializer<EntityType> {
+public class EntityTypeAdapter implements JsonDeserializer<LegacyEntityType>, JsonSerializer<LegacyEntityType> {
     @Override
-    public EntityType deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+    public LegacyEntityType deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         //System.out.println("des:" + json.getAsInt());
-        return EntityType.values()[json.getAsInt()];
+        return LegacyEntityType.values()[json.getAsInt()];
     }
 
     @Override
-    public JsonElement serialize(EntityType src, Type typeOfSrc, JsonSerializationContext context) {
+    public JsonElement serialize(LegacyEntityType src, Type typeOfSrc, JsonSerializationContext context) {
         switch (src){
             case Entity:
                 return new JsonPrimitive(0);

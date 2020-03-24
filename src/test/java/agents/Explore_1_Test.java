@@ -20,6 +20,7 @@ import logger.JsonLoggerInstrument;
 import nl.uu.cs.aplib.Logging;
 import nl.uu.cs.aplib.mainConcepts.*;
 import world.BeliefState;
+import world.LabEntity;
 
 import static agents.TestSettings.USE_GRAPHICS;
 import static agents.TestSettings.USE_INSTRUMENT;
@@ -84,7 +85,7 @@ public class Explore_1_Test {
         int i = 0 ;
         while (g.getStatus().inProgress()) {
             agent.update();
-            System.out.println("*** " + i + ", " + agent.getState().id + " @" + agent.getState().position) ;
+            System.out.println("*** " + i + ", " + agent.getState().id + " @" + agent.getState().worldmodel.position) ;
             Thread.sleep(30);
             i++ ;
             if (i>120) {
@@ -92,8 +93,8 @@ public class Explore_1_Test {
             }
         }
         assertTrue(g.getStatus().success()) ;
-        var agent_p  = agent.getState().position ;
-        var button_p = agent.getState().getEntity("button1").position ;
+        var agent_p  = agent.getState().worldmodel.getFloorPosition() ;
+        var button_p = ((LabEntity) agent.getState().getEntity("button1")).getFloorPosition() ;
         assertTrue(agent_p.distance(button_p) < 0.5) ;
 
         g.printGoalStructureStatus();
