@@ -172,7 +172,7 @@ public class ColorSwitchLevelTest {
         		. invariant(agent, (BeliefState b) -> 
         		        assertTrue_("", 
         		        		    "Check if the color screen is " + colorName, 
-        		             b.evaluateEntity("CS1", e -> e.getStringProperty("color").equals(colorCode)))
+        		             b.evaluateEntity("SCS1", e -> e.getStringProperty("color").equals(colorCode)))
         		        )
         		. withTactic(TacticLib.receivePing());
         
