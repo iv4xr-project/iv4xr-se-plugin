@@ -42,7 +42,7 @@ public class SimpleInteractionTest {
     @BeforeAll
     static void start() {
     	// Uncomment this to make the game's graphic visible:
-    	// TestSettings.USE_GRAPHICS = true ;
+    	//TestSettings.USE_GRAPHICS = true ;
     	String labRecruitesExeRootDir = System.getProperty("user.dir") ;
     	labRecruitsTestServer = TestSettings.start_LabRecruitsTestServer(labRecruitesExeRootDir) ;
     }
@@ -56,7 +56,7 @@ public class SimpleInteractionTest {
 
         // Create an environment
     	var config = new EnvironmentConfig("button1_opens_door1") ;
-    	// config.light_intensity = 0f ; this does not seem to work
+    	//config.light_intensity = -100f ; //this does not seem to work
         var environment = new LabRecruitsEnvironment(config);
     	
         if(TestSettings.USE_GRAPHICS) {
