@@ -17,8 +17,9 @@ import nl.uu.cs.aplib.multiAgentSupport.ComNode;
 import world.BeliefState;
 
 /**
- * A dedicated sub-class of {@link eu.iv4xr.framework.mainConcepts.TestAgent} to test
- * the Lab Recruits game.
+ * A subclass of {@link eu.iv4xr.framework.mainConcepts.TestAgent} to test
+ * the Lab Recruits game. It provides some overriding of inherited methods,
+ * but facilitating some convenience type casting.
  */
 public class LabRecruitsTestAgent extends TestAgent {
 

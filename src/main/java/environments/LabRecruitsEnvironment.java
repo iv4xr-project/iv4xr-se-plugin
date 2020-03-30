@@ -17,18 +17,23 @@ import world.LabWorldModel;
 import world.LegacyObservation;
 
 /**
- * An implementation of {@link nl.uu.cs.aplib.environments.JsonEnvironment} using 
- * {@link environments.SocketEnvironment}.
- * This implementation is dedicated to facilitate the communication between agents
- * and the Lab Recruits game.
- * It is used by Agents to send commands and receive observations
-*/
+ * An implementation of {@link nl.uu.cs.aplib.environments.JsonEnvironment}
+ * using {@link environments.SocketEnvironment}. It facilitates the
+ * communication between agents and the Lab Recruits game. A set of basic
+ * methods to control the game is provided. Keep in mind that methods 
+ * exposed by this Environment are very primitive; they do not apply any
+ * form of reasoning. 
+ */
 public class LabRecruitsEnvironment extends SocketEnvironment {
 
     public Pathfinder pathFinder;
 
     /**
-     * Constructor
+     * A constructor to create an instance of this Environment. It expects an instance of
+     * {@link game.LabRecruitsTestServer} to already running, and also an instance of  
+     * the Lab Recruit game to be already launched. The given configuration object
+     * contains information about the TCP port to be used to communicate with the game
+     * instance. 
      */
     public LabRecruitsEnvironment(EnvironmentConfig config) {
         super(config.host, config.port);
@@ -39,10 +44,12 @@ public class LabRecruitsEnvironment extends SocketEnvironment {
         this.pathFinder = new Pathfinder(navmesh);
     }
 
-    /**
-     * This constructor is used whenever te game is already running and configured
-     */
     private static EnvironmentConfig STANDARD_CONFIG = new EnvironmentConfig();
+
+	/**
+	 * To create an instance of this environment, using standard configuration; see
+	 * {@link EnvironmentConfig}.
+	 */
     public LabRecruitsEnvironment() {
         super(STANDARD_CONFIG.host, STANDARD_CONFIG.port);
         // When this application has connected with the environment, an exchange in information takes place:
@@ -50,8 +57,6 @@ public class LabRecruitsEnvironment extends SocketEnvironment {
         NavMeshContainer navmesh = getResponse(Request.gymEnvironmentInitialisation(STANDARD_CONFIG));
         this.pathFinder = new Pathfinder(navmesh);
     }
-
-    // Initialisation object
 
     private LabWorldModel sendAgentCommand_andGetObservation(AgentCommand c){
     	LegacyObservation obs = getResponse(Request.command(c)); 
@@ -61,7 +66,10 @@ public class LabRecruitsEnvironment extends SocketEnvironment {
     }
 
     /**
-     * This method will make the agent move a certain max distance toward the target
+     * This method will make the agent move a certain max distance toward the target.
+     * Note that this method does not take obstacles into account. This is something
+     * your agent needs to reason about by itself, based on the series of observations
+     * it receives from this Environment.
      *
      * @param target: The target the agent wants to move to
      * @param agentId: The ID of the agent (more precisely, the ID of the game-entity controlled by the agent)
@@ -72,7 +80,8 @@ public class LabRecruitsEnvironment extends SocketEnvironment {
         return moveToward(agentId, agentPosition, target, false);
     }
 
-    public LabWorldModel moveToward(String agentId, Vec3 agentPosition, Vec3 target, boolean jump) {
+    // jumping is not supported for now
+    private LabWorldModel moveToward(String agentId, Vec3 agentPosition, Vec3 target, boolean jump) {
         //define the max distance the agent wants to move ahead between updates
         float maxDist = 2f;
 
@@ -121,7 +130,8 @@ public class LabRecruitsEnvironment extends SocketEnvironment {
     }
     
     /**
-     * this function updates the hazards in Unity, which is specified in EnvironmentConfig
+     * this function updates the hazards in Unity, which is specified in EnvironmentConfig.
+     * Currently broken :| TODO.
      */
     public Boolean updateHazards(){
         return getResponse(Request.updateEnvironment());

@@ -24,13 +24,23 @@ import static nl.uu.cs.aplib.AplibEDSL.*;
 
 /**
  * This class provide a set of standard tactics to interact with the Lab Recruits
- * game. Tactics are higher-level actions, and are used to solve goals for
- * aplib agents.
+ * game. While {@link environments.LabRecruitsEnvironment} provides the primitive
+ * methods/actions to control the Lab Recruit game, the tactics provided by this
+ * class provide higher-level actions, and are used to solve goals for
+ * aplib agents. Most tactics provided here incorporate automatic path finding
+ * over the Lab Recruits game world. This path finding will in principle allow an
+ * agent to auto navigate from its current position to some position p, provided:
+ * (1) p is physically reachable from the agent's current position, and (2) the
+ * agent believes that p is reachable. For example, if p is located in a room that
+ * the agent never sees, it would then believe that it has no way to reach p.
+ * So, before it is able to auto-navigate to p, we may need to first convince the
+ * agent of the reachability of p, e.g. by making it see that the areas in-between
+ * are reachable.
  */
 public class TacticLib {
    
 	/**
-	 * This method will return a tactic in which the agent will move towards a given
+	 * Construct a tactic in which the agent will move towards a given
 	 * position. This action is enabled if the agent believes that there is a path (through
 	 * the navigation-graph maintained by the agent) to the entity. Note that in
 	 * reality the position may turn out to be unreachable. The agent will try to
@@ -330,7 +340,7 @@ public class TacticLib {
     }
 
     /**
-     * This method will return a tactic in which the agent will "explore" the world.
+     * This method will construct a tactic in which the agent will "explore" the world.
      * The tactic will locate the nearest reachable navigation node which the agent
      * has not discovered yet, and drive the agent to go there.
      */
