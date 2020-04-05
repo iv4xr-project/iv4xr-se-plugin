@@ -487,7 +487,7 @@ public class TacticLib {
     		   . on((BeliefState belief) -> {
    				     if(!memo.stateIs("inTransit")) return null ;
                      var g = (Vec3) memo.memorized.get(0) ;
-                     if (belief.worldmodel.getFloorPosition().distance(g) <= 0.25) {
+                     if (belief.worldmodel.getFloorPosition().distance(g) <= 0.3) {
                     	 // we have arrived at the destination 
                     	 memo.moveState("S0");
                     	 memo.memorized.clear(); 
