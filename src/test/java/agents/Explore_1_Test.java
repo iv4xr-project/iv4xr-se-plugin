@@ -48,7 +48,7 @@ public class Explore_1_Test {
     @BeforeAll
     static void start() {
     	// Uncomment this to make the game's graphic visible:
-        TestSettings.USE_GRAPHICS = true ;
+        // TestSettings.USE_GRAPHICS = true ;
     	String labRecruitesExeRootDir = System.getProperty("user.dir") ;
        	labRecruitsTestServer = TestSettings.start_LabRecruitsTestServer(labRecruitesExeRootDir) ;
     }
@@ -69,8 +69,7 @@ public class Explore_1_Test {
         		                     . attachState(new BeliefState())
         		                     . attachEnvironment(environment) ;
         
-        var g = SEQ(GoalLib.justObserve().lift(),
-        		    GoalLib.entityIsInRange("button1").lift()) ;
+        var g = GoalLib.entityIsInRange("button1").lift() ;
         agent.setGoal(g) ;
         
     	if(TestSettings.USE_GRAPHICS) {
@@ -85,19 +84,22 @@ public class Explore_1_Test {
         int i = 0 ;
         while (g.getStatus().inProgress()) {
             agent.update();
-            System.out.println("*** " + i + ", " + agent.getState().id + " @" + agent.getState().worldmodel.position) ;
+            System.out.println("*** " + i + "/" 
+               + agent.getState().worldmodel.timestamp + ", "
+               + agent.getState().id + " @" + agent.getState().worldmodel.position) ;
             Thread.sleep(30);
             i++ ;
             if (i>120) {
             	break ;
             }
         }
+        
+        g.printGoalStructureStatus();
+        
         assertTrue(g.getStatus().success()) ;
         var agent_p  = agent.getState().worldmodel.getFloorPosition() ;
-        var button_p = ((LabEntity) agent.getState().getEntity("button1")).getFloorPosition() ;
+        var button_p = ((LabEntity) agent.getState().worldmodel.getElement("button1")).getFloorPosition() ;
         assertTrue(agent_p.distance(button_p) < 0.5) ;
-
-        g.printGoalStructureStatus();
         
         if (!environment.close())
             throw new InterruptedException("Unity refuses to close the Simulation!");

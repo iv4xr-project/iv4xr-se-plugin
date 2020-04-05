@@ -93,7 +93,7 @@ public class MentalMapTest {
         for(int i = 0; i < m.getKnownVertices().length; i++){
             seenVertices[i] = i;
         }
-        m.updateKnownVertices(seenVertices);
+        m.updateKnownVertices(1,seenVertices);
     }
 
     /**
@@ -130,7 +130,7 @@ public class MentalMapTest {
 
         //check if the path finding was successful
         assertTrue(result != null);
-        m.applyPath(new Vec3(goal), result);
+        m.applyPath(1,new Vec3(goal), result);
 
         //check if the goal location remained the same
         assertEquals(goal.x, m.getGoalLocation().x, delta);
@@ -153,7 +153,7 @@ public class MentalMapTest {
 
         //check if the path finding was successful
         assertTrue(result1 != null);
-        m.applyPath(new Vec3(goal1), result1);
+        m.applyPath(1,new Vec3(goal1), result1);
 
         //check if the goal location remained the same
         assertEquals(goal1.x, m.getGoalLocation().x, delta);
@@ -163,7 +163,7 @@ public class MentalMapTest {
         //find a path between triangle 0 and 6
         Vec3 goal2 = new Vec3(7, 0, 7);
         Vec3[] result2 = m.navigateForce(new Vec3(0, 0, 0), new Vec3(goal2), new HashSet<>());
-        m.applyPath(new Vec3(goal2), result2);
+        m.applyPath(2,new Vec3(goal2), result2);
 
         //check if the path finding was successful
         assertTrue(result2 != null);
@@ -186,7 +186,7 @@ public class MentalMapTest {
         //Find a path between triangle 0 and 3
         Vec3 goal = new Vec3(3.5, 0, 3.5);
         Vec3[] result1 = m.navigate(new Vec3(0, 0, 0), new Vec3(goal), new HashSet<>());
-        m.applyPath(new Vec3(goal), result1);
+        m.applyPath(1,new Vec3(goal), result1);
 
         //check if the path finding was successful
         assertTrue(result1 != null);
@@ -198,7 +198,7 @@ public class MentalMapTest {
 
         //Find the same path again
         Vec3[] result2 = m.navigate(new Vec3(0, 0, 0), new Vec3(goal), new HashSet<>());
-        m.applyPath(new Vec3(goal), result2);
+        m.applyPath(2,new Vec3(goal), result2);
 
         //check if the path finding was successful
         assertTrue(result2 != null);
@@ -219,7 +219,7 @@ public class MentalMapTest {
 
         //update the seen nodes
         int[] updateVertices = new int[]{1, 2, 5};
-        m.updateKnownVertices(updateVertices);
+        m.updateKnownVertices(1,updateVertices);
 
         //check that that only the seen vertices have been updated
         for (int i = 0; i < m.getKnownVertices().length; i++) {
@@ -241,7 +241,7 @@ public class MentalMapTest {
 
         //update the seen nodes
         int[] updateVertices = new int[0];
-        m.updateKnownVertices(updateVertices);
+        m.updateKnownVertices(1,updateVertices);
 
         //check that that only the seen vertices have been updated
         for (int i = 0; i < m.getKnownVertices().length; i++) {
@@ -256,7 +256,7 @@ public class MentalMapTest {
     public void testGetUnknownNeighbourClosestTo(){
         MentalMap m = setUp2();
         //update the known nodes so we only know node 0
-        m.updateKnownVertices(new int[]{0,1});
+        m.updateKnownVertices(1,new int[]{0,1});
 
         //try to get find node 3 when starting from node 0
         Vec3 node = m.getUnknownNeighbourClosestTo(m.pathFinder.graph.toVec3(0), m.pathFinder.graph.toVec3(3), new HashSet<>());
@@ -272,7 +272,7 @@ public class MentalMapTest {
     public void testGetUnknownNeighbourClosestToWithBlocked(){
         MentalMap m = setUp2();
         //update the known nodes so we only know node 0
-        m.updateKnownVertices(new int[]{0,1});
+        m.updateKnownVertices(1,new int[]{0,1});
 
         //try to get node 3 when starting from node 0 to find node 3
         Vec3 node = m.getUnknownNeighbourClosestTo(m.pathFinder.graph.toVec3(0), m.pathFinder.graph.toVec3(3), new HashSet<>());
@@ -295,7 +295,7 @@ public class MentalMapTest {
         //Find a path between triangle 0 and 3
         Vec3 goal = new Vec3(3.5, 0, 3.5);
         Vec3[] result = m.navigate(new Vec3(0, 0, 0), new Vec3(goal), new HashSet<>());
-        m.applyPath(new Vec3(goal), result);
+        m.applyPath(1,new Vec3(goal), result);
 
         //get the way point
         Vec3 wayPoint = m.getNextWayPoint();
@@ -321,7 +321,7 @@ public class MentalMapTest {
         //Find a path between triangle 0 and 3
         Vec3 goal = new Vec3(3.5, 0, 3.5);
         Vec3[] result = m.navigate(new Vec3(0, 0, 0), new Vec3(goal), new HashSet<>());
-        m.applyPath(new Vec3(goal), result);
+        m.applyPath(1,new Vec3(goal), result);
 
         //get the way point
         Vec3 wayPoint = m.getNextWayPoint();

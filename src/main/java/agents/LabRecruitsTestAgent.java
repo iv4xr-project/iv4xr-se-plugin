@@ -40,6 +40,7 @@ public class LabRecruitsTestAgent extends TestAgent {
     
     public LabRecruitsTestAgent attachState(BeliefState state) {
     	state.id = this.id ;
+    	state.worldmodel.agentId = this.id ;
     	super.attachState(state);
     	return this ;
     }
@@ -89,9 +90,9 @@ public class LabRecruitsTestAgent extends TestAgent {
         System.out.println("NO GOAL COMPLETED");
     }
 
-    public void refresh() {
-        getState().updateBelief(env().observe(getState().id));
-    }
+    //public void refresh() {
+        //getState().updateBelief(env().observe(getState().id));
+    //}
 
     public BeliefState getState(){
         return (BeliefState) this.state;

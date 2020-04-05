@@ -94,9 +94,8 @@ public class RoomReachabilityTest {
 	        
 	        // define the testing-task:
 	        var testingTask = SEQ(
-	            GoalLib.justObserve().lift(),
-		        GoalLib.entityIsInteracted("button1"),
-                GoalLib.entityIsInRange_smarter("door1"),
+	            GoalLib.entityIsInteracted("button1"),
+                GoalLib.doorIsInRange_smarter("door1"),
 	        	GoalLib.entityInvariantChecked(testAgent,
 	            		"door1", 
 	            		"door1 should be open", 
@@ -111,13 +110,13 @@ public class RoomReachabilityTest {
 	        	GoalLib.entityIsInteracted("button4"),
 	        	//GoalLib.entityIsInRange("button3").lift(),
 	        	//GoalLib.entityIsInRange("door1").lift(),
-	        	GoalLib.entityIsInRange_smarter("door1"),
+	        	GoalLib.doorIsInRange_smarter("door1"),
 	        	GoalLib.entityInvariantChecked(testAgent,
 	            		"door1", 
 	            		"door1 should be open", 
 	            		(WorldEntity e) -> e.getBooleanProperty("isOpen")),
 	        	//GoalLib.entityIsInRange("button1").lift(),
-	        	GoalLib.entityIsInRange_smarter("door3"),
+	        	GoalLib.doorIsInRange_smarter("door3"),
 	        	GoalLib.entityInvariantChecked(testAgent,
 	            		"door3", 
 	            		"door3 should be open", 

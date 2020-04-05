@@ -117,8 +117,7 @@ public class AgentSimpleMovementTest {
         		                    . attachState(new BeliefState())
         		                    . attachEnvironment(env) ;
         
-        agent.setGoal(SEQ(GoalLib.justObserve().lift()
-        		         ,GoalLib.positionsVisited(dest)));
+        agent.setGoal(GoalLib.positionIsInRange(dest).lift());
         return agent;
     }
 }

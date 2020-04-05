@@ -9,6 +9,7 @@ package agents.tactics;
 
 import helperclasses.datastructures.Tuple;
 import helperclasses.datastructures.Vec3;
+import nl.uu.cs.aplib.agents.MiniMemory;
 import nl.uu.cs.aplib.mainConcepts.Goal;
 import nl.uu.cs.aplib.mainConcepts.GoalStructure;
 import nl.uu.cs.aplib.mainConcepts.Tactic;
@@ -33,12 +34,14 @@ import static eu.iv4xr.framework.Iv4xrEDSL.* ;
 public class GoalLib {
 	
 	
+	/*
 	public static Goal justObserve() {
 		Goal g = new Goal("Just making an observation") 
 				. toSolve(b -> true) 
 				.withTactic(TacticLib.observe()) ;
 		return g ;
 	}
+	*/
 	
     /**
      * This method will construct a goal in which the agent will move to a known position.
@@ -47,41 +50,21 @@ public class GoalLib {
      */
     public static Goal positionIsInRange(Vec3 goalPosition) {
         //define the goal
-        Goal goal = new Goal("This position is in-range: " + goalPosition.toString()).toSolve((BeliefState belief) -> {
-            //check if the agent is close to the goal position
-            return belief.withinRange(goalPosition);
-            //if (belief.position == null) return false;
-            //return goalPosition.distance(belief.position) < 0.4;
-        });
-
+        Goal goal = new Goal("This position is in-range: " + goalPosition.toString())
+        		    . toSolve((BeliefState belief) -> {
+                        //check if the agent is close to the goal position
+                        return belief.withinRange(goalPosition);
+                        //return goalPosition.distance(belief.position) < 0.4;
+                    });
         //define the goal structure
-        Goal g = goal.withTactic(FIRSTof(//the tactic used to solve the goal
-                TacticLib.navigateTo(goalPosition),//move to the goal position
-                TacticLib.explore(), //explore if the goal position is unknown
-                // adding a strategy to handle explore-blind-corner:
-                SEQ(TacticLib.forcePastExploreBlindCorner(),
-                        FIRSTof(TacticLib.navigateTo(goalPosition),
-                                ABORT())),
-                ABORT())) ;
+        Goal g = goal.withTactic(
+        		 FIRSTof(//the tactic used to solve the goal
+                   TacticLib.navigateTo(goalPosition),//move to the goal position
+                   TacticLib.explore(), //explore if the goal position is unknown
+                   ABORT())) ;
         return g;
     }
     
-    public static Goal originalPositionIsInRange(Vec3 goalPosition) {
-        //define the goal
-        Goal goal = new Goal("Reach position " + goalPosition.toString()).toSolve((BeliefState belief) -> {
-            //check if the agent is close to the goal position
-            return belief.withinRange(goalPosition);
-            //if (belief.position == null) return false;
-            //return goalPosition.distance(belief.position) < 0.4;
-        });
-
-        //define the goal structure
-        Goal g = goal.withTactic(FIRSTof(//the tactic used to solve the goal
-                TacticLib.originalNavigateTo(goalPosition),//move to the goal position
-                TacticLib.explore(),//explore if the goal position is unknown
-                TacticLib.observe()));//find the agent's own position
-        return g;
-    }
 
     /**
      * This method will return a goal structure in which the agent will sequentially move along 
@@ -104,40 +87,36 @@ public class GoalLib {
      * This method will construct a goal structure in which the agent will move to the 
      * in-game entity with the given id. Moving to a close enough distance is enough to solve
      * this goal. 
-     * 
-     * Note: this goal should in principle also work on a moving entity.
-     * 
      * The goal fails if the agent no longer believes that the entity is reachable.
      */
     public static Goal entityIsInRange(String entityId) {
-        Goal goal = new Goal(String.format("This entity is in-range: [%s]",entityId)).toSolve((BeliefState belief) -> belief.withinRange(entityId));
+        Goal goal = new Goal(String.format("This entity is in-range: [%s]",entityId))
+        		
+        		   . toSolve((BeliefState belief) -> belief.withinRange(entityId));
 
         //define the goal structure
-        Goal g = goal.withTactic(FIRSTof( //the tactic used to solve the goal
-                TacticLib.navigateTo(entityId),//try to move to the entity
-                TacticLib.explore(),//find the entity
-                // adding a strategy to handle explore-blind-corner:
-                SEQ(TacticLib.forcePastExploreBlindCorner(),
-                        FIRSTof(TacticLib.navigateTo(entityId),
-                                ABORT())),
-                ABORT()));
+        Goal g = goal.withTactic(
+        		FIRSTof( //the tactic used to solve the goal
+                  TacticLib.navigateTo(entityId),//try to move to the entity
+                  TacticLib.explore(),//find the entity
+                  ABORT()));
         return g;
     }
-    
-    
-    /**
+      
+    /*
      * This is used by the method entityIsInRange_smarter below. It defined when
      * the agent is close enough to make a fresh observation. The distance should
      * be larger than the "vicinity" distance, but close enough to make sure that
      * the agent will actually have line of sight to the entity.
      * The setting of these two distances are a bit SENSITIVE.
-     */
+    
     private static boolean inClosexxxRange(BeliefState belief, String entityId) {
     	if (belief.worldmodel.position==null) return false ;
     	var e = (LabEntity) belief.getEntity(entityId) ;
     	if (e==null) return false ;
     	return belief.worldmodel.getFloorPosition().distance(e.getFloorPosition()) <= BeliefState.UNIT_DISTANCE  ;
     }
+    */
     
     /**
      * Use this goal to approach a door which according to the current belief is closed,
@@ -146,14 +125,24 @@ public class GoalLib {
      * The agent cannot literally navigate to the door, because this would be prohibited
      * by its current navigation graph (which will say that the door is unreachable, and
      * therefore cannot provide a path to it).
-     * Instead, this goal will check if there is a point in the VICINITY of the door that
-     * are reachable (for now this is either a point some vicinity-distance E/W/N or S
-     * of the position/center of the door. If such a vicinity-point can be found, the
-     * agent will navigate to that point. It will actually stop a bit before that point,
-     * in just enough distance (decided by inClosexxxRange) to make an updated observation
-     * on the state of the door (whether it is open or close).
+     * Instead, this goal will try to find a neighboring navigation node N that is reachable.
+     * If such N can be found, the agent will first navigate to N, hoping that this will
+     * update its observation on the door (which it suspects to be open); and then it will
+     * proceed to navigate to the door.
+     * 
+     * This goal fails if either no such N can be found, or if the agent cannot find witness
+     * that the door is open (e.g. if it is indeed actuallu still closed).
      */
-    public static GoalStructure entityIsInRange_smarter(String entityId) {
+    public static GoalStructure doorIsInRange_smarter(String entityId) {
+    	var goal = SEQ(navigate_toNearestNode_toDoor(entityId),
+    			       entityIsInRange(entityId).lift()) ;
+    	return goal ;
+    }
+        
+    
+    /*
+    
+    public static GoalStructure entityIsInRange_smarter_xxx(String entityId) {
         Goal goalE = goal(String.format("East vicinity of this entity is in-range: [%s]",entityId))
         		    . toSolve((BeliefState belief) -> inClosexxxRange(belief,entityId));
         var goalW = goal(String.format("West vicinity of this entity is in-range: [%s]",entityId))
@@ -205,24 +194,67 @@ public class GoalLib {
     		        return new Tuple(newPosition, path) ;
     		   }).lift() ;
     }
+    */
     
-
-    /**
-     * This method will return a goal structure in which the agent will sequentially move along 
-     * the given entities (specified through their ids).
-     *
-     * @param entitiesIds: A list of object ids to which the agent wants to move
-     * @return A goal structure in which the agent will try to walk along the goal id's
-     */
-    public static GoalStructure entitiesVisited(String... entitiesIds) {
-        GoalStructure[] subGoals = new GoalStructure[entitiesIds.length];
-
-        for (int i = 0; i < entitiesIds.length; i++) {
-            subGoals[i] = entityIsInRange(entitiesIds[i]).lift();
-        }
-        return SEQ(subGoals);
+    public static GoalStructure navigate_toNearestNode_toDoor(String doorId) {
+    	var memo = new MiniMemory("") ;
+    	memo.memorize(new Vec3(1,0,1)) ; // dummy location 
+    	
+    	Goal neighboringNodeIsFound = goal("A reachable node close to the door " + doorId + " is found.")
+    	     . toSolve((BeliefState belief) -> true) 
+    		 . withTactic(
+    			 action("Finding a reachable neighbor to door " + doorId)
+    			   . do1( (BeliefState belief) -> {
+    				   var door = (LabEntity) belief.worldmodel.getElement(doorId) ;
+    				   if (door == null) ABORT() ;
+    				   var p = door.getFloorPosition() ;
+    				   var containingNode = belief.mentalMap.pathFinder.graph.vecToNode(p) ;
+    				   var knownNeighbors = belief.mentalMap.pathFinder.graph.getKnownNeighbours(
+    						     containingNode, 
+    						     belief.mentalMap.getKnownVertices(), 
+    						     belief.blockedNodes) ;
+    				   Double minDist = Double.MAX_VALUE ;
+    				   Vec3 nearestNeighbor = null ;
+    				   Vec3[] pathToNearestNeighbor = null ;
+    				   for (var k : knownNeighbors) {
+    					   Vec3 q = belief.mentalMap.pathFinder.graph.toVec3(k) ;
+    					   var path = belief.canReach(q) ;
+    					   if (path != null && path.length>0) {
+    						   var dist = p.distance(q) ;
+    						   if (dist < minDist)  {
+    							   minDist = dist ;
+    							   nearestNeighbor = q ;
+    							   pathToNearestNeighbor = path ;
+    						   } 
+    					   } 
+    				   }
+    				   if (nearestNeighbor == null) ABORT() ;
+    				   Vec3 r = (Vec3) memo.memorized.get(0) ;
+    				   r.x = nearestNeighbor.x ;
+    				   r.y = nearestNeighbor.y ;
+    				   r.z = nearestNeighbor.z ;
+    				   //memo.memorize(pathToNearestNeighbor);
+    				   return belief ;
+    			   })
+    			   .lift() 	
+    					
+    		   ) ;
+    	
+    	Goal neighboringNodeIsReached = goal("A reachable node close to the door " + doorId + " is reached.")
+       	     . toSolve((BeliefState belief) -> { 
+       	    	   var q =(Vec3)  memo.memorized.get(0) ;
+       	    	   return belief.worldmodel.getFloorPosition().distance(q) <= 0.25 ;
+       	       }) 
+       		 . withTactic(TacticLib.dynamicNavigateTo(
+       			   "Navigating to a reachable node close to the door " + doorId,
+       			   (Vec3) memo.memorized.get(0))) ;
+    			
+    	var goal = SEQ(neighboringNodeIsFound.lift(),
+    			       neighboringNodeIsReached.lift()) ;
+    	
+    	return goal ;
     }
-
+    
     /**
      * Construct a goal structure that will make an agent to move towards the given entity and interact with it.
      * Currently the used tactic is not smart enough to handle a moving entity, in particular if it moves while
@@ -237,65 +269,44 @@ public class GoalLib {
      */
     public static GoalStructure entityIsInteracted(String entityId) {
         //move to the object
-        Goal goal1 = goal(String.format("This entity is in interaction distance: [%s]", entityId)).toSolve((BeliefState belief) ->
-                belief.worldmodel.position != null && belief.isWIthinInteractionDistanceWith(entityId));
+        Goal goal1 = goal(String.format("This entity is in interaction distance: [%s]", entityId))
+        		. toSolve((BeliefState belief) -> belief.canInteract(entityId));
 
         //interact with the object
-        Goal goal2 = goal(String.format("This entity is interacted: [%s]", entityId)).toSolve((BeliefState belief) -> true);
+        Goal goal2 = goal(String.format("This entity is interacted: [%s]", entityId))
+        		. toSolve((BeliefState belief) -> true);
 
         //Set the tactics with which the goals will be solved
-        GoalStructure g1 = goal1.withTactic(FIRSTof( //the tactic used to solve the goal
-                TacticLib.navigateTo(entityId), //try to move to the entity
-                TacticLib.explore(), //find the entity
-                // handling explore-blind corner:
-                SEQ(TacticLib.forcePastExploreBlindCorner(),
-                    FIRSTof(TacticLib.navigateTo(entityId),
-                            ABORT())),
-                ABORT())) //find the agent's own position
+        GoalStructure g1 = goal1.withTactic(
+        		FIRSTof( //the tactic used to solve the goal
+                   TacticLib.navigateTo(entityId), //try to move to the entity
+                   TacticLib.explore(), //find the entity
+                   ABORT())) 
                 .lift();
         
-        GoalStructure g2 = goal2.withTactic(FIRSTof( //the tactic used to solve the goal
-                TacticLib.interact(entityId),// interact with the entity
-                ABORT())) // observe the objects
+        GoalStructure g2 = goal2.withTactic(
+        		FIRSTof( //the tactic used to solve the goal
+                   TacticLib.interact(entityId),// interact with the entity
+                   ABORT())) // observe the objects
                 .lift();
 
         return SEQ(g1, g2);
     }
     
 
-
-    /**
-     * Interact with a variable number of buttons sequentially before moving to the goal
-     *
-     * @param goal    The name of the object of the final goal
-     * @param buttons A collection of objects to interact with
-     * @return A sequence of goals moving to and interacting with the given objects
-     */
-    public static GoalStructure buttonsVisited_thenGoalVisited(String goal, String... buttons) {
-        var gs = new GoalStructure[buttons.length + 1];
-        for (int i = 0; i < buttons.length; i++) gs[i] = entityIsInteracted(buttons[i]);
-        gs[buttons.length] = entityIsInRange(goal).lift();
-
-        return SEQ(gs);
-    }
-
-    /**
-     * This goal will make agent to navigate to the given entity, and make sure that the agent has the 
-     * latest observation of the entity.
-     * Getting the entity within sight is enough to complete this goal.
-     * 
-     * This goal fails if the agent no longer believes that the entity is reachable.
-     */
-    public static Goal entityInspected(String id){
-        return goal("This entity is inpected: " + id)
+	/**
+	 * This goal will make agent to navigate to the given entity, and make sure that
+	 * the agent has the latest observation of the entity. Getting the entity within
+	 * sight is enough to complete this goal.
+	 * 
+	 * This goal fails if the agent no longer believes that the entity is reachable.
+	 */
+    public static Goal entityStateRefreshed(String id){
+        return goal("The belief on this entity is refreshed: " + id)
                 .toSolve((BeliefState b) -> b.evaluateEntity(id, e -> b.age(e) == 0))
                 .withTactic(FIRSTof(
                         TacticLib.navigateTo(id),
                         TacticLib.explore(),
-                        // handling explore-blind corner:
-                        SEQ(TacticLib.forcePastExploreBlindCorner(),
-                            FIRSTof(TacticLib.navigateTo(id),
-                            		ABORT())),
                         ABORT()));
     }
 
@@ -311,12 +322,14 @@ public class GoalLib {
      */
     public static GoalStructure entityInspected(String id, Predicate<WorldEntity> predicate){
         return SEQ(
-            entityInspected(id).lift(),
-            goal("Evaluate " + id)
+            entityStateRefreshed(id).lift(),
+            goal("This entity is inspected: " + id)
             .toSolve((BeliefState b) -> b.evaluateEntity(id, predicate))
-            .withTactic(FIRSTof(
-                    TacticLib.observeOnce(),
-                    ABORT())).lift()
+            .withTactic(
+                SEQ(
+                   TacticLib.observe(),
+                   ABORT()))
+            .lift()
         );
     }
     
@@ -333,10 +346,10 @@ public class GoalLib {
      */
     public static GoalStructure entityInvariantChecked(TestAgent agent, String id, String info, Predicate<WorldEntity> predicate){
         return SEQ(
-            entityInspected(id).lift(),
+            entityStateRefreshed(id).lift(),
             testgoal("Invariant check " + id, agent)
-            .toSolve((BeliefState b) -> true) // nothing to solve
-            .invariant(agent,                 // something to check :)
+            . toSolve((BeliefState b) -> true) // nothing to solve
+            . invariant(agent,                 // something to check :)
             		(BeliefState b) -> {
             			if (b.evaluateEntity(id, predicate))
             			   return new VerdictEvent("Object-check " + id, info, true) ;
@@ -345,9 +358,8 @@ public class GoalLib {
             			
             		}
             		)
-            .withTactic(FIRSTof(
-                    TacticLib.observeOnce(),
-                    ABORT())).lift()
+            .withTactic(TacticLib.observe())
+            .lift()
         );
     }
     
@@ -368,8 +380,8 @@ public class GoalLib {
             			   return new VerdictEvent("Inv-check" , info, false) ;
             		    }
             		)
-            .withTactic(FIRSTof(
-                    TacticLib.observeOnce(),
+            .withTactic(SEQ(
+                    TacticLib.observe(),
                     ABORT())).lift()
         );
     }
@@ -381,7 +393,7 @@ public class GoalLib {
      * @return A goal structure which will be concluded when the agent shared its memory once
      */
     public static GoalStructure memorySent(String id){
-        return goal("Share memory").toSolve((BeliefState belief) -> true).withTactic(
+        return goal("Map is shared").toSolve((BeliefState belief) -> true).withTactic(
                 TacticLib.shareMemory(id)
         ).lift();
     }

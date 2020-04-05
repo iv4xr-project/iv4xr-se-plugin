@@ -27,34 +27,26 @@ import java.util.stream.Collectors;
 public class BeliefState extends StateWithMessenger {
 
     public String id;
-    //public Vec3 position;
-    //public Vec3 velocity;
     
     /**
      * To keep track entities the agent has knowledge about (not necessarily up to date knowledge).
      */
     public LabWorldModel worldmodel = new LabWorldModel() ;
-
-    //private HashMap<String, LegacyEntity> entities = new HashMap<>();
     
     /**
      * This keep track of the world's map that is known (has been explored) by the agent.
      */
     public MentalMap mentalMap;
-
-    //public int lastUpdated = -1;
-    //public boolean didNothingPreviousTurn;
   
     public Boolean receivedPing = false;//store whether the agent has an unhandled ping
 
-    
     /**
      * keep track of nodes which are blocked and can not be used for pathfinding
      */
     public HashSet<Integer> blockedNodes = new HashSet<>();
     public HashMap<String, Integer[]> nodesBlockedByEntity = new HashMap<>();
     
-    List<Vec3> recentPositions = new LinkedList<>() ;
+    List<Vec3> recentPositions = new LinkedList<>() ; 
 
     public BeliefState() { }
 
@@ -111,7 +103,7 @@ public class BeliefState extends StateWithMessenger {
     	return this.worldmodel.timestamp - e.timestamp ;
     }
     
-    public Long age(String id) { return age(getEntity(id)) ; }
+    public Long age(String id) { return age(worldmodel.getElement(id)) ; }
     
     /**
      * Like derivedLastVelocity(), but if it tries to get the last known
@@ -150,14 +142,9 @@ public class BeliefState extends StateWithMessenger {
         return nodesBlockedByEntity.getOrDefault(id, new Integer[]{});
     }
 
-    public WorldEntity getEntity(String id) { 
-        return worldmodel.getElement(id) ;
-    }
-
-
     // predicates
     public boolean evaluateEntity(String id, Predicate<WorldEntity> predicate) {
-    	WorldEntity e  = getEntity(id) ;
+    	WorldEntity e  = worldmodel.getElement(id) ;
     	if (e==null) return false ;
         return predicate.test(e);
     }
@@ -169,7 +156,7 @@ public class BeliefState extends StateWithMessenger {
     	return button!= null && button.getBooleanProperty("isOn") ;
     }
 
-    public boolean isOn(String id) { return isOn(getEntity(id)) ; }
+    public boolean isOn(String id) { return isOn(worldmodel.getElement(id)) ; }
     
     /**
      * Check if a door is active/open.
@@ -178,7 +165,7 @@ public class BeliefState extends StateWithMessenger {
     	return door != null && door.getBooleanProperty("isOpen") ;
     }
 
-    public boolean isOpen(String id) { return isOpen(getEntity(id)) ; }
+    public boolean isOpen(String id) { return isOpen(worldmodel.getElement(id)) ; }
     
 	/**
 	 * Calculate the straight line distance from the agent to an entity, without
@@ -189,7 +176,7 @@ public class BeliefState extends StateWithMessenger {
     	return worldmodel.position.distance(e.position) ;
     }
     
-    public double distanceTo(String id) { return distanceTo(getEntity(id)) ; }
+    public double distanceTo(String id) { return distanceTo(worldmodel.getElement(id)) ; }
     
 	/**
 	 * Check if the agent belief there is a path from its current location to the
@@ -217,40 +204,23 @@ public class BeliefState extends StateWithMessenger {
 	 * so, the route/path is returned. Be aware that this might be an expensive
 	 * query as it trigger a fresh path finding calculation.
 	 */ 
-    public Vec3[] canReach(String id) { return canReach(getEntity(id)) ; }
+    public Vec3[] canReach(String id) { return canReach(worldmodel.getElement(id)) ; }
     
-
 	/**
-	 * Invoke the mental map to find a path. This triggers a fresh path calculation
-	 * to make sure that the latest belief is used.
-	 * 
+	 * Invoke the mental map to find a path to the given position. If there is
+	 * already a path to get there (that was previously calculated and memorized by
+	 * the agent) this memorized path will be returned. Else a path is obtained from
+	 * fresh path calculation.
+	 *
 	 * @param goal: The position where the agent wants to move to.
-	 * @return The path found
+	 * @return The path found or the already stored path if the goal location is
+	 *         equal to the previous goal location
 	 */
     public Vec3[] findPathTo(Vec3 q) {
-        return mentalMap.navigateForce(worldmodel.getFloorPosition(), q, blockedNodes);
-    }
-
-    /**
-     * Invoke the mental map to find a path, unless it already has a path towards it.
-     *
-     * @param goal: The position where the agent wants to move to.
-     * @return The path found or the already stored path if the goal location is equal to the previous goal location
-     */
-    public Vec3[] cachedFindPathTo(Vec3 q) {
         return mentalMap.navigate(worldmodel.getFloorPosition(), q, blockedNodes);
     }
     
-    /**
-     * This method will make the agent move a certain (small) max distance toward the given position.
-     */
-    public LabWorldModel moveToward(Vec3 q) {
-    	var o = env().moveToward(this.id, worldmodel.getFloorPosition(), q) ;
-    	recentPositions.add(o.getFloorPosition()) ;
-    	// keep track the last FOUR positions
-    	if (recentPositions.size()>4) recentPositions.remove(0) ;
-    	return o ;
-    }
+
     
     /**
      * True if the agent is "stuck" with respect to the given position q. "Stuck" is
@@ -259,7 +229,7 @@ public class BeliefState extends StateWithMessenger {
      * between p0 and p1 and p0 and p3 are at most 0.05, and the distance between p0 and
      * q is larger than 1.0.
      */
-    public boolean isStuck(Vec3 q) {
+    public boolean isStuck() {
     	int N = recentPositions.size() ;
     	if(N<3) return false ;
     	Vec3 p0 = recentPositions.get(N-3) ;
@@ -276,76 +246,21 @@ public class BeliefState extends StateWithMessenger {
     	recentPositions.clear();
     }
     
-    /**
-     * Check if the agent is located close to a door. If so, the door is returned, and otherwise null.
-     * "Close" is being defined as within a distance of 0.6 unit.
-     */
-    public WorldEntity atDoor() {
+	/**
+	 * Return all close-by doors around the agent. Else an empty list is returned.
+	 * "Close" is being defined as within a distance of 0.6 unit.
+	 */
+    public List<WorldEntity> closebyDoor() {
     	var doors = knownDoors() ;
+    	List<WorldEntity> nearbyDoors = new LinkedList<>();
     	for (var d : doors) {
-    		if (worldmodel.position.distance(d.position) <= CLOSE_RANGE) return d ;
+    		if (worldmodel.position.distance(d.position) <= CLOSE_RANGE) {
+    			nearbyDoors.add(d) ;
+    		}
     	}
-    	return null ;
+    	return nearbyDoors ;
     }
-    
-    private static double sign_(double x) {
-    	if (x>0) return 1 ;
-    	if (x<0) return -1 ;
-    	return 0 ;
-    }
-    
-    /**
-     * If the agent gets stuck in an bending corner (because the navigation algorithm does not
-     * take agent's dimension into account... :| ), this method tries to find a position close 
-     * to the agent, which can unstuck agent. The agent can travel to this new position, which
-     * will move it past the stucking corner.
-     * 
-     * If such a position can be found, it is returned. Else null is returned.
-     * 
-     * Note that the method simply checks if there is a navigation polygon that contains this
-     * unstuck position. It doesn't check if this position is actually reachable from the agent's
-     * current position.
-     */
-    public Vec3 unstuck() {
-    	var unstuck_distance = UNIT_DISTANCE * 0.5 ;
-    	// use derived velocity...
-    	var velocity_ = derived_lastNonZeroXZVelocity() ;
-    	if (velocity_ == null) {
-    		// movement vector is unknown ... try one of these:
-    		/*
-    		var p = new Vec3(position.x + unstuck_distance, position.y, position.z) ;
-    		if (mentalMap.getContainingPolygon(p) != null) return p ; 
-    		p = new Vec3(position.x - unstuck_distance, position.y, position.z) ;
-    		if (mentalMap.getContainingPolygon(p) != null) return p ; 
-    		p = new Vec3(position.x, position.y, position.z +  unstuck_distance) ;
-    		if (mentalMap.getContainingPolygon(p) != null) return p ; 
-    		p = new Vec3(position.x, position.y, position.z -  unstuck_distance) ;
-    		if (mentalMap.getContainingPolygon(p) != null) return p ; 
-    		*/
-    		return null ;
-    	}
-    	var x_orientation = sign_(velocity_.x) ;  // 1 if the agent is facing eastly, and -1 if westly
-    	var z_orientation = sign_(velocity_.z) ;  // 1 if the agent is facing northly, and -1 if southly
-    	// System.out.println("#### calling unstuck()") ;
-    	// try E/W unstuck first:
-    	if (x_orientation != 0) {
-    		var p = worldmodel.getFloorPosition() ;
-    		p.x += unstuck_distance*x_orientation ;
-    		if (mentalMap.getContainingPolygon(p) != null) return p ; 
-        	//if (mentalMap.pathFinder.graph.vecToNode(p) != null) return p ;
-    	}
-    	// try N/S unstuck:
-    	if (z_orientation != 0) {
-    		var p = worldmodel.getFloorPosition() ;
-    		p.z = unstuck_distance*z_orientation ;
-        	if (mentalMap.getContainingPolygon(p) != null) return p ; 
-        	//if (mentalMap.pathFinder.graph.vecToNode(p) != null) return p ;	
-    	}
-    	// can't find an unstuck option...
-    	return null ;
-    }
-    
-
+  
     /**
      * Get the goal location of the agent.
      *
@@ -363,47 +278,37 @@ public class BeliefState extends StateWithMessenger {
     public Vec3 getNextWayPoint() {
         return mentalMap.getNextWayPoint();
     }
-
+	
+    @Override
+    public void updateState() {
+        super.updateState();
+        var observation = this.env().observe(id) ;
+        mergeNewObservationIntoWOM(observation) ;
+        recentPositions.add(new Vec3(this.worldmodel.position)) ;
+        if (recentPositions.size()>4) recentPositions.remove(0) ;
+    }
     /**
      * Update the agent's belief state with new information from the environment.
      *
      * @param observation: The observation used to update the belief state.
      */
-    public void updateBelief(LabWorldModel observation) {
-        //check if the observation is not null
-        if (observation == null) throw new IllegalArgumentException("Null observation received");
-           
-        // increase the time stamp:
-        worldmodel.increaseTimeStamp() ;
-        
-        // odd the newly seen entities, or incorporate their change:
-        List<WorldEntity> freshOrChangedEntities = new LinkedList<>() ;
-        for(WorldEntity e : observation.elements.values()) {
-        	var f = worldmodel.addEntity(e) ;
-        	if (e==f) {
-        		// so.. e was added; so it is fresh or changes
-        		freshOrChangedEntities.add(e) ;
-        	}
-        }
-        // we will now swap the world models:
-        observation.timestamp = worldmodel.timestamp ;
-        observation.elements = worldmodel.elements ;
-        worldmodel = observation ;
-        
-        // recalculating navigation nodes that become blocked or unblocked:
+    public void mergeNewObservationIntoWOM(LabWorldModel observation) {
+    	
+    	var impactEntities = worldmodel.mergeNewObservation(observation) ;
+    	// recalculating navigation nodes that become blocked or unblocked:
         boolean refreshNeeded = false ;
-        for (var e : freshOrChangedEntities) {
+        for (var e : impactEntities) {
         	switch(e.type) {
-        	  case "Door" : {
+        	  case LabEntity.DOOR : {
         	 	 var blocked = nodesBlockedByEntity.get(e.id) ;
-        		 if (blocked==null && e.isBlocking()) {
+        		 if (blocked==null && worldmodel.isBlocking(e)) {
         			// ADD blocked nodes!
         			blocked = EntityNodeIntersection.getNodesBlockedByInteractiveEntity(e, mentalMap.pathFinder.navmesh); 
         			// if (blocked.length > 0 ) don't bother with this guard.. more efficient without
         			nodesBlockedByEntity.put(e.id,blocked) ; 
         			refreshNeeded = true ;
         		 } 
-        		 else if (blocked!=null && ! e.isBlocking())  {
+        		 else if (blocked!=null && ! worldmodel.isBlocking(e))  {
         			 // the door is open, clear the blocked nodes!
         		 	nodesBlockedByEntity.remove(e.id) ;
         		 	refreshNeeded = true ;
@@ -413,8 +318,8 @@ public class BeliefState extends StateWithMessenger {
         		 }
         		 break ;
         	  }
-        	  case "ColorScreen" : // fall through
-        	  case "Goal" : {
+        	  case LabEntity.COLORSCREEN : // fall through
+        	  case LabEntity.GOAL : {
         		 var blocked = nodesBlockedByEntity.get(e.id) ;
          		 if (blocked==null) {
          			// ADD blocked nodes!
@@ -429,13 +334,16 @@ public class BeliefState extends StateWithMessenger {
         	  }
         	}
         }
+    	//System.out.println("### impacted entities = " + impactEntities.size()) ;
+    	//System.out.println("    blocked-nodes refresh needed = " + refreshNeeded) ;
+
         if (refreshNeeded) {
         	blockedNodes.clear(); 
             for(var blocked: nodesBlockedByEntity.values()) Collections.addAll(blockedNodes,blocked); 
         }
                   
         //add the newly found part, if there is any, of the world map to the mental-map
-        mentalMap.updateKnownVertices(worldmodel.visibleNavigationNodes);
+        mentalMap.updateKnownVertices(worldmodel.timestamp,observation.visibleNavigationNodes);
         mentalMap.updateCurrentWayPoint(worldmodel.getFloorPosition());
     }
 
@@ -449,15 +357,15 @@ public class BeliefState extends StateWithMessenger {
         return mentalMap.getUnknownNeighbourClosestTo(startPosition, targetPosition, blockedNodes);
     }
 
-    /**
+    /*
      * Test if the agent is within the interaction bounds of an object.
      * @param id: the object to look for.
      * @return whether the object is within reach of the agent.
      */
-    public boolean isWIthinInteractionDistanceWith(String id) {
-    	var e = getEntity(id) ;
+    public boolean canInteract(String id) {
+    	var e = worldmodel.getElement(id) ;
     	if (e==null) return false ;
-        return e.isWithinInteractionDistance(worldmodel.getFloorPosition());
+   	    return worldmodel.canInteract(LabWorldModel.INTERACT, e) ;
     }
 
     public static final float IN_RANGE = 0.4f ;
@@ -481,7 +389,7 @@ public class BeliefState extends StateWithMessenger {
     	return e != null && withinRange(((LabEntity) e).getFloorPosition());
     }
     
-    public boolean withinRange(String id){ return withinRange(getEntity(id)) ; }
+    public boolean withinRange(String id){ return withinRange(worldmodel.getElement(id)) ; }
     
     private boolean withinRange(Vec3 destination, float range){
         return worldmodel.position != null && worldmodel.getFloorPosition().distanceSquared(destination) < range * range;
@@ -512,8 +420,4 @@ public class BeliefState extends StateWithMessenger {
         return this;
     }
 
-    @Override
-    public void updateState() {
-        super.updateState();
-    }
 }

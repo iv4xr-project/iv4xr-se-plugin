@@ -26,6 +26,9 @@ import world.LegacyObservation;
  */
 public class LabRecruitsEnvironment extends SocketEnvironment {
 
+	/**
+	 * Navigation graph.
+	 */
     public Pathfinder pathFinder;
 
     /**
@@ -34,6 +37,9 @@ public class LabRecruitsEnvironment extends SocketEnvironment {
      * the Lab Recruit game to be already launched. The given configuration object
      * contains information about the TCP port to be used to communicate with the game
      * instance. 
+     * 
+     * The constructor also asks the game to send the whole navigation-mesh of the level,
+     * which it then stores in the {@link pathFinder} field.
      */
     public LabRecruitsEnvironment(EnvironmentConfig config) {
         super(config.host, config.port);
@@ -61,7 +67,7 @@ public class LabRecruitsEnvironment extends SocketEnvironment {
     private LabWorldModel sendAgentCommand_andGetObservation(AgentCommand c){
     	LegacyObservation obs = getResponse(Request.command(c)); 
     	// covert the obtained observation to a WorldModel:
-    	var wom = LabWorldModel.toWorldModel(obs) ;
+    	var wom = LegacyObservation.toWorldModel(obs) ;
         return wom ;
     }
 

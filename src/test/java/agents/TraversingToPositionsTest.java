@@ -62,8 +62,7 @@ public class TraversingToPositionsTest {
         var p4 = new Vec3(1,0,1) ;
         
         // Make the agent reach each positon sequentially.
-        var g = SEQ(GoalLib.justObserve().lift(),
-        		    GoalLib.positionsVisited(p1),
+        var g = SEQ(GoalLib.positionsVisited(p1),
         		    GoalLib.invariantChecked(agent,"p1 is reached", 
         		    		(BeliefState s) -> s.worldmodel.getFloorPosition().distance(p1) < 0.5), 
         		    GoalLib.positionsVisited(p2),
