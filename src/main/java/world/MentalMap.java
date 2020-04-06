@@ -10,25 +10,25 @@ package world;
 import helperclasses.Intersections.EntityNodeIntersection;
 import helperclasses.Intersections.PointTriangleIntersection;
 import helperclasses.Intersections.TrianglePolygonIntersection;
+import helperclasses.datastructures.Tuple;
 import helperclasses.datastructures.Vec3;
 import helperclasses.datastructures.linq.QArrayList;
 import pathfinding.Pathfinder;
 
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 /**
  * This class is used  to store the current knowledge of the world and form it into a mental map
  */
 public class MentalMap {
     private boolean[] knownVertices;
+    private long[] knownVerticesTimestamps ; // containing information on when vert. i becomes known, else it is null
     public Pathfinder pathFinder;
 
     //store the current path and position on the path
     private Vec3[] path;
+    private long pathTimestamp = -1 ;
     private Vec3 goalLocation;
     private int currentWayPoint = -1;
 
@@ -40,6 +40,7 @@ public class MentalMap {
     public MentalMap(Pathfinder p) {
         pathFinder = p;
         knownVertices = new boolean[pathFinder.navmesh.vertices.length];
+        knownVerticesTimestamps = new long[pathFinder.navmesh.vertices.length] ;
     }
 
     /**
@@ -47,15 +48,23 @@ public class MentalMap {
      * @param goal: The goal location of the path
      * @param path: The path the agent will follow
      */
-    public void applyPath(Vec3 goal, Vec3[] path){
+    public void applyPath(long timestamp, Vec3 goal, Vec3[] path){
         this.path = path;
+        pathTimestamp = timestamp ;
         currentWayPoint = path.length - 1;
         goalLocation = goal;
     }
+    
+    public long getPathTimestamp() { return pathTimestamp ; }
 
     /**
-     * This method will invoke the pathfinder to try to compute a path with the current seen nodes
-     *
+     * This method will invoke the pathfinder to try to compute a path to the given
+     * goal-position. Only then nodes so-far seen by the agent will be used for 
+     * planning the path (in particular, the part of the world which the agent
+     * has not seen will be excluded). A list of nodes which should additionally
+     * be excluded for path planning, e.g. because they are blocked, can also be
+     * added.
+     * 
      * @param from: The location of the agent from where to start the path finding
      * @param goal: The position where the agent wants to move to
      * @return The path which is constructed or null if it was impossible to construct the path
@@ -69,11 +78,22 @@ public class MentalMap {
     }
 
     /**
-     * This method will invoke the pathfinder, if the goal is different from the previous goal
-     * @param from: The location of the agent from where to start the path finding
-     * @param goal: The position where the agent wants to move to
-     * @return The path which is constructed or null if it was impossible to construct the path
-     */
+	 * This method will invoke the pathfinder, if the goal is different from the
+	 * currently maintained goal. If the goal-position is the same, this method will
+	 * return the previously remembered path to the position.
+	 * 
+	 * If the currently maintained goal-position is different, this method will
+	 * invoke {@link navigateForce}. Only then nodes so-far seen by the agent will
+	 * be used for planning the path (in particular, the part of the world which the
+	 * agent has not seen will be excluded). A list of nodes which should
+	 * additionally be excluded for path planning, e.g. because they are blocked,
+	 * can also be added.
+	 * 
+	 * @param from: The location of the agent from where to start the path finding
+	 * @param goal: The position where the agent wants to move to
+	 * @return The path which is constructed or null if it was impossible to
+	 *         construct the path
+	 */
     public Vec3[] navigate(Vec3 from, Vec3 goal, HashSet<Integer> blockedNodes) {
         //Check if the goal is different
         if (goalLocation != null) {
@@ -144,9 +164,13 @@ public class MentalMap {
      *
      * @param visibleNodes: The list of nodes which are visible to the agent
      */
-    public void updateKnownVertices(int[] visibleNodes) {
+    public void updateKnownVertices(long timestamp, int[] visibleNodes) {
         for (int i : visibleNodes) {
-            knownVertices[i] = true;
+        	// only update previously unknown vertex:
+        	if (!knownVertices[i]) {
+        		knownVertices[i] = true;
+                knownVerticesTimestamps[i] = timestamp ;
+        	}    
         }
     }
 
@@ -207,13 +231,44 @@ public class MentalMap {
      * @return An array of vertices by id known to the agent
      */
     public Integer[] getKnownVerticesById(){
-        List<Integer> vertices = new ArrayList<>();
+        List<Integer> vertices = new LinkedList<>();
         for(int i =0; i < knownVertices.length; i++) {
             if(knownVertices[i]) vertices.add(i);
         }
-
         return vertices.toArray(new Integer[vertices.size()]);
     }
+    
+    public List<Tuple<Integer,Long>> getKnownVertices_withTimestamps() {
+    	List<Tuple<Integer,Long>> vertices = new LinkedList<>();
+        for(int i =0; i < knownVertices.length; i++) {
+            if(knownVertices[i]) {
+            	vertices.add( new Tuple(i,knownVerticesTimestamps[i]));
+            }
+        }
+        return vertices ;
+    }
+    
+    /*
+    public Vec3 getFurthestCenterPoint_ofLastExploredPolygon(Vec3 agentPosition) {
+    	long mostRecentTimestamp = -1 ;
+    	for(int k=0; k<knownVertices.length; k++) {
+    		if (knownVertices[k]) {
+    			mostRecentTimestamp = Math.max(mostRecentTimestamp, knownVerticesTimestamps[k]) ;
+    		}
+    	}
+    	if (mostRecentTimestamp < 0) return null ;
+    	Vec3 furthest = null ;
+    	for (int k=0;  k<knownVertices.length; k++) {
+    		if (knownVertices[k] &&  knownVerticesTimestamps[k]>=mostRecentTimestamp) {
+    			var q = pathFinder.graph.toVec3(k) ;
+    			if (furthest==null || agentPosition.distance(q) > agentPosition.distance(furthest)) {
+    			    furthest = q ;
+    			}
+    		}
+    	}
+    	return furthest ;
+    }
+    */
 
     public boolean[] getKnownVertices(){ return knownVertices;}
     

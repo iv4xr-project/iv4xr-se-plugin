@@ -48,7 +48,7 @@ public class EntityNodeIntersectionTest {
         TriangleMesh m = setup();
 
         //create the entity
-        var e = new LabEntity("id","bla",false,false);
+        var e = new LabEntity("id","bla",false);
         //e.center = new Vec3(2,0.5,1);   
         //e.center = new Vec3(1.5,0.5,1); // applying -0.5 on v.x due to the Door-hack.
         e.position = new Vec3(2,0.5,1);   
@@ -69,7 +69,7 @@ public class EntityNodeIntersectionTest {
         TriangleMesh m = setup();
 
         //create the entity
-        var e = new LabEntity("id","bla",false,false);
+        var e = new LabEntity("id","bla",false);
         // e.center = new Vec3(5,0.5,5);
         //e.center = new Vec3(4.5,0.5,5); // applying -0.5 on v.x due to the Door-hack.
         e.position = new Vec3(5,0.5,5);
@@ -89,7 +89,7 @@ public class EntityNodeIntersectionTest {
         TriangleMesh m = setup();
 
         //create the entity
-        var e = new LabEntity("id","bla",false,false);
+        var e = new LabEntity("id","bla",false);
         //e.center = new Vec3(3,0.5,3);
         //e.center = new Vec3(2.5,0.5,3); // applying -0.5 on v.x due to the Door-hack.
         e.position = new Vec3(3,0.5,3);
@@ -111,7 +111,7 @@ public class EntityNodeIntersectionTest {
         TriangleMesh m = setup();
 
         //create the entity
-        var e = new LabEntity("id","bla",false,false);
+        var e = new LabEntity("id","bla",false);
         //e.center = new Vec3(2,3.5,2);
         //e.center = new Vec3(1.5,3.5,2); // applying -0.5 on v.x due to the Door-hack.   
         e.position = new Vec3(2,3.5,2);

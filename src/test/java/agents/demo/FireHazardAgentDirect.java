@@ -70,16 +70,15 @@ public class FireHazardAgentDirect {
         //You will probably not want to explore to prevent random behaviour. in order to do this set the waypoints close enough to each other
 
     	var testingTask = SEQ(
-        		GoalLib.justObserve().lift(),
-                GoalLib.originalPositionIsInRange(new Vec3(6,0,5)).lift(),
-                GoalLib.originalPositionIsInRange(new Vec3(7,0,8)).lift(),
-                GoalLib.originalPositionIsInRange(new Vec3(7,0,11)).lift(),
-                GoalLib.originalPositionIsInRange(new Vec3(5,0,11)).lift(),
-                GoalLib.originalPositionIsInRange(new Vec3(5,0,16)).lift(),
-                GoalLib.originalPositionIsInRange(new Vec3(2,0,16)).lift(),
-                GoalLib.originalPositionIsInRange(new Vec3(1,0,18)).lift(),
-                GoalLib.originalPositionIsInRange(new Vec3(3,0,20)).lift(),
-                GoalLib.originalPositionIsInRange(new Vec3(6,0,20)).lift(),
+        		GoalLib.positionIsInRange(new Vec3(6,0,5)).lift(),
+                GoalLib.positionIsInRange(new Vec3(7,0,8)).lift(),
+                GoalLib.positionIsInRange(new Vec3(7,0,11)).lift(),
+                GoalLib.positionIsInRange(new Vec3(5,0,11)).lift(),
+                GoalLib.positionIsInRange(new Vec3(5,0,16)).lift(),
+                GoalLib.positionIsInRange(new Vec3(2,0,16)).lift(),
+                GoalLib.positionIsInRange(new Vec3(1,0,18)).lift(),
+                GoalLib.positionIsInRange(new Vec3(3,0,20)).lift(),
+                GoalLib.positionIsInRange(new Vec3(6,0,20)).lift(),
                 GoalLib.entityIsInteracted("b1.1"),
                 GoalLib.positionsVisited(new Vec3(5,0,25))
         ) ;

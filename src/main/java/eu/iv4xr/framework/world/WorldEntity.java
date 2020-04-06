@@ -1,12 +1,13 @@
 package eu.iv4xr.framework.world;
 
-import java.io.Serializable;
+import java.io.*;
 import java.util.*;
 
 import eu.iv4xr.framework.world.WorldModel;
 import helperclasses.datastructures.Vec3;
+import nl.uu.cs.aplib.mainConcepts.Environment;
 
-public class WorldEntity {
+public class WorldEntity implements Serializable {
 	
 	/**
 	 * A unique id identifying this entity.
@@ -18,6 +19,9 @@ public class WorldEntity {
 	 */
 	public final String type ;
 	
+	/**
+	 * Represent the last time the state of this entity is sampled.
+	 */
 	public long timestamp = -1 ;
 	
 	/**
@@ -31,11 +35,6 @@ public class WorldEntity {
 	public Vec3 velocity ;
 	
 	/**
-	 * If true then this entity can be interacted to.
-	 */
-	public final boolean interactable ;
-	
-	/**
 	 * If true then this entity is "dynamic", which means that its state may change at the runtime.
 	 * Note that an entity does not have to be moving (having velocity) to be dynamic.
 	 */
@@ -44,10 +43,9 @@ public class WorldEntity {
 	
 	public Map<String,WorldEntity> elements = new HashMap<>() ;
 		
-	public WorldEntity(String id, String type, boolean interactable, boolean dynamic) {
+	public WorldEntity(String id, String type, boolean dynamic) {
 		this.id = id ;
 		this.type = type ;
-		this.interactable = interactable ;
 		this.dynamic = dynamic ;
 	}
 	
@@ -137,6 +135,13 @@ public class WorldEntity {
 	}
 	
 	/**
+	 * Return a WorldEntity representing this entity's previous state, if that is tracked.
+	 */
+	public WorldEntity getPreviousState() {
+		return previousState ;
+	}
+	
+	/**
 	 * True if this entity has no previous state, or if its state differs
 	 * from its previous.
 	 * Note that we only track 1x previous state (so there is no longer
@@ -156,23 +161,6 @@ public class WorldEntity {
 	}
 	
 	/**
-	 * Return true if this entity can block movement, and else false.
-	 * This method should be implemented by the subclass. So, override this.
-	 */
-	public boolean isBlocking() {
-		throw new UnsupportedOperationException() ;
-	}
-	
-	/**
-	 * Determine if the given position p is close enough to this entity to allow an agent
-	 * which is located at p to interact with the entity. This should be implemented
-	 * by the subclass. So, override this.
-	 */
-	public boolean isWithinInteractionDistance(Vec3 p) {
-		throw new UnsupportedOperationException() ;
-	}
-	
-	/**
 	 * If true then this entity is a moving entity. This is defined as having a
 	 * non-null velocity. Note that the entity may still have a zero velocity;
 	 * but it will still be classified as "moving".
@@ -185,6 +173,16 @@ public class WorldEntity {
 	@Override
 	public int hashCode() {
 		return Objects.hash(position,velocity,extent,properties,elements) ;
+	}
+	
+	public WorldEntity deepclone() throws IOException, ClassNotFoundException {
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		ObjectOutputStream out = new ObjectOutputStream(bos);
+        out.writeObject(this);
+        ByteArrayInputStream bis = new   ByteArrayInputStream(bos.toByteArray());
+        ObjectInputStream in = new ObjectInputStream(bis);
+        var copied = (WorldEntity) in.readObject();
+        return copied ;
 	}
 
 }

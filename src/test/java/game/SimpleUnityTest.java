@@ -109,8 +109,8 @@ public class SimpleUnityTest {
                 .toSolve((BeliefState belief) 
                 		  -> 
                           belief.knownEntities().size() == 1
-                          && belief.getEntity("button0") != null 
-                          && belief.getEntity("button0").position.equals(new Vec3(1, 0, 1)))
+                          && belief.worldmodel.getElement("button0") != null 
+                          && belief.worldmodel.getElement("button0").position.equals(new Vec3(1, 0, 1)))
                 .withTactic(TacticLib.observe()) // the agent should be able to see the button by observing
                 .lift();
 
@@ -154,8 +154,8 @@ public class SimpleUnityTest {
                 .toSolve((BeliefState belief) 
               		  -> 
                    belief.knownEntities().size() == 1
-                   && belief.getEntity("button1") != null 
-                   && belief.getEntity("button1").position.equals(new Vec3(3, 0, 1)))
+                   && belief.worldmodel.getElement("button1") != null 
+                   && belief.worldmodel.getElement("button1").position.equals(new Vec3(3, 0, 1)))
                 .withTactic(TacticLib.observe()) // the agent should be able to see the button by observing
                 .lift();
 
@@ -192,9 +192,7 @@ public class SimpleUnityTest {
     		        . attachEnvironment(environment);
 
         GoalStructure goal = SEQ(
-        		GoalLib.justObserve().lift(),
-                GoalLib.positionIsInRange(new Vec3(1,0,1)).lift(),
-                //GoalLib.entityIsInRange("button0").lift(),
+        		GoalLib.positionIsInRange(new Vec3(1,0,1)).lift(),
                 GoalLib.entityInspected("button0", e -> ! e.getBooleanProperty("isOn")),
                 GoalLib.entityIsInteracted("button0"),
                 GoalLib.entityInspected("button0", e -> e.getBooleanProperty("isOn")),

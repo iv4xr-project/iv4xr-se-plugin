@@ -7,12 +7,13 @@ at Utrecht University within the Software and Game project course.
 
 package helperclasses.datastructures;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
  * Basic class to store 3 doubles together
  */
-public class Vec3 {
+public class Vec3 implements Serializable {
 
     public double x, y, z;
 
@@ -247,7 +248,9 @@ public class Vec3 {
     }
 
     /**
-     * This method will compute the normalized distance squared
+     * This method will compute the normalized distance squared.
+     * "Normalized" here means that it is always positive. So
+     * let d = q - p. Then we calculate d.x^2 + d.y^2 + d.z^2.
      *
      * @return The normalized distance squared
      */
@@ -257,7 +260,8 @@ public class Vec3 {
     }
 
     /**
-     * This method will compute the normalized distance
+     * This method will compute the normalized distance.
+     * "Normalized" here means that it is always positive.
      *
      * @return The normalized distance
      */

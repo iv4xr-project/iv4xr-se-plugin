@@ -62,8 +62,7 @@ public class Explore_2_Test {
         		                     . attachState(new BeliefState())
         		                     . attachEnvironment(environment) ;
         
-        var g = SEQ(GoalLib.justObserve().lift(),
-        		    GoalLib.entityIsInteracted("button1")) ;
+        var g = GoalLib.entityIsInteracted("button1") ;
         
         agent.setGoal(g) ;
 
@@ -93,7 +92,7 @@ public class Explore_2_Test {
         
         assertTrue(g.getStatus().success()) ;
         var agent_p  = agent.getState().worldmodel.getFloorPosition() ;
-        var button_p = ((LabEntity) agent.getState().getEntity("button1")).getFloorPosition() ;
+        var button_p = ((LabEntity) agent.getState().worldmodel.getElement("button1")).getFloorPosition() ;
         assertTrue(agent_p.distance(button_p) < 0.5) ;
 
         if (!environment.close())

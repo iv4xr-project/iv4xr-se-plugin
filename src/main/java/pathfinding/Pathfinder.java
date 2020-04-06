@@ -24,8 +24,8 @@ public class Pathfinder
 
     public TriangleMesh navmesh;
     public TriangleGraph graph;
-    List<Vec3> path;
-    Integer[] edges;
+    //List<Vec3> path;
+    //Integer[] edges;
     Vec3 prev;
     int left;
     int right;
@@ -77,13 +77,13 @@ public class Pathfinder
     {
         Astar astar = new Astar(this.graph, from, to, knownVertices, blockedNodes);
         Integer[] pathIndices = astar.getPath();
-        path = new ArrayList<>();
+        List<Vec3> path = new ArrayList<>();
         path.add(to);
 
         //if the length of the path equals 1 then no waypoint generation is needed
         if(pathIndices.length == 1) return new Vec3[]{to};
 
-        edges = getEdges(pathIndices);
+        Integer[] edges = getEdges(pathIndices);
 
         prev = to;
         int[] leftright = getleftright(edges[0], prev);
@@ -109,7 +109,7 @@ public class Pathfinder
                     rightverts.add(right);
                     if (isLeft(prev, navmesh.vertices[leftend], navmesh.vertices[right]))
                     {
-                        i = leftCorner(i);
+                        i = leftCorner(edges,path,i);
                         break;
                     }
                     if (isLeft(prev, navmesh.vertices[rightend], navmesh.vertices[right]))
@@ -126,7 +126,7 @@ public class Pathfinder
                     leftverts.add(left);
                     if (isRight(prev, navmesh.vertices[rightend], navmesh.vertices[left]))
                     {
-                        i = rightCorner(i);
+                        i = rightCorner(edges,path,i);
                         break;
                     }
                     if (isRight(prev, navmesh.vertices[leftend], navmesh.vertices[left]))
@@ -173,7 +173,7 @@ public class Pathfinder
      * @param i: The index of the edge that the pathfinding is currently at
      * @return The index of the edge that the pathfinding is at after the corner
      */
-    int leftCorner(int i)
+    int leftCorner(Integer[] edges, List<Vec3> path, int i)
     {
         leftverts.clear();
         path.add(navmesh.vertices[leftend]);
@@ -203,7 +203,7 @@ public class Pathfinder
      * @param i: The index of the edge that the pathfinding is currently at
      * @return The index of the edge that the pathfinding is at after the corner
      */
-    int rightCorner(int i)
+    int rightCorner(Integer[] edges, List<Vec3> path, int i)
     {
         rightverts.clear();
         path.add(navmesh.vertices[rightend]);

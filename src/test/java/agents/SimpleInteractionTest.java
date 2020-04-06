@@ -73,14 +73,16 @@ public class SimpleInteractionTest {
         
         // define the test-goal:
         var goal = SEQ(
-        	GoalLib.justObserve().lift(),
-            GoalLib.entityIsInteracted("button1"),
+        	GoalLib.entityIsInteracted("button1"),
             GoalLib.entityInvariantChecked(testAgent,
             		"button1", 
             		"button1 should be active", 
             		(WorldEntity e) -> e.getBooleanProperty("isOn")),
 
+            GoalLib.navigate_toNearestNode_toDoor("door1"),
             GoalLib.entityIsInRange("door1").lift(),
+            
+            
             GoalLib.entityInvariantChecked(testAgent,
             		"door1", 
             		"door1 should be open", 
@@ -92,17 +94,23 @@ public class SimpleInteractionTest {
         testAgent . setTestDataCollector(dataCollector) . setGoal(goal) ;
 
         // keep updating the agent
+        int i = 0 ;
         while (goal.getStatus().inProgress()) {
+        	System.out.println("*** " + i + "/" 
+                    + testAgent.getState().worldmodel.timestamp + ", "
+                    + testAgent.getState().id + " @" + testAgent.getState().worldmodel.position) ;
         	testAgent.update();
+        	i++ ;
         }
 
+        testAgent.printStatus();
+        
         // check that we have passed both tests above:
         assertTrue(dataCollector.getNumberOfPassVerdictsSeen() == 2) ;
         // goal status should be success
         assertTrue(testAgent.success());
 
         // close
-        testAgent.printStatus();
         if (!environment.close())
             throw new InterruptedException("Unity refuses to close the Simulation!");
     }

@@ -97,8 +97,7 @@ public class ColorSwitchLevelTest {
         
         // defining the task for agent Butty:
         var buttyTask = SEQ(
-        		GoalLib.justObserve().lift(),
-                GoalLib.entityIsInteracted("CB3"), //move to the red button and interact with it
+        		GoalLib.entityIsInteracted("CB3"), //move to the red button and interact with it
                 GoalLib.pingSent("0", "1").lift(), //send a ping to the other agent
                 GoalLib.entityIsInteracted("CB3"), //move to the red button and interact with it
                 GoalLib.entityIsInteracted("CB1"), //move to the blue button and interact with it
