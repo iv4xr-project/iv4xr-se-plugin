@@ -1,13 +1,19 @@
 ﻿using System;
 
 using VRage.Plugins;
+using VRage.Utils;
 
 namespace EU.Iv4xr.SePlugin
 {
-    public class PluginMain : IPlugin
+    public class IvxrPlugin : IPlugin
     {
+        MyLog m_log;
+
         public void Init(object gameInstance)
         {
+            m_log = new MyLog(alwaysFlush: true);
+            m_log.Init("ivxr-plugin.log", new System.Text.StringBuilder("0.1.0"));
+            m_log.WriteLine($"{nameof(IvxrPlugin)} initialization started.");
         }
 
         public void Update()
