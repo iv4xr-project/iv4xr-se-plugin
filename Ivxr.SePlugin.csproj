@@ -2,10 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <RootNamespace>ivxr_se_plugin</RootNamespace>
+    <RootNamespace>EU.Iv4xr.SePlugin</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\se\major\Sources\VRage.Game\VRage.Game.csproj" />
     <ProjectReference Include="..\..\se\major\Sources\VRage\VRage.csproj" />
   </ItemGroup>
 
