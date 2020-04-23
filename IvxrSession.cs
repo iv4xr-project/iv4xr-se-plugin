@@ -8,6 +8,8 @@ using VRage.Game.Components;
 using VRageMath;
 using Sandbox.Game.Multiplayer;
 using VRage.Game.Entity;
+using LitJson;
+using EU.Iv4xr.SePlugin.WorldModel;
 
 namespace EU.Iv4xr.SePlugin
 {
@@ -30,6 +32,12 @@ namespace EU.Iv4xr.SePlugin
 
                 IvxrPlugin.Log.WriteLine(
                     $"IvxrSession: position: {characterPosition.X}, entities count: {entities.Count}");
+
+                if (entities.Count > 0)
+                {
+                    var entity = new WorldEntity(entities.First().Name);
+                    IvxrPlugin.Log.WriteLine($"First entity: {JsonMapper.ToJson(entity)}");
+                }
                 
                 entities.Clear();
             }
