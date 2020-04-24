@@ -1,5 +1,5 @@
 ﻿using System;
-
+using VRage.Game.ObjectBuilders.Gui;
 using VRage.Plugins;
 using VRage.Utils;
 
@@ -7,7 +7,9 @@ namespace EU.Iv4xr.SePlugin
 {
 	public class IvxrPlugin : IPlugin
 	{
-		public static MyLog Log { get; private set; } 
+		public static MyLog Log { get; private set; }
+
+		private PluginServer m_server;
 
 		static IvxrPlugin()
 		{
@@ -18,6 +20,9 @@ namespace EU.Iv4xr.SePlugin
 		public void Init(object gameInstance)
 		{
 			Log.WriteLine($"{nameof(IvxrPlugin)} initialization started.");
+
+			m_server = new PluginServer();
+			m_server.Start();
 		}
 
 		public void Update()
@@ -36,7 +41,8 @@ namespace EU.Iv4xr.SePlugin
 			{
 				if (disposing)
 				{
-					// TODO: dispose managed state (managed objects).
+					// dispose managed state (managed objects).
+					m_server.Stop();
 				}
 
 				// TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
