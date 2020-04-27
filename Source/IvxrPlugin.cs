@@ -33,11 +33,11 @@ namespace EU.Iv4xr.SePlugin
 
 
 		#region IDisposable Support
-		private bool disposedValue = false; // To detect redundant calls
+		private bool alreadyDisposed = false; // To detect redundant calls
 
 		protected virtual void Dispose(bool disposing)
 		{
-			if (!disposedValue)
+			if (!alreadyDisposed)
 			{
 				if (disposing)
 				{
@@ -48,7 +48,7 @@ namespace EU.Iv4xr.SePlugin
 				// TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
 				// TODO: set large fields to null.
 
-				disposedValue = true;
+				alreadyDisposed = true;
 			}
 		}
 
