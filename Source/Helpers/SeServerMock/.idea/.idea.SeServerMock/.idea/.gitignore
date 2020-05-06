@@ -2,9 +2,9 @@
 /shelf/
 /workspace.xml
 # Rider ignored files
-/contentModel.xml
 /modules.xml
 /projectSettingsUpdater.xml
-/.idea.GameServerMock.iml
+/contentModel.xml
+/.idea.SeServerMock.iml
 # Editor-based HTTP Client requests
 /httpRequests/

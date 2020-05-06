@@ -1,4 +1,6 @@
-﻿using System;
+﻿using EU.Iv4xr.PluginLib;
+using EU.Iv4xr.SePlugin.SeLib;
+using System;
 using VRage.Game.ObjectBuilders.Gui;
 using VRage.Plugins;
 using VRage.Utils;
@@ -7,21 +9,23 @@ namespace EU.Iv4xr.SePlugin
 {
 	public class IvxrPlugin : IPlugin
 	{
-		public static MyLog Log { get; private set; }
+		public static ILog Log { get; private set; }
 
 		private PluginServer m_server;
 
 		static IvxrPlugin()
 		{
-			Log = new MyLog(alwaysFlush: true);
-			Log.Init("ivxr-plugin.log", new System.Text.StringBuilder("0.1.0"));
+			var seLog = new SeLog(alwaysFlush: true);
+			seLog.Init("ivxr-plugin.log");
+
+			Log = seLog;
 		}
 
 		public void Init(object gameInstance)
 		{
 			Log.WriteLine($"{nameof(IvxrPlugin)} initialization started.");
 
-			m_server = new PluginServer();
+			m_server = new PluginServer(Log);
 			m_server.Start();
 		}
 
