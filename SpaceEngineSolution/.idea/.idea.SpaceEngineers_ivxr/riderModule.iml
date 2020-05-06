@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module type="RIDER_MODULE" version="4">
   <component name="NewModuleRootManager">
-    <content url="file://$USER_HOME$/.nuget/packages/xunit.runner.visualstudio/2.1.0/build/_common/xunit.abstractions.dll" />
-    <content url="file://$USER_HOME$/.nuget/packages/xunit.runner.visualstudio/2.1.0/build/_common/xunit.runner.utility.desktop.dll" />
-    <content url="file://$USER_HOME$/.nuget/packages/xunit.runner.visualstudio/2.1.0/build/_common/xunit.runner.visualstudio.testadapter.dll" />
-    <content url="file://$MODULE_DIR$/../../.." />
+    <content url="file://$MODULE_DIR$/../../../Helpers/GameServerMock/SeServerMock" />
+    <content url="file://$MODULE_DIR$/../../../Ivxr.PlugIndependentLib" />
+    <content url="file://$MODULE_DIR$/../../../Source" />
+    <content url="file://$MODULE_DIR$/../.." />
     <content url="file://$MODULE_DIR$/../../../../../se/major/3rd/Aftermath/lib/x64/GFSDK_Aftermath_Lib.x64.dll" />
     <content url="file://$MODULE_DIR$/../../../../../se/major/3rd/Havok/x86/Release/Havok.dll" />
     <content url="file://$MODULE_DIR$/../../../../../se/major/3rd/Havok/x86/Release/Havok.pdb" />
