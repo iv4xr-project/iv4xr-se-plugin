@@ -99,18 +99,45 @@ namespace EU.Iv4xr.PluginLib
             {
                 string message = Encoding.ASCII.GetString(buffer, 0, readCount);
                 int indexOfNewLine = message.IndexOf('\n');
+                // TODO(PP): Change to a warning (after validating it does not actually occur).
                 if ((indexOfNewLine != -1) && (indexOfNewLine != message.Length - 1))
                     throw new NotImplementedException("Unexpected new line in the middle of message.");
 
+                // TODO(PP): Implement this.
                 if (indexOfNewLine == -1)
                     throw new NotImplementedException("Reading message in multiple parts not implemented.");
 
                 m_log.WriteLine($"Read message: {message}");
 
-                // FIXME: just a testing reply
-                var replyBuffer = Encoding.ASCII.GetBytes($"Got {readCount} bytes, thanks.\n");
-                stream.Write(replyBuffer, 0, replyBuffer.Length);
+                bool disconnected;
+                ProcessMessage(stream, message, out disconnected);
+                if (disconnected)
+                    break;
             }
+        }
+
+        private void ProcessMessage(NetworkStream clientStream, string message, out bool disconnected)
+        {
+            disconnected = false;
+
+            if (message.StartsWith("{\"cmd\":\"DISCONNECT\""))
+            {
+                Reply(clientStream, "true");
+                clientStream.Close(timeout: 100);  // ms
+                disconnected = true;
+            }
+            else
+            {
+                // FIXME(PP): just a testing reply
+                Reply(clientStream, $"Got {message.Length} bytes, thanks.");
+            }
+        }
+
+        private void Reply(NetworkStream clientStream, string reply)
+        {
+            // TODO(PP): prevent allocation of a new buffer each time
+            var replyBuffer = Encoding.ASCII.GetBytes(reply + '\n');
+            clientStream.Write(replyBuffer, 0, replyBuffer.Length);
         }
     }
 }
