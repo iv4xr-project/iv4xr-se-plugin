@@ -1,4 +1,4 @@
-﻿using EU.Iv4xr.PluginLib;
+using EU.Iv4xr.PluginLib;
 using EU.Iv4xr.SePlugin.SeLib;
 using System;
 using VRage.Game.ObjectBuilders.Gui;
@@ -11,7 +11,8 @@ namespace EU.Iv4xr.SePlugin
 	{
 		public static ILog Log { get; private set; }
 
-		private PluginServer m_server;
+		private readonly RequestQueue m_requestQueue = new RequestQueue();
+		private PluginServer m_server;		
 
 		static IvxrPlugin()
 		{
@@ -25,7 +26,7 @@ namespace EU.Iv4xr.SePlugin
 		{
 			Log.WriteLine($"{nameof(IvxrPlugin)} initialization started.");
 
-			m_server = new PluginServer(Log);
+			m_server = new PluginServer(Log, m_requestQueue);
 			m_server.Start();
 		}
 
@@ -47,6 +48,7 @@ namespace EU.Iv4xr.SePlugin
 				{
 					// dispose managed state (managed objects).
 					m_server.Stop();
+					m_requestQueue.Dispose();
 				}
 
 				// TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.

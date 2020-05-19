@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Data;
 using System.IO;
 using System.Net;
@@ -15,15 +16,12 @@ namespace EU.Iv4xr.PluginLib
     public class PluginServer
     {
         private ILog m_log;
+        private readonly RequestQueue m_requestQueue;
 
-        public PluginServer()
-        {
-            m_log = new ConsoleLog();
-        }
-
-        public PluginServer(ILog mLog)
+        public PluginServer(ILog mLog, RequestQueue requestQueue)
         {
             m_log = mLog;
+            m_requestQueue = requestQueue;
         }
 
         public void SetLog(ILog log)
@@ -109,8 +107,7 @@ namespace EU.Iv4xr.PluginLib
 
                 m_log.WriteLine($"Read message: {message}");
 
-                bool disconnected;
-                ProcessMessage(stream, message, out disconnected);
+                ProcessMessage(stream, message, out bool disconnected);
                 if (disconnected)
                     break;
             }
@@ -120,17 +117,30 @@ namespace EU.Iv4xr.PluginLib
         {
             disconnected = false;
 
-            if (message.StartsWith("{\"cmd\":\"DISCONNECT\""))
+            if (message.StartsWith("{\"cmd\":\"OBSERVE\""))
+            {
+                m_requestQueue.Requests.Enqueue(new Request(clientStream, message));
+            }
+            else if (message.StartsWith("{\"cmd\":\"DISCONNECT\""))
             {
                 Reply(clientStream, "true");
                 clientStream.Close(timeout: 100);  // ms
                 disconnected = true;
+                return;  // It's important not to wait from any reply from the queue.
             }
             else
             {
-                // FIXME(PP): just a testing reply
-                Reply(clientStream, $"Got {message.Length} bytes, thanks.");
+                m_requestQueue.Requests.Enqueue(new Request(clientStream, message));
             }
+
+            WaitForReplyAndSendIt();
+        }
+
+        private void WaitForReplyAndSendIt()
+        {
+            // TODO(PP): consider adding a timetout
+            var reply = m_requestQueue.Replys.Take();
+            Reply(reply.ClientStream, reply.Message);
         }
 
         private void Reply(NetworkStream clientStream, string reply)
