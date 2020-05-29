@@ -1,44 +1,34 @@
 ﻿using EU.Iv4xr.PluginLib;
-using EU.Iv4xr.SePlugin.SeLib;
 using EU.Iv4xr.SePlugin.Control;
+using EU.Iv4xr.SePlugin.SeLib;
 using System;
-using VRage.Game.ObjectBuilders.Gui;
-using VRage.Plugins;
-using VRage.Utils;
+using System.Collections.Generic;
+using System.Text;
 
 namespace EU.Iv4xr.SePlugin
 {
-	public class IvxrPlugin : IPlugin
+	public class IvxrPluginContext : IDisposable
 	{
-		public static IvxrPluginContext Context { get; private set; }
+		public ILog Log { get; private set; }
+		public readonly Controller Controller;
 
-		// Shortcuts
-		public static ILog Log { get; private set; }
-		public static Controller Controller { get; private set; }
+		private readonly RequestQueue m_requestQueue = new RequestQueue();
+		private readonly PluginServer m_server;
 
-		public void Init(object gameInstance)
+		public IvxrPluginContext()
 		{
-			if (Context != null)
-			{
-				Log.WriteLine("Init already called.");
-				return;
-			}
+			var seLog = new SeLog(alwaysFlush: true);
+			seLog.Init("ivxr-plugin.log");
+			Log = seLog;
 
-			Context = new IvxrPluginContext();
-
-			Controller = Context.Controller;
-
-			Log = Context.Log;
-			Log.WriteLine($"{nameof(IvxrPlugin)} initialization finished.");
-
-			Context.StartServer();
+			m_server = new PluginServer(Log, m_requestQueue);
+			Controller = new Controller(m_requestQueue);
 		}
 
-		public void Update()
+		public void StartServer()
 		{
-			//m_log.WriteLine("Update called.");
+			m_server.Start();
 		}
-
 
 		protected virtual void Dispose(bool disposing)
 		{
@@ -47,7 +37,8 @@ namespace EU.Iv4xr.SePlugin
 				if (disposing)
 				{
 					// dispose managed state (managed objects).
-					Context.Dispose();
+					m_server.Stop();
+					m_requestQueue.Dispose();
 				}
 
 				// TODO: Set large fields to null.

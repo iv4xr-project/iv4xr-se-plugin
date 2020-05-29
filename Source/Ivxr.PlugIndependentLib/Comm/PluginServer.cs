@@ -18,9 +18,9 @@ namespace EU.Iv4xr.PluginLib
         private ILog m_log;
         private readonly RequestQueue m_requestQueue;
 
-        public PluginServer(ILog mLog, RequestQueue requestQueue)
+        public PluginServer(ILog log, RequestQueue requestQueue)
         {
-            m_log = mLog;
+            m_log = log;
             m_requestQueue = requestQueue;
         }
 
@@ -110,6 +110,8 @@ namespace EU.Iv4xr.PluginLib
                 ProcessMessage(stream, message, out bool disconnected);
                 if (disconnected)
                     break;
+
+                WaitForReplyAndSendIt();
             }
         }
 
@@ -117,11 +119,23 @@ namespace EU.Iv4xr.PluginLib
         {
             disconnected = false;
 
-            if (message.StartsWith("{\"cmd\":\"OBSERVE\""))
+            if (!message.StartsWith("{\"Cmd\":"))
+            {
+                // TODO: throw new InvalidDataException("Unexpected message header: " + message);
+                m_log.WriteLine("Unexpected message header: " + message);
+
+                // TODO(PP): Remove this. For now, just reply anyway to test the communication.
+                m_requestQueue.Requests.Enqueue(new Request(clientStream, message));
+                return;
+            }
+
+            string command = message.Substring(startIndex: 7, length: 12);
+
+            if (command.StartsWith("\"AGENTCOM"))  // AGENTCOMMAND 
             {
                 m_requestQueue.Requests.Enqueue(new Request(clientStream, message));
             }
-            else if (message.StartsWith("{\"cmd\":\"DISCONNECT\""))
+            else if (command.StartsWith("\"DISCONNECT\""))
             {
                 Reply(clientStream, "true");
                 clientStream.Close(timeout: 100);  // ms
@@ -130,10 +144,8 @@ namespace EU.Iv4xr.PluginLib
             }
             else
             {
-                m_requestQueue.Requests.Enqueue(new Request(clientStream, message));
+                throw new NotImplementedException("Command unknown or not implemented: " + command);
             }
-
-            WaitForReplyAndSendIt();
         }
 
         private void WaitForReplyAndSendIt()

@@ -20,6 +20,8 @@ namespace EU.Iv4xr.SePlugin
         {
             base.UpdateBeforeSimulation();
 
+            IvxrPlugin.Controller.ProcessRequests();
+
             var playerCount = Sync.Players.GetOnlinePlayerCount();
             if (playerCount > 0)
             {

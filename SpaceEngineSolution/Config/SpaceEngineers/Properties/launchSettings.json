@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "SpaceEngineers": {
+      "commandName": "Project",
+      "commandLineArgs": "-plugin \"D:\\evostore\\src\\se\\major\\Sources\\Iv4xr\\iv4xr-se-plugin\\Source\\Ivxr.PlugIndependentLib\\bin\\Debug\\netstandard2.0\\Ivxr.PlugIndependentLib.dll\" \"D:\\evostore\\src\\se\\major\\Sources\\Iv4xr\\iv4xr-se-plugin\\Source\\Ivxr.SePlugin\\bin\\Debug\\netstandard2.0\\Ivxr.SePlugin.dll\""
+    }
+  }
+}
