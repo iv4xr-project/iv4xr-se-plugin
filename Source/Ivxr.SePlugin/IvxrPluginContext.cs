@@ -1,4 +1,4 @@
-﻿using EU.Iv4xr.PluginLib;
+using EU.Iv4xr.PluginLib;
 using EU.Iv4xr.SePlugin.Control;
 using EU.Iv4xr.SePlugin.SeLib;
 using System;
@@ -32,19 +32,19 @@ namespace EU.Iv4xr.SePlugin
 
 		protected virtual void Dispose(bool disposing)
 		{
-			if (!alreadyDisposed)
+			if (alreadyDisposed)
+				return;
+
+			if (disposing)
 			{
-				if (disposing)
-				{
-					// dispose managed state (managed objects).
-					m_server.Stop();
-					m_requestQueue.Dispose();
-				}
-
-				// TODO: Set large fields to null.
-
-				alreadyDisposed = true;
+				// dispose managed state (managed objects).
+				m_server.Stop();
+				m_requestQueue.Dispose();
 			}
+
+			// TODO: Set large fields to null.
+
+			alreadyDisposed = true;
 		}
 
 		#region The rest of IDisposable Support

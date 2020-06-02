@@ -131,6 +131,7 @@ namespace EU.Iv4xr.PluginLib
 
             string command = message.Substring(startIndex: 7, length: 12);
 
+            // ReSharper disable once StringLiteralTypo
             if (command.StartsWith("\"AGENTCOM"))  // AGENTCOMMAND 
             {
                 m_requestQueue.Requests.Enqueue(new Request(clientStream, message));
@@ -150,7 +151,7 @@ namespace EU.Iv4xr.PluginLib
 
         private void WaitForReplyAndSendIt()
         {
-            // TODO(PP): consider adding a timetout
+            // TODO(PP): consider adding a timeout
             var reply = m_requestQueue.Replys.Take();
             Reply(reply.ClientStream, reply.Message);
         }
