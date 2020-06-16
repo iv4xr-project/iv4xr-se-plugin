@@ -8,11 +8,11 @@ namespace EU.Iv4xr.PluginLib
         public RequestQueue()
         {
             Requests = new ConcurrentQueue<Request>();
-            Replys = new BlockingCollection<Request>();
+            Replies = new BlockingCollection<Request>();
         }
         
         public ConcurrentQueue<Request> Requests { get; }
-        public BlockingCollection<Request> Replys { get; }
+        public BlockingCollection<Request> Replies { get; }
 
         #region IDisposable Support
         private bool disposedValue = false; // To detect redundant calls
@@ -23,7 +23,7 @@ namespace EU.Iv4xr.PluginLib
             {
                 if (disposing)
                 {
-                    Replys.Dispose();
+                    Replies.Dispose();
                 }
 
                 disposedValue = true;

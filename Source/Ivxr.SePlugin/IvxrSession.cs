@@ -44,5 +44,12 @@ namespace EU.Iv4xr.SePlugin
                 entities.Clear();
             }
         }
-    }
+
+		protected override void UnloadData()
+		{
+			base.UnloadData();
+
+			IvxrPlugin.Context.EndSession();
+		}
+	}
 }

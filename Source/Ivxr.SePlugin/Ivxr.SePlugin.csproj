@@ -10,6 +10,7 @@
     <ProjectReference Include="..\..\..\..\se\major\Sources\VRage.Game\VRage.Game.csproj" />
     <ProjectReference Include="..\..\..\..\se\major\Sources\VRage\VRage.csproj" />
     <ProjectReference Include="..\Ivxr.PlugIndependentLib\Ivxr.PlugIndependentLib.csproj" />
+    <ProjectReference Include="..\Ivxr.SeGameLib\Ivxr.SeGameLib.csproj" />
   </ItemGroup>
 
 </Project>

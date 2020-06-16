@@ -1,0 +1,1 @@
+<Playlist Version="1.0"><Add Test="Ivxr.SeGameLib.Tests.JsonerTests.ConvertsObjectToJson" /><Add Test="Ivxr.SeGameLib.Tests.JsonerTests.ConvertsSeObservationToJson" /><Add Test="Ivxr.SeGameLib.Tests.PlainVec3DTests.ConvertsCorrectlyFromVector3D" /></Playlist>

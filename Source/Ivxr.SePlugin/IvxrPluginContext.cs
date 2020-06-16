@@ -1,9 +1,9 @@
-using EU.Iv4xr.PluginLib;
-using EU.Iv4xr.SePlugin.Control;
+﻿using EU.Iv4xr.PluginLib;
 using EU.Iv4xr.SePlugin.SeLib;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Iv4xr.SeGameLib.Control;
 
 namespace EU.Iv4xr.SePlugin
 {
@@ -13,7 +13,10 @@ namespace EU.Iv4xr.SePlugin
 		public readonly Controller Controller;
 
 		private readonly RequestQueue m_requestQueue = new RequestQueue();
+
 		private readonly PluginServer m_server;
+
+		private readonly Observer m_observer = new Observer();
 
 		public IvxrPluginContext()
 		{
@@ -22,12 +25,19 @@ namespace EU.Iv4xr.SePlugin
 			Log = seLog;
 
 			m_server = new PluginServer(Log, m_requestQueue);
-			Controller = new Controller(m_requestQueue);
+			Controller = new Controller(m_requestQueue, m_observer);
 		}
 
 		public void StartServer()
 		{
 			m_server.Start();
+		}
+
+		public void EndSession()
+		{
+			Log.WriteLine("Ending session.");
+
+			m_observer.EndSession();
 		}
 
 		protected virtual void Dispose(bool disposing)

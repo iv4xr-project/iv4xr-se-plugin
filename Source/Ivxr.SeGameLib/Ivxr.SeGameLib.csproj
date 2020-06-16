@@ -6,7 +6,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\se\major\Sources\Sandbox.Game\Sandbox.Game.csproj" />
     <ProjectReference Include="..\..\..\..\se\major\Sources\VRage.Math\VRage.Math.csproj" />
+    <ProjectReference Include="..\Ivxr.PlugIndependentLib\Ivxr.PlugIndependentLib.csproj" />
   </ItemGroup>
 
 </Project>

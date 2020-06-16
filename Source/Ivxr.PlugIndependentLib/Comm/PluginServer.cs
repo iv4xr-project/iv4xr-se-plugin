@@ -152,7 +152,7 @@ namespace EU.Iv4xr.PluginLib
         private void WaitForReplyAndSendIt()
         {
             // TODO(PP): consider adding a timeout
-            var reply = m_requestQueue.Replys.Take();
+            var reply = m_requestQueue.Replies.Take();
             Reply(reply.ClientStream, reply.Message);
         }
 
