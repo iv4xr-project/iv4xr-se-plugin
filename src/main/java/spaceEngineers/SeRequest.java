@@ -50,8 +50,8 @@ public class SeRequest<ResponseType> {
      * Request an observation after executing the sent Command
      * TODO(PP): Replace response type with some SE observation
      */
-    public static SeRequest<LegacyObservation> command(AgentCommand command) {
-        return new SeRequest<>(LegacyObservation.class, RequestType.AGENTCOMMAND, command);
+    public static SeRequest<SeObservation> command(AgentCommand command) {
+        return new SeRequest<>(SeObservation.class, RequestType.AGENTCOMMAND, command);
     }
 
 }
