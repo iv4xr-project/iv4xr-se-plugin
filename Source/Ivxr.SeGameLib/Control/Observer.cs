@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using EU.Iv4xr.PluginLib;
 using EU.Iv4xr.SeGameLib.WorldModel;
 using Iv4xr.SeGameLib.WorldModel;
+using Sandbox.Game.Entities;
 using Sandbox.Game.Entities.Character;
 using Sandbox.Game.Multiplayer;
+using VRage.Game.Entity;
 using VRageMath;
 
 namespace Iv4xr.SeGameLib.Control
@@ -17,6 +20,8 @@ namespace Iv4xr.SeGameLib.Control
 
 	public class Observer : IObserver
 	{
+		public ILog Log { get; set; }
+
 		private MyCharacter m_character;
 
 		private readonly PlainVec3D AgentExtent = new PlainVec3D(0.5, 1, 0.5);  // TODO(PP): It's just a quick guess, check the reality.
@@ -47,7 +52,8 @@ namespace Iv4xr.SeGameLib.Control
 				AgentID = "se0",
 				Position = new PlainVec3D(GetPlayerPosition()),  // Consider reducing allocations.
 				Velocity = new PlainVec3D(GetPlayerVelocity()),
-				Extent = AgentExtent
+				Extent = AgentExtent,
+				Entities = CollectSurroundingEntities()
 			};
 		}
 
@@ -60,6 +66,42 @@ namespace Iv4xr.SeGameLib.Control
 		{
 			// TODO(PP): Calculate velocity!
 			return Vector3D.Zero; 
+		}
+
+		private List<SeEntity> CollectSurroundingEntities()
+		{
+			var ivEntities = new List<SeEntity>();
+
+			var characterPosition = GetPlayerPosition();
+
+			var sphere = new BoundingSphereD(characterPosition, radius: 25.0);
+			List<MyEntity> entities = MyEntities.GetEntitiesInSphere(ref sphere);
+
+			try
+			{
+				foreach (MyEntity entity in entities)
+				{
+					var ivEntity = new SeEntity()
+					{
+						Id = entity.Name,
+						Position = new PlainVec3D(entity.PositionComp.GetPosition())
+					};
+
+					ivEntities.Add(ivEntity);
+
+					if (ivEntities.Count() > 100)  // TODO(PP): Define as param.
+					{
+						Log?.WriteLine($"{nameof(CollectSurroundingEntities)}: Too many entities!");
+						break;
+					}
+				}
+			}
+			finally
+			{
+				entities.Clear();
+			}
+
+			return ivEntities;
 		}
 	}
 }

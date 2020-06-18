@@ -15,6 +15,6 @@ namespace EU.Iv4xr.SeGameLib.WorldModel
 		public PlainVec3D Velocity;  // Agent's velocity
 		public PlainVec3D Extent;  // Agent's dimensions (x,y,z size/2)
 
-		// TODO(PP): Add entities.
+		public List<SeEntity> Entities;
 	}
 }

@@ -12,10 +12,22 @@ namespace SeServerMock.Mocks
 	{
 		public SeObservation GetObservation()
 		{
+			var entity = new SeEntity()
+			{
+				Id = "Ente",
+				Position = new PlainVec3D(3, 2, 1)
+			};
+
+			var entities = new List<SeEntity>
+			{
+				entity
+			};
+
 			return new SeObservation()
 			{
 				AgentID = "Mock",
-				Position = new PlainVec3D(4, 2, 0)
+				Position = new PlainVec3D(4, 2, 0),
+				Entities = entities
 			};
 		}
 	}
