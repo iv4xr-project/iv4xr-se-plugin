@@ -7,7 +7,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\Ivxr.PlugIndependentLib\Ivxr.PlugIndependentLib.csproj" />
-      <ProjectReference Include="..\..\Ivxr.SePlugin\Ivxr.SePlugin.csproj" />
     </ItemGroup>
 
 </Project>

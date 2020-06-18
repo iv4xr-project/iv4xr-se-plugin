@@ -1,32 +1,37 @@
-﻿using EU.Iv4xr.PluginLib;
-using EU.Iv4xr.SePlugin.SeLib;
+﻿using Iv4xr.PluginLib;
+using Iv4xr.SePlugin.SeLib;
 using System;
+using Iv4xr.SePlugin.Control;
 using VRage.Game.ObjectBuilders.Gui;
 using VRage.Plugins;
 using VRage.Utils;
 
-namespace EU.Iv4xr.SePlugin
+namespace Iv4xr.SePlugin
 {
 	public class IvxrPlugin : IPlugin
 	{
+		public static IvxrPluginContext Context { get; private set; }
+
+		// Shortcuts
 		public static ILog Log { get; private set; }
-
-		private PluginServer m_server;
-
-		static IvxrPlugin()
-		{
-			var seLog = new SeLog(alwaysFlush: true);
-			seLog.Init("ivxr-plugin.log");
-
-			Log = seLog;
-		}
+		public static Controller Controller { get; private set; }
 
 		public void Init(object gameInstance)
 		{
-			Log.WriteLine($"{nameof(IvxrPlugin)} initialization started.");
+			if (Context != null)
+			{
+				Log.WriteLine("Init already called.");
+				return;
+			}
 
-			m_server = new PluginServer(Log);
-			m_server.Start();
+			Context = new IvxrPluginContext();
+
+			Controller = Context.Controller;
+
+			Log = Context.Log;
+			Log.WriteLine($"{nameof(IvxrPlugin)} initialization finished.");
+
+			Context.StartServer();
 		}
 
 		public void Update()
@@ -35,10 +40,6 @@ namespace EU.Iv4xr.SePlugin
 		}
 
 
-
-		#region IDisposable Support
-		private bool alreadyDisposed = false; // To detect redundant calls
-
 		protected virtual void Dispose(bool disposing)
 		{
 			if (!alreadyDisposed)
@@ -46,15 +47,18 @@ namespace EU.Iv4xr.SePlugin
 				if (disposing)
 				{
 					// dispose managed state (managed objects).
-					m_server.Stop();
+					Context.Dispose();
 				}
 
-				// TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
-				// TODO: set large fields to null.
+				// TODO: Set large fields to null.
 
 				alreadyDisposed = true;
 			}
 		}
+
+		#region The rest of IDisposable Support
+
+		private bool alreadyDisposed = false; // To detect redundant calls
 
 		// TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
 		// ~PluginMain() {
@@ -70,6 +74,7 @@ namespace EU.Iv4xr.SePlugin
 			// TODO: uncomment the following line if the finalizer is overridden above.
 			// GC.SuppressFinalize(this);
 		}
+
 		#endregion
 	}
 }

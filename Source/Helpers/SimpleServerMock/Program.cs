@@ -2,10 +2,8 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
-using Iv4xr.PluginLib;
-using Iv4xr.PluginLib.Log;
-using Iv4xr.SePlugin.Control;
-using SeServerMock.Mocks;
+using EU.Iv4xr.PluginLib;
+using EU.Iv4xr.PluginLib.Log;
 
 namespace SeServerMock
 {
@@ -17,26 +15,19 @@ namespace SeServerMock
             var log = new ConsoleLog();
             using (var requestQueue = new RequestQueue())
             {
-	            var server = new PluginServer(log, requestQueue);
+
+                var server = new PluginServer(log, requestQueue);
                 server.Start();
 
-				var observer = new MockObserver();
-
-                var controller = new Controller(requestQueue, observer);
-
-				while (true)
+                while (true)
                 {
-					controller.ProcessRequests();
-
-					/*
                     while (requestQueue.Requests.TryDequeue(out Request request))
                     {
                         log.WriteLine("dequeued: " + request.Message);
 
-                        requestQueue.Replies.Add(
+                        requestQueue.Replys.Add(
                             new Request(request.ClientStream, $"Got {request.Message.Length} bytes, thanks!"));
                     }
-					*/
 
                     Thread.Sleep(50);
                 }

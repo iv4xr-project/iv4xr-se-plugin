@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "SpaceEngineers": {
+      "commandName": "Project",
+      "commandLineArgs": "-plugin \"ivxr-plugin/Ivxr.PlugIndependentLib.dll\" \"ivxr-plugin/Ivxr.SePlugin.dll\""
+    }
+  }
+}

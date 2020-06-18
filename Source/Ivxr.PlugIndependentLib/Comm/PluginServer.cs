@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Data;
 using System.IO;
 using System.Net;
@@ -7,23 +8,20 @@ using System.Text;
 using System.Threading;
 using System.Xml;
 
-using EU.Iv4xr.PluginLib;
-using EU.Iv4xr.PluginLib.Log;
+using Iv4xr.PluginLib;
+using Iv4xr.PluginLib.Log;
 
-namespace EU.Iv4xr.PluginLib
+namespace Iv4xr.PluginLib
 {
     public class PluginServer
     {
         private ILog m_log;
+        private readonly RequestQueue m_requestQueue;
 
-        public PluginServer()
+        public PluginServer(ILog log, RequestQueue requestQueue)
         {
-            m_log = new ConsoleLog();
-        }
-
-        public PluginServer(ILog mLog)
-        {
-            m_log = mLog;
+            m_log = log;
+            m_requestQueue = requestQueue;
         }
 
         public void SetLog(ILog log)
@@ -94,31 +92,75 @@ namespace EU.Iv4xr.PluginLib
         {
             var buffer = new byte[4096];
 
-            while (!m_shouldStop)
+            int readCount;
+            while ((readCount = stream.Read(buffer, 0, buffer.Length)) != 0)
             {
-                int readCount;
-                int readSoFar = 0;
-                while ((readCount = stream.Read(buffer, readSoFar, buffer.Length - readSoFar)) != 0)
-                {
-                    readSoFar += readCount;
-                    if (readSoFar >= buffer.Length * 3 / 4)
-                        throw new InternalBufferOverflowException("Buffer too small (TODO: grow it).");
+                string message = Encoding.ASCII.GetString(buffer, 0, readCount);
+                int indexOfNewLine = message.IndexOf('\n');
+                // TODO(PP): Change to a warning (after validating it does not actually occur).
+                if ((indexOfNewLine != -1) && (indexOfNewLine != message.Length - 1))
+                    throw new NotImplementedException("Unexpected new line in the middle of message.");
 
-                    string message = Encoding.ASCII.GetString(buffer, 0, readSoFar);
-                    int indexOfNewLine = message.IndexOf('\n');
-                    if ((indexOfNewLine != -1) && (indexOfNewLine != message.Length - 1))
-                        throw new NotImplementedException("Unexpected new line in the middle of message.");
+                // TODO(PP): Implement this.
+                if (indexOfNewLine == -1)
+                    throw new NotImplementedException("Reading message in multiple parts not implemented.");
 
-                    m_log.WriteLine($"Read message: {message}");
+                m_log.WriteLine($"Read message: {message}");
 
-                    // FIXME: just a testing reply
-                    var replyBuffer = Encoding.ASCII.GetBytes($"Got {readCount} bytes, thanks.\n");
-                    stream.Write(replyBuffer, 0, replyBuffer.Length);
+                ProcessMessage(stream, message, out bool disconnected);
+                if (disconnected)
+                    break;
 
-                    // we are only doing this because we don't support reading multiple parts...
-                    readSoFar = 0;
-                }
+                WaitForReplyAndSendIt();
             }
+        }
+
+        private void ProcessMessage(NetworkStream clientStream, string message, out bool disconnected)
+        {
+            disconnected = false;
+
+            if (!message.StartsWith("{\"Cmd\":"))
+            {
+                // TODO: throw new InvalidDataException("Unexpected message header: " + message);
+                m_log.WriteLine("Unexpected message header: " + message);
+
+                // TODO(PP): Remove this. For now, just reply anyway to test the communication.
+                m_requestQueue.Requests.Enqueue(new Request(clientStream, message));
+                return;
+            }
+
+            string command = message.Substring(startIndex: 7, length: 12);
+
+            // ReSharper disable once StringLiteralTypo
+            if (command.StartsWith("\"AGENTCOM"))  // AGENTCOMMAND 
+            {
+                m_requestQueue.Requests.Enqueue(new Request(clientStream, message));
+            }
+            else if (command.StartsWith("\"DISCONNECT\""))
+            {
+                Reply(clientStream, "true");
+                clientStream.Close(timeout: 100);  // ms
+                disconnected = true;
+                return;  // It's important not to wait from any reply from the queue.
+            }
+            else
+            {
+                throw new NotImplementedException("Command unknown or not implemented: " + command);
+            }
+        }
+
+        private void WaitForReplyAndSendIt()
+        {
+            // TODO(PP): consider adding a timeout
+            var reply = m_requestQueue.Replies.Take();
+            Reply(reply.ClientStream, reply.Message);
+        }
+
+        private void Reply(NetworkStream clientStream, string reply)
+        {
+            // TODO(PP): prevent allocation of a new buffer each time
+            var replyBuffer = Encoding.ASCII.GetBytes(reply + '\n');
+            clientStream.Write(replyBuffer, 0, replyBuffer.Length);
         }
     }
 }
