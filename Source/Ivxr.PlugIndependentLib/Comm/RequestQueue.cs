@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 
-namespace EU.Iv4xr.PluginLib
+namespace Iv4xr.PluginLib
 {
     public class RequestQueue : IDisposable
     {

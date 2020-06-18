@@ -4,9 +4,9 @@ using System.Text;
 using Iv4xr.SeGameLib.WorldModel;
 using VRageMath;
 
-namespace EU.Iv4xr.SeGameLib.WorldModel
+namespace Iv4xr.SeGameLib.WorldModel
 {
-	// Intended to be maximally compatible with eu.iv4xr.framework.world.WorldModel from the iv4XR Java framework.
+	// Intended to be maximally compatible with Iv4xr.framework.world.WorldModel from the iv4XR Java framework.
 	public class SeObservation
 	{
 		public string AgentID;

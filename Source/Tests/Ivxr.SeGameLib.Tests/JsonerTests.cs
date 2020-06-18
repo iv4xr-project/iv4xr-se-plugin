@@ -1,6 +1,5 @@
 ﻿using Iv4xr.SeGameLib.Json;
 using System;
-using EU.Iv4xr.SeGameLib.WorldModel;
 using Iv4xr.SeGameLib.WorldModel;
 using VRageMath;
 using Xunit;

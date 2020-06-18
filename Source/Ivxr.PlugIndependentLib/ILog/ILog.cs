@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace EU.Iv4xr.PluginLib
+namespace Iv4xr.PluginLib
 {
 	public interface ILog
 	{

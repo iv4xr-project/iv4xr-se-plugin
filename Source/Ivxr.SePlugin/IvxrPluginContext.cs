@@ -1,11 +1,11 @@
-﻿using EU.Iv4xr.PluginLib;
-using EU.Iv4xr.SePlugin.SeLib;
+﻿using Iv4xr.PluginLib;
+using Iv4xr.SePlugin.SeLib;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using Iv4xr.SeGameLib.Control;
 
-namespace EU.Iv4xr.SePlugin
+namespace Iv4xr.SePlugin
 {
 	public class IvxrPluginContext : IDisposable
 	{

@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using EU.Iv4xr.PluginLib;
-using EU.Iv4xr.SeGameLib.WorldModel;
+using Iv4xr.PluginLib;
+using Iv4xr.SeGameLib.WorldModel;
 using Iv4xr.SeGameLib.WorldModel;
 using Sandbox.Game.Entities;
 using Sandbox.Game.Entities.Character;

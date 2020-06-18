@@ -8,10 +8,10 @@ using System.Text;
 using System.Threading;
 using System.Xml;
 
-using EU.Iv4xr.PluginLib;
-using EU.Iv4xr.PluginLib.Log;
+using Iv4xr.PluginLib;
+using Iv4xr.PluginLib.Log;
 
-namespace EU.Iv4xr.PluginLib
+namespace Iv4xr.PluginLib
 {
     public class PluginServer
     {

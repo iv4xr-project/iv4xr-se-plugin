@@ -1,6 +1,6 @@
 ﻿using System.Net.Sockets;
 
-namespace EU.Iv4xr.PluginLib
+namespace Iv4xr.PluginLib
 {
     public class Request
     {

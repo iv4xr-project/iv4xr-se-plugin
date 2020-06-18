@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using EU.Iv4xr.SeGameLib.WorldModel;
-using Iv4xr.SeGameLib.Control;
 using Iv4xr.SeGameLib.WorldModel;
+using Iv4xr.SeGameLib.Control;
 using VRage.Noise.Modifiers;
 
 namespace SeServerMock.Mocks

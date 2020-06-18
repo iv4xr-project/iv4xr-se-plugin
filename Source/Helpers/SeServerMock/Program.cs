@@ -2,8 +2,8 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
-using EU.Iv4xr.PluginLib;
-using EU.Iv4xr.PluginLib.Log;
+using Iv4xr.PluginLib;
+using Iv4xr.PluginLib.Log;
 using Iv4xr.SeGameLib.Control;
 using SeServerMock.Mocks;
 

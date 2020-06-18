@@ -1,6 +1,6 @@
 ﻿using VRage.Game.Components;
 
-namespace EU.Iv4xr.SePlugin
+namespace Iv4xr.SePlugin
 {
 	[MySessionComponentDescriptor(MyUpdateOrder.BeforeSimulation | MyUpdateOrder.AfterSimulation)]
     class IvxrSession : MySessionComponentBase

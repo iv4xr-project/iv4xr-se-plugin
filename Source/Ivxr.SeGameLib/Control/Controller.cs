@@ -1,4 +1,4 @@
-﻿using EU.Iv4xr.PluginLib;
+﻿using Iv4xr.PluginLib;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

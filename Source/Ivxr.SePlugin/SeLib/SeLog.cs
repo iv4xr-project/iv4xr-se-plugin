@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 
-using EU.Iv4xr.PluginLib;
+using Iv4xr.PluginLib;
 using VRage.Utils;
 
-namespace EU.Iv4xr.SePlugin.SeLib
+namespace Iv4xr.SePlugin.SeLib
 {
 	class SeLog : ILog
 	{
