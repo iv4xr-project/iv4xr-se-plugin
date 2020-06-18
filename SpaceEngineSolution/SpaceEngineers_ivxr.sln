@@ -90,9 +90,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeServerMock", "..\Source\H
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivxr.PlugIndependentLib", "..\Source\Ivxr.PlugIndependentLib\Ivxr.PlugIndependentLib.csproj", "{CE782082-F8E9-4FE5-A04D-89ED99084E95}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivxr.SeGameLib", "..\Source\Ivxr.SeGameLib\Ivxr.SeGameLib.csproj", "{2C5E69B6-F70C-4004-B00A-49640FAFD6FF}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ivxr.SeGameLib.Tests", "..\Source\Tests\Ivxr.SeGameLib.Tests\Ivxr.SeGameLib.Tests.csproj", "{77BE56CF-4F42-4268-9D9A-8F73C51287B6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ivxr.SePlugin.Tests", "..\Source\Tests\Ivxr.SePlugin.Tests\Ivxr.SePlugin.Tests.csproj", "{77BE56CF-4F42-4268-9D9A-8F73C51287B6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1010,36 +1008,6 @@ Global
 		{CE782082-F8E9-4FE5-A04D-89ED99084E95}.Testing|x64.Build.0 = Debug|Any CPU
 		{CE782082-F8E9-4FE5-A04D-89ED99084E95}.Testing|x86.ActiveCfg = Debug|Any CPU
 		{CE782082-F8E9-4FE5-A04D-89ED99084E95}.Testing|x86.Build.0 = Debug|Any CPU
-		{2C5E69B6-F70C-4004-B00A-49640FAFD6FF}.AllocationProfilingRelease|Any CPU.ActiveCfg = Release|Any CPU
-		{2C5E69B6-F70C-4004-B00A-49640FAFD6FF}.AllocationProfilingRelease|Any CPU.Build.0 = Release|Any CPU
-		{2C5E69B6-F70C-4004-B00A-49640FAFD6FF}.AllocationProfilingRelease|x64.ActiveCfg = Release|Any CPU
-		{2C5E69B6-F70C-4004-B00A-49640FAFD6FF}.AllocationProfilingRelease|x64.Build.0 = Release|Any CPU
-		{2C5E69B6-F70C-4004-B00A-49640FAFD6FF}.AllocationProfilingRelease|x86.ActiveCfg = Release|Any CPU
-		{2C5E69B6-F70C-4004-B00A-49640FAFD6FF}.AllocationProfilingRelease|x86.Build.0 = Release|Any CPU
-		{2C5E69B6-F70C-4004-B00A-49640FAFD6FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2C5E69B6-F70C-4004-B00A-49640FAFD6FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2C5E69B6-F70C-4004-B00A-49640FAFD6FF}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{2C5E69B6-F70C-4004-B00A-49640FAFD6FF}.Debug|x64.Build.0 = Debug|Any CPU
-		{2C5E69B6-F70C-4004-B00A-49640FAFD6FF}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{2C5E69B6-F70C-4004-B00A-49640FAFD6FF}.Debug|x86.Build.0 = Debug|Any CPU
-		{2C5E69B6-F70C-4004-B00A-49640FAFD6FF}.Release Official|Any CPU.ActiveCfg = Release|Any CPU
-		{2C5E69B6-F70C-4004-B00A-49640FAFD6FF}.Release Official|Any CPU.Build.0 = Release|Any CPU
-		{2C5E69B6-F70C-4004-B00A-49640FAFD6FF}.Release Official|x64.ActiveCfg = Release|Any CPU
-		{2C5E69B6-F70C-4004-B00A-49640FAFD6FF}.Release Official|x64.Build.0 = Release|Any CPU
-		{2C5E69B6-F70C-4004-B00A-49640FAFD6FF}.Release Official|x86.ActiveCfg = Release|Any CPU
-		{2C5E69B6-F70C-4004-B00A-49640FAFD6FF}.Release Official|x86.Build.0 = Release|Any CPU
-		{2C5E69B6-F70C-4004-B00A-49640FAFD6FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2C5E69B6-F70C-4004-B00A-49640FAFD6FF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2C5E69B6-F70C-4004-B00A-49640FAFD6FF}.Release|x64.ActiveCfg = Release|Any CPU
-		{2C5E69B6-F70C-4004-B00A-49640FAFD6FF}.Release|x64.Build.0 = Release|Any CPU
-		{2C5E69B6-F70C-4004-B00A-49640FAFD6FF}.Release|x86.ActiveCfg = Release|Any CPU
-		{2C5E69B6-F70C-4004-B00A-49640FAFD6FF}.Release|x86.Build.0 = Release|Any CPU
-		{2C5E69B6-F70C-4004-B00A-49640FAFD6FF}.Testing|Any CPU.ActiveCfg = Debug|Any CPU
-		{2C5E69B6-F70C-4004-B00A-49640FAFD6FF}.Testing|Any CPU.Build.0 = Debug|Any CPU
-		{2C5E69B6-F70C-4004-B00A-49640FAFD6FF}.Testing|x64.ActiveCfg = Debug|Any CPU
-		{2C5E69B6-F70C-4004-B00A-49640FAFD6FF}.Testing|x64.Build.0 = Debug|Any CPU
-		{2C5E69B6-F70C-4004-B00A-49640FAFD6FF}.Testing|x86.ActiveCfg = Debug|Any CPU
-		{2C5E69B6-F70C-4004-B00A-49640FAFD6FF}.Testing|x86.Build.0 = Debug|Any CPU
 		{77BE56CF-4F42-4268-9D9A-8F73C51287B6}.AllocationProfilingRelease|Any CPU.ActiveCfg = Release|Any CPU
 		{77BE56CF-4F42-4268-9D9A-8F73C51287B6}.AllocationProfilingRelease|Any CPU.Build.0 = Release|Any CPU
 		{77BE56CF-4F42-4268-9D9A-8F73C51287B6}.AllocationProfilingRelease|x64.ActiveCfg = Release|Any CPU
@@ -1105,11 +1073,10 @@ Global
 		{0F85D931-646A-4618-9DB4-88228DD8A8CD} = {B1DCB10F-47FB-45DF-8DBC-B1BCDAFCDA7F}
 		{2B840066-8AF5-49CD-A97C-A7D889124B59} = {B1DCB10F-47FB-45DF-8DBC-B1BCDAFCDA7F}
 		{CE782082-F8E9-4FE5-A04D-89ED99084E95} = {B1DCB10F-47FB-45DF-8DBC-B1BCDAFCDA7F}
-		{2C5E69B6-F70C-4004-B00A-49640FAFD6FF} = {B1DCB10F-47FB-45DF-8DBC-B1BCDAFCDA7F}
 		{77BE56CF-4F42-4268-9D9A-8F73C51287B6} = {B1DCB10F-47FB-45DF-8DBC-B1BCDAFCDA7F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {4439B157-BE4B-4FBE-9B40-CC14674AEAB3}
 		VisualSVNWorkingCopyRoot = ..\..
+		SolutionGuid = {4439B157-BE4B-4FBE-9B40-CC14674AEAB3}
 	EndGlobalSection
 EndGlobal

@@ -3,7 +3,7 @@ using Iv4xr.SePlugin.SeLib;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Iv4xr.SeGameLib.Control;
+using Iv4xr.SePlugin.Control;
 
 namespace Iv4xr.SePlugin
 {

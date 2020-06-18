@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using VRageMath;
 
-namespace Iv4xr.SeGameLib.WorldModel
+namespace Iv4xr.SePlugin.WorldModel
 {
 	/// <summary>
 	/// Yet another Vector3D class. This time without any properties for easy (JSON) serialization.

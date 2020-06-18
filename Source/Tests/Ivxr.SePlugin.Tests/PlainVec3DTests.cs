@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Iv4xr.SeGameLib.Json;
-using Iv4xr.SeGameLib.WorldModel;
+using Iv4xr.SePlugin.Json;
+using Iv4xr.SePlugin.WorldModel;
 using VRageMath;
 using Xunit;
 

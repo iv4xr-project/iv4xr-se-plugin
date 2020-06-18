@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using LitJson;
 
-namespace Iv4xr.SeGameLib.Json
+namespace Iv4xr.SePlugin.Json
 {
 	public class Jsoner
 	{

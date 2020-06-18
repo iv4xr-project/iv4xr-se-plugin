@@ -72,9 +72,9 @@
       <Project>{40CE67D5-C89F-4A56-AE52-85DB1BEA07FE}</Project>
       <Name>VRage.Math</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Ivxr.SeGameLib\Ivxr.SeGameLib.csproj">
-      <Project>{2C5E69B6-F70C-4004-B00A-49640FAFD6FF}</Project>
-      <Name>Ivxr.SeGameLib</Name>
+    <ProjectReference Include="..\..\Ivxr.SePlugin\Ivxr.SePlugin.csproj">
+      <Project>{0f85d931-646a-4618-9db4-88228dd8a8cd}</Project>
+      <Name>Ivxr.SePlugin</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />

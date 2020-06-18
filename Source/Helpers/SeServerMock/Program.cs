@@ -4,7 +4,7 @@ using System.Net.Sockets;
 using System.Threading;
 using Iv4xr.PluginLib;
 using Iv4xr.PluginLib.Log;
-using Iv4xr.SeGameLib.Control;
+using Iv4xr.SePlugin.Control;
 using SeServerMock.Mocks;
 
 namespace SeServerMock

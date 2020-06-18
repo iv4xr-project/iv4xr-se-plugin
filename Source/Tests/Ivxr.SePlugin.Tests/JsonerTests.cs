@@ -1,6 +1,6 @@
-﻿using Iv4xr.SeGameLib.Json;
+﻿using Iv4xr.SePlugin.Json;
 using System;
-using Iv4xr.SeGameLib.WorldModel;
+using Iv4xr.SePlugin.WorldModel;
 using VRageMath;
 using Xunit;
 using System.Collections.Generic;

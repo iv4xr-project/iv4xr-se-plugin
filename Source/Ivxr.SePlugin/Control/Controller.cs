@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
-using Iv4xr.SeGameLib.Json;
+using Iv4xr.SePlugin.Json;
 
-namespace Iv4xr.SeGameLib.Control
+namespace Iv4xr.SePlugin.Control
 {
 	public class Controller
 	{

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Iv4xr.SeGameLib.WorldModel
+namespace Iv4xr.SePlugin.WorldModel
 {
 	public class SeEntity
 	{

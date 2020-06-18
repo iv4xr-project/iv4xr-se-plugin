@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Iv4xr.PluginLib;
-using Iv4xr.SeGameLib.WorldModel;
-using Iv4xr.SeGameLib.WorldModel;
+using Iv4xr.SePlugin.WorldModel;
+using Iv4xr.SePlugin.WorldModel;
 using Sandbox.Game.Entities;
 using Sandbox.Game.Entities.Character;
 using Sandbox.Game.Multiplayer;
 using VRage.Game.Entity;
 using VRageMath;
 
-namespace Iv4xr.SeGameLib.Control
+namespace Iv4xr.SePlugin.Control
 {
 	public interface IObserver
 	{
