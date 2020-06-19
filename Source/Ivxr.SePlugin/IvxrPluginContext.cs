@@ -10,7 +10,7 @@ namespace Iv4xr.SePlugin
 	public class IvxrPluginContext : IDisposable
 	{
 		public ILog Log { get; private set; }
-		public readonly Controller Controller;
+		public readonly Dispatcher Dispatcher;
 
 		private readonly RequestQueue m_requestQueue = new RequestQueue();
 
@@ -25,7 +25,7 @@ namespace Iv4xr.SePlugin
 			Log = seLog;
 
 			m_server = new PluginServer(Log, m_requestQueue);
-			Controller = new Controller(m_requestQueue, m_observer);
+			Dispatcher = new Dispatcher(m_requestQueue, m_observer);
 		}
 
 		public void StartServer()

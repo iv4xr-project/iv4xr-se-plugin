@@ -14,7 +14,7 @@ namespace Iv4xr.SePlugin
 
 		// Shortcuts
 		public static ILog Log { get; private set; }
-		public static Controller Controller { get; private set; }
+		public static Dispatcher Dispatcher { get; private set; }
 
 		public void Init(object gameInstance)
 		{
@@ -26,7 +26,7 @@ namespace Iv4xr.SePlugin
 
 			Context = new IvxrPluginContext();
 
-			Controller = Context.Controller;
+			Dispatcher = Context.Dispatcher;
 
 			Log = Context.Log;
 			Log.WriteLine($"{nameof(IvxrPlugin)} initialization finished.");

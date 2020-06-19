@@ -22,11 +22,11 @@ namespace SeServerMock
 
 				var observer = new MockObserver();
 
-                var controller = new Controller(requestQueue, observer);
+                var dispatcher = new Dispatcher(requestQueue, observer);
 
 				while (true)
                 {
-					controller.ProcessRequests();
+					dispatcher.ProcessRequests();
 
 					/*
                     while (requestQueue.Requests.TryDequeue(out Request request))

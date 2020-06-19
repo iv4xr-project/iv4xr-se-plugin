@@ -9,7 +9,7 @@ namespace Iv4xr.SePlugin
         {
             base.UpdateBeforeSimulation();
 
-            IvxrPlugin.Controller.ProcessRequests();
+            IvxrPlugin.Dispatcher.ProcessRequests();
         }
 
 		protected override void UnloadData()
