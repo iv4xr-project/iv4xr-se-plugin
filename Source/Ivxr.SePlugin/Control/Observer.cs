@@ -17,35 +17,22 @@ namespace Iv4xr.SePlugin.Control
 		SeObservation GetObservation();
 	}
 
-	public class Observer : IObserver
+	internal class Observer : IObserver
 	{
 		public ILog Log { get; set; }
 
-		private MyCharacter m_character;
-
 		private readonly PlainVec3D AgentExtent = new PlainVec3D(0.5, 1, 0.5);  // TODO(PP): It's just a quick guess, check the reality.
 
-		public void InitSession()
-		{
-			var playerCount = Sync.Players.GetOnlinePlayerCount();
-			if (playerCount <= 0)
-			{
-				throw new InvalidOperationException("Didn't find any players.");
-			}
+		private GameSession m_gameSession;
+		private MyCharacter Character => m_gameSession.Character;
 
-			m_character = Sync.Players.GetOnlinePlayers().First().Character;
-		}
-
-		public void EndSession()
+		public Observer(GameSession session)
 		{
-			m_character = null;
+			m_gameSession = session;
 		}
 
 		public SeObservation GetObservation()
 		{
-			if (m_character is null)
-				InitSession();
-
 			return new SeObservation
 			{
 				AgentID = "se0",
@@ -58,7 +45,7 @@ namespace Iv4xr.SePlugin.Control
 
 		private Vector3D GetPlayerPosition()
 		{
-			return m_character.PositionComp.GetPosition();
+			return Character.PositionComp.GetPosition();
 		}
 
 		private Vector3D GetPlayerVelocity()

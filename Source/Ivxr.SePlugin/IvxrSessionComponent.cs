@@ -3,9 +3,16 @@
 namespace Iv4xr.SePlugin
 {
 	[MySessionComponentDescriptor(MyUpdateOrder.BeforeSimulation | MyUpdateOrder.AfterSimulation)]
-    class IvxrSession : MySessionComponentBase
+    class IvxrSessionComponent : MySessionComponentBase
     {
-        public override void UpdateBeforeSimulation()
+		public override void BeforeStart()
+		{
+			base.BeforeStart();
+
+			IvxrPlugin.Context.InitSession();
+		}
+
+		public override void UpdateBeforeSimulation()
         {
             base.UpdateBeforeSimulation();
 

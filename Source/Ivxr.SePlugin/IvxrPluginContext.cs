@@ -16,7 +16,9 @@ namespace Iv4xr.SePlugin
 
 		private readonly PluginServer m_server;
 
-		private readonly Observer m_observer = new Observer();
+		private readonly GameSession m_gameSession = new GameSession();
+
+		private readonly Observer m_observer;
 
 		public IvxrPluginContext()
 		{
@@ -25,6 +27,8 @@ namespace Iv4xr.SePlugin
 			Log = seLog;
 
 			m_server = new PluginServer(Log, m_requestQueue);
+			m_observer = new Observer(m_gameSession);
+
 			Dispatcher = new Dispatcher(m_requestQueue, m_observer);
 		}
 
@@ -33,11 +37,16 @@ namespace Iv4xr.SePlugin
 			m_server.Start();
 		}
 
+		public void InitSession()
+		{
+			m_gameSession.InitSession();
+		}
+
 		public void EndSession()
 		{
 			Log.WriteLine("Ending session.");
 
-			m_observer.EndSession();
+			m_gameSession.EndSession();
 		}
 
 		protected virtual void Dispose(bool disposing)
