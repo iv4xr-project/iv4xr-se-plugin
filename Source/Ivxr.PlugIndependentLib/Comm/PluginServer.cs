@@ -121,12 +121,9 @@ namespace Iv4xr.PluginLib
 
             if (!message.StartsWith("{\"Cmd\":"))
             {
-                // TODO: throw new InvalidDataException("Unexpected message header: " + message);
-                m_log.WriteLine("Unexpected message header: " + message);
-
-                // TODO(PP): Remove this. For now, just reply anyway to test the communication.
-                m_requestQueue.Requests.Enqueue(new Request(clientStream, message));
-                return;
+                throw new InvalidDataException("Unexpected message header: " + message);
+                // m_log.WriteLine("Unexpected message header: " + message);
+                // return;
             }
 
             string command = message.Substring(startIndex: 7, length: 12);
@@ -134,7 +131,7 @@ namespace Iv4xr.PluginLib
             // ReSharper disable once StringLiteralTypo
             if (command.StartsWith("\"AGENTCOM"))  // AGENTCOMMAND 
             {
-                m_requestQueue.Requests.Enqueue(new Request(clientStream, message));
+                m_requestQueue.Requests.Enqueue(new RequestItem(clientStream, message));
             }
             else if (command.StartsWith("\"DISCONNECT\""))
             {

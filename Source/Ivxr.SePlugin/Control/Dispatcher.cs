@@ -4,40 +4,62 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using Iv4xr.SePlugin.Json;
+using Iv4xr.SePlugin.WorldModel;
+using Iv4xr.PluginLib.Comm;
 
 namespace Iv4xr.SePlugin.Control
 {
 	public class Dispatcher
 	{
+		public ILog Log { get; set; }
+
 		private readonly RequestQueue m_requestQueue;
 
 		private readonly IObserver m_observer;
 
+		private readonly ICharacterController m_controller;
+
 		private readonly Jsoner m_jsoner = new Jsoner();
 
-		public Dispatcher(RequestQueue requestQueue, IObserver observer)
+		public Dispatcher(RequestQueue requestQueue, IObserver observer, ICharacterController controller)
 		{
 			m_requestQueue = requestQueue;
 			m_observer = observer;
+			m_controller = controller;
 		}
 
 		public void ProcessRequests()
 		{
-			while (m_requestQueue.Requests.TryDequeue(out Request request))
+			while (m_requestQueue.Requests.TryDequeue(out RequestItem request))
 			{
-				// Assuming observation request for now.
-				var jsonReply = m_jsoner.ToJson(m_observer.GetObservation());
+				// Skip prefix "{\"Cmd\":\"AGENTCOMMAND\",\"Arg\":{\"Cmd\":\""
+				var commandName = request.Message.Substring(36, 10);
+				string jsonReply;
+
+				Log?.WriteLine($"{nameof(Dispatcher)} command prefix: '{commandName}'.");
+
+				if (commandName.StartsWith("DONOTHING"))
+				{
+					// Just observe.
+				}
+				else if (commandName.StartsWith("MOVETOWARD"))
+				{
+					var requestShell = m_jsoner.ToObject<SeRequestShell<AgentCommand<MoveCommandArgs>>>(request.Message);
+					var moveCommandArgs = requestShell.Arg.Arg;
+
+					Log?.WriteLine($"Move indicator: {moveCommandArgs.MoveIndicator}");
+					m_controller.Move(moveCommandArgs.MoveIndicator);
+				}
+				else
+				{
+					// TODO(PP): Maybe just log error and continue.
+					throw new NotImplementedException($"Uknown agent command: {commandName}");
+				}
+
+				jsonReply = m_jsoner.ToJson(m_observer.GetObservation());
 
 				m_requestQueue.Replies.Add(
-					new Request(request.ClientStream, message: jsonReply));
-
-				/*
-				var character = m_observer.GetCharacter();
-
-				var entityController = character.ControllerInfo.Controller;
-
-				entityController.ControlledEntity.MoveAndRotate(new VRageMath.Vector3(0, 0, 0.1), Vector2.Zero, 0);
-				*/
+					new RequestItem(request.ClientStream, message: jsonReply));
 			}
 		}
 	}

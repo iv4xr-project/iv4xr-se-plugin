@@ -7,7 +7,12 @@ using System.Text;
 
 namespace Iv4xr.SePlugin.Control
 {
-	internal class GameSession
+	public interface IGameSession
+	{
+		MyCharacter Character { get; }
+	}
+
+	internal class GameSession : IGameSession
 	{
 		public MyCharacter Character { get; private set; }
 

@@ -4,12 +4,15 @@ using Iv4xr.SePlugin.WorldModel;
 using VRageMath;
 using Xunit;
 using System.Collections.Generic;
+using Iv4xr.PluginLib.Comm;
 
 namespace Ivxr.SeGameLib.Tests
 {
 	public class JsonerTests
 	{
 		private readonly Jsoner m_jsoner = new Jsoner();
+
+		private const int Precision = 4;
 
 		private class Class
 		{
@@ -45,5 +48,62 @@ namespace Ivxr.SeGameLib.Tests
 				json);
 		}
 
+		[Fact]
+		public void DeserializesPlainVec3DIntoVector3D()
+		{
+			var originalVector = new PlainVec3D(1, 2, -3);
+
+			var json = m_jsoner.ToJson(originalVector);
+
+			var vector3 = m_jsoner.ToObject<Vector3D>(json);
+
+			Assert.Equal(originalVector.X, vector3.X);
+			Assert.Equal(originalVector.Y, vector3.Y);
+			Assert.Equal(originalVector.Z, vector3.Z);
+		}
+
+		[Fact]
+		public void DeserializesAgentCommandRequest()
+		{
+			string requestJson = "{\"Cmd\":\"AGENTCOMMAND\",\"Arg\":{\"Cmd\":\"MOVETOWARD\"," +
+				"\"AgentId\":\"you\",\"TargetId\":\"you\"," +
+				"\"Arg\":5.5}}";
+
+			var request = m_jsoner.ToObject<SeRequestShell<AgentCommand<double>>>(requestJson);
+
+			Assert.Equal(5.5, request.Arg.Arg, Precision);
+		}
+
+		[Fact]
+		public void DeserializesMoveCommandArgs()
+		{
+			string argsJson = "{\"Object1\":{\"X\":0.0,\"Y\":0.0,\"Z\":-1.0},\"Object2\":false}";
+
+			var args = m_jsoner.ToObject<MoveCommandArgs>(argsJson);
+
+			Assert.Equal(-1.0d, args.MoveIndicator.Z, Precision);
+		}
+
+		[Fact]
+		public void DeserializesMoveCommand()
+		{
+			string requestJson = "{\"Cmd\":\"AGENTCOMMAND\",\"Arg\":{\"Cmd\":\"MOVETOWARD\"," +
+				"\"AgentId\":\"you\",\"TargetId\":\"you\"," +
+				"\"Arg\":{\"Object1\":{\"X\":0.0,\"Y\":0.0,\"Z\":-1.0},\"Object2\":false}}}";
+
+			var request = m_jsoner.ToObject<SeRequestShell<AgentCommand<MoveCommandArgs>>>(requestJson);
+
+			Assert.Equal(-1.0d, request.Arg.Arg.MoveIndicator.Z, Precision);
+		}
+
+		/* (don't even show this in the list)
+		[Fact(Skip="One time use.")]
+		public void MeasureCommandPrefixLength()
+		{
+			string commandPrefix = "{\"Cmd\":\"AGENTCOMMAND\",\"Arg\":{\"Cmd\":\"";
+
+			Assert.Equal(36, commandPrefix.Length);  // Need this constant in the code.
+		}
+		*/
 	}
 }

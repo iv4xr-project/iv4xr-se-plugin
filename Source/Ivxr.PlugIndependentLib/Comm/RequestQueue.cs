@@ -7,12 +7,12 @@ namespace Iv4xr.PluginLib
     {
         public RequestQueue()
         {
-            Requests = new ConcurrentQueue<Request>();
-            Replies = new BlockingCollection<Request>();
+            Requests = new ConcurrentQueue<RequestItem>();
+            Replies = new BlockingCollection<RequestItem>();
         }
         
-        public ConcurrentQueue<Request> Requests { get; }
-        public BlockingCollection<Request> Replies { get; }
+        public ConcurrentQueue<RequestItem> Requests { get; }
+        public BlockingCollection<RequestItem> Replies { get; }
 
         #region IDisposable Support
         private bool disposedValue = false; // To detect redundant calls

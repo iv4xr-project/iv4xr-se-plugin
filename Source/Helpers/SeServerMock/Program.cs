@@ -21,8 +21,10 @@ namespace SeServerMock
                 server.Start();
 
 				var observer = new MockObserver();
+				var controller = new MockCharacterController();
 
-                var dispatcher = new Dispatcher(requestQueue, observer);
+                var dispatcher = new Dispatcher(requestQueue, observer, controller);
+				dispatcher.Log = log;
 
 				while (true)
                 {
@@ -38,7 +40,7 @@ namespace SeServerMock
                     }
 					*/
 
-                    Thread.Sleep(50);
+                    Thread.Sleep(5);
                 }
 
                 // server.Start(waitForFinish: true);

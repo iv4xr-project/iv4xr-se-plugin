@@ -2,9 +2,12 @@
 
 namespace Iv4xr.PluginLib
 {
-    public class Request
+	/// <summary>
+	/// Request item of the request queue, carring its context.
+	/// </summary>
+    public class RequestItem
     {
-        public Request(NetworkStream clientStream, string message)
+        public RequestItem(NetworkStream clientStream, string message)
         {
             ClientStream = clientStream;
             Message = message;
