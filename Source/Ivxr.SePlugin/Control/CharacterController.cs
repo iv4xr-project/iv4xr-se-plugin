@@ -23,6 +23,9 @@ namespace Iv4xr.SePlugin.Control
 		{
 			var entityController = m_session.Character.ControllerInfo.Controller;
 
+			if (entityController is null)  // Happens when the character enters a vehicle, for example.
+				throw new NotSupportedException("Entity control not possible now."); 
+
 			entityController.ControlledEntity.MoveAndRotate(move, Vector2.Zero, 0);
 		}
 	}

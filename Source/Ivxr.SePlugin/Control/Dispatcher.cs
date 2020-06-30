@@ -32,35 +32,50 @@ namespace Iv4xr.SePlugin.Control
 		{
 			while (m_requestQueue.Requests.TryDequeue(out RequestItem request))
 			{
-				// Skip prefix "{\"Cmd\":\"AGENTCOMMAND\",\"Arg\":{\"Cmd\":\""
-				var commandName = request.Message.Substring(36, 10);
 				string jsonReply;
 
-				Log?.WriteLine($"{nameof(Dispatcher)} command prefix: '{commandName}'.");
-
-				if (commandName.StartsWith("DONOTHING"))
+				try
 				{
-					// Just observe.
+					jsonReply = ProcessSingleRequest(request);
 				}
-				else if (commandName.StartsWith("MOVETOWARD"))
+				catch (Exception ex)
 				{
-					var requestShell = m_jsoner.ToObject<SeRequestShell<AgentCommand<MoveCommandArgs>>>(request.Message);
-					var moveCommandArgs = requestShell.Arg.Arg;
-
-					Log?.WriteLine($"Move indicator: {moveCommandArgs.MoveIndicator}");
-					m_controller.Move(moveCommandArgs.MoveIndicator);
+					Log.WriteLine($"Error processing a request: {ex.Message}");
+					Log.WriteLine($"Full request: \"{request.Message}\"");
+					jsonReply = "false";  // Simple error response, details can be learned from the log.
 				}
-				else
-				{
-					// TODO(PP): Maybe just log error and continue.
-					throw new NotImplementedException($"Uknown agent command: {commandName}");
-				}
-
-				jsonReply = m_jsoner.ToJson(m_observer.GetObservation());
 
 				m_requestQueue.Replies.Add(
 					new RequestItem(request.ClientStream, message: jsonReply));
 			}
+		}
+
+		private string ProcessSingleRequest(RequestItem request)
+		{
+			// Skip prefix "{\"Cmd\":\"AGENTCOMMAND\",\"Arg\":{\"Cmd\":\""
+			var commandName = request.Message.Substring(36, 10);
+
+			Log?.WriteLine($"{nameof(Dispatcher)} command prefix: '{commandName}'.");
+
+			if (commandName.StartsWith("DONOTHING"))
+			{
+				// Just observe.
+			}
+			else if (commandName.StartsWith("MOVETOWARD"))
+			{
+				var requestShell = m_jsoner.ToObject<SeRequestShell<AgentCommand<MoveCommandArgs>>>(request.Message);
+				var moveCommandArgs = requestShell.Arg.Arg;
+
+				Log?.WriteLine($"Move indicator: {moveCommandArgs.MoveIndicator}");
+				m_controller.Move(moveCommandArgs.MoveIndicator);
+			}
+			else
+			{
+				// TODO(PP): Maybe just log error and continue.
+				throw new NotImplementedException($"Uknown agent command: {commandName}");
+			}
+
+			return m_jsoner.ToJson(m_observer.GetObservation());
 		}
 	}
 }
