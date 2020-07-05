@@ -14,7 +14,17 @@ namespace Iv4xr.SePlugin.Control
 
 	internal class GameSession : IGameSession
 	{
-		public MyCharacter Character { get; private set; }
+		public MyCharacter Character
+		{
+			get
+			{
+				if (m_character is null)
+					InitSession();
+
+				return m_character;
+			}
+		}
+		private MyCharacter m_character;
 
 		public void InitSession()
 		{
@@ -24,12 +34,12 @@ namespace Iv4xr.SePlugin.Control
 				throw new InvalidOperationException("Didn't find any players.");
 			}
 
-			Character = Sync.Players.GetOnlinePlayers().First().Character;
+			m_character = Sync.Players.GetOnlinePlayers().First().Character;
 		}
 
 		public void EndSession()
 		{
-			Character = null;
+			m_character = null;
 		}
 	}
 }

@@ -41,6 +41,7 @@ namespace Iv4xr.SePlugin.Control
 				catch (Exception ex)
 				{
 					Log.WriteLine($"Error processing a request: {ex.Message}");
+					Log.WriteLine($"Exception details:\n{ex.ToString()}\n-----\n");
 					Log.WriteLine($"Full request: \"{request.Message}\"");
 					jsonReply = "false";  // Simple error response, details can be learned from the log.
 				}
@@ -71,7 +72,6 @@ namespace Iv4xr.SePlugin.Control
 			}
 			else
 			{
-				// TODO(PP): Maybe just log error and continue.
 				throw new NotImplementedException($"Uknown agent command: {commandName}");
 			}
 

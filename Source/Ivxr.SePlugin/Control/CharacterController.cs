@@ -21,6 +21,9 @@ namespace Iv4xr.SePlugin.Control
 
 		public void Move(Vector3 move)
 		{
+			if (m_session.Character is null)
+				throw new NullReferenceException("I'm out of character!");  // Should not happen.
+			
 			var entityController = m_session.Character.ControllerInfo.Controller;
 
 			if (entityController is null)  // Happens when the character enters a vehicle, for example.
