@@ -6,6 +6,7 @@ using System.Text;
 using Iv4xr.SePlugin.Json;
 using Iv4xr.SePlugin.WorldModel;
 using Iv4xr.PluginLib.Comm;
+using VRageMath;
 
 namespace Iv4xr.SePlugin.Control
 {
@@ -58,17 +59,23 @@ namespace Iv4xr.SePlugin.Control
 
 			Log?.WriteLine($"{nameof(Dispatcher)} command prefix: '{commandName}'.");
 
-			if (commandName.StartsWith("DONOTHING"))
+			if (commandName.StartsWith("OBSERVE") || commandName.StartsWith("DONOTHING"))  // DONOTHING is obsolete.
 			{
 				// Just observe.
 			}
-			else if (commandName.StartsWith("MOVETOWARD"))
+			else if (commandName.StartsWith("MOVE_ROTAT"))  // MOVE_ROTATE
+			{
+				var requestShell = m_jsoner.ToObject<SeRequestShell<AgentCommand<MoveAndRotateArgs>>>(request.Message);
+
+				m_controller.Move(requestShell.Arg.Arg);
+			}
+			else if (commandName.StartsWith("MOVETOWARD"))  // TODO(PP): Remove.
 			{
 				var requestShell = m_jsoner.ToObject<SeRequestShell<AgentCommand<MoveCommandArgs>>>(request.Message);
 				var moveCommandArgs = requestShell.Arg.Arg;
 
 				Log?.WriteLine($"Move indicator: {moveCommandArgs.MoveIndicator}");
-				m_controller.Move(moveCommandArgs.MoveIndicator);
+				m_controller.Move(moveCommandArgs.MoveIndicator, Vector2.Zero, 0.0f);
 			}
 			else
 			{

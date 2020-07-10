@@ -16,6 +16,27 @@ namespace Iv4xr.SePlugin.WorldModel
 		public bool Jump => Object2;
 	}
 
+	public class MoveAndRotateArgs
+	{
+		public Vector3D Movement;  // D = double, needed for LitJson deserialization
+
+		public Vector3D Rotation3 // D = double
+		{
+			get { return m_rotation3; }
+			set  // Set also Vector2 Rotation.
+			{
+				m_rotation3 = value;
+				Rotation.X = (float)value.X;
+				Rotation.Y = (float)value.Y;
+			}
+		}
+		private Vector3D m_rotation3;
+
+		public double Roll;
+
+		public Vector2 Rotation;
+	}
+
 	public class AgentCommand<ArgumentType>
 	{
 		public string Cmd;

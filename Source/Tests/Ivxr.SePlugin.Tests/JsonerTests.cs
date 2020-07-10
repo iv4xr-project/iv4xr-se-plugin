@@ -96,6 +96,21 @@ namespace Ivxr.SeGameLib.Tests
 			Assert.Equal(-1.0d, request.Arg.Arg.MoveIndicator.Z, Precision);
 		}
 
+		[Fact]
+		public void DeserializesMoveAndRotateCommand()
+		{
+			string requestJson = "{\"Cmd\":\"AGENTCOMMAND\",\"Arg\":{\"Cmd\":\"MOVE_ROTATE\"," +
+				"\"AgentId\":\"you\",\"TargetId\":\"you\"," +
+				"\"Arg\":{\"Movement\":{\"X\":0.0,\"Y\":0.0,\"Z\":-1.0},\"Rotation3\":{\"X\":0.3,\"Y\":0.0,\"Z\":0.0},\"Roll\":0.0}}}";
+
+			var request = m_jsoner.ToObject<SeRequestShell<AgentCommand<MoveAndRotateArgs>>>(requestJson);
+
+			var args = request.Arg.Arg;
+			Assert.Equal(-1.0f, args.Movement.Z, Precision);
+			Assert.Equal(0.3f, args.Rotation.X, Precision);  // Check for correct mapping Rotation3 -> Rotation
+			Assert.Equal(0.0f, args.Rotation.Y, Precision);
+		}
+
 		/* (don't even show this in the list)
 		[Fact(Skip="One time use.")]
 		public void MeasureCommandPrefixLength()
