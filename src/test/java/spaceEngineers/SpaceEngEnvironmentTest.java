@@ -1,20 +1,14 @@
 package spaceEngineers;
 
-import communication.agent.AgentCommand;
-import nl.uu.cs.aplib.mainConcepts.Environment;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import spaceEngineers.commands.SeAgentCommand;
 
 public class SpaceEngEnvironmentTest {
 
     @Test
     public void disconnectTest() {
         var environment = new SpaceEngEnvironment("localhost", 9678);
-
-        var reply = environment.sendCommand(
-                new Environment.EnvOperation("me", "you", "request", "hello!"));
-
-        System.out.println("Reply: " + (String)reply);
 
         boolean result = environment.getSeResponse(SeRequest.disconnect());
         Assertions.assertTrue(result);
@@ -24,7 +18,7 @@ public class SpaceEngEnvironmentTest {
     public void observeTest() {
         var environment = new SpaceEngEnvironment("localhost", 9678);
 
-        var observation = environment.getSeResponse(SeRequest.command(AgentCommand.doNothing("you")));
+        var observation = environment.getSeResponse(SeRequest.command(SeAgentCommand.doNothing("you")));
         Assertions.assertNotNull(observation);
 
         System.out.println("AgentId: " + observation.agentID);
@@ -39,7 +33,7 @@ public class SpaceEngEnvironmentTest {
         var environment = new SpaceEngEnvironment("localhost", 9678);
 
         for (int i = 0; i < 5; i++) {
-            var observation = environment.getSeResponse(SeRequest.command(AgentCommand.doNothing("you")));
+            var observation = environment.getSeResponse(SeRequest.command(SeAgentCommand.doNothing("you")));
             Assertions.assertNotNull(observation);
 
             System.out.println("AgentId: " + observation.agentID);
@@ -54,7 +48,7 @@ public class SpaceEngEnvironmentTest {
     public void observeEntitiesTest() {
         var environment = new SpaceEngEnvironment("localhost", 9678);
 
-        var observation = environment.getSeResponse(SeRequest.command(AgentCommand.doNothing("you")));
+        var observation = environment.getSeResponse(SeRequest.command(SeAgentCommand.doNothing("you")));
         Assertions.assertNotNull(observation);
         Assertions.assertNotNull(observation.entities);
         Assertions.assertTrue(observation.entities.size() > 0);

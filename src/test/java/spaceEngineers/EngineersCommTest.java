@@ -7,10 +7,12 @@ import org.junit.jupiter.api.Test;
 public class EngineersCommTest {
 
     @Test
-    public void commTest() {
+    public void commScrewingTest() {
 
         var environment = new SeSocketEnvironment("localhost", 9678);
 
+        // These messages are invalid, so we basically test error handling here.
+        // (The server cuts of the connection after the first message.)
         var messages = new String[] { "hello", "you", "fool" };
 
         for (var message : messages) {
