@@ -10,13 +10,13 @@ namespace Iv4xr.SePlugin
 	public class IvxrPluginContext : IDisposable
 	{
 		public ILog Log { get; private set; }
-		public readonly Controller Controller;
+		public readonly Dispatcher Dispatcher;
 
 		private readonly RequestQueue m_requestQueue = new RequestQueue();
 
 		private readonly PluginServer m_server;
 
-		private readonly Observer m_observer = new Observer();
+		private readonly GameSession m_gameSession = new GameSession();
 
 		public IvxrPluginContext()
 		{
@@ -25,7 +25,13 @@ namespace Iv4xr.SePlugin
 			Log = seLog;
 
 			m_server = new PluginServer(Log, m_requestQueue);
-			Controller = new Controller(m_requestQueue, m_observer);
+			var observer = new Observer(m_gameSession);
+			var controller = new CharacterController(m_gameSession);
+
+			Dispatcher = new Dispatcher(m_requestQueue, observer, controller)
+			{
+				Log = Log
+			};
 		}
 
 		public void StartServer()
@@ -33,11 +39,16 @@ namespace Iv4xr.SePlugin
 			m_server.Start();
 		}
 
+		public void InitSession()
+		{
+			m_gameSession.InitSession();
+		}
+
 		public void EndSession()
 		{
 			Log.WriteLine("Ending session.");
 
-			m_observer.EndSession();
+			m_gameSession.EndSession();
 		}
 
 		protected virtual void Dispose(bool disposing)

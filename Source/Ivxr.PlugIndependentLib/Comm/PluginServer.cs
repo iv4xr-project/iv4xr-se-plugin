@@ -121,11 +121,10 @@ namespace Iv4xr.PluginLib
 
             if (!message.StartsWith("{\"Cmd\":"))
             {
-                // TODO: throw new InvalidDataException("Unexpected message header: " + message);
+                // throw new InvalidDataException("Unexpected message header: " + message);
                 m_log.WriteLine("Unexpected message header: " + message);
-
-                // TODO(PP): Remove this. For now, just reply anyway to test the communication.
-                m_requestQueue.Requests.Enqueue(new Request(clientStream, message));
+				// We disconnect here, because the outer loop can't handle a request without a reply from the queue.
+				Disconnect(clientStream, out disconnected, reply: false);  
                 return;
             }
 
@@ -134,31 +133,41 @@ namespace Iv4xr.PluginLib
             // ReSharper disable once StringLiteralTypo
             if (command.StartsWith("\"AGENTCOM"))  // AGENTCOMMAND 
             {
-                m_requestQueue.Requests.Enqueue(new Request(clientStream, message));
+                m_requestQueue.Requests.Enqueue(new RequestItem(clientStream, message));
             }
             else if (command.StartsWith("\"DISCONNECT\""))
             {
                 Reply(clientStream, "true");
                 clientStream.Close(timeout: 100);  // ms
                 disconnected = true;
-                return;  // It's important not to wait from any reply from the queue.
+                return;  // It's important not to wait for any reply from the queue.
             }
             else
             {
-                throw new NotImplementedException("Command unknown or not implemented: " + command);
-            }
+                // throw new NotImplementedException("Command unknown or not implemented: " + command);
+                m_log.WriteLine("Command unknown or not implemented: " + command);
+				// We disconnect here, because the outer loop can't handle a request without a reply from the queue.
+				Disconnect(clientStream, out disconnected, reply: false);
+			}
         }
+
+		private void Disconnect(NetworkStream clientStream, out bool disconnected, bool reply = true)
+		{
+			Reply(clientStream, reply.ToString());
+			clientStream.Close(timeout: 100);  // ms
+			disconnected = true;
+		}
 
         private void WaitForReplyAndSendIt()
         {
-            // TODO(PP): consider adding a timeout
+            // TODO(PP): consider adding a timeout (blocks when no reply ready)
             var reply = m_requestQueue.Replies.Take();
             Reply(reply.ClientStream, reply.Message);
         }
 
         private void Reply(NetworkStream clientStream, string reply)
         {
-            // TODO(PP): prevent allocation of a new buffer each time
+            // TODO(PP): avoid allocation of a new buffer each time
             var replyBuffer = Encoding.ASCII.GetBytes(reply + '\n');
             clientStream.Write(replyBuffer, 0, replyBuffer.Length);
         }
