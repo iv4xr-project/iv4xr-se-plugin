@@ -7,7 +7,7 @@ import eu.iv4xr.framework.world.WorldModel;
 import helperclasses.datastructures.Vec3;
 import nl.uu.cs.aplib.mainConcepts.Environment;
 
-public class WorldEntity implements Serializable {
+public class XXXWorldEntity implements Serializable {
 	
 	/**
 	 * A unique id identifying this entity.

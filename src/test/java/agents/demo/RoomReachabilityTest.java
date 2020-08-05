@@ -42,12 +42,6 @@ import static nl.uu.cs.aplib.AplibEDSL.*;
  * The testing task is to verify that the closet in the east is reachable from
  * the player initial position, which it is if the door guarding it can be opened.
  * This in turn requires a series of switches and other doors to be opened.
- * 
- * ISSUE to be solved!!
- *    * When the agent believes that a door is closed, it will refuse to navigate
- *      to it (because it is not reachable according to its nav-map).
- *      We need instead navigate to a position close to it to observe it.
- *    * Agent can get stuck in a bending corner!
  */
 public class RoomReachabilityTest {
 

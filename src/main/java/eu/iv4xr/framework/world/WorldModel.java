@@ -14,7 +14,7 @@ import world.LabWorldModel;
  * how the world is structured; this may incorporate its past knowledge which may no
  * longer be up to date.
  */
-public class WorldModel {
+public class XXXWorldModel {
 	
 	/**
 	 * The id of the agent that owns this World Model.
