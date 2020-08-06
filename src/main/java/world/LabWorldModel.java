@@ -2,9 +2,10 @@ package world;
 
 import java.util.*;
 import environments.LabRecruitsEnvironment;
-import eu.iv4xr.framework.world.WorldEntity;
-import eu.iv4xr.framework.world.WorldModel;
-import helperclasses.datastructures.Vec3;
+import eu.iv4xr.framework.mainConcepts.W3DEnvironment;
+import eu.iv4xr.framework.mainConcepts.WorldEntity;
+import eu.iv4xr.framework.mainConcepts.WorldModel;
+import eu.iv4xr.framework.spatial.Vec3;
 import nl.uu.cs.aplib.mainConcepts.Environment;
 
 public class LabWorldModel extends WorldModel {
@@ -61,8 +62,8 @@ public class LabWorldModel extends WorldModel {
     	if (target.type != LabEntity.SWITCH) return false ;
     	    	
 		var target_onfloorPosition = target.getFloorPosition() ;
-		var min = Vec3.subtract(target_onfloorPosition, target.extent);
-        var max = Vec3.sum(target_onfloorPosition, target.extent);
+		var min = Vec3.sub(target_onfloorPosition, target.extent);
+        var max = Vec3.add(target_onfloorPosition, target.extent);
         if (e.extent.y <= 0.2) {
         	min.y -= 0.2 ;
         	max.y += 0.2 ;
@@ -85,7 +86,7 @@ public class LabWorldModel extends WorldModel {
 	}
 	
 	@Override
-	public LabWorldModel interact(Environment env, String interactionType, WorldEntity e) {
+	public LabWorldModel interact(W3DEnvironment env, String interactionType, WorldEntity e) {
 		// For now, Lab Recruits only have one interaction type, so we are not going
 		// to check interactionType.
 		var target = (LabEntity) e ;
@@ -94,12 +95,12 @@ public class LabWorldModel extends WorldModel {
 	}
 	
 	@Override
-	public LabWorldModel observe(Environment env) {
+	public LabWorldModel observe(W3DEnvironment env) {
 		return ((LabRecruitsEnvironment) env).observe(this.agentId) ;
 	}
 	
 	@Override
-	public LabWorldModel moveToward(Environment env, Vec3 position) {
+	public LabWorldModel moveToward(W3DEnvironment env, Vec3 position) {
 		return ((LabRecruitsEnvironment) env).moveToward(this.agentId,this.getFloorPosition(), position) ;
 	}
 	

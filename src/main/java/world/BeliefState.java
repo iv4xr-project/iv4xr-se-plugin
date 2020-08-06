@@ -9,7 +9,7 @@ package world;
 
 import communication.agent.AgentCommandType;
 import environments.LabRecruitsEnvironment;
-import eu.iv4xr.framework.world.WorldEntity;
+import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import helperclasses.Intersections.EntityNodeIntersection;
 import helperclasses.datastructures.Vec3;
 import helperclasses.datastructures.linq.QArrayList;

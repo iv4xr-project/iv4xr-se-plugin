@@ -13,7 +13,7 @@ import communication.adapters.EntityAdapter;
 import communication.adapters.EntityTypeAdapter;
 import communication.system.Request;
 import logger.PrintColor;
-import nl.uu.cs.aplib.mainConcepts.Environment;
+import eu.iv4xr.framework.mainConcepts.W3DEnvironment;
 import world.LegacyDynamicEntity;
 import world.LegacyEntity;
 import world.LegacyEntityType;
@@ -23,7 +23,7 @@ import java.io.*;
 import java.lang.reflect.Modifier;
 import java.net.Socket;
 
-public class SocketEnvironment extends Environment {
+public class SocketEnvironment extends W3DEnvironment {
 
     private Socket socket;
     private BufferedReader reader;

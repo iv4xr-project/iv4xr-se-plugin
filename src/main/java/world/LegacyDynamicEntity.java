@@ -7,7 +7,7 @@ at Utrecht University within the Software and Game project course.
 
 package world;
 
-import helperclasses.datastructures.Vec3;
+import eu.iv4xr.framework.spatial.Vec3;
 
 /**
  * A representation of a "dynamic" object in the world. 

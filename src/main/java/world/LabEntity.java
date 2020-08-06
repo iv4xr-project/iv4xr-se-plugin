@@ -1,9 +1,9 @@
 package world;
 
 import environments.LabRecruitsEnvironment;
-import eu.iv4xr.framework.world.WorldEntity;
-import eu.iv4xr.framework.world.WorldModel;
-import helperclasses.datastructures.Vec3;
+import eu.iv4xr.framework.mainConcepts.WorldEntity;
+import eu.iv4xr.framework.mainConcepts.WorldModel;
+import eu.iv4xr.framework.spatial.Vec3;
 import nl.uu.cs.aplib.mainConcepts.Environment;
 
 public class LabEntity extends WorldEntity {

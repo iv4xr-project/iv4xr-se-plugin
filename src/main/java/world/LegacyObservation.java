@@ -7,8 +7,7 @@ at Utrecht University within the Software and Game project course.
 
 package world;
 
-import helperclasses.datastructures.Vec3;
-
+import eu.iv4xr.framework.spatial.Vec3;
 import java.util.List;
 
 /**
@@ -44,7 +43,7 @@ public class LegacyObservation {
     		myid = "FH" + e.position ;
     		var lenty =  new LabEntity(myid,LabEntity.FIREHAZARD,false) ;
     		lenty.position = new Vec3(e.position.x, e.position.y+1, e.position.z) ;
-    		lenty.extent   = new Vec3(0.5, 1, 0.5) ;
+    		lenty.extent   = new Vec3(0.5f, 1f, 0.5f) ;
     		lenty.timestamp = e.lastUpdated ;
         	return lenty ;
     	}
@@ -55,7 +54,7 @@ public class LegacyObservation {
     		// door can be blocking
     		var lenty = new LabEntity(myid,LabEntity.DOOR,true) ;
     		lenty.position = new Vec3(e.position.x, e.position.y+1, e.position.z) ;
-    		lenty.extent   = new Vec3(0.5, 1, 0.5) ;
+    		lenty.extent   = new Vec3(0.5f, 1f, 0.5f) ;
     		lenty.properties.put("isOpen", iteractive_e.isActive) ;
     		lenty.timestamp = e.lastUpdated ;
         	return lenty ;
@@ -65,7 +64,7 @@ public class LegacyObservation {
     		// switch is non-blocking
     		var lenty = new LabEntity(myid,LabEntity.SWITCH,true) ;
     		lenty.position = new Vec3(e.position.x, e.position.y, e.position.z) ;
-    		lenty.extent   = new Vec3(0.5, 0, 0.5) ;
+    		lenty.extent   = new Vec3(0.5f, 0f, 0.5f) ;
     		lenty.properties.put("isOn", iteractive_e.isActive) ;
     		lenty.timestamp = e.lastUpdated ;
         	return lenty ;
@@ -81,10 +80,10 @@ public class LegacyObservation {
     		// determining its bounding box ... need to know the screen orientation
             var orientation = myid.substring(0,1).toUpperCase() ;
             if (orientation.equals("W") || orientation.equals("E")) {
-            	lenty.extent = new Vec3(1, 1, 0.5) ;
+            	lenty.extent = new Vec3(1f, 1f, 0.5f) ;
             }
             else if (orientation.equals("S") || orientation.equals("N")) {
-            	lenty.extent = new Vec3(0.5, 1, 1) ;
+            	lenty.extent = new Vec3(0.5f, 1f, 1f) ;
             }
             else throw new IllegalArgumentException("Color switch " + myid + " needs to encode its orientation as the first letter of its id.") ;
     		
@@ -97,8 +96,8 @@ public class LegacyObservation {
     		// Unfortunately LabRecruits does NOT pass information on the bounding box of
     		// this entity.
     		var lenty = new LabEntity(myid,LabEntity.GOAL,false) ;
-    		lenty.position = new Vec3(e.position.x, e.position.y+0.9, e.position.z) ;
-    		lenty.extent = new Vec3(0.25, 0.9, 0.25) ;
+    		lenty.position = new Vec3(e.position.x, e.position.y+0.9f, e.position.z) ;
+    		lenty.extent = new Vec3(0.25f, 0.9f, 0.25f) ;
             lenty.timestamp = e.lastUpdated ;
         	return lenty ;
     	    }
@@ -117,9 +116,9 @@ public class LegacyObservation {
     	if (obs==null) return null ;
     	var wom = new LabWorldModel() ;
     	wom.agentId = obs.agentID ;
-    	wom.position = new Vec3(obs.agentPosition) ;
+    	wom.position = obs.agentPosition.copy() ;
     	wom.position.y += 0.75 ;
-    	wom.extent = new Vec3(0.2,0.75,0.2) ;
+    	wom.extent = new Vec3(0.2f,0.75f,0.2f) ;
     	wom.timestamp = obs.tick ;
     	wom.velocity = obs.velocity ;
     	wom.didNothingPreviousGameTurn = obs.didNothing ;

@@ -7,8 +7,8 @@ at Utrecht University within the Software and Game project course.
 
 package world;
 
-import eu.iv4xr.framework.world.WorldEntity;
-import helperclasses.datastructures.Vec3;
+import eu.iv4xr.framework.mainConcepts.WorldEntity;
+import eu.iv4xr.framework.spatial.Vec3;
 
 /**
  * A representation of an object in the game world. Only a few fields are exposed.

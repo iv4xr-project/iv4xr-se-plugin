@@ -7,11 +7,9 @@ at Utrecht University within the Software and Game project course.
 
 package world;
 
-import helperclasses.datastructures.Vec3;
-
+import eu.iv4xr.framework.spatial.Vec3;
+import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import java.util.List;
-
-import eu.iv4xr.framework.world.WorldEntity;
 
 /**
  * Represeration of interactive entity.
@@ -30,8 +28,8 @@ public class LegacyInteractiveEntity extends LegacyEntity {
     }
 
     public boolean canInteract(Vec3 point) {
-        var min = Vec3.subtract(center, extents);
-        var max = Vec3.sum(center, extents);
+        var min = Vec3.sub(center, extents);
+        var max = Vec3.add(center, extents);
         return (point.x > min.x && point.x < max.x &&
                 point.y > min.y && point.y < max.y &&
                 point.z > min.z && point.z < max.z);
