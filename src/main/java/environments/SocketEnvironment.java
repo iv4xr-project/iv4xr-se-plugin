@@ -13,7 +13,11 @@ import communication.adapters.EntityAdapter;
 import communication.adapters.EntityTypeAdapter;
 import communication.system.Request;
 import logger.PrintColor;
+import pathfinding.Pathfinder;
+import eu.iv4xr.framework.exception.Iv4xrError;
 import eu.iv4xr.framework.mainConcepts.W3DEnvironment;
+import eu.iv4xr.framework.spatial.meshes.Mesh;
+import world.LabRecruitsRawNavMesh;
 import world.LegacyDynamicEntity;
 import world.LegacyEntity;
 import world.LegacyEntityType;
@@ -28,6 +32,8 @@ public class SocketEnvironment extends W3DEnvironment {
     private Socket socket;
     private BufferedReader reader;
     private PrintWriter writer;
+    
+    private LabRecruitsConfig gameconfig ;
 
     // transient modifiers should be excluded, otherwise they will be send with json
     private static Gson gson = new GsonBuilder()
@@ -37,7 +43,7 @@ public class SocketEnvironment extends W3DEnvironment {
             .registerTypeHierarchyAdapter(LegacyEntity.class, new EntityAdapter())
             .create();
 
-    SocketEnvironment(String host, int port) {
+    private void setupSockets(String host, int port) {
 
         int maxWaitTime = 20000;
 
@@ -60,6 +66,30 @@ public class SocketEnvironment extends W3DEnvironment {
         else{
             System.out.println(String.format("%s: Could not establish a connection with %s, please start %s before creating a GymEnvironment.", PrintColor.FAILURE(), PrintColor.UNITY(), PrintColor.UNITY()));
         }
+    }
+    
+    public SocketEnvironment(LabRecruitsConfig gameConfig) {
+    	this.gameconfig = gameConfig ;
+    	setupSockets(gameConfig.host, gameConfig.port) ;
+    	
+    	super(config.host, config.port);
+        // When this application has connected with the environment, an exchange in information takes place:
+        // For now, this application sends nothing, and receives a navmesh of the world.
+        LabRecruitsRawNavMesh navmesh = getResponse(Request.gymEnvironmentInitialisation(config));
+
+        this.pathFinder = new Pathfinder(navmesh);
+    	
+    }
+    
+    @Override
+    public void loadWorld() {
+		worldNavigableMesh = (Mesh) sendCommand(null,null,LOADWORLD_CMDNAME,null,Mesh.class) ;
+		if (worldNavigableMesh==null) 
+			throw new Iv4xrError("Fail to load the navgation-graph of the world") ;
+	}
+    
+    public LabRecruitsConfig gameConfig() { 
+    	return gameconfig ;
     }
 
     /**

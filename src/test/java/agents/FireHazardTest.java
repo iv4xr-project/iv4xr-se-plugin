@@ -10,7 +10,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import agents.tactics.GoalLib;
-import environments.EnvironmentConfig;
+import environments.LabRecruitsConfig;
 import environments.LabRecruitsEnvironment;
 import eu.iv4xr.framework.mainConcepts.TestDataCollector;
 import game.LabRecruitsTestServer;
@@ -36,7 +36,7 @@ public class FireHazardTest {
     //@Test
     public void testFire1() throws InterruptedException {
     	
-    	var environment = new LabRecruitsEnvironment(new EnvironmentConfig("firetest"));
+    	var environment = new LabRecruitsEnvironment(new LabRecruitsConfig("firetest"));
 
         LabRecruitsTestAgent agent = new LabRecruitsTestAgent("agent0")
         		                     . attachState(new BeliefState())

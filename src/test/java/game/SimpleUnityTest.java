@@ -10,7 +10,7 @@ package game;
 import agents.LabRecruitsTestAgent;
 import agents.tactics.GoalLib;
 import agents.tactics.TacticLib;
-import environments.EnvironmentConfig;
+import environments.LabRecruitsConfig;
 import environments.LabRecruitsEnvironment;
 import helperclasses.datastructures.Vec3;
 import helperclasses.datastructures.linq.QArrayList;
@@ -53,7 +53,7 @@ public class SimpleUnityTest {
     @Test
     public void observePositionTest() {
 
-        var config = new EnvironmentConfig("observePositionTest")
+        var config = new LabRecruitsConfig("observePositionTest")
                 .replaceSeed(500)
                 .replaceFireSpreadSpeed(2f);
 
@@ -94,7 +94,7 @@ public class SimpleUnityTest {
     @Test
     public void observeSwitchTest() {
 
-        var config = new EnvironmentConfig("observeSwitchTest");
+        var config = new LabRecruitsConfig("observeSwitchTest");
 
         LabRecruitsEnvironment environment = new LabRecruitsEnvironment(config);
         if(USE_INSTRUMENT)
@@ -139,7 +139,7 @@ public class SimpleUnityTest {
     @Test
     public void observeVisibleSwitches() {
 
-        var config = new EnvironmentConfig("observeVisibleSwitches");
+        var config = new LabRecruitsConfig("observeVisibleSwitches");
 
         LabRecruitsEnvironment environment = new LabRecruitsEnvironment(config);
         if(USE_INSTRUMENT)
@@ -180,7 +180,7 @@ public class SimpleUnityTest {
 
     @Test
     public void moveToButton() throws InterruptedException {
-        var config = new EnvironmentConfig("moveToButton");
+        var config = new LabRecruitsConfig("moveToButton");
 
         LabRecruitsEnvironment environment = new LabRecruitsEnvironment(config);
         if(USE_INSTRUMENT)

@@ -7,7 +7,7 @@ at Utrecht University within the Software and Game project course.
 
 package pathfinding;
 
-import environments.EnvironmentConfig;
+import environments.LabRecruitsConfig;
 import helperclasses.astar.Graph;
 import helperclasses.datastructures.Vec3;
 import helperclasses.datastructures.functions.Function0;

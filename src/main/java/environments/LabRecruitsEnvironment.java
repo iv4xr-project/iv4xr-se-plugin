@@ -10,9 +10,9 @@ package environments;
 import communication.agent.AgentCommand;
 import communication.system.Request;
 import helperclasses.datastructures.Vec3;
-import pathfinding.NavMeshContainer;
 import pathfinding.Pathfinder;
 import world.BeliefState;
+import world.LabRecruitsRawNavMesh;
 import world.LabWorldModel;
 import world.LegacyObservation;
 
@@ -41,26 +41,26 @@ public class LabRecruitsEnvironment extends SocketEnvironment {
      * The constructor also asks the game to send the whole navigation-mesh of the level,
      * which it then stores in the {@link pathFinder} field.
      */
-    public LabRecruitsEnvironment(EnvironmentConfig config) {
+    public LabRecruitsEnvironment(LabRecruitsConfig config) {
         super(config.host, config.port);
         // When this application has connected with the environment, an exchange in information takes place:
         // For now, this application sends nothing, and receives a navmesh of the world.
-        NavMeshContainer navmesh = getResponse(Request.gymEnvironmentInitialisation(config));
+        LabRecruitsRawNavMesh navmesh = getResponse(Request.gymEnvironmentInitialisation(config));
 
         this.pathFinder = new Pathfinder(navmesh);
     }
 
-    private static EnvironmentConfig STANDARD_CONFIG = new EnvironmentConfig();
+    private static LabRecruitsConfig STANDARD_CONFIG = new LabRecruitsConfig();
 
 	/**
 	 * To create an instance of this environment, using standard configuration; see
-	 * {@link EnvironmentConfig}.
+	 * {@link LabRecruitsConfig}.
 	 */
     public LabRecruitsEnvironment() {
         super(STANDARD_CONFIG.host, STANDARD_CONFIG.port);
         // When this application has connected with the environment, an exchange in information takes place:
         // For now, this application sends nothing, and receives a navmesh of the world.
-        NavMeshContainer navmesh = getResponse(Request.gymEnvironmentInitialisation(STANDARD_CONFIG));
+        LabRecruitsRawNavMesh navmesh = getResponse(Request.gymEnvironmentInitialisation(STANDARD_CONFIG));
         this.pathFinder = new Pathfinder(navmesh);
     }
 

@@ -15,7 +15,7 @@ public class EnvConfigTest {
 
     @Test
     public void JsonTest(){
-        EnvironmentConfig config  = new EnvironmentConfig("minimal")
+        LabRecruitsConfig config  = new LabRecruitsConfig("minimal")
                 .removeLink(new Tuple<>("button1", "door1"))
                 .replaceSeed(52572723);
 

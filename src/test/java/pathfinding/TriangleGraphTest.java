@@ -10,6 +10,8 @@ package pathfinding;
 import helperclasses.astar.Astar;
 import helperclasses.datastructures.Vec3;
 import helperclasses.datastructures.mesh.TriangleMesh;
+import world.LabRecruitsRawNavMesh;
+
 import static org.junit.jupiter.api.Assertions.* ;
 import org.junit.jupiter.api.Test;
 import java.util.Arrays;
@@ -22,7 +24,7 @@ public class TriangleGraphTest {
     private TriangleGraph basicGraph() {
         return new TriangleGraph(
                 new TriangleMesh(
-                        new NavMeshContainer(
+                        new LabRecruitsRawNavMesh(
                                 new int[]{0, 1, 2, 1, 2, 3},
                                 new Vec3[]{
                                         new Vec3(0, 0, 0),
@@ -78,7 +80,7 @@ public class TriangleGraphTest {
     public void testMultipleNeighboursOverlapping() {
         TriangleGraph g = new TriangleGraph(
                 new TriangleMesh(
-                        new NavMeshContainer(
+                        new LabRecruitsRawNavMesh(
                                 new int[]{0, 1, 2, 1, 2, 3, 0, 3, 2, 0, 1, 3},
                                 new Vec3[]{
                                         new Vec3(0, 0, 0),
@@ -100,7 +102,7 @@ public class TriangleGraphTest {
     public void testMultipleNeighbours() {
         TriangleGraph g = new TriangleGraph(
                 new TriangleMesh(
-                        new NavMeshContainer(
+                        new LabRecruitsRawNavMesh(
                                 new int[]{0, 1, 2, 1, 2, 3, 4, 3, 2, 5, 2, 0},
                                 new Vec3[]{
                                         new Vec3(0, 0, 0),
@@ -179,7 +181,7 @@ public class TriangleGraphTest {
     public void testPathFinding() {
         TriangleGraph g = new TriangleGraph(
                 new TriangleMesh(
-                        new NavMeshContainer(
+                        new LabRecruitsRawNavMesh(
                                 new int[]{0, 1, 2, 1, 2, 3, 2, 3, 4},
                                 new Vec3[]{
                                         new Vec3(0, 0, 0),
@@ -213,7 +215,7 @@ public class TriangleGraphTest {
         //                       2 - 3 - 4 - 5
         return new TriangleGraph(
                 new TriangleMesh(
-                        new NavMeshContainer(
+                        new LabRecruitsRawNavMesh(
                                 new int[]{0, 1, 3, 0, 3, 4, 1, 3, 2, 2, 3, 4, 2, 4, 5, 4, 5, 6},
                                 new Vec3[]{
                                         new Vec3(0, 0, 0),

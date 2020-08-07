@@ -1,7 +1,7 @@
 package agents;
 
 import agents.tactics.*;
-import environments.EnvironmentConfig;
+import environments.LabRecruitsConfig;
 import environments.LabRecruitsEnvironment;
 import eu.iv4xr.framework.mainConcepts.TestAgent;
 import game.LabRecruitsTestServer;
@@ -56,7 +56,7 @@ public class Explore_2_Test {
     @Test
     public void test_explore_on_maze_with_closedroom() throws InterruptedException {
 
-    	var environment = new LabRecruitsEnvironment(new EnvironmentConfig("button1_opens_door1_v2"));
+    	var environment = new LabRecruitsEnvironment(new LabRecruitsConfig("button1_opens_door1_v2"));
     	
         LabRecruitsTestAgent agent = new LabRecruitsTestAgent("agent1")
         		                     . attachState(new BeliefState())

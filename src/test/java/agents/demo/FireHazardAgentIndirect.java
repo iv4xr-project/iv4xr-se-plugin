@@ -9,7 +9,7 @@ package agents.demo;
 import agents.LabRecruitsTestAgent;
 import agents.TestSettings;
 import agents.tactics.GoalLib;
-import environments.EnvironmentConfig;
+import environments.LabRecruitsConfig;
 import environments.LabRecruitsEnvironment;
 import helperclasses.datastructures.Vec3;
 import helperclasses.datastructures.linq.QArrayList;
@@ -60,7 +60,7 @@ public class FireHazardAgentIndirect {
     //@Test
     public void fireHazardDemo() throws InterruptedException{
         //Add the level to the resources and change the string in the environmentConfig on the next line from Ramps to the new level
-        var env = (LabRecruitsEnvironment) new LabRecruitsEnvironment(new EnvironmentConfig("HZRDIndirect").replaceAgentMovementSpeed(0.2f)).registerInstrumenter(new JsonLoggerInstrument()).turnOnDebugInstrumentation();
+        var env = (LabRecruitsEnvironment) new LabRecruitsEnvironment(new LabRecruitsConfig("HZRDIndirect").replaceAgentMovementSpeed(0.2f)).registerInstrumenter(new JsonLoggerInstrument()).turnOnDebugInstrumentation();
 
         QArrayList<LabRecruitsTestAgent> agents = new QArrayList<>(new LabRecruitsTestAgent[] {
                 createHazardAgent(env)

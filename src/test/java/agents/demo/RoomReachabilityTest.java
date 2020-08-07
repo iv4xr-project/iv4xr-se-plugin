@@ -13,7 +13,7 @@ import agents.LabRecruitsTestAgent;
 import agents.TestSettings;
 import agents.tactics.GoalLib;
 import agents.tactics.TacticLib;
-import environments.EnvironmentConfig;
+import environments.LabRecruitsConfig;
 import environments.LabRecruitsEnvironment;
 import eu.iv4xr.framework.mainConcepts.TestDataCollector;
 import eu.iv4xr.framework.world.WorldEntity;
@@ -72,7 +72,7 @@ public class RoomReachabilityTest {
     	var doorToTest = "door1" ;
 
         // Create an environment
-        var environment = new LabRecruitsEnvironment(new EnvironmentConfig("buttons_doors_1"));
+        var environment = new LabRecruitsEnvironment(new LabRecruitsConfig("buttons_doors_1"));
         if(USE_INSTRUMENT) instrument(environment) ;
 
         try {

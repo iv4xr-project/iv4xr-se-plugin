@@ -10,7 +10,7 @@ import agents.LabRecruitsTestAgent;
 import agents.TestSettings;
 import agents.tactics.GoalLib;
 import agents.tactics.TacticLib;
-import environments.EnvironmentConfig;
+import environments.LabRecruitsConfig;
 import environments.LabRecruitsEnvironment;
 import eu.iv4xr.framework.mainConcepts.TestDataCollector;
 import eu.iv4xr.framework.mainConcepts.TestGoal;
@@ -74,7 +74,7 @@ public class ColorSwitchLevelTest {
     @Test
     public void testColorSwitchDemo() throws InterruptedException{
     	        
-        var env = new LabRecruitsEnvironment(new EnvironmentConfig("CLRSWTCH"));
+        var env = new LabRecruitsEnvironment(new LabRecruitsConfig("CLRSWTCH"));
         if(USE_INSTRUMENT) instrument(env) ;
 
         if(TestSettings.USE_GRAPHICS) {

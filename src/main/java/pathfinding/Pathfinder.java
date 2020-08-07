@@ -10,6 +10,7 @@ package pathfinding;
 import helperclasses.astar.Astar;
 import helperclasses.datastructures.Vec3;
 import helperclasses.datastructures.mesh.TriangleMesh;
+import world.LabRecruitsRawNavMesh;
 
 import java.util.HashSet;
 import java.util.List;
@@ -44,7 +45,7 @@ public class Pathfinder
      *
      * @param mesh
      */
-    public Pathfinder(NavMeshContainer mesh)
+    public Pathfinder(LabRecruitsRawNavMesh mesh)
     {
         this.navmesh = new TriangleMesh(mesh);
         this.graph = new TriangleGraph(navmesh);

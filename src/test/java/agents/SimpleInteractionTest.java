@@ -18,7 +18,7 @@ import org.junit.jupiter.api.Test;
 import static agents.TestSettings.*;
 import agents.tactics.GoalLib;
 import agents.tactics.TacticLib;
-import environments.EnvironmentConfig;
+import environments.LabRecruitsConfig;
 import environments.LabRecruitsEnvironment;
 import eu.iv4xr.framework.mainConcepts.TestDataCollector;
 import eu.iv4xr.framework.world.WorldEntity;
@@ -55,7 +55,7 @@ public class SimpleInteractionTest {
     public void interactionAgent() throws InterruptedException {
 
         // Create an environment
-    	var config = new EnvironmentConfig("button1_opens_door1") ;
+    	var config = new LabRecruitsConfig("button1_opens_door1") ;
     	//config.light_intensity = -100f ; //this does not seem to work
         var environment = new LabRecruitsEnvironment(config);
     	

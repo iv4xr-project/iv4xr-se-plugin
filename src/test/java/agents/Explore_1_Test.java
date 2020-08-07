@@ -9,7 +9,7 @@ package agents;
 
 import agents.tactics.GoalLib;
 import agents.tactics.TacticLib;
-import environments.EnvironmentConfig;
+import environments.LabRecruitsConfig;
 import environments.LabRecruitsEnvironment;
 import eu.iv4xr.framework.mainConcepts.TestAgent;
 import eu.iv4xr.framework.mainConcepts.TestDataCollector;
@@ -63,7 +63,7 @@ public class Explore_1_Test {
     @Test
     public void test_explore_on_simplemaze() throws InterruptedException {
 
-    	var environment = new LabRecruitsEnvironment(new EnvironmentConfig("smallmaze"));
+    	var environment = new LabRecruitsEnvironment(new LabRecruitsConfig("smallmaze"));
         
         LabRecruitsTestAgent agent = new LabRecruitsTestAgent("agent1")
         		                     . attachState(new BeliefState())

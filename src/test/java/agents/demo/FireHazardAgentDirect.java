@@ -9,7 +9,7 @@ package agents.demo;
 import agents.LabRecruitsTestAgent;
 import agents.TestSettings;
 import agents.tactics.GoalLib;
-import environments.EnvironmentConfig;
+import environments.LabRecruitsConfig;
 import environments.LabRecruitsEnvironment;
 import game.LabRecruitsTestServer;
 import helperclasses.datastructures.Vec3;
@@ -85,7 +85,7 @@ public class FireHazardAgentDirect {
     	
         //Add the level to the resources and change the string in the environmentConfig on the next line from Ramps to the new level
         //var env = new LabRecruitsEnvironment(new EnvironmentConfig("HZRDDirect").replaceAgentMovementSpeed(0.2f));
-        var env = new LabRecruitsEnvironment(new EnvironmentConfig("HZRDDirect")) ;
+        var env = new LabRecruitsEnvironment(new LabRecruitsConfig("HZRDDirect")) ;
         if(USE_INSTRUMENT) instrument(env) ;
         
 

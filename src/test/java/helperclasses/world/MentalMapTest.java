@@ -10,8 +10,9 @@ package helperclasses.world;
 import helperclasses.datastructures.Vec3;
 import static org.junit.jupiter.api.Assertions.* ;
 import org.junit.jupiter.api.Test;
-import pathfinding.NavMeshContainer;
+
 import pathfinding.Pathfinder;
+import world.LabRecruitsRawNavMesh;
 import world.MentalMap;
 import java.util.HashSet;
 
@@ -24,7 +25,7 @@ public class MentalMapTest {
      */
     private MentalMap setUp() {
         //make a basic navMesh with 10 triangles which are connected in a circle
-        NavMeshContainer m = new NavMeshContainer(new int[]{
+        LabRecruitsRawNavMesh m = new LabRecruitsRawNavMesh(new int[]{
                 0, 1, 2,
                 1, 2, 3,
                 2, 3, 5,
@@ -61,7 +62,7 @@ public class MentalMapTest {
         //make a basic navMesh with 5 triangles 0-1-4
         //connected in this way                 |   |
         //                                      2---3
-        NavMeshContainer m = new NavMeshContainer(new int[]{
+        LabRecruitsRawNavMesh m = new LabRecruitsRawNavMesh(new int[]{
                 0, 1, 2,
                 1, 2, 3,
                 0, 2, 4,

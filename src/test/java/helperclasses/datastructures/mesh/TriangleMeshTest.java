@@ -8,9 +8,10 @@ at Utrecht University within the Software and Game project course.
 package helperclasses.datastructures.mesh;
 
 import helperclasses.datastructures.Vec3;
+import world.LabRecruitsRawNavMesh;
+
 import static org.junit.jupiter.api.Assertions.* ;
 import org.junit.jupiter.api.Test;
-import pathfinding.NavMeshContainer;
 
 public class TriangleMeshTest {
 
@@ -23,7 +24,7 @@ public class TriangleMeshTest {
     @Test
     public void constructor() {
         var mesh = new TriangleMesh(
-                new NavMeshContainer(
+                new LabRecruitsRawNavMesh(
                         new int[]{0, 1, 2},
                         new Vec3[]{
                                 new Vec3(2, 0, 3),
@@ -60,7 +61,7 @@ public class TriangleMeshTest {
     @Test
     public void constructor2() {
         var mesh = new TriangleMesh(
-                new NavMeshContainer(
+                new LabRecruitsRawNavMesh(
                         new int[]{0, 1, 2, 1, 2, 3},
                         new Vec3[]{
                                 new Vec3(0, 0, 0),
@@ -111,7 +112,7 @@ public class TriangleMeshTest {
     	assertThrows(IllegalArgumentException.class, 
     		() -> { 
     	        var mesh = new TriangleMesh(
-    	                new NavMeshContainer(
+    	                new LabRecruitsRawNavMesh(
     	                        new int[]{0, 1, 1}, // <--- this will not instantiate to a triangle
     	                        new Vec3[]{
     	                                new Vec3(2, 0, 3),
@@ -129,7 +130,7 @@ public class TriangleMeshTest {
     	assertThrows(IllegalArgumentException.class, 
     		() -> { 
     			var mesh = new TriangleMesh(
-    	                new NavMeshContainer(
+    	                new LabRecruitsRawNavMesh(
     	                        new int[]{0, 1, 2, 1, 2, 3}, // <--- vertices[3] does not exist
     	                        new Vec3[]{
     	                                new Vec3(2, 0, 3),
@@ -148,7 +149,7 @@ public class TriangleMeshTest {
     	assertThrows(IllegalArgumentException.class, 
     		() -> { 
     	        var mesh = new TriangleMesh(
-    	                new NavMeshContainer(
+    	                new LabRecruitsRawNavMesh(
     	                        new int[]{0, 1, 2},
     	                        new Vec3[]{
     	                                new Vec3(2, 0, 3),

@@ -8,8 +8,8 @@ at Utrecht University within the Software and Game project course.
 package communication.system;
 
 import communication.agent.AgentCommand;
-import environments.EnvironmentConfig;
-import pathfinding.NavMeshContainer;
+import environments.LabRecruitsConfig;
+import world.LabRecruitsRawNavMesh;
 import world.LegacyObservation;
 
 /**
@@ -81,8 +81,8 @@ public class Request<ResponseType>  {
      * - Agent ID's along with their implementation type
      * @return GymInitialisation
      */
-    public static Request<NavMeshContainer> gymEnvironmentInitialisation(EnvironmentConfig config) {
-        return new Request<>(NavMeshContainer.class, RequestType.INIT, config);
+    public static Request<LabRecruitsRawNavMesh> gymEnvironmentInitialisation(LabRecruitsConfig config) {
+        return new Request<>(LabRecruitsRawNavMesh.class, RequestType.INIT, config);
     }
 
     /**

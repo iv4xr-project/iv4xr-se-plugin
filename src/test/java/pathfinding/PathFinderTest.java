@@ -8,6 +8,8 @@ at Utrecht University within the Software and Game project course.
 package pathfinding;
 
 import helperclasses.datastructures.Vec3;
+import world.LabRecruitsRawNavMesh;
+
 import static org.junit.jupiter.api.Assertions.* ;
 import org.junit.jupiter.api.Test;
 
@@ -25,8 +27,8 @@ public class PathFinderTest {
     // | \ |   | \ |
     // 0__\1  10__\11
 
-    private NavMeshContainer CreateNavmesh() {
-        return new NavMeshContainer(
+    private LabRecruitsRawNavMesh CreateNavmesh() {
+        return new LabRecruitsRawNavMesh(
                 // 12 triangles
                 new int[]{
                         0, 1, 2,   // 0
@@ -63,7 +65,7 @@ public class PathFinderTest {
     }
 
     private boolean[] SeenNodes(){
-        NavMeshContainer n = CreateNavmesh();
+        LabRecruitsRawNavMesh n = CreateNavmesh();
         boolean[] seenNodes = new boolean[n.indices.length];
         for (int i = 0; i<seenNodes.length; i++) {
             seenNodes[i]= true;

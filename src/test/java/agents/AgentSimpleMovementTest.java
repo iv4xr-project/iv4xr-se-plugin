@@ -19,7 +19,7 @@ import static agents.TestSettings.USE_SERVER_FOR_TEST;
 
 import agents.LabRecruitsTestAgent;
 import agents.tactics.GoalLib;
-import environments.EnvironmentConfig;
+import environments.LabRecruitsConfig;
 import helperclasses.datastructures.linq.QArrayList;
 import logger.JsonLoggerInstrument;
 import environments.LabRecruitsEnvironment;
@@ -56,7 +56,7 @@ public class AgentSimpleMovementTest {
     @Test
     public void movementTest() throws InterruptedException {
 
-        var environment = new LabRecruitsEnvironment(new EnvironmentConfig("square"));
+        var environment = new LabRecruitsEnvironment(new LabRecruitsConfig("square"));
         
         var p0 = new Vec3(3, 0, 3) ;
         var p1 = new Vec3(3, 0, 4) ;

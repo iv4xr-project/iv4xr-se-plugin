@@ -15,7 +15,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import agents.tactics.GoalLib;
-import environments.EnvironmentConfig;
+import environments.LabRecruitsConfig;
 import environments.LabRecruitsEnvironment;
 import eu.iv4xr.framework.mainConcepts.TestDataCollector;
 import game.LabRecruitsTestServer;
@@ -46,7 +46,7 @@ public class TraversingToPositionsTest {
     @Test
     public void reachPositions() throws InterruptedException {
         
-        var environment = new LabRecruitsEnvironment(new EnvironmentConfig("hollowsquare"));
+        var environment = new LabRecruitsEnvironment(new LabRecruitsConfig("hollowsquare"));
 
         LabRecruitsTestAgent agent = new LabRecruitsTestAgent("agent0")
         		                     . attachState(new BeliefState())

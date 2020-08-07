@@ -10,8 +10,9 @@ import helperclasses.datastructures.Vec3;
 import helperclasses.datastructures.mesh.TriangleMesh;
 import static org.junit.jupiter.api.Assertions.* ;
 import org.junit.jupiter.api.Test;
-import pathfinding.NavMeshContainer;
+
 import world.LabEntity;
+import world.LabRecruitsRawNavMesh;
 import world.LegacyEntity;
 import world.LegacyInteractiveEntity;
 
@@ -23,7 +24,7 @@ public class EntityNodeIntersectionTest {
         //                               |
         //                               4 - 5 with a second layer with a single node on the top of node 2
         return new TriangleMesh(
-                new NavMeshContainer(
+                new LabRecruitsRawNavMesh(
                         new int[]{0,1,3,0,2,3,2,3,6,2,5,6,3,6,7,3,4,7,8,9,10},
                         new Vec3[]{
                                 new Vec3(1, 0, 1),
