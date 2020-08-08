@@ -33,11 +33,14 @@ public class LabRecruitsConfig {
     public float light_intensity = 1f; // does not seem to work ... TODO
 
     /**
-     *  This feature is so far unused. Leave it here for compatibility.
+     *  Extra links between switches and doors that we want to explicitly
+     *  add through this configuration.
      */
     public ArrayList<Pair<String, String>> add_links = new ArrayList<>();
+    
     /**
-     *  This feature is so far unused. Leave it here for compatibility.
+     *  Links between switches and doors that we want to explicitly remove
+     *  through this configuration.
      */
     public ArrayList<Pair<String, String>> remove_links = new ArrayList<>();
 
@@ -107,25 +110,24 @@ public class LabRecruitsConfig {
         return this;
     }
 
-    /*
-    public EnvironmentConfig addLink(Tuple<String, String> link){
-        this.add_links.add(link);
-        return this;
-    }
-
-    public EnvironmentConfig addLinks(Tuple<String, String> ... links){
+    /**
+     * Add explicit links between switches and doors. Each link is represented by
+     * an instance of Pair (s,d). 
+     */
+    public LabRecruitsConfig addSwitchToDoorLinks(Pair<String, String> ... links){
         this.add_links.addAll(Arrays.asList(links));
         return this;
     }
 
-    public EnvironmentConfig removeLink(Tuple<String, String> link){
-        this.remove_links.add(link);
-        return this;
-    }
-
-    public EnvironmentConfig removeLinks(Tuple<String, String> ... links){
+    /**
+     * Add these links between switches and doors to be removed (so, if a switch s is 
+     * connected to a door d in the level definition, and it is to be removed, then they
+     * will no longer be connected. 
+     * Each link is represented by an instance of Pair (s,d). 
+     */
+    public LabRecruitsConfig removeSwitchToDoorLinks(Pair<String, String> ... links){
         this.remove_links.addAll(Arrays.asList(links));
         return this;
     }
-    */
+   
 }

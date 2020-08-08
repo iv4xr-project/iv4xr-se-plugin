@@ -9,19 +9,52 @@ package environments;
 
 import org.junit.jupiter.api.Test;
 
+import agents.TestSettings;
+import game.LabRecruitsTestServer;
+import game.Platform;
+
+import static org.junit.jupiter.api.Assertions.* ;
+
+import java.util.Scanner;
+
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+
+
 public class LabRecruitsEnvironmentTest {
+	
+	private LabRecruitsTestServer labRecruitsTestServer ;
 
-    /**
-     * @Test public void testReachObject() {
-     * GymEnvironment env = new GymEnvironment();
-     * var goal = GymEnvironment.ReachObject("flag1");
-     * assertEquals("INPROGRESS", goal.getStatus().toString());
-     * assertTrue(goal.lift().isTopGoal());
-     * }
-     **/
+    @BeforeEach
+    void start() {
+    	// Uncomment this to make the game's graphic visible:
+    	var useGraphics = true ;
+    	SocketReaderWriter.debug = true ;
+    	String labRecruitesExeRootDir = System.getProperty("user.dir") ;
+    	labRecruitsTestServer =new LabRecruitsTestServer(
+    			useGraphics,
+                Platform.PathToLabRecruitsExecutable(labRecruitesExeRootDir));
+    	labRecruitsTestServer.waitForGameToLoad();
+    }
 
-    // @Test ... to do
-    public void testMoveToObject() {
+    @AfterEach
+    void close() { 
+    	SocketReaderWriter.debug = false ;
+    	if(labRecruitsTestServer!=null) labRecruitsTestServer.close(); 
+    }
 
+    @Test
+    public void test1() {
+    	assertTrue(labRecruitsTestServer != null) ;
+    	
+    	var environment = new LabRecruitsEnvironment(new LabRecruitsConfig("minimal"));
+    	
+    	assertTrue(environment != null) ;
+    	
+    	System.out.println("You can drag then game window elsewhere for beter viewing. Then hit RETURN to continue.") ;
+		new Scanner(System.in) . nextLine() ;
+		
     }
 }

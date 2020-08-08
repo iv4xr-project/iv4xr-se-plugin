@@ -23,7 +23,7 @@ import world.LegacyEntityType;
  */
 public class SocketReaderWriter {
 	
-	public boolean debug = false ;
+	public static boolean debug = false ;
 	
 	
     private Socket socket;
@@ -104,8 +104,9 @@ public class SocketReaderWriter {
     public <T> T read(Class<T> expectedClassOfResultObj) throws IOException {
     	String response = reader.readLine() ; 
         // we do not have to cast to T, since req.responseType is of type Class<T>
-        //System.out.println(json);
-    	return gson.fromJson(response,expectedClassOfResultObj);
+        System.out.println(response);
+        return null ;
+    	//return gson.fromJson(response,expectedClassOfResultObj);
     }
 
     /**
