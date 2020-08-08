@@ -55,9 +55,9 @@ public class LabRecruitsEnvironment extends W3DEnvironment {
     @Override
     public void loadWorld() {
 		var rawmesh = (LabRecruitsRawNavMesh) sendCommand(null,null,LOADWORLD_CMDNAME,null,LabRecruitsRawNavMesh.class) ;
-		//if (rawmesh==null) 
-		//	throw new Iv4xrError("Fail to load the navgation-graph of the world") ;
-		//worldNavigableMesh = rawmesh.covertToMesh() ;
+		if (rawmesh==null) 
+			throw new Iv4xrError("Fail to load the navgation-graph of the world") ;
+		worldNavigableMesh = rawmesh.covertToMesh() ;
 	}
     
     @Override

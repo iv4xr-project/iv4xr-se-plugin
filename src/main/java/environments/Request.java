@@ -44,8 +44,12 @@ public class Request<ResponseType>  {
     /**
      * Specifying the type of the request to Lab Recruits, e.g. to initialize the game,
      * or to send a command for an agent.
+     * 
+     * The name of the field, "cmd", is a bit misleading, because it does not hold the
+     * actual command for Lab Recruits agent, but rather just representing the request
+     * type. The actual command, if there is one, is embedded in the "arg" field.
      */
-    public RequestType requestType ;
+    public RequestType cmd ;
     
     /**
      * The argument of the request. E.g. for INIT-request it will be a configuration parameters
@@ -60,7 +64,7 @@ public class Request<ResponseType>  {
         // convert he command to string
         this.responseType = responseType;
 
-        this.requestType = reqType;
+        this.cmd = reqType;
         this.arg = arg;
     }
 
@@ -71,7 +75,7 @@ public class Request<ResponseType>  {
         // convert he command to string
         this.responseType = responseType;
 
-        this.requestType = reqType;
+        this.cmd = reqType;
         this.arg = null;
     }
 
