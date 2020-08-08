@@ -90,18 +90,19 @@ public class LabWorldModel extends WorldModel {
 		// For now, Lab Recruits only have one interaction type, so we are not going
 		// to check interactionType.
 		var target = (LabEntity) e ;
+		// using != should be ok in this case, as they should point to the same string as well:
 		if (target.type != LabEntity.SWITCH) return null ;
-		return ((LabRecruitsEnvironment) env).interactWith(this.agentId, target.id) ;
+		return (LabWorldModel) super.interact(env, interactionType, e) ;
 	}
 	
 	@Override
 	public LabWorldModel observe(W3DEnvironment env) {
-		return ((LabRecruitsEnvironment) env).observe(this.agentId) ;
+		return (LabWorldModel) super.observe(env) ;
 	}
 	
 	@Override
-	public LabWorldModel moveToward(W3DEnvironment env, Vec3 position) {
-		return ((LabRecruitsEnvironment) env).moveToward(this.agentId,this.getFloorPosition(), position) ;
+	public LabWorldModel moveToward(W3DEnvironment env, Vec3 targetLocation) {
+		return (LabWorldModel) super.moveToward(env, targetLocation) ;
 	}
 	
 

@@ -20,9 +20,9 @@ import helperclasses.datastructures.linq.QArrayList;
  * Vec3 p, then this means that the point p is a corner belonging to the face 
  * with the id/index k in the mesh.
  * 
- * The faces in the mesh are always triangles. And the points/corners are always
- * stored consecutively. So, for example vertices[0], vertices[1], vertices[2]
- * belong to the first triangle, and then vertices[3], vertices[4], vertices[5]
+ * The faces in the mesh are always triangles. And the indices are always
+ * stored consecutively. So, for example indices[0], indices[1], indices[2]
+ * belong to the first triangle, and then indices[3], indices[4], indices[5]
  * belong to the next triangle.
  * 
  * The triangles are numbered increasingly. So, indices[0]=indices[1]=indices[2] 
@@ -54,8 +54,11 @@ public class LabRecruitsRawNavMesh {
         // (2) constructing explicit triangles form this raw-mesh, and storing them in
         // the new mesh:
         
-        //The triangles are not stored in tuples.
-        //The indices of this raw-mesh have a format like: [t0v0, t0v1, t0v2, t1v0, t1v1, t1v2, .. ]
+        // The triangles are not stored in tuples.
+        // The indices of this raw-mesh have a format like: [t0v0, t0v1, t0v2, t1v0, t1v1, t1v2, .. ]
+        // If T is a triangle with index tr, its vertices would be:
+        //   vertices[tr*3], vertices[tr*3+1], vertices[tr*3+2]
+        //
         int triangleCount = this.indices.length / 3;
         for (int tr=0; tr<triangleCount; tr++ ) {
         	int startSegment = tr*3 ;

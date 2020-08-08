@@ -7,130 +7,147 @@ at Utrecht University within the Software and Game project course.
 
 package environments;
 
-import helperclasses.datastructures.Vec3;
-import pathfinding.Pathfinder;
-import world.BeliefState;
+import logger.PrintColor;
+import nl.uu.cs.aplib.utils.Pair;
+import eu.iv4xr.framework.exception.Iv4xrError;
+import eu.iv4xr.framework.mainConcepts.W3DEnvironment;
+import eu.iv4xr.framework.spatial.Vec3;
 import world.LabRecruitsRawNavMesh;
-import world.LabWorldModel;
 import world.LegacyObservation;
+import world.LabWorldModel;
 
-/**
- * An implementation of {@link nl.uu.cs.aplib.environments.JsonEnvironment}
- * using {@link environments.SocketEnvironment}. It facilitates the
- * communication between agents and the Lab Recruits game. A set of basic
- * methods to control the game is provided. Keep in mind that methods 
- * exposed by this Environment are very primitive; they do not apply any
- * form of reasoning. 
- */
-public class LabRecruitsEnvironment extends SocketEnvironment {
+import java.io.*;
+
+public class LabRecruitsEnvironment extends W3DEnvironment {
+	
+	private LabRecruitsConfig gameconfig ;
 
 	/**
-	 * Navigation graph.
+	 * Limiting the agent speed per update cycle to 2 distance unit.
 	 */
-    public Pathfinder pathFinder;
+	public static final float AGENTSPEED = 2f ;
+	
+	static public String INTERACT_CMDNAME  = "Interact" ;
 
-    /**
-     * A constructor to create an instance of this Environment. It expects an instance of
-     * {@link game.LabRecruitsTestServer} to already running, and also an instance of  
-     * the Lab Recruit game to be already launched. The given configuration object
-     * contains information about the TCP port to be used to communicate with the game
-     * instance. 
-     * 
-     * The constructor also asks the game to send the whole navigation-mesh of the level,
-     * which it then stores in the {@link pathFinder} field.
-     */
-    public LabRecruitsEnvironment(LabRecruitsConfig config) {
-        super(config.host, config.port);
-        // When this application has connected with the environment, an exchange in information takes place:
-        // For now, this application sends nothing, and receives a navmesh of the world.
-        LabRecruitsRawNavMesh navmesh = getResponse(Request.gymEnvironmentInitialisation(config));
-
-        this.pathFinder = new Pathfinder(navmesh);
-    }
-
-    private static LabRecruitsConfig STANDARD_CONFIG = new LabRecruitsConfig();
-
+	private SocketReaderWriter socket ;
+    
+	
 	/**
-	 * To create an instance of this environment, using standard configuration; see
-	 * {@link LabRecruitsConfig}.
+	 * Create an instance of this environment with the standard Lab Recruits configuration.
 	 */
-    public LabRecruitsEnvironment() {
-        super(STANDARD_CONFIG.host, STANDARD_CONFIG.port);
-        // When this application has connected with the environment, an exchange in information takes place:
-        // For now, this application sends nothing, and receives a navmesh of the world.
-        LabRecruitsRawNavMesh navmesh = getResponse(Request.gymEnvironmentInitialisation(STANDARD_CONFIG));
-        this.pathFinder = new Pathfinder(navmesh);
-    }
-
-    private LabWorldModel sendAgentCommand_andGetObservation(AgentCommand c){
-    	LegacyObservation obs = getResponse(Request.command(c)); 
-    	// covert the obtained observation to a WorldModel:
-    	var wom = LegacyObservation.toWorldModel(obs) ;
-        return wom ;
-    }
-
+	public LabRecruitsEnvironment() {
+		this(new LabRecruitsConfig()) ;
+	}
     /**
-     * This method will make the agent move a certain max distance toward the target.
-     * Note that this method does not take obstacles into account. This is something
-     * your agent needs to reason about by itself, based on the series of observations
-     * it receives from this Environment.
-     *
-     * @param target: The target the agent wants to move to
-     * @param agentId: The ID of the agent (more precisely, the ID of the game-entity controlled by the agent)
-     * @param agentPosition: The agent's current position
-     * @return The observation following from the action
+     * Constructor. Create an instance of this environment with the given Lab 
+     * Recruits configuration.
      */
-    public LabWorldModel moveToward(String agentId, Vec3 agentPosition, Vec3 target) {
-        return moveToward(agentId, agentPosition, target, false);
+    public LabRecruitsEnvironment(LabRecruitsConfig gameConfig) {
+    	this.gameconfig = gameConfig ;
+    	socket = new SocketReaderWriter(gameConfig.host, gameConfig.port) ;
+    	loadWorld() ;
     }
-
-    // jumping is not supported for now
-    private LabWorldModel moveToward(String agentId, Vec3 agentPosition, Vec3 target, boolean jump) {
-        //define the max distance the agent wants to move ahead between updates
-        float maxDist = 2f;
-
-        //Calculate where the agent wants to move to
-        Vec3 targetDirection = Vec3.subtract(target, agentPosition);
-        targetDirection.normalize();
-
-        //Check if we can move the full distance ahead
-        double dist = target.distance(agentPosition);
-        if (dist < maxDist) {
-            targetDirection.multiply(dist);
-        } else {
-            targetDirection.multiply(maxDist);
+    
+    public LabRecruitsConfig gameConfig() { 
+    	return gameconfig ;
+    }
+    
+    @Override
+    public void loadWorld() {
+		var rawmesh = (LabRecruitsRawNavMesh) sendCommand(null,null,LOADWORLD_CMDNAME,null,LabRecruitsRawNavMesh.class) ;
+		if (rawmesh==null) 
+			throw new Iv4xrError("Fail to load the navgation-graph of the world") ;
+		worldNavigableMesh = rawmesh.covertToMesh() ;
+	}
+    
+    @Override
+    public LabWorldModel observe(String agentId) {
+		return (LabWorldModel) super.observe(agentId) ;
+	}	
+    
+    @Override
+    public LabWorldModel moveToward(String agentId, Vec3 agentLocation, Vec3 targetLocation) {
+    	return (LabWorldModel) super.moveToward(agentId, agentLocation, targetLocation) ;
+    }
+    
+    @Override
+    public LabWorldModel interact(String agentId, String targetId, String interactionType) {
+		return (LabWorldModel) sendCommand(agentId, targetId, INTERACT_CMDNAME, null, null);
+	}
+    
+    /**
+     * @param cmd representing the command to send to the real environment.
+     * @return an object that the real environment sends back as the result of the
+     * command, if any.
+     */
+    @Override
+    protected Object sendCommand_(EnvOperation cmd) {
+    	// The way the communication with Lab Recruit works, an EnvOperation cannot be
+    	// send directly to LR. Instead, we need to translate it first to the right
+    	// instance of "Request" object.
+        try {
+        	 if (cmd.command.equals(LOADWORLD_CMDNAME)) {
+             	return sendPackage(Request.gymEnvironmentInitialisation(gameconfig)) ;
+             }
+        	 Request<LegacyObservation> request ;
+             if (cmd.command.equals(OBSERVE_CMDNAME)) {
+            	request =  Request.command(AgentCommand.doNothing(cmd.invokerId)) ;
+             }
+             else if (cmd.command.equals(MOVETOWARD_CMDNAME)) {
+            	 Vec3 agentLocation = ((Pair<Vec3,Vec3>) cmd.arg).fst ;
+            	 Vec3 targetLocation = ((Pair<Vec3,Vec3>) cmd.arg).snd ;
+            	 
+                 //Calculate the move direction:
+                 Vec3 direction = Vec3.sub(agentLocation, targetLocation);
+                 if (direction.length() > AGENTSPEED) {
+                	 // the distance is too far, given the agent speed. Calculate a new
+                	 // target position, which is reachable given the speed:
+                	 direction = direction.normalized() ;
+                	 direction = Vec3.mul(direction, AGENTSPEED) ;
+                	 targetLocation = Vec3.add(agentLocation, direction) ;
+                 } 
+                 boolean jump = false ; // for now, we will not use jumps
+                 request = Request.command(AgentCommand.moveTowardCommand(cmd.invokerId,targetLocation,jump)) ;
+             }
+             else if (cmd.command.equals(INTERACT_CMDNAME)) {
+            	 request = Request.command(AgentCommand.interactCommand(cmd.invokerId, cmd.targetId)) ;
+             }
+             else throw new IllegalArgumentException();
+             LegacyObservation obs =  sendPackage(request) ;
+             return LegacyObservation.toWorldModel(obs) ;
         }
-        //add the agent own position to the current coordinates
-        targetDirection.add(agentPosition);
-
-        //send the command
-        return sendAgentCommand_andGetObservation(AgentCommand.moveTowardCommand(agentId, targetDirection, jump));
+        catch (IOException ex) {
+           System.out.println("I/O error: " + ex.getMessage());
+           return null;
+        }
     }
-
-    /**
-     * This will send a do-nothing command to unity, and return a new Observation.
-     */
-    public LabWorldModel observe(String agentId){
-        return sendAgentCommand_andGetObservation(AgentCommand.doNothing(agentId));
-    }
-
-    // send an interaction command to unity
-    public LabWorldModel interactWith(String agentId, String target){
-        return sendAgentCommand_andGetObservation(AgentCommand.interactCommand(agentId, target));
-    }
-
+    
     /**
      * Press the "play-button" in Unity. If left unpressed, no simulation/game-play can start.
      */
     public Boolean startSimulation(){
-        return getResponse(Request.startSimulation());
+    	try {
+    		return sendPackage(Request.startSimulation());
+    	}
+    	catch (IOException e) {
+            System.out.println(e.getMessage());
+            System.out.println(String.format("%s: Sending a start-simulation command fails.", PrintColor.FAILURE()));
+            return false;
+        }
     }
 
     /**
      * Press the "pause-button" in Unity. This will pull the Unity-side paused.
      */
     public Boolean pauseSimulation(){
-        return getResponse(Request.pauseSimulation());
+    	try {
+    		return sendPackage(Request.pauseSimulation());
+    	}
+    	catch (IOException e) {
+            System.out.println(e.getMessage());
+            System.out.println(String.format("%s: Sending a pause-simulation command fails.", PrintColor.FAILURE()));
+            return false;
+        }
     }
     
     /**
@@ -138,7 +155,44 @@ public class LabRecruitsEnvironment extends SocketEnvironment {
      * Currently broken :| TODO.
      */
     public Boolean updateHazards(){
-        return getResponse(Request.updateEnvironment());
+    	try {
+           return sendPackage(Request.updateEnvironment());
+    	}
+    	catch (IOException e) {
+            System.out.println(e.getMessage());
+            System.out.println(String.format("%s: Sending an update-environment command fails.", PrintColor.FAILURE()));
+            return false;
+        }
     }
 
+    
+    /**
+     * Close the socket and connection with the Lab Recruits.
+     */
+    public boolean close() {
+    	try {
+    		boolean success = sendPackage(Request.disconnect());
+    		if(success){
+    			socket.close() ;
+    		}
+    		else {
+                System.out.println(String.format("%s: Unity does not respond to a disconnection request.", PrintColor.FAILURE()));
+            }
+    		return success ;
+    	}
+    	catch (IOException e) {
+            System.out.println(e.getMessage());
+            System.out.println(String.format("%s: Could not disconnect from the host by closing the socket.", PrintColor.FAILURE()));
+            return false;
+        }
+    }
+    
+    /**
+     * Primitive for sending a command-package to Lab-Recruit, and to return its response. 
+     * The command to send should be wrapped as a "Request" object. 
+     */
+    private <T> T sendPackage(Request<T> packageToSend) throws IOException {
+    	socket.write(packageToSend);
+    	return socket.read(packageToSend.responseType) ;
+    }
 }
