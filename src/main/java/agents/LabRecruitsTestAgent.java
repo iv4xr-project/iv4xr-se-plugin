@@ -7,9 +7,9 @@ at Utrecht University within the Software and Game project course.
 
 package agents;
 
-import communication.agent.AgentCommand;
-import communication.system.Request;
+import environments.AgentCommand;
 import environments.LabRecruitsEnvironment;
+import environments.Request;
 import eu.iv4xr.framework.mainConcepts.TestAgent;
 import eu.iv4xr.framework.mainConcepts.TestDataCollector;
 import nl.uu.cs.aplib.mainConcepts.GoalStructure;

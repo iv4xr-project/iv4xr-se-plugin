@@ -1,13 +1,13 @@
-package communication.adapters;
+package environments;
 
 import com.google.gson.*;
-import helperclasses.datastructures.Vec3;
+import eu.iv4xr.framework.spatial.Vec3;
 import world.*;
 
 import java.lang.reflect.Type;
 import java.util.Arrays;
 
-public class EntityAdapter implements JsonDeserializer<LegacyEntity>, JsonSerializer<LegacyEntity> {
+public class EntityJsonAdapter implements JsonDeserializer<LegacyEntity>, JsonSerializer<LegacyEntity> {
 
     /**
      * This deserializer should deserialize Entities based on their type

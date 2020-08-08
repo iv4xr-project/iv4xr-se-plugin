@@ -1,7 +1,7 @@
 package environments;
 
 import helperclasses.Util;
-import helperclasses.datastructures.Tuple;
+import nl.uu.cs.aplib.utils.Pair;
 import game.Platform;
 
 import java.nio.file.Paths;
@@ -35,11 +35,11 @@ public class LabRecruitsConfig {
     /**
      *  This feature is so far unused. Leave it here for compatibility.
      */
-    public ArrayList<Tuple<String, String>> add_links = new ArrayList<>();
+    public ArrayList<Pair<String, String>> add_links = new ArrayList<>();
     /**
      *  This feature is so far unused. Leave it here for compatibility.
      */
-    public ArrayList<Tuple<String, String>> remove_links = new ArrayList<>();
+    public ArrayList<Pair<String, String>> remove_links = new ArrayList<>();
 
     /**
      * Return a default configuration. The path to the level-file and the name of the level

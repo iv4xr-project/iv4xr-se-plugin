@@ -1,11 +1,11 @@
-package communication.adapters;
+package environments;
 
 import com.google.gson.*;
 import world.LegacyEntityType;
 
 import java.lang.reflect.Type;
 
-public class EntityTypeAdapter implements JsonDeserializer<LegacyEntityType>, JsonSerializer<LegacyEntityType> {
+public class EntityTypeJsonAdapter implements JsonDeserializer<LegacyEntityType>, JsonSerializer<LegacyEntityType> {
     @Override
     public LegacyEntityType deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         //System.out.println("des:" + json.getAsInt());

@@ -5,20 +5,35 @@ at Utrecht University within the Software and Game project course.
 ©Copyright Utrecht University (Department of Information and Computing Sciences)
 */
 
-package communication.system;
+package environments;
 
-import communication.agent.AgentCommand;
-import environments.LabRecruitsConfig;
 import world.LabRecruitsRawNavMesh;
 import world.LegacyObservation;
 
 /**
- * because it already contains an invoker and target which will be useful in multi agent environments
+ * A wrapper for commands to be sent to the Lab Recruits. 
+ * WP: This is a bit legacy, let's not change this.
+ * 
+ * Because it already contains an invoker and target which will be useful in multi agent environments
  * This Request class provides a little bit more utility that handles the casting for you for the ResponseType
  * @author Maurin
  */
 
 public class Request<ResponseType>  {
+	
+	
+	/**
+	 * Keep this enum synced with Unity!
+	 */
+	public enum RequestType
+	{
+	    DISCONNECT,
+	    PAUSE,
+	    START,
+	    INIT,
+	    UPDATE_ENVIRONMENT,
+	    AGENTCOMMAND
+	}
 
     /**
      * Java can not determine the class of ResponseType at runtime.
@@ -26,28 +41,37 @@ public class Request<ResponseType>  {
      */
     public transient final Class<ResponseType> responseType;
 
-    public RequestType cmd;
+    /**
+     * Specifying the type of the request to Lab Recruits, e.g. to initialize the game,
+     * or to send a command for an agent.
+     */
+    public RequestType requestType ;
+    
+    /**
+     * The argument of the request. E.g. for INIT-request it will be a configuration parameters
+     * for Lab Recruits. For Agent-command request it will be the command name and parameters.
+     */
     public Object arg;
 
     /**
      * This constructor is based on the sendCommand method from JsonEnvironment
      */
-    private Request(Class<ResponseType> responseType, RequestType cmd, Object arg) {
+    private Request(Class<ResponseType> responseType, RequestType reqType, Object arg) {
         // convert he command to string
         this.responseType = responseType;
 
-        this.cmd = cmd;
+        this.requestType = reqType;
         this.arg = arg;
     }
 
     /**
      * This constructor is based on the sendCommand method from JsonEnvironment
      */
-    private Request(Class<ResponseType> responseType, RequestType cmd) {
+    private Request(Class<ResponseType> responseType, RequestType reqType) {
         // convert he command to string
         this.responseType = responseType;
 
-        this.cmd = cmd;
+        this.requestType = reqType;
         this.arg = null;
     }
 

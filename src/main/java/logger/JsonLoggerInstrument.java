@@ -10,9 +10,10 @@ package logger;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
-import communication.agent.AgentCommand;
-import communication.system.Request;
-import communication.system.RequestType;
+
+import environments.AgentCommand;
+import environments.Request;
+import environments.RequestType;
 import helperclasses.datastructures.Vec3;
 import nl.uu.cs.aplib.mainConcepts.Environment;
 

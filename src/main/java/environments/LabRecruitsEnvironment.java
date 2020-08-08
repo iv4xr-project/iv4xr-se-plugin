@@ -7,8 +7,6 @@ at Utrecht University within the Software and Game project course.
 
 package environments;
 
-import communication.agent.AgentCommand;
-import communication.system.Request;
 import helperclasses.datastructures.Vec3;
 import pathfinding.Pathfinder;
 import world.BeliefState;

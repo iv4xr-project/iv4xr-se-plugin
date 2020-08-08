@@ -7,7 +7,7 @@ at Utrecht University within the Software and Game project course.
 
 package world;
 
-import communication.agent.AgentCommandType;
+import environments.AgentCommandType;
 import environments.LabRecruitsEnvironment;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import helperclasses.Intersections.EntityNodeIntersection;

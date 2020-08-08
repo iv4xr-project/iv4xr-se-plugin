@@ -3,6 +3,8 @@ package communication;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import communication.adapters.*;
+import environments.EntityJsonAdapter;
+import environments.EntityTypeJsonAdapter;
 import helperclasses.datastructures.Vec3;
 import org.junit.jupiter.api.Assertions ;
 import org.junit.jupiter.api.Test;
@@ -18,8 +20,8 @@ public class EntityAdapterTest {
 
         // copy from SocketEnvironment
         Gson deserializer = new GsonBuilder()
-                .registerTypeAdapter(LegacyEntityType.class, new EntityTypeAdapter())
-                .registerTypeHierarchyAdapter(LegacyEntity.class, new EntityAdapter())
+                .registerTypeAdapter(LegacyEntityType.class, new EntityTypeJsonAdapter())
+                .registerTypeHierarchyAdapter(LegacyEntity.class, new EntityJsonAdapter())
                 .create();
 
         LegacyEntity[] originals = new LegacyEntity[] {
@@ -41,7 +43,7 @@ public class EntityAdapterTest {
     @Test
     public void EntityTypeAdapterTest(){
         Gson gson = new GsonBuilder()
-                .registerTypeHierarchyAdapter(LegacyEntityType.class, new EntityTypeAdapter())
+                .registerTypeHierarchyAdapter(LegacyEntityType.class, new EntityTypeJsonAdapter())
                 .create();
         Assertions.assertEquals("0", gson.toJson(LegacyEntityType.Entity));
         Assertions.assertEquals("1", gson.toJson(LegacyEntityType.Dynamic));

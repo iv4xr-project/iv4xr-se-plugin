@@ -5,16 +5,28 @@ at Utrecht University within the Software and Game project course.
 ©Copyright Utrecht University (Department of Information and Computing Sciences)
 */
 
-package communication.agent;
+package environments;
 
-import helperclasses.datastructures.Tuple;
-import helperclasses.datastructures.Vec3;
+import nl.uu.cs.aplib.utils.Pair;
+import eu.iv4xr.framework.spatial.Vec3 ;
 
 /**
+ * Part of the wrapper class to wrap commands sent to Lab Recruits. See also the class
+ * Request.
+ * WP: This is a bit legacy, let's not change this.
+ * 
+ * 
  * The AgentRequest class is a Request that always returns an observation of the gym.
  * @author Maurin
  */
 public class AgentCommand {
+	
+	public enum AgentCommandType
+	{
+	    DONOTHING,
+	    MOVETOWARD,
+	    INTERACT
+	}
 
     public AgentCommandType cmd;
     public String agentId;
@@ -40,17 +52,17 @@ public class AgentCommand {
     }
 
     /**
-     * Moves an agent in a certain direction without using a jump
+     * Moves an agent towards the given location, without using a jump
      */
-    public static AgentCommand moveTowardCommand(String agent, Vec3 direction) {
-        return moveTowardCommand(agent, direction, false);
+    public static AgentCommand moveTowardCommand(String agent, Vec3 targetLocation) {
+        return moveTowardCommand(agent, targetLocation, false);
     }
 
     /**
-     * Moves an agent in a certain direction.
+     * Moves an agent towards the given location.
      */
-    public static AgentCommand moveTowardCommand(String agent, Vec3 direction, boolean jump) {
-        return new AgentCommand(agent, agent, AgentCommandType.MOVETOWARD, new Tuple<>(direction, jump));
+    public static AgentCommand moveTowardCommand(String agent, Vec3 targetLocation, boolean jump) {
+        return new AgentCommand(agent, agent, AgentCommandType.MOVETOWARD, new Pair<>(targetLocation, jump));
     }
 
     /**

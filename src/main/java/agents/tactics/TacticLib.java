@@ -7,7 +7,6 @@ at Utrecht University within the Software and Game project course.
 
 package agents.tactics;
 
-import communication.agent.AgentCommandType;
 import eu.iv4xr.framework.world.WorldEntity;
 import helperclasses.datastructures.Tuple;
 import helperclasses.datastructures.Vec3;
@@ -23,6 +22,8 @@ import world.LegacyObservation;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+
+import environments.AgentCommandType;
 
 import static nl.uu.cs.aplib.AplibEDSL.*;
 
