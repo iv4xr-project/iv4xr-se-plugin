@@ -98,7 +98,7 @@ public class LabRecruitsEnvironment extends W3DEnvironment {
             	 Vec3 targetLocation = ((Pair<Vec3,Vec3>) cmd.arg).snd ;
             	 
                  //Calculate the move direction:
-                 Vec3 direction = Vec3.sub(agentLocation, targetLocation);
+                 Vec3 direction = Vec3.sub(targetLocation,agentLocation);
                  if (direction.length() > AGENTSPEED) {
                 	 // the distance is too far, given the agent speed. Calculate a new
                 	 // target position, which is reachable given the speed:
