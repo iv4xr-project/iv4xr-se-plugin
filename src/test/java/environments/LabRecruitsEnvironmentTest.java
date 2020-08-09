@@ -33,7 +33,7 @@ public class LabRecruitsEnvironmentTest {
     @BeforeEach
     void start() {
     	// set this to true to make the game's graphic visible:
-    	var useGraphics = true ;
+    	var useGraphics = false ;
     	SocketReaderWriter.debug = true ;
     	String labRecruitesExeRootDir = System.getProperty("user.dir") ;
     	labRecruitsTestServer =new LabRecruitsTestServer(
@@ -134,29 +134,44 @@ public class LabRecruitsEnvironmentTest {
     @Test
     public void test_env_interaction() throws InterruptedException {
     	assertTrue(labRecruitsTestServer != null) ;
+    	
+    	float InteractionRange = 0.35f ;
+    	
     	var config = new LabRecruitsConfig("square2") ;
     	var env = new LabRecruitsEnvironment(config);
     	LabWorldModel obs0 = env.observe("agent0") ;
         var button0Position = obs0.getElement("button0").position ;
         System.out.println(">>> agent position: " + obs0.position) ;
         System.out.println(">>> button0 position: " + button0Position) ;
-        for (int k=0; k<10; k++) {
+        var distance = Float.MAX_VALUE ;
+        for (int k=0; k<20; k++) {
         	env.moveToward("agent0",obs0.position, button0Position) ;
-            Thread.sleep(50);
+            Thread.sleep(30);
         	obs0 = env.observe("agent0") ;
-        	var distance = Vec3.dist(button0Position,obs0.position) ;
+        	var p0 = obs0.position.copy() ;
+        	var p1 = button0Position.copy() ;
+        	p0.y = 0 ;
+        	p1.y = 0 ;
+        	distance = Vec3.dist(p0,p1) ;
             System.out.println(">>> agent position: " + obs0.position + ", distance="+ distance) ;
-            if (distance < 0.2) {
+            if (distance <= InteractionRange) {
             	System.out.println(">>>  close enough to the button0, now toggling it") ;
             	var obs1 = env.interact("agent0", "button0", "") ;
-            	System.out.println(">>> button0 isOn: " + obs1.getElement("button0").getBooleanProperty("isOn")) ;
-            	System.out.println(">>> door0 isOpen: " + obs1.getElement("door0").getBooleanProperty("isOpen")) ;
+            	var button0State = obs1.getElement("button0").getBooleanProperty("isOn") ;
+            	var door0State = obs1.getElement("door0").getBooleanProperty("isOpen") ;
+            	System.out.println(">>> button0 isOn: " + button0State) ;
+            	System.out.println(">>> door0 isOpen: " + door0State) ;
+            	assertTrue(button0State) ;
+            	assertTrue(door0State) ;
             	break ;
             }
         }
         
-      System.out.println("Hit RETURN to continue.") ;
-      new Scanner(System.in) . nextLine() ;
+        if (distance > InteractionRange) 
+        	fail("Fail to get close enough to button-0.") ;
+        
+        //System.out.println("Hit RETURN to continue.")  ;
+        //new Scanner(System.in) . nextLine() ;
         
     }
     

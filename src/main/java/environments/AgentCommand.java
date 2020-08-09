@@ -7,8 +7,8 @@ at Utrecht University within the Software and Game project course.
 
 package environments;
 
-import nl.uu.cs.aplib.utils.Pair;
 import eu.iv4xr.framework.spatial.Vec3 ;
+import helperclasses.datastructures.LegacyTuple;
 
 /**
  * Part of the wrapper class to wrap commands sent to Lab Recruits. See also the class
@@ -62,7 +62,9 @@ public class AgentCommand {
      * Moves an agent towards the given location.
      */
     public static AgentCommand moveTowardCommand(String agent, Vec3 targetLocation, boolean jump) {
-        return new AgentCommand(agent, agent, AgentCommandType.MOVETOWARD, new Pair<>(targetLocation, jump));
+    	// use LegacyTuple here. Dont cange it to e.g. Pair, as the serialization expect specific
+    	// field-names:
+        return new AgentCommand(agent, agent, AgentCommandType.MOVETOWARD, new LegacyTuple<>(targetLocation, jump));
     }
 
     /**
