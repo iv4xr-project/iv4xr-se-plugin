@@ -134,12 +134,14 @@ public class MeshFromLabRecruitsTest {
     	
     	// adding a door does not change the numer of vertices nor faces. Compare this
     	// with the long-corridor level:
+    	
     	level = "longcorridorWithDoorBetween" ;
     	System.out.println(">>> level: " + level) ;
     	env = new LabRecruitsEnvironment(new LabRecruitsConfig(level));
     	mesh = env.worldNavigableMesh ;
     	assertEquals(mesh.vertices.size(), meshHorzCorridor.vertices.size()) ;
     	assertEquals(mesh.faces.size(), meshHorzCorridor.faces.size()) ;
+    	
     }
     
     /**
