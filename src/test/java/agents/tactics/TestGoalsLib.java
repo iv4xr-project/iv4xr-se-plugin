@@ -44,8 +44,7 @@ public class TestGoalsLib {
     public void test_positionIsInCloseRange() throws InterruptedException {
     	test_positionIsInCloseRange("smallmaze","agent1", new Vec3(9,0,1)) ;
     	test_positionIsInCloseRange("buttons_doors_1","agent1", new Vec3(2.5f,0,3)) ;
-       	test_positionIsInCloseRange("buttons_doors_1","agent1", new Vec3(9,0,1)) ;
-           	
+       	test_positionIsInCloseRange("buttons_doors_1","agent1", new Vec3(9,0,1)) ;       	
     }
     
     
@@ -88,9 +87,14 @@ public class TestGoalsLib {
 	
 	@Test
 	public void test_entityStateRefreshed() throws InterruptedException {
-		var levelName = "smallmaze" ;
-		var agentId = "agent1" ;
-		var entityId = "button1" ;
+		test_entityStateRefreshed("smallmaze","agent1","button1") ;
+		test_entityStateRefreshed("buttons_doors_1","agent1","button2") ;
+		test_entityStateRefreshed("buttons_doors_1","agent1","button1") ;
+	}
+	void test_entityStateRefreshed(String levelName, String agentId, String entityId) throws InterruptedException {
+		
+		System.out.println("======= Level: " + levelName + ", target entity " + entityId) ;
+		
 		var environment = new LabRecruitsEnvironment(new EnvironmentConfig(levelName));
         
         LabRecruitsTestAgent agent = new LabRecruitsTestAgent(agentId)
