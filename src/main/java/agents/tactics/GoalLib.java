@@ -45,16 +45,17 @@ public class GoalLib {
 	
     /**
      * This method will construct a goal in which the agent will move to a known position.
-     * The goal is solved if the position is "in-range" from the agent.
-     * It will fail the goal if the agent no longer believes the position to be reachable.
+     * The goal is solved if the agent's floor-position is within 0.2 distance from the
+     * specified position.
+     * 
+     * The agent will fail the goal if it no longer believes the position to be reachable.
      */
-    public static Goal positionIsInRange(Vec3 goalPosition) {
+    public static Goal positionIsInCloseRange(Vec3 goalPosition) {
         //define the goal
         Goal goal = new Goal("This position is in-range: " + goalPosition.toString())
         		    . toSolve((BeliefState belief) -> {
                         //check if the agent is close to the goal position
-                        return belief.withinRange(goalPosition);
-                        //return goalPosition.distance(belief.position) < 0.4;
+                        return goalPosition.distance(belief.worldmodel.getFloorPosition()) < 0.4;
                     });
         //define the goal structure
         Goal g = goal.withTactic(
@@ -68,17 +69,17 @@ public class GoalLib {
 
     /**
      * This method will return a goal structure in which the agent will sequentially move along 
-     * specified positions. The agent does not literally have to be at eact of these position;
-     * being 'in-range' of each of them is enough.
+     * specified positions. The agent does not literally have to be at each of these position;
+     * being in the close-range (0.2 distance) is enough.
      * 
      * The goal-structure will fail if one of its position fails, which happen if the agent no
-     * longer believs that the position is reachable.
+     * longer believes that the position is reachable.
      */
     public static GoalStructure positionsVisited(Vec3... positions) {
         GoalStructure[] subGoals = new GoalStructure[positions.length];
 
         for (int i = 0; i < positions.length; i++) {
-            subGoals[i] = positionIsInRange(positions[i]).lift();
+            subGoals[i] = positionIsInCloseRange(positions[i]).lift();
         }
         return SEQ(subGoals);
     }
@@ -92,7 +93,7 @@ public class GoalLib {
     public static Goal entityIsInRange(String entityId) {
         Goal goal = new Goal(String.format("This entity is in-range: [%s]",entityId))
         		
-        		   . toSolve((BeliefState belief) -> belief.withinRange(entityId));
+        		   . toSolve((BeliefState belief) -> belief.withinViewRange(entityId));
 
         //define the goal structure
         Goal g = goal.withTactic(
@@ -256,9 +257,10 @@ public class GoalLib {
     }
     
     /**
-     * Construct a goal structure that will make an agent to move towards the given entity and interact with it.
-     * Currently the used tactic is not smart enough to handle a moving entity, in particular if it moves while
-     * the agent is entering the interaction distance.
+     * Construct a goal structure that will make an agent to move towards the given entity,
+     * until it is in the interaction-distance with the entity; and then interacts with it.
+     * Currently the used tactic is not smart enough to handle a moving entity, in particular 
+     * if it moves while the agent is entering the interaction distance.
      * 
      * The goal fails if the agent no longer believes that the entity is reachable, or when it fails to 
      * interact with it.

@@ -51,6 +51,9 @@ public class LabWorldModel extends WorldModel {
 		return availableInteractionTypes_ ;
 	}
     
+    /**
+     * The agent can interact with e is e is a switch, and the agent is at e's location.
+     */
     @Override
     public boolean canInteract(String interactionType, WorldEntity e) {
     	// since Lab Reruits so far only have one interaction type, we skip

@@ -8,6 +8,7 @@ at Utrecht University within the Software and Game project course.
 package world;
 
 import communication.agent.AgentCommandType;
+import environments.EnvironmentConfig;
 import environments.LabRecruitsEnvironment;
 import eu.iv4xr.framework.world.WorldEntity;
 import helperclasses.Intersections.EntityNodeIntersection;
@@ -248,13 +249,13 @@ public class BeliefState extends StateWithMessenger {
     
 	/**
 	 * Return all close-by doors around the agent. Else an empty list is returned.
-	 * "Close" is being defined as within a distance of 0.6 unit.
+	 * "Close" is being defined as within a distance of 1.0.
 	 */
     public List<WorldEntity> closebyDoor() {
     	var doors = knownDoors() ;
     	List<WorldEntity> nearbyDoors = new LinkedList<>();
     	for (var d : doors) {
-    		if (worldmodel.position.distance(d.position) <= CLOSE_RANGE) {
+    		if (worldmodel.position.distance(d.position) <= 1.0) {
     			nearbyDoors.add(d) ;
     		}
     	}
@@ -368,32 +369,36 @@ public class BeliefState extends StateWithMessenger {
    	    return worldmodel.canInteract(LabWorldModel.INTERACT, e) ;
     }
 
-    public static final float IN_RANGE = 0.4f ;
-    public static final float CLOSE_RANGE = 0.6f ;
+
     public static final float UNIT_DISTANCE = 1f ;
 
+    public float viewDistance = 10f ;
+
     /**
-     * True if the given position q is "within range" (in close vicinity) of the
-     * agent. (right now it is 0.4 distance unit). This q is assumed to be an
-     * on-floor position.
+     * Copy the view-distance from the given LR configuration into this Belief.
      */
-    public boolean withinRange(Vec3 q){
-        return withinRange(q, IN_RANGE);
+    public void setViewDistance(EnvironmentConfig config) {
+    	viewDistance = config.view_distance ;
     }
     
     /**
-     * True if the entity is "within range" (in close vicinity) of the
-     * agent. (right now it is 0.4 distance unit)
+     * True if the given position q is within the viewing range of the
+     * agent. This is defined by the field viewDistance, whose default is 10.
      */
-    public boolean withinRange(WorldEntity e){
-    	return e != null && withinRange(((LabEntity) e).getFloorPosition());
+    public boolean withinViewRange(Vec3 q){
+    	return worldmodel.position != null && worldmodel.getFloorPosition().distanceSquared(q) < viewDistance * viewDistance;
     }
     
-    public boolean withinRange(String id){ return withinRange(worldmodel.getElement(id)) ; }
-    
-    private boolean withinRange(Vec3 destination, float range){
-        return worldmodel.position != null && worldmodel.getFloorPosition().distanceSquared(destination) < range * range;
+    /**
+     * True if the entity is "within viewing range" of the agent. This is defined by the field viewDistance,
+     * whose default is 10.
+     */
+    public boolean withinViewRange(WorldEntity e){
+    	return e != null && withinViewRange(((LabEntity) e).getFloorPosition());
     }
+    
+    public boolean withinViewRange(String id){ return withinViewRange(worldmodel.getElement(id)) ; }
+    
 
     @Override
     public String toString() {
