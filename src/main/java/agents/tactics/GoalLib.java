@@ -307,7 +307,7 @@ public class GoalLib {
         return goal("The belief on this entity is refreshed: " + id)
                 .toSolve((BeliefState b) -> b.evaluateEntity(id, e -> b.age(e) == 0))
                 .withTactic(FIRSTof(
-                        TacticLib.navigateTo(id),
+                        TacticLib.navigateToClosestReachableNode(id),
                         TacticLib.explore(),
                         ABORT()));
     }
