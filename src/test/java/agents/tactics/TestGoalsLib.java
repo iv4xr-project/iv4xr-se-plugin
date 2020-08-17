@@ -183,5 +183,35 @@ public class TestGoalsLib {
 	    assertTrue(agent.getTestDataCollector().getNumberOfFailVerdictsSeen() == 0) ;
 	    assertTrue(agent.getTestDataCollector().getNumberOfPassVerdictsSeen() == 2) ;
 	}
+	
+	/**
+	 * Using a level from Samira to test.
+	 * @throws InterruptedException
+	 */
+	@Test
+	public void samiratest() throws InterruptedException {
+		var button2 = "button2" ;
+		var button3 = "button3" ;
+		var button5 = "button5" ;
+		var door1 = "door1" ;
+		var door4 = "door4" ;
+		var door6 = "door6" ;
+		
+	
+		var desc = ", the test is to check door6, which is not directly reachable. "  ;
+		var agent = create_and_deploy_testagent("samiratest","agent1",desc) ;
+		GoalStructure g = 
+			SEQ(GoalLib.entityInteracted(button2),
+				GoalLib.entityStateRefreshed(door1),
+				GoalLib.entityInteracted(button3),
+				GoalLib.entityStateRefreshed(door4),
+				GoalLib.entityInteracted(button5),
+				//GoalLib.entityStateRefreshed(door4), not needed
+				GoalLib.entityStateRefreshed(door6));
+		setgoal_and_run_agent(agent,g,120) ;
+		BeliefState state = (BeliefState) agent.getState() ;
+		assertTrue(state.worldmodel.getElement(door6) != null) ;
+		assertTrue(state.isOpen(door6)) ;
+	}
 
 }

@@ -129,6 +129,7 @@ public class TacticLib {
 	    			    // sort the candidates according to how close they are to the entity e (closest first)
 	    			    candidates.sort((c1,c2) -> c1.object2.compareTo(c2.object2));
 	    			    // now find the first one that is reachable:
+	    			    System.out.println(">>> #candidates closest reachable neighbor nodes = " + candidates.size()) ;
 	    			    Vec3 destination = null ;
 	    			    Vec3[] path = null ;
 	    			    for(var c : candidates) {
@@ -136,11 +137,13 @@ public class TacticLib {
 	    			    	path = belief.findPathTo(destination) ;
 	    			    	if (path != null) {
 	    			    		// found a reachable candidate!
+	    			    		System.out.println(">>> a reachable neighboring node found :" + destination + ", path: " + Arrays.toString(path)) ;
 	    			    		memory.memorized.clear();
 	    			    		memory.memorize(destination);
 	    			    		return new Tuple(destination,path) ;
 	    			    	}
 	    			    }
+	    			    System.out.println(">>> no reachable neighboring nodes :|") ;
 	    			    // no reachable node can be found. We will clear the memory, and declare the tactic as disabled
 	    			    memory.memorized.clear() ;
 	    			    return null ;
