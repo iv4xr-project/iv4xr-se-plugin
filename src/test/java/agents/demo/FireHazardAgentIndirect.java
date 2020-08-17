@@ -111,15 +111,15 @@ public class FireHazardAgentIndirect {
 
         agent.setGoal(SEQ(
                 GoalLib.positionsVisited(new Vec3(6,0,5), new Vec3(8,0,1), new Vec3(13,4,1)),
-                GoalLib.entityIsInteracted("b4.1"),
+                GoalLib.entityInteracted("b4.1"),
                 GoalLib.positionsVisited(new Vec3(13,4,3)),
-                GoalLib.entityIsInteracted("b7.1"),
+                GoalLib.entityInteracted("b7.1"),
                 GoalLib.positionsVisited(new Vec3(9,4,9), new Vec3(8,4,6), new Vec3(5,4,7)),
-                GoalLib.entityIsInteracted("b8.2"),
+                GoalLib.entityInteracted("b8.2"),
                 GoalLib.positionsVisited(new Vec3(1,4,13)),
-                GoalLib.entityIsInteracted("b5.1"),
+                GoalLib.entityInteracted("b5.1"),
                 GoalLib.positionsVisited(new Vec3(1,4,22), new Vec3(6,0,22)),
-                GoalLib.entityIsInteracted("b1.1"),
+                GoalLib.entityInteracted("b1.1"),
                 GoalLib.positionsVisited(new Vec3(5,0,25))
                 ));
         return agent;

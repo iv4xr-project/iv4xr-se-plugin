@@ -52,7 +52,7 @@ public class FireHazardTest {
             throw new InterruptedException("Unity refuses to start the Simulation!");
 
         // Make the agent reach each positon sequentially.
-        var g = GoalLib.positionIsInRange(new Vec3(5,0,1)).lift()   ;  
+        var g = GoalLib.positionInCloseRange(new Vec3(5,0,1)).lift()   ;  
 
         
         agent.setGoal(g) ;
