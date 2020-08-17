@@ -171,12 +171,15 @@ public class TacticLib {
 		    			    if (e==null) return null ;
 		    			    var p = e.getFloorPosition() ;
 		                	Vec3 currentDestination = belief.getGoalLocation() ;
+		                	//System.out.println(">>> navigating to " + id) ;
 		                	if (currentDestination==null || currentDestination.distance(p) >= 0.05) {
 		                		// the agent has no current location to go to, or the new goal location
 		                		// is quite different from the current goal location, we will then calculate
 		                		// a new path:
 		                		var path = belief.findPathTo(p) ;
-		                		if (path==null || path.length==0) return null ;
+		                		//System.out.println(">>> currentDestination: " + currentDestination 
+		                		//		           + ", #path: " + path.length) ;
+		                		if (path==null) return null ;
 		                		return new Tuple(p,path) ;
 		                	}
 		                	else {
@@ -226,8 +229,8 @@ public class TacticLib {
                 	//System.out.println("### tactic NavigateTo " + destination) ;
                     
                 	//if a new path is received, memorize it as the current path to follow:
-                	if (path!= null && path.length>0 ) {
-                		belief.mentalMap.applyPath(belief.worldmodel.timestamp, position, path) ;
+                	if (path!= null) {
+                		belief.mentalMap.applyPath(belief.worldmodel.timestamp, destination, path) ;
                 	}               
                     //move towards the next way point of whatever the current path is:
                     belief.worldmodel.moveToward(belief.env(),belief.getNextWayPoint());
@@ -261,7 +264,7 @@ public class TacticLib {
      * to follow this path. It may happen that this path leads to a door that
      * turns out to be closed; so, path re-calculation is needed.
      * 
-     * This method constructs a tatctic T that tries to identify when recalculation of 
+     * This method constructs a tactic T that tries to identify when recalculation of 
      * path to the the goal position, namely when:
      * 
      *   (1) the agent is near a door that turns out to be closed, and hence blocking 
@@ -284,11 +287,12 @@ public class TacticLib {
                 		return false ;
                 	}
                 	var closeby_doors = belief.closebyDoor() ;
+                	//System.out.println(">>> #close-by doors: " + closeby_doors.size()) ;
             		for (var door : closeby_doors) {
                 		if (!belief.isOpen(door)) {
                 			return true ;
                 		}
-                	}		;
+                	}		
                 	return false ; })
                 .lift() ;
            return clearTargetPosition ;     
@@ -321,6 +325,7 @@ public class TacticLib {
     				return belief ;
     			})
     			.on_((BeliefState belief) -> {
+    				//System.out.println(">>> stuck: " + belief.isStuck() + ", goal loc: " + belief.getGoalLocation()) ;
     				return belief.getGoalLocation() != null &&  belief.isStuck() ;
     			})
     			.lift() ;	
@@ -591,6 +596,7 @@ public class TacticLib {
                     	 // to S0.
                     	 memo.moveState("S0");
                      }
+                     // System.out.println(">>> explore in-transit: " + memo.stateIs("inTransit")) ;
                      // System.out.println(">>> exploration target: " + exploration_target) ;
                      // We should not need to re-calculate the path. If we are "inTransit" the path is
                      // already in the agent's memory
@@ -650,7 +656,11 @@ public class TacticLib {
     			})
     			.lift() ;
     	*/    	        
-        return FIRSTof(selectExplorationTarget,exploreInTransit) ;
+        return FIRSTof(
+        		 forceReplanPath(), 
+				 tryToUnstuck(),
+				 selectExplorationTarget,
+				 exploreInTransit) ;
     }
 
 }

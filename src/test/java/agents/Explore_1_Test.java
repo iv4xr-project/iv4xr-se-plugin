@@ -69,7 +69,7 @@ public class Explore_1_Test {
         		                     . attachState(new BeliefState())
         		                     . attachEnvironment(environment) ;
         
-        var g = GoalLib.entityIsInRange("button1").lift() ;
+        var g = GoalLib.entityInteracted("button1") ;
         agent.setGoal(g) ;
         
     	if(TestSettings.USE_GRAPHICS) {

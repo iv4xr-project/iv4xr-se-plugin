@@ -143,7 +143,11 @@ public class BeliefState extends StateWithMessenger {
         return nodesBlockedByEntity.getOrDefault(id, new Integer[]{});
     }
 
-    // predicates
+    /**
+     * Inspect the given predicate on the in-game entity with the given id. Note that
+     * if the entity if not in the agent's belief (so, a query on it on the belief would
+     * return null) this method will return a false.
+     */
     public boolean evaluateEntity(String id, Predicate<WorldEntity> predicate) {
     	WorldEntity e  = worldmodel.getElement(id) ;
     	if (e==null) return false ;

@@ -56,7 +56,7 @@ public class RoomReachabilityTest {
     @BeforeAll
     static void start() {
     	// Uncomment this to make the game's graphic visible:
-    	//TestSettings.USE_GRAPHICS = true ;
+    	// TestSettings.USE_GRAPHICS = true ;
     	String labRecruitesExeRootDir = System.getProperty("user.dir") ;
     	labRecruitsTestServer = TestSettings.start_LabRecruitsTestServer(labRecruitesExeRootDir) ;
     }
@@ -94,29 +94,29 @@ public class RoomReachabilityTest {
 	        
 	        // define the testing-task:
 	        var testingTask = SEQ(
-	            GoalLib.entityIsInteracted("button1"),
-                GoalLib.doorIsInRange_smarter("door1"),
+	            GoalLib.entityInteracted("button1"),
+                GoalLib.entityStateRefreshed("door1"),
 	        	GoalLib.entityInvariantChecked(testAgent,
 	            		"door1", 
 	            		"door1 should be open", 
 	            		(WorldEntity e) -> e.getBooleanProperty("isOpen")),
 	        	
-	        	GoalLib.entityIsInteracted("button3"),
-	        	GoalLib.entityIsInRange("door2").lift(),
+	        	GoalLib.entityInteracted("button3"),
+	        	GoalLib.entityStateRefreshed("door2"),
 	        	GoalLib.entityInvariantChecked(testAgent,
 	            		"door2", 
 	            		"door2 should be open", 
 	            		(WorldEntity e) -> e.getBooleanProperty("isOpen")),
-	        	GoalLib.entityIsInteracted("button4"),
+	        	GoalLib.entityInteracted("button4"),
 	        	//GoalLib.entityIsInRange("button3").lift(),
 	        	//GoalLib.entityIsInRange("door1").lift(),
-	        	GoalLib.doorIsInRange_smarter("door1"),
+	        	GoalLib.entityStateRefreshed("door1"),
 	        	GoalLib.entityInvariantChecked(testAgent,
 	            		"door1", 
 	            		"door1 should be open", 
 	            		(WorldEntity e) -> e.getBooleanProperty("isOpen")),
 	        	//GoalLib.entityIsInRange("button1").lift(),
-	        	GoalLib.doorIsInRange_smarter("door3"),
+	        	GoalLib.entityStateRefreshed("door3"),
 	        	GoalLib.entityInvariantChecked(testAgent,
 	            		"door3", 
 	            		"door3 should be open", 
