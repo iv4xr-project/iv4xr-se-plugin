@@ -192,11 +192,11 @@ public class SimpleUnityTest {
     		        . attachEnvironment(environment);
 
         GoalStructure goal = SEQ(
-        		GoalLib.positionIsInRange(new Vec3(1,0,1)).lift(),
+        		GoalLib.positionInCloseRange(new Vec3(1,0,1)).lift(),
                 GoalLib.entityInspected("button0", e -> ! e.getBooleanProperty("isOn")),
-                GoalLib.entityIsInteracted("button0"),
+                GoalLib.entityInteracted("button0"),
                 GoalLib.entityInspected("button0", e -> e.getBooleanProperty("isOn")),
-                GoalLib.positionIsInRange(new Vec3(1,0,1)).lift()
+                GoalLib.positionInCloseRange(new Vec3(1,0,1)).lift()
         );
 
         agent.setGoal(goal);
