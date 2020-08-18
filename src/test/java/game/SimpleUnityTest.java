@@ -194,9 +194,9 @@ public class SimpleUnityTest {
         GoalStructure goal = SEQ(
                 // 'entityInspected' breaks this test --Naraenda
         		GoalLib.positionInCloseRange(new Vec3(1,0,1)).lift(),
-                //GoalLib.entityInspected("button0", e -> ! e.getBooleanProperty("isOn")),
+                GoalLib.entityInspected("button0", e -> ! e.getBooleanProperty("isOn")),
                 GoalLib.entityInteracted("button0"),
-                //GoalLib.entityInspected("button0", e -> e.getBooleanProperty("isOn")),
+                GoalLib.entityInspected("button0", e -> e.getBooleanProperty("isOn")),
                 GoalLib.positionInCloseRange(new Vec3(1,0,1)).lift()
         );
 

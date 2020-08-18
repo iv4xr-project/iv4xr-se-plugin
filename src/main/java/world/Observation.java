@@ -84,7 +84,9 @@ public class Observation {
         wom.position.y += 0.75;
 
         for (int i = 0; i < obs.objects.length; i++) {
-            wom.updateEntity(toWorldEntity(obs.objects[i]));
+            var we = toWorldEntity(obs.objects[i]);
+            we.assignTimeStamp(wom.timestamp);
+            wom.updateEntity(we);
         }
 
         return wom;
@@ -138,9 +140,8 @@ public class Observation {
             });
         }
 
-
         LabEntity we_final = new LabEntity(
-            obj.name, // obj.id would be more appropriate, but some tests still use name.
+            obj.name, // TODO: obj.id would be more appropriate, but some tests still use name.
             we_type,
             true
         );
