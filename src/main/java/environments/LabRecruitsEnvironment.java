@@ -15,6 +15,7 @@ import pathfinding.Pathfinder;
 import world.BeliefState;
 import world.LabWorldModel;
 import world.LegacyObservation;
+import world.Observation;
 
 /**
  * An implementation of {@link nl.uu.cs.aplib.environments.JsonEnvironment}
@@ -65,10 +66,10 @@ public class LabRecruitsEnvironment extends SocketEnvironment {
     }
 
     private LabWorldModel sendAgentCommand_andGetObservation(AgentCommand c){
-    	LegacyObservation obs = getResponse(Request.command(c)); 
+    	Observation obs = getResponse(Request.command(c)); 
     	// covert the obtained observation to a WorldModel:
-    	var wom = LegacyObservation.toWorldModel(obs) ;
-        return wom ;
+    	var wom = Observation.toWorldModel(obs);
+        return wom;
     }
 
     /**

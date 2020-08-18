@@ -11,6 +11,7 @@ import communication.agent.AgentCommand;
 import environments.EnvironmentConfig;
 import pathfinding.NavMeshContainer;
 import world.LegacyObservation;
+import world.Observation;
 
 /**
  * because it already contains an invoker and target which will be useful in multi agent environments
@@ -88,8 +89,8 @@ public class Request<ResponseType>  {
     /**
      * Request an observation after executing the sent Command
      */
-    public static Request<LegacyObservation> command(AgentCommand command) {
-        return new Request<>(LegacyObservation.class, RequestType.AGENTCOMMAND, command);
+    public static Request<Observation> command(AgentCommand command) {
+        return new Request<>(Observation.class, RequestType.AGENTCOMMAND, command);
     }
 
     /**
