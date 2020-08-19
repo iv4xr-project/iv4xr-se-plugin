@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.lang.reflect.Modifier;
 import java.net.Socket;
+import java.net.SocketException;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -58,6 +59,16 @@ public class SocketReaderWriter {
                 writer = new PrintWriter(socket.getOutputStream(), true);
             } catch (IOException ignored) { }
         }
+        
+        try {
+        	// set the socket to timeout in 5 secs
+        	// Currently LR just hang when we try to send an illegal command. This should be fixed,
+        	// for now we place this time-out.
+        	socket.setSoTimeout(5000) ;
+        }
+        catch(SocketException e) {
+        	System.out.println("Failing to set timeout on the socketL: " + e.getMessage()) ;
+        }
 
         if(socketReady()){
             System.out.println(String.format("%s: Connected with %s on %s:%s", PrintColor.SUCCESS(), PrintColor.UNITY(), host, port));
@@ -102,6 +113,7 @@ public class SocketReaderWriter {
      * The resulting object is then returned.
      */
     public <T> T read(Class<T> expectedClassOfResultObj) throws IOException {
+    	
     	String response = reader.readLine() ; 
         // we do not have to cast to T, since req.responseType is of type Class<T>
         System.out.println("** RECEIVING: " + response);

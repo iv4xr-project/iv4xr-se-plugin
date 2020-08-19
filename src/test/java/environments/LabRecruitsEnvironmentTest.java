@@ -48,6 +48,11 @@ public class LabRecruitsEnvironmentTest {
     	if(labRecruitsTestServer!=null) labRecruitsTestServer.close(); 
     }
 
+    void hit_RETURN() {
+		System.out.println("You can drag then game window elsewhere for beter viewing. Then hit RETURN to continue.") ;
+    	new Scanner(System.in) . nextLine() ;
+	}
+    
     /**
      * Test if an instance of LR-env can be created, connected to the LR game, and
      * if level nav-mesh is received.
@@ -129,6 +134,40 @@ public class LabRecruitsEnvironmentTest {
     	assertTrue(obs.getElement("door0") == null) ;
     	assertTrue(obs.getElement("screen0") == null) ;
 
+    }
+    
+    @Test
+    public void test_env_sending_illegal_commands() throws InterruptedException {
+    	assertTrue(labRecruitsTestServer != null) ;
+    	
+    	float InteractionRange = 0.35f ;
+    	
+    	var config = new LabRecruitsConfig("square1") ;
+    	var env = new LabRecruitsEnvironment(config);
+    	// agent-1 does not exist, so the following command is illegal. LR will not send back any
+    	// response, but our LR-env will eventually time-out
+    	
+    	// hit_RETURN() ;
+    	
+    	LabWorldModel obs0 = env.observe("agent1") ;
+    	assertTrue(obs0 == null) ;
+
+    	// sending a legal command:
+    	obs0 = env.observe("agent0") ;
+    	assertTrue(obs0 != null && obs0.agentId.equals("agent0")) ;
+    	
+    	// try to interact with button0. This should not work because it is too far, but currently
+    	// LR will just happily execute this command. FIX THIS (at the LR side).
+    	obs0 = env.interact("agent0","button0","") ;
+    	assertTrue(obs0 != null) ;
+
+    	//System.out.println("" + obs0) ;
+    	// This one is illegal because button1 does not exist. LR will not send back any
+    	// response, but our LR-env will eventually time-out
+    	obs0 = env.interact("agent0","button1","") ;
+    	assertTrue(obs0 == null) ;
+    	
+    	//hit_RETURN() ;
     }
     
     @Test

@@ -298,6 +298,11 @@ public class BeliefState extends StateWithMessenger {
      */
     public void mergeNewObservationIntoWOM(LabWorldModel observation) {
     	
+    	// if there is no observation given (e.g. because the socket-connection times out)
+    	// then obviously there is no information to merge either.
+    	// We then simply return.
+    	if (observation == null) return ;
+    	
     	var impactEntities = worldmodel.mergeNewObservation(observation) ;
     	// recalculating navigation nodes that become blocked or unblocked:
         boolean refreshNeeded = false ;
