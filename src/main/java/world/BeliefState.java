@@ -9,49 +9,63 @@ package world;
 
 import environments.AgentCommandType;
 import environments.LabRecruitsEnvironment;
+import eu.iv4xr.framework.extensions.pathfinding.SurfaceNavGraph;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
+import eu.iv4xr.framework.spatial.Vec3;
 import helperclasses.Intersections.EntityNodeIntersection;
-import helperclasses.datastructures.Vec3;
 import helperclasses.datastructures.linq.QArrayList;
-import nl.uu.cs.aplib.agents.StateWithMessenger;
+import nl.uu.cs.aplib.agents.State;
 import nl.uu.cs.aplib.mainConcepts.Environment;
 
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+
 /**
  * Stores agent knowledge of the agent itself, the entities it has observed, what parts of the
  * world map have been explored and its current movement goals.
  */
-public class BeliefState extends StateWithMessenger {
+public class BeliefState extends State {
 
+	/**
+	 * The id of the agent that owns this belief.
+	 */
     public String id;
     
     /**
      * To keep track entities the agent has knowledge about (not necessarily up to date knowledge).
      */
-    public LabWorldModel worldmodel = new LabWorldModel() ;
+    public LabWorldModel worldmodel  = new LabWorldModel() ;
     
     /**
-     * This keep track of the world's map that is known (has been explored) by the agent.
+     * A 3D-surface pathfinder to guide agent to navigate over the game world.
      */
-    public MentalMap mentalMap;
-  
+    public SurfaceNavGraph pathfinder ;
+    
     public Boolean receivedPing = false;//store whether the agent has an unhandled ping
-
+    
+    
     /**
-     * keep track of nodes which are blocked and can not be used for pathfinding
+     * Since getting to some location may take multiple cycle, and we want to avoid invoking the
+     * pathfinder at every cycle, the agent will memorize what the target location it is trying
+     * to reach. This is called "goal-location", and along with it the path leading to it, as 
+     * returned by the pathfinder. The agent basically only needs to follow this path. We will
+     * additionally also need to keep track of where the agent is in this path.
      */
-    public HashSet<Integer> blockedNodes = new HashSet<>();
-    public HashMap<String, Integer[]> nodesBlockedByEntity = new HashMap<>();
+    private Vec3 memorizedGoalLocation;
+    private Vec3[] memorizedPath;
+    //private long pathTimestamp = -1 ;
+    /**
+     * Pointing to where the agent is, in the memorizedPath.
+     */
+    private int currentWayPoint = -1;
     
     List<Vec3> recentPositions = new LinkedList<>() ; 
 
     public BeliefState() { }
 
     public Collection<WorldEntity> knownEntities() { return worldmodel.elements.values(); }
-    
     
     
     // lexicographically comparing e1 and e2 based on its age and distance:
@@ -116,8 +130,7 @@ public class BeliefState extends StateWithMessenger {
     	if (N<2) return null ;
     	//System.out.println("#### #recentPositions=" + N) ;
     	for(int k=N; k>1; k--) {
-    		Vec3 q = new Vec3(recentPositions.get(k-1)) ;
-        	q.subtract(recentPositions.get(k-2)) ;
+    		Vec3 q = Vec3.sub(recentPositions.get(k-1), recentPositions.get(k-2)) ;
         	if (q.x != 0 || q.z != 0) return q ;
     	}
     	return null ;
@@ -133,13 +146,8 @@ public class BeliefState extends StateWithMessenger {
     public Vec3 derivedVelocity() {
     	int N = recentPositions.size() ;
     	if (N<2) return null ;
-    	Vec3 q = new Vec3(recentPositions.get(N-1)) ;
-    	q.subtract(recentPositions.get(N-2)) ;
+    	Vec3 q = Vec3.sub(recentPositions.get(N-1),recentPositions.get(N-2)) ;
     	return q ;
-    }
-
-    public Integer[] getNodesBlockedByEntity(String id){
-        return nodesBlockedByEntity.getOrDefault(id, new Integer[]{});
     }
 
     /**
@@ -177,7 +185,7 @@ public class BeliefState extends StateWithMessenger {
 	 */
     public double distanceTo(WorldEntity e) {
     	if (e==null) return Double.POSITIVE_INFINITY ;
-    	return worldmodel.position.distance(e.position) ;
+    	return Vec3.dist(worldmodel.position, e.position) ;
     }
     
     public double distanceTo(String id) { return distanceTo(worldmodel.getElement(id)) ; }
@@ -199,7 +207,7 @@ public class BeliefState extends StateWithMessenger {
 	 * query as it trigger a fresh path finding calculation.
 	 */    
     public Vec3[] canReach(Vec3 q) {
-    	return findPathTo(q) ;
+    	return findPathTo(q,true) ;
     }
     
 	/**
@@ -211,17 +219,33 @@ public class BeliefState extends StateWithMessenger {
     public Vec3[] canReach(String id) { return canReach(worldmodel.getElement(id)) ; }
     
 	/**
-	 * Invoke the mental map to find a path to the given position. If there is
-	 * already a path to get there (that was previously calculated and memorized by
-	 * the agent) this memorized path will be returned. Else a path is obtained from
-	 * fresh path calculation.
-	 *
-	 * @param goal: The position where the agent wants to move to.
-	 * @return The path found or the already stored path if the goal location is
-	 *         equal to the previous goal location
+	 * Invoke the pathfinder to calculate a path from the agent current location
+	 * to the given location q.
+	 * 
+	 * If the flag "force" is set to true, the pathfinder will really be invoked.
+	 * 
+	 * If it is set to false, the method first compares q with the goal-location
+	 * it memorizes. If they are very close, the method assumes the destination
+	 * is still the same, and that the agent is following the memorized path to it.
+	 * In this case, it won't recalculate the path, but simply return the memorized
+	 * path.
 	 */
-    public Vec3[] findPathTo(Vec3 q) {
-        return mentalMap.navigate(worldmodel.getFloorPosition(), q, blockedNodes);
+    public Vec3[] findPathTo(Vec3 q, boolean forceIt) {
+    	if (!forceIt && memorizedGoalLocation!=null) {
+    		if (Vec3.dist(q,memorizedGoalLocation) <= 0.05) return memorizedPath ;
+    	}
+    	// else we invoke the pathfinder to calculate a path:
+    	var abstractpath = pathfinder.findPath(worldmodel.getFloorPosition(),q,0.05f) ;
+    	if (abstractpath == null) return null ;
+    	int N = abstractpath.size() ;
+    	Vec3[] path = new Vec3[N+1] ;
+    	int k = 0 ;
+    	for (int v : abstractpath) {
+    		path[k] = pathfinder.vertices.get(v) ;
+    		k++ ;
+    	}
+    	path[N] = q ;
+    	return path ;
     }
     
 
@@ -237,8 +261,8 @@ public class BeliefState extends StateWithMessenger {
     	int N = recentPositions.size() ;
     	if(N<3) return false ;
     	Vec3 p0 = recentPositions.get(N-3) ;
-    	return p0.distance(recentPositions.get(N-2)) <= 0.05
-    		   &&  p0.distance(recentPositions.get(N-1)) <= 0.05 ;
+    	return Vec3.dist(p0,recentPositions.get(N-2)) <= 0.05
+    		   &&  Vec3.dist(p0,recentPositions.get(N-1)) <= 0.05 ;
          //    && p0.distance(q) > 1.0 ;   should first translate p0 to the on-floor coordinate!
     }
     
@@ -256,13 +280,9 @@ public class BeliefState extends StateWithMessenger {
 	 */
     public List<WorldEntity> closebyDoor() {
     	var doors = knownDoors() ;
-    	List<WorldEntity> nearbyDoors = new LinkedList<>();
-    	for (var d : doors) {
-    		if (worldmodel.position.distance(d.position) <= 1.0) {
-    			nearbyDoors.add(d) ;
-    		}
-    	}
-    	return nearbyDoors ;
+    	return doors.stream()
+    			    .filter(d -> Vec3.dist(worldmodel.position,d.position) <= 1.0)
+    			    .collect(Collectors.toList());
     }
   
     /**
@@ -271,7 +291,7 @@ public class BeliefState extends StateWithMessenger {
      * @return The current goal location used for the path finding.
      */
     public Vec3 getGoalLocation() {
-        return mentalMap.getGoalLocation();
+        return memorizedGoalLocation ;
     }
 
     /**
