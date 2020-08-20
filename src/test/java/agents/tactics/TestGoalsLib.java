@@ -11,12 +11,12 @@ import org.junit.jupiter.api.Test;
 
 import agents.LabRecruitsTestAgent;
 import agents.TestSettings;
-import environments.EnvironmentConfig;
+import environments.LabRecruitsConfig;
 import environments.LabRecruitsEnvironment;
 import eu.iv4xr.framework.mainConcepts.TestDataCollector;
-import eu.iv4xr.framework.world.WorldEntity;
+import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import game.LabRecruitsTestServer;
-import helperclasses.datastructures.Vec3;
+import eu.iv4xr.framework.spatial.Vec3;
 import nl.uu.cs.aplib.mainConcepts.GoalStructure;
 import static nl.uu.cs.aplib.AplibEDSL.* ;
 import world.BeliefState;
@@ -50,7 +50,7 @@ public class TestGoalsLib {
 	LabRecruitsTestAgent create_and_deploy_testagent(String levelName, String agentId, String testDescription) {
         System.out.println("======= Level: " + levelName + ", " + testDescription) ;
 		
-        var environment = new LabRecruitsEnvironment(new EnvironmentConfig(levelName));
+        var environment = new LabRecruitsEnvironment(new LabRecruitsConfig(levelName));
         
         LabRecruitsTestAgent agent = new LabRecruitsTestAgent(agentId)
         		                     . attachState(new BeliefState())

@@ -2,10 +2,9 @@ package communication;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import communication.adapters.*;
 import environments.EntityJsonAdapter;
 import environments.EntityTypeJsonAdapter;
-import helperclasses.datastructures.Vec3;
+import eu.iv4xr.framework.spatial.Vec3;
 import org.junit.jupiter.api.Assertions ;
 import org.junit.jupiter.api.Test;
 import world.*;

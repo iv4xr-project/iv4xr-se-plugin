@@ -21,7 +21,7 @@ import agents.tactics.TacticLib;
 import environments.LabRecruitsConfig;
 import environments.LabRecruitsEnvironment;
 import eu.iv4xr.framework.mainConcepts.TestDataCollector;
-import eu.iv4xr.framework.world.WorldEntity;
+import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import game.LabRecruitsTestServer;
 import helperclasses.datastructures.linq.QArrayList;
 import nl.uu.cs.aplib.mainConcepts.BasicAgent;

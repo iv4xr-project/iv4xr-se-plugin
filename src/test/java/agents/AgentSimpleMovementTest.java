@@ -25,7 +25,7 @@ import logger.JsonLoggerInstrument;
 import environments.LabRecruitsEnvironment;
 import game.LabRecruitsTestServer;
 import game.Platform;
-import helperclasses.datastructures.Vec3;
+import eu.iv4xr.framework.spatial.Vec3;
 import logger.PrintColor;
 import nl.uu.cs.aplib.mainConcepts.Environment;
 import static nl.uu.cs.aplib.AplibEDSL.* ;
@@ -93,17 +93,17 @@ public class AgentSimpleMovementTest {
             }
         }
         System.out.println("*** Distance " + ta0.getState().id + " to dest:" 
-                           + ta0.getState().worldmodel.getFloorPosition().distance(p0)) ;
+                           + Vec3.dist(ta0.getState().worldmodel.getFloorPosition(),p0)) ;
         System.out.println("*** Distance " + ta1.getState().id + " to dest:" 
-                           + ta1.getState().worldmodel.getFloorPosition().distance(p1)) ;
+                           + Vec3.dist(ta1.getState().worldmodel.getFloorPosition(),p1)) ;
         System.out.println("*** Distance " + ta2.getState().id + " to dest:" 
-                           + ta2.getState().worldmodel.getFloorPosition().distance(p2)) ;
+                           + Vec3.dist(ta2.getState().worldmodel.getFloorPosition(),p2)) ;
         System.out.println("*** Distance " + ta3.getState().id + " to dest:" 
-                           + ta3.getState().worldmodel.getFloorPosition().distance(p3)) ;
-        assertTrue(ta0.getState().worldmodel.getFloorPosition().distance(p0) < 0.5) ;
-        assertTrue(ta1.getState().worldmodel.getFloorPosition().distance(p1) < 0.5) ;
-        assertTrue(ta2.getState().worldmodel.getFloorPosition().distance(p2) < 0.5) ;
-        assertTrue(ta3.getState().worldmodel.getFloorPosition().distance(p3) < 0.5) ;
+                           + Vec3.dist(ta3.getState().worldmodel.getFloorPosition(),p3)) ;
+        assertTrue(Vec3.dist(ta0.getState().worldmodel.getFloorPosition(),p0) < 0.5) ;
+        assertTrue(Vec3.dist(ta1.getState().worldmodel.getFloorPosition(),p1) < 0.5) ;
+        assertTrue(Vec3.dist(ta2.getState().worldmodel.getFloorPosition(),p2) < 0.5) ;
+        assertTrue(Vec3.dist(ta3.getState().worldmodel.getFloorPosition(),p3) < 0.5) ;
    
 	    if (!environment.close())
 	        throw new InterruptedException("Unity refuses to close the Simulation!");

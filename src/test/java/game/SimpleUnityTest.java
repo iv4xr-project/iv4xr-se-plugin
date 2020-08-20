@@ -12,7 +12,7 @@ import agents.tactics.GoalLib;
 import agents.tactics.TacticLib;
 import environments.LabRecruitsConfig;
 import environments.LabRecruitsEnvironment;
-import helperclasses.datastructures.Vec3;
+import eu.iv4xr.framework.spatial.Vec3;
 import helperclasses.datastructures.linq.QArrayList;
 import logger.JsonLoggerInstrument;
 import nl.uu.cs.aplib.mainConcepts.GoalStructure;

@@ -15,7 +15,7 @@ import eu.iv4xr.framework.mainConcepts.TestAgent;
 import eu.iv4xr.framework.mainConcepts.TestDataCollector;
 import game.LabRecruitsTestServer;
 import game.Platform;
-import helperclasses.datastructures.Vec3;
+import eu.iv4xr.framework.spatial.Vec3;
 import logger.JsonLoggerInstrument;
 import nl.uu.cs.aplib.Logging;
 import nl.uu.cs.aplib.mainConcepts.*;
@@ -99,7 +99,7 @@ public class Explore_1_Test {
         assertTrue(g.getStatus().success()) ;
         var agent_p  = agent.getState().worldmodel.getFloorPosition() ;
         var button_p = ((LabEntity) agent.getState().worldmodel.getElement("button1")).getFloorPosition() ;
-        assertTrue(agent_p.distance(button_p) < 0.5) ;
+        assertTrue(Vec3.dist(agent_p,button_p) < 0.5) ;
         
         if (!environment.close())
             throw new InterruptedException("Unity refuses to close the Simulation!");

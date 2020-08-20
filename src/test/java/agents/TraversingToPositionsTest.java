@@ -19,7 +19,7 @@ import environments.LabRecruitsConfig;
 import environments.LabRecruitsEnvironment;
 import eu.iv4xr.framework.mainConcepts.TestDataCollector;
 import game.LabRecruitsTestServer;
-import helperclasses.datastructures.Vec3;
+import eu.iv4xr.framework.spatial.Vec3;
 import nl.uu.cs.aplib.mainConcepts.BasicAgent;
 import static nl.uu.cs.aplib.AplibEDSL.* ;
 import world.BeliefState;
@@ -64,16 +64,16 @@ public class TraversingToPositionsTest {
         // Make the agent reach each positon sequentially.
         var g = SEQ(GoalLib.positionsVisited(p1),
         		    GoalLib.invariantChecked(agent,"p1 is reached", 
-        		    		(BeliefState s) -> s.worldmodel.getFloorPosition().distance(p1) < 0.5), 
+        		    		(BeliefState s) -> Vec3.dist(s.worldmodel.getFloorPosition(),p1) < 0.5), 
         		    GoalLib.positionsVisited(p2),
         		    GoalLib.invariantChecked(agent,"p2 is reached", 
-        		    		(BeliefState s) -> s.worldmodel.getFloorPosition().distance(p2) < 0.5), 
+        		    		(BeliefState s) -> Vec3.dist(s.worldmodel.getFloorPosition(),p2) < 0.5), 
         		    GoalLib.positionsVisited(p3),
         		    GoalLib.invariantChecked(agent,"p3 is reached", 
-        		    		(BeliefState s) -> s.worldmodel.getFloorPosition().distance(p3) < 0.5), 
+        		    		(BeliefState s) -> Vec3.dist(s.worldmodel.getFloorPosition(),p3) < 0.5), 
         		    GoalLib.positionsVisited(p4),
         		    GoalLib.invariantChecked(agent,"p4 is reached", 
-        		    		(BeliefState s) -> s.worldmodel.getFloorPosition().distance(p4) < 0.5) 
+        		    		(BeliefState s) -> Vec3.dist(s.worldmodel.getFloorPosition(),p4) < 0.5) 
         		);
         
         var dataCollector = new TestDataCollector() ;

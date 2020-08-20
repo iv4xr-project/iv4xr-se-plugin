@@ -11,7 +11,7 @@ import agents.TestSettings;
 import agents.tactics.GoalLib;
 import environments.LabRecruitsConfig;
 import environments.LabRecruitsEnvironment;
-import helperclasses.datastructures.Vec3;
+import eu.iv4xr.framework.spatial.Vec3;
 import helperclasses.datastructures.linq.QArrayList;
 import logger.JsonLoggerInstrument;
 import logger.PrintColor;

@@ -14,7 +14,7 @@ import environments.LabRecruitsConfig;
 import environments.LabRecruitsEnvironment;
 import eu.iv4xr.framework.mainConcepts.TestDataCollector;
 import game.LabRecruitsTestServer;
-import helperclasses.datastructures.Vec3;
+import eu.iv4xr.framework.spatial.Vec3;
 import world.BeliefState;
 
 public class FireHazardTest {
