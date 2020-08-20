@@ -13,8 +13,8 @@ import com.google.gson.JsonSyntaxException;
 
 import environments.AgentCommand;
 import environments.Request;
-import environments.RequestType;
-import helperclasses.datastructures.Vec3;
+import environments.Request.RequestType;
+import eu.iv4xr.framework.spatial.Vec3;
 import nl.uu.cs.aplib.mainConcepts.Environment;
 
 import java.lang.reflect.Modifier;

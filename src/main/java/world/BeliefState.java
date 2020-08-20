@@ -7,13 +7,12 @@ at Utrecht University within the Software and Game project course.
 
 package world;
 
-import environments.AgentCommandType;
+import environments.LabRecruitsConfig;
 import environments.LabRecruitsEnvironment;
 import eu.iv4xr.framework.extensions.pathfinding.SurfaceNavGraph;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
+import eu.iv4xr.framework.spatial.Obstacle;
 import eu.iv4xr.framework.spatial.Vec3;
-import helperclasses.Intersections.EntityNodeIntersection;
-import helperclasses.datastructures.linq.QArrayList;
 import nl.uu.cs.aplib.agents.State;
 import nl.uu.cs.aplib.mainConcepts.Environment;
 
@@ -45,6 +44,9 @@ public class BeliefState extends State {
     
     public Boolean receivedPing = false;//store whether the agent has an unhandled ping
     
+    public static final float UNIT_DISTANCE = 1f ;
+
+    public float viewDistance = 10f ;
     
     /**
      * Since getting to some location may take multiple cycle, and we want to avoid invoking the
@@ -54,8 +56,8 @@ public class BeliefState extends State {
      * additionally also need to keep track of where the agent is in this path.
      */
     private Vec3 memorizedGoalLocation;
-    private Vec3[] memorizedPath;
-    //private long pathTimestamp = -1 ;
+    private List<Vec3> memorizedPath;
+    private long pathTimestamp = -1 ;
     /**
      * Pointing to where the agent is, in the memorizedPath.
      */
@@ -195,7 +197,7 @@ public class BeliefState extends State {
 	 * entity e. If so, a path is returned, and else null. Do note that
 	 * path-checking can be expensive.
 	 */
-    public Vec3[] canReach(WorldEntity e) {
+    public List<Vec3> canReach(WorldEntity e) {
     	if (e==null) return null ;
     	return canReach(((LabEntity) e).getFloorPosition()) ;
     }
@@ -203,10 +205,10 @@ public class BeliefState extends State {
 	/**
 	 * Check if the agent believes that given position is reachable. That is, if a
 	 * navigation route to the position, through its nav-graph, exists. If this is
-	 * so, the route/path is returned. Be aware that this might be an expensive
+	 * so, the route/path is returned; else null. Be aware that this might be an expensive
 	 * query as it trigger a fresh path finding calculation.
 	 */    
-    public Vec3[] canReach(Vec3 q) {
+    public List<Vec3> canReach(Vec3 q) {
     	return findPathTo(q,true) ;
     }
     
@@ -216,7 +218,7 @@ public class BeliefState extends State {
 	 * so, the route/path is returned. Be aware that this might be an expensive
 	 * query as it trigger a fresh path finding calculation.
 	 */ 
-    public Vec3[] canReach(String id) { return canReach(worldmodel.getElement(id)) ; }
+    public List<Vec3> canReach(String id) { return canReach(worldmodel.getElement(id)) ; }
     
 	/**
 	 * Invoke the pathfinder to calculate a path from the agent current location
@@ -230,21 +232,16 @@ public class BeliefState extends State {
 	 * In this case, it won't recalculate the path, but simply return the memorized
 	 * path.
 	 */
-    public Vec3[] findPathTo(Vec3 q, boolean forceIt) {
+    public List<Vec3> findPathTo(Vec3 q, boolean forceIt) {
     	if (!forceIt && memorizedGoalLocation!=null) {
     		if (Vec3.dist(q,memorizedGoalLocation) <= 0.05) return memorizedPath ;
     	}
     	// else we invoke the pathfinder to calculate a path:
     	var abstractpath = pathfinder.findPath(worldmodel.getFloorPosition(),q,0.05f) ;
     	if (abstractpath == null) return null ;
-    	int N = abstractpath.size() ;
-    	Vec3[] path = new Vec3[N+1] ;
-    	int k = 0 ;
-    	for (int v : abstractpath) {
-    		path[k] = pathfinder.vertices.get(v) ;
-    		k++ ;
-    	}
-    	path[N] = q ;
+    	List<Vec3> path = abstractpath.stream().map(v -> pathfinder.vertices.get(v)).collect(Collectors.toList()) ;
+    	// add the destination path too:
+    	path.add(q) ;
     	return path ;
     }
     
@@ -286,31 +283,100 @@ public class BeliefState extends State {
     }
   
     /**
-     * Get the goal location of the agent.
-     *
-     * @return The current goal location used for the path finding.
+     * Set the given destination as the agent current space-navigation destination. The
+     * given path is a pre-computed path to get to this destination.
+     */
+    public void applyPath(long timestamp, Vec3 destination, List<Vec3> path){
+    	memorizedGoalLocation = destination;
+        memorizedPath = path;
+        pathTimestamp = timestamp ;
+        currentWayPoint = 0 ;
+    }
+    
+    /**
+     * Get the 3D location which the agent memorized as its current 3D navigation 
+     * goal/destination.
      */
     public Vec3 getGoalLocation() {
-        return memorizedGoalLocation ;
+        return new Vec3(memorizedGoalLocation.x, memorizedGoalLocation.y, memorizedGoalLocation.z)    ;
     }
 
+    /** 
+     * Clear (setting to null) the memorized 3D destination location and the memorized path to it.
+     */
+    public void clearGoalLocation() {
+    	memorizedGoalLocation = null ;
+    	memorizedPath = null ;
+    	pathTimestamp = -1 ;
+    	currentWayPoint = -1 ;
+    }
+    
     /**
-     * This method will return the next wayPoint for an agent to move to.
+     * Update the current wayPoint if a new wayPoint has been reached
      *
-     * @return The coordinates of the next way point from the calculated path.
+     * @param position: The position of the agent
+     * @return Whether the waypoint was updated or not
+     */
+    private boolean updateCurrentWayPoint(Vec3 position) {
+    	if(currentWayPoint >= memorizedPath.size()) {
+            // goalLocation = null;//disable the goal to signal that the goal is reached
+            return false;
+        }
+        //if the agent is close to the current wayPoint update to follow the next wayPoint
+        if (Vec3.dist(position, memorizedPath.get(currentWayPoint)) <= 0.2) {
+            currentWayPoint++ ;
+            return true ;
+        }
+        return false ;
+    }
+    
+    /**
+     * Insert as the new current way-point, and shift the old current and the ones after it
+     * to the right in the memorized path.
+     */
+    public void insertNewWayPoint(Vec3 p) {
+    	if (currentWayPoint < memorizedPath.size()) {
+        	memorizedPath.add(currentWayPoint,p) ;    		
+    	}
+     }
+    
+    /**
+     * When the agent has been assigned a destination (a 3D location) to travel to, along with
+     * the path to get there, it can then follow this path. Each position in the path is
+     * called a way-point. It can move thus from a way-point to the next one. This method
+     * returns what is the current way-point the agent is trying to go to.
      */
     public Vec3 getNextWayPoint() {
-        return mentalMap.getNextWayPoint();
+        return memorizedPath.get(Math.min(currentWayPoint, memorizedPath.size()-1)) ;
     }
 	
+    /**
+     * This method will be called automatically by the agent when the agent.update()
+     * method is called.
+     */
     @Override
     public void updateState() {
         super.updateState();
         var observation = this.env().observe(id) ;
         mergeNewObservationIntoWOM(observation) ;
-        recentPositions.add(new Vec3(this.worldmodel.position)) ;
+        recentPositions.add(new Vec3(worldmodel.position.x, worldmodel.position.y, worldmodel.position.z)) ;
         if (recentPositions.size()>4) recentPositions.remove(0) ;
     }
+    
+    /**
+     * Check if a game entity identified by is is already registered as an obstacle in the
+     * navigation graph. If it is, the entity will be returned (wrapped as an instance of
+     * the class Obstacle). Else null is returned.
+     */
+    private Obstacle findThisObstacleInNavGraph(String id) {
+    	for (Obstacle o : pathfinder.obstacles) {
+    		LabEntity e = (LabEntity) o.obstacle ;
+    		if (e.id.equals(id)) return o ;
+    	}
+    	return null ;
+    }
+    
+    
     /**
      * Update the agent's belief state with new information from the environment.
      *
@@ -323,67 +389,36 @@ public class BeliefState extends State {
     	// We then simply return.
     	if (observation == null) return ;
     	
+    	// update the navigation graph with nodes seen in the new observation
+    	pathfinder.markAsSeen(observation.visibleNavigationNodes) ;
+    	// update the tracking of memorized path to follow:
+    	updateCurrentWayPoint(worldmodel.getFloorPosition());
+    	
+    	// add newly discovered Obstacle-like entities, or change their states if they are like doors
+    	// which can be open or close:
     	var impactEntities = worldmodel.mergeNewObservation(observation) ;
     	// recalculating navigation nodes that become blocked or unblocked:
         boolean refreshNeeded = false ;
         for (var e : impactEntities) {
-        	switch(e.type) {
-        	  case LabEntity.DOOR : {
-        	 	 var blocked = nodesBlockedByEntity.get(e.id) ;
-        		 if (blocked==null && worldmodel.isBlocking(e)) {
-        			// ADD blocked nodes!
-        			blocked = EntityNodeIntersection.getNodesBlockedByInteractiveEntity(e, mentalMap.pathFinder.navmesh); 
-        			// if (blocked.length > 0 ) don't bother with this guard.. more efficient without
-        			nodesBlockedByEntity.put(e.id,blocked) ; 
-        			refreshNeeded = true ;
-        		 } 
-        		 else if (blocked!=null && ! worldmodel.isBlocking(e))  {
-        			 // the door is open, clear the blocked nodes!
-        		 	nodesBlockedByEntity.remove(e.id) ;
-        		 	refreshNeeded = true ;
-        		 }
-        		 else {
-        			// else no need to change 
-        		 }
-        		 break ;
-        	  }
-        	  case LabEntity.COLORSCREEN : // fall through
-        	  case LabEntity.GOAL : {
-        		 var blocked = nodesBlockedByEntity.get(e.id) ;
-         		 if (blocked==null) {
-         			// ADD blocked nodes!
-         			blocked = EntityNodeIntersection.getNodesBlockedByInteractiveEntity(e, mentalMap.pathFinder.navmesh); 
-         			nodesBlockedByEntity.put(e.id,blocked) ;
-         			refreshNeeded = true ;
-         		 } 
-         		 else {
-         			 // no need to change
-         		 }
-         		 break ;
-        	  }
+        	if (e.type.equals(LabEntity.DOOR) || e.type.equals(LabEntity.COLORSCREEN) || e.type.equals(LabEntity.GOAL)) {
+        		Obstacle o = findThisObstacleInNavGraph(e.id) ;
+	       		if (o==null) {
+	       			 // e has not been added to the navgraph, so we add it, and retrieve its
+	       			 // Obstacle-wrapper:
+	       			 pathfinder.addObstacle((LabEntity) e); 
+	       			 int N = pathfinder.obstacles.size();
+	       			 o = pathfinder.obstacles.get(N-1) ;	
+	       			 if (! e.type.equals(LabEntity.DOOR)) {
+	       				 // unless it is a door, the obstacle is always blocking:
+	       				 o.isBlocking = true ;
+	       			 }
+	       		}
+	       		// if it is a door, toggle the blocking state of o to reflect the blocking state of e:
+	       		if (e.type.equals(LabEntity.DOOR)) {
+	       		   o.isBlocking = worldmodel.isBlocking(e) ;
+	       		}
         	}
         }
-    	//System.out.println("### impacted entities = " + impactEntities.size()) ;
-    	//System.out.println("    blocked-nodes refresh needed = " + refreshNeeded) ;
-
-        if (refreshNeeded) {
-        	blockedNodes.clear(); 
-            for(var blocked: nodesBlockedByEntity.values()) Collections.addAll(blockedNodes,blocked); 
-        }
-                  
-        //add the newly found part, if there is any, of the world map to the mental-map
-        mentalMap.updateKnownVertices(worldmodel.timestamp,observation.visibleNavigationNodes);
-        mentalMap.updateCurrentWayPoint(worldmodel.getFloorPosition());
-    }
-
-    /**
-     * Return the position of the closest unknown node
-     * @param startPosition: The position from which to look for unknown neighbours
-     * @param targetPosition: The position in which direction the agent wants to explore
-     * @return The vec3 coordinate of the closest neighbour or null if no neighbour is available
-     */
-    public Vec3 getUnknownNeighbourClosestTo(Vec3 startPosition, Vec3 targetPosition) {
-        return mentalMap.getUnknownNeighbourClosestTo(startPosition, targetPosition, blockedNodes);
     }
 
     /*
@@ -397,15 +432,10 @@ public class BeliefState extends State {
    	    return worldmodel.canInteract(LabWorldModel.INTERACT, e) ;
     }
 
-
-    public static final float UNIT_DISTANCE = 1f ;
-
-    public float viewDistance = 10f ;
-
     /**
      * Copy the view-distance from the given LR configuration into this Belief.
      */
-    public void setViewDistance(EnvironmentConfig config) {
+    public void setViewDistance(LabRecruitsConfig config) {
     	viewDistance = config.view_distance ;
     }
     
@@ -414,7 +444,8 @@ public class BeliefState extends State {
      * agent. This is defined by the field viewDistance, whose default is 10.
      */
     public boolean withinViewRange(Vec3 q){
-    	return worldmodel.position != null && worldmodel.getFloorPosition().distanceSquared(q) < viewDistance * viewDistance;
+    	return worldmodel.position != null 
+    			&& Vec3.sub(worldmodel.getFloorPosition(),q).lengthSq() < viewDistance * viewDistance;
     }
     
     /**
@@ -446,10 +477,17 @@ public class BeliefState extends State {
         return (LabRecruitsEnvironment) super.env();
     }
 
+    /**
+     * Link an environment to this Belief. It must be an instance of LabRecruitsEnvironment.
+     * This will also create an instance of SurafaceNavGraph from the navigation-mesh of the 
+     * loaded LR-level stored in the env.
+     */
     @Override
     public BeliefState setEnvironment(Environment e) {
-        super.setEnvironment(e);
-        mentalMap = new MentalMap(env().pathFinder);
+    	super.setEnvironment(e) ;
+        if (! (e instanceof LabRecruitsEnvironment)) throw new IllegalArgumentException("Expecting an instance of LabRecruitsEnvironment") ;
+        LabRecruitsEnvironment e_ = (LabRecruitsEnvironment) e ;        
+        pathfinder = new SurfaceNavGraph(e_.worldNavigableMesh) ;
         return this;
     }
 

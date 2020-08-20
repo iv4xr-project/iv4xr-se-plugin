@@ -1,12 +1,18 @@
 package world;
 
+import java.util.Collection;
+import java.util.HashSet;
+
 import environments.LabRecruitsEnvironment;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
+import eu.iv4xr.framework.spatial.Box;
+import eu.iv4xr.framework.spatial.Line;
+import eu.iv4xr.framework.spatial.LineIntersectable;
 import eu.iv4xr.framework.spatial.Vec3;
 import nl.uu.cs.aplib.mainConcepts.Environment;
 
-public class LabEntity extends WorldEntity {
+public class LabEntity extends WorldEntity implements LineIntersectable{
 	
 	// entity types
 	public static final String DOOR = "Door" ;
@@ -42,6 +48,18 @@ public class LabEntity extends WorldEntity {
 		  case COLORSCREEN : return getProperty("color").equals(old.getProperty("color")) ;
 		}
 		return false ;
+	}
+
+	@Override
+	public Collection<Vec3> intersect(Line l) {
+		// only these types can block movements:
+		if (type.equals(DOOR) || type.equals(COLORSCREEN) || type.equals(GOAL)) {
+			// use a box to calculate the intersection with this door :D
+			Box box = new Box(this.position,this.extent) ;
+			return box.intersect(l) ;
+		}
+		else 
+			return new HashSet<>() ;
 	}
 	
 }
