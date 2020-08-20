@@ -7,25 +7,21 @@ at Utrecht University within the Software and Game project course.
 
 package agents.tactics;
 
-import helperclasses.datastructures.Tuple;
-import helperclasses.datastructures.Vec3;
-import nl.uu.cs.aplib.agents.MiniMemory;
+import static nl.uu.cs.aplib.AplibEDSL.*;
+import static eu.iv4xr.framework.Iv4xrEDSL.* ;
 import nl.uu.cs.aplib.mainConcepts.Goal;
 import nl.uu.cs.aplib.mainConcepts.GoalStructure;
 import nl.uu.cs.aplib.mainConcepts.Tactic;
+import eu.iv4xr.framework.spatial.Vec3;
+import eu.iv4xr.framework.mainConcepts.ObservationEvent.VerdictEvent;
+import eu.iv4xr.framework.mainConcepts.TestAgent;
+import eu.iv4xr.framework.mainConcepts.WorldEntity;
+
 import world.BeliefState;
-import world.LabEntity;
-import world.LegacyEntity;
 
 import java.util.function.Predicate;
 
-import static nl.uu.cs.aplib.AplibEDSL.*;
 
-import eu.iv4xr.framework.mainConcepts.ObservationEvent.VerdictEvent;
-import eu.iv4xr.framework.mainConcepts.TestAgent;
-import eu.iv4xr.framework.world.WorldEntity;
-
-import static eu.iv4xr.framework.Iv4xrEDSL.* ;
 
 /**
  * This class provide a set of standard useful sub-goals/sub-goal-structures
@@ -55,7 +51,7 @@ public class GoalLib {
         Goal goal = new Goal("This position is in-range: " + goalPosition.toString())
         		    . toSolve((BeliefState belief) -> {
                         //check if the agent is close to the goal position
-                        return goalPosition.distance(belief.worldmodel.getFloorPosition()) < 0.4;
+                        return Vec3.dist(goalPosition,belief.worldmodel.getFloorPosition()) < 0.4;
                     });
         //define the goal structure
         Goal g = goal.withTactic(
@@ -224,9 +220,9 @@ public class GoalLib {
      * @param id: The id of the sending agent
      * @return A goal structure which will be concluded when the agent shared its memory once
      */
-    public static GoalStructure memorySent(String id){
+    public static GoalStructure observationSent(String id){
         return goal("Map is shared").toSolve((BeliefState belief) -> true).withTactic(
-                TacticLib.shareMemory(id)
+                TacticLib.shareObservation(id)
         ).lift();
     }
 

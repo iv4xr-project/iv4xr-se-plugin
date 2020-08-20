@@ -20,7 +20,7 @@ public class TupleTest {
     @Test
     public void checkStorage() {
         //create tuple
-        Tuple<Integer, Boolean> t = new Tuple<>(1, true);
+        LegacyTuple<Integer, Boolean> t = new LegacyTuple<>(1, true);
 
         //check if the values are stored
         Assertions.assertEquals(Integer.valueOf(1), t.object1);

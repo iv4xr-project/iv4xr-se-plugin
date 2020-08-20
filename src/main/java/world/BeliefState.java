@@ -57,7 +57,7 @@ public class BeliefState extends State {
      */
     private Vec3 memorizedGoalLocation;
     private List<Vec3> memorizedPath;
-    private long pathTimestamp = -1 ;
+    private long goalLocationTimeStamp = -1 ;
     /**
      * Pointing to where the agent is, in the memorizedPath.
      */
@@ -289,7 +289,7 @@ public class BeliefState extends State {
     public void applyPath(long timestamp, Vec3 destination, List<Vec3> path){
     	memorizedGoalLocation = destination;
         memorizedPath = path;
-        pathTimestamp = timestamp ;
+        goalLocationTimeStamp = timestamp ;
         currentWayPoint = 0 ;
     }
     
@@ -301,13 +301,20 @@ public class BeliefState extends State {
         return new Vec3(memorizedGoalLocation.x, memorizedGoalLocation.y, memorizedGoalLocation.z)    ;
     }
 
+    /**
+     * Return the time when the current 3D location navigation target/destination (and the
+     * path to it) was set.
+     */
+    public long getGoalLocationTimestamp() {
+    	return goalLocationTimeStamp ;
+    }
     /** 
      * Clear (setting to null) the memorized 3D destination location and the memorized path to it.
      */
     public void clearGoalLocation() {
     	memorizedGoalLocation = null ;
     	memorizedPath = null ;
-    	pathTimestamp = -1 ;
+    	goalLocationTimeStamp = -1 ;
     	currentWayPoint = -1 ;
     }
     
@@ -420,6 +427,7 @@ public class BeliefState extends State {
         	}
         }
     }
+    
 
     /*
      * Test if the agent is within the interaction bounds of an object.
