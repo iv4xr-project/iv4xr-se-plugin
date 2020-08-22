@@ -61,7 +61,7 @@ public class BeliefState extends State {
     /**
      * Pointing to where the agent is, in the memorizedPath.
      */
-    private int currentWayPoint = -1;
+    private int currentWayPoint_ = -1;
     
     List<Vec3> recentPositions = new LinkedList<>() ; 
 
@@ -290,7 +290,7 @@ public class BeliefState extends State {
     	memorizedGoalLocation = destination;
         memorizedPath = path;
         goalLocationTimeStamp = timestamp ;
-        currentWayPoint = 0 ;
+        currentWayPoint_ = 0 ;
     }
     
     /**
@@ -298,6 +298,7 @@ public class BeliefState extends State {
      * goal/destination.
      */
     public Vec3 getGoalLocation() {
+    	if (memorizedGoalLocation == null) return null ;
         return new Vec3(memorizedGoalLocation.x, memorizedGoalLocation.y, memorizedGoalLocation.z)    ;
     }
 
@@ -308,6 +309,10 @@ public class BeliefState extends State {
     public long getGoalLocationTimestamp() {
     	return goalLocationTimeStamp ;
     }
+    
+    public List<Vec3> getMemorizedPath() {
+    	return memorizedPath;
+    }
     /** 
      * Clear (setting to null) the memorized 3D destination location and the memorized path to it.
      */
@@ -315,7 +320,7 @@ public class BeliefState extends State {
     	memorizedGoalLocation = null ;
     	memorizedPath = null ;
     	goalLocationTimeStamp = -1 ;
-    	currentWayPoint = -1 ;
+    	currentWayPoint_ = -1 ;
     }
     
     /**
@@ -325,13 +330,16 @@ public class BeliefState extends State {
      * @return Whether the waypoint was updated or not
      */
     private boolean updateCurrentWayPoint(Vec3 position) {
-    	if(currentWayPoint >= memorizedPath.size()) {
+    	if(memorizedPath==null || currentWayPoint_ >= memorizedPath.size()) {
             // goalLocation = null;//disable the goal to signal that the goal is reached
             return false;
         }
         //if the agent is close to the current wayPoint update to follow the next wayPoint
-        if (Vec3.dist(position, memorizedPath.get(currentWayPoint)) <= 0.2) {
-            currentWayPoint++ ;
+    	var delta = Vec3.dist(position, memorizedPath.get(currentWayPoint_)) ;
+    	//System.out.println(">>> path" + memorizedPath) ;
+    	//System.out.println(">>> currentwaypoint " + currentWayPoint + ", delta: " + delta) ;
+        if (delta <= 0.4) {
+            currentWayPoint_++ ;
             return true ;
         }
         return false ;
@@ -342,8 +350,8 @@ public class BeliefState extends State {
      * to the right in the memorized path.
      */
     public void insertNewWayPoint(Vec3 p) {
-    	if (currentWayPoint < memorizedPath.size()) {
-        	memorizedPath.add(currentWayPoint,p) ;    		
+    	if (currentWayPoint_ < memorizedPath.size()) {
+        	memorizedPath.add(currentWayPoint_,p) ;    		
     	}
      }
     
@@ -353,8 +361,8 @@ public class BeliefState extends State {
      * called a way-point. It can move thus from a way-point to the next one. This method
      * returns what is the current way-point the agent is trying to go to.
      */
-    public Vec3 getNextWayPoint() {
-        return memorizedPath.get(Math.min(currentWayPoint, memorizedPath.size()-1)) ;
+    public Vec3 getCurrentWayPoint() {
+        return memorizedPath.get(Math.min(currentWayPoint_, memorizedPath.size()-1)) ;
     }
 	
     /**
@@ -398,8 +406,6 @@ public class BeliefState extends State {
     	
     	// update the navigation graph with nodes seen in the new observation
     	pathfinder.markAsSeen(observation.visibleNavigationNodes) ;
-    	// update the tracking of memorized path to follow:
-    	updateCurrentWayPoint(worldmodel.getFloorPosition());
     	
     	// add newly discovered Obstacle-like entities, or change their states if they are like doors
     	// which can be open or close:
@@ -426,6 +432,9 @@ public class BeliefState extends State {
 	       		}
         	}
         }
+        
+        // update the tracking of memorized path to follow:
+        updateCurrentWayPoint(worldmodel.getFloorPosition());
     }
     
 

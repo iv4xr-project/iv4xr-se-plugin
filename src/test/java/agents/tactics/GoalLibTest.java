@@ -21,7 +21,7 @@ import nl.uu.cs.aplib.mainConcepts.GoalStructure;
 import static nl.uu.cs.aplib.AplibEDSL.* ;
 import world.BeliefState;
 
-public class TestGoalsLib {
+public class GoalLibTest {
 	
 	private static LabRecruitsTestServer labRecruitsTestServer;
 

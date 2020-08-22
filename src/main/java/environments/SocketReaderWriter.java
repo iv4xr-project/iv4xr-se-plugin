@@ -116,7 +116,9 @@ public class SocketReaderWriter {
     	
     	String response = reader.readLine() ; 
         // we do not have to cast to T, since req.responseType is of type Class<T>
-        System.out.println("** RECEIVING: " + response);
+        if (debug) {
+        	System.out.println("** RECEIVING: " + response);
+        }
         //return null ;
     	return gson.fromJson(response,expectedClassOfResultObj);
     }

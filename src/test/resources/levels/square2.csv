@@ -9,7 +9,7 @@ w,f,f,f,f:b^button0,f,f,f,f,w
 w,f,f,f,f,f,f,f,f,w
 w,f,f,f,f,f,f,f,f,w
 w,f,f,f,f,f,f,f,f,w
-w,f,f,f:cs>e^screen0,f,f,f:bc>s,f,f:t>s,w
+w,f,f,f:cs>e^escreen0,f,f,f:bc>s,f,f:t>s,w
 w,f:d>s^door0,w,w,w,w,w,w,w,w
 |w,w,w,w,w,w,w,w,w,w
 w,,,,,,,,,w

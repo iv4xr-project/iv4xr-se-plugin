@@ -20,6 +20,7 @@ import agents.tactics.GoalLib;
 import agents.tactics.TacticLib;
 import environments.LabRecruitsConfig;
 import environments.LabRecruitsEnvironment;
+import environments.SocketReaderWriter;
 import eu.iv4xr.framework.mainConcepts.TestDataCollector;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import game.LabRecruitsTestServer;
@@ -43,12 +44,16 @@ public class SimpleInteractionTest {
     static void start() {
     	// Uncomment this to make the game's graphic visible:
     	//TestSettings.USE_GRAPHICS = true ;
+    	SocketReaderWriter.debug = true ;
     	String labRecruitesExeRootDir = System.getProperty("user.dir") ;
     	labRecruitsTestServer = TestSettings.start_LabRecruitsTestServer(labRecruitesExeRootDir) ;
     }
 
     @AfterAll
-    static void close() { if(labRecruitsTestServer!=null) labRecruitsTestServer.close(); }
+    static void close() { 
+    	SocketReaderWriter.debug = false ;
+    	if(labRecruitsTestServer!=null) labRecruitsTestServer.close(); 
+    }
    
 
     @Test
@@ -99,9 +104,11 @@ public class SimpleInteractionTest {
                     + testAgent.getState().id + " @" + testAgent.getState().worldmodel.position) ;
         	testAgent.update();
         	i++ ;
+        	if (i>=70) break ;
         }
 
-        testAgent.printStatus();
+        goal.printGoalStructureStatus();
+        //testAgent.printStatus();
         
         // check that we have passed both tests above:
         assertTrue(dataCollector.getNumberOfPassVerdictsSeen() == 2) ;

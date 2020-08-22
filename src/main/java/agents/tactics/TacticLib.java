@@ -21,6 +21,7 @@ import eu.iv4xr.framework.spatial.meshes.Face;
 import world.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * This class provide a set of standard tactics to interact with the Lab
@@ -231,7 +232,11 @@ public class TacticLib {
                 		belief.applyPath(belief.worldmodel.timestamp, destination, path) ;
                 	}               
                     //move towards the next way point of whatever the current path is:
-                    belief.worldmodel.moveToward(belief.env(),belief.getNextWayPoint());
+                	System.out.println(">>> destination: " + destination) ;
+                	System.out.println(">>> path: " + path) ;
+                	System.out.println(">>> memorized dest: " + belief.getGoalLocation()) ;
+                	System.out.println(">>> memorized path: " + belief.getMemorizedPath()) ;
+                    belief.worldmodel.moveToward(belief.env(),belief.getCurrentWayPoint());
                     return belief; 
                     })
                 .on((BeliefState belief) -> {
@@ -308,7 +313,7 @@ public class TacticLib {
     				System.out.println("#### STUCK, probably cannot get past a turn-corner: @" 
     			           + belief.worldmodel.position
     			           + ", current way-point: " 
-    			           + belief.getNextWayPoint()) ;
+    			           + belief.getCurrentWayPoint()) ;
     	    		var unstuckPosition = unstuck(belief) ;
     	    		if (unstuckPosition != null) {
     	    			System.out.println("#### forcing a move past the corner...to " + unstuckPosition) ;        		
@@ -344,7 +349,7 @@ public class TacticLib {
      */
     public static Vec3 unstuck(BeliefState belief) {
     	var unstuck_distance = BeliefState.UNIT_DISTANCE * 0.5 ;
-    	var agent_current_direction = Vec3.sub(belief.getNextWayPoint(), belief.worldmodel.position) ;
+    	var agent_current_direction = Vec3.sub(belief.getCurrentWayPoint(), belief.worldmodel.position) ;
     	
     	var x_orientation = Math.signum(agent_current_direction.x) ;  // 1 if the agent is facing eastly, and -1 if westly
     	var z_orientation = Math.signum(agent_current_direction.z) ;  // 1 if the agent is facing northly, and -1 if southly
@@ -496,10 +501,15 @@ public class TacticLib {
                         //apply the memory share
                     	var obs = (LabWorldModel) m.getArgs()[0] ;
                     	if (obs.timestamp >= belief.worldmodel.timestamp) {
-                    		belief.worldmodel.mergeNewObservation(obs) ;
+                    		// Don't do this! It would take over the agent position of the new obs.
+                    		// belief.worldmodel.mergeNewObservation(obs) ;
+                    		// Do this instead:
+                    		for (WorldEntity e : obs.elements.values()) {
+                    			belief.worldmodel.updateEntity(e) ;
+                    		}
                     	}
                     	else {
-                    		belief.worldmodel.mergeOldwObservationIntoWOM(obs) ;
+                    		belief.worldmodel.mergeOldObservation(obs) ;
                     	}
                     	belief.pathfinder.markAsSeen(obs.visibleNavigationNodes);
                         m = belief.messenger().retrieve(M -> M.getMsgName().equals("ObservationSharing")) ;
@@ -560,7 +570,7 @@ public class TacticLib {
     	var selectExplorationTarget = action("Explore: setting next exploration target")
                 . do2((BeliefState belief) -> (Pair<Vec3,List<Vec3>> q) -> {
                 	 belief.applyPath(belief.worldmodel.timestamp,q.fst, q.snd);
-                	 belief.worldmodel.moveToward(belief.env(),belief.getNextWayPoint());
+                	 belief.worldmodel.moveToward(belief.env(),belief.getCurrentWayPoint());
                      return belief ;
                   })
     			. on((BeliefState belief) -> {
@@ -569,22 +579,26 @@ public class TacticLib {
     				 float distToFaceThreshold = 0.02f ;
     				 
                      //get the location of the closest unexplored node
-    				 var explorationCandidates = belief.pathfinder.explore(belief.worldmodel.getFloorPosition(),0.05f) ;
-    				 if (explorationCandidates.isEmpty()) {
+    				 var position = belief.worldmodel.getFloorPosition() ;
+    				 //System.out.println(">>> #explored nodes:" + belief.pathfinder.numberOfSeen()) ;
+    				 var path = belief.pathfinder.explore(position,0.05f) ;
+    				
+    				 if (path==null || path.isEmpty()) {
     					memo.moveState("exhausted") ;
-                        System.out.println("### no new and reachable area found; agent is @" + belief.worldmodel.position) ;
+                        System.out.println("### no new and reachable navigation point found; agent is @" + belief.worldmodel.position) ;
                         return null ;
     				 }
-    				 Vec3 explorationTarget = belief.pathfinder.vertices.get(explorationCandidates.get(0)) ;
-    	    				 
-    				 var path = belief.findPathTo(explorationTarget,true) ;
-    				 // remove the last element because it would be in the list 2x:
-    				 path.remove(path.size() - 1) ;
-                     System.out.println("### setting a new exploration target: " + explorationTarget) ;
+    				 List<Vec3> explorationPath = path.stream()
+    						            .map(v -> belief.pathfinder.vertices.get(v))
+    						            .collect(Collectors.toList()) ; 
+    				 
+    				 var target = explorationPath.get(explorationPath.size() - 1) ;
+    				 //System.out.println("### setting a new exploration target: " + target) ;
+                     //System.out.println("### path to exploration target: " + explorationPath) ;
                      memo.memorized.clear();
-                     memo.memorize(explorationTarget);
+                     memo.memorize(target);
                      memo.moveState("inTransit") ;
-                     return new Pair(explorationTarget, path);//return the path finding information
+                     return new Pair(target, explorationPath);//return the path finding information
                  })
                . lift(); 
     	

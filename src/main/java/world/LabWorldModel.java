@@ -72,6 +72,8 @@ public class LabWorldModel extends WorldModel {
         	max.y += 0.2 ;
         }
         var agent_floorp = getFloorPosition() ;
+        
+        //System.out.println(">>> agent @" + agent_floorp + ", e.id @" + target_onfloorPosition) ;
     	
         return (agent_floorp.x > min.x && agent_floorp.x < max.x &&
         		agent_floorp.y > min.y  && agent_floorp.y < max.y  &&
