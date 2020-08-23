@@ -114,8 +114,8 @@ public class LabRecruitsEnvironmentTest {
     	var door0 = obs.getElement("door0") ;
     	assertFalse(door0.getBooleanProperty("isOpen")) ;
     	// check if the color screen is observed:
-    	var cs0 = obs.getElement("screen0") ;
-    	//System.out.println(">>> " + cs0.getStringProperty("color")) ;
+    	var cs0 = obs.getElement("escreen0") ;
+    	System.out.println(">>> " + cs0.getStringProperty("color")) ;
     	assertTrue(cs0.getStringProperty("color").equals("CS 0 0 0")) ;
     }
     
