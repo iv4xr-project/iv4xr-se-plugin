@@ -55,8 +55,10 @@ public class LabEntity extends WorldEntity implements LineIntersectable{
 		// only these types can block movements:
 		if (type.equals(DOOR) || type.equals(COLORSCREEN) || type.equals(GOAL)) {
 			// use a box to calculate the intersection with this door :D
-			Box box = new Box(this.position,this.extent) ;
-			return box.intersect(l) ;
+			Box box = new Box(this.getFloorPosition(),Vec3.add(this.extent, new Vec3(0.05f,0,0.05f))) ;
+			var intersections = box.intersect(l) ;
+			//System.out.println(">>> " + intersections) ;
+			return intersections ;
 		}
 		else 
 			return new HashSet<>() ;

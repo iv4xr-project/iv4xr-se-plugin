@@ -236,7 +236,8 @@ public class TacticLib {
                 	System.out.println(">>> path: " + path) ;
                 	System.out.println(">>> memorized dest: " + belief.getGoalLocation()) ;
                 	System.out.println(">>> memorized path: " + belief.getMemorizedPath()) ;
-                    belief.worldmodel.moveToward(belief.env(),belief.getCurrentWayPoint());
+                	if (belief.getMemorizedPath() != null)
+                		belief.worldmodel.moveToward(belief.env(),belief.getCurrentWayPoint());
                     return belief; 
                     })
                 .on((BeliefState belief) -> {
@@ -286,7 +287,7 @@ public class TacticLib {
                 })
                 .on_((BeliefState belief) -> { 
                 	if (belief.getGoalLocation() == null
-                		|| belief.worldmodel.timestamp - belief.getGoalLocationTimestamp() < 4) {
+                		|| belief.worldmodel.timestamp - belief.getGoalLocationTimestamp() < 6) {
                 		return false ;
                 	}
                 	var closeby_doors = belief.closebyDoor() ;

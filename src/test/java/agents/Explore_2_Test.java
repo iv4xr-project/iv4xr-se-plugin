@@ -75,6 +75,8 @@ public class Explore_2_Test {
         if (! environment.startSimulation())
             throw new InterruptedException("Unity refuses to start the Simulation!");
 
+        //agent.getState().pathfinder.perfect_memory_pathfinding = true ;
+
         int i = 0 ;
         while (g.getStatus().inProgress()) {
             agent.update();

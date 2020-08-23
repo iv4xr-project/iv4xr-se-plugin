@@ -331,6 +331,7 @@ public class BeliefState extends State {
      */
     private boolean updateCurrentWayPoint(Vec3 position) {
     	if(memorizedPath==null || currentWayPoint_ >= memorizedPath.size()) {
+    		memorizedGoalLocation = null ;
             // goalLocation = null;//disable the goal to signal that the goal is reached
             return false;
         }
