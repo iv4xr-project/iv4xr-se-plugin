@@ -51,15 +51,20 @@ public class BeliefState extends State {
     /**
      * Since getting to some location may take multiple cycle, and we want to avoid invoking the
      * pathfinder at every cycle, the agent will memorize what the target location it is trying
-     * to reach. This is called "goal-location", and along with it the path leading to it, as 
+     * to reach (which we will call "goal-location") and along with it the path leading to it, as 
      * returned by the pathfinder. The agent basically only needs to follow this path. We will
      * additionally also need to keep track of where the agent is in this path.
+     * 
+     * Elements of the memorized path will be called "way-points". So, to reach the goal-location,
+     * the agent should travel from one way-point to the next one. The field currentWayPoint
+     * keeps track of which way-point is the one that the agent currently should travel to.
      */
     private Vec3 memorizedGoalLocation;
     private List<Vec3> memorizedPath;
     private long goalLocationTimeStamp = -1 ;
     /**
-     * Pointing to where the agent is, in the memorizedPath.
+     * Pointing the current way-point in the memorized-path, that the agent currently is
+     * set to travel to.
      */
     private int currentWayPoint_ = -1;
     
@@ -324,26 +329,25 @@ public class BeliefState extends State {
     }
     
     /**
-     * Update the current wayPoint if a new wayPoint has been reached
-     *
-     * @param position: The position of the agent
-     * @return Whether the waypoint was updated or not
+     * Update the current wayPoint. If it is reached, it should be moved to the next one,
+     * unless if it is the last one, then it will not be advanced.
+     * 
+     * This method will not clear the memorized way-point nor the path leading to it. The
+     * agent must explicitly does so itself, based on its own consideration.
      */
-    private boolean updateCurrentWayPoint(Vec3 position) {
-    	if(memorizedPath==null || currentWayPoint_ >= memorizedPath.size()) {
-    		memorizedGoalLocation = null ;
-            // goalLocation = null;//disable the goal to signal that the goal is reached
-            return false;
-        }
-        //if the agent is close to the current wayPoint update to follow the next wayPoint
-    	var delta = Vec3.dist(position, memorizedPath.get(currentWayPoint_)) ;
+    private void updateCurrentWayPoint() {
+    	if (memorizedGoalLocation == null) return ;
+    	var delta = Vec3.dist(worldmodel.getFloorPosition(), memorizedPath.get(currentWayPoint_)) ;
     	//System.out.println(">>> path" + memorizedPath) ;
     	//System.out.println(">>> currentwaypoint " + currentWayPoint + ", delta: " + delta) ;
-        if (delta <= 0.4) {
-            currentWayPoint_++ ;
-            return true ;
+    	if (delta <= 0.4) {
+    		// the current way-point is reached, advance to the next way-point, unless it
+    		// is the last one.
+    		// the agent must clear or set another goal-location explicitly by itself.
+            if (currentWayPoint_ < memorizedPath.size() - 1) {
+        		currentWayPoint_++ ;            	
+            }
         }
-        return false ;
     }
     
     /**
@@ -435,7 +439,7 @@ public class BeliefState extends State {
         }
         
         // update the tracking of memorized path to follow:
-        updateCurrentWayPoint(worldmodel.getFloorPosition());
+        updateCurrentWayPoint();
     }
     
 

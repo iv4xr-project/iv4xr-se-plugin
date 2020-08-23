@@ -58,8 +58,8 @@ public class AgentSimpleMovementTest {
 
         var environment = new LabRecruitsEnvironment(new LabRecruitsConfig("square"));
         
-        var p0 = new Vec3(3, 0, 3) ;
-        var p1 = new Vec3(3, 0, 4) ;
+        var p0 = new Vec3(8, 0, 1) ;
+        var p1 = new Vec3(1, 0, 1) ;
         var p2 = new Vec3(4, 0, 3) ;
         var p3 = new Vec3(4, 0, 4) ;
         var ta0 = createAgent("agent0", environment, p0);
@@ -86,7 +86,7 @@ public class AgentSimpleMovementTest {
             }
             Thread.sleep(15);
             tick++;
-            if (tick >= 30) {
+            if (tick >= 50) {
             	// takes too long, something is wrong..
             	Assertions.fail("The agents run too long...") ;
             	break ;

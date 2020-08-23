@@ -91,7 +91,7 @@ public class TacticLib {
 		MiniMemory memory = new MiniMemory("S0") ;
 		
 		Action move = 
-				  rawNavigateTo_("Navigate to a navigation vertex nearby " + id, null)
+				unguardedNavigateTo("Navigate to a navigation vertex nearby " + id, null)
 				  
 				. on((BeliefState belief) -> {
 					
@@ -163,7 +163,7 @@ public class TacticLib {
     	
     	// let's just reuse rawNavigateTo_(..), and then we replace its guard:
     	
-    	Action move = rawNavigateTo_("Navigate to " + id, null)
+    	Action move = unguardedNavigateTo("Navigate to " + id, null)
     			      // replacing its guard with this new one:
 		              . on((BeliefState belief) -> {
 		                	var e = (LabEntity) belief.worldmodel.getElement(id) ;
@@ -211,12 +211,46 @@ public class TacticLib {
 	 * This tactic will not try to detect if the agent has become stuck.
 	 */
     public static Tactic rawNavigateTo(Vec3 position) {
-    	return rawNavigateTo_("Navigate to " + position, position) . lift() ;
+    	return unguardedNavigateTo("Navigate to " + position, position)  
+    		   . on((BeliefState belief) -> {
+                	Vec3 currentDestination = belief.getGoalLocation() ;
+                	if (currentDestination==null || Vec3.dist(currentDestination,position) >= 0.05) {
+                		// the agent has no current location to go to, or the new goal location
+                		// is quite different from the current goal location, we will then calculate
+                		// a new path:
+                		var path = belief.findPathTo(position,true) ; // force to calculate path
+                		if (path==null) return null ;
+                		return new Pair(position,path) ;
+                	}
+                	else {
+                		// the agent is already going to the specified location. So there is
+                		// no need to calculate a new path. We will return a pair(position,null)
+                		// to signal this.
+                		return new Pair(position,null) ;
+                	}}) 
+    		   . lift() ;
     }
     
-    // a generic navigateTo that we will later reuse and tweak in a number of 
-    // navigate-like tactics
-    private static Action rawNavigateTo_(String actionName, Vec3 position) {
+    /**
+     * This action will in principle drive the agent towards a previously memorized 3D 
+     * goal-location, along a previously memorized path. The exact behavior is controlled
+     * by what its guard passes to it. The given guard below is a dummy guard which is
+     * always enabled and simply passes the pair (null,null),which will lead to the above 
+     * behavior. This guard should be replaced when using this action.
+     * 
+     * If the guard pass (d,path) where d is a destination and p is a non-null path, 
+     * this pair will be memorized as the new goal-location/path pair for the agent 
+     * to follow.
+     * 
+     * If the guard pass (*,null) the action will stick to the currently memorized 
+     * goal-location/path.
+     * 
+     * IMPORTANT: this action will still try to move the agent to the goal-location, even
+     * when it is already there. A higher level reasoning of the agent should decide
+     * that whether it wants to stop this stuttering, and how (e.g. by imposing a guard
+     * that prevents the stuttering, or by clearing the memorized goal-location.
+     */ 
+    private static Action unguardedNavigateTo(String actionName, Vec3 position) {
     	Action move = action(actionName)
                 .do2((BeliefState belief) -> (Pair<Vec3,List<Vec3>> q)  -> {
                 	// q is a pair of (distination,path). Passing the destination is not necessary
@@ -239,23 +273,9 @@ public class TacticLib {
                 	if (belief.getMemorizedPath() != null)
                 		belief.worldmodel.moveToward(belief.env(),belief.getCurrentWayPoint());
                     return belief; 
-                    })
-                .on((BeliefState belief) -> {
-                	Vec3 currentDestination = belief.getGoalLocation() ;
-                	if (currentDestination==null || Vec3.dist(currentDestination,position) >= 0.05) {
-                		// the agent has no current location to go to, or the new goal location
-                		// is quite different from the current goal location, we will then calculate
-                		// a new path:
-                		var path = belief.findPathTo(position,true) ; // force to calculate path
-                		if (path==null) return null ;
-                		return new Pair(position,path) ;
-                	}
-                	else {
-                		// the agent is already going to the specified location. So there is
-                		// no need to calculate a new path. We will return a pair(position,null)
-                		// to signal this.
-                		return new Pair(position,null) ;
-                	}}) ;
+                    }) 
+                // a dummy guard; override this when using this action:
+                .on((BeliefState belief) -> new Pair(null,null)) ;
     	return move ;
     }
     
@@ -376,12 +396,11 @@ public class TacticLib {
     private static boolean isPointInNavigableSurface(BeliefState belief, Vec3 p) {
     	List<Face> faces = new LinkedList<>() ;
     	faces.addAll(belief.pathfinder.faces) ;
-    	belief.pathfinder.vertices.get(0) ;
     	faces.sort((f1,f2) -> 
     	     Float.compare(Vec3.dist(belief.pathfinder.vertices.get(f1.vertices[0]),p), 
     	    		       Vec3.dist(belief.pathfinder.vertices.get(f2.vertices[0]),p))) ;
     	for (Face f : faces) {
-    		if (f.distFromPoint(p, belief.pathfinder.vertices) <= 0.02) 
+    		if (f.distFromPoint(p, belief.pathfinder.vertices) <= 0.045) 
     			return true ;
     	}
     	return false ;
@@ -567,73 +586,72 @@ public class TacticLib {
     public static Tactic explore() {
     	
     	var memo = new MiniMemory("S0") ;
+    	// three states: 
+    	//  S0 ; initial exploration state, a new exploration target must be set
+    	//  inTransit: when the agent is traveling to the set exploration target
+    	//  exhausted: there is no more exploration target left
+    	//
     	
-    	var selectExplorationTarget = action("Explore: setting next exploration target")
-                . do2((BeliefState belief) -> (Pair<Vec3,List<Vec3>> q) -> {
-                	 belief.applyPath(belief.worldmodel.timestamp,q.fst, q.snd);
-                	 belief.worldmodel.moveToward(belief.env(),belief.getCurrentWayPoint());
-                     return belief ;
-                  })
+    	var explore_ = 
+    			unguardedNavigateTo("Explore: traveling to an exploration target",null)
+    			
     			. on((BeliefState belief) -> {
-    				 if(!memo.stateIs("S0")) return null ;
-                     
-    				 float distToFaceThreshold = 0.02f ;
-    				 
-                     //get the location of the closest unexplored node
-    				 var position = belief.worldmodel.getFloorPosition() ;
-    				 //System.out.println(">>> #explored nodes:" + belief.pathfinder.numberOfSeen()) ;
-    				 var path = belief.pathfinder.explore(position,0.05f) ;
-    				
-    				 if (path==null || path.isEmpty()) {
-    					memo.moveState("exhausted") ;
-                        System.out.println("### no new and reachable navigation point found; agent is @" + belief.worldmodel.position) ;
-                        return null ;
+    				 if(memo.stateIs("S0")) {
+    					 // in this state we must decide a new exploration target:
+    					 float distToFaceThreshold = 0.05f ;
+        				 
+                         //get the location of the closest unexplored node
+        				 var position = belief.worldmodel.getFloorPosition() ;
+        				 //System.out.println(">>> #explored nodes:" + belief.pathfinder.numberOfSeen()) ;
+        				 var path = belief.pathfinder.explore(position,distToFaceThreshold) ;
+        				
+        				 if (path==null || path.isEmpty()) {
+        					memo.moveState("exhausted") ;
+                            System.out.println("### no new and reachable navigation point found; agent is @" + belief.worldmodel.position) ;
+                            return null ;
+        				 }
+        				 List<Vec3> explorationPath = path.stream()
+        						            .map(v -> belief.pathfinder.vertices.get(v))
+        						            .collect(Collectors.toList()) ; 
+        				 
+        				 var target = explorationPath.get(explorationPath.size() - 1) ;
+        				 //System.out.println("### setting a new exploration target: " + target) ;
+                         //System.out.println("### path to exploration target: " + explorationPath) ;
+                         memo.memorized.clear();
+                         memo.memorize(target);
+                         memo.moveState("inTransit") ; // move the exploration state to inTransit...
+                         return new Pair(target, explorationPath);//return the path finding information
     				 }
-    				 List<Vec3> explorationPath = path.stream()
-    						            .map(v -> belief.pathfinder.vertices.get(v))
-    						            .collect(Collectors.toList()) ; 
-    				 
-    				 var target = explorationPath.get(explorationPath.size() - 1) ;
-    				 //System.out.println("### setting a new exploration target: " + target) ;
-                     //System.out.println("### path to exploration target: " + explorationPath) ;
-                     memo.memorized.clear();
-                     memo.memorize(target);
-                     memo.moveState("inTransit") ;
-                     return new Pair(target, explorationPath);//return the path finding information
+    				 else if (memo.stateIs("inTransit")) {
+    					 Vec3 exploration_target = (Vec3) memo.memorized.get(0) ;
+                         // note that exploration_target won't be null because we are in the state
+                         // in-Transit
+                         Vec3 agentLocation = belief.worldmodel.getFloorPosition() ;
+                         Vec3 currentDestination = belief.getGoalLocation() ;
+                         if (Vec3.dist(agentLocation,exploration_target) <= 0.3 // current exploration target is reached
+                             || currentDestination==null 
+                             || Vec3.dist(currentDestination,exploration_target) > 0.3) {
+                        	 // in all these cases we need to select a new exploration target.
+                        	 // This is done by moving back the exploration state to S0.
+                        	 memo.moveState("S0");
+                         }
+                         // System.out.println(">>> explore in-transit: " + memo.stateIs("inTransit")) ;
+                         // System.out.println(">>> exploration target: " + exploration_target) ;
+                         // We should not need to re-calculate the path. If we are "inTransit" the path is
+                         // already in the agent's memory
+                         // return new Tuple(g, belief.findPathTo(g));
+                         return new Pair(exploration_target,null);
+    				 }
+                     // in all other cases, the guard is not enabled:
+    				 return null ;
                  })
                . lift(); 
-    	
-    	var exploreInTransit = rawNavigateTo_("Explore: traveling to current exploration target",null)
-    		   . on((BeliefState belief) -> {
-   				     if(!memo.stateIs("inTransit")) return null ;
-                     Vec3 exploration_target = (Vec3) memo.memorized.get(0) ;
-                     // note that exploration_target won't be null because we are in the state
-                     // in-Transit
-                     Vec3 agentLocation = belief.worldmodel.getFloorPosition() ;
-                     Vec3 currentDestination = belief.getGoalLocation() ;
-                     if (Vec3.dist(agentLocation,exploration_target) <= 0.3 // current exploration target is reached
-                         || currentDestination==null 
-                         || Vec3.dist(currentDestination,exploration_target) > 0.3) {
-                    	 // in all these cases we need to give the control back to selectExplorationTarget
-                    	 // to select a new exploration target.
-                    	 // This is done by moving back the exploration state
-                    	 // to S0.
-                    	 memo.moveState("S0");
-                     }
-                     // System.out.println(">>> explore in-transit: " + memo.stateIs("inTransit")) ;
-                     // System.out.println(">>> exploration target: " + exploration_target) ;
-                     // We should not need to re-calculate the path. If we are "inTransit" the path is
-                     // already in the agent's memory
-                     // return new Tuple(g, belief.findPathTo(g));
-                     return new Pair(exploration_target,null);
-                })
-              . lift(); 
+
    	        
         return FIRSTof(
         		 forceReplanPath(), 
 				 tryToUnstuck(),
-				 selectExplorationTarget,
-				 exploreInTransit) ;
+				 explore_) ;
     }
 
 }
