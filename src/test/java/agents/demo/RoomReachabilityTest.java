@@ -132,7 +132,7 @@ public class RoomReachabilityTest {
 	            Thread.sleep(50);
 	            i++ ; 
 	        	testAgent.update();
-	        	if (i>400) {
+	        	if (i>200) {
 	        		break ;
 	        	}
 	        }

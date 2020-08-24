@@ -18,6 +18,7 @@ import eu.iv4xr.framework.mainConcepts.TestAgent;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 
 import world.BeliefState;
+import world.LabEntity;
 
 import java.util.function.Predicate;
 
@@ -99,7 +100,10 @@ public class GoalLib {
         //the first goal is to navigate to the entity:
         var goal1 = 
         	  goal(String.format("This entity is in interaction distance: [%s]", entityId))
-        	  . toSolve((BeliefState belief) -> belief.canInteract(entityId))
+        	  . toSolve((BeliefState belief) -> {
+        		  var e = (LabEntity) belief.worldmodel.getElement(entityId) ;
+       	          return e!=null && Vec3.dist(belief.worldmodel.getFloorPosition(), e.getFloorPosition()) < 0.3 ;
+        	    })
         	  . withTactic(
                     FIRSTof( //the tactic used to solve the goal
                     TacticLib.navigateTo(entityId), //try to move to the entity

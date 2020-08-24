@@ -65,12 +65,12 @@ public class LabWorldModel extends WorldModel {
     	if (target.type != LabEntity.SWITCH) return false ;
     	    	
 		var target_onfloorPosition = target.getFloorPosition() ;
-		var min = Vec3.sub(target_onfloorPosition, target.extent);
-        var max = Vec3.add(target_onfloorPosition, target.extent);
-        if (e.extent.y <= 0.2) {
-        	min.y -= 0.2 ;
-        	max.y += 0.2 ;
-        }
+		var extent = new Vec3(Math.max(target.extent.x,0.3f),
+				              Math.max(target.extent.y,0.3f),
+				              Math.max(target.extent.z,0.3f)) ;
+		
+		var min = Vec3.sub(target_onfloorPosition,extent);
+        var max = Vec3.add(target_onfloorPosition,extent);
         var agent_floorp = getFloorPosition() ;
         
         //System.out.println(">>> agent @" + agent_floorp + ", e.id @" + target_onfloorPosition) ;

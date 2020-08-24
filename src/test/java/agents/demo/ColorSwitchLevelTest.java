@@ -56,7 +56,7 @@ public class ColorSwitchLevelTest {
     @BeforeAll
     static void start() {
     	// Uncomment this to make the game's graphic visible:
-    	// TestSettings.USE_GRAPHICS = true ;
+     TestSettings.USE_GRAPHICS = true ;
     	String labRecruitesExeRootDir = System.getProperty("user.dir") ;
     	labRecruitsTestServer = TestSettings.start_LabRecruitsTestServer(labRecruitesExeRootDir) ;
     }
@@ -136,12 +136,14 @@ public class ColorSwitchLevelTest {
             }
             System.out.println("") ;
             
-            if (tick > 100) {
+            if (tick > 200) {
             	break ;
             }
             Thread.sleep(30);
             tick++;
         }
+        
+        buttyTask.printGoalStructureStatus();
 
         //check that no verdict failed
         assertEquals(0, screeny.getTestDataCollector().getNumberOfFailVerdictsSeen());

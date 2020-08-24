@@ -89,6 +89,7 @@ public class GoalLibTest {
             }
         }
         g.printGoalStructureStatus();
+        // hit_RETURN() ;
         // check that the given goal is solved:
         assertTrue(g.getStatus().success()) ;
 	}
@@ -129,7 +130,7 @@ public class GoalLibTest {
 				GoalLib.entityStateRefreshed(button2))  ;
 		desc = ", target entity: " + button1 + " then" + button2 ;
 		agent = create_and_deploy_testagent("buttons_doors_1","agent1",desc) ;
-		setgoal_and_run_agent(agent,g,120) ;
+		setgoal_and_run_agent(agent,g,150) ;
 		state = (BeliefState) agent.getState() ;
 		assertTrue(state.worldmodel.getElement(button1) != null) ;
 		assertFalse(state.isOn(button1)) ;

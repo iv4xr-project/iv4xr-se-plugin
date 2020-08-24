@@ -142,19 +142,19 @@ public class BeliefFromLabReceruitsTest {
      	assertTrue(belief.pathfinder.obstacles.get(0).obstacle == door) ;
      	
     	// the button is reachable
-    	var path = belief.findPathTo(button.position,true) ;
-    	assertTrue(path.size() > 0) ;
+    	var result = belief.findPathTo(button.position,true) ;
+    	assertTrue(result.snd.size() > 0) ;
      	
      	// literally the door position is not reachable:
-     	path = belief.findPathTo(door.getFloorPosition(),true) ;
-     	assertTrue(path == null) ;
+     	result = belief.findPathTo(door.getFloorPosition(),true) ;
+     	assertTrue(result == null) ;
      	//System.out.println(path) ;
      
      	// cheat; pretend all nodes are explored. Location (7,0,5) should
      	// not be reachable (blocked by the door):
      	belief.pathfinder.perfect_memory_pathfinding = true ;
-     	path = belief.findPathTo(new Vec3(7f,0,5),true) ;
-     	assertTrue(path == null) ;
+     	result = belief.findPathTo(new Vec3(7f,0,5),true) ;
+     	assertTrue(result == null) ;
      	//System.out.println(path) ;
      	
      	
@@ -162,13 +162,13 @@ public class BeliefFromLabReceruitsTest {
      	belief.pathfinder.obstacles.get(0).isBlocking = false ;
         	
      	// the door location should now be reachable:
-     	path = belief.findPathTo(door.getFloorPosition(),true) ;
-     	assertTrue(path.size() > 0 ) ;
+     	result = belief.findPathTo(door.getFloorPosition(),true) ;
+     	assertTrue(result.snd.size() > 0 ) ;
      	//System.out.println(path) ;
      	
      	// the location (7,0,5) should now also be reachable:
-     	path = belief.findPathTo(new Vec3(7f,0,5),true) ;
-     	assertTrue(path.size() > 0 ) ;
+     	result = belief.findPathTo(new Vec3(7f,0,5),true) ;
+     	assertTrue(result.snd.size() > 0 ) ;
      	//System.out.println(path) ;
     	
     }
@@ -191,8 +191,8 @@ public class BeliefFromLabReceruitsTest {
     	belief.pathfinder.perfect_memory_pathfinding = true ;
 
     	// Location (5,0,5) should NOTE be reachable (blocked by the door):
-    	var path = belief.findPathTo(new Vec3(5,0,5),true) ;
-     	assertTrue(path == null) ;
+    	var result = belief.findPathTo(new Vec3(5,0,5),true) ;
+     	assertTrue(result == null) ;
      	
      	// this level has a gap, so (5,0,5) should be reachable:
      	level = "squareWithOneButtonAndChairsBetween_andHole" ;
@@ -204,8 +204,8 @@ public class BeliefFromLabReceruitsTest {
     	agent.update();
     	
     	belief.pathfinder.perfect_memory_pathfinding = true ;
-    	path = belief.findPathTo(new Vec3(5,0,5),true) ;
-     	assertTrue(path.size()>0) ;
+    	result = belief.findPathTo(new Vec3(5,0,5),true) ;
+     	assertTrue(result.snd.size()>0) ;
      	
      	// this level has a door, so (9,0,1) should not be reachable:
      	level = "longcorridorWithDoorBetween" ;
@@ -226,20 +226,20 @@ public class BeliefFromLabReceruitsTest {
     	belief.pathfinder.perfect_memory_pathfinding = true ;
 
     	// location (9,0,1) and the door should NOT be reachable:
-    	path = belief.findPathTo(new Vec3(9,0,1),true) ;
-     	assertTrue(path==null) ;
-     	path = belief.findPathTo(door.getFloorPosition(),true) ;
-     	assertTrue(path==null) ;
+    	result = belief.findPathTo(new Vec3(9,0,1),true) ;
+     	assertTrue(result==null) ;
+     	result = belief.findPathTo(door.getFloorPosition(),true) ;
+     	assertTrue(result==null) ;
      	
      	
         // simulate that the door is open:
      	belief.pathfinder.obstacles.get(0).isBlocking = false ;
         	
      	// location (9,0,1) and the door location should now be reachable:
-     	path = belief.findPathTo(new Vec3(9,0,1),true) ;
-     	assertTrue(path.size() > 0 ) ;
-     	path = belief.findPathTo(door.getFloorPosition(),true) ;
-     	assertTrue(path.size() > 0 ) ;
+     	result = belief.findPathTo(new Vec3(9,0,1),true) ;
+     	assertTrue(result.snd.size() > 0 ) ;
+     	result = belief.findPathTo(door.getFloorPosition(),true) ;
+     	assertTrue(result.snd.size() > 0 ) ;
      	//System.out.println(path) ;
     }
 }
