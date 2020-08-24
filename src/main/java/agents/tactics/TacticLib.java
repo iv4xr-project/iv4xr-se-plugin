@@ -40,6 +40,27 @@ import java.util.stream.Collectors;
  * areas in-between are reachable.
  */
 public class TacticLib {
+	
+	/**
+	 * Distance used to unstuck an agent.
+	 */
+	public static final float UNSTUCK_DELTA = 0.5f ; 
+	
+	/**
+	 * When the agent comes to this distance to the current exploration target,
+	 * the target is considered as achieved (and the agent may then move to
+	 * the next exploration target).
+	 */
+	public static final float EXPLORATION_TARGET_DIST_THRESHOLD = 0.5f ;
+	
+	
+	/**
+	 * Threshold on the distance between a point to a surface to determine when
+	 * the point is on the surface. This is used by the unstuck tactic to check
+	 * that an unstucking proposal is still on the navigable surface,
+	 */
+	public static final float DIST_SURFACE_THRESHOLD_STUCK = 0.045f;
+	
    
 	/**
 	 * The same as {@link rawNavigateTo}, but the constructed tactic will also try
@@ -274,10 +295,8 @@ public class TacticLib {
      * This method constructs a tactic T that tries to identify when recalculation of 
      * path to the the goal position, namely when:
      * 
-     *   (1) the agent is near a door that turns out to be closed, and hence blocking 
-     *        the path that was previously planned.
-     *        
-     *    and (2) the path is not recently calculated:
+     *    the agent observes a door has a state which is different than the last time
+     *    it saw it.
      *
      *  Path recalculation is forced by clearing the goal-position.	
      */
@@ -369,7 +388,6 @@ public class TacticLib {
      * current position.
      */
     public static Vec3 unstuck(BeliefState belief) {
-    	var unstuck_distance = BeliefState.UNIT_DISTANCE * 0.5 ;
     	var agent_current_direction = Vec3.sub(belief.getCurrentWayPoint(), belief.worldmodel.getFloorPosition()) ;
     	
     	var x_orientation = Math.signum(agent_current_direction.x) ;  // 1 if the agent is facing eastly, and -1 if westly
@@ -378,14 +396,14 @@ public class TacticLib {
     	// try E/W unstuck first:
     	if (x_orientation != 0) {
     		var p = belief.worldmodel.getFloorPosition() ;
-    		p.x += unstuck_distance*x_orientation ;
+    		p.x += TacticLib.UNSTUCK_DELTA * x_orientation ;
     		if (isPointInNavigableSurface(belief,p)) return p ; 
         	//if (mentalMap.pathFinder.graph.vecToNode(p) != null) return p ;
     	}
     	// try N/S unstuck:
     	if (z_orientation != 0) {
     		var p = belief.worldmodel.getFloorPosition() ;
-    		p.z += unstuck_distance*z_orientation ;
+    		p.z += TacticLib.UNSTUCK_DELTA * z_orientation ;
         	if (isPointInNavigableSurface(belief,p)) return p ; 
         	//if (mentalMap.pathFinder.graph.vecToNode(p) != null) return p ;	
     	}
@@ -400,44 +418,12 @@ public class TacticLib {
     	     Float.compare(Vec3.dist(belief.pathfinder.vertices.get(f1.vertices[0]),p), 
     	    		       Vec3.dist(belief.pathfinder.vertices.get(f2.vertices[0]),p))) ;
     	for (Face f : faces) {
-    		if (f.distFromPoint(p, belief.pathfinder.vertices) <= 0.045) 
+    		if (f.distFromPoint(p, belief.pathfinder.vertices) <= DIST_SURFACE_THRESHOLD_STUCK) 
     			return true ;
     	}
     	return false ;
     }
     
-    /*
-     * Sometimes the agent can become stuck in a turn around corner while
-     * it is searching for a position or entity. When the entity is not on
-     * the known map, the search is typically combined with exploration.
-     * It can be the case, that in a turn around corner the agent has seen
-     * the last navigation polygons, and therefore it has no more node to
-     * explore,  but its line of sight to the target is blocked, and 
-     * therefore it mistakenly concludes that the entity could not exist.
-     * 
-     * This tactic will try to puch the agent to move a little bit past the
-     * stuck corner.
-     */
-    /*
-    public static Tactic forcePastExploreBlindCorner() {
-    	return action("Trying to force the agent to get past an explore-blind-corner")
-    		   . do1((BeliefState belief) -> { 
-    			    var unstuckPosition = belief.unstuck() ;
-    			    System.out.println("#### invoking forcePastExploreBlindCorner") ;
-    			    System.out.println("#### agent velocity " + belief.derived_lastNonZeroXZVelocity()) ;
-    			    System.out.println("#### unstuck option " + unstuckPosition) ;  
-    			    LabWorldModel o ;
-    			    if (unstuckPosition!=null)
-    			    	o = belief.moveToward(unstuckPosition) ;
-    			    else 
-    			    	o = belief.env().observe(belief.id) ;
-    			    belief.updateBelief(o);
-    			    return belief ; 
-    			 })
-    		   . on(belief -> true)
-    		   . lift() ;
-    }
-    */
     
     /**
      * Send an interact command if the agent is close enough.
@@ -604,12 +590,11 @@ public class TacticLib {
     			. on((BeliefState belief) -> {
     				 if(memo.stateIs("S0")) {
     					 // in this state we must decide a new exploration target:
-    					 float distToFaceThreshold = 0.2f ;
         				 
                          //get the location of the closest unexplored node
         				 var position = belief.worldmodel.getFloorPosition() ;
         				 //System.out.println(">>> #explored nodes:" + belief.pathfinder.numberOfSeen()) ;
-        				 var path = belief.pathfinder.explore(position,distToFaceThreshold) ;
+        				 var path = belief.pathfinder.explore(position,BeliefState.DIST_TO_FACE_THRESHOLD) ;
         				
         				 if (path==null || path.isEmpty()) {
         					memo.moveState("exhausted") ;
@@ -636,14 +621,14 @@ public class TacticLib {
                          Vec3 agentLocation = belief.worldmodel.getFloorPosition() ;
                          Vec3 currentDestination = belief.getGoalLocation() ;
                          var distToExplorationTarget = Vec3.dist(agentLocation,exploration_target) ;
-                         if (distToExplorationTarget <= 0.5 // current exploration target is reached
+                         if (distToExplorationTarget <= EXPLORATION_TARGET_DIST_THRESHOLD // current exploration target is reached
                              || currentDestination==null 
                              || Vec3.dist(currentDestination,exploration_target) > 0.3) {
                         	 // in all these cases we need to select a new exploration target.
                         	 // This is done by moving back the exploration state to S0.
                         	 memo.moveState("S0");
                          }
-                         if (distToExplorationTarget<=0.5) {
+                         if (distToExplorationTarget<=EXPLORATION_TARGET_DIST_THRESHOLD) {
                         	 System.out.println("### dist to explroration target " + distToExplorationTarget) ;
                          }
                          // System.out.println(">>> explore in-transit: " + memo.stateIs("inTransit")) ;
