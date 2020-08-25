@@ -4,6 +4,9 @@ import java.util.function.Function;
 
 import helperclasses.datastructures.Vec3;
 
+/**
+ * The observation JSON generated in Observation.cs in the game.
+ */
 public class Observation {
     public class Agent {
         public String id;
@@ -13,59 +16,79 @@ public class Observation {
     }
 
     public class Meta {
+        /** Integer representation of the time */
         public Integer tick;
+
+        /** ISO 8601 timestamp of the data sent by the game */
+        public String time;
     }
 
-    public class Objects {
+    /**
+     * The layout of the SerializedGameObject generated in APLSynced.cs
+     */
+    public class GameObject {
 
+        /** The transform of the game object. */
         public class Transform {
             public Vec3 position;
             public Vec3 rotation;
             public Vec3 velocity;
         }
+
+        /** The axis aligned bounding box of Unity's collider */
         public class Collider {
+            /** The center of the collider in world space */
             public Vec3 center;
+            /** The size of the bounding box */
             public Vec3 size;
         }
 
         // Optional Observable properties:
-
-        // Buttons or maybe doors can be interacted with
+        /** Buttons or maybe doors can be interacted with */
         public class Interactable {
             public Boolean interactable;
-            public Float interactionCooldown;
-            public Float timeSinceInteraction;
+            public Float   interactionCooldown;
+            public Float   timeSinceInteraction;
         }
 
-        // For colored buttons
+        /** For colored buttons */
         public class Colorized {
             public Vec3 color;
         }
 
-        // Colored screen
+        /** Colored screen */
         public class ColorScreen {
             public Vec3 color;
         }
 
-        // States for doors and toggle buttons
+        /** States for doors and toggle buttons */
         public class Toggleable {
             public Boolean isActive;
         }
+
+        /** The fire hazard */
+        public class FireHazard {
+
+        }
+
+        // Object data
         public String name;
         public String tag;
         public String id;
         public Collider[] colliders;
-        public Transform transform;
+        public Transform  transform;
 
+        // Optional observable component data
         public Interactable Interactable;
-        public Colorized Colorized;
-        public ColorScreen ColorScreen;
-        public Toggleable Toggleable;
+        public Colorized    Colorized;
+        public ColorScreen  ColorScreen;
+        public Toggleable   Toggleable;
+        public FireHazard   FireHazard;
     }
 
     public Agent agent;
     public Meta meta;
-    public Objects[] objects;
+    public GameObject[] objects;
     public int[] navMeshIndices;
 
     public static LabWorldModel toWorldModel(Observation obs) {
@@ -92,7 +115,7 @@ public class Observation {
         return wom;
     }
 
-    public static LabEntity toWorldEntity(Objects obj) {
+    public static LabEntity toWorldEntity(GameObject obj) {
         if (obj == null) return null;
         String we_type = "";
 
@@ -110,6 +133,9 @@ public class Observation {
                 we.extent = Vec3.multiply(0.5, obj.colliders[0].size);
                 return we;
             });
+            if (obj.colliders.length > 1) {
+                System.out.println(String.format("Multiple colliders found for object {0}, this is currently not supported.", obj.name));
+            }
         }
 
         if (obj.tag.equals("Door") && obj.Toggleable != null) {
@@ -138,6 +164,8 @@ public class Observation {
                 we.properties.put("color", obj.ColorScreen.color);
                 return we;
             });
+        } else if (obj.FireHazard != null) {
+            we_type = LabEntity.FIREHAZARD;
         }
 
         LabEntity we_final = new LabEntity(
