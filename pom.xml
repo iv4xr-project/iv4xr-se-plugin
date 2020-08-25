@@ -73,7 +73,7 @@
         <dependency>
             <groupId>com.github.iv4XR-project</groupId>
             <artifactId>aplib</artifactId>
-            <version>0.0_alpha.1.4</version>
+            <version>0.0_alpha.1.5</version>
         </dependency>
     </dependencies>
 </project>

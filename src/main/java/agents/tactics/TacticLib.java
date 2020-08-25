@@ -155,7 +155,11 @@ public class TacticLib {
 					}
 				}) ;
 		
-		return move.lift() ;
+		return  FIRSTof(
+				 forceReplanPath(), 
+				 tryToUnstuck(),
+				 move.lift()
+			   ) ;
 	}
 	
     /**
