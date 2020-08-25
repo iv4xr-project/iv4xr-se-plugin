@@ -83,7 +83,39 @@ public class GoalLib {
         }
         return SEQ(subGoals);
     }
-
+    
+    
+    /**
+     * This method will construct a goal in which the agent will a reachable position nearby
+     * the given entity. Positions east/west/south/north in the distance of 1.0 from
+     * the entity will be tried. Actually, the used tactic will try to reach a position
+     * in the distance of 0.7 from the entity, but this goal will be achieved when the
+     * agent is within 1.0 radius.
+     * 
+     * Becareful when you tweak these distances. There is some inaccuracy in the underlying
+     * navmesh reasoning that may come up with a nearby location "inside" a door, which is
+     * obviously unreachable. If the threshold above is too small, we might end up with such
+     * a case.
+     * 
+     * The agent will fail the goal if it no longer believes the position to be reachable.
+     */
+    public static GoalStructure entityInCloseRange(String entityId) {
+    	//define the goal
+        Goal goal = new Goal("This entity is closeby: " + entityId)
+        		    . toSolve((BeliefState belief) -> {
+                        //check if the agent is close to the goal position
+        		    	var e = belief.worldmodel.getElement(entityId) ;
+        		    	if (e == null) return false ;
+                        return belief.worldmodel.getFloorPosition().distance(e.getFloorPosition()) <= 1 ;
+                    });
+        //define the goal structure
+        return goal.withTactic(
+        		 FIRSTof(//the tactic used to solve the goal
+                   TacticLib.navigateToCloseByPosition(entityId),//move to the goal position
+                   TacticLib.explore(), //explore if the goal position is unknown
+                   ABORT())) 
+        	  . lift();
+    }
 
 
     /**

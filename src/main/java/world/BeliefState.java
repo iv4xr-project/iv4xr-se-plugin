@@ -259,7 +259,7 @@ public class BeliefState extends StateWithMessenger {
     	var doors = knownDoors() ;
     	List<WorldEntity> nearbyDoors = new LinkedList<>();
     	for (var d : doors) {
-    		if (worldmodel.position.distance(d.position) <= 1.0) {
+    		if (worldmodel.position.distance(((LabEntity) d).getFloorPosition()) <= 1.0) {
     			nearbyDoors.add(d) ;
     		}
     	}

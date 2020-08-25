@@ -88,7 +88,81 @@ public class TacticLib {
 			   )  ;
 	}
 	
+	/**
+	 * Navigate to a location, nearby the given entity, if the location is reachable.
+	 * Locations east/west/south/north of the entity of distance 0.7 will be tried.
+	 */
+	static Tactic navigateToCloseByPosition(String id) {
+
+		MiniMemory memory = new MiniMemory("S0") ;
+		
+		Action move = 
+				  rawNavigateTo_("Navigate to a position nearby " + id, null)
+				  
+				. on((BeliefState belief) -> {
+					
+					var e = (LabEntity) belief.worldmodel.getElement(id) ;
+    			    if (e==null) return null ;
+    			    
+					Vec3 nodeLocation = null ;
+					if (!memory.memorized.isEmpty()) {
+						nodeLocation = (Vec3) memory.memorized.get(0) ;
+					}
+					Vec3 currentGoalLocation = belief.getGoalLocation() ;
+					
+					if (nodeLocation == null 
+					    || currentGoalLocation == null
+					    || nodeLocation.distance(currentGoalLocation) >= 0.05) {
+						// in all these cases we need to calculate the node to go
+						
+						var agent_location = belief.worldmodel.getFloorPosition() ;
+	    			    var entity_location = e.getFloorPosition() ;
+	    			    List<Vec3> candidates = new LinkedList<>() ;
+	    			    float delta = 0.7f ;
+	    			    // adding North and south candidates
+	    			    candidates.add(Vec3.sum(entity_location, new Vec3(0,0,delta))) ;
+	    			    candidates.add(Vec3.sum(entity_location, new Vec3(0,0,-delta))) ;
+	    			    // adding east and west candidates:
+	    			    candidates.add(Vec3.sum(entity_location, new Vec3(delta,0,0))) ;
+	    			    candidates.add(Vec3.sum(entity_location, new Vec3(-delta,0,0))) ;
+	    			    
+	    			    // iterate over the candidates, if one would be reachable:
+	    			    for (var c : candidates) {
+	    			    	// if c (a candidate point near the entity) is on the navigable,
+	    			    	// we should ignore it:
+	    			    	if (belief.mentalMap.getContainingPolygon(c) == null) continue ;
+	    			    	var path = belief.mentalMap.navigateForce(agent_location,c,belief.blockedNodes) ;
+	    			    	if (path != null) {
+	    			    		// found our target
+	    			    		System.out.println(">>> a reachable closeby position found :" + c + ", path: " + Arrays.toString(path)) ;
+	    			    		memory.memorized.clear();
+	    			    		memory.memorize(c);
+	    			    		return new Tuple(c,path) ;
+	    			    	}
+	    			    }
+	    			    System.out.println(">>> i tried few nearby locations, but none are reachable :|") ;
+	    			    // no reachable node can be found. We will clear the memory, and declare the tactic as disabled
+	    			    memory.memorized.clear() ;
+	    			    return null ;
+					}
+					else {
+						// else the memorized location and the current goal-location coincide. No need to
+						// recalculate the path, so we will just return the pair (memorized-loc,null)
+						return new Tuple (nodeLocation,null) ;
+					}
+				}) ;
+		
+		return  FIRSTof(
+				 forceReplanPath(), 
+				 tryToUnstuck(),
+				 move.lift()
+			   ) ;
+	}
 	
+	/**
+	 * Navigate to a navigation node closest to the given entity, and is moreover
+	 * reachable by the agent.
+	 */
 	static Tactic navigateToClosestReachableNode(String id) {
 		
 		MiniMemory memory = new MiniMemory("S0") ;
@@ -112,6 +186,7 @@ public class TacticLib {
 					    || nodeLocation.distance(currentGoalLocation) >= 0.05) {
 						// in all these cases we need to calculate the node to go
 						
+						var agent_location = belief.worldmodel.getFloorPosition() ;
 	    			    var entity_location = e.getFloorPosition() ;
 	    			    var knownVertices = belief.mentalMap.getKnownVerticesById() ;
 	    			    if (knownVertices.length == 0) return null ;
@@ -134,7 +209,7 @@ public class TacticLib {
 	    			    Vec3[] path = null ;
 	    			    for(var c : candidates) {
 	    			    	destination = c.object1 ;
-	    			    	path = belief.findPathTo(destination) ;
+	    			    	path = belief.mentalMap.navigateForce(agent_location,destination,belief.blockedNodes) ;
 	    			    	if (path != null) {
 	    			    		// found a reachable candidate!
 	    			    		System.out.println(">>> a reachable neighboring node found :" + destination + ", path: " + Arrays.toString(path)) ;
