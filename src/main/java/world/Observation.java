@@ -13,6 +13,7 @@ public class Observation {
         public Vec3 position;
         public Vec3 velocity;
         public Boolean didNothing;
+        public int health;
     }
 
     public class Meta {
@@ -155,6 +156,12 @@ public class Observation {
             } else {
                 builder = builder.andThen(we -> {
                     we.properties.put("isOn", false);
+                    return we;
+                });
+            }
+            if (obj.Colorized != null) {
+                builder = builder.andThen(we ->{
+                    we.properties.put("color", obj.Colorized.color);
                     return we;
                 });
             }
