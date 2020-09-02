@@ -5,7 +5,7 @@ Status: Prototype / early development
 
 ## Introduction
 
-This project is a Space Engineers (a game by Keen Software House) plugin which enables integration with the iv4XR testing framework. The plugin runs a TCP/IP server with JSON-based API. It allows to access surrounding of the player's character in a structured form (a World Object Model, WOM) and to control the character. Those are the two defining features, more will be added during the development.
+Space Engineers is a sandbox game by Keen Software House. This project is a plugin for the game which enables its integration with the iv4XR testing framework. The plugin runs a TCP/IP server with JSON-based API. It allows to access surrounding of the player's character in a structured form (a World Object Model, WOM) and to control the character. Those are the two defining features, more will be added during the development.
 
 ## How to build
 
@@ -31,4 +31,4 @@ Currently implemented commands:
 - **MoveAndRotate** – allows to move and and rotate the agent in all directions.
 - Disconnect
 
-There's a Java project derived from the Lab Recruits demo that contains a demo client in the form of unit tests. (Link pending.)
+There's a Java project derived from the Lab Recruits demo that contains a demo client in the form of unit tests. (The [repository is here](https://github.com/iv4xr-project/iv4xrDemo-space-engineers), but it's not public yet.)
