@@ -31,4 +31,4 @@ Currently implemented commands:
 - **MoveAndRotate** – allows to move and and rotate the agent in all directions.
 - Disconnect
 
-There's a Java project derived from the Lab Recruits demo that contains a demo client in the form of unit tests. (The [repository is here](https://github.com/iv4xr-project/iv4xrDemo-space-engineers), but it's not public yet.)
+There's a Java project derived from the Lab Recruits demo that contains a demo client in the form of unit tests. The [repository is here](https://github.com/iv4xr-project/iv4xrDemo-space-engineers).
