@@ -91,18 +91,21 @@ public class Test_SamiraLevels {
 
 	}
 	
+	/**
+	 * Using entityStateRefreshed to simply refresh the state of door-1
+	 * @throws InterruptedException
+	 */
 	@Test
 	public void test1() throws InterruptedException {
-		var button1 = "button1" ;
 		GoalStructure g = SEQ(
 				GoalLib.entityInteracted("button2"),
-				GoalLib.entityStateRefreshed("door1"),GoalLib.entityInCloseRange("door1"),
+				GoalLib.entityStateRefreshed("door1"),
 				GoalLib.entityInteracted("button4"),
-				GoalLib.entityStateRefreshed("door1"), GoalLib.entityInCloseRange("door1"),
+				GoalLib.entityStateRefreshed("door1"), 
 				GoalLib.entityInteracted("button5"),
-				GoalLib.entityStateRefreshed("door1"), GoalLib.entityInCloseRange("door1"),
+				GoalLib.entityStateRefreshed("door1"), 
 				GoalLib.entityInteracted("button3"),
-				GoalLib.entityStateRefreshed("door1"), GoalLib.entityInCloseRange("door1"),
+				GoalLib.entityStateRefreshed("door1"),
 				GoalLib.entityInteracted("button1"),
 				GoalLib.entityStateRefreshed("door1"),
 				GoalLib.entityInspected("door1", e -> e.getBooleanProperty("isOpen")),
@@ -113,6 +116,50 @@ public class Test_SamiraLevels {
 				;
 		var desc = "blabla" ;
 		var agent = create_and_deploy_testagent("samiratest_2","agent1",desc) ;
+		setgoal_and_run_agent(agent,g,200) ;
+	}
+	
+	/**
+	 * Using entityInCloseRange to approach door1 (and refresh its state as we do so)
+	 */
+	@Test
+	public void test2() throws InterruptedException {
+		GoalStructure g = SEQ(
+				GoalLib.entityInteracted("button2"),
+				GoalLib.entityInCloseRange("door1"),
+				GoalLib.entityInteracted("button4"),
+				GoalLib.entityInCloseRange("door1"),
+				GoalLib.entityInteracted("button5"),
+				GoalLib.entityInCloseRange("door1"),
+				GoalLib.entityInteracted("button3"),
+				GoalLib.entityInCloseRange("door1"),
+				GoalLib.entityInteracted("button1"),
+				GoalLib.entityInCloseRange("door1"),
+				GoalLib.entityInspected("door1", e -> e.getBooleanProperty("isOpen")),
+				GoalLib.entityInteracted("button7")
+				) ;
+		var desc = "blabla" ;
+		var agent = create_and_deploy_testagent("samiratest_2","agent1",desc) ;
+		setgoal_and_run_agent(agent,g,200) ;
+	}
+	
+	@Test
+	public void test3() throws InterruptedException {
+		GoalStructure g = SEQ(
+				GoalLib.entityInteracted("button2"),
+				GoalLib.entityInCloseRange("door1"),
+				GoalLib.entityInteracted("button4"),
+				GoalLib.entityInCloseRange("door1"),
+				GoalLib.entityInteracted("button5"),
+				GoalLib.entityInCloseRange("door1"),
+				GoalLib.entityInteracted("button3"),
+				GoalLib.entityInCloseRange("door1"),
+				GoalLib.entityInCloseRange("button5"),
+				GoalLib.entityInCloseRange("door2"),
+				GoalLib.entityInspected("door2", e -> !e.getBooleanProperty("isOpen"))
+				) ;
+		var desc = "blabla" ;
+		var agent = create_and_deploy_testagent("samiratest_3","agent1",desc) ;
 		setgoal_and_run_agent(agent,g,200) ;
 	}
 }
