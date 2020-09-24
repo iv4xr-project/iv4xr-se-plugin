@@ -18,6 +18,7 @@ public enum RequestType
     START,
     INIT,
     UPDATE_ENVIRONMENT,
-    AGENTCOMMAND  // TODO(PP): Should probably be AGENT_COMMAND
+    AGENTCOMMAND,  // TODO(PP): Should probably be AGENT_COMMAND
+    SESSION  // TODO(PP): Added for Space Engineers, consider making a separate RequestType for SE
 }
 

@@ -14,7 +14,7 @@ public class MoveAgentTest {
 
     @Test
     public void moveTest() {
-        var environment = new SpaceEngEnvironment("localhost", 9678);
+        var environment = SpaceEngEnvironment.localhost();
 
         // Single move request is not actually visible on the character movement, see manyMovesTest below
         var observation = environment.getSeResponse(SeRequest.command(
@@ -30,7 +30,7 @@ public class MoveAgentTest {
 
     @Test
     public void moveAndRotateTest() {
-        var environment = new SpaceEngEnvironment("localhost", 9678);
+        var environment = SpaceEngEnvironment.localhost();
 
         // Single move request is not actually visible on the character movement, see manyMovesTest below
         var observation = environment.getSeResponse(SeRequest.command(
@@ -47,7 +47,7 @@ public class MoveAgentTest {
     @Test
     public void manyMovesTest() {
 
-        var environment = new SpaceEngEnvironment("localhost", 9678);
+        var environment = SpaceEngEnvironment.localhost();
 
         var moves = new ArrayList<Vec3>();
         BiConsumer<Vec3, Integer> addMoves = (move, count) -> {
@@ -78,7 +78,7 @@ public class MoveAgentTest {
     @Test
     public void manyMovesAndRotationsTest() {
 
-        var environment = new SpaceEngEnvironment("localhost", 9678);
+        var environment = SpaceEngEnvironment.localhost();
 
         var moves = new ArrayList<MovementArgs>();
         BiConsumer<MovementArgs, Integer> addMoves = (movementArgs, count) -> {

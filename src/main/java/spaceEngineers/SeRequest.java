@@ -1,10 +1,8 @@
 package spaceEngineers;
 
-import communication.agent.AgentCommand;
-import communication.system.Request;
 import communication.system.RequestType;
 import spaceEngineers.commands.SeAgentCommand;
-import world.LegacyObservation;
+import spaceEngineers.commands.SeSessionCommand;
 
 public class SeRequest<ResponseType> {
 
@@ -49,10 +47,13 @@ public class SeRequest<ResponseType> {
 
     /**
      * Request an observation after executing the sent Command
-     * TODO(PP): Replace response type with some SE observation
      */
     public static SeRequest<SeObservation> command(SeAgentCommand command) {
         return new SeRequest<>(SeObservation.class, RequestType.AGENTCOMMAND, command);
+    }
+
+    public static SeRequest<Boolean> session(SeSessionCommand sessionCommand) {
+        return new SeRequest<>(Boolean.class, RequestType.SESSION, sessionCommand);
     }
 
 }

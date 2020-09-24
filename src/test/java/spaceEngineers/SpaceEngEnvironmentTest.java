@@ -8,7 +8,7 @@ public class SpaceEngEnvironmentTest {
 
     @Test
     public void disconnectTest() {
-        var environment = new SpaceEngEnvironment("localhost", 9678);
+        var environment = SpaceEngEnvironment.localhost();
 
         boolean result = environment.getSeResponse(SeRequest.disconnect());
         Assertions.assertTrue(result);
@@ -16,7 +16,7 @@ public class SpaceEngEnvironmentTest {
 
     @Test
     public void observeTest() {
-        var environment = new SpaceEngEnvironment("localhost", 9678);
+        var environment = SpaceEngEnvironment.localhost();
 
         var observation = environment.getSeResponse(SeRequest.command(SeAgentCommand.doNothing("you")));
         Assertions.assertNotNull(observation);
@@ -30,7 +30,7 @@ public class SpaceEngEnvironmentTest {
 
     @Test
     public void observeManyTimesTest() {
-        var environment = new SpaceEngEnvironment("localhost", 9678);
+        var environment = SpaceEngEnvironment.localhost();
 
         for (int i = 0; i < 5; i++) {
             var observation = environment.getSeResponse(SeRequest.command(SeAgentCommand.doNothing("you")));
@@ -46,7 +46,7 @@ public class SpaceEngEnvironmentTest {
 
     @Test
     public void observeEntitiesTest() {
-        var environment = new SpaceEngEnvironment("localhost", 9678);
+        var environment = SpaceEngEnvironment.localhost();
 
         var observation = environment.getSeResponse(SeRequest.command(SeAgentCommand.doNothing("you")));
         Assertions.assertNotNull(observation);

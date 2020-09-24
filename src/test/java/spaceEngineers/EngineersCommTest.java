@@ -9,7 +9,7 @@ public class EngineersCommTest {
     @Test
     public void commScrewingTest() {
 
-        var environment = new SeSocketEnvironment("localhost", 9678);
+        var environment = new SeSocketEnvironment("localhost", SeSocketEnvironment.DEFAULT_PORT);
 
         // These messages are invalid, so we basically test error handling here.
         // (The server cuts of the connection after the first message.)

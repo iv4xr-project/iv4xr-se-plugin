@@ -13,6 +13,8 @@ import java.lang.reflect.Modifier;
 
 public class SeSocketEnvironment extends SocketEnvironment {
 
+    public static final int DEFAULT_PORT = 9678;
+
     public SeSocketEnvironment(String host, int port) {
         super(host, port);
     }
