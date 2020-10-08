@@ -4,6 +4,7 @@ using System.Net.Sockets;
 using System.Threading;
 using Iv4xr.PluginLib;
 using Iv4xr.PluginLib.Log;
+using Iv4xr.SePlugin.Session;
 using Iv4xr.SePlugin.Control;
 using SeServerMock.Mocks;
 
@@ -15,9 +16,12 @@ namespace SeServerMock
         public static void Main(string[] args)
         {
             var log = new ConsoleLog();
+			var sessionController = new MockSessionController() { Log = log };
+			var sessionDispatcher = new SessionDispatcher(sessionController) { Log = log };
+
             using (var requestQueue = new RequestQueue())
             {
-	            var server = new PluginServer(log, requestQueue);
+	            var server = new PluginServer(log, sessionDispatcher, requestQueue);
                 server.Start();
 
 				var observer = new MockObserver();
