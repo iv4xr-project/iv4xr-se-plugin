@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Iv4xr.SePlugin.Control;
+using Iv4xr.SePlugin.Session;
 
 namespace Iv4xr.SePlugin
 {
@@ -11,6 +12,8 @@ namespace Iv4xr.SePlugin
 	{
 		public ILog Log { get; private set; }
 		public readonly Dispatcher Dispatcher;
+
+		private readonly SessionDispatcher m_sessionDispatcher;
 
 		private readonly RequestQueue m_requestQueue = new RequestQueue();
 
@@ -24,14 +27,14 @@ namespace Iv4xr.SePlugin
 			seLog.Init("ivxr-plugin.log");
 			Log = seLog;
 
-			m_server = new PluginServer(Log, m_requestQueue);
+			var sessionController = new SessionController() { Log = Log };
+			m_sessionDispatcher = new SessionDispatcher(sessionController) { Log = Log };
+
+			m_server = new PluginServer(Log, m_sessionDispatcher, m_requestQueue);
 			var observer = new Observer(m_gameSession);
 			var controller = new CharacterController(m_gameSession);
 
-			Dispatcher = new Dispatcher(m_requestQueue, observer, controller)
-			{
-				Log = Log
-			};
+			Dispatcher = new Dispatcher(m_requestQueue, observer, controller) { Log = Log };
 		}
 
 		public void StartServer()

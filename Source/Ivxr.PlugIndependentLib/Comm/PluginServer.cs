@@ -6,21 +6,20 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
-using System.Xml;
 
-using Iv4xr.PluginLib;
-using Iv4xr.PluginLib.Log;
 
 namespace Iv4xr.PluginLib
 {
     public class PluginServer
     {
         private ILog m_log;
+		private readonly ISessionDispatcher m_sessionDispatcher;
         private readonly RequestQueue m_requestQueue;
 
-        public PluginServer(ILog log, RequestQueue requestQueue)
+        public PluginServer(ILog log, ISessionDispatcher sessionDispatcher, RequestQueue requestQueue)
         {
             m_log = log;
+			m_sessionDispatcher = sessionDispatcher;
             m_requestQueue = requestQueue;
         }
 
@@ -110,8 +109,6 @@ namespace Iv4xr.PluginLib
                 ProcessMessage(stream, message, out bool disconnected);
                 if (disconnected)
                     break;
-
-                WaitForReplyAndSendIt();
             }
         }
 
@@ -134,13 +131,17 @@ namespace Iv4xr.PluginLib
             if (command.StartsWith("\"AGENTCOM"))  // AGENTCOMMAND 
             {
                 m_requestQueue.Requests.Enqueue(new RequestItem(clientStream, message));
+
+				// TODO(PP): This tends to block when the message is not added to the queue. Rearchitecture, or at least add a timeout.
+                WaitForReplyAndSendIt();
             }
+			else if (command.StartsWith("\"SESSION\""))
+			{
+				m_sessionDispatcher.ProcessRequest(new RequestItem(clientStream, message));
+			}
             else if (command.StartsWith("\"DISCONNECT\""))
             {
-                Reply(clientStream, "true");
-                clientStream.Close(timeout: 100);  // ms
-                disconnected = true;
-                return;  // It's important not to wait for any reply from the queue.
+				Disconnect(clientStream, out disconnected, reply: true);
             }
             else
             {
@@ -165,11 +166,21 @@ namespace Iv4xr.PluginLib
             Reply(reply.ClientStream, reply.Message);
         }
 
-        private void Reply(NetworkStream clientStream, string reply)
+        public static void Reply(NetworkStream clientStream, string reply)
         {
             // TODO(PP): avoid allocation of a new buffer each time
             var replyBuffer = Encoding.ASCII.GetBytes(reply + '\n');
             clientStream.Write(replyBuffer, 0, replyBuffer.Length);
         }
+
+		public static void ReplyOK(NetworkStream clientStream)
+		{
+			Reply(clientStream, "true");
+		}
+
+		public static void ReplyFalse(NetworkStream clientStream)
+		{
+			Reply(clientStream, "false");
+		}
     }
 }
