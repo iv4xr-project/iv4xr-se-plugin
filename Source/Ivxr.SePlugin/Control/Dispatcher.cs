@@ -41,8 +41,7 @@ namespace Iv4xr.SePlugin.Control
 				}
 				catch (Exception ex)
 				{
-					Log.WriteLine($"Error processing a request: {ex.Message}");
-					Log.WriteLine($"Exception details:\n{ex.ToString()}\n-----\n");
+					Log.Exception(ex, "Error processing a request");
 					Log.WriteLine($"Full request: \"{request.Message}\"");
 					jsonReply = "false";  // Simple error response, details can be learned from the log.
 				}

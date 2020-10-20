@@ -8,4 +8,13 @@ namespace Iv4xr.PluginLib
 	{
 		void WriteLine(string message);
 	}
+
+	public static class LogExtensions
+	{
+		public static void Exception(this ILog log, Exception ex, string message)
+		{
+			log.WriteLine($"{message}: {ex.Message}");
+			log.WriteLine($"Exception details:\n{ex.ToString()}\n-----\n");
+		}
+	}
 }
