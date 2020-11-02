@@ -66,14 +66,22 @@ public class LabWorldModel extends WorldModel {
 		var target_onfloorPosition = target.getFloorPosition() ;
 		var min = Vec3.subtract(target_onfloorPosition, target.extent);
         var max = Vec3.sum(target_onfloorPosition, target.extent);
+		if (e.extent.x <= 0.2) {
+			min.x -= 0.2;
+			max.x += 0.2;
+		}
         if (e.extent.y <= 0.2) {
-        	min.y -= 0.2 ;
-        	max.y += 0.2 ;
-        }
+        	min.y -= 0.2;
+        	max.y += 0.2;
+		}
+		if (e.extent.z <= 0.2) {
+			min.z -= 0.2;
+			max.z += 0.2;
+		}
         var agent_floorp = getFloorPosition() ;
     	
         return (agent_floorp.x > min.x && agent_floorp.x < max.x &&
-        		agent_floorp.y > min.y  && agent_floorp.y < max.y  &&
+        		agent_floorp.y > min.y && agent_floorp.y < max.y &&
         		agent_floorp.z > min.z && agent_floorp.z < max.z);
 	}
     

@@ -149,7 +149,9 @@ public class SocketEnvironment extends Environment {
     	// something) are put inside the req object ... :|
         String json = (String) sendCommand("APlib", "Unity", "request", gson.toJson(req));
         // we do not have to cast to T, since req.responseType is of type Class<T>
+        //System.out.println("JSON START");
         //System.out.println(json);
+        //System.out.println("JSON END");
         return gson.fromJson(json, req.responseType);
     }
 

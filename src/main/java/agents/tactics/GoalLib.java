@@ -166,7 +166,8 @@ public class GoalLib {
 	 */
     public static GoalStructure entityStateRefreshed(String id){
         return goal("The belief on this entity is refreshed: " + id)
-                .toSolve((BeliefState b) -> b.evaluateEntity(id, e -> b.age(e) == 0))
+                .toSolve((BeliefState b) -> 
+                    b.evaluateEntity(id, e -> b.age(e) == 0))
                 .withTactic(FIRSTof(
                         TacticLib.navigateToClosestReachableNode(id),
                         TacticLib.explore(),
@@ -188,12 +189,12 @@ public class GoalLib {
         return SEQ(
             entityStateRefreshed(id),
             goal("This entity is inspected: " + id)
-            .toSolve((BeliefState b) -> b.evaluateEntity(id, predicate))
-            .withTactic(
-                SEQ(
-                   TacticLib.observe(),
-                   ABORT()))
-            .lift()
+                .toSolve((BeliefState b) -> b.evaluateEntity(id, predicate))
+                .withTactic(
+                    SEQ(
+                    TacticLib.observe(),
+                    ABORT()))
+                .lift()
         );
     }
     

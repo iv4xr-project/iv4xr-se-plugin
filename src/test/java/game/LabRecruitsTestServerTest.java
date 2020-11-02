@@ -16,7 +16,8 @@ public class LabRecruitsTestServerTest {
     @Test
     public void binExistsTest() {
 
-    	String labRecruitesExeRootDir = System.getProperty("user.dir") ;
+        String labRecruitesExeRootDir = System.getProperty("user.dir");
+        System.out.println(labRecruitesExeRootDir);
         LabRecruitsTestServer testServer = new LabRecruitsTestServer(
                 false,
                 Platform.PathToLabRecruitsExecutable(labRecruitesExeRootDir));
