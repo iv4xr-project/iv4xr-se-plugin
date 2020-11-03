@@ -11,4 +11,6 @@ public class SeObservation {
     public Vec3 velocity;
 
     public List<SeEntity> entities;
+
+    public List<SeBlock> blocks;
 }

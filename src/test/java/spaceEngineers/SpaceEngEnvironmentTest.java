@@ -59,4 +59,20 @@ public class SpaceEngEnvironmentTest {
         boolean result = environment.getSeResponse(SeRequest.disconnect());
         Assertions.assertTrue(result);
     }
+
+    @Test
+    public void observeBlocksTest() {
+        var environment = SpaceEngEnvironment.localhost();
+
+        var observation = environment.getSeResponse(SeRequest.command(SeAgentCommand.doNothing("you")));
+        Assertions.assertNotNull(observation);
+        Assertions.assertNotNull(observation.blocks);
+        Assertions.assertTrue(observation.blocks.size() > 0);
+
+        System.out.println("Got " + observation.blocks.size() + " blocks.");
+        System.out.println("First block integrity: " + observation.blocks.get(0).integrity);
+
+        boolean result = environment.getSeResponse(SeRequest.disconnect());
+        Assertions.assertTrue(result);
+    }
 }
