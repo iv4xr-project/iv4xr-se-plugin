@@ -14,11 +14,15 @@ Requires Space Engineers codebase (which is not open) to compile. The resulting 
 ## How to run the game with this plugin
 
 1. Obtain the binary release of Space Engineers (buy it on Steam or get a key). Install the game.
-2. Put the plugin libraries into the folder with the game binaries. A common location is `C:\Program Files (x86)\Steam\steamapps\common\SpaceEngineers\Bin64`. It's recommended to create a subfolder there (such as `iv4xr-debug`) and put the libraries inside the subfolder. (Alternatively, it can be a symbolic link to the build folder of the plugin project.)
-3. Right-click on the game title in the Steam library list and open its properties window. Click on the **Set launch options...** button. Add the option `-plugin` and list the libraries. The result should be something like this: `-plugin "iv4xr-debug\Ivxr.PlugIndependentLib.dll" "iv4xr-debug\Ivxr.SePlugin.dll"`.
-4. Run the game.
-5. Start a scenario. (It's necessary to do it manually for now. Should be done automatically by the testing framework in the future.)
-6. If the plugin works correctly, a TCP/IP server is listening for JSON-based commands on a fixed port number. (The current development version uses port number 9678.) 
+2. Obtain the binary release of the plugin. Look for [releases](https://github.com/iv4xr-project/iv4xr-se-plugin/releases) in this repository and for Assets of the chosen release. Download the two DLL libraries.
+3. IMPORTANT: Make sure Windows is OK to run the libraries. Windows 10 blocks "randomly" downloaded libraries. To unblock them, right-click each of them and open file properties. Look for Security section on the bottom part of the General tab. You might see a message: "*This file came from another computer and might be blocked...*". If so, check the `Unblock` checkbox.
+   (If you skip this step, the game will probably crash with a message: `System.NotSupportedException`: *An attempt was made to load an assembly from a network location...*)
+4. Put the plugin libraries into the folder with the game binaries. A common location is `C:\Program Files (x86)\Steam\steamapps\common\SpaceEngineers\Bin64`.
+   Tip: It's you can put the libraries into a subfolder (such as `ivxr-debug`). Or, it can be a symbolic link to the build folder of the plugin project. In that case, you must prefix the name of each library with `ivxr-debug\` in the following step. 
+5. Right-click on the game title in the Steam library list and open its properties window. Click on the **Set launch options...** button. Add the option `-plugin` and list the libraries. The result should be something like this: `-plugin Ivxr.PlugIndependentLib.dll Ivxr.SePlugin.dll`.
+6. Run the game. (If the game crashes, make sure you've seen step 3.)
+7. Start a scenario. (It's necessary to do it manually for now. Should be done automatically by the testing framework in the future.)
+8. If the plugin works correctly, a TCP/IP server is listening for JSON-based commands on a fixed port number. (The current development version uses the port number 9678.) 
    Another sign of life is a log file present in user's app data folder such as: `C:\Users\<username>\AppData\Roaming\SpaceEngineers\ivxr-plugin.log`
 
 ## API
