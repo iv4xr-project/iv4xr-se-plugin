@@ -494,6 +494,7 @@ public class TacticLib {
                . do2((BeliefState belief) -> (WorldEntity e) -> {
                 	  var obs = belief.worldmodel.interact(belief.env(), LabWorldModel.INTERACT, e)  ;
                 	  // force update to worldmodel:
+                	  //System.out.println("## interacted with " + objectID) ;
                 	  belief.mergeNewObservationIntoWOM(obs);
                       return belief;
                     })

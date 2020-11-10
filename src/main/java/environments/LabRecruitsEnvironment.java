@@ -65,8 +65,12 @@ public class LabRecruitsEnvironment extends SocketEnvironment {
         this.pathFinder = new Pathfinder(navmesh);
     }
 
+    // place holder for debugging ... to be removed later
+    public Observation obs ;
+    
     private LabWorldModel sendAgentCommand_andGetObservation(AgentCommand c){
     	Observation obs = getResponse(Request.command(c)); 
+    	this.obs = obs ;
     	// covert the obtained observation to a WorldModel:
     	var wom = Observation.toWorldModel(obs);
         return wom;

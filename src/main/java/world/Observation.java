@@ -1,5 +1,6 @@
 package world;
 
+import java.io.Serializable;
 import java.util.function.Function;
 
 import helperclasses.datastructures.Vec3;
@@ -16,7 +17,7 @@ public class Observation {
         public int health;
     }
 
-    public class Meta {
+    static public class Meta {
         /** Integer representation of the time */
         public Integer tick;
 
@@ -27,17 +28,17 @@ public class Observation {
     /**
      * The layout of the SerializedGameObject generated in APLSynced.cs
      */
-    public class GameObject {
+    static public class GameObject {
 
         /** The transform of the game object. */
-        public class Transform {
+    	static public class Transform {
             public Vec3 position;
             public Vec3 rotation;
             public Vec3 velocity;
         }
 
         /** The axis aligned bounding box of Unity's collider */
-        public class Collider {
+    	static public class Collider {
             /** The center of the collider in world space */
             public Vec3 center;
             /** The size of the bounding box */
@@ -46,29 +47,40 @@ public class Observation {
 
         // Optional Observable properties:
         /** Buttons or maybe doors can be interacted with */
-        public class Interactable {
+    	static public class Interactable {
             public Boolean interactable;
             public Float   interactionCooldown;
             public Float   timeSinceInteraction;
         }
 
         /** For colored buttons */
-        public class Colorized {
-            public Vec3 color;
+    	static public class Colorized {
+            public Color color;
         }
 
         /** Colored screen */
-        public class ColorScreen {
-            public Vec3 color;
+    	static public class ColorScreen {
+            public Color color;
+        }
+        
+    	static public class Color implements Serializable {
+			private static final long serialVersionUID = 1L;
+			public float r;
+        	public float g;
+        	public float b;
+        	@Override
+        	public String toString() {
+        		return("" + r + "/" + g + "/" + b) ;
+        	}
         }
 
         /** States for doors and toggle buttons */
-        public class Toggleable {
+    	static public class Toggleable {
             public Boolean isActive;
         }
 
         /** The fire hazard */
-        public class FireHazard {
+    	static public class FireHazard {
 
         }
 
@@ -135,7 +147,9 @@ public class Observation {
                 return we;
             });
             if (obj.colliders.length > 1) {
-                System.out.println(String.format("Multiple colliders found for object {0}, this is currently not supported.", obj.name));
+                System.out.println(String.format("Multiple colliders found for object "
+                		 + obj.name + "/" + obj.id + "/" + obj.tag +
+                		 ", this is currently not supported.", obj.name));
             }
         }
 
@@ -168,6 +182,7 @@ public class Observation {
         } else if (obj.tag.equals("ColorScreen") && obj.ColorScreen != null) {
             we_type = LabEntity.COLORSCREEN;
             builder = builder.andThen(we -> {
+            	//System.out.println("### org color: " + obj.ColorScreen.color) ;
                 we.properties.put("color", obj.ColorScreen.color);
                 return we;
             });

@@ -37,7 +37,8 @@ public class FireHazardAgentDirect {
     @BeforeAll
     static void start() {
     	// Uncomment this to make the game's graphic visible:
-    	//TestSettings.USE_GRAPHICS = true ;
+    	TestSettings.USE_SERVER_FOR_TEST = false ;
+    	TestSettings.USE_GRAPHICS = true ;
     	String labRecruitesExeRootDir = System.getProperty("user.dir") ;
     	labRecruitsTestServer = TestSettings.start_LabRecruitsTestServer(labRecruitesExeRootDir) ;
     }
@@ -61,7 +62,7 @@ public class FireHazardAgentDirect {
      * 
      * BROKEN!! Fix this the agent get stuck.
      */
-    //@Test
+    @Test
     public void fireHazardDemo() throws InterruptedException{
     	
         //the goals are in order
