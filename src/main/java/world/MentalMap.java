@@ -56,6 +56,8 @@ public class MentalMap {
     }
     
     public long getPathTimestamp() { return pathTimestamp ; }
+    
+    public boolean hasActivePath() { return path != null && path.length > 0 ; }
 
     /**
      * This method will invoke the pathfinder to try to compute a path to the given

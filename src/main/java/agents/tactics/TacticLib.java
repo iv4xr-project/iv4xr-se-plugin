@@ -112,7 +112,8 @@ public class TacticLib {
 					
 					if (nodeLocation == null 
 					    || currentGoalLocation == null
-					    || nodeLocation.distance(currentGoalLocation) >= 0.05) {
+					    || nodeLocation.distance(currentGoalLocation) >= 0.05
+					    || ! belief.mentalMap.hasActivePath()) {
 						// in all these cases we need to calculate the node to go
 						
 						var agent_location = belief.worldmodel.getFloorPosition() ;
@@ -183,7 +184,8 @@ public class TacticLib {
 					
 					if (nodeLocation == null 
 					    || currentGoalLocation == null
-					    || nodeLocation.distance(currentGoalLocation) >= 0.05) {
+					    || nodeLocation.distance(currentGoalLocation) >= 0.05
+					    || !belief.mentalMap.hasActivePath()) {
 						// in all these cases we need to calculate the node to go
 						
 						var agent_location = belief.worldmodel.getFloorPosition() ;
@@ -254,7 +256,8 @@ public class TacticLib {
 		    			    var p = e.getFloorPosition() ;
 		                	Vec3 currentDestination = belief.getGoalLocation() ;
 		                	//System.out.println(">>> navigating to " + id) ;
-		                	if (currentDestination==null || currentDestination.distance(p) >= 0.05) {
+		                	if (currentDestination==null || currentDestination.distance(p) >= 0.05
+		                			|| ! belief.mentalMap.hasActivePath()) {
 		                		// the agent has no current location to go to, or the new goal location
 		                		// is quite different from the current goal location, we will then calculate
 		                		// a new path:
@@ -320,7 +323,8 @@ public class TacticLib {
                     })
                 .on((BeliefState belief) -> {
                 	Vec3 currentDestination = belief.getGoalLocation() ;
-                	if (currentDestination==null || currentDestination.distance(position) >= 0.05) {
+                	if (currentDestination==null || currentDestination.distance(position) >= 0.05
+                			|| !belief.mentalMap.hasActivePath()) {
                 		// the agent has no current location to go to, or the new goal location
                 		// is quite different from the current goal location, we will then calculate
                 		// a new path:
@@ -639,7 +643,7 @@ public class TacticLib {
                      return belief ;
                   })
     			. on((BeliefState belief) -> {
-    				 if(!memo.stateIs("S0")) return null ;
+    				 if(!memo.stateIs("S0") && belief.mentalMap.getGoalLocation() != null) return null ;
                      
                      //get the location of the closest unexplored node
                      Vec3 g = belief.getUnknownNeighbourClosestTo(belief.worldmodel.getFloorPosition(), belief.worldmodel.getFloorPosition());
@@ -672,7 +676,8 @@ public class TacticLib {
                      Vec3 currentDestination = belief.getGoalLocation() ;
                      if (agentLocation.distance(exploration_target) <= 0.3 // current exploration target is reached
                          || currentDestination==null 
-                         || currentDestination.distance(exploration_target) > 0.3) {
+                         || currentDestination.distance(exploration_target) > 0.3
+                         || !belief.mentalMap.hasActivePath()) {
                     	 // in all these cases we need to give the control back to selectExplorationTarget
                     	 // to select a new exploration target.
                     	 // This is done by moving back the exploration state

@@ -144,6 +144,9 @@ public class Observation {
             builder = builder.andThen(we -> {
                 we.position = obj.colliders[0].center;
                 we.extent = Vec3.multiply(0.5, obj.colliders[0].size);
+                we.extent.x = Math.abs(we.extent.x) ;
+                we.extent.y = Math.abs(we.extent.y) ;
+                we.extent.z = Math.abs(we.extent.z) ;
                 return we;
             });
             if (obj.colliders.length > 1) {
