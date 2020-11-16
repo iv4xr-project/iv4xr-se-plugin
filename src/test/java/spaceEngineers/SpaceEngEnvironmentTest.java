@@ -60,6 +60,7 @@ public class SpaceEngEnvironmentTest {
         Assertions.assertTrue(result);
     }
 
+
     @Test
     public void observeBlocksTest() {
         var environment = SpaceEngEnvironment.localhost();
@@ -70,9 +71,14 @@ public class SpaceEngEnvironmentTest {
         Assertions.assertTrue(observation.blocks.size() > 0);
 
         System.out.println("Got " + observation.blocks.size() + " blocks.");
-        System.out.println("First block integrity: " + observation.blocks.get(0).integrity);
+        var firstBlock = observation.blocks.get(0);
+        System.out.println("First block max integrity: " + firstBlock.maxIntegrity);
+        System.out.println("First block build integrity: " + firstBlock.buildIntegrity);
+        System.out.println("First block integrity: " + firstBlock.integrity);
 
         boolean result = environment.getSeResponse(SeRequest.disconnect());
         Assertions.assertTrue(result);
     }
+
+
 }
