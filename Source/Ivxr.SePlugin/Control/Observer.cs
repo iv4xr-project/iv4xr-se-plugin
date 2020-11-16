@@ -9,6 +9,7 @@ using Sandbox.Game.Entities.Character;
 using Sandbox.Game.Entities.Cube;
 using Sandbox.Game.Multiplayer;
 using VRage.Game.Entity;
+using VRage.Game.ModAPI;
 using VRageMath;
 
 namespace Iv4xr.SePlugin.Control
@@ -111,12 +112,14 @@ namespace Iv4xr.SePlugin.Control
 				var foundBlocks = new HashSet<MySlimBlock>();
 				grid.GetBlocksInsideSphere(ref sphere, foundBlocks);  // NOTE: This might be slow (profiled ages ago)
 
-				foreach (var sourceBlock in foundBlocks)
+				foreach (IMySlimBlock sourceBlock in foundBlocks)
 				{
 					var ivBlock = new SeBlock
 					{
-						Id = sourceBlock.UniqueId.ToString(),  // Note(PP): Consider to optimize by using int.
+						// TODO(PP): generate some Id?
 						Position = new PlainVec3D(grid.GridIntegerToWorld(sourceBlock.Position)),
+						MaxIntegrity = sourceBlock.MaxIntegrity,
+						BuildIntegrity = sourceBlock.BuildIntegrity,
 						Integrity = sourceBlock.Integrity
 					};
 
