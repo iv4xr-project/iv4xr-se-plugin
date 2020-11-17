@@ -127,6 +127,30 @@ public class Observation {
 
         return wom;
     }
+    
+    static String constructId(GameObject obj) {
+    	switch(obj.tag) {
+    	   case "Door" : return obj.name ;
+    	   case "Switch" : return obj.name ;
+    	   case "ColorScreen" : return obj.name ;
+    	   case "Decoration" :
+    		   // decorations are statics, so we can use their x,y,z coordinates to identify them
+    		   int k = obj.name.indexOf("Prefab") ;
+    		   String id_ = obj.name.substring(0,k) + "@" + obj.transform.position.toString() ; 
+    		   return id_ ;
+    	   default :
+    		   // well other cases
+    		   // (1) Fire
+    		   if (obj.FireHazard != null) {
+    			   // Firehazard does not move around, so we will use their positions to identify them
+    			   k = obj.name.indexOf("(Clone)") ;
+        		   id_ = obj.name.substring(0,k) + "@" + obj.transform.position.toString() ; 
+        		   return id_ ;
+    		   }
+    		   // other cases ... not sure. Use name?
+    		   return obj.name ;
+    	}
+    }
 
     public static LabEntity toWorldEntity(GameObject obj) {
         if (obj == null) return null;
@@ -194,7 +218,8 @@ public class Observation {
         }
 
         LabEntity we_final = new LabEntity(
-            obj.name, // TODO: obj.id would be more appropriate, but some tests still use name.
+            //obj.name, // TODO: obj.id would be more appropriate, but some tests still use name.
+            constructId(obj),
             we_type,
             true
         );

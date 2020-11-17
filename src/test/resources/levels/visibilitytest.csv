@@ -1,10 +1,10 @@
 button0,door0,,,,,,,,,
 |w,w,w,w,w,w,w,w,w,w,w
+w,f,f:t>n,f:c>s,f,w,f,f:npc^guard,f,f:dhf,w
 w,f,f,f,f,w,f,f,f,f,w
-w,f,f,f,f,w,f,f,f,f,w
-w,f,f,f:b^button0,f:a^agent0,f:d>e^door0,f:b^button1,f,f,f:t>w,w
-w,f,f,f,f,w,f,f,f,f,w
-w,f,f,f,f,w,f,f,f,f,w
+w,f:p2>w,f,f:b^button0,f:a^agent0,f:d>e^door0,f:b^button1,f,f,f,wf>n
+w,f,f,f,f,w,f,f,f,f:g^FLAG,w
+w,f:bc>e,f:t>n,f,f,w,f,f:a^BOSS,f,f:dhf,w
 w,w,w,w,w,w,w,w,w,w,w
 |w,w,w,w,w,w,w,w,w,w,w
 w,,,,,w,,,,,w
