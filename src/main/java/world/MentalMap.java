@@ -22,6 +22,8 @@ import java.util.*;
  * This class is used  to store the current knowledge of the world and form it into a mental map
  */
 public class MentalMap {
+	
+	// these are vertices ... and not index of triangles.
     private boolean[] knownVertices;
     private long[] knownVerticesTimestamps ; // containing information on when vert. i becomes known, else it is null
     public Pathfinder pathFinder;

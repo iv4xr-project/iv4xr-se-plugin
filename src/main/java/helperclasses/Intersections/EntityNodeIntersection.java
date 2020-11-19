@@ -102,6 +102,7 @@ public class EntityNodeIntersection {
             }
         }
         return blockedNodes.toArray(new Integer[blockedNodes.size()]);
+        
     }
 
     /**

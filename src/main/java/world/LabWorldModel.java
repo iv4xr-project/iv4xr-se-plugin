@@ -9,6 +9,8 @@ import nl.uu.cs.aplib.mainConcepts.Environment;
 
 public class LabWorldModel extends WorldModel {
 	
+	public int health ;
+	
 	/**
 	 * Describing the part of the static world that the agent currently sees.
 	 * Here, it is described as a set of nodes in the world's navigation graph
@@ -33,6 +35,14 @@ public class LabWorldModel extends WorldModel {
 	   justSwitch.add(LabEntity.SWITCH) ;
 	   availableInteractionTypes_.put(INTERACT,justSwitch) ;
 	}
+	 
+	@Override
+	public List<WorldEntity> mergeNewObservation(WorldModel observation) {
+		this.health = ((LabWorldModel) observation).health ;
+		this.visibleNavigationNodes = ((LabWorldModel) observation).visibleNavigationNodes ;
+		return super.mergeNewObservation(observation) ;
+	}
+	
 	
 	@Override
 	public LabEntity getElement(String id) {

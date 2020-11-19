@@ -42,7 +42,8 @@ public class BeliefState extends StateWithMessenger {
     public Boolean receivedPing = false;//store whether the agent has an unhandled ping
 
     /**
-     * keep track of nodes which are blocked and can not be used for pathfinding
+     * keep track of nodes which are blocked and can not be used for pathfinding.
+     * In this version, a "node" in this set is an index of a triangle/polygon.
      */
     public HashSet<Integer> blockedNodes = new HashSet<>();
     public HashMap<String, Integer[]> nodesBlockedByEntity = new HashMap<>();

@@ -108,6 +108,7 @@ public class Observation {
         if (obs == null) return null;
         var wom = new LabWorldModel();
         wom.agentId   = obs.agent.id;
+        wom.health = obs.agent.health ;
         wom.position  = obs.agent.position;
     	wom.extent    = new Vec3(0.2,0.75,0.2) ;
         wom.velocity  = obs.agent.velocity;

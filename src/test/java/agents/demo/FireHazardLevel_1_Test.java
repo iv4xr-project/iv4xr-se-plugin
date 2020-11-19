@@ -27,10 +27,22 @@ import world.BeliefState;
 
 import static agents.TestSettings.*;
 import static nl.uu.cs.aplib.AplibEDSL.SEQ;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Scanner;
 
-public class FireHazardAgentDirect {
+
+/**
+ * In this demo we show a level with plenty of fire hazard. The level has a room with
+ * a fire extinguisher which serves as the goal room. The testing task is to verify
+ * that this goal room is reachable and such that the agent remains healthy enough
+ * (which we will define as retaining at least 0.5 of its original health).
+ * 
+ * The test is not very intelligent though. The agent is programmed to go through a series
+ * of a pre-defined way-points that should keep it mostly safe. It still have to find
+ * its own way to navigate between the way-points.
+ */
+public class FireHazardLevel_1_Test {
 
     private static LabRecruitsTestServer labRecruitsTestServer;
 
@@ -52,23 +64,13 @@ public class FireHazardAgentDirect {
     	env.registerInstrumenter(new JsonLoggerInstrument()).turnOnDebugInstrumentation();
     }
     
-    /**
-     * This demo will tests if an agent can escape the fire hazard level
-     * First of the issues is that hazard overwrite each other, so only one
-     * is visible to the agent. Working on this.
-     * 
-     * Additionally, the hazard avoidance implemented at the Unity-side confuses
-     * auto path-finding. It should be disabled anyway. TODO.
-     * 
-     * BROKEN!! Fix this the agent get stuck.
-     */
     @Test
     public void fireHazardDemo() throws InterruptedException{
     	
         //the goals are in order
         //add move goals with GoalStructureFactory.reachPositions(new Vec3(1,0,1)) it can take either a single or multiple vec3
         //set interaction with the buttons with GoalStructureFactory.reachAndInteract("CB3") using the id of the button
-        //You will probably not want to explore to prevent random behaviour. in order to do this set the waypoints close enough to each other
+        //You will probably not want to explore to prevent random behaviour. In order to do this set the waypoints close enough to each other
 
     	var testingTask = SEQ(
         		GoalLib.positionInCloseRange(new Vec3(6,0,5)).lift(),
@@ -104,6 +106,7 @@ public class FireHazardAgentDirect {
         if (! env.startSimulation())
             throw new InterruptedException("Unity refuses to start the Simulation!");
 
+        int health0 = 0  ;
         int tick = 0;
         // run the agent until it solves its goal:
         while (testingTask.getStatus().inProgress()){
@@ -113,15 +116,22 @@ public class FireHazardAgentDirect {
             		+ ", V=" + agent.getState().derivedVelocity());
 
             agent.update();
+            if (tick==0) {
+            	health0 = agent.getState().worldmodel.health ;
+            }
              
             if (tick>2000) {
             	break ;
             }
-            Thread.sleep(50);
+            Thread.sleep(30);
             tick++;
         }
 
         testingTask.printGoalStructureStatus(); 
+        // check that the testing task is completed and that the agent still have 'enough'
+        // health
+        assertTrue(testingTask.getStatus().success()) ;
+        assertTrue(agent.getState().worldmodel.health >= health0/2) ;
         
         if (!env.close())
             throw new InterruptedException("Unity refuses to close the Simulation!");

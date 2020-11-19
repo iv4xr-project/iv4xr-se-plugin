@@ -26,17 +26,37 @@ import world.BeliefState;
 
 import static agents.TestSettings.*;
 import static nl.uu.cs.aplib.AplibEDSL.SEQ;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Scanner;
 
-public class FireHazardAgentIndirect {
+/**
+ * In this demo we show a level with plenty of fire hazard. The level has a room with
+ * a fire extinguisher which serves as the goal room. The testing task is to verify
+ * that this goal room is reachable and such that the agent remains healthy enough
+ * (which we will define as retaining at least 0.5 of its original health).
+ * 
+ * The test is not very intelligent though. The agent is programmed to go through a series
+ * of a pre-defined way-points that should keep it mostly safe. It still have to find
+ * its own way to navigate between the way-points.
+ * 
+ * In this Hazard-level the way-points will direct the agent to avoid the fire by first
+ * going to the 2nd floor, and then navigate in the floor towards stairs leading back
+ * to the 1ft floor, and then next to the goal room.
+ * 
+ * TO DO: some times, in this level at the end the agent may foolishly explore the first
+ * floor, and through fires :| It still survives, but not ideal.
+ * We have yet to implement a fire-avoidance tactic. Todo.
+ */
+public class FireHazardLevel_2_Test {
 
     private static LabRecruitsTestServer labRecruitsTestServer;
 
     @BeforeAll
     static void start() {
     	// Uncomment this to make the game's graphic visible:
-    	// TestSettings.USE_GRAPHICS = true ;
+    	TestSettings.USE_SERVER_FOR_TEST = false ;
+    	TestSettings.USE_GRAPHICS = true ;
        	String labRecruitesExeRootDir = System.getProperty("user.dir") ;
     	labRecruitsTestServer = TestSettings.start_LabRecruitsTestServer(labRecruitesExeRootDir) ; 
     }
@@ -57,14 +77,14 @@ public class FireHazardAgentIndirect {
      * 
      * BROKEN fix this!
      */
-    //@Test
+    @Test
     public void fireHazardDemo() throws InterruptedException{
         //Add the level to the resources and change the string in the environmentConfig on the next line from Ramps to the new level
-        var env = (LabRecruitsEnvironment) new LabRecruitsEnvironment(new EnvironmentConfig("HZRDIndirect").replaceAgentMovementSpeed(0.2f)).registerInstrumenter(new JsonLoggerInstrument()).turnOnDebugInstrumentation();
+        var env = (LabRecruitsEnvironment) new LabRecruitsEnvironment(new EnvironmentConfig("HZRDIndirect")
+        		.replaceAgentMovementSpeed(0.2f)) ;
+        		//.registerInstrumenter(new JsonLoggerInstrument()).turnOnDebugInstrumentation();
 
-        QArrayList<LabRecruitsTestAgent> agents = new QArrayList<>(new LabRecruitsTestAgent[] {
-                createHazardAgent(env)
-        });
+        LabRecruitsTestAgent agent = createHazardAgent(env) ;
 
     	if(TestSettings.USE_GRAPHICS) {
     		System.out.println("You can drag then game window elsewhere for beter viewing. Then hit RETURN to continue.") ;
@@ -76,21 +96,35 @@ public class FireHazardAgentIndirect {
             throw new InterruptedException("Unity refuses to start the Simulation!");
 
         int tick = 0;
+        int health0 = 0 ;
         // run the agent until it solves its goal:
-        while (!agents.allTrue(LabRecruitsTestAgent::success)){
-
-            System.out.println(PrintColor.GREEN("TICK " + tick + ":"));
-
-            // only updates in progress
-            for(var agent : agents.where(agent -> !agent.success())){
-                agent.update();
-                if(agent.success()){
-                    agent.printStatus();
-                }
-            }
+        while (!agent.success()){
+        	agent.update();
+        	System.out.println("*** " + tick + ": " + agent.getState().id + " @" + agent.getState().worldmodel.position) ; 
             Thread.sleep(30);
+            
+            if (tick==0) {
+            	health0 = agent.getState().worldmodel.health ;
+            }
+            /*
+        	System.out.println(">>> Seen vertices:") ;
+        	for (int v : agent.getState().worldmodel.visibleNavigationNodes) {
+        		var v_ = agent.getState().mentalMap.pathFinder.navmesh.vertices[v] ;
+        		System.out.println("    " + v_) ;
+        	}
+        	*/
+            
             tick++;
+            /*
+            if (tick >= 20) {
+            	break ;
+            }*/
         }
+        
+        // check that the testing task is completed and that the agent still have 'enough'
+        // health
+        assertTrue(agent.success()) ;
+        assertTrue(agent.getState().worldmodel.health >= health0/2) ;
 
         if (!env.close())
             throw new InterruptedException("Unity refuses to close the Simulation!");
@@ -110,7 +144,7 @@ public class FireHazardAgentIndirect {
         //You will probably not want to explore to prevent random behaviour. in order to do this set the waypoints close enough to each other
 
         agent.setGoal(SEQ(
-                GoalLib.positionsVisited(new Vec3(6,0,5), new Vec3(8,0,1), new Vec3(13,4,1)),
+                GoalLib.positionsVisited(new Vec3(6,0,5), new Vec3(8,0,1), new Vec3(12,4,1)),
                 GoalLib.entityInteracted("b4.1"),
                 GoalLib.positionsVisited(new Vec3(13,4,3)),
                 GoalLib.entityInteracted("b7.1"),
