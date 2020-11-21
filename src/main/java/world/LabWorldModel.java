@@ -10,6 +10,8 @@ import nl.uu.cs.aplib.mainConcepts.Environment;
 public class LabWorldModel extends WorldModel {
 	
 	public int health ;
+	public int score ;
+	public String mood ;
 	
 	/**
 	 * Describing the part of the static world that the agent currently sees.
@@ -38,8 +40,11 @@ public class LabWorldModel extends WorldModel {
 	 
 	@Override
 	public List<WorldEntity> mergeNewObservation(WorldModel observation) {
-		this.health = ((LabWorldModel) observation).health ;
-		this.visibleNavigationNodes = ((LabWorldModel) observation).visibleNavigationNodes ;
+		LabWorldModel observation_ = (LabWorldModel) observation ;
+		this.health = observation_.health ;
+		this.score  = observation_.score ;
+		this.mood = observation_.mood ;
+		this.visibleNavigationNodes = observation_.visibleNavigationNodes ;
 		return super.mergeNewObservation(observation) ;
 	}
 	

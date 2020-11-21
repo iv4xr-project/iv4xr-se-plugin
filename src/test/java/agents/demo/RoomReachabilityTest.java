@@ -55,9 +55,9 @@ public class RoomReachabilityTest {
 
     @BeforeAll
     static void start() {
-    	TestSettings.USE_SERVER_FOR_TEST = false ;
+    	//TestSettings.USE_SERVER_FOR_TEST = false ;
     	// Uncomment this to make the game's graphic visible:
-    	TestSettings.USE_GRAPHICS = true ;
+    	//TestSettings.USE_GRAPHICS = true ;
     	String labRecruitesExeRootDir = System.getProperty("user.dir") ;
     	labRecruitsTestServer = TestSettings.start_LabRecruitsTestServer(labRecruitesExeRootDir) ;
     }

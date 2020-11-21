@@ -8,6 +8,8 @@ import helperclasses.datastructures.Vec3;
 import world.BeliefState;
 import world.LabWorldModel;
 
+import static nl.uu.cs.aplib.AplibEDSL.*;
+
 import static org.junit.jupiter.api.Assertions.* ;
 
 import java.util.Scanner;
@@ -27,9 +29,9 @@ public class VisibilityTest {
 
     @BeforeAll
     static void start() {
-    	TestSettings.USE_SERVER_FOR_TEST = false ;
+    	//TestSettings.USE_SERVER_FOR_TEST = false ;
     	// Uncomment this to make the game's graphic visible:
-    	TestSettings.USE_GRAPHICS = true ;
+    	//TestSettings.USE_GRAPHICS = true ;
     	String labRecruitesExeRootDir = System.getProperty("user.dir") ;
        	labRecruitsTestServer = TestSettings.start_LabRecruitsTestServer(labRecruitesExeRootDir) ;
     }
@@ -79,51 +81,37 @@ public class VisibilityTest {
        assertEquals(1,countDecoration(wom,"Desk")) ;
        
        
+       var goal = SEQ(GoalLib.entityInteracted("button0"),
+    		          GoalLib.entityInteracted("button1"));
+       agent . setGoal(goal) ;
        
-       // toggle button0 to open the door 
-       Thread.sleep(30);
-       wom = environment.moveToward("agent0", wom.position, new Vec3(3,0,3)) ; 
-       Thread.sleep(30);
-       wom = environment.interactWith("agent0","button0") ;
+       int i = 0 ;
+       // keep updating the agent
+       while (goal.getStatus().inProgress()) {
+       	System.out.println("*** " + i + ", " + agent.getState().id + " @" + agent.getState().worldmodel.position) ;
+           Thread.sleep(50);
+           i++ ; 
+       	agent.update();
+       	if (i>100) {
+       		break ;
+       	}
+       }
        
-       // wait to let the door open completely, then observe
-       Thread.sleep(500);
-       wom = environment.observe("agent0") ;
+       // check what the agent has seen so far. In particular it should now see items
+       // in the next room
+       assertTrue(goal.getStatus().success()) ;
+       wom = agent.getState().worldmodel ; 
        assertNotNull(wom.getElement("button0")) ;
        assertNotNull(wom.getElement("door0")) ;
-       assertNull(wom.getElement("button1")) ;
-       
-       // move to pass the door and observe again:
-       Thread.sleep(50);
-       wom = environment.moveToward("agent0", wom.position, new Vec3(4,0,3)) ; 
-       Thread.sleep(50);
-       wom = environment.moveToward("agent0", wom.position, new Vec3(5,0,3)) ; 
-       Thread.sleep(30);
-       wom = environment.moveToward("agent0", wom.position, new Vec3(6,0,3)) ; 
-       Thread.sleep(30);
-  
-       wom = environment.observe("agent0") ;
-
-       assertNotNull(wom.getElement("button0")) ;
-       assertNotNull(wom.getElement("door0")) ;
+       // checking if items in the next room are by now seen:
        assertNotNull(wom.getElement("button1")) ;
-
-       
-       // move further into the room:
-       wom = environment.moveToward("agent0", wom.position, new Vec3(7,0,3)) ; 
-       Thread.sleep(30);
-       wom = environment.moveToward("agent0", wom.position, new Vec3(8,0,3)) ; 
-       Thread.sleep(30);
-       wom = environment.observe("agent0") ;
-       
        assertEquals(2,countDecoration(wom,"FireHazard")) ; // can see 2x fires
        assertNotNull(wom.getElement("guard")) ; // can see an NPC named "guard"
        assertNotNull(wom.getElement("FLAG")) ; // can see a goal named "FLAG"
        
-       // The following objects are not sent over by LR :|.. 
-       //    fire extinguisher, because it is a sub-object?
-       //    other agents 
-       
+       // can just as well check the score and mood :)
+       assertEquals(12,wom.score) ;
+       assertTrue(wom.mood.equals("Hmm...")) ;
        
        if (!environment.close())
            throw new InterruptedException("Unity refuses to start the Simulation!");

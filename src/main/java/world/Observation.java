@@ -15,6 +15,8 @@ public class Observation {
         public Vec3 velocity;
         public Boolean didNothing;
         public int health;
+        public int score ;
+        public String mood ;
     }
 
     static public class Meta {
@@ -109,6 +111,8 @@ public class Observation {
         var wom = new LabWorldModel();
         wom.agentId   = obs.agent.id;
         wom.health = obs.agent.health ;
+        wom.score = obs.agent.score ;
+        wom.mood = obs.agent.mood ;
         wom.position  = obs.agent.position;
     	wom.extent    = new Vec3(0.2,0.75,0.2) ;
         wom.velocity  = obs.agent.velocity;
