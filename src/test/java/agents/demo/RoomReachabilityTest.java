@@ -55,9 +55,9 @@ public class RoomReachabilityTest {
 
     @BeforeAll
     static void start() {
-    	//TestSettings.USE_SERVER_FOR_TEST = false ;
+    	// TestSettings.USE_SERVER_FOR_TEST = false ;
     	// Uncomment this to make the game's graphic visible:
-    	//TestSettings.USE_GRAPHICS = true ;
+    	 TestSettings.USE_GRAPHICS = true ;
     	String labRecruitesExeRootDir = System.getProperty("user.dir") ;
     	labRecruitsTestServer = TestSettings.start_LabRecruitsTestServer(labRecruitesExeRootDir) ;
     }
@@ -79,7 +79,9 @@ public class RoomReachabilityTest {
     	var doorToTest = "door1" ;
 
         // Create an environment
-        var environment = new LabRecruitsEnvironment(new EnvironmentConfig("buttons_doors_1"));
+    	var config = new EnvironmentConfig("buttons_doors_1") ;
+    	config.light_intensity = 0.3f ;
+    	var environment = new LabRecruitsEnvironment(config);
         if(USE_INSTRUMENT) instrument(environment) ;
 
         try {
