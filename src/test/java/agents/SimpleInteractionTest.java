@@ -28,6 +28,7 @@ import nl.uu.cs.aplib.mainConcepts.BasicAgent;
 import nl.uu.cs.aplib.mainConcepts.GoalStructure;
 import static nl.uu.cs.aplib.AplibEDSL.* ;
 import world.BeliefState;
+import world.LabWorldModel;
 import world.LegacyEntity;
 import world.LegacyInteractiveEntity;
 
@@ -41,9 +42,9 @@ public class SimpleInteractionTest {
 
     @BeforeAll
     static void start() {
+    	// TestSettings.USE_SERVER_FOR_TEST = false ;
     	// Uncomment this to make the game's graphic visible:
-    	//TestSettings.USE_SERVER_FOR_TEST = false ;
-    	//TestSettings.USE_GRAPHICS = true ;
+    	// TestSettings.USE_GRAPHICS = true ;
     	String labRecruitesExeRootDir = System.getProperty("user.dir") ;
     	labRecruitsTestServer = TestSettings.start_LabRecruitsTestServer(labRecruitesExeRootDir) ;
     }
@@ -53,17 +54,13 @@ public class SimpleInteractionTest {
    
 
     @Test
-    public void interactionAgent() throws InterruptedException {
+    public void test1() throws InterruptedException {
 
         // Create an environment
     	var config = new EnvironmentConfig("button1_opens_door1") ;
-    	//config.light_intensity = -100f ; //this does not seem to work
         var environment = new LabRecruitsEnvironment(config);
     	
-        if(TestSettings.USE_GRAPHICS) {
-    		System.out.println("You can drag then game window elsewhere for beter viewing. Then hit RETURN to continue.") ;
-    		new Scanner(System.in) . nextLine() ;
-    	}
+        youCanRepositionWindow() ;
         
         environment.startSimulation(); // this will press the "Play" button in the game for you
 
@@ -115,8 +112,44 @@ public class SimpleInteractionTest {
         // goal status should be success
         assertTrue(testAgent.success());
 
-        // close
-        if (!environment.close())
-            throw new InterruptedException("Unity refuses to close the Simulation!");
+        environment.closeAndThrow(); 
+    }
+    
+    @Test
+    public void test_illegalInteraction() throws InterruptedException {
+    	// Create an environment
+    	var config = new EnvironmentConfig("button1_opens_door1") ;
+        var environment = new LabRecruitsEnvironment(config);
+    	
+        youCanRepositionWindow() ;
+        
+        environment.startSimulation(); // this will press the "Play" button in the game for you
+
+        // create a test agent
+        var agent = new LabRecruitsTestAgent("agent1") // matches the ID in the CSV file
+    		    . attachState(new BeliefState())
+    		    . attachEnvironment(environment);
+        
+        LabWorldModel wom = environment.observe("agent1") ;
+        
+        // interacting with button should not turn it, as the agent is not close enough:
+        wom = environment.interactWith("agent1","button1") ;
+        Thread.sleep(50);
+        wom = environment.observe("agent1") ;
+        assertFalse(wom.getElement("button1").getBooleanProperty("isOn")) ;
+
+        // interacting with a non-existing entity should not be problem, the in-game
+        // agent will not do anything, and LR will simply return an observation:
+        wom = environment.interactWith("agent1","xxx") ;
+        
+        // interacting with an existing entity, which is not interactable should not
+        // be problem either:
+        wom = environment.interactWith("agent1","door1") ;
+        
+        // should reach this point:
+        assertTrue(true) ;
+        
+        
+        environment.closeAndThrow();
     }
 }

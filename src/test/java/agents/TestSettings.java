@@ -3,6 +3,8 @@ package agents;
 import static agents.TestSettings.USE_GRAPHICS;
 import static agents.TestSettings.USE_SERVER_FOR_TEST;
 
+import java.util.Scanner;
+
 import game.LabRecruitsTestServer;
 import game.Platform;
 
@@ -37,6 +39,13 @@ public class TestSettings {
             labRecruitsTestServer.waitForGameToLoad();
         }
     	return labRecruitsTestServer ;
+    }
+    
+    public static void youCanRepositionWindow() {
+    	if(USE_GRAPHICS) {
+    		System.out.println("You can drag then game window elsewhere for beter viewing. Then hit RETURN to continue.") ;
+    		new Scanner(System.in) . nextLine() ;
+    	}
     }
 
 }

@@ -108,6 +108,15 @@ public class SocketEnvironment extends Environment {
 
         return success;
     }
+    
+    /**
+     * Invoke close(), and if Unity refuses to close, this method will throw an
+     * InterruptedException.
+     */
+    public void closeAndThrow() throws InterruptedException {
+    	if (!this.close())
+	        throw new InterruptedException("Unity refuses to close the Simulation!");
+    }
 
     /**
      * @param cmd representing the command to send to the real environment.
