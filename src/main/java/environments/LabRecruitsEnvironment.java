@@ -19,19 +19,19 @@ import world.LabWorldModel;
 import java.io.*;
 
 public class LabRecruitsEnvironment extends W3DEnvironment {
-	
+
 	private LabRecruitsConfig gameconfig ;
 
 	/**
 	 * Limiting the agent speed per update cycle to 2 distance unit.
 	 */
 	public static final float AGENTSPEED = 2f ;
-	
+
 	static public String INTERACT_CMDNAME  = "Interact" ;
 
 	private SocketReaderWriter socket ;
-    
-	
+
+
 	/**
 	 * Create an instance of this environment with the standard Lab Recruits configuration.
 	 */
@@ -39,7 +39,7 @@ public class LabRecruitsEnvironment extends W3DEnvironment {
 		this(new LabRecruitsConfig()) ;
 	}
     /**
-     * Constructor. Create an instance of this environment with the given Lab 
+     * Constructor. Create an instance of this environment with the given Lab
      * Recruits configuration.
      */
     public LabRecruitsEnvironment(LabRecruitsConfig gameConfig) {
@@ -47,34 +47,38 @@ public class LabRecruitsEnvironment extends W3DEnvironment {
     	socket = new SocketReaderWriter(gameConfig.host, gameConfig.port) ;
     	loadWorld() ;
     }
-    
-    public LabRecruitsConfig gameConfig() { 
+
+    public LabRecruitsConfig gameConfig() {
     	return gameconfig ;
     }
-    
+
     @Override
     public void loadWorld() {
 		var rawmesh = (LabRecruitsRawNavMesh) sendCommand(null,null,LOADWORLD_CMDNAME,null,LabRecruitsRawNavMesh.class) ;
-		if (rawmesh==null) 
+		if (rawmesh==null)
 			throw new Iv4xrError("Fail to load the navgation-graph of the world") ;
 		worldNavigableMesh = rawmesh.covertToMesh() ;
 	}
-    
+
     @Override
     public LabWorldModel observe(String agentId) {
 		return (LabWorldModel) super.observe(agentId) ;
-	}	
-    
+	}
+
     @Override
     public LabWorldModel moveToward(String agentId, Vec3 agentLocation, Vec3 targetLocation) {
     	return (LabWorldModel) super.moveToward(agentId, agentLocation, targetLocation) ;
     }
-    
+
     @Override
     public LabWorldModel interact(String agentId, String targetId, String interactionType) {
 		return (LabWorldModel) sendCommand(agentId, targetId, INTERACT_CMDNAME, null, null);
 	}
-    
+
+
+	// place holder for debugging ... to be removed later
+	public Observation obs ;
+
     /**
      * @param cmd representing the command to send to the real environment.
      * @return an object that the real environment sends back as the result of the
@@ -96,7 +100,7 @@ public class LabRecruitsEnvironment extends W3DEnvironment {
              else if (cmd.command.equals(MOVETOWARD_CMDNAME)) {
             	 Vec3 agentLocation = ((Pair<Vec3,Vec3>) cmd.arg).fst ;
             	 Vec3 targetLocation = ((Pair<Vec3,Vec3>) cmd.arg).snd ;
-            	 
+
                  //Calculate the move direction:
                  Vec3 direction = Vec3.sub(targetLocation,agentLocation);
                  if (direction.length() > AGENTSPEED) {
@@ -105,7 +109,7 @@ public class LabRecruitsEnvironment extends W3DEnvironment {
                 	 direction = direction.normalized() ;
                 	 direction = Vec3.mul(direction, AGENTSPEED) ;
                 	 targetLocation = Vec3.add(agentLocation, direction) ;
-                 } 
+                 }
                  boolean jump = false ; // for now, we will not use jumps
                  request = Request.command(AgentCommand.moveTowardCommand(cmd.invokerId,targetLocation,jump)) ;
              }
@@ -114,6 +118,7 @@ public class LabRecruitsEnvironment extends W3DEnvironment {
              }
              else throw new IllegalArgumentException();
              LegacyObservation obs =  sendPackage(request) ;
+						 this.obs = obs ;
              return LegacyObservation.toWorldModel(obs) ;
         }
         catch (IOException ex) {
@@ -121,7 +126,7 @@ public class LabRecruitsEnvironment extends W3DEnvironment {
            return null;
         }
     }
-    
+
     /**
      * Press the "play-button" in Unity. If left unpressed, no simulation/game-play can start.
      */
@@ -149,7 +154,7 @@ public class LabRecruitsEnvironment extends W3DEnvironment {
             return false;
         }
     }
-    
+
     /**
      * this function updates the hazards in Unity, which is specified in EnvironmentConfig.
      * Currently broken :| TODO.
@@ -165,7 +170,7 @@ public class LabRecruitsEnvironment extends W3DEnvironment {
         }
     }
 
-    
+
     /**
      * Close the socket and connection with the Lab Recruits.
      */
@@ -186,10 +191,10 @@ public class LabRecruitsEnvironment extends W3DEnvironment {
             return false;
         }
     }
-    
+
     /**
-     * Primitive for sending a command-package to Lab-Recruit, and to return its response. 
-     * The command to send should be wrapped as a "Request" object. 
+     * Primitive for sending a command-package to Lab-Recruit, and to return its response.
+     * The command to send should be wrapped as a "Request" object.
      */
     private <T> T sendPackage(Request<T> packageToSend) throws IOException {
     	socket.write(packageToSend);

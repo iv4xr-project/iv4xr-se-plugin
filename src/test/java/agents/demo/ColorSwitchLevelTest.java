@@ -40,7 +40,7 @@ import java.util.Scanner;
  * and the other has a screen. Pushing the buttons will set a certain color on
  * the screen. The testing task is to verify that each button will indeed set
  * the correct collor.
- * 
+ *
  * Two communicating agents are used, one in each room. One is given the task to
  * operate the buttons, and the other is to check the screen. Note that there is
  * no light of sight between the room, so each agent cannot physically see the
@@ -55,15 +55,16 @@ public class ColorSwitchLevelTest {
 
     @BeforeAll
     static void start() {
+    	//TestSettings.USE_SERVER_FOR_TEST = false ;
     	// Uncomment this to make the game's graphic visible:
-        // TestSettings.USE_GRAPHICS = true ;
+    	//TestSettings.USE_GRAPHICS = true ;
     	String labRecruitesExeRootDir = System.getProperty("user.dir") ;
     	labRecruitsTestServer = TestSettings.start_LabRecruitsTestServer(labRecruitesExeRootDir) ;
     }
 
     @AfterAll
     static void close() { if(labRecruitsTestServer!=null) labRecruitsTestServer.close(); }
-    
+
     void instrument(Environment env) {
     	env.registerInstrumenter(new JsonLoggerInstrument()).turnOnDebugInstrumentation();
     }
@@ -73,7 +74,7 @@ public class ColorSwitchLevelTest {
      */
     @Test
     public void testColorSwitchDemo() throws InterruptedException{
-    	        
+
         var env = new LabRecruitsEnvironment(new LabRecruitsConfig("CLRSWTCH"));
         if(USE_INSTRUMENT) instrument(env) ;
 
@@ -81,7 +82,7 @@ public class ColorSwitchLevelTest {
     		System.out.println("You can drag then game window elsewhere for beter viewing. Then hit RETURN to continue.") ;
     		new Scanner(System.in) . nextLine() ;
     	}
-        
+
         // creating two test agents, Butty and Screeny:
         ComNode communication = new ComNode();
         var butty   =  new LabRecruitsTestAgent("0","")
@@ -91,31 +92,28 @@ public class ColorSwitchLevelTest {
         var screeny = new LabRecruitsTestAgent("1","")
                        . attachState(new BeliefState())
                        . attachEnvironment(env)
- 		               . registerTo(communication) 
+ 		               . registerTo(communication)
  		               . setTestDataCollector(new TestDataCollector()) ;
-    	
-        
+
         // defining the task for agent Butty:
         var buttyTask = SEQ(
         		GoalLib.entityInteracted("CB3"), //move to the red button and interact with it
                 GoalLib.pingSent("0", "1").lift(), //send a ping to the other agent
-                GoalLib.entityInteracted("CB3"), //move to the red button and interact with it
                 GoalLib.entityInteracted("CB1"), //move to the blue button and interact with it
                 GoalLib.pingSent("0", "1").lift(), //send a ping to the other agent
-                GoalLib.entityInteracted("CB1"), //move to the blue button and interact with it
                 GoalLib.entityInteracted("CB2"), //move to the green button and interact with it
-                GoalLib.pingSent("0", "1").lift(), //send a ping to the other agent
-                GoalLib.entityInteracted("CB2")); //move to the green button and interact with it
+                GoalLib.pingSent("0", "1").lift() //send a ping to the other agent
+                ) ;
         // and the testing task for agent Screeny:
         var screenyTask = (SEQ(
-        		colorIsVerified(screeny,"red","CS 1 0 0").lift(),
-        		colorIsVerified(screeny,"blue","CS 0 0 1").lift(),
-        		colorIsVerified(screeny,"green","CS 0 1 0").lift()
+        		colorIsVerified(screeny,"red","1.0/0.0/0.0").lift(),
+        		colorIsVerified(screeny,"purple","1.0/0.0/1.0").lift(),
+        		colorIsVerified(screeny,"white","1.0/1.0/1.0").lift()
          )) ;
         // set these goals:
         butty.setGoal(buttyTask) ;
         screeny.setGoal(screenyTask) ;
-        
+
         // press play in Unity
         if (! env.startSimulation())
             throw new InterruptedException("Unity refuses to start the Simulation!");
@@ -123,26 +121,34 @@ public class ColorSwitchLevelTest {
         int tick = 0;
         // run the agent until it solves its goal:
         while (!(butty.success() && screeny.success())){
-
+        //while (!(butty.success())){
             System.out.print("** " + tick + ":");
             if (!butty.success()) {
             	butty.update();
             	System.out.print(" agent Butty @" + butty.getState().worldmodel.position) ;
-                if (butty.success()) butty.printStatus() ;
+                if (butty.success()) {
+                	System.out.print(" Butty DONE.") ;
+                	butty.printStatus() ;
+                }
             }
+
             if (!screeny.success()) {
             	screeny.update();
-            	if (screeny.success()) butty.printStatus() ;
+            	System.out.print(" agent Screeny sees " + screeny.getState().worldmodel.getElement("SCS1").getProperty("color")) ;
+            	if (screeny.success()) {
+            		System.out.print(" Screeny DONE.") ;
+            		screeny.printStatus() ;
+            	}
             }
             System.out.println("") ;
-            
+
             if (tick > 200) {
             	break ;
             }
             Thread.sleep(30);
             tick++;
         }
-        
+
         buttyTask.printGoalStructureStatus();
 
         //check that no verdict failed
@@ -154,13 +160,13 @@ public class ColorSwitchLevelTest {
             throw new InterruptedException("Unity refuses to close the Simulation!");
     }
 
-    
+
     // Wait for the ping to check the color screen with the specified color
-	// Red  : CS 1 0 0
-    // Blue : CS 0 0 1
-    // Green: CS 0 1 0
+	// Red    : 1.0/0.0/0.0
+    // Purple : 1.0/0.0/1.0
+    // White  : 1.0/1.0/1.0
     static TestGoal colorIsVerified(LabRecruitsTestAgent agent, String colorName, String colorCode) {
-    	
+
         TestGoal g = testgoal("Wait for ping")
         		. toSolve((BeliefState b) -> {
                      if(b.receivedPing){
@@ -169,14 +175,14 @@ public class ColorSwitchLevelTest {
                      }
                         return false;
                    })
-        		
-        		. invariant(agent, (BeliefState b) -> 
-        		        assertTrue_("", 
-        		        		    "Check if the color screen is " + colorName, 
-        		             b.evaluateEntity("SCS1", e -> e.getStringProperty("color").equals(colorCode)))
+
+        		. invariant(agent, (BeliefState b) ->
+        		        assertTrue_("",
+        		        		    "Check if the color screen is " + colorName,
+        		             b.evaluateEntity("SCS1", e -> e.getStringProperty("color").toString().equals(colorCode)))
         		        )
         		. withTactic(TacticLib.receivePing());
-        
+
         return g ;
     }
 }

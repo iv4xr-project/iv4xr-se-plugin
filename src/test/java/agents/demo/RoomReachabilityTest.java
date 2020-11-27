@@ -49,6 +49,7 @@ public class RoomReachabilityTest {
 
     @BeforeAll
     static void start() {
+    	// TestSettings.USE_SERVER_FOR_TEST = false ;
     	// Uncomment this to make the game's graphic visible:
     	// TestSettings.USE_GRAPHICS = true ;
     	String labRecruitesExeRootDir = System.getProperty("user.dir") ;
@@ -57,7 +58,7 @@ public class RoomReachabilityTest {
 
     @AfterAll
     static void close() { if(labRecruitsTestServer!=null) labRecruitsTestServer.close(); }
-    
+
     void instrument(Environment env) {
     	env.registerInstrumenter(new JsonLoggerInstrument()).turnOnDebugInstrumentation();
     }
@@ -67,12 +68,14 @@ public class RoomReachabilityTest {
      */
     @Test
     public void closetReachableTest() throws InterruptedException {
-    	
+
     	var buttonToTest = "button1" ;
     	var doorToTest = "door1" ;
 
         // Create an environment
-        var environment = new LabRecruitsEnvironment(new LabRecruitsConfig("buttons_doors_1"));
+    	var config = new EnvironmentConfig("buttons_doors_1") ;
+    	config.light_intensity = 0.3f ;
+    	var environment = new LabRecruitsEnvironment(config);
         if(USE_INSTRUMENT) instrument(environment) ;
 
         try {
@@ -80,64 +83,64 @@ public class RoomReachabilityTest {
         		System.out.println("You can drag then game window elsewhere for beter viewing. Then hit RETURN to continue.") ;
         		new Scanner(System.in) . nextLine() ;
         	}
-        	
+
 	        // create a test agent
 	        var testAgent = new LabRecruitsTestAgent("agent1") // matches the ID in the CSV file
         		    . attachState(new BeliefState())
         		    . attachEnvironment(environment);
-	        
+
 	        // define the testing-task:
 	        var testingTask = SEQ(
 	            GoalLib.entityInteracted("button1"),
                 GoalLib.entityStateRefreshed("door1"),
 	        	GoalLib.entityInvariantChecked(testAgent,
-	            		"door1", 
-	            		"door1 should be open", 
+	            		"door1",
+	            		"door1 should be open",
 	            		(WorldEntity e) -> e.getBooleanProperty("isOpen")),
-	        	
+
 	        	GoalLib.entityInteracted("button3"),
 	        	GoalLib.entityStateRefreshed("door2"),
 	        	GoalLib.entityInvariantChecked(testAgent,
-	            		"door2", 
-	            		"door2 should be open", 
+	            		"door2",
+	            		"door2 should be open",
 	            		(WorldEntity e) -> e.getBooleanProperty("isOpen")),
 	        	GoalLib.entityInteracted("button4"),
 	        	//GoalLib.entityIsInRange("button3").lift(),
 	        	//GoalLib.entityIsInRange("door1").lift(),
 	        	GoalLib.entityStateRefreshed("door1"),
 	        	GoalLib.entityInvariantChecked(testAgent,
-	            		"door1", 
-	            		"door1 should be open", 
+	            		"door1",
+	            		"door1 should be open",
 	            		(WorldEntity e) -> e.getBooleanProperty("isOpen")),
 	        	//GoalLib.entityIsInRange("button1").lift(),
 	        	GoalLib.entityStateRefreshed("door3"),
 	        	GoalLib.entityInvariantChecked(testAgent,
-	            		"door3", 
-	            		"door3 should be open", 
+	            		"door3",
+	            		"door3 should be open",
 	            		(WorldEntity e) -> e.getBooleanProperty("isOpen"))
 	        );
 	        // attaching the goal and testdata-collector
 	        var dataCollector = new TestDataCollector();
 	        testAgent . setTestDataCollector(dataCollector) . setGoal(testingTask) ;
-	
-	        
+
+
 	        environment.startSimulation(); // this will press the "Play" button in the game for you
 	        //goal not achieved yet
 	        assertFalse(testAgent.success());
-	
+
 	        int i = 0 ;
 	        // keep updating the agent
 	        while (testingTask.getStatus().inProgress()) {
 	        	System.out.println("*** " + i + ", " + testAgent.getState().id + " @" + testAgent.getState().worldmodel.position) ;
 	            Thread.sleep(50);
-	            i++ ; 
+	            i++ ;
 	        	testAgent.update();
 	        	if (i>200) {
 	        		break ;
 	        	}
 	        }
 	        testingTask.printGoalStructureStatus();
-	
+
 	        // check that we have passed both tests above:
 	        assertTrue(dataCollector.getNumberOfPassVerdictsSeen() == 4) ;
 	        // goal status should be success
@@ -148,4 +151,3 @@ public class RoomReachabilityTest {
         finally { environment.close(); }
     }
 }
-

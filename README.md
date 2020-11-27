@@ -1,10 +1,11 @@
 # <img src="./docs/iv4xr_logo_1200dpi.png" width="20%"> <img src="./docs/logo.png" width="8%"> iv4xr Demo
 
 
-This is a demo for the [iv4xr Agent-based Testing Framework](https://github.com/iv4xr-project/aplib),
-demonstrating that iv4xr test agents can control a game called _Lab Recruits_ to perform fome testing tasks.
-The game is included as binary; else you can build it yourself
+This is a demo version 2.x for the [iv4xr Agent-based Testing Framework](https://github.com/iv4xr-project/aplib),
+demonstrating that iv4xr test agents can control a game called _Lab Recruits_ to perform testing tasks.
+The game executable is no longer included in the repository. It might be included in certain releases, or else you need to build it yourself
 from its [repository](https://github.com/iv4xr-project/labrecruits).
+You will need Lab Recruits version v2.1.
 
    <img src="./docs/LRSS1.png" width="70%">
 
@@ -15,6 +16,10 @@ from its [repository](https://github.com/iv4xr-project/labrecruits).
 **The Lab Recruits Game.** It is a 3D game (a screenshot is shown above) written for the purpose of testing AI (like the AI of our iv4xr test agents). It features custom level that you can define yourself through a CSV file. Keep in mind that the game is also work in progress. More about this game can be found in its [repository](https://github.com/iv4xr-project/labrecruits).
 
 ### Deploying the demo
+
+Build an executable of the [Lab Recruits](https://github.com/iv4xr-project/labrecruits). To do this you can clone or download the source code of this game. Open the project in Unity (note the specific version it needs) and build the executable from there.
+
+For Mac: put the produced `LabRecruits.app` in `gym/Mac/bin`. For Windows: put the produced files including `LabRecruits.exe` in `gym/Windows/bin`.
 
 The demo classes are in `src/test/java/agents/demo`. The demos are by default non-visual (you don't literally see the game runs). Set the variable `TestSettings.USE_GRAPHICS` in the corresponding demo-class to `true` if you want it to be visual.
 

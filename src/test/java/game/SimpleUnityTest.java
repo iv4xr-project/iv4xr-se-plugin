@@ -106,11 +106,15 @@ public class SimpleUnityTest {
         		    . attachEnvironment(environment);
 
         GoalStructure goal = goal(config.level_name)
-                .toSolve((BeliefState belief) 
-                		  -> 
-                          belief.knownEntities().size() == 1
-                          && belief.worldmodel.getElement("button0") != null 
-                          && belief.worldmodel.getElement("button0").position.equals(new Vec3(1, 0, 1)))
+                .toSolve((BeliefState belief) -> 
+                    {
+                        if (belief.knownEntities().size() != 1) return false;
+                        var button = belief.worldmodel.getElement("button0");
+                        return 
+                            button != null && 
+                            button.position.x == 1 && 
+                            button.position.z == 1;
+                    })
                 .withTactic(TacticLib.observe()) // the agent should be able to see the button by observing
                 .lift();
 
@@ -151,11 +155,13 @@ public class SimpleUnityTest {
     		        . attachEnvironment(environment);
 
         GoalStructure goal = goal(config.level_name)
-                .toSolve((BeliefState belief) 
-              		  -> 
-                   belief.knownEntities().size() == 1
-                   && belief.worldmodel.getElement("button1") != null 
-                   && belief.worldmodel.getElement("button1").position.equals(new Vec3(3, 0, 1)))
+                .toSolve((BeliefState belief) -> {
+                    var button = belief.worldmodel.getElement("button1");
+                    return 
+                        button != null && 
+                        button.position.x == 3 && 
+                        button.position.z == 1;
+                })
                 .withTactic(TacticLib.observe()) // the agent should be able to see the button by observing
                 .lift();
 
@@ -192,6 +198,7 @@ public class SimpleUnityTest {
     		        . attachEnvironment(environment);
 
         GoalStructure goal = SEQ(
+                // 'entityInspected' breaks this test --Naraenda
         		GoalLib.positionInCloseRange(new Vec3(1,0,1)).lift(),
                 GoalLib.entityInspected("button0", e -> ! e.getBooleanProperty("isOn")),
                 GoalLib.entityInteracted("button0"),
@@ -211,6 +218,7 @@ public class SimpleUnityTest {
         while (goal.getStatus().inProgress()) {
             agent.update();
             System.out.println("*** " + i + ": " + agent.getState().id + " @" + agent.getState().worldmodel.position) ;
+            System.out.println("Can interact: " + agent.getState().canInteract("button0"));
             if (i>90) {
             	   break ;
             }

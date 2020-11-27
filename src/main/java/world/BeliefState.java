@@ -33,52 +33,52 @@ public class BeliefState extends State {
 	 * the point is "on" the face, or at least close enough to the face.
 	 */
 	public static final float DIST_TO_FACE_THRESHOLD = 0.2f ;
-	
+
 	/**
 	 * Distance between a location to the currently memorized goal location; if it
 	 * is further, pathfinder is triggered to calculate a new path.
 	 */
 	public static final float DIST_TO_MEMORIZED_GOALLOCATION_SOFT_REPATH_THRESHOLD  = 0.05f ;
-	
+
 	/**
 	 * When the distance of the agent to the current waypoint is less than this, the
 	 * waypoint is considered achieved, and we advance to next waypoint.
 	 */
 	public static final float DIST_TO_WAYPOINT_UPDATE_THRESHOLD = 0.5f ;
-	
+
 	/**
 	 * All navigation vertices within this distance form the agent will be automatically
 	 * added as "seen" (since LR seem not to include them all...bug?).
 	 */
 	public static final float AUTOVIEW_HACK_DIST = 0.4f ;
-	
+
 	/**
 	 * The id of the agent that owns this belief.
 	 */
     public String id;
-    
+
     /**
      * To keep track entities the agent has knowledge about (not necessarily up to date knowledge).
      */
     public LabWorldModel worldmodel  = new LabWorldModel() ;
-    
-    
+
+
     /**
      * A 3D-surface pathfinder to guide agent to navigate over the game world.
      */
     public SurfaceNavGraph pathfinder ;
-    
+
     public Boolean receivedPing = false;//store whether the agent has an unhandled ping
-    
+
     public float viewDistance = 10f ;
-    
+
     /**
      * Since getting to some location may take multiple cycle, and we want to avoid invoking the
      * pathfinder at every cycle, the agent will memorize what the target location it is trying
-     * to reach (which we will call "goal-location") and along with it the path leading to it, as 
+     * to reach (which we will call "goal-location") and along with it the path leading to it, as
      * returned by the pathfinder. The agent basically only needs to follow this path. We will
      * additionally also need to keep track of where the agent is in this path.
-     * 
+     *
      * Elements of the memorized path will be called "way-points". So, to reach the goal-location,
      * the agent should travel from one way-point to the next one. The field currentWayPoint
      * keeps track of which way-point is the one that the agent currently should travel to.
@@ -91,55 +91,55 @@ public class BeliefState extends State {
      * set to travel to.
      */
     private int currentWayPoint_ = -1;
-    
-    List<Vec3> recentPositions = new LinkedList<>() ; 
+
+    List<Vec3> recentPositions = new LinkedList<>() ;
 
     public BeliefState() { }
 
     public Collection<WorldEntity> knownEntities() { return worldmodel.elements.values(); }
-    
-    
+
+
     // lexicographically comparing e1 and e2 based on its age and distance:
     private int compareAgeDist(WorldEntity e1, WorldEntity e2) {
     	var c1 = Long.compare(age(e1),age(e2)) ;
     	if (c1 != 0) return c1 ;
     	return Double.compare(distanceTo(e1),distanceTo(e2)) ;
     }
-    
+
     /**
      * Return all the buttons in the agent's belief.
      */
-    public List<WorldEntity> knownButtons() { 
-    	return knownEntities().stream()    	
+    public List<WorldEntity> knownButtons() {
+    	return knownEntities().stream()
     			. filter(e -> e.type.equals("Switch"))
-    			. collect(Collectors.toList()) ;		
+    			. collect(Collectors.toList()) ;
     }
 
     /**
      * Return all the buttons in the agent's belief, sorted in ascending age
      * (so, from the most recently updated to the oldest) and distance.
      */
-    public List<WorldEntity> knownButtons_sortedByAgeAndDistance() { 
+    public List<WorldEntity> knownButtons_sortedByAgeAndDistance() {
     	var buttons = knownButtons() ;
     	buttons.sort((b1,b2) -> compareAgeDist(b1,b2)) ;
     	return buttons ;
     }
-    
+
     /**
      * Return all the doors in the agent's belief.
      */
-    public List<WorldEntity> knownDoors() { 
-    	return knownEntities().stream()    	
+    public List<WorldEntity> knownDoors() {
+    	return knownEntities().stream()
     			. filter(e -> e.type.equals("Door"))
     			. collect(Collectors.toList()) ;
     }
 
-    public List<WorldEntity> knownDoors_sortedByAgeAndDistance() { 
+    public List<WorldEntity> knownDoors_sortedByAgeAndDistance() {
     	var doors = knownDoors() ;
     	doors.sort((b1,b2) -> compareAgeDist(b1,b2)) ;
     	return doors ;
     }
-    
+
     /**
      * Return how much time in the past, since the entity's last update.
      */
@@ -147,9 +147,9 @@ public class BeliefState extends State {
     	if (e==null) return null ;
     	return this.worldmodel.timestamp - e.timestamp ;
     }
-    
+
     public Long age(String id) { return age(worldmodel.getElement(id)) ; }
-    
+
     /**
      * Like derivedLastVelocity(), but if it tries to get the last known
      * and non-zero XZ-velocity that can be inferred from tracked positions.
@@ -166,7 +166,7 @@ public class BeliefState extends State {
     	}
     	return null ;
     }
-    
+
 	/**
 	 * Well ... the "velocity" field turns out to be always zero. So for now, this
 	 * method will calculate "derived" last velocity, based on the difference
@@ -191,7 +191,7 @@ public class BeliefState extends State {
     	if (e==null) return false ;
         return predicate.test(e);
     }
-    
+
     /***
      * Check if a button is active (in its "on" state).
      */
@@ -200,7 +200,7 @@ public class BeliefState extends State {
     }
 
     public boolean isOn(String id) { return isOn(worldmodel.getElement(id)) ; }
-    
+
     /**
      * Check if a door is active/open.
      */
@@ -209,7 +209,7 @@ public class BeliefState extends State {
     }
 
     public boolean isOpen(String id) { return isOpen(worldmodel.getElement(id)) ; }
-    
+
 	/**
 	 * Calculate the straight line distance from the agent to an entity, without
 	 * regard if the entity is actually reachable.
@@ -218,9 +218,9 @@ public class BeliefState extends State {
     	if (e==null) return Double.POSITIVE_INFINITY ;
     	return Vec3.dist(worldmodel.position, e.position) ;
     }
-    
+
     public double distanceTo(String id) { return distanceTo(worldmodel.getElement(id)) ; }
-    
+
 	/**
 	 * Check if the agent belief there is a path from its current location to the
 	 * entity e. If so, a path is returned, and else null. Do note that
@@ -230,46 +230,46 @@ public class BeliefState extends State {
     	if (e==null) return null ;
     	return canReach(((LabEntity) e).getFloorPosition()) ;
     }
-    
+
 	/**
 	 * Check if the agent believes that given position is reachable. That is, if a
 	 * navigation route to the position, through its nav-graph, exists. If this is
 	 * so, the route/path is returned; else null. Be aware that this might be an expensive
 	 * query as it trigger a fresh path finding calculation.
-	 */    
+	 */
     public List<Vec3> canReach(Vec3 q) {
     	return findPathTo(q,true).snd ;
     }
-    
+
 	/**
 	 * Check if the agent believes that given position is reachable. That is, if a
 	 * navigation route to the position, through its nav-graph, exists. If this is
 	 * so, the route/path is returned. Be aware that this might be an expensive
 	 * query as it trigger a fresh path finding calculation.
-	 */ 
+	 */
     public List<Vec3> canReach(String id) { return canReach(worldmodel.getElement(id)) ; }
-    
+
 	/**
 	 * Invoke the pathfinder to calculate a path from the agent current location
 	 * to the given location q.
-	 * 
+	 *
 	 * If the flag "force" is set to true, the pathfinder will really be invoked.
-	 * 
+	 *
 	 * If it is set to false, the method first compares q with the goal-location
 	 * it memorizes. If they are very close, the method assumes the destination
 	 * is still the same, and that the agent is following the memorized path to it.
 	 * In this case, it won't recalculate the path, but simply return the memorized
 	 * path.
-	 * 
+	 *
 	 * If no re-calculation is needed the method returns the pair(q',null), where
 	 * q' is the currenly memorized goal-location.
-	 * 
+	 *
 	 * If pathfinding is invoked, and results in a path, the pair (q,path) is returned.
 	 * If no path can be found, null will be returned.
 	 */
     public Pair<Vec3,List<Vec3>> findPathTo(Vec3 q, boolean forceIt) {
     	if (!forceIt && memorizedGoalLocation!=null) {
-    		if (Vec3.dist(q,memorizedGoalLocation) <= DIST_TO_MEMORIZED_GOALLOCATION_SOFT_REPATH_THRESHOLD) 
+    		if (Vec3.dist(q,memorizedGoalLocation) <= DIST_TO_MEMORIZED_GOALLOCATION_SOFT_REPATH_THRESHOLD)
     			return new Pair(q,null) ;
     	}
     	// else we invoke the pathfinder to calculate a path:
@@ -281,9 +281,9 @@ public class BeliefState extends State {
     	path.add(q) ;
     	return new Pair(q,path) ;
     }
-    
 
-    
+
+
     /**
      * True if the agent is "stuck" with respect to the given position q. "Stuck" is
      * defined as follows. Let p0,p1.p3 be the THREE most recent (and registered)
@@ -300,7 +300,7 @@ public class BeliefState extends State {
     		   &&  Vec3.dist(p0,recentPositions.get(N-1)) <= 0.05 ;
          //    && p0.distance(q) > 1.0 ;   should first translate p0 to the on-floor coordinate!
     }
-    
+
     /**
      * Clear the tracking of the agent's most recent positions. This tracking is done to detect
      * if the agent gets stuck.
@@ -308,7 +308,7 @@ public class BeliefState extends State {
     public void clearStuckTrackingInfo() {
     	recentPositions.clear();
     }
-    
+
 	/**
 	 * Return all close-by doors around the agent. Else an empty list is returned.
 	 * "Close" is being defined as within a distance of 1.0.
@@ -319,7 +319,7 @@ public class BeliefState extends State {
     			    .filter(d -> Vec3.dist(worldmodel.position,d.position) <= 2.0)
     			    .collect(Collectors.toList());
     }
-  
+
     /**
      * Set the given destination as the agent current space-navigation destination. The
      * given path is a pre-computed path to get to this destination.
@@ -330,9 +330,9 @@ public class BeliefState extends State {
         goalLocationTimeStamp = timestamp ;
         currentWayPoint_ = 0 ;
     }
-    
+
     /**
-     * Get the 3D location which the agent memorized as its current 3D navigation 
+     * Get the 3D location which the agent memorized as its current 3D navigation
      * goal/destination.
      */
     public Vec3 getGoalLocation() {
@@ -347,11 +347,11 @@ public class BeliefState extends State {
     public long getGoalLocationTimestamp() {
     	return goalLocationTimeStamp ;
     }
-    
+
     public List<Vec3> getMemorizedPath() {
     	return memorizedPath;
     }
-    /** 
+    /**
      * Clear (setting to null) the memorized 3D destination location and the memorized path to it.
      */
     public void clearGoalLocation() {
@@ -360,11 +360,11 @@ public class BeliefState extends State {
     	goalLocationTimeStamp = -1 ;
     	currentWayPoint_ = -1 ;
     }
-    
+
     /**
      * Update the current wayPoint. If it is reached, it should be moved to the next one,
      * unless if it is the last one, then it will not be advanced.
-     * 
+     *
      * This method will not clear the memorized way-point nor the path leading to it. The
      * agent must explicitly does so itself, based on its own consideration.
      */
@@ -373,7 +373,7 @@ public class BeliefState extends State {
     	var delta = Vec3.dist(worldmodel.getFloorPosition(), memorizedPath.get(currentWayPoint_)) ;
     	//System.out.println(">>> path" + memorizedPath) ;
     	//System.out.println(">>> currentwaypoint " + currentWayPoint + ", delta: " + delta) ;
-    	
+
     	// be careful with this threshold... seems to be somewhat sensitive; the mesh generated by
     	// LR seem not to take the width of the character into account, which can cause problem
     	// as to trying to move an agent to a position it cannot reach due to its width
@@ -382,21 +382,21 @@ public class BeliefState extends State {
     		// is the last one.
     		// the agent must clear or set another goal-location explicitly by itself.
             if (currentWayPoint_ < memorizedPath.size() - 1) {
-        		currentWayPoint_++ ;            	
+        		currentWayPoint_++ ;
             }
         }
     }
-    
+
     /**
      * Insert as the new current way-point, and shift the old current and the ones after it
      * to the right in the memorized path.
      */
     public void insertNewWayPoint(Vec3 p) {
     	if (currentWayPoint_ < memorizedPath.size()) {
-        	memorizedPath.add(currentWayPoint_,p) ;    		
+        	memorizedPath.add(currentWayPoint_,p) ;
     	}
      }
-    
+
     /**
      * When the agent has been assigned a destination (a 3D location) to travel to, along with
      * the path to get there, it can then follow this path. Each position in the path is
@@ -406,7 +406,7 @@ public class BeliefState extends State {
     public Vec3 getCurrentWayPoint() {
         return memorizedPath.get(Math.min(currentWayPoint_, memorizedPath.size()-1)) ;
     }
-	
+
     /**
      * This method will be called automatically by the agent when the agent.update()
      * method is called.
@@ -422,7 +422,7 @@ public class BeliefState extends State {
         recentPositions.add(new Vec3(worldmodel.position.x, worldmodel.position.y, worldmodel.position.z)) ;
         if (recentPositions.size()>4) recentPositions.remove(0) ;
     }
-    
+
     /**
      * Check if a game entity identified by is is already registered as an obstacle in the
      * navigation graph. If it is, the entity will be returned (wrapped as an instance of
@@ -435,25 +435,25 @@ public class BeliefState extends State {
     	}
     	return null ;
     }
-    
+
     static List<Integer> arrayToList(int[] a) {
     	List<Integer> s = new LinkedList<>() ;
     	for (int i : a) s.add(i) ;
     	return s ;
     }
-    
+
     /**
      * Update the agent's belief state with new information from the environment.
      *
      * @param observation: The observation used to update the belief state.
      */
     public void mergeNewObservationIntoWOM(LabWorldModel observation) {
-    	
+
     	// if there is no observation given (e.g. because the socket-connection times out)
     	// then obviously there is no information to merge either.
     	// We then simply return.
     	if (observation == null) return ;
-    	
+
     	// update the navigation graph with nodes seen in the new observation
     	pathfinder.markAsSeen(observation.visibleNavigationNodes) ;
     	// HACK.. adding nearby vertices as seen:
@@ -465,10 +465,10 @@ public class BeliefState extends State {
         		}
         	}
     	}
-    	
-    	
+
+
     	System.out.println("### seeing these nodes: "  +  arrayToList(observation.visibleNavigationNodes)) ;
-    	
+
     	// add newly discovered Obstacle-like entities, or change their states if they are like doors
     	// which can be open or close:
     	var impactEntities = worldmodel.mergeNewObservation(observation) ;
@@ -480,9 +480,9 @@ public class BeliefState extends State {
 	       		if (o==null) {
 	       			 // e has not been added to the navgraph, so we add it, and retrieve its
 	       			 // Obstacle-wrapper:
-	       			 pathfinder.addObstacle((LabEntity) e); 
+	       			 pathfinder.addObstacle((LabEntity) e);
 	       			 int N = pathfinder.obstacles.size();
-	       			 o = pathfinder.obstacles.get(N-1) ;	
+	       			 o = pathfinder.obstacles.get(N-1) ;
 	       			 if (! e.type.equals(LabEntity.DOOR)) {
 	       				 // unless it is a door, the obstacle is always blocking:
 	       				 o.isBlocking = true ;
@@ -494,11 +494,11 @@ public class BeliefState extends State {
 	       		}
         	}
         }
-        
+
         // update the tracking of memorized path to follow:
         updateCurrentWayPoint();
     }
-    
+
 
     /*
      * Test if the agent is within the interaction bounds of an object.
@@ -517,16 +517,16 @@ public class BeliefState extends State {
     public void setViewDistance(LabRecruitsConfig config) {
     	viewDistance = config.view_distance ;
     }
-    
+
     /**
      * True if the given position q is within the viewing range of the
      * agent. This is defined by the field viewDistance, whose default is 10.
      */
     public boolean withinViewRange(Vec3 q){
-    	return worldmodel.position != null 
+    	return worldmodel.position != null
     			&& Vec3.sub(worldmodel.getFloorPosition(),q).lengthSq() < viewDistance * viewDistance;
     }
-    
+
     /**
      * True if the entity is "within viewing range" of the agent. This is defined by the field viewDistance,
      * whose default is 10.
@@ -534,9 +534,9 @@ public class BeliefState extends State {
     public boolean withinViewRange(WorldEntity e){
     	return e != null && withinViewRange(((LabEntity) e).getFloorPosition());
     }
-    
+
     public boolean withinViewRange(String id){ return withinViewRange(worldmodel.getElement(id)) ; }
-    
+
 
     @Override
     public String toString() {
@@ -558,14 +558,14 @@ public class BeliefState extends State {
 
     /**
      * Link an environment to this Belief. It must be an instance of LabRecruitsEnvironment.
-     * This will also create an instance of SurafaceNavGraph from the navigation-mesh of the 
+     * This will also create an instance of SurafaceNavGraph from the navigation-mesh of the
      * loaded LR-level stored in the env.
      */
     @Override
     public BeliefState setEnvironment(Environment e) {
     	super.setEnvironment(e) ;
         if (! (e instanceof LabRecruitsEnvironment)) throw new IllegalArgumentException("Expecting an instance of LabRecruitsEnvironment") ;
-        LabRecruitsEnvironment e_ = (LabRecruitsEnvironment) e ;        
+        LabRecruitsEnvironment e_ = (LabRecruitsEnvironment) e ;
         pathfinder = new SurfaceNavGraph(e_.worldNavigableMesh) ;
         return this;
     }

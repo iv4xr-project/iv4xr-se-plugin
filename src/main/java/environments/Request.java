@@ -9,6 +9,7 @@ package environments;
 
 import world.LabRecruitsRawNavMesh;
 import world.LegacyObservation;
+import world.Observation;
 
 /**
  * A wrapper for commands to be sent to the Lab Recruits. 
@@ -116,8 +117,8 @@ public class Request<ResponseType>  {
     /**
      * Request an observation after executing the sent Command
      */
-    public static Request<LegacyObservation> command(AgentCommand command) {
-        return new Request<>(LegacyObservation.class, RequestType.AGENTCOMMAND, command);
+    public static Request<Observation> command(AgentCommand command) {
+        return new Request<>(Observation.class, RequestType.AGENTCOMMAND, command);
     }
 
     /**
