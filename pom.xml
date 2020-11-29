@@ -71,7 +71,7 @@
 
         <!-- dependencies on iv4xr Agent Framework -->
         <!--  for remote repo:
-        <dependency> 
+        <dependency>
             <groupId>com.github.iv4XR-project</groupId>
             <artifactId>aplib</artifactId>
             <version>v1.0</version>
@@ -80,7 +80,7 @@
         <dependency>
             <groupId>nl.uu.cs.aplib</groupId>
             <artifactId>aplib</artifactId>
-            <version>1.1.0-alpha</version>
+            <version>1.2.0</version>
         </dependency>
     </dependencies>
 </project>

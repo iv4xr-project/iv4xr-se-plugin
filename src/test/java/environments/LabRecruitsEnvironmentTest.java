@@ -88,14 +88,15 @@ public class LabRecruitsEnvironmentTest {
     }
     
     @Test
-    public void test_env_simple_interaction() {
+    public void test_env_simple_interaction() throws InterruptedException {
     	assertTrue(labRecruitsTestServer != null) ;
     	var env = new LabRecruitsEnvironment(new LabRecruitsConfig("minimal"));
+    	env.moveToward("agent0", new Vec3(1f,0.75f,2f), new Vec3(1f,0f,1f)) ;
+    	Thread.sleep(50);
     	LabWorldModel obs = env.interact("agent0", "button0", "") ;
     	LabEntity b0 = obs.getElement("button0") ;
     	assertTrue(b0 != null) ;
     	assertTrue(b0.getBooleanProperty("isOn")) ;
-    
     }
     
     @Test
@@ -116,7 +117,7 @@ public class LabRecruitsEnvironmentTest {
     	// check if the color screen is observed:
     	var cs0 = obs.getElement("escreen0") ;
     	System.out.println(">>> " + cs0.getStringProperty("color")) ;
-    	assertTrue(cs0.getStringProperty("color").equals("CS 0 0 0")) ;
+    	assertTrue(cs0.getStringProperty("color").toString().equals("0.0/0.0/0.0")) ;
     }
     
     @Test
@@ -129,10 +130,10 @@ public class LabRecruitsEnvironmentTest {
     	// check that button 0 and 2 are visible:
     	assertTrue(obs.getElement("button0") != null) ;
     	assertTrue(obs.getElement("button2") != null) ;
+    	assertTrue(obs.getElement("button1") != null) ;
     	// check that that other interactables are not visible:   	
-    	assertTrue(obs.getElement("button1") == null) ;
     	assertTrue(obs.getElement("door0") == null) ;
-    	assertTrue(obs.getElement("screen0") == null) ;
+    	assertTrue(obs.getElement("escreen0") == null) ;
 
     }
     
@@ -144,28 +145,30 @@ public class LabRecruitsEnvironmentTest {
     	
     	var config = new LabRecruitsConfig("square1") ;
     	var env = new LabRecruitsEnvironment(config);
-    	// agent-1 does not exist, so the following command is illegal. LR will not send back any
-    	// response, but our LR-env will eventually time-out
     	
     	// hit_RETURN() ;
-    	
-    	LabWorldModel obs0 = env.observe("agent1") ;
-    	assertTrue(obs0 == null) ;
+    	LabWorldModel obs0 = null ;
+
+    	// agent-1 does not exist, so the following command is illegal. LR does see that this is illegal,
+    	// but it does not send back anything either, which causes the Java-side to keep waiting.
+    	// TODO: fix this on the LR side so that it returns something,  e.g. null.    	
+    	//LabWorldModel obs0 = env.observe("agent1") ;
+    	//assertTrue(obs0 == null) ;
 
     	// sending a legal command:
     	obs0 = env.observe("agent0") ;
     	assertTrue(obs0 != null && obs0.agentId.equals("agent0")) ;
     	
-    	// try to interact with button0. This should not work because it is too far, but currently
-    	// LR will just happily execute this command. FIX THIS (at the LR side).
+    	// try to interact with button0. This should not work because it is too far.
     	obs0 = env.interact("agent0","button0","") ;
     	assertTrue(obs0 != null) ;
-
-    	//System.out.println("" + obs0) ;
-    	// This one is illegal because button1 does not exist. LR will not send back any
-    	// response, but our LR-env will eventually time-out
+    	assertFalse(obs0.getElement("button0").getBooleanProperty("isOn")) ;
+    	
+    	// This one is illegal because button1 does not exist. LR will not do anything, and simply send back
+    	// an observation.
     	obs0 = env.interact("agent0","button1","") ;
-    	assertTrue(obs0 == null) ;
+    	assertTrue(obs0 != null) ;
+
     	
     	//hit_RETURN() ;
     }
@@ -185,7 +188,7 @@ public class LabRecruitsEnvironmentTest {
         var distance = Float.MAX_VALUE ;
         for (int k=0; k<20; k++) {
         	env.moveToward("agent0",obs0.position, button0Position) ;
-            Thread.sleep(30);
+            Thread.sleep(50);
         	obs0 = env.observe("agent0") ;
         	var p0 = obs0.position.copy() ;
         	var p1 = button0Position.copy() ;
@@ -197,10 +200,11 @@ public class LabRecruitsEnvironmentTest {
             	System.out.println(">>>  close enough to the button0, now toggling it") ;
             	var obs1 = env.interact("agent0", "button0", "") ;
             	var button0State = obs1.getElement("button0").getBooleanProperty("isOn") ;
-            	var door0State = obs1.getElement("door0").getBooleanProperty("isOpen") ;
+            	assertTrue(button0State) ;
+            	var door0 = obs1.getElement("door0") ;
+            	var door0State = door0.getBooleanProperty("isOpen") ;
             	System.out.println(">>> button0 isOn: " + button0State) ;
             	System.out.println(">>> door0 isOpen: " + door0State) ;
-            	assertTrue(button0State) ;
             	assertTrue(door0State) ;
             	break ;
             }

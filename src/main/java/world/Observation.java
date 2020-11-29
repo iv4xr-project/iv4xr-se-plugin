@@ -3,7 +3,8 @@ package world;
 import java.io.Serializable;
 import java.util.function.Function;
 
-import helperclasses.datastructures.Vec3;
+import eu.iv4xr.framework.spatial.Vec3;
+
 
 /**
  * The observation JSON generated in Observation.cs in the game.
@@ -114,7 +115,7 @@ public class Observation {
         wom.score = obs.agent.score ;
         wom.mood = obs.agent.mood ;
         wom.position  = obs.agent.position;
-    	wom.extent    = new Vec3(0.2,0.75,0.2) ;
+    	wom.extent    = new Vec3(0.2f,0.75f,0.2f) ;
         wom.velocity  = obs.agent.velocity;
         wom.timestamp = obs.meta.tick;
 
@@ -160,6 +161,9 @@ public class Observation {
     public static LabEntity toWorldEntity(GameObject obj) {
         if (obj == null) return null;
         String we_type = "";
+        // dynamic game-object can change state; for now we will just declare all game-objects sent by LR to be
+        // dynamic. TODO: refine this in the future. E.g. a chair is not dynamic.
+        boolean isDynamic = true ; 
 
         Function<LabEntity, LabEntity> builder = we -> {
             we.position = obj.transform.position;
@@ -172,7 +176,7 @@ public class Observation {
             
             builder = builder.andThen(we -> {
                 we.position = obj.colliders[0].center;
-                we.extent = Vec3.multiply(0.5, obj.colliders[0].size);
+                we.extent = Vec3.mul(obj.colliders[0].size, 0.5f);
                 we.extent.x = Math.abs(we.extent.x) ;
                 we.extent.y = Math.abs(we.extent.y) ;
                 we.extent.z = Math.abs(we.extent.z) ;
@@ -226,7 +230,7 @@ public class Observation {
             //obj.name, // TODO: obj.id would be more appropriate, but some tests still use name.
             constructId(obj),
             we_type,
-            true
+            isDynamic
         );
         return builder.apply(we_final);
     }

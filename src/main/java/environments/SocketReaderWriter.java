@@ -12,8 +12,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import logger.PrintColor;
-import world.LegacyEntity;
-import world.LegacyEntityType;
 
 /**
  * Provide a reader/writer to a socket to communicate with the system under test.
@@ -37,8 +35,6 @@ public class SocketReaderWriter {
     private static Gson gson = new GsonBuilder()
             .serializeNulls()
             .excludeFieldsWithModifiers(Modifier.TRANSIENT)
-            .registerTypeAdapter(LegacyEntityType.class, new EntityTypeJsonAdapter())
-            .registerTypeHierarchyAdapter(LegacyEntity.class, new EntityJsonAdapter())
             .create();
     
     
@@ -59,7 +55,7 @@ public class SocketReaderWriter {
                 writer = new PrintWriter(socket.getOutputStream(), true);
             } catch (IOException ignored) { }
         }
-        
+        /* WP: disabled. This is now fixed.
         try {
         	// set the socket to timeout in 5 secs
         	// Currently LR just hang when we try to send an illegal command. This should be fixed,
@@ -69,6 +65,7 @@ public class SocketReaderWriter {
         catch(SocketException e) {
         	System.out.println("Failing to set timeout on the socketL: " + e.getMessage()) ;
         }
+        */
 
         if(socketReady()){
             System.out.println(String.format("%s: Connected with %s on %s:%s", PrintColor.SUCCESS(), PrintColor.UNITY(), host, port));

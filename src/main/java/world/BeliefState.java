@@ -566,7 +566,7 @@ public class BeliefState extends State {
     	super.setEnvironment(e) ;
         if (! (e instanceof LabRecruitsEnvironment)) throw new IllegalArgumentException("Expecting an instance of LabRecruitsEnvironment") ;
         LabRecruitsEnvironment e_ = (LabRecruitsEnvironment) e ;
-        pathfinder = new SurfaceNavGraph(e_.worldNavigableMesh) ;
+        pathfinder = new SurfaceNavGraph(e_.worldNavigableMesh,0.5f) ; // area-size threshold 0.5 
         return this;
     }
 

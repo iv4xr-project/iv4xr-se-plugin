@@ -13,8 +13,8 @@ import eu.iv4xr.framework.exception.Iv4xrError;
 import eu.iv4xr.framework.mainConcepts.W3DEnvironment;
 import eu.iv4xr.framework.spatial.Vec3;
 import world.LabRecruitsRawNavMesh;
-import world.LegacyObservation;
 import world.LabWorldModel;
+import world.Observation;
 
 import java.io.*;
 
@@ -93,7 +93,7 @@ public class LabRecruitsEnvironment extends W3DEnvironment {
         	 if (cmd.command.equals(LOADWORLD_CMDNAME)) {
              	return sendPackage(Request.gymEnvironmentInitialisation(gameconfig)) ;
              }
-        	 Request<LegacyObservation> request ;
+        	 Request<Observation> request ;
              if (cmd.command.equals(OBSERVE_CMDNAME)) {
             	request =  Request.command(AgentCommand.doNothing(cmd.invokerId)) ;
              }
@@ -117,9 +117,9 @@ public class LabRecruitsEnvironment extends W3DEnvironment {
             	 request = Request.command(AgentCommand.interactCommand(cmd.invokerId, cmd.targetId)) ;
              }
              else throw new IllegalArgumentException();
-             LegacyObservation obs =  sendPackage(request) ;
-						 this.obs = obs ;
-             return LegacyObservation.toWorldModel(obs) ;
+             Observation obs =  sendPackage(request) ;
+			 this.obs = obs ; // copying the observation for debugging, for now...
+             return Observation.toWorldModel(obs) ;
         }
         catch (IOException ex) {
            System.out.println("I/O error: " + ex.getMessage());

@@ -8,7 +8,6 @@ at Utrecht University within the Software and Game project course.
 package environments;
 
 import world.LabRecruitsRawNavMesh;
-import world.LegacyObservation;
 import world.Observation;
 
 /**
