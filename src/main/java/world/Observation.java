@@ -222,7 +222,10 @@ public class Observation {
                 we.properties.put("color", obj.ColorScreen.color);
                 return we;
             });
-        } else if (obj.FireHazard != null) {
+        } else if (obj.tag.equals("Goal")) {
+        	we_type = LabEntity.GOAL ;
+        }
+        else if (obj.FireHazard != null) {
             we_type = LabEntity.FIREHAZARD;
         }
 

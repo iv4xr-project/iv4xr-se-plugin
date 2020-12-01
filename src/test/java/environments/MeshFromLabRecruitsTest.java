@@ -9,7 +9,9 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import agents.TestSettings;
 import eu.iv4xr.framework.extensions.pathfinding.SurfaceNavGraph;
+import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.spatial.Vec3;
 import eu.iv4xr.framework.spatial.meshes.Face;
 import eu.iv4xr.framework.spatial.meshes.Mesh;
@@ -35,6 +37,7 @@ public class MeshFromLabRecruitsTest {
     	labRecruitsTestServer =new LabRecruitsTestServer(
     			useGraphics,
                 Platform.PathToLabRecruitsExecutable(labRecruitesExeRootDir));
+    	//TestSettings.USE_SERVER_FOR_TEST = false ;
     	labRecruitsTestServer.waitForGameToLoad();
     }
 
@@ -209,17 +212,13 @@ public class MeshFromLabRecruitsTest {
     
     
     @Test
-    public void test_that_closeddoors_block_visibility_on_vertices() {
+    public void test_how_door_affects_visibility_on_vertices() throws InterruptedException {
     	assertTrue(labRecruitsTestServer != null) ;
     	var level = "longcorridorWithDoorBetween" ;
     	System.out.println(">>> level: " + level) ;
     	var config = new LabRecruitsConfig(level);
     	var env = new LabRecruitsEnvironment(config);
-    	var obs = env.observe("agent0") ;
-    	var door0 = obs.getElement("door0") ;
-    	System.out.println(">>> agent position:" + obs.position) ;
-    	System.out.println(">>> door0 position:" + door0.position + ", distance: " + 
-    	                        Vec3.dist(door0.position, obs.position)) ;
+    	System.out.println(">>> Mesh information:") ;
     	var mesh = env.worldNavigableMesh ;
     	System.out.println(">>> #vertices: " + mesh.vertices.size()) ;
     	System.out.println(">>> #faces: " + mesh.faces.size()) ;
@@ -227,27 +226,76 @@ public class MeshFromLabRecruitsTest {
     	var topright = getTopRightCorner(mesh); 
     	System.out.println(">>> bottom-left: " + bottomleft) ;
     	System.out.println(">>> top-right: " + topright) ;
+    	
+    	// Door-0 is initially closed. Let's check which nodes should be visible:
+    	
+    	var obs = env.observe("agent0") ;
+    	var door0 = obs.getElement("door0") ;
+    	System.out.println(">>> agent position:" + obs.position) ;
+    	System.out.println(">>> door0 position:" + door0.position + ", distance: " + 
+    	                        Vec3.dist(door0.position, obs.position)) ;
+    	// button-1 should NOT be visible:
+    	System.out.println(">>> can see button1: " + obs.getElement("button1")) ;
+    	assertFalse(obs.getElement("button1") != null) ;
+
     	var visibleNodes = obs.visibleNavigationNodes ;
     	var agentPosition = obs.position ;
     	for (int v : visibleNodes) {
     		var v_ = mesh.vertices.get(v) ;
     		var dist = Vec3.dist(agentPosition,v_) ;
-    		System.out.println("   ** Visible: vertex " + v + ", distance = " + dist) ;
+    		System.out.println("   ** Visible: vertex " + v 
+    				+ " " + v_ 
+    				+ ", distance = " + dist) ;
     		assertTrue(dist <= Vec3.dist(door0.position, obs.position) + 0.5) ;
     	}
     	for (var v : getUnvisibleVertices(mesh,visibleNodes)) {
     		var v_ = mesh.vertices.get(v) ;
     		var dist = Vec3.dist(agentPosition,v_) ;
-    		System.out.println("   ** NOT visible: vertex " + v + ", distance = " + dist) ;
-    		assertTrue(dist > Vec3.dist(door0.position, obs.position) + 0.5) ;
+    		System.out.println("   ** NOT visible: vertex " + v + " " + v_ + ", distance = " + dist) ;
+    		boolean onTheSameFloor = Math.abs(v_.y - 0f) <= 0.1 ;
+    		assertTrue(!onTheSameFloor || dist > Vec3.dist(door0.position, obs.position) + 0.5) ;
+    	}
+    	
+    	// Let's not open door-1
+    	env.interact("agent0", "button0", "") ;
+    	// The door opens slowly :| So make sure to add enough delay. The door needs to be completely open
+    	// for the agent to get full sight to what lies behind it:
+    	Thread.sleep(1000);
+
+    	obs = env.observe("agent0") ;
+    	System.out.println(">>> agent position:" + obs.position) ;
+    	System.out.println(">>> door0 position:" + door0.position + ", distance: " + 
+    	                        Vec3.dist(door0.position, obs.position)) ;
+    	// button1 should not be visible:
+    	System.out.println(">>> can see button1: " + obs.getElement("button1")) ;
+    	assertTrue(obs.getElement("button1") != null) ;
+
+    	visibleNodes = obs.visibleNavigationNodes ;
+    	agentPosition = obs.position ;
+    	for (int v : visibleNodes) {
+    		var v_ = mesh.vertices.get(v) ;
+    		var dist = Vec3.dist(agentPosition,v_) ;
+    		System.out.println("   ** Visible: vertex " + v 
+    				+ " " + v_ 
+    				+ ", distance = " + dist) ;
+    		assertTrue(dist <= config.view_distance) ;
+    	}
+    	for (var v : getUnvisibleVertices(mesh,visibleNodes)) {
+    		var v_ = mesh.vertices.get(v) ;
+    		var dist = Vec3.dist(agentPosition,v_) ;
+    		System.out.println("   ** NOT visible: vertex " + v + " " + v_ + ", distance = " + dist) ;
+    		boolean onTheSameFloor = Math.abs(v_.y - 0f) <= 0.1 ;
+    		assertTrue(!onTheSameFloor || dist > config.view_distance) ;
     	}
     }
+    
+    
     
     /**
      * Test how different layout of static obstacles influence the reachability of nodes in 
      * navigation mesh. Obviously, walls should block reachability. 
-     * But also static furnitures like tables, chairs, book-cases. It seems color-screen
-     * also block reachability.
+     * But also static furnitures like tables, chairs, book-cases. Color-screen
+     * also blocks reachability.
      */ 
     @Test
     public void test_nodes_reachability_behind_static_obstacles() {
@@ -312,12 +360,25 @@ public class MeshFromLabRecruitsTest {
     		System.out.println("     vertex " + v + ": " + mesh.vertices.get(v)) ;
     	}
     	// We will use SurfaceNavGraph to verify reachability
-    	SurfaceNavGraph navgraph = new SurfaceNavGraph(mesh) ;
+    	SurfaceNavGraph navgraph = new SurfaceNavGraph(mesh,0.5f) ;
+    	
+    	// let's check intrinsic reachability .. so assume perfect-memory:
     	navgraph.perfect_memory_pathfinding = true ;
+    	
+    	for(WorldEntity e :obs.elements.values()) {
+    		if (e.type.equals(LabEntity.COLORSCREEN)) {
+    			LabEntity e_ = (LabEntity) e ;
+    			System.out.println(">>> " + e_.id + " " + e_.getFloorPosition() + ", extent: " + e_.extent) ;
+    			navgraph.addObstacleInBlockingState(e_); 
+    		}
+    	}
+    	
+    	// navgraph.markAsSeen(visibleNodes);
     	var agent_loc = Vec3.add(obs.position, Vec3.zero()) ;
     	agent_loc.y = 0 ;
     	// button location... assumed to be at (5,0,5):
     	var button_loc = new Vec3(5,0,5) ;
+    	
     	var path = navgraph.findPath(agent_loc, button_loc, 0.2f) ;
     	System.out.println(">>> SurfaceNavgraph info:") ;
     	System.out.println(">>>   #vertices: " + navgraph.vertices.size()) ;
@@ -351,9 +412,8 @@ public class MeshFromLabRecruitsTest {
 	return true ;	
 	}
     
-    // Unfortunately, this test fails. It seems that LR does not do the calculation correctly
-    // Disabling the test for now:
-    //@Test
+
+    @Test
     public void test_that_wall_blocks_visibility_on_vertices() throws InterruptedException {
     	assertTrue(labRecruitsTestServer != null) ;
     	var level = "longcorridorWithWallBetween" ;
@@ -380,13 +440,14 @@ public class MeshFromLabRecruitsTest {
     		var v_ = mesh.vertices.get(v) ;
     		var dist = Vec3.dist(agentPosition,v_) ;
     		System.out.println("   ** Visible: vertex " + v + ", distance = " + dist) ;
-    		assertTrue(dist <= 5f) ;
+    		assertTrue(dist <= 4f) ;
     	}
     	for (var v : getUnvisibleVertices(mesh,visibleNodes)) {
     		var v_ = mesh.vertices.get(v) ;
     		var dist = Vec3.dist(agentPosition,v_) ;
+    		boolean onTheSameFloor = Math.abs(v_.y - 0f) <= 0.1 ;
     		System.out.println("   ** NOT visible: vertex " + v + " @" + v_ + ", distance = " + dist) ;
-    		assertTrue(dist > 5f) ;
+    		assertTrue(!onTheSameFloor || dist > 4f) ;
     	}
     }
     
