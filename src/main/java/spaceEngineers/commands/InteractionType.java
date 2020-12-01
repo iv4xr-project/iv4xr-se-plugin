@@ -11,10 +11,8 @@ package spaceEngineers.commands;
  * Keep this enum synced with Unity!
  */
 
-public enum SeAgentCommandType
+public enum InteractionType
 {
-    OBSERVE,
-    MOVE_ROTATE,
-    MOVETOWARD,
-    INTERACT
+    EQUIP,
+    PLACE
 }

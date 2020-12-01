@@ -42,6 +42,11 @@ public class SeAgentCommand {
         return moveAndRotate(agent, new MovementArgs(movement, rotation, roll));
     }
 
+    public static SeAgentCommand interact(String agent, int slot) {
+        return new SeAgentCommand(agent, agent, SeAgentCommandType.INTERACT, slot);
+    }
+
+
     /**
      * Moves an agent in a certain direction.
      */
