@@ -9,6 +9,11 @@ namespace SeServerMock.Mocks
 {
 	internal class MockCharacterController : ICharacterController
 	{
+		public void EquipToolbarItem(int slot)
+		{
+			// Noop.
+		}
+
 		public void Move(Vector3 move, Vector2 rotation, float roll)
 		{
 			// Noop.

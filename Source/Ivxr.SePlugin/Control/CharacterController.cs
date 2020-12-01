@@ -1,4 +1,5 @@
 ﻿using Iv4xr.SePlugin.WorldModel;
+using Sandbox.Game.Screens.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,6 +11,7 @@ namespace Iv4xr.SePlugin.Control
 	{
 		void Move(Vector3 move, Vector2 rotation, float roll);
 		void Move(MoveAndRotateArgs args);
+		void EquipToolbarItem(int slot);
 	}
 
 	public class CharacterController : ICharacterController
@@ -37,6 +39,13 @@ namespace Iv4xr.SePlugin.Control
 				throw new NotSupportedException("Entity control not possible now."); 
 
 			entityController.ControlledEntity.MoveAndRotate(movement, rotation, roll);
+		}
+
+		public void EquipToolbarItem(int slot)
+		{
+			var currentToolbar = MyToolbarComponent.CurrentToolbar;
+
+			currentToolbar.ActivateItemAtSlot(slot);
 		}
 	}
 }

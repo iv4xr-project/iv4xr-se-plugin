@@ -76,6 +76,14 @@ namespace Iv4xr.SePlugin.Control
 				Log?.WriteLine($"Move indicator: {moveCommandArgs.MoveIndicator}");
 				m_controller.Move(moveCommandArgs.MoveIndicator, Vector2.Zero, 0.0f);
 			}
+			else if (commandName.StartsWith("INTERACT"))
+			{ 
+				var requestShell = m_jsoner.ToObject<SeRequestShell<AgentCommand<int>>>(request.Message);
+				var toolbarSlot = requestShell.Arg.Arg;
+
+				Log?.WriteLine($"Interact -- Toolbar slot: {toolbarSlot}");
+				m_controller.EquipToolbarItem(toolbarSlot);
+			}
 			else
 			{
 				throw new NotImplementedException($"Uknown agent command: {commandName}");
