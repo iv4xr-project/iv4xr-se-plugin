@@ -4,6 +4,7 @@ import helperclasses.datastructures.Vec3;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import spaceEngineers.commands.InteractionArgs;
+import spaceEngineers.commands.InteractionType;
 import spaceEngineers.commands.SeAgentCommand;
 
 public class InteractionTest {
@@ -12,12 +13,28 @@ public class InteractionTest {
     public void equipToolbarItemTest() {
         var environment = SpaceEngEnvironment.localhost();
 
-        // Single move request is not actually visible on the character movement, see manyMovesTest below
         var observation = environment.getSeResponse(SeRequest.command(
-                SeAgentCommand.interact("you", 5)));
+                SeAgentCommand.interact("you", new InteractionArgs(InteractionType.EQUIP, 4))));
         Assertions.assertNotNull(observation);
 
         boolean result = environment.getSeResponse(SeRequest.disconnect());
         Assertions.assertTrue(result);
     }
+
+    @Test
+    public void equipAndPlace() {
+        var environment = SpaceEngEnvironment.localhost();
+
+        var observation = environment.getSeResponse(SeRequest.command(
+                SeAgentCommand.interact("you", new InteractionArgs(InteractionType.EQUIP,3))));
+        Assertions.assertNotNull(observation);
+
+        observation = environment.getSeResponse(SeRequest.command(
+                SeAgentCommand.interact("you", new InteractionArgs(InteractionType.PLACE))));
+        Assertions.assertNotNull(observation);
+
+        boolean result = environment.getSeResponse(SeRequest.disconnect());
+        Assertions.assertTrue(result);
+    }
+
 }
