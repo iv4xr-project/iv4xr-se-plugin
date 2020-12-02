@@ -25,7 +25,7 @@ namespace SeServerMock
                 server.Start();
 
 				var observer = new MockObserver();
-				var controller = new MockCharacterController();
+				var controller = new MockCharacterController() { Log = log };
 
                 var dispatcher = new Dispatcher(requestQueue, observer, controller);
 				dispatcher.Log = log;

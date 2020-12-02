@@ -78,11 +78,9 @@ namespace Iv4xr.SePlugin.Control
 			}
 			else if (commandName.StartsWith("INTERACT"))
 			{ 
-				var requestShell = m_jsoner.ToObject<SeRequestShell<AgentCommand<int>>>(request.Message);
-				var toolbarSlot = requestShell.Arg.Arg;
+				var requestShell = m_jsoner.ToObject<SeRequestShell<AgentCommand<InteractionArgs>>>(request.Message);
 
-				Log?.WriteLine($"Interact -- Toolbar slot: {toolbarSlot}");
-				m_controller.EquipToolbarItem(toolbarSlot);
+				m_controller.Interact(requestShell.Arg.Arg);
 			}
 			else
 			{
