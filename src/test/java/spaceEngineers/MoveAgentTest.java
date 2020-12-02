@@ -55,10 +55,12 @@ public class MoveAgentTest {
                 moves.add(move);
         };
 
-        addMoves.accept(new Vec3(0, 0, -1), 40);  // Forward
-        addMoves.accept(new Vec3(1, 0, 0), 10);   // Right
-        addMoves.accept(new Vec3(0, 0, -1), 20);
-        addMoves.accept(new Vec3(-1, 0, 0), 20);  // Left
+        final int stepBoost = 1;  // Increase to 10 to 20 to slow down the movement (and see it better)
+
+        addMoves.accept(new Vec3(0, 0, -1), 4 * stepBoost);  // Forward
+        addMoves.accept(new Vec3(1, 0, 0), 1 * stepBoost);   // Right
+        addMoves.accept(new Vec3(0, 0, -1), 2 * stepBoost);
+        addMoves.accept(new Vec3(-1, 0, 0), 2 * stepBoost);  // Left
 
         moves.add(new Vec3(0, 0.5, 0)); // Up
 
@@ -86,20 +88,22 @@ public class MoveAgentTest {
                 moves.add(movementArgs);
         };
 
+        final int stepBoost = 1;  // Increase to 10 to 20 to slow down the movement (and see it better)
+
         var forwardArgs = new MovementArgs(new Vec3(0, 0, -1));
-        addMoves.accept(forwardArgs, 30);
+        addMoves.accept(forwardArgs, 3 * stepBoost);
 
         var rotateArgs = new MovementArgs(Vec3.zero(), new Vec3(0, 9.0, 0), 0);
-        addMoves.accept(rotateArgs, 20);
+        addMoves.accept(rotateArgs, 2 * stepBoost);
 
-        addMoves.accept(forwardArgs, 30);
-        addMoves.accept(new MovementArgs(new Vec3(-1, 0, 0)), 20);  // Left
+        addMoves.accept(forwardArgs, 3 * stepBoost);
+        addMoves.accept(new MovementArgs(new Vec3(-1, 0, 0)), 20 * stepBoost);  // Left
 
         var rollArgs = new MovementArgs(Vec3.zero(), Vec3.zero(), -2);
-        addMoves.accept(rollArgs, 15);
+        addMoves.accept(rollArgs, 2 * stepBoost);
 
         var allArgs = new MovementArgs(new Vec3(0, 0.7, 0.2), new Vec3(5, 7, 0), 1.5f);
-        addMoves.accept(allArgs, 40);
+        addMoves.accept(allArgs, 4 * stepBoost);
 
         for (var move : moves) {
 
