@@ -115,48 +115,54 @@ public class TacticLib {
 		MiniMemory memory = new MiniMemory("S0") ;
 
 		Action move =
-				  rawNavigateTo_("Navigate to a position nearby " + id, null)
+				unguardedNavigateTo("Navigate to a position nearby " + id)
 
 				. on((BeliefState belief) -> {
 
 					var e = (LabEntity) belief.worldmodel.getElement(id) ;
     			    if (e==null) return null ;
 
-					Vec3 nodeLocation = null ;
+					Vec3 closeByLocation = null ;
 					if (!memory.memorized.isEmpty()) {
-						nodeLocation = (Vec3) memory.memorized.get(0) ;
+						// if the position has been calculated before, retrieve it from memory:
+						closeByLocation = (Vec3) memory.memorized.get(0) ;
 					}
 					Vec3 currentGoalLocation = belief.getGoalLocation() ;
 
-					if (nodeLocation == null
+					if (closeByLocation == null
 					    || currentGoalLocation == null
-					    || nodeLocation.distance(currentGoalLocation) >= 0.05
-					    || ! belief.mentalMap.hasActivePath()) {
-						// in all these cases we need to calculate the node to go
+					    || Vec3.dist(closeByLocation,currentGoalLocation) >= 0.05
+					    || belief.getMemorizedPath() == null) {
+						// in all these cases we need to calculate the location to go
 
-						var agent_location = belief.worldmodel.getFloorPosition() ;
+						//var agent_location = belief.worldmodel.getFloorPosition() ;
 	    			    var entity_location = e.getFloorPosition() ;
+	    			    // calculate the center of the square on which the target entity is located:
+	    			    var entity_sqcenter = new Vec3((float) Math.floor((double) entity_location.x) + 0.5f,
+	    			    		entity_location.y,
+	    			    		(float) Math.floor((double) entity_location.z) + 0.5f) ;
+	    			    
 	    			    List<Vec3> candidates = new LinkedList<>() ;
-	    			    float delta = 0.7f ;
+	    			    float delta = 0.5f ;
 	    			    // adding North and south candidates
-	    			    candidates.add(Vec3.sum(entity_location, new Vec3(0,0,delta))) ;
-	    			    candidates.add(Vec3.sum(entity_location, new Vec3(0,0,-delta))) ;
+	    			    candidates.add(Vec3.add(entity_sqcenter, new Vec3(0,0,delta))) ;
+	    			    candidates.add(Vec3.add(entity_sqcenter, new Vec3(0,0,-delta))) ;
 	    			    // adding east and west candidates:
-	    			    candidates.add(Vec3.sum(entity_location, new Vec3(delta,0,0))) ;
-	    			    candidates.add(Vec3.sum(entity_location, new Vec3(-delta,0,0))) ;
+	    			    candidates.add(Vec3.add(entity_sqcenter, new Vec3(delta,0,0))) ;
+	    			    candidates.add(Vec3.add(entity_sqcenter, new Vec3(-delta,0,0))) ;
 
 	    			    // iterate over the candidates, if one would be reachable:
 	    			    for (var c : candidates) {
 	    			    	// if c (a candidate point near the entity) is on the navigable,
 	    			    	// we should ignore it:
-	    			    	if (belief.mentalMap.getContainingPolygon(c) == null) continue ;
-	    			    	var path = belief.mentalMap.navigateForce(agent_location,c,belief.blockedNodes) ;
-	    			    	if (path != null) {
+	    			    	if (getCoveringFaces(belief,c) == null) continue ;
+	    			    	var result = belief.findPathTo(c, true) ; 
+	    			    	if (result != null) {
 	    			    		// found our target
-	    			    		System.out.println(">>> a reachable closeby position found :" + c + ", path: " + Arrays.toString(path)) ;
+	    			    		System.out.println(">>> a reachable closeby position found :" + c + ", path: " + result.snd) ;
 	    			    		memory.memorized.clear();
 	    			    		memory.memorize(c);
-	    			    		return new Tuple(c,path) ;
+	    			    		return result ;
 	    			    	}
 	    			    }
 	    			    System.out.println(">>> i tried few nearby locations, but none are reachable :|") ;
@@ -167,7 +173,7 @@ public class TacticLib {
 					else {
 						// else the memorized location and the current goal-location coincide. No need to
 						// recalculate the path, so we will just return the pair (memorized-loc,null)
-						return new Tuple (nodeLocation,null) ;
+						return new Pair (closeByLocation,null) ;
 					}
 				}) ;
 
@@ -177,6 +183,22 @@ public class TacticLib {
 				 move.lift()
 			   ) ;
 	}
+	
+	
+	/**
+	 * Return the face in the nav-mesh maintained by a BeliefState, 
+	 * that covers a given point. Return null if there is none.
+	 */
+    static Face getCoveringFaces(BeliefState S, Vec3 p) {
+    	for(Face face : S.pathfinder.faces) {
+			if (face.distFromPoint(p, S.pathfinder.vertices) <= 0.1) {
+				// found it
+				return face ;
+			}
+    	}
+    	return null ;
+    }
+	
 
 	/**
 	 * Navigate to a navigation node closest to the given entity, and is moreover
@@ -187,7 +209,7 @@ public class TacticLib {
 		MiniMemory memory = new MiniMemory("S0") ;
 
 		Action move =
-				unguardedNavigateTo("Navigate to a navigation vertex nearby " + id, null)
+				unguardedNavigateTo("Navigate to a navigation vertex nearby " + id)
 
 				. on((BeliefState belief) -> {
 
@@ -205,32 +227,30 @@ public class TacticLib {
 					    || Vec3.dist(nodeLocation,currentGoalLocation) >= 0.05) {
 						// in all these cases we need to calculate the node to go
 
-    			    var entity_location = e.getFloorPosition() ;
+    			        var entity_location = e.getFloorPosition() ;
 	    			    List<Pair<Vec3,Float>> candidates = new LinkedList<>() ;
-	    			    int N = belief.pathfinder.vertices.size() ;
 	    			    int k=0 ;
 	    			    for (Vec3 v : belief.pathfinder.vertices) {
 	    			    	if (belief.pathfinder.seenVertices.get(k)) {
 	    			    		// v has been seen:
 	    			    		candidates.add(new Pair(v, Vec3.dist(entity_location, v))) ;
-/* xxxx .... conflict
 	    			    	}
 	    			    	k++ ;
 	    			    }
 
-		    			if (candidates.isEmpty()) return null ;
-		    			// sort the candidates according to how close they are to the entity e (closest first)
-		    			candidates.sort((c1,c2) -> c1.snd.compareTo(c2.snd));
-		    			// now find the first one that is reachable:
+		    		    if (candidates.isEmpty()) return null ;
+		    		    // sort the candidates according to how close they are to the entity e (closest first)
+		    		    candidates.sort((c1,c2) -> c1.snd.compareTo(c2.snd));
+		    		    // now find the first one that is reachable:
 		    		    System.out.println(">>> #candidates closest reachable neighbor nodes = " + candidates.size()) ;
-		    			Pair<Vec3,List<Vec3>> result = null ;
-		    			for(var c : candidates) {
+		    		    Pair<Vec3,List<Vec3>> result = null ;
+		    		    for(var c : candidates) {
 		    			    result = belief.findPathTo(c.fst,true) ;
 		    			    if (result != null) {
-		    			    	// found a reachable candidate!
-		    			    	System.out.println(">>> a reachable nearby node found :" + c.fst + ", path: " + result.snd) ;
-		    			    	memory.memorized.clear();
-		    			    	memory.memorize(result.fst);
+		    			        // found a reachable candidate!
+		    			        System.out.println(">>> a reachable nearby node found :" + c.fst + ", path: " + result.snd) ;
+		    			        memory.memorized.clear();
+		    			        memory.memorize(result.fst);
 		    			    	return result ;
 		    			    }
 		    		    }
@@ -253,6 +273,7 @@ public class TacticLib {
 			   )  ;
 	}
 
+
     /**
      * A tactic to navigate to the given entity's location. The tactic is enabled if
      * the agent believes the entity exists and is reachable. Else the tactic is NOT
@@ -262,7 +283,7 @@ public class TacticLib {
 
     	// let's just reuse rawNavigateTo_(..), and then we replace its guard:
 
-    	Action move = unguardedNavigateTo("Navigate to " + id, null)
+    	Action move = unguardedNavigateTo("Navigate to " + id)
     			      // replacing its guard with this new one:
 		              . on((BeliefState belief) -> {
 		                	var e = (LabEntity) belief.worldmodel.getElement(id) ;
@@ -271,10 +292,10 @@ public class TacticLib {
 		    			    // find path to p, but don't force re-calculation
 		    			    return belief.findPathTo(p,false) ;
 		                }) ;
-
-/* xxx --- conflict
+    	
     	return move.lift() ;
-     }
+    }
+     
 
 	/**
 	 * Construct a tactic T that will drive the agent to move towards a given
@@ -297,7 +318,7 @@ public class TacticLib {
 	 * This tactic will not try to detect if the agent has become stuck.
 	 */
     public static Tactic rawNavigateTo(Vec3 position) {
-    	return unguardedNavigateTo("Navigate to " + position, position)
+    	return unguardedNavigateTo("Navigate to " + position)
     		   . on((BeliefState belief) -> {
     			    // Check if a path to the position can be found; use the flag "false"
     			    // so as not to force repeated recalculation of the reachability.
@@ -314,17 +335,18 @@ public class TacticLib {
     }
 
     /**
-     * This action will in principle drive the agent towards a previously memorized 3D
-     * goal-location, along a previously memorized path. The exact behavior is controlled
-     * by what its guard passes to it. The given guard below is a dummy guard which is
+     * This action will in principle drive the agent towards a previously memorized 
+     * goal-location (a position in the world), along a previously memorized path. 
+     * The exact behavior is controlled
+     * by what its guard passes/propagates to it. The given guard below is a dummy guard which is
      * always enabled and simply passes the pair (null,null),which will lead to the above
      * behavior. This guard should be replaced when using this action.
      *
-     * If the guard pass (d,path) where d is a destination and p is a non-null path,
+     * If the guard propagates (d,path) where d is a destination and p is a non-null path,
      * this pair will be memorized as the new goal-location/path pair for the agent
      * to follow.
      *
-     * If the guard pass (*,null) the action will stick to the currently memorized
+     * If the guard propagates (*,null) the action will stick to the currently memorized
      * goal-location/path.
      *
      * IMPORTANT: this action will still try to move the agent to the goal-location, even
@@ -332,7 +354,7 @@ public class TacticLib {
      * that whether it wants to stop this stuttering, and how (e.g. by imposing a guard
      * that prevents the stuttering, or by clearing the memorized goal-location.
      */
-    private static Action unguardedNavigateTo(String actionName, Vec3 position) {
+    private static Action unguardedNavigateTo(String actionName) {
     	Action move = action(actionName)
                 .do2((BeliefState belief) -> (Pair<Vec3,List<Vec3>> q)  -> {
                 	// q is a pair of (distination,path). Passing the destination is not necessary
@@ -352,9 +374,11 @@ public class TacticLib {
                 	System.out.println(">>> path: " + path) ;
                 	System.out.println(">>> memorized dest: " + belief.getGoalLocation()) ;
                 	System.out.println(">>> memorized path: " + belief.getMemorizedPath()) ;
-                	if (belief.getMemorizedPath() != null)
+                	if (belief.getMemorizedPath() != null) {
                 		belief.worldmodel.moveToward(belief.env(),belief.getCurrentWayPoint());
-                    return belief;
+                		return belief ;
+                	}
+                	else return null ;
                     })
                 // a dummy guard; override this when using this action:
                 .on((BeliefState belief) -> new Pair(null,null)) ;
@@ -684,7 +708,7 @@ public class TacticLib {
     	//
 
     	var explore_ =
-    			unguardedNavigateTo("Explore: traveling to an exploration target",null)
+    			unguardedNavigateTo("Explore: traveling to an exploration target")
 
     			. on((BeliefState belief) -> {
     				 if(memo.stateIs("S0")) {

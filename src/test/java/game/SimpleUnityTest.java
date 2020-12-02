@@ -22,7 +22,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.AfterAll;
 import world.BeliefState;
-import world.LegacyInteractiveEntity;
 
 import java.util.function.Predicate;
 

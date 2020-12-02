@@ -30,8 +30,6 @@ import nl.uu.cs.aplib.mainConcepts.GoalStructure;
 import static nl.uu.cs.aplib.AplibEDSL.* ;
 import world.BeliefState;
 import world.LabWorldModel;
-import world.LegacyEntity;
-import world.LegacyInteractiveEntity;
 
 /**
  * In this test we are given a simple small room with a button close by and a door.
@@ -45,7 +43,7 @@ public class SimpleInteractionTest {
     static void start() {
     	// TestSettings.USE_SERVER_FOR_TEST = false ;
     	// Uncomment this to make the game's graphic visible:
-    	// TestSettings.USE_GRAPHICS = true ;
+    	TestSettings.USE_GRAPHICS = true ;
     	SocketReaderWriter.debug = true ;
     	String labRecruitesExeRootDir = System.getProperty("user.dir") ;
     	labRecruitsTestServer = TestSettings.start_LabRecruitsTestServer(labRecruitesExeRootDir) ;
@@ -126,8 +124,8 @@ public class SimpleInteractionTest {
     @Test
     public void test_illegalInteraction() throws InterruptedException {
     	// Create an environment
-    	var config = new EnvironmentConfig("button1_opens_door1") ;
-        var environment = new LabRecruitsEnvironment(config);
+    	var config = new LabRecruitsConfig("button1_opens_door1") ;
+    	LabRecruitsEnvironment environment = new LabRecruitsEnvironment(config);
 
         youCanRepositionWindow() ;
 
@@ -141,18 +139,18 @@ public class SimpleInteractionTest {
         LabWorldModel wom = environment.observe("agent1") ;
 
         // interacting with button should not turn it, as the agent is not close enough:
-        wom = environment.interactWith("agent1","button1") ;
+        wom = environment.interact("agent1","button1",null) ;
         Thread.sleep(50);
         wom = environment.observe("agent1") ;
         assertFalse(wom.getElement("button1").getBooleanProperty("isOn")) ;
 
         // interacting with a non-existing entity should not be problem, the in-game
         // agent will not do anything, and LR will simply return an observation:
-        wom = environment.interactWith("agent1","xxx") ;
+        wom = environment.interact("agent1","xxx",null) ;
 
         // interacting with an existing entity, which is not interactable should not
         // be problem either:
-        wom = environment.interactWith("agent1","door1") ;
+        wom = environment.interact("agent1","door1",null) ;
 
         // should reach this point:
         assertTrue(true) ;

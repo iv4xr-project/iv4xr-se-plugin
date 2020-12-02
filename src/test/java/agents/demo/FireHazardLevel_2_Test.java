@@ -56,7 +56,7 @@ public class FireHazardLevel_2_Test {
     static void start() {
     	// Uncomment this to make the game's graphic visible:
     	//TestSettings.USE_SERVER_FOR_TEST = false ;
-    	//TestSettings.USE_GRAPHICS = true ;
+    	TestSettings.USE_GRAPHICS = true ;
        	String labRecruitesExeRootDir = System.getProperty("user.dir") ;
     	labRecruitsTestServer = TestSettings.start_LabRecruitsTestServer(labRecruitesExeRootDir) ;
     }
@@ -80,7 +80,11 @@ public class FireHazardLevel_2_Test {
     @Test
     public void fireHazardDemo() throws InterruptedException{
         //Add the level to the resources and change the string in the environmentConfig on the next line from Ramps to the new level
-        var env = (LabRecruitsEnvironment) new LabRecruitsEnvironment(new LabRecruitsConfig("HZRDIndirect").replaceAgentMovementSpeed(0.2f)).registerInstrumenter(new JsonLoggerInstrument()).turnOnDebugInstrumentation();
+        var config = new LabRecruitsConfig("HZRDIndirect")
+        		. replaceAgentMovementSpeed(0.2f)
+        		. replaceLightIntensity(0.3f);
+        
+    	var env = (LabRecruitsEnvironment) new LabRecruitsEnvironment(config).turnOnDebugInstrumentation();
 
         LabRecruitsTestAgent agent = createHazardAgent(env) ;
 

@@ -191,6 +191,16 @@ public class LabRecruitsEnvironment extends W3DEnvironment {
             return false;
         }
     }
+    
+    /**
+     * Invoke close(), and if Unity refuses to close, this method will throw an
+     * InterruptedException.
+     */
+    public void closeAndThrow() throws InterruptedException {
+    	if (!this.close())
+	        throw new InterruptedException("Unity refuses to close the Simulation!");
+    }
+
 
     /**
      * Primitive for sending a command-package to Lab-Recruit, and to return its response.

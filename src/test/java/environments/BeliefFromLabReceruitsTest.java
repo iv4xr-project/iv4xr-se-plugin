@@ -82,9 +82,6 @@ public class BeliefFromLabReceruitsTest {
     	agent.update();
     	assertTrue(agent.getState().worldmodel.getElement("button0") != null) ;
     	assertTrue(agent.getState().isOn("button0") == false) ;
-    	
-    	
-
     }
     
     @Test
@@ -110,7 +107,7 @@ public class BeliefFromLabReceruitsTest {
     	assertTrue(wom.getElement("button1") != null) ;
     	assertTrue(wom.getElement("button0") != null) ;
     	assertTrue(wom.getElement("escreen0") != null) ;
-    	assertTrue(wom.getElement("escreen0").getStringProperty("color").equals("CS 0 0 0")) ;
+    	assertTrue(wom.getElement("escreen0").getStringProperty("color").toString().equals("0.0/0.0/0.0")) ;
     	
     	
     	//hit_RETURN()  ;

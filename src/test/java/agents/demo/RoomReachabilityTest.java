@@ -31,8 +31,6 @@ import org.junit.jupiter.api.Test;
 import game.Platform;
 import game.LabRecruitsTestServer;
 import world.BeliefState;
-import world.LegacyEntity;
-import world.LegacyInteractiveEntity;
 
 import static agents.TestSettings.*;
 import static nl.uu.cs.aplib.AplibEDSL.*;
@@ -51,7 +49,7 @@ public class RoomReachabilityTest {
     static void start() {
     	// TestSettings.USE_SERVER_FOR_TEST = false ;
     	// Uncomment this to make the game's graphic visible:
-    	// TestSettings.USE_GRAPHICS = true ;
+    	TestSettings.USE_GRAPHICS = true ;
     	String labRecruitesExeRootDir = System.getProperty("user.dir") ;
     	labRecruitsTestServer = TestSettings.start_LabRecruitsTestServer(labRecruitesExeRootDir) ;
     }
@@ -73,7 +71,7 @@ public class RoomReachabilityTest {
     	var doorToTest = "door1" ;
 
         // Create an environment
-    	var config = new EnvironmentConfig("buttons_doors_1") ;
+    	var config = new LabRecruitsConfig("buttons_doors_1") ;
     	config.light_intensity = 0.3f ;
     	var environment = new LabRecruitsEnvironment(config);
         if(USE_INSTRUMENT) instrument(environment) ;
@@ -117,7 +115,8 @@ public class RoomReachabilityTest {
 	        	GoalLib.entityInvariantChecked(testAgent,
 	            		"door3",
 	            		"door3 should be open",
-	            		(WorldEntity e) -> e.getBooleanProperty("isOpen"))
+	            		(WorldEntity e) -> e.getBooleanProperty("isOpen")),
+	        	GoalLib.entityInCloseRange("door3")
 	        );
 	        // attaching the goal and testdata-collector
 	        var dataCollector = new TestDataCollector();

@@ -48,7 +48,7 @@ public class Explore_1_Test {
     @BeforeAll
     static void start() {
     	// Uncomment this to make the game's graphic visible:
-        // TestSettings.USE_GRAPHICS = true ;
+        TestSettings.USE_GRAPHICS = true ;
     	String labRecruitesExeRootDir = System.getProperty("user.dir") ;
        	labRecruitsTestServer = TestSettings.start_LabRecruitsTestServer(labRecruitesExeRootDir) ;
     }

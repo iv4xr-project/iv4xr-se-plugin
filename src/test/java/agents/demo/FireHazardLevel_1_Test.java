@@ -50,7 +50,7 @@ public class FireHazardLevel_1_Test {
     static void start() {
     	// Uncomment this to make the game's graphic visible:
     	//TestSettings.USE_SERVER_FOR_TEST = false ;
-    	//TestSettings.USE_GRAPHICS = true ;
+    	TestSettings.USE_GRAPHICS = true ;
     	String labRecruitesExeRootDir = System.getProperty("user.dir") ;
     	labRecruitsTestServer = TestSettings.start_LabRecruitsTestServer(labRecruitesExeRootDir) ;
     }
@@ -88,7 +88,9 @@ public class FireHazardLevel_1_Test {
     	
         //Add the level to the resources and change the string in the environmentConfig on the next line from Ramps to the new level
         //var env = new LabRecruitsEnvironment(new EnvironmentConfig("HZRDDirect").replaceAgentMovementSpeed(0.2f));
-        var env = new LabRecruitsEnvironment(new LabRecruitsConfig("HZRDDirect")) ;
+        var config = new LabRecruitsConfig("HZRDDirect") ;
+    	config.light_intensity = 0.5f ;
+    	var env = new LabRecruitsEnvironment(config) ;
         if(USE_INSTRUMENT) instrument(env) ;
         
 

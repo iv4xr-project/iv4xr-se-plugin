@@ -4,7 +4,6 @@ import static agents.TestSettings.USE_SERVER_FOR_TEST;
 
 
 import game.LabRecruitsTestServer;
-import helperclasses.datastructures.Vec3;
 import world.BeliefState;
 import world.LabWorldModel;
 
@@ -17,7 +16,7 @@ import java.util.Scanner;
 import org.junit.jupiter.api.Test;
 
 import agents.tactics.GoalLib;
-import environments.EnvironmentConfig;
+import environments.LabRecruitsConfig;
 import environments.LabRecruitsEnvironment;
 
 import org.junit.jupiter.api.AfterAll;
@@ -31,7 +30,7 @@ public class VisibilityTest {
     static void start() {
     	//TestSettings.USE_SERVER_FOR_TEST = false ;
     	// Uncomment this to make the game's graphic visible:
-    	//TestSettings.USE_GRAPHICS = true ;
+    	TestSettings.USE_GRAPHICS = true ;
     	String labRecruitesExeRootDir = System.getProperty("user.dir") ;
        	labRecruitsTestServer = TestSettings.start_LabRecruitsTestServer(labRecruitesExeRootDir) ;
     }
@@ -51,7 +50,7 @@ public class VisibilityTest {
     @Test
     public void visibility_test_1() throws InterruptedException {
     	
-    	var environment = new LabRecruitsEnvironment(new EnvironmentConfig("visibilitytest"));
+    	var environment = new LabRecruitsEnvironment(new LabRecruitsConfig("visibilitytest"));
     	
         LabRecruitsTestAgent agent = new LabRecruitsTestAgent("agent0")
         		                     . attachState(new BeliefState())

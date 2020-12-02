@@ -103,7 +103,7 @@ public class GoalLib {
                         //check if the agent is close to the goal position
         		    	var e = belief.worldmodel.getElement(entityId) ;
         		    	if (e == null) return false ;
-                        return belief.worldmodel.getFloorPosition().distance(e.getFloorPosition()) <= 1 ;
+                        return Vec3.dist(belief.worldmodel.getFloorPosition(),e.getFloorPosition()) <= 1 ;
                     });
         //define the goal structure
         return goal.withTactic(

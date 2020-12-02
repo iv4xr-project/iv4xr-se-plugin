@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import agents.LabRecruitsTestAgent;
 import agents.TestSettings;
-import environments.EnvironmentConfig;
+import environments.LabRecruitsConfig;
 import environments.LabRecruitsEnvironment;
 import game.LabRecruitsTestServer;
 import nl.uu.cs.aplib.mainConcepts.GoalStructure;
@@ -25,7 +25,7 @@ public class Test_SamiraLevels {
     static void start() {
     	//TestSettings.USE_SERVER_FOR_TEST = false ;
     	// Uncomment this to make the game's graphic visible:
-        //TestSettings.USE_GRAPHICS = true ;
+        TestSettings.USE_GRAPHICS = true ;
     	String labRecruitesExeRootDir = System.getProperty("user.dir") ;
        	labRecruitsTestServer = TestSettings.start_LabRecruitsTestServer(labRecruitesExeRootDir) ;
     }
@@ -47,7 +47,7 @@ public class Test_SamiraLevels {
 	LabRecruitsTestAgent create_and_deploy_testagent(String levelName, String agentId, String testDescription) {
         System.out.println("======= Level: " + levelName + ", " + testDescription) ;
 		
-        var environment = new LabRecruitsEnvironment(new EnvironmentConfig(levelName));
+        var environment = new LabRecruitsEnvironment(new LabRecruitsConfig(levelName));
         
         LabRecruitsTestAgent agent = new LabRecruitsTestAgent(agentId)
         		                     . attachState(new BeliefState())
