@@ -565,11 +565,16 @@ public class TacticLib {
                 	var e = belief.worldmodel.getElement(objectID) ;
                 	//System.out.println(">>>> " + objectID + ": " + e) ;
                 	if (e==null) return null ;
-                	//System.out.println(">>>>    dist: " + Vec3.dist(belief.worldmodel.getFloorPosition(),e.getFloorPosition())) ;
+                	// System.out.println(">>>>    dist: " + Vec3.dist(belief.worldmodel.getFloorPosition(),e.getFloorPosition())) ;
 
                 	if (belief.worldmodel.canInteract(LabWorldModel.INTERACT, e)) {
                 		return e ;
                 	}
+                	//System.out.println(">>> cannot interact with " + e.id) ;
+            		//System.out.println("    Agent pos: " + belief.worldmodel.getFloorPosition()) ;
+            		//System.out.println("    Entity pos:" + e.getFloorPosition()) ;
+            		//System.out.println("    Entity extent:" + e.extent) ;
+            		
                 	return null ;
                     })
                . lift();

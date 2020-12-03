@@ -134,7 +134,7 @@ public class GoalLib {
         	  goal(String.format("This entity is in interaction distance: [%s]", entityId))
         	  . toSolve((BeliefState belief) -> {
         		  var e = (LabEntity) belief.worldmodel.getElement(entityId) ;
-       	          return e!=null && Vec3.dist(belief.worldmodel.getFloorPosition(), e.getFloorPosition()) < 0.3 ;
+       	          return e!=null && Vec3.dist(belief.worldmodel.getFloorPosition(), e.getFloorPosition()) < 0.35 ;
         	    })
         	  . withTactic(
                     FIRSTof( //the tactic used to solve the goal

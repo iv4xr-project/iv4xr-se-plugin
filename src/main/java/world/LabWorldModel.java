@@ -80,19 +80,12 @@ public class LabWorldModel extends WorldModel {
     	if (target.type != LabEntity.SWITCH) return false ;
     	    	
 		var target_onfloorPosition = target.getFloorPosition() ;
-		var extent = new Vec3(Math.max(target.extent.x,0.3f),
-				              Math.max(target.extent.y,0.3f),
-				              Math.max(target.extent.z,0.3f)) ;
-
-		var min = Vec3.sub(target_onfloorPosition,extent);
-        var max = Vec3.add(target_onfloorPosition,extent);
         var agent_floorp = getFloorPosition() ;
-
-        //System.out.println(">>> agent @" + agent_floorp + ", e.id @" + target_onfloorPosition) ;
-
-        return (agent_floorp.x > min.x && agent_floorp.x < max.x &&
-        		agent_floorp.y > min.y && agent_floorp.y < max.y &&
-        		agent_floorp.z > min.z && agent_floorp.z < max.z);
+        // squared distance between the floor positions of the target and agent:
+        var distSq = Vec3.sub(target_onfloorPosition, agent_floorp).lengthSq() ;
+        
+        // interaction distance threshold is set at 0.6, so its squared-value is 0.36
+        return distSq <= 0.36 ;	
 	}
 
 	@Override

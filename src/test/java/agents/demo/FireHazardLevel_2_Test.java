@@ -146,7 +146,7 @@ public class FireHazardLevel_2_Test {
         //You will probably not want to explore to prevent random behaviour. in order to do this set the waypoints close enough to each other
 
         agent.setGoal(SEQ(
-                GoalLib.positionsVisited(new Vec3(6,0,5), new Vec3(8,0,1), new Vec3(12,4,1)),
+                GoalLib.positionsVisited(new Vec3(6,0,5), new Vec3(8,0,1), new Vec3(13,4,1)),
                 GoalLib.entityInteracted("b4.1"),
                 GoalLib.positionsVisited(new Vec3(13,4,3)),
                 GoalLib.entityInteracted("b7.1"),
