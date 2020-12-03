@@ -467,7 +467,7 @@ public class BeliefState extends State {
     	}
 
 
-    	System.out.println("### seeing these nodes: "  +  arrayToList(observation.visibleNavigationNodes)) ;
+    	// System.out.println("### seeing these nodes: "  +  arrayToList(observation.visibleNavigationNodes)) ;
 
     	// add newly discovered Obstacle-like entities, or change their states if they are like doors
     	// which can be open or close:

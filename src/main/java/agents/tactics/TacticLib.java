@@ -370,10 +370,10 @@ public class TacticLib {
                 		belief.applyPath(belief.worldmodel.timestamp, destination, path) ;
                 	}
                     //move towards the next way point of whatever the current path is:
-                	System.out.println(">>> destination: " + destination) ;
-                	System.out.println(">>> path: " + path) ;
-                	System.out.println(">>> memorized dest: " + belief.getGoalLocation()) ;
-                	System.out.println(">>> memorized path: " + belief.getMemorizedPath()) ;
+                	//System.out.println(">>> destination: " + destination) ;
+                	//System.out.println(">>> path: " + path) ;
+                	//System.out.println(">>> memorized dest: " + belief.getGoalLocation()) ;
+                	//System.out.println(">>> memorized path: " + belief.getMemorizedPath()) ;
                 	if (belief.getMemorizedPath() != null) {
                 		belief.worldmodel.moveToward(belief.env(),belief.getCurrentWayPoint());
                 		return belief ;
