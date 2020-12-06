@@ -1,13 +1,14 @@
-# <img src="./docs/iv4xr_logo_1200dpi.png" width="20%"> <img src="./docs/logo.png" width="8%"> iv4xr Demo
+# <img src="./docs/iv4xr_logo_1200dpi.png" width="20%"> <img src="./docs/logo.png" width="8%"> iv4XR Demo
 
 
-This is a demo version 2.x for the [iv4xr Agent-based Testing Framework](https://github.com/iv4xr-project/aplib),
-demonstrating that iv4xr test agents can control a game called _Lab Recruits_ to perform testing tasks.
+This is a demo version 2.x for the [iv4XR Agent-based Testing Framework](https://github.com/iv4xr-project/aplib),
+demonstrating that iv4XR test agents can control a game called _Lab Recruits_ to perform testing tasks.
 The game executable is no longer included in the repository. It might be included in certain releases, or else you need to build it yourself
 from its [repository](https://github.com/iv4xr-project/labrecruits).
-You will need Lab Recruits version v2.1.
 
-   <img src="./docs/LRSS1.png" width="70%">
+You will need correct versions of the iv4XR Framework and the game Lab Recruits, which are compatible with this version of Demo. Check the `pom.xml` to know which versions are needed.
+
+   <img src="./docs/LRSS1.png" width="48%"><img src="./docs/LRSS3.png" width="50%">
 
 **Work in progress notice.** Keep in mind that the work here is still in progress. Things may look ugly while we are working on them, and things may change.
 
@@ -58,7 +59,4 @@ Maurin Voshol,
 Menno Klunder,
 Stijn Hinlopen,
 Tom Tanis.
-**Game Artists from Mediacollege Amsterdam:**
-Quinto Veldhuyzen,
-Sophie Meester.
-**Others:** Wishnu Prasetya.
+**Others:** Wishnu Prasetya, Naraenda Prasetya.
