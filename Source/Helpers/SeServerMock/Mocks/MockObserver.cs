@@ -22,11 +22,26 @@ namespace SeServerMock.Mocks
 				entity
 			};
 
+			var block = new SeBlock()
+			{
+				Id = "blk",
+				Position = new PlainVec3D(5, 5, 5),
+				MaxIntegrity = 10f,
+				BuildIntegrity = 1.0f,
+				Integrity = 5.0f
+			};
+
+			var blocks = new List<SeBlock>
+			{
+				block
+			};
+
 			return new SeObservation()
 			{
 				AgentID = "Mock",
 				Position = new PlainVec3D(4, 2, 0),
-				Entities = entities
+				Entities = entities,
+				Blocks = blocks
 			};
 		}
 	}

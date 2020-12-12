@@ -6,8 +6,10 @@ using Iv4xr.PluginLib;
 using Iv4xr.SePlugin.WorldModel;
 using Sandbox.Game.Entities;
 using Sandbox.Game.Entities.Character;
+using Sandbox.Game.Entities.Cube;
 using Sandbox.Game.Multiplayer;
 using VRage.Game.Entity;
+using VRage.Game.ModAPI;
 using VRageMath;
 
 namespace Iv4xr.SePlugin.Control
@@ -33,13 +35,17 @@ namespace Iv4xr.SePlugin.Control
 
 		public SeObservation GetObservation()
 		{
+			var characterPosition = GetPlayerPosition();
+			var sphere = new BoundingSphereD(characterPosition, radius: 25.0);
+
 			return new SeObservation
 			{
 				AgentID = "se0",
-				Position = new PlainVec3D(GetPlayerPosition()),  // Consider reducing allocations.
+				Position = new PlainVec3D(characterPosition),  // Consider reducing allocations.
 				Velocity = new PlainVec3D(GetPlayerVelocity()),
 				Extent = AgentExtent,
-				Entities = CollectSurroundingEntities()
+				Entities = CollectSurroundingEntities(sphere),  // TODO(PP): Don't return both entities and blocks (duplicate work).
+				Blocks = CollectSurroundingBlocks(sphere)
 			};
 		}
 
@@ -54,40 +60,80 @@ namespace Iv4xr.SePlugin.Control
 			return Vector3D.Zero; 
 		}
 
-		private List<SeEntity> CollectSurroundingEntities()
+		private IEnumerable<MyEntity> EnumerateSurroundingEntities(BoundingSphereD sphere)
 		{
-			var ivEntities = new List<SeEntity>();
-
-			var characterPosition = GetPlayerPosition();
-
-			var sphere = new BoundingSphereD(characterPosition, radius: 25.0);
 			List<MyEntity> entities = MyEntities.GetEntitiesInSphere(ref sphere);
 
 			try
 			{
 				foreach (MyEntity entity in entities)
-				{
-					var ivEntity = new SeEntity()
-					{
-						Id = entity.Name,
-						Position = new PlainVec3D(entity.PositionComp.GetPosition())
-					};
-
-					ivEntities.Add(ivEntity);
-
-					if (ivEntities.Count() > 100)  // TODO(PP): Define as param.
-					{
-						Log?.WriteLine($"{nameof(CollectSurroundingEntities)}: Too many entities!");
-						break;
-					}
-				}
+					yield return entity;
 			}
 			finally
 			{
 				entities.Clear();
 			}
+		}
+
+		private List<SeEntity> CollectSurroundingEntities(BoundingSphereD sphere)
+		{
+			var ivEntities = new List<SeEntity>();
+
+			foreach (MyEntity entity in EnumerateSurroundingEntities(sphere))
+			{
+				var ivEntity = new SeEntity()
+				{
+					Id = entity.Name,
+					Position = new PlainVec3D(entity.PositionComp.GetPosition())
+				};
+
+				ivEntities.Add(ivEntity);
+
+				if (ivEntities.Count() > 1000)  // TODO(PP): Define as param.
+				{
+					Log?.WriteLine($"{nameof(CollectSurroundingEntities)}: Too many entities!");
+					break;
+				}
+			}
 
 			return ivEntities;
+		}
+
+		private List<SeBlock> CollectSurroundingBlocks(BoundingSphereD sphere)
+		{
+			var ivBlocks = new List<SeBlock>();  // iv4XR interface blocks ("SE blocks" from the outside)
+
+			foreach (MyEntity entity in EnumerateSurroundingEntities(sphere))
+			{
+				var grid = entity as MyCubeGrid;
+				if (grid is null)
+					continue;
+				
+				var foundBlocks = new HashSet<MySlimBlock>();
+				grid.GetBlocksInsideSphere(ref sphere, foundBlocks);  // NOTE: This might be slow (profiled ages ago)
+
+				foreach (IMySlimBlock sourceBlock in foundBlocks)
+				{
+					var ivBlock = new SeBlock
+					{
+						// TODO(PP): generate some Id?
+						Position = new PlainVec3D(grid.GridIntegerToWorld(sourceBlock.Position)),
+						MaxIntegrity = sourceBlock.MaxIntegrity,
+						BuildIntegrity = sourceBlock.BuildIntegrity,
+						Integrity = sourceBlock.Integrity
+					};
+
+					ivBlocks.Add(ivBlock);
+
+					if (ivBlocks.Count() > 1000)  // TODO(PP): Define as param.
+					{
+						Log?.WriteLine($"{nameof(CollectSurroundingBlocks)}: Too many blocks!");
+						break;
+					}
+				}
+			}
+
+			return ivBlocks;
 		}
 	}
 }
