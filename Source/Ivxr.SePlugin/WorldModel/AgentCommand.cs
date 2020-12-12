@@ -37,6 +37,18 @@ namespace Iv4xr.SePlugin.WorldModel
 		public Vector2 Rotation;
 	}
 
+	public enum InteractionType
+	{
+		EQUIP,
+		PLACE
+	}
+
+	public class InteractionArgs
+	{
+		public InteractionType InteractionType;
+		public int Slot;
+	}
+
 	public class AgentCommand<ArgumentType>
 	{
 		public string Cmd;
