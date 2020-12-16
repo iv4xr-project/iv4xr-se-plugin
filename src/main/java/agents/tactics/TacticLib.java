@@ -137,10 +137,14 @@ public class TacticLib {
 
 						//var agent_location = belief.worldmodel.getFloorPosition() ;
 	    			    var entity_location = e.getFloorPosition() ;
-	    			    // calculate the center of the square on which the target entity is located:
-	    			    var entity_sqcenter = new Vec3((float) Math.floor((double) entity_location.x) + 0.5f,
+	    			    // Calculate the center of the square on which the target entity is located.
+	    			    // Note: the bottom-left position of the bottom-left corner is (0.5,-,0.5) so this need to be taken into
+	    			    // account.
+	    			    // First, substract 0.5 from (x,z) ... then round it down. Add 0.5 to get the center position.
+	    			    // Then add another 0.5 to compensate the 0.5 that we substracted earlier.
+	    			    var entity_sqcenter = new Vec3((float) Math.floor((double) entity_location.x - 0.5f) + 1f,
 	    			    		entity_location.y,
-	    			    		(float) Math.floor((double) entity_location.z) + 0.5f) ;
+	    			    		(float) Math.floor((double) entity_location.z - 0.5f) + 1f) ;
 	    			    
 	    			    List<Vec3> candidates = new LinkedList<>() ;
 	    			    float delta = 0.5f ;

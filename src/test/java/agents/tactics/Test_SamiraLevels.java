@@ -101,14 +101,18 @@ public class Test_SamiraLevels {
 		GoalStructure g = SEQ(
 				GoalLib.entityInteracted("button2"),
 				GoalLib.entityStateRefreshed("door1"),
+				GoalLib.entityInCloseRange("door1"),
 				GoalLib.entityInteracted("button4"),
-				GoalLib.entityStateRefreshed("door1"), 
+				GoalLib.entityStateRefreshed("door1"),
+				GoalLib.entityInCloseRange("door1"),
 				GoalLib.entityInteracted("button5"),
 				GoalLib.entityStateRefreshed("door1"), 
+				GoalLib.entityInCloseRange("door1"),
 				GoalLib.entityInteracted("button3"),
 				GoalLib.entityStateRefreshed("door1"),
 				GoalLib.entityInteracted("button1"),
 				GoalLib.entityStateRefreshed("door1"),
+				GoalLib.entityInCloseRange("door1"),
 				GoalLib.entityInspected("door1", e -> e.getBooleanProperty("isOpen")),
 				GoalLib.entityInteracted("button7")
 				)

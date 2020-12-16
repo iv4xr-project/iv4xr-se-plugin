@@ -28,7 +28,7 @@ public class VisibilityTest {
 
     @BeforeAll
     static void start() {
-    	//TestSettings.USE_SERVER_FOR_TEST = false ;
+        //TestSettings.USE_SERVER_FOR_TEST = false ;
     	// Uncomment this to make the game's graphic visible:
     	// TestSettings.USE_GRAPHICS = true ;
     	String labRecruitesExeRootDir = System.getProperty("user.dir") ;
@@ -96,9 +96,12 @@ public class VisibilityTest {
        	}
        }
        
+       goal.printGoalStructureStatus();
+       
        // check what the agent has seen so far. In particular it should now see items
        // in the next room
        assertTrue(goal.getStatus().success()) ;
+       
        wom = agent.getState().worldmodel ; 
        assertNotNull(wom.getElement("button0")) ;
        assertNotNull(wom.getElement("door0")) ;
@@ -109,7 +112,7 @@ public class VisibilityTest {
        assertNotNull(wom.getElement("FLAG")) ; // can see a goal named "FLAG"
        
        // can just as well check the score and mood :)
-       assertEquals(12,wom.score) ;
+       assertEquals(22,wom.score) ;
        //assertTrue(wom.mood.equals("Hmm...")) ;
        
        if (!environment.close())
