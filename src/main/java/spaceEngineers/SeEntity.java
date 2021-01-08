@@ -1,6 +1,6 @@
 package spaceEngineers;
 
-import helperclasses.datastructures.Vec3;
+import eu.iv4xr.framework.spatial.Vec3;
 
 public class SeEntity {
 

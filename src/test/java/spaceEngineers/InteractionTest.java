@@ -1,6 +1,6 @@
 package spaceEngineers;
 
-import helperclasses.datastructures.Vec3;
+import eu.iv4xr.framework.spatial.Vec3;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import spaceEngineers.commands.InteractionArgs;

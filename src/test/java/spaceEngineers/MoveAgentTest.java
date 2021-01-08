@@ -1,7 +1,6 @@
 package spaceEngineers;
 
-import communication.agent.AgentCommand;
-import helperclasses.datastructures.Vec3;
+import eu.iv4xr.framework.spatial.Vec3;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import spaceEngineers.commands.MovementArgs;
@@ -18,7 +17,7 @@ public class MoveAgentTest {
 
         // Single move request is not actually visible on the character movement, see manyMovesTest below
         var observation = environment.getSeResponse(SeRequest.command(
-                SeAgentCommand.moveTowardCommand("you", new Vec3(0,0,-1.0), false)));
+                SeAgentCommand.moveTowardCommand("you", new Vec3(0,0,-1), false)));
         Assertions.assertNotNull(observation);
 
         System.out.println("AgentId: " + observation.agentID);
@@ -34,7 +33,7 @@ public class MoveAgentTest {
 
         // Single move request is not actually visible on the character movement, see manyMovesTest below
         var observation = environment.getSeResponse(SeRequest.command(
-                SeAgentCommand.moveAndRotate("you", new Vec3(0,0,-1.), new Vec3(0.3, 0, 0), 0)));
+                SeAgentCommand.moveAndRotate("you", new Vec3(0,0,-1), new Vec3(0.3f, 0, 0), 0)));
         Assertions.assertNotNull(observation);
 
         System.out.println("AgentId: " + observation.agentID);
@@ -62,7 +61,7 @@ public class MoveAgentTest {
         addMoves.accept(new Vec3(0, 0, -1), 2 * stepBoost);
         addMoves.accept(new Vec3(-1, 0, 0), 2 * stepBoost);  // Left
 
-        moves.add(new Vec3(0, 0.5, 0)); // Up
+        moves.add(new Vec3(0, 0.5f, 0)); // Up
 
         for (var move : moves) {
 
@@ -93,7 +92,7 @@ public class MoveAgentTest {
         var forwardArgs = new MovementArgs(new Vec3(0, 0, -1));
         addMoves.accept(forwardArgs, 3 * stepBoost);
 
-        var rotateArgs = new MovementArgs(Vec3.zero(), new Vec3(0, 9.0, 0), 0);
+        var rotateArgs = new MovementArgs(Vec3.zero(), new Vec3(0, 9, 0), 0);
         addMoves.accept(rotateArgs, 2 * stepBoost);
 
         addMoves.accept(forwardArgs, 3 * stepBoost);
@@ -102,7 +101,7 @@ public class MoveAgentTest {
         var rollArgs = new MovementArgs(Vec3.zero(), Vec3.zero(), -2);
         addMoves.accept(rollArgs, 2 * stepBoost);
 
-        var allArgs = new MovementArgs(new Vec3(0, 0.7, 0.2), new Vec3(5, 7, 0), 1.5f);
+        var allArgs = new MovementArgs(new Vec3(0, 0.7f, 0.2f), new Vec3(5, 7, 0), 1.5f);
         addMoves.accept(allArgs, 4 * stepBoost);
 
         for (var move : moves) {

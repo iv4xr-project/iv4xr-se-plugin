@@ -1,7 +1,7 @@
 package spaceEngineers.commands;
 
-import helperclasses.datastructures.Tuple;
-import helperclasses.datastructures.Vec3;
+import helperclasses.datastructures.LegacyTuple;
+import eu.iv4xr.framework.spatial.Vec3;
 
 public class SeAgentCommand {
     public SeAgentCommandType cmd;
@@ -51,6 +51,6 @@ public class SeAgentCommand {
      * Moves an agent in a certain direction.
      */
     public static SeAgentCommand moveTowardCommand(String agent, Vec3 direction, boolean jump) {
-        return new SeAgentCommand(agent, agent, SeAgentCommandType.MOVETOWARD, new Tuple<>(direction, jump));
+        return new SeAgentCommand(agent, agent, SeAgentCommandType.MOVETOWARD, new LegacyTuple<>(direction, jump));
     }
 }

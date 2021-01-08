@@ -1,7 +1,6 @@
 package spaceEngineers;
 
-import helperclasses.datastructures.Vec3;
-import world.LegacyEntity;
+import eu.iv4xr.framework.spatial.Vec3;
 import java.util.List;
 
 public class SeObservation {
