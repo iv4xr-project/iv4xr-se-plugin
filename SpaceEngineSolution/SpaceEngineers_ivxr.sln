@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30804.86
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.1259
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpaceEngineers", "..\..\se\Sources\SpaceEngineers\SpaceEngineers.csproj", "{5CD034C8-A242-4BD6-94F4-F20C655A69E8}"
 EndProject
@@ -99,6 +99,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivxr.SePlugin", "..\Source\Ivxr.SePlugin\Ivxr.SePlugin.csproj", "{92BCF318-E91E-40E7-8056-964CE210FAD4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ivxr.SePlugin.Tests", "..\Source\Tests\Ivxr.SePlugin.Tests\Ivxr.SePlugin.Tests.csproj", "{77BE56CF-4F42-4268-9D9A-8F73C51287B6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeServerMock", "..\Source\Helpers\SeServerMock\SeServerMock.csproj", "{77C3FD79-4E28-4B70-A977-901C43535C2A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1034,6 +1036,36 @@ Global
 		{77BE56CF-4F42-4268-9D9A-8F73C51287B6}.Testing|x64.Build.0 = Debug|Any CPU
 		{77BE56CF-4F42-4268-9D9A-8F73C51287B6}.Testing|x86.ActiveCfg = Debug|Any CPU
 		{77BE56CF-4F42-4268-9D9A-8F73C51287B6}.Testing|x86.Build.0 = Debug|Any CPU
+		{77C3FD79-4E28-4B70-A977-901C43535C2A}.AllocationProfilingRelease|Any CPU.ActiveCfg = Release|Any CPU
+		{77C3FD79-4E28-4B70-A977-901C43535C2A}.AllocationProfilingRelease|Any CPU.Build.0 = Release|Any CPU
+		{77C3FD79-4E28-4B70-A977-901C43535C2A}.AllocationProfilingRelease|x64.ActiveCfg = Release|Any CPU
+		{77C3FD79-4E28-4B70-A977-901C43535C2A}.AllocationProfilingRelease|x64.Build.0 = Release|Any CPU
+		{77C3FD79-4E28-4B70-A977-901C43535C2A}.AllocationProfilingRelease|x86.ActiveCfg = Release|Any CPU
+		{77C3FD79-4E28-4B70-A977-901C43535C2A}.AllocationProfilingRelease|x86.Build.0 = Release|Any CPU
+		{77C3FD79-4E28-4B70-A977-901C43535C2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77C3FD79-4E28-4B70-A977-901C43535C2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77C3FD79-4E28-4B70-A977-901C43535C2A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{77C3FD79-4E28-4B70-A977-901C43535C2A}.Debug|x64.Build.0 = Debug|Any CPU
+		{77C3FD79-4E28-4B70-A977-901C43535C2A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{77C3FD79-4E28-4B70-A977-901C43535C2A}.Debug|x86.Build.0 = Debug|Any CPU
+		{77C3FD79-4E28-4B70-A977-901C43535C2A}.Release Official|Any CPU.ActiveCfg = Release|Any CPU
+		{77C3FD79-4E28-4B70-A977-901C43535C2A}.Release Official|Any CPU.Build.0 = Release|Any CPU
+		{77C3FD79-4E28-4B70-A977-901C43535C2A}.Release Official|x64.ActiveCfg = Release|Any CPU
+		{77C3FD79-4E28-4B70-A977-901C43535C2A}.Release Official|x64.Build.0 = Release|Any CPU
+		{77C3FD79-4E28-4B70-A977-901C43535C2A}.Release Official|x86.ActiveCfg = Release|Any CPU
+		{77C3FD79-4E28-4B70-A977-901C43535C2A}.Release Official|x86.Build.0 = Release|Any CPU
+		{77C3FD79-4E28-4B70-A977-901C43535C2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77C3FD79-4E28-4B70-A977-901C43535C2A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77C3FD79-4E28-4B70-A977-901C43535C2A}.Release|x64.ActiveCfg = Release|Any CPU
+		{77C3FD79-4E28-4B70-A977-901C43535C2A}.Release|x64.Build.0 = Release|Any CPU
+		{77C3FD79-4E28-4B70-A977-901C43535C2A}.Release|x86.ActiveCfg = Release|Any CPU
+		{77C3FD79-4E28-4B70-A977-901C43535C2A}.Release|x86.Build.0 = Release|Any CPU
+		{77C3FD79-4E28-4B70-A977-901C43535C2A}.Testing|Any CPU.ActiveCfg = Debug|Any CPU
+		{77C3FD79-4E28-4B70-A977-901C43535C2A}.Testing|Any CPU.Build.0 = Debug|Any CPU
+		{77C3FD79-4E28-4B70-A977-901C43535C2A}.Testing|x64.ActiveCfg = Debug|Any CPU
+		{77C3FD79-4E28-4B70-A977-901C43535C2A}.Testing|x64.Build.0 = Debug|Any CPU
+		{77C3FD79-4E28-4B70-A977-901C43535C2A}.Testing|x86.ActiveCfg = Debug|Any CPU
+		{77C3FD79-4E28-4B70-A977-901C43535C2A}.Testing|x86.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1071,6 +1103,7 @@ Global
 		{D204FD60-1E48-4DB4-A639-C8DE7FCD96D7} = {6E0E75F1-620F-4777-927B-23039B0151AD}
 		{92BCF318-E91E-40E7-8056-964CE210FAD4} = {6E0E75F1-620F-4777-927B-23039B0151AD}
 		{77BE56CF-4F42-4268-9D9A-8F73C51287B6} = {6E0E75F1-620F-4777-927B-23039B0151AD}
+		{77C3FD79-4E28-4B70-A977-901C43535C2A} = {6E0E75F1-620F-4777-927B-23039B0151AD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		VisualSVNWorkingCopyRoot = ..\..
