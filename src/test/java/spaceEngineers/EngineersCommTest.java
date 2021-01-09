@@ -5,7 +5,7 @@ import nl.uu.cs.aplib.mainConcepts.Environment;
 import org.junit.jupiter.api.Test;
 
 public class EngineersCommTest {
-
+/*
     @Test
     public void commScrewingTest() {
 
@@ -22,4 +22,6 @@ public class EngineersCommTest {
             System.out.println("Reply: " + (String)reply);
         }
     }
+
+ */
 }

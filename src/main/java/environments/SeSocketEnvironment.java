@@ -3,11 +3,7 @@ package environments;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import communication.adapters.EntityAdapter;
-import communication.adapters.EntityTypeAdapter;
 import spaceEngineers.SeRequest;
-import world.LegacyEntity;
-import world.LegacyEntityType;
 
 import java.lang.reflect.Modifier;
 
@@ -24,13 +20,10 @@ public class SeSocketEnvironment extends SocketEnvironment {
     }
 
     // transient modifiers should be excluded, otherwise they will be send with json
-    // TODO(PP): replace entity adapters
     private static Gson gson = new GsonBuilder()
             .serializeNulls()
             .excludeFieldsWithModifiers(Modifier.TRANSIENT)
-            .registerTypeAdapter(LegacyEntityType.class, new EntityTypeAdapter())
-            .registerTypeHierarchyAdapter(LegacyEntity.class, new EntityAdapter())
-            .setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)
+            .setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)  // For SpaceEngineers compatibility.
             .create();
 
     /**
