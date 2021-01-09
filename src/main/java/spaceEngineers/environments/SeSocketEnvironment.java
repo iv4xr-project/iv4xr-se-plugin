@@ -1,4 +1,4 @@
-package environments;
+package spaceEngineers.environments;
 
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;

@@ -1,6 +1,8 @@
 package spaceEngineers;
 
-import environments.SeSocketEnvironment;
+import spaceEngineers.environments.SeSocketEnvironment;
+
+// TODO(GAI/PP): Redesign this by extending W3DEnvironment (@see class LabRecruitsEnvironment for inspiration)
 
 public class SpaceEngEnvironment extends SeSocketEnvironment {
 

@@ -1,11 +1,11 @@
 package spaceEngineers;
 
-import environments.SeSocketEnvironment;
+import spaceEngineers.environments.SeSocketEnvironment;
 import nl.uu.cs.aplib.mainConcepts.Environment;
 import org.junit.jupiter.api.Test;
 
 public class EngineersCommTest {
-/*
+
     @Test
     public void commScrewingTest() {
 
@@ -17,11 +17,10 @@ public class EngineersCommTest {
 
         for (var message : messages) {
             var reply = environment.sendCommand(
-                    new Environment.EnvOperation("me", "you", "request", message));
+                    new Environment.EnvOperation("me", "you", "request", message, Object.class));
 
             System.out.println("Reply: " + (String)reply);
         }
     }
 
- */
 }
