@@ -275,42 +275,4 @@ public class GoalLib {
         );
     }
     
-     public static <State>GoalStructure lift____(Predicate<State> p) {
-    	 return goal("Lifting predicate to goal")
-    	            .toSolve((Boolean b) ->  b ) 
-    	            .withTactic(
-    	            		SEQ(
-    	            		action("lifting a predicate").do1((State belief)-> {
-         						return p.test(belief) ;
-         						}
-         						).lift()
-    	            		,
-    	                    ABORT()))
-    	            .lift() ;
-    	
-     }
-     
-     public static <State> GoalStructure success__() {
-    	 return goal(String.format("success"))
-         		. toSolve((State belief) -> { return true;})
-         		. withTactic(action("").do1((State state) -> state).lift()) 
-         		.lift();
-    	
-     }
-     
-    
-     public static <State>GoalStructure NEWREPEAT(Predicate<State> p, GoalStructure subgoal) {
-    	 GoalStructure[] subgoals = new GoalStructure[2];
-    	 subgoals[0] =  lift____(p);
-    	 subgoals[1] = success__();
-    		return new GoalStructure(GoalsCombinator.REPEAT, 
-    						new GoalStructure (GoalsCombinator.FIRSTOF,
-    						new GoalStructure (GoalsCombinator.SEQ , subgoals)
-    						,subgoal
-    						)
-    						
-    				) ;
-    	}
-    
-    }
 }
