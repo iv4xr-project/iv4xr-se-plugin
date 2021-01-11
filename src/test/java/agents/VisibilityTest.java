@@ -111,6 +111,10 @@ public class VisibilityTest {
        assertNotNull(wom.getElement("guard")) ; // can see an NPC named "guard"
        assertNotNull(wom.getElement("FLAG")) ; // can see a goal named "FLAG"
        
+       // let's also check that the two buttons are turned on:
+       assertTrue(wom.getElement("button0").getBooleanProperty("isOn")) ;
+       assertTrue(wom.getElement("button1").getBooleanProperty("isOn")) ;
+
        // can just as well check the score and mood :)
        assertEquals(22,wom.score) ;
        //assertTrue(wom.mood.equals("Hmm...")) ;
