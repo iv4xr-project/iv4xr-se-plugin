@@ -9,7 +9,17 @@ Space Engineers is a sandbox game by Keen Software House. This project is a plug
 
 ## How to build
 
-Requires Space Engineers codebase (which is not open) to compile. The resulting plug-in (a couple of .NET libraries), however, works with the official Steam version of Space Engineers without any modification of the game.
+The plug-in requires Space Engineers codebase (which is not open) to compile. The resulting plug-in (a couple of .NET libraries), however, works with the official Steam version of Space Engineers without any modification of the game.
+
+### How to build if you have SE sources
+
+There's a VS solution file in this repository (in the `SpaceEngineSolution` folder) that contains the plugin projects as well as Space Engineers projects, some of which are dependencies of the plug-in. For this solution file to work, you need to checkout Space Engineers sources to a specific location relative to this Git repository – the relevant branch (such as "Major") has to be checked-out into a directory called "`se`" located next to the checkout of this Git repository. See the nested list below, which corresponds to the required directory structure:
+
+* `se-plugin` – just a top level directory, can have any name
+  * `iv4xr-se-plugin` – a checkout of this Git repository
+  * `se` – a checkout of a Space Engineers branch (presumably from it's Subversion repository)
+
+Before starting the build of the solution, make sure a correct build configuration is selected. Either **Debug** or **Release** configuration and the **x64** platform.
 
 ## How to run the game with this plugin
 
