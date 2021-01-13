@@ -84,7 +84,7 @@ namespace Iv4xr.SePlugin.Control
 			}
 			else
 			{
-				throw new NotImplementedException($"Uknown agent command: {commandName}");
+				throw new NotImplementedException($"Unknown agent command: {commandName}");
 			}
 
 			return m_jsoner.ToJson(m_observer.GetObservation());
