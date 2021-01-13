@@ -1,10 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using VRageMath;
 
 namespace Iv4xr.SePlugin.WorldModel
 {
+	// This enum follows Java / Kotlin naming convention.
+	[SuppressMessage("ReSharper", "InconsistentNaming")]
+	public enum ObservationMode
+	{
+		DEFAULT,
+		BASIC,
+		BLOCKS,
+		NEW_BLOCKS,
+		ENTITIES
+	}
+
+	public class ObservationArgs
+	{
+		public static ObservationArgs Default = new ObservationArgs();
+
+		public ObservationMode ObservationMode = ObservationMode.DEFAULT;
+	}
+
 	// to deserialize Java tuple
 	public class MoveCommandArgs
 	{
@@ -22,7 +41,7 @@ namespace Iv4xr.SePlugin.WorldModel
 
 		public Vector3D Rotation3 // D = double
 		{
-			get { return m_rotation3; }
+			get => m_rotation3;
 			set  // Set also Vector2 Rotation.
 			{
 				m_rotation3 = value;
@@ -37,6 +56,8 @@ namespace Iv4xr.SePlugin.WorldModel
 		public Vector2 Rotation;
 	}
 
+	// This enum follows Java / Kotlin naming convention.
+	[SuppressMessage("ReSharper", "InconsistentNaming")]
 	public enum InteractionType
 	{
 		EQUIP,
