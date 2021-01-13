@@ -2,9 +2,7 @@ package spaceEngineers;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import spaceEngineers.commands.InteractionArgs;
-import spaceEngineers.commands.InteractionType;
-import spaceEngineers.commands.SeAgentCommand;
+import spaceEngineers.commands.*;
 
 public class InteractionTest {
 
@@ -48,10 +46,11 @@ public class InteractionTest {
                 SeAgentCommand.interact("you", new InteractionArgs(InteractionType.PLACE))));
         Assertions.assertNotNull(observation);
 
-        observation = environment.getSeResponse(SeRequest.command(SeAgentCommand.observe("you")));
+        observation = environment.getSeResponse(SeRequest.command(
+                SeAgentCommand.observe("you", new ObservationArgs(ObservationMode.NEW_BLOCKS))));
         Assertions.assertNotNull(observation);
         Assertions.assertNotNull(observation.blocks);
-        Assertions.assertTrue(observation.blocks.size() > 0);
+        Assertions.assertTrue(observation.blocks.size() > 0, "Expecting non-zero block count.");
 
         System.out.println("Got " + observation.blocks.size() + " blocks.");
         var firstBlock = observation.blocks.get(0);

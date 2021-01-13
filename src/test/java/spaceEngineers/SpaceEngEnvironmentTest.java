@@ -2,6 +2,8 @@ package spaceEngineers;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import spaceEngineers.commands.ObservationArgs;
+import spaceEngineers.commands.ObservationMode;
 import spaceEngineers.commands.SeAgentCommand;
 
 public class SpaceEngEnvironmentTest {
@@ -48,7 +50,8 @@ public class SpaceEngEnvironmentTest {
     public void observeEntitiesTest() {
         var environment = SpaceEngEnvironment.localhost();
 
-        var observation = environment.getSeResponse(SeRequest.command(SeAgentCommand.observe("you")));
+        var observation = environment.getSeResponse(SeRequest.command(
+                SeAgentCommand.observe("you", new ObservationArgs(ObservationMode.ENTITIES))));
         Assertions.assertNotNull(observation);
         Assertions.assertNotNull(observation.entities);
         Assertions.assertTrue(observation.entities.size() > 0);
@@ -65,10 +68,11 @@ public class SpaceEngEnvironmentTest {
     public void observeBlocksTest() {
         var environment = SpaceEngEnvironment.localhost();
 
-        var observation = environment.getSeResponse(SeRequest.command(SeAgentCommand.observe("you")));
+        var observation = environment.getSeResponse(SeRequest.command(
+                SeAgentCommand.observe("you", new ObservationArgs(ObservationMode.BLOCKS))));
         Assertions.assertNotNull(observation);
         Assertions.assertNotNull(observation.blocks);
-        Assertions.assertTrue(observation.blocks.size() > 0);
+        Assertions.assertTrue(observation.blocks.size() > 0, "Expecting non-zero block count.");
 
         System.out.println("Got " + observation.blocks.size() + " blocks.");
         var firstBlock = observation.blocks.get(0);
