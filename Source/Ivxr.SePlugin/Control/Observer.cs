@@ -28,6 +28,8 @@ namespace Iv4xr.SePlugin.Control
 		private GameSession m_gameSession;
 		private MyCharacter Character => m_gameSession.Character;
 
+		private HashSet<int> m_previousBlockIds = new HashSet<int>();
+
 		public Observer(GameSession session)
 		{
 			m_gameSession = session;
@@ -103,6 +105,8 @@ namespace Iv4xr.SePlugin.Control
 		{
 			var ivBlocks = new List<SeBlock>();  // iv4XR interface blocks ("SE blocks" from the outside)
 
+			var blockIds = new HashSet<int>();
+
 			foreach (MyEntity entity in EnumerateSurroundingEntities(sphere))
 			{
 				var grid = entity as MyCubeGrid;
@@ -114,13 +118,19 @@ namespace Iv4xr.SePlugin.Control
 
 				foreach (IMySlimBlock sourceBlock in foundBlocks)
 				{
+					int blockId = ((MySlimBlock) sourceBlock).UniqueId;
+					blockIds.Add(blockId);
+
+					if (m_previousBlockIds.Contains(blockId))
+						continue;  // only return new blocks for now
+
 					var ivBlock = new SeBlock
 					{
 						// TODO(PP): generate some Id?
 						Position = new PlainVec3D(grid.GridIntegerToWorld(sourceBlock.Position)),
 						MaxIntegrity = sourceBlock.MaxIntegrity,
 						BuildIntegrity = sourceBlock.BuildIntegrity,
-						Integrity = sourceBlock.Integrity
+						Integrity = sourceBlock.Integrity,
 					};
 
 					ivBlocks.Add(ivBlock);
@@ -132,6 +142,10 @@ namespace Iv4xr.SePlugin.Control
 					}
 				}
 			}
+
+			m_previousBlockIds = blockIds;
+
+			Log?.WriteLine($"{nameof(CollectSurroundingBlocks)}: Found {ivBlocks.Count} new blocks.");
 
 			return ivBlocks;
 		}
