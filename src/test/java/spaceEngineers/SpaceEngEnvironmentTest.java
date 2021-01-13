@@ -18,7 +18,7 @@ public class SpaceEngEnvironmentTest {
     public void observeTest() {
         var environment = SpaceEngEnvironment.localhost();
 
-        var observation = environment.getSeResponse(SeRequest.command(SeAgentCommand.doNothing("you")));
+        var observation = environment.getSeResponse(SeRequest.command(SeAgentCommand.observe("you")));
         Assertions.assertNotNull(observation);
 
         System.out.println("AgentId: " + observation.agentID);
@@ -33,7 +33,7 @@ public class SpaceEngEnvironmentTest {
         var environment = SpaceEngEnvironment.localhost();
 
         for (int i = 0; i < 5; i++) {
-            var observation = environment.getSeResponse(SeRequest.command(SeAgentCommand.doNothing("you")));
+            var observation = environment.getSeResponse(SeRequest.command(SeAgentCommand.observe("you")));
             Assertions.assertNotNull(observation);
 
             System.out.println("AgentId: " + observation.agentID);
@@ -48,7 +48,7 @@ public class SpaceEngEnvironmentTest {
     public void observeEntitiesTest() {
         var environment = SpaceEngEnvironment.localhost();
 
-        var observation = environment.getSeResponse(SeRequest.command(SeAgentCommand.doNothing("you")));
+        var observation = environment.getSeResponse(SeRequest.command(SeAgentCommand.observe("you")));
         Assertions.assertNotNull(observation);
         Assertions.assertNotNull(observation.entities);
         Assertions.assertTrue(observation.entities.size() > 0);
@@ -65,7 +65,7 @@ public class SpaceEngEnvironmentTest {
     public void observeBlocksTest() {
         var environment = SpaceEngEnvironment.localhost();
 
-        var observation = environment.getSeResponse(SeRequest.command(SeAgentCommand.doNothing("you")));
+        var observation = environment.getSeResponse(SeRequest.command(SeAgentCommand.observe("you")));
         Assertions.assertNotNull(observation);
         Assertions.assertNotNull(observation.blocks);
         Assertions.assertTrue(observation.blocks.size() > 0);

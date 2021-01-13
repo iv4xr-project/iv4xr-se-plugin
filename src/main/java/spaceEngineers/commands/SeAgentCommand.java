@@ -23,7 +23,7 @@ public class SeAgentCommand {
     /**
      * The agent does not do anything. This can be used to just observe the gym.
      */
-    public static SeAgentCommand doNothing(String agent) {
+    public static SeAgentCommand observe(String agent) {
         return new SeAgentCommand(agent, agent, SeAgentCommandType.OBSERVE, null);
     }
 
