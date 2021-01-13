@@ -57,6 +57,7 @@ namespace Iv4xr.SePlugin.Control
 		{
 			var entityController = GetEntityController();
 
+			// TODO: This works in survival but not in creative -- fix it. 
 			entityController.ControlledEntity.BeginShoot(MyShootActionEnum.PrimaryAction);
 		}
 

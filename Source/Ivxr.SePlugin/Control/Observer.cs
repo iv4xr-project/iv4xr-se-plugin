@@ -17,36 +17,69 @@ namespace Iv4xr.SePlugin.Control
 	public interface IObserver
 	{
 		SeObservation GetObservation();
+		SeObservation GetObservation(ObservationArgs observationArgs);
 	}
 
 	internal class Observer : IObserver
 	{
 		public ILog Log { get; set; }
 
-		private readonly PlainVec3D AgentExtent = new PlainVec3D(0.5, 1, 0.5);  // TODO(PP): It's just a quick guess, check the reality.
+		private readonly PlainVec3D m_agentExtent = new PlainVec3D(0.5, 1, 0.5);  // TODO(PP): It's just a quick guess, check the reality.
 
-		private GameSession m_gameSession;
+		private readonly GameSession m_gameSession;
 		private MyCharacter Character => m_gameSession.Character;
+
+		private HashSet<int> m_previousBlockIds = new HashSet<int>();
 
 		public Observer(GameSession session)
 		{
 			m_gameSession = session;
 		}
 
-		public SeObservation GetObservation()
+		public SeObservation GetObservation(ObservationArgs observationArgs)
 		{
-			var characterPosition = GetPlayerPosition();
-			var sphere = new BoundingSphereD(characterPosition, radius: 25.0);
+			var mode = ((observationArgs.ObservationMode == ObservationMode.DEFAULT)
+				? ObservationMode.BASIC
+				: observationArgs.ObservationMode);
 
-			return new SeObservation
+			var characterPosition = GetPlayerPosition();
+
+			var observation = new SeObservation
 			{
 				AgentID = "se0",
 				Position = new PlainVec3D(characterPosition),  // Consider reducing allocations.
 				Velocity = new PlainVec3D(GetPlayerVelocity()),
-				Extent = AgentExtent,
-				Entities = CollectSurroundingEntities(sphere),  // TODO(PP): Don't return both entities and blocks (duplicate work).
-				Blocks = CollectSurroundingBlocks(sphere)
+				Extent = m_agentExtent,
 			};
+
+			if (mode == ObservationMode.BASIC)
+			{
+				return observation;
+			}
+
+			var sphere = new BoundingSphereD(characterPosition, radius: 25.0);
+
+			switch (mode)
+			{
+				case ObservationMode.ENTITIES:
+					observation.Entities = CollectSurroundingEntities(sphere);
+					break;
+
+				case ObservationMode.BLOCKS:
+				case ObservationMode.NEW_BLOCKS:
+					observation.Blocks = CollectSurroundingBlocks(sphere, mode);
+					break;
+
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
+
+			return observation;
+		}
+
+		public SeObservation GetObservation()
+		{
+			return GetObservation(ObservationArgs.Default);
 		}
 
 		private Vector3D GetPlayerPosition()
@@ -99,9 +132,11 @@ namespace Iv4xr.SePlugin.Control
 			return ivEntities;
 		}
 
-		private List<SeBlock> CollectSurroundingBlocks(BoundingSphereD sphere)
+		private List<SeBlock> CollectSurroundingBlocks(BoundingSphereD sphere, ObservationMode mode)
 		{
 			var ivBlocks = new List<SeBlock>();  // iv4XR interface blocks ("SE blocks" from the outside)
+
+			var blockIds = new HashSet<int>();
 
 			foreach (MyEntity entity in EnumerateSurroundingEntities(sphere))
 			{
@@ -114,13 +149,21 @@ namespace Iv4xr.SePlugin.Control
 
 				foreach (IMySlimBlock sourceBlock in foundBlocks)
 				{
+					int blockId = ((MySlimBlock) sourceBlock).UniqueId;
+					blockIds.Add(blockId);  // TODO(PP): Consider not updating the hash set when not in NEW_BLOCKS mode.
+
+					if (mode == ObservationMode.NEW_BLOCKS)
+					{
+						if (m_previousBlockIds.Contains(blockId))
+							continue;
+					}
+
 					var ivBlock = new SeBlock
 					{
-						// TODO(PP): generate some Id?
 						Position = new PlainVec3D(grid.GridIntegerToWorld(sourceBlock.Position)),
 						MaxIntegrity = sourceBlock.MaxIntegrity,
 						BuildIntegrity = sourceBlock.BuildIntegrity,
-						Integrity = sourceBlock.Integrity
+						Integrity = sourceBlock.Integrity,
 					};
 
 					ivBlocks.Add(ivBlock);
@@ -132,6 +175,10 @@ namespace Iv4xr.SePlugin.Control
 					}
 				}
 			}
+
+			m_previousBlockIds = blockIds;
+
+			Log?.WriteLine($"{nameof(CollectSurroundingBlocks)}: Found {ivBlocks.Count} new blocks.");
 
 			return ivBlocks;
 		}

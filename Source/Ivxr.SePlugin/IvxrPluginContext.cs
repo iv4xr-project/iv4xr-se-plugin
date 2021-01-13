@@ -31,7 +31,7 @@ namespace Iv4xr.SePlugin
 			m_sessionDispatcher = new SessionDispatcher(sessionController) { Log = Log };
 
 			m_server = new PluginServer(Log, m_sessionDispatcher, m_requestQueue);
-			var observer = new Observer(m_gameSession);
+			var observer = new Observer(m_gameSession) { Log = Log };
 			var controller = new CharacterController(m_gameSession);
 
 			Dispatcher = new Dispatcher(m_requestQueue, observer, controller) { Log = Log };

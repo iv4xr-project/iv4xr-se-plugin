@@ -60,7 +60,9 @@ namespace Iv4xr.SePlugin.Control
 
 			if (commandName.StartsWith("OBSERVE") || commandName.StartsWith("DONOTHING"))  // DONOTHING is obsolete.
 			{
-				// Just observe.
+				var requestShell = m_jsoner.ToObject<SeRequestShell<AgentCommand<ObservationArgs>>>(request.Message);
+
+				return m_jsoner.ToJson(m_observer.GetObservation(requestShell.Arg.Arg));
 			}
 			else if (commandName.StartsWith("MOVE_ROTAT"))  // MOVE_ROTATE
 			{
@@ -84,7 +86,7 @@ namespace Iv4xr.SePlugin.Control
 			}
 			else
 			{
-				throw new NotImplementedException($"Uknown agent command: {commandName}");
+				throw new NotImplementedException($"Unknown agent command: {commandName}");
 			}
 
 			return m_jsoner.ToJson(m_observer.GetObservation());

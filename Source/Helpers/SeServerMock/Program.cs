@@ -24,11 +24,10 @@ namespace SeServerMock
 	            var server = new PluginServer(log, sessionDispatcher, requestQueue);
                 server.Start();
 
-				var observer = new MockObserver();
+				var observer = new MockObserver() { Log = log };
 				var controller = new MockCharacterController() { Log = log };
 
-                var dispatcher = new Dispatcher(requestQueue, observer, controller);
-				dispatcher.Log = log;
+				var dispatcher = new Dispatcher(requestQueue, observer, controller) { Log = log };
 
 				while (true)
                 {
