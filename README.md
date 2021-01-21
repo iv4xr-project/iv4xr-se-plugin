@@ -29,6 +29,7 @@ The network protocol is just some proof of concept for now, so it's possible it 
 
 Currently implemented commands:
 
+- *Session* command: **Load** – Loads a scenario.
 - **Observe** – experimental; returns list of entities and their location in the agent's surrounding. It has several different modes. One of them is to return only new blocks not reported in past observations.
 - **MoveAndRotate** – allows to move and and rotate the agent in all directions.
 - **Interact** – implements some rudimentary commands for building new blocks in the game. Current interaction types:
