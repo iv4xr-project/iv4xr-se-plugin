@@ -41,7 +41,7 @@ namespace Iv4xr.SePlugin.Control
 		{
 			if (args.InteractionType == InteractionType.EQUIP)
 			{
-				EquipToolbarItem(args.Slot);
+				EquipToolbarItem(args.Slot, args.Page);
 			}
 			else if (args.InteractionType == InteractionType.PLACE)
 			{
@@ -61,9 +61,12 @@ namespace Iv4xr.SePlugin.Control
 			entityController.ControlledEntity.BeginShoot(MyShootActionEnum.PrimaryAction);
 		}
 
-		private void EquipToolbarItem(int slot)
+		private void EquipToolbarItem(int slot, int page)
 		{
 			var currentToolbar = MyToolbarComponent.CurrentToolbar;
+
+			if (page >= 0)
+				currentToolbar.SwitchToPage(page);
 
 			currentToolbar.ActivateItemAtSlot(slot);
 		}

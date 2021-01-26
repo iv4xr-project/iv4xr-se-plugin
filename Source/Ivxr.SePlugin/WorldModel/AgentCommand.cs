@@ -67,6 +67,7 @@ namespace Iv4xr.SePlugin.WorldModel
 	public class InteractionArgs
 	{
 		public InteractionType InteractionType;
+		public int Page;
 		public int Slot;
 	}
 
