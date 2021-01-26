@@ -19,6 +19,18 @@ public class InteractionTest {
     }
 
     @Test
+    public void pageAndEquipTest() {
+        var environment = SpaceEngEnvironment.localhost();
+
+        var observation = environment.getSeResponse(SeRequest.command(
+                SeAgentCommand.interact("you", new InteractionArgs(InteractionType.EQUIP, 4, 2))));
+        Assertions.assertNotNull(observation);
+
+        boolean result = environment.getSeResponse(SeRequest.disconnect());
+        Assertions.assertTrue(result);
+    }
+
+    @Test
     public void equipAndPlace() {
         var environment = SpaceEngEnvironment.localhost();
 
