@@ -52,3 +52,36 @@ There's a VS solution file in this repository (in the `SpaceEngineSolution` fold
   * `se` – a checkout of a Space Engineers branch (presumably from it's Subversion repository)
 
 Before starting the build of the solution, make sure a correct build configuration is selected. Either **Debug** or **Release** configuration and the **x64** platform.
+
+## Architecture Overview
+
+Overview of the solution projects:
+
+* **`Ivxr.SePlugin`** – The **main plugin project**. Contains most of the important logic. It is one of the plugin libraries, the main one.
+  * See the project details below.
+* **`Ivxr.SePlugin.Tests`** – Unit tests for the main project.
+* **`Ivxr.PlugIndependentLib`** – Contains service code that is *entirely independent of the Space Engineers codebase* for better dependency management and easier testing.
+  * Currently contains mostly the TCP/IP server and some basic interfaces such as the logging interface.
+  * It is a secondary plugin library.
+  * Notable classes: `PluginServer` – a TCP/IP server.
+* **`SeServerMock`** – A testing project which runs a TCP/IP server based on the infrastructure from the two main libraries and using some simple mock implementations of the classes which would normally depend on a running game.
+
+#### Project details: `Ivxr.SePlugin`
+
+List of notable classes – top level:
+
+* `IvxrPlugin` – Entry point of the plugin, implements the game's `IPlugin` interface.
+* `IvxrSessionComponent` –  Inherits from game's `MySessionComponentBase` which allows the component to hook the plugin into game events such as `UpdateBeforeSimulation` called each timestep of the game.
+* `IvxrPluginContext` – Root of the dependency tree of the plugin, constructs all the important objects.
+
+Notable sub-namespaces (and the solution sub-folders):
+
+* `Control` – Interfacing with the game: Obtaining observation and control of the character. Notable classes:
+  * `Dispatcher` – The command hub.
+  * `CharacterController` – Self-explanatory.
+  * `Observer` – Extracts observations from the game.
+* `Session` – Session control such as loading a saved game. Has a separate command dispatcher because it needs to run (in the "lobby") even when no actual game is running.
+* `WorldModel` – Classes supporting the communication (JSON over TCP/IP).
+
+
+
