@@ -44,10 +44,14 @@ namespace Iv4xr.SePlugin.Control
 
 			var characterPosition = GetPlayerPosition();
 
+			var orientation = Character.PositionComp.GetOrientation();
+
 			var observation = new SeObservation
 			{
 				AgentID = "se0",
 				Position = new PlainVec3D(characterPosition),  // Consider reducing allocations.
+				OrientationForward = new PlainVec3D(orientation.Forward),
+				OrientationUp = new PlainVec3D(orientation.Up),
 				Velocity = new PlainVec3D(GetPlayerVelocity()),
 				Extent = m_agentExtent,
 			};

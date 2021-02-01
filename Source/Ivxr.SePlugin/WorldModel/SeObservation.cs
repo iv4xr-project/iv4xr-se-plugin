@@ -12,6 +12,8 @@ namespace Iv4xr.SePlugin.WorldModel
 		public string AgentID;
 
 		public PlainVec3D Position;  // Agent's position
+		public PlainVec3D OrientationForward;
+		public PlainVec3D OrientationUp;
 		public PlainVec3D Velocity;  // Agent's velocity
 		public PlainVec3D Extent;  // Agent's dimensions (x,y,z size/2)
 
