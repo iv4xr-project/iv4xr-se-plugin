@@ -25,6 +25,8 @@ public class SpaceEngEnvironmentTest {
 
         System.out.println("AgentId: " + observation.agentID);
         System.out.println("Position: " + observation.position);
+        System.out.println("OrientationFwd: " + observation.orientationForward);
+        System.out.println("OrientationUp : " + observation.orientationUp);
 
         boolean result = environment.getSeResponse(SeRequest.disconnect());
         Assertions.assertTrue(result);

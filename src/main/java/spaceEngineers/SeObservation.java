@@ -7,6 +7,8 @@ public class SeObservation {
 
     public String agentID;
     public Vec3 position;
+    public Vec3 orientationForward;
+    public Vec3 orientationUp;
     public Vec3 velocity;
 
     public List<SeEntity> entities;
