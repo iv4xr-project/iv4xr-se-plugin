@@ -13,8 +13,6 @@ namespace Iv4xr.SePlugin
 		public ILog Log { get; private set; }
 		public readonly Dispatcher Dispatcher;
 
-		private readonly SessionDispatcher m_sessionDispatcher;
-
 		private readonly RequestQueue m_requestQueue = new RequestQueue();
 
 		private readonly PluginServer m_server;
@@ -28,9 +26,9 @@ namespace Iv4xr.SePlugin
 			Log = seLog;
 
 			var sessionController = new SessionController() { Log = Log };
-			m_sessionDispatcher = new SessionDispatcher(sessionController) { Log = Log };
+			var sessionDispatcher = new SessionDispatcher(sessionController) { Log = Log };
 
-			m_server = new PluginServer(Log, m_sessionDispatcher, m_requestQueue);
+			m_server = new PluginServer(Log, sessionDispatcher, m_requestQueue);
 			var observer = new Observer(m_gameSession) { Log = Log };
 			var controller = new CharacterController(m_gameSession);
 
