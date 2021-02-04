@@ -1,5 +1,6 @@
 ﻿using Iv4xr.SePlugin.WorldModel;
 using Sandbox.Game.Entities;
+using Sandbox.Game.Multiplayer;
 using Sandbox.Game.Screens.Helpers;
 using Sandbox.Game.World;
 using System;
@@ -55,9 +56,22 @@ namespace Iv4xr.SePlugin.Control
 
 		private void PlaceItem()
 		{
-			var entityController = GetEntityController();
+			// copied from MyCubePlacer.Shoot
+			bool isAdminOrCreative =
+				(MySession.Static.CreativeToolsEnabled(Sync.MyId) && MySession.Static.HasCreativeRights)
+				|| MySession.Static.CreativeMode;
 
-			// TODO: This works in survival but not in creative -- fix it. 
+			if (isAdminOrCreative)
+			{
+				if (MyCubeBuilder.Static is null)
+					throw new NullReferenceException("Cube builder is null.");
+
+				MyCubeBuilder.Static.Add();
+				return;
+			}
+
+			// else: use tool's primary action in survival mode
+			var entityController = GetEntityController();
 			entityController.ControlledEntity.BeginShoot(MyShootActionEnum.PrimaryAction);
 		}
 
