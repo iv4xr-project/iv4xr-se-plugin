@@ -24,16 +24,14 @@ namespace Iv4xr.SePlugin.Control
 	{
 		public ILog Log { get; set; }
 
-		private readonly PlainVec3D m_agentExtent = new PlainVec3D(0.5, 1, 0.5);  // TODO(PP): It's just a quick guess, check the reality.
-
-		private readonly GameSession m_gameSession;
-		private MyCharacter Character => m_gameSession.Character;
 
 		private HashSet<int> m_previousBlockIds = new HashSet<int>();
+		private readonly LowLevelObserver m_lowLevelObserver;
 
 		public Observer(GameSession session)
 		{
-			m_gameSession = session;
+			// TODO(PP): dependency injection
+			m_lowLevelObserver = new LowLevelObserver(session);
 		}
 
 		public SeObservation GetObservation(ObservationArgs observationArgs)
@@ -42,26 +40,14 @@ namespace Iv4xr.SePlugin.Control
 				? ObservationMode.BASIC
 				: observationArgs.ObservationMode);
 
-			var characterPosition = GetPlayerPosition();
-
-			var orientation = Character.PositionComp.GetOrientation();
-
-			var observation = new SeObservation
-			{
-				AgentID = "se0",
-				Position = new PlainVec3D(characterPosition),  // Consider reducing allocations.
-				OrientationForward = new PlainVec3D(orientation.Forward),
-				OrientationUp = new PlainVec3D(orientation.Up),
-				Velocity = new PlainVec3D(GetPlayerVelocity()),
-				Extent = m_agentExtent,
-			};
+			var observation = m_lowLevelObserver.GetBasicObservation();
 
 			if (mode == ObservationMode.BASIC)
 			{
 				return observation;
 			}
 
-			var sphere = new BoundingSphereD(characterPosition, radius: 25.0);
+			var sphere = new BoundingSphereD(m_lowLevelObserver.GetPlayerPosition(), radius: 25.0);
 
 			switch (mode)
 			{
@@ -86,37 +72,11 @@ namespace Iv4xr.SePlugin.Control
 			return GetObservation(ObservationArgs.Default);
 		}
 
-		private Vector3D GetPlayerPosition()
-		{
-			return Character.PositionComp.GetPosition();
-		}
-
-		private Vector3D GetPlayerVelocity()
-		{
-			// TODO(PP): Calculate velocity!
-			return Vector3D.Zero; 
-		}
-
-		private IEnumerable<MyEntity> EnumerateSurroundingEntities(BoundingSphereD sphere)
-		{
-			List<MyEntity> entities = MyEntities.GetEntitiesInSphere(ref sphere);
-
-			try
-			{
-				foreach (MyEntity entity in entities)
-					yield return entity;
-			}
-			finally
-			{
-				entities.Clear();
-			}
-		}
-
 		private List<SeEntity> CollectSurroundingEntities(BoundingSphereD sphere)
 		{
 			var ivEntities = new List<SeEntity>();
 
-			foreach (MyEntity entity in EnumerateSurroundingEntities(sphere))
+			foreach (MyEntity entity in m_lowLevelObserver.EnumerateSurroundingEntities(sphere))
 			{
 				var ivEntity = new SeEntity()
 				{
@@ -136,24 +96,44 @@ namespace Iv4xr.SePlugin.Control
 			return ivEntities;
 		}
 
+		private static string GetSeBlockType(IMySlimBlock sourceBlock)
+		{ 
+			// block.BlockDefinition.Id.TypeId not used, SubtypeName seems sufficiently unique for now.
+			return sourceBlock.BlockDefinition?.Id is null
+				? "null"
+				: sourceBlock.BlockDefinition.Id.SubtypeName;
+		}
+
 		private List<SeBlock> CollectSurroundingBlocks(BoundingSphereD sphere, ObservationMode mode)
 		{
+			SeBlock CreateSeBlock(MyCubeGrid grid, IMySlimBlock sourceBlock)
+			{
+				return new SeBlock
+				{
+					Position = new PlainVec3D(grid.GridIntegerToWorld(sourceBlock.Position)),
+					MaxIntegrity = sourceBlock.MaxIntegrity,
+					BuildIntegrity = sourceBlock.BuildIntegrity,
+					Integrity = sourceBlock.Integrity,
+					BlockType = GetSeBlockType(sourceBlock)
+				};
+			}
+
 			var ivBlocks = new List<SeBlock>();  // iv4XR interface blocks ("SE blocks" from the outside)
 
 			var blockIds = new HashSet<int>();
 
-			foreach (MyEntity entity in EnumerateSurroundingEntities(sphere))
+			foreach (MyEntity entity in m_lowLevelObserver.EnumerateSurroundingEntities(sphere))
 			{
 				var grid = entity as MyCubeGrid;
 				if (grid is null)
 					continue;
 				
 				var foundBlocks = new HashSet<MySlimBlock>();
-				grid.GetBlocksInsideSphere(ref sphere, foundBlocks);  // NOTE: This might be slow (profiled ages ago)
+				m_lowLevelObserver.GetBlocksInsideSphere(grid, ref sphere, foundBlocks);  // NOTE: Likely slow.
 
-				foreach (IMySlimBlock sourceBlock in foundBlocks)
+				foreach (MySlimBlock sourceBlock in foundBlocks)
 				{
-					int blockId = ((MySlimBlock) sourceBlock).UniqueId;
+					int blockId = sourceBlock.UniqueId;
 					blockIds.Add(blockId);  // TODO(PP): Consider not updating the hash set when not in NEW_BLOCKS mode.
 
 					if (mode == ObservationMode.NEW_BLOCKS)
@@ -162,15 +142,7 @@ namespace Iv4xr.SePlugin.Control
 							continue;
 					}
 
-					var ivBlock = new SeBlock
-					{
-						Position = new PlainVec3D(grid.GridIntegerToWorld(sourceBlock.Position)),
-						MaxIntegrity = sourceBlock.MaxIntegrity,
-						BuildIntegrity = sourceBlock.BuildIntegrity,
-						Integrity = sourceBlock.Integrity,
-					};
-
-					ivBlocks.Add(ivBlock);
+					ivBlocks.Add(CreateSeBlock(grid, sourceBlock));
 
 					if (ivBlocks.Count() > 1000)  // TODO(PP): Define as param.
 					{
