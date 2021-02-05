@@ -10,5 +10,7 @@ namespace Iv4xr.SePlugin.WorldModel
 		public float MaxIntegrity;
 		public float BuildIntegrity;
 		public float Integrity;
+
+		public string BlockType;
 	}
 }
