@@ -106,7 +106,7 @@ namespace Iv4xr.SePlugin.Control
 
 		private List<SeBlock> CollectSurroundingBlocks(BoundingSphereD sphere, ObservationMode mode)
 		{
-			SeBlock CreateSeBlock(MyCubeGrid grid, IMySlimBlock sourceBlock)
+			SeBlock CreateSeBlock(MyCubeGrid grid, MySlimBlock sourceBlock)
 			{
 				return new SeBlock
 				{
@@ -114,7 +114,12 @@ namespace Iv4xr.SePlugin.Control
 					MaxIntegrity = sourceBlock.MaxIntegrity,
 					BuildIntegrity = sourceBlock.BuildIntegrity,
 					Integrity = sourceBlock.Integrity,
-					BlockType = GetSeBlockType(sourceBlock)
+					BlockType = GetSeBlockType(sourceBlock),
+					MinPosition = new PlainVec3D(grid.GridIntegerToWorld(sourceBlock.Min)),
+					MaxPosition = new PlainVec3D(grid.GridIntegerToWorld(sourceBlock.Max)),
+
+					// Note: it does not have to be the same as block.Min - block.Max (because of rotations)
+					Size = new PlainVec3D(sourceBlock.BlockDefinition.Size)
 				};
 			}
 
