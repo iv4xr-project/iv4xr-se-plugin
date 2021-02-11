@@ -81,6 +81,7 @@ public class SpaceEngEnvironmentTest {
         System.out.println("First block max integrity: " + firstBlock.maxIntegrity);
         System.out.println("First block build integrity: " + firstBlock.buildIntegrity);
         System.out.println("First block integrity: " + firstBlock.integrity);
+        System.out.println("First block type: " + firstBlock.blockType);
 
         boolean result = environment.getSeResponse(SeRequest.disconnect());
         Assertions.assertTrue(result);
