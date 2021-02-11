@@ -119,7 +119,10 @@ namespace Iv4xr.SePlugin.Control
 					MaxPosition = new PlainVec3D(grid.GridIntegerToWorld(sourceBlock.Max)),
 
 					// Note: it does not have to be the same as block.Min - block.Max (because of rotations)
-					Size = new PlainVec3D(sourceBlock.BlockDefinition.Size)
+					Size = new PlainVec3D(sourceBlock.BlockDefinition.Size),
+
+					OrientationForward = new PlainVec3D(grid.WorldMatrix.GetDirectionVector(sourceBlock.Orientation.Forward)),
+					OrientationUp      = new PlainVec3D(grid.WorldMatrix.GetDirectionVector(sourceBlock.Orientation.Up))
 				};
 			}
 
