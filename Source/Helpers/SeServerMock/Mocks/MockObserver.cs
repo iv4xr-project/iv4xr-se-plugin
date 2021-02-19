@@ -31,7 +31,8 @@ namespace SeServerMock.Mocks
 				Position = new PlainVec3D(5, 5, 5),
 				MaxIntegrity = 10f,
 				BuildIntegrity = 1.0f,
-				Integrity = 5.0f
+				Integrity = 5.0f,
+				BlockType = "MockBlock"
 			};
 
 			var blocks = new List<SeBlock>
