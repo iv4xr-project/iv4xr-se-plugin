@@ -2,104 +2,10 @@
 using System;
 using System.Collections.Generic;
 using Iv4xr.SePlugin.Json;
-using Iv4xr.SePlugin.WorldModel;
-using Iv4xr.PluginLib.Comm;
-using VRageMath;
 
 namespace Iv4xr.SePlugin.Control
 {
-
-    using CommandDict = Dictionary<String, StringCommand>;
-
-    public class DispatcherContext
-    {
-        public readonly IObserver observer;
-        public readonly ICharacterController characterController;
-
-        public DispatcherContext(IObserver observer, ICharacterController characterController)
-        {
-            this.observer = observer;
-            this.characterController = characterController;
-        }
-    }
-
-    public interface StringCommand
-    {
-        string Cmd { get; }
-        string Execute(string message, DispatcherContext m_context, Jsoner m_jsoner);
-    }
-
-    public abstract class DispatcherCommand<I, O> : StringCommand
-        where I : class
-        where O : class
-    {
-        public string Cmd { get; }
-
-        public DispatcherCommand(string cmd)
-        {
-            this.Cmd = cmd;
-        }
-
-        public string Execute(string message, DispatcherContext m_context, Jsoner m_jsoner)
-
-        {
-            var inputData = m_jsoner.ToObject<I>(message);
-            var outputData = Execute(m_context, inputData);
-            return m_jsoner.ToJson(outputData);
-        }
-
-        public abstract O Execute(DispatcherContext context, I data);
-    }
-
-    public class ObserveCommand : DispatcherCommand<SeRequestShell<AgentCommand<ObservationArgs>>, SeObservation>
-    {
-
-        public ObserveCommand() : base("OBSERVE")
-        {}
-
-        public override SeObservation Execute(DispatcherContext context, SeRequestShell<AgentCommand<ObservationArgs>> data)
-        {
-            return context.observer.GetObservation(data.Arg.Arg);
-        }
-    }
-
-    public class MoveAndRotateCommand : DispatcherCommand<SeRequestShell<AgentCommand<MoveAndRotateArgs>>, SeObservation>
-    {
-        public MoveAndRotateCommand() : base("MOVE_ROTATE")
-        {}
-
-        public override SeObservation Execute(DispatcherContext context, SeRequestShell<AgentCommand<MoveAndRotateArgs>> data)
-        {
-            context.characterController.Move(data.Arg.Arg);
-            return context.observer.GetObservation();
-        }
-    }
-
-    public class MoveTowardCommand : DispatcherCommand<SeRequestShell<AgentCommand<MoveCommandArgs>>, SeObservation>
-    {
-        public MoveTowardCommand() : base("MOVETOWARD")
-        {}
-
-        public override SeObservation Execute(DispatcherContext context, SeRequestShell<AgentCommand<MoveCommandArgs>> data)
-        {
-            context.characterController.Move(data.Arg.Arg.MoveIndicator, Vector2.Zero, 0.0f);
-            return context.observer.GetObservation();
-
-        }
-    }
-
-    public class InteractCommand : DispatcherCommand<SeRequestShell<AgentCommand<InteractionArgs>>, SeObservation>
-    {
-        public InteractCommand() : base("INTERACT")
-        {}
-
-        public override SeObservation Execute(DispatcherContext context, SeRequestShell<AgentCommand<InteractionArgs>> data)
-        {
-            context.characterController.Interact(data.Arg.Arg);
-            return context.observer.GetObservation();
-        }
-    }
-
+    using CommandDict = Dictionary<String, IStringCommand>;
 
     public class Dispatcher
     {
@@ -130,15 +36,14 @@ namespace Iv4xr.SePlugin.Control
             }
         }
 
-        public void AddCommand(StringCommand command)
+        public void AddCommand(IStringCommand command)
         {
             m_commands[command.Cmd] = command;
         }
 
         private CommandDict DefaultCommands()
         {
-
-            var commandList = new List<StringCommand>
+            var commandList = new List<IStringCommand>
             {
                 new ObserveCommand(),
                 new MoveAndRotateCommand(),
@@ -187,7 +92,6 @@ namespace Iv4xr.SePlugin.Control
                 return command.Execute(request.Message, m_context, m_jsoner);
             }
             throw new NotImplementedException($"Unknown agent command: {commandName}");
-
         }
     }
 }
