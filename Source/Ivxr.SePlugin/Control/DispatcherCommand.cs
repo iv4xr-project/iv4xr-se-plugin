@@ -38,6 +38,6 @@ namespace Iv4xr.SePlugin.Control
             return jsoner.ToJson(outputData);
         }
 
-        public abstract TOutput Execute(DispatcherContext context, TInput data);
+        protected abstract TOutput Execute(DispatcherContext context, TInput data);
     }
 }

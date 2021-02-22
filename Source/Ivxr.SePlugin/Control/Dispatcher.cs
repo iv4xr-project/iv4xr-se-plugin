@@ -19,7 +19,8 @@ namespace Iv4xr.SePlugin.Control
 
         private readonly CommandDict m_commands;
 
-        public Dispatcher(RequestQueue requestQueue, IObserver observer, ICharacterController controller, CommandDict commands = null)
+        public Dispatcher(RequestQueue requestQueue, IObserver observer, ICharacterController controller,
+            CommandDict commands = null)
         {
             m_requestQueue = requestQueue;
             m_context = new DispatcherContext(observer, controller);
@@ -31,7 +32,7 @@ namespace Iv4xr.SePlugin.Control
             m_commands[command.Cmd] = command;
         }
 
-        private CommandDict DefaultCommands()
+        private static CommandDict DefaultCommands()
         {
             var commandList = new List<IStringCommand>
             {
@@ -40,11 +41,13 @@ namespace Iv4xr.SePlugin.Control
                 new MoveTowardCommand(),
                 new InteractCommand()
             };
+            
             var result = new CommandDict();
             foreach (var command in commandList)
             {
                 result[command.Cmd] = command;
             }
+            
             return result;
         }
 
@@ -76,12 +79,11 @@ namespace Iv4xr.SePlugin.Control
             var commandName = request.Message.Substring(36, 20).Split(new[] { "\"" }, StringSplitOptions.None)[0];
             Log?.WriteLine($"{nameof(Dispatcher)} command prefix: '{commandName}'.");
 
-            if (m_commands.ContainsKey(commandName))
-            {
-                var command = m_commands[commandName];
-                return command.Execute(request.Message, m_context, m_jsoner);
-            }
-            throw new NotImplementedException($"Unknown agent command: {commandName}");
+            if (!m_commands.ContainsKey(commandName))
+                throw new NotImplementedException($"Unknown agent command: {commandName}");
+            
+            var command = m_commands[commandName];
+            return command.Execute(request.Message, m_context, m_jsoner);
         }
     }
 }

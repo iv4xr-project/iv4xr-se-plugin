@@ -10,7 +10,7 @@ namespace Iv4xr.SePlugin.Control
         {
         }
 
-        public override SeObservation Execute(DispatcherContext context,
+        protected override SeObservation Execute(DispatcherContext context,
             SeRequestShell<AgentCommand<ObservationArgs>> data)
         {
             return context.Observer.GetObservation(data.Arg.Arg);
@@ -24,7 +24,7 @@ namespace Iv4xr.SePlugin.Control
         {
         }
 
-        public override SeObservation Execute(DispatcherContext context,
+        protected override SeObservation Execute(DispatcherContext context,
             SeRequestShell<AgentCommand<MoveAndRotateArgs>> data)
         {
             context.CharacterController.Move(data.Arg.Arg);
@@ -38,7 +38,7 @@ namespace Iv4xr.SePlugin.Control
         {
         }
 
-        public override SeObservation Execute(DispatcherContext context,
+        protected override SeObservation Execute(DispatcherContext context,
             SeRequestShell<AgentCommand<MoveCommandArgs>> data)
         {
             context.CharacterController.Move(data.Arg.Arg.MoveIndicator, Vector2.Zero, 0.0f);
@@ -52,7 +52,7 @@ namespace Iv4xr.SePlugin.Control
         {
         }
 
-        public override SeObservation Execute(DispatcherContext context,
+        protected override SeObservation Execute(DispatcherContext context,
             SeRequestShell<AgentCommand<InteractionArgs>> data)
         {
             context.CharacterController.Interact(data.Arg.Arg);
