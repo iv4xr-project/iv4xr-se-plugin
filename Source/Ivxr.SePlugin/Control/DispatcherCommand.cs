@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Iv4xr.SePlugin.Json;
+﻿using Iv4xr.SePlugin.Json;
 using Iv4xr.SePlugin.WorldModel;
 using Iv4xr.PluginLib.Comm;
 using VRageMath;
@@ -9,13 +7,13 @@ namespace Iv4xr.SePlugin.Control
 {
     public class DispatcherContext
     {
-        public readonly IObserver m_observer;
-        public readonly ICharacterController m_characterController;
+        public readonly IObserver Observer;
+        public readonly ICharacterController CharacterController;
 
         public DispatcherContext(IObserver observer, ICharacterController characterController)
         {
-            this.m_observer = observer;
-            this.m_characterController = characterController;
+            this.Observer = observer;
+            this.CharacterController = characterController;
         }
     }
 
@@ -31,7 +29,7 @@ namespace Iv4xr.SePlugin.Control
     {
         public string Cmd { get; }
 
-        public DispatcherCommand(string cmd)
+        protected DispatcherCommand(string cmd)
         {
             this.Cmd = cmd;
         }
@@ -54,7 +52,7 @@ namespace Iv4xr.SePlugin.Control
 
         public override SeObservation Execute(DispatcherContext context, SeRequestShell<AgentCommand<ObservationArgs>> data)
         {
-            return context.m_observer.GetObservation(data.Arg.Arg);
+            return context.Observer.GetObservation(data.Arg.Arg);
         }
     }
 
@@ -65,8 +63,8 @@ namespace Iv4xr.SePlugin.Control
 
         public override SeObservation Execute(DispatcherContext context, SeRequestShell<AgentCommand<MoveAndRotateArgs>> data)
         {
-            context.m_characterController.Move(data.Arg.Arg);
-            return context.m_observer.GetObservation();
+            context.CharacterController.Move(data.Arg.Arg);
+            return context.Observer.GetObservation();
         }
     }
 
@@ -77,8 +75,8 @@ namespace Iv4xr.SePlugin.Control
 
         public override SeObservation Execute(DispatcherContext context, SeRequestShell<AgentCommand<MoveCommandArgs>> data)
         {
-            context.m_characterController.Move(data.Arg.Arg.MoveIndicator, Vector2.Zero, 0.0f);
-            return context.m_observer.GetObservation();
+            context.CharacterController.Move(data.Arg.Arg.MoveIndicator, Vector2.Zero, 0.0f);
+            return context.Observer.GetObservation();
         }
     }
 
@@ -89,8 +87,8 @@ namespace Iv4xr.SePlugin.Control
 
         public override SeObservation Execute(DispatcherContext context, SeRequestShell<AgentCommand<InteractionArgs>> data)
         {
-            context.m_characterController.Interact(data.Arg.Arg);
-            return context.m_observer.GetObservation();
+            context.CharacterController.Interact(data.Arg.Arg);
+            return context.Observer.GetObservation();
         }
     }
 }
