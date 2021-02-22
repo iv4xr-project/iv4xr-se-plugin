@@ -5,17 +5,13 @@ using Iv4xr.SePlugin.Json;
 
 namespace Iv4xr.SePlugin.Control
 {
-    using CommandDict = Dictionary<String, IStringCommand>;
+    using CommandDict = Dictionary<string, IStringCommand>;
 
     public class Dispatcher
     {
         public ILog Log { get; set; }
 
         private readonly RequestQueue m_requestQueue;
-
-        private readonly IObserver m_observer;
-
-        private readonly ICharacterController m_controller;
 
         private readonly Jsoner m_jsoner = new Jsoner();
 
@@ -26,14 +22,8 @@ namespace Iv4xr.SePlugin.Control
         public Dispatcher(RequestQueue requestQueue, IObserver observer, ICharacterController controller, CommandDict commands = null)
         {
             m_requestQueue = requestQueue;
-            m_observer = observer;
-            m_controller = controller;
             m_context = new DispatcherContext(observer, controller);
-            m_commands = commands;
-            if (m_commands == null)
-            {
-                m_commands = DefaultCommands();
-            }
+            m_commands = commands ?? DefaultCommands();
         }
 
         public void AddCommand(IStringCommand command)
@@ -83,7 +73,7 @@ namespace Iv4xr.SePlugin.Control
         private string ProcessSingleRequest(RequestItem request)
         {
             // Skip prefix "{\"Cmd\":\"AGENTCOMMAND\",\"Arg\":{\"Cmd\":\""
-            var commandName = request.Message.Substring(36, 20).Split(new string[] { "\"" }, StringSplitOptions.None)[0];
+            var commandName = request.Message.Substring(36, 20).Split(new[] { "\"" }, StringSplitOptions.None)[0];
             Log?.WriteLine($"{nameof(Dispatcher)} command prefix: '{commandName}'.");
 
             if (m_commands.ContainsKey(commandName))
