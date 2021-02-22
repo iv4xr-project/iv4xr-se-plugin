@@ -1,95 +1,89 @@
 ﻿using Iv4xr.PluginLib;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
 using Iv4xr.SePlugin.Json;
-using Iv4xr.SePlugin.WorldModel;
-using Iv4xr.PluginLib.Comm;
-using VRageMath;
 
 namespace Iv4xr.SePlugin.Control
 {
-	public class Dispatcher
-	{
-		public ILog Log { get; set; }
+    using CommandDict = Dictionary<string, IStringCommand>;
 
-		private readonly RequestQueue m_requestQueue;
+    public class Dispatcher
+    {
+        public ILog Log { get; set; }
 
-		private readonly IObserver m_observer;
+        private readonly RequestQueue m_requestQueue;
 
-		private readonly ICharacterController m_controller;
+        private readonly Jsoner m_jsoner = new Jsoner();
 
-		private readonly Jsoner m_jsoner = new Jsoner();
+        private readonly DispatcherContext m_context;
 
-		public Dispatcher(RequestQueue requestQueue, IObserver observer, ICharacterController controller)
-		{
-			m_requestQueue = requestQueue;
-			m_observer = observer;
-			m_controller = controller;
-		}
+        private readonly CommandDict m_commands;
 
-		public void ProcessRequests()
-		{
-			while (m_requestQueue.Requests.TryDequeue(out RequestItem request))
-			{
-				string jsonReply;
+        public Dispatcher(RequestQueue requestQueue, IObserver observer, ICharacterController controller,
+            CommandDict commands = null)
+        {
+            m_requestQueue = requestQueue;
+            m_context = new DispatcherContext(observer, controller);
+            m_commands = commands ?? DefaultCommands();
+        }
 
-				try
-				{
-					jsonReply = ProcessSingleRequest(request);
-				}
-				catch (Exception ex)
-				{
-					Log.Exception(ex, "Error processing a request");
-					Log.WriteLine($"Full request: \"{request.Message}\"");
-					jsonReply = "false";  // Simple error response, details can be learned from the log.
-				}
+        public void AddCommand(IStringCommand command)
+        {
+            m_commands[command.Cmd] = command;
+        }
 
-				m_requestQueue.Replies.Add(
-					new RequestItem(request.ClientStream, message: jsonReply));
-			}
-		}
+        private static CommandDict DefaultCommands()
+        {
+            var commandList = new List<IStringCommand>
+            {
+                new ObserveCommand(),
+                new MoveAndRotateCommand(),
+                new MoveTowardCommand(),
+                new InteractCommand()
+            };
+            
+            var result = new CommandDict();
+            foreach (var command in commandList)
+            {
+                result[command.Cmd] = command;
+            }
+            
+            return result;
+        }
 
-		private string ProcessSingleRequest(RequestItem request)
-		{
-			// Skip prefix "{\"Cmd\":\"AGENTCOMMAND\",\"Arg\":{\"Cmd\":\""
-			var commandName = request.Message.Substring(36, 10);
+        public void ProcessRequests()
+        {
+            while (m_requestQueue.Requests.TryDequeue(out RequestItem request))
+            {
+                string jsonReply;
 
-			Log?.WriteLine($"{nameof(Dispatcher)} command prefix: '{commandName}'.");
+                try
+                {
+                    jsonReply = ProcessSingleRequest(request);
+                }
+                catch (Exception ex)
+                {
+                    Log.Exception(ex, "Error processing a request");
+                    Log.WriteLine($"Full request: \"{request.Message}\"");
+                    jsonReply = "false";  // Simple error response, details can be learned from the log.
+                }
 
-			if (commandName.StartsWith("OBSERVE") || commandName.StartsWith("DONOTHING"))  // DONOTHING is obsolete.
-			{
-				var requestShell = m_jsoner.ToObject<SeRequestShell<AgentCommand<ObservationArgs>>>(request.Message);
+                m_requestQueue.Replies.Add(
+                    new RequestItem(request.ClientStream, message: jsonReply));
+            }
+        }
 
-				return m_jsoner.ToJson(m_observer.GetObservation(requestShell.Arg.Arg));
-			}
-			else if (commandName.StartsWith("MOVE_ROTAT"))  // MOVE_ROTATE
-			{
-				var requestShell = m_jsoner.ToObject<SeRequestShell<AgentCommand<MoveAndRotateArgs>>>(request.Message);
+        private string ProcessSingleRequest(RequestItem request)
+        {
+            // Skip prefix "{\"Cmd\":\"AGENTCOMMAND\",\"Arg\":{\"Cmd\":\""
+            var commandName = request.Message.Substring(36, 20).Split(new[] { "\"" }, StringSplitOptions.None)[0];
+            Log?.WriteLine($"{nameof(Dispatcher)} command prefix: '{commandName}'.");
 
-				m_controller.Move(requestShell.Arg.Arg);
-			}
-			else if (commandName.StartsWith("MOVETOWARD"))  // TODO(PP): Remove.
-			{
-				var requestShell = m_jsoner.ToObject<SeRequestShell<AgentCommand<MoveCommandArgs>>>(request.Message);
-				var moveCommandArgs = requestShell.Arg.Arg;
-
-				Log?.WriteLine($"Move indicator: {moveCommandArgs.MoveIndicator}");
-				m_controller.Move(moveCommandArgs.MoveIndicator, Vector2.Zero, 0.0f);
-			}
-			else if (commandName.StartsWith("INTERACT"))
-			{ 
-				var requestShell = m_jsoner.ToObject<SeRequestShell<AgentCommand<InteractionArgs>>>(request.Message);
-
-				m_controller.Interact(requestShell.Arg.Arg);
-			}
-			else
-			{
-				throw new NotImplementedException($"Unknown agent command: {commandName}");
-			}
-
-			return m_jsoner.ToJson(m_observer.GetObservation());
-		}
-	}
+            if (!m_commands.ContainsKey(commandName))
+                throw new NotImplementedException($"Unknown agent command: {commandName}");
+            
+            var command = m_commands[commandName];
+            return command.Execute(request.Message, m_context, m_jsoner);
+        }
+    }
 }
