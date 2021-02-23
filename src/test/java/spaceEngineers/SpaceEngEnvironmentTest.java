@@ -75,6 +75,8 @@ public class SpaceEngEnvironmentTest {
         Assertions.assertNotNull(observation);
         Assertions.assertNotNull(observation.blocks);
         Assertions.assertTrue(observation.blocks.size() > 0, "Expecting non-zero block count.");
+        Assertions.assertEquals(1, observation.grids.size(), "Expecting 1 grid count.");
+        Assertions.assertEquals(1, observation.grids.get(0).blocks.size(), "Expecting 1 grid block count.");
 
         System.out.println("Got " + observation.blocks.size() + " blocks.");
         var firstBlock = observation.blocks.get(0);
