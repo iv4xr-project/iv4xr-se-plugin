@@ -3,6 +3,7 @@ using Iv4xr.SePlugin.SeLib;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Iv4xr.SePlugin.Communication;
 using Iv4xr.SePlugin.Control;
 using Iv4xr.SePlugin.Session;
 
@@ -29,8 +30,8 @@ namespace Iv4xr.SePlugin
 			var sessionDispatcher = new SessionDispatcher(sessionController) { Log = Log };
 
 			m_server = new PluginServer(Log, sessionDispatcher, m_requestQueue);
-			var llObserver = new LowLevelObserver(m_gameSession) { Log = Log };
-			var observer = new Observer(llObserver) { Log = Log };
+			var lowLevelObserver = new LowLevelObserver(m_gameSession) { Log = Log };
+			var observer = new Observer(lowLevelObserver) { Log = Log };
 			var controller = new CharacterController(m_gameSession);
 
 			Dispatcher = new Dispatcher(m_requestQueue, observer, controller) { Log = Log };
