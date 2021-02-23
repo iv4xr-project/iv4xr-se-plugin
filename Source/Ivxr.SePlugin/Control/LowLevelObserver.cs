@@ -76,7 +76,7 @@ namespace Iv4xr.SePlugin.Control
         {
             return EnumerateSurroundingEntities(sphere)
                     .OfType<MyCubeGrid>()
-                    .Select(grid => m_seEntityBuilder.CreateSeGrid(grid, sphere)).ToList();
+                    .Select(grid => m_seEntityBuilder.CreateSeGrid(grid, sphere, mode)).ToList();
         }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Iv4xr.SePlugin.WorldModel;
@@ -8,13 +9,41 @@ using VRageMath;
 
 namespace Iv4xr.SePlugin.Control
 {
+    internal class PreviousBlocksFilter
+    {
+        private readonly HashSet<int> m_previousBlockIds = new HashSet<int>();
+        private readonly HashSet<int> m_newBlockIds = new HashSet<int>();
+
+        private bool FilterOnlyNew(MySlimBlock block)
+        {
+            m_newBlockIds.Add(block.UniqueId);
+            return !m_previousBlockIds.Contains(block.UniqueId);
+        }
+
+        public Func<MySlimBlock, bool> FilterByMode(ObservationMode mode)
+        {
+            if (mode == ObservationMode.NEW_BLOCKS)
+            {
+                return FilterOnlyNew;
+            }
+            else
+            {
+                return block => true;
+            }
+        }
+
+        public void AfterFilter()
+        {
+            m_previousBlockIds.Clear();
+            m_newBlockIds.ForEach(it => m_previousBlockIds.Add(it));
+        }
+    }
+
     internal class SeEntityBuilder
     {
-        private HashSet<int> m_previousBlockIds = new HashSet<int>();
-
-        public SeGrid CreateSeGrid(MyCubeGrid sourceGrid, BoundingSphereD sphere)
+        public SeGrid CreateSeGrid(MyCubeGrid sourceGrid, BoundingSphereD sphere, ObservationMode mode)
         {
-            var seBlocks = GridBLocks(FoundBlocks(sourceGrid, sphere)).ToList();
+            var seBlocks = GridBLocks(FoundBlocks(sourceGrid, sphere), mode).ToList();
             var position = sourceGrid.GridIntegerToWorld(sphere.Center);
             return new SeGrid
             {
@@ -23,18 +52,16 @@ namespace Iv4xr.SePlugin.Control
             };
         }
 
-        private IEnumerable<SeBlock> GridBLocks(IEnumerable<MySlimBlock> foundBlocks, int limit = 1000)
+        private readonly PreviousBlocksFilter m_previousBlocksFilter = new PreviousBlocksFilter();
+
+        private IEnumerable<SeBlock> GridBLocks(IEnumerable<MySlimBlock> foundBlocks, ObservationMode mode,
+            int limit = 1000)
         {
-            var newBlockIds = new HashSet<int>();
-            var blocks = foundBlocks.Select(block =>
-                    {
-                        newBlockIds.Add(block.UniqueId);
-                        return block;
-                    }).Where(block => !m_previousBlockIds.Contains(block.UniqueId))
+            var blocks = foundBlocks.Where(m_previousBlocksFilter.FilterByMode(mode));
+            m_previousBlocksFilter.AfterFilter();
+            return blocks
                     .Take(limit) //or Where + local variable counting and logging result if previous behaviour desirable
                     .Select(CreateSeBlock);
-            m_previousBlockIds = newBlockIds;
-            return blocks;
         }
 
         private static IEnumerable<MySlimBlock> FoundBlocks(MyCubeGrid grid, BoundingSphereD sphere)
