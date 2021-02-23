@@ -32,6 +32,9 @@ namespace Iv4xr.SePlugin.Communication
             this.Cmd = cmd;
         }
 
+        /// <summary>
+        /// Deserialize the command, execute & serialize response.
+        /// </summary>
         public string Execute(string message, DispatcherContext context, Jsoner jsoner)
         {
             var inputData = jsoner.ToObject<TInput>(message);
@@ -39,6 +42,9 @@ namespace Iv4xr.SePlugin.Communication
             return jsoner.ToJson(outputData);
         }
 
+        /// <summary>
+        /// Execute the command while consuming and returning typed non-serialized data.
+        /// </summary>
         protected abstract TOutput Execute(DispatcherContext context, TInput data);
     }
 }
