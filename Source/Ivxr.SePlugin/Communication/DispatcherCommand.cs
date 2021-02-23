@@ -22,8 +22,8 @@ namespace Iv4xr.SePlugin.Communication
     }
 
     public abstract class DispatcherCommand<TInput, TOutput> : IStringCommand
-        where TInput : class
-        where TOutput : class
+            where TInput : class
+            where TOutput : class
     {
         public string Cmd { get; }
 

@@ -7,7 +7,7 @@ namespace Iv4xr.SePlugin
     {
         public static bool IsAdminOrCreative(this MySession session)
         {
-			// copied from MyCubePlacer.Shoot
+            // copied from MyCubePlacer.Shoot
             return session.CreativeMode || (session.CreativeToolsEnabled(Sync.MyId) && session.HasCreativeRights);
         }
     }

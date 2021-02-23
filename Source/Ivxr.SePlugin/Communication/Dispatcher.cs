@@ -37,18 +37,18 @@ namespace Iv4xr.SePlugin.Communication
         {
             var commandList = new List<IStringCommand>
             {
-                new ObserveCommand(),
-                new MoveAndRotateCommand(),
-                new MoveTowardCommand(),
-                new InteractCommand()
+                    new ObserveCommand(),
+                    new MoveAndRotateCommand(),
+                    new MoveTowardCommand(),
+                    new InteractCommand()
             };
-            
+
             var result = new CommandDict();
             foreach (var command in commandList)
             {
                 result[command.Cmd] = command;
             }
-            
+
             return result;
         }
 
@@ -66,7 +66,7 @@ namespace Iv4xr.SePlugin.Communication
                 {
                     Log.Exception(ex, "Error processing a request");
                     Log.WriteLine($"Full request: \"{request.Message}\"");
-                    jsonReply = "false";  // Simple error response, details can be learned from the log.
+                    jsonReply = "false"; // Simple error response, details can be learned from the log.
                 }
 
                 m_requestQueue.Replies.Add(
@@ -78,13 +78,13 @@ namespace Iv4xr.SePlugin.Communication
         {
             // Skip prefix "{\"Cmd\":\"AGENTCOMMAND\",\"Arg\":{\"Cmd\":\""
             var commandName = request.Message.Substring(36, 20)
-                .Split(new[] { "\"" }, StringSplitOptions.None)[0];
-            
+                    .Split(new[] {"\""}, StringSplitOptions.None)[0];
+
             Log?.WriteLine($"{nameof(Dispatcher)} command prefix: '{commandName}'.");
 
             if (!m_commands.ContainsKey(commandName))
                 throw new NotImplementedException($"Unknown agent command: {commandName}");
-            
+
             var command = m_commands[commandName];
             return command.Execute(request.Message, m_context, m_jsoner);
         }

@@ -19,7 +19,7 @@ namespace Iv4xr.SePlugin.Control
     }
 
     public class
-        MoveAndRotateCommand : DispatcherCommand<SeRequestShell<AgentCommand<MoveAndRotateArgs>>, SeObservation>
+            MoveAndRotateCommand : DispatcherCommand<SeRequestShell<AgentCommand<MoveAndRotateArgs>>, SeObservation>
     {
         public MoveAndRotateCommand() : base("MOVE_ROTATE")
         {

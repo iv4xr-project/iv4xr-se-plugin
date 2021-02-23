@@ -2,28 +2,28 @@
 
 namespace Iv4xr.SePlugin
 {
-	[MySessionComponentDescriptor(MyUpdateOrder.BeforeSimulation | MyUpdateOrder.AfterSimulation)]
+    [MySessionComponentDescriptor(MyUpdateOrder.BeforeSimulation | MyUpdateOrder.AfterSimulation)]
     class IvxrSessionComponent : MySessionComponentBase
     {
-		public override void BeforeStart()
-		{
-			base.BeforeStart();
+        public override void BeforeStart()
+        {
+            base.BeforeStart();
 
-			IvxrPlugin.Context.InitSession();
-		}
+            IvxrPlugin.Context.InitSession();
+        }
 
-		public override void UpdateBeforeSimulation()
+        public override void UpdateBeforeSimulation()
         {
             base.UpdateBeforeSimulation();
 
             IvxrPlugin.Dispatcher.ProcessRequests();
         }
 
-		protected override void UnloadData()
-		{
-			base.UnloadData();
+        protected override void UnloadData()
+        {
+            base.UnloadData();
 
-			IvxrPlugin.Context.EndSession();
-		}
-	}
+            IvxrPlugin.Context.EndSession();
+        }
+    }
 }

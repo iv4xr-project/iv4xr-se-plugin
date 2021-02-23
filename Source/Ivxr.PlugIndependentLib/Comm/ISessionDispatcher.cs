@@ -4,8 +4,8 @@ using System.Text;
 
 namespace Iv4xr.PluginLib
 {
-	public interface ISessionDispatcher
-	{
-		void ProcessRequest(RequestItem request);
-	}
+    public interface ISessionDispatcher
+    {
+        void ProcessRequest(RequestItem request);
+    }
 }

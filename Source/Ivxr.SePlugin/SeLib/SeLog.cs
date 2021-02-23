@@ -1,29 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-
 using Iv4xr.PluginLib;
 using VRage.Utils;
 
 namespace Iv4xr.SePlugin.SeLib
 {
-	class SeLog : ILog
-	{
-		private MyLog m_log;
+    class SeLog : ILog
+    {
+        private MyLog m_log;
 
-		public SeLog(bool alwaysFlush = false)
-		{
-			m_log = new MyLog(alwaysFlush);
-		}
+        public SeLog(bool alwaysFlush = false)
+        {
+            m_log = new MyLog(alwaysFlush);
+        }
 
-		public void Init(string logFileName)
-		{
-			m_log.Init(logFileName, new StringBuilder("0.1.0"));
-		}
+        public void Init(string logFileName)
+        {
+            m_log.Init(logFileName, new StringBuilder("0.1.0"));
+        }
 
-		public void WriteLine(string message)
-		{
-			m_log.WriteLine(message);
-		}
-	}
+        public void WriteLine(string message)
+        {
+            m_log.WriteLine(message);
+        }
+    }
 }

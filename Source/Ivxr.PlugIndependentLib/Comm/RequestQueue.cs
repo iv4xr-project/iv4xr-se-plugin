@@ -10,11 +10,12 @@ namespace Iv4xr.PluginLib
             Requests = new ConcurrentQueue<RequestItem>();
             Replies = new BlockingCollection<RequestItem>();
         }
-        
+
         public ConcurrentQueue<RequestItem> Requests { get; }
         public BlockingCollection<RequestItem> Replies { get; }
 
         #region IDisposable Support
+
         private bool disposedValue = false; // To detect redundant calls
 
         protected virtual void Dispose(bool disposing)
@@ -35,6 +36,7 @@ namespace Iv4xr.PluginLib
             // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
             Dispose(true);
         }
+
         #endregion
     }
 }

@@ -8,24 +8,24 @@ using VRageMath;
 
 namespace SeServerMock.Mocks
 {
-	internal class MockCharacterController : ICharacterController
-	{
-		public ILog Log { get; set; }
+    internal class MockCharacterController : ICharacterController
+    {
+        public ILog Log { get; set; }
 
-		public void Interact(InteractionArgs args)
-		{
-			Log?.WriteLine($"Interaction type: {args.InteractionType}");
-			Log?.WriteLine($"Slot: {args.Slot}");
-		}
+        public void Interact(InteractionArgs args)
+        {
+            Log?.WriteLine($"Interaction type: {args.InteractionType}");
+            Log?.WriteLine($"Slot: {args.Slot}");
+        }
 
-		public void Move(Vector3 move, Vector2 rotation, float roll)
-		{
-			// Noop.
-		}
+        public void Move(Vector3 move, Vector2 rotation, float roll)
+        {
+            // Noop.
+        }
 
-		public void Move(MoveAndRotateArgs args)
-		{
-			// Noop.
-		}
-	}
+        public void Move(MoveAndRotateArgs args)
+        {
+            // Noop.
+        }
+    }
 }

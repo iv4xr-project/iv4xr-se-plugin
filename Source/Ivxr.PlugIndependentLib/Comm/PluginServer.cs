@@ -13,13 +13,13 @@ namespace Iv4xr.PluginLib
     public class PluginServer
     {
         private ILog m_log;
-		private readonly ISessionDispatcher m_sessionDispatcher;
+        private readonly ISessionDispatcher m_sessionDispatcher;
         private readonly RequestQueue m_requestQueue;
 
         public PluginServer(ILog log, ISessionDispatcher sessionDispatcher, RequestQueue requestQueue)
         {
             m_log = log;
-			m_sessionDispatcher = sessionDispatcher;
+            m_sessionDispatcher = sessionDispatcher;
             m_requestQueue = requestQueue;
         }
 
@@ -44,8 +44,8 @@ namespace Iv4xr.PluginLib
                 m_log.WriteLine("Ivxr server loop ended");
             })
             {
-                IsBackground = true,
-                Name = "Ivrx plugin server thread"
+                    IsBackground = true,
+                    Name = "Ivrx plugin server thread"
             };
             thread.Start();
 
@@ -68,7 +68,7 @@ namespace Iv4xr.PluginLib
         }
 
         private void Serve(TcpListener listener)
-        { 
+        {
             using (var client = listener.AcceptTcpClient())
             {
                 m_log.WriteLine("Connected.");
@@ -120,44 +120,44 @@ namespace Iv4xr.PluginLib
             {
                 // throw new InvalidDataException("Unexpected message header: " + message);
                 m_log.WriteLine("Unexpected message header: " + message);
-				// We disconnect here, because the outer loop can't handle a request without a reply from the queue.
-				Disconnect(clientStream, out disconnected, reply: false);  
+                // We disconnect here, because the outer loop can't handle a request without a reply from the queue.
+                Disconnect(clientStream, out disconnected, reply: false);
                 return;
             }
 
             string command = message.Substring(startIndex: 7, length: 12);
 
             // ReSharper disable once StringLiteralTypo
-            if (command.StartsWith("\"AGENTCOM"))  // AGENTCOMMAND 
+            if (command.StartsWith("\"AGENTCOM")) // AGENTCOMMAND 
             {
                 m_requestQueue.Requests.Enqueue(new RequestItem(clientStream, message));
 
-				// TODO(PP): This tends to block when the message is not added to the queue. Rearchitecture, or at least add a timeout.
+                // TODO(PP): This tends to block when the message is not added to the queue. Rearchitecture, or at least add a timeout.
                 WaitForReplyAndSendIt();
             }
-			else if (command.StartsWith("\"SESSION\""))
-			{
-				m_sessionDispatcher.ProcessRequest(new RequestItem(clientStream, message));
-			}
+            else if (command.StartsWith("\"SESSION\""))
+            {
+                m_sessionDispatcher.ProcessRequest(new RequestItem(clientStream, message));
+            }
             else if (command.StartsWith("\"DISCONNECT\""))
             {
-				Disconnect(clientStream, out disconnected, reply: true);
+                Disconnect(clientStream, out disconnected, reply: true);
             }
             else
             {
                 // throw new NotImplementedException("Command unknown or not implemented: " + command);
                 m_log.WriteLine("Command unknown or not implemented: " + command);
-				// We disconnect here, because the outer loop can't handle a request without a reply from the queue.
-				Disconnect(clientStream, out disconnected, reply: false);
-			}
+                // We disconnect here, because the outer loop can't handle a request without a reply from the queue.
+                Disconnect(clientStream, out disconnected, reply: false);
+            }
         }
 
-		private void Disconnect(NetworkStream clientStream, out bool disconnected, bool reply = true)
-		{
-			Reply(clientStream, reply.ToString());
-			clientStream.Close(timeout: 100);  // ms
-			disconnected = true;
-		}
+        private void Disconnect(NetworkStream clientStream, out bool disconnected, bool reply = true)
+        {
+            Reply(clientStream, reply.ToString());
+            clientStream.Close(timeout: 100); // ms
+            disconnected = true;
+        }
 
         private void WaitForReplyAndSendIt()
         {
@@ -173,14 +173,14 @@ namespace Iv4xr.PluginLib
             clientStream.Write(replyBuffer, 0, replyBuffer.Length);
         }
 
-		public static void ReplyOK(NetworkStream clientStream)
-		{
-			Reply(clientStream, "true");
-		}
+        public static void ReplyOK(NetworkStream clientStream)
+        {
+            Reply(clientStream, "true");
+        }
 
-		public static void ReplyFalse(NetworkStream clientStream)
-		{
-			Reply(clientStream, "false");
-		}
+        public static void ReplyFalse(NetworkStream clientStream)
+        {
+            Reply(clientStream, "false");
+        }
     }
 }
