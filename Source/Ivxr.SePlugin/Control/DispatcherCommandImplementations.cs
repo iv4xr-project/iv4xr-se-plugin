@@ -1,5 +1,6 @@
 ﻿using Iv4xr.SePlugin.WorldModel;
 using Iv4xr.PluginLib.Comm;
+using Iv4xr.SePlugin.Communication;
 using VRageMath;
 
 namespace Iv4xr.SePlugin.Control

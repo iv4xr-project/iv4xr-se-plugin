@@ -1,9 +1,10 @@
 ﻿using Iv4xr.PluginLib;
 using System;
 using System.Collections.Generic;
+using Iv4xr.SePlugin.Control;
 using Iv4xr.SePlugin.Json;
 
-namespace Iv4xr.SePlugin.Control
+namespace Iv4xr.SePlugin.Communication
 {
     using CommandDict = Dictionary<string, IStringCommand>;
 
@@ -76,7 +77,9 @@ namespace Iv4xr.SePlugin.Control
         private string ProcessSingleRequest(RequestItem request)
         {
             // Skip prefix "{\"Cmd\":\"AGENTCOMMAND\",\"Arg\":{\"Cmd\":\""
-            var commandName = request.Message.Substring(36, 20).Split(new[] { "\"" }, StringSplitOptions.None)[0];
+            var commandName = request.Message.Substring(36, 20)
+                .Split(new[] { "\"" }, StringSplitOptions.None)[0];
+            
             Log?.WriteLine($"{nameof(Dispatcher)} command prefix: '{commandName}'.");
 
             if (!m_commands.ContainsKey(commandName))

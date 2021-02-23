@@ -1,6 +1,7 @@
-﻿using Iv4xr.SePlugin.Json;
+﻿using Iv4xr.SePlugin.Control;
+using Iv4xr.SePlugin.Json;
 
-namespace Iv4xr.SePlugin.Control
+namespace Iv4xr.SePlugin.Communication
 {
     public class DispatcherContext
     {
