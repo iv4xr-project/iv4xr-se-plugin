@@ -42,10 +42,12 @@ namespace Ivxr.SeGameLib.Tests
 
             Assert.Equal("{\"AgentID\":\"Foo\"," +
                          "\"Position\":{\"X\":1.0,\"Y\":2.0,\"Z\":3.0}," +
+                         "\"OrientationForward\":{\"X\":0.0,\"Y\":0.0,\"Z\":0.0}," +
+                         "\"OrientationUp\":{\"X\":0.0,\"Y\":0.0,\"Z\":0.0}," +
                          "\"Velocity\":{\"X\":0.0,\"Y\":0.0,\"Z\":0.0}," +
                          "\"Extent\":{\"X\":0.0,\"Y\":0.0,\"Z\":0.0}," +
                          "\"Entities\":[]," +
-                         "\"Blocks\":null}",
+                         "\"Blocks\":null,\"Grids\":null}",
                 json);
         }
 
