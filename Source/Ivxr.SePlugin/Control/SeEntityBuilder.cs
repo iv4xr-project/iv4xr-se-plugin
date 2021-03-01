@@ -59,6 +59,7 @@ namespace Iv4xr.SePlugin.Control
             
             return new SeGrid
             {
+                Id = sourceGrid.DisplayName,
                 Position = new PlainVec3D(position),
                 Blocks = seBlocks
             };
