@@ -13,6 +13,5 @@ public class SeObservation {
 
     public List<SeEntity> entities;
 
-    public List<SeBlock> blocks;
     public List<SeGrid> grids;
 }

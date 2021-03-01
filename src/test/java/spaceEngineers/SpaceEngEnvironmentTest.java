@@ -73,13 +73,12 @@ public class SpaceEngEnvironmentTest {
         var observation = environment.getSeResponse(SeRequest.command(
                 SeAgentCommand.observe("you", new ObservationArgs(ObservationMode.BLOCKS))));
         Assertions.assertNotNull(observation);
-        Assertions.assertNotNull(observation.blocks);
-        Assertions.assertTrue(observation.blocks.size() > 0, "Expecting non-zero block count.");
+        Assertions.assertNotNull(observation.grids);
         Assertions.assertEquals(1, observation.grids.size(), "Expecting 1 grid count.");
         Assertions.assertEquals(1, observation.grids.get(0).blocks.size(), "Expecting 1 grid block count.");
 
-        System.out.println("Got " + observation.blocks.size() + " blocks.");
-        var firstBlock = observation.blocks.get(0);
+        System.out.println("Got " + observation.grids.size() + " grids.");
+        var firstBlock = observation.grids.get(0).blocks.get(0);
         System.out.println("First block max integrity: " + firstBlock.maxIntegrity);
         System.out.println("First block build integrity: " + firstBlock.buildIntegrity);
         System.out.println("First block integrity: " + firstBlock.integrity);
