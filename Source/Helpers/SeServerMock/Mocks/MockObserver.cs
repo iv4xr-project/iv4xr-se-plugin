@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using Iv4xr.PluginLib;
-using Iv4xr.SePlugin.WorldModel;
 using Iv4xr.SePlugin.Control;
-using VRage.Noise.Modifiers;
+using Iv4xr.SePlugin.WorldModel;
 
 namespace SeServerMock.Mocks
 {
@@ -40,12 +37,21 @@ namespace SeServerMock.Mocks
                     block
             };
 
+            var grids = new List<SeGrid>
+            {
+                    new SeGrid()
+                    {
+                            Position = block.Position,
+                            Blocks = blocks
+                    }
+            };
+
             return new SeObservation()
             {
                     AgentID = "Mock",
                     Position = new PlainVec3D(4, 2, 0),
                     Entities = entities,
-                    Blocks = blocks
+                    Grids = grids
             };
         }
 

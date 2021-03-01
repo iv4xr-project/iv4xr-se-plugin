@@ -1,12 +1,9 @@
-using Iv4xr.PluginLib;
-using Iv4xr.SePlugin.WorldModel;
-using Sandbox.Game.Entities;
-using Sandbox.Game.Entities.Cube;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Iv4xr.PluginLib;
+using Iv4xr.SePlugin.WorldModel;
 using VRage.Game.Entity;
-using VRage.Game.ModAPI;
 using VRageMath;
 
 namespace Iv4xr.SePlugin.Control
@@ -51,7 +48,7 @@ namespace Iv4xr.SePlugin.Control
 
                 case ObservationMode.BLOCKS:
                 case ObservationMode.NEW_BLOCKS:
-                    observation.Blocks = m_lowLevelObserver.CollectSurroundingBlocks(sphere, mode);
+                    observation.Grids = m_lowLevelObserver.CollectSurroundingBlocks(sphere, mode);
                     break;
 
                 default:

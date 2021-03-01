@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Iv4xr.SePlugin.WorldModel;
-using VRageMath;
+﻿using System.Collections.Generic;
 
 namespace Iv4xr.SePlugin.WorldModel
 {
@@ -19,6 +15,6 @@ namespace Iv4xr.SePlugin.WorldModel
 
         public List<SeEntity> Entities;
 
-        public List<SeBlock> Blocks;
+        public List<SeGrid> Grids;
     }
 }
