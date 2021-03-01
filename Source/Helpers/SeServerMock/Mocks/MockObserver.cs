@@ -51,7 +51,6 @@ namespace SeServerMock.Mocks
                     AgentID = "Mock",
                     Position = new PlainVec3D(4, 2, 0),
                     Entities = entities,
-                    Blocks = blocks,
                     Grids = grids
             };
         }

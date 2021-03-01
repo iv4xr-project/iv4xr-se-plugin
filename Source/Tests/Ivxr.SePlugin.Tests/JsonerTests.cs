@@ -47,7 +47,7 @@ namespace Ivxr.SeGameLib.Tests
                          "\"Velocity\":{\"X\":0.0,\"Y\":0.0,\"Z\":0.0}," +
                          "\"Extent\":{\"X\":0.0,\"Y\":0.0,\"Z\":0.0}," +
                          "\"Entities\":[]," +
-                         "\"Blocks\":null,\"Grids\":null}",
+                         "\"Grids\":null}",
                 json);
         }
 

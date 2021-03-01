@@ -18,11 +18,12 @@ namespace Iv4xr.SePlugin.Control
         private readonly PlainVec3D
                 m_agentExtent = new PlainVec3D(0.5, 1, 0.5); // TODO(PP): It's just a quick guess, check the reality.
 
-        private readonly SeEntityBuilder m_seEntityBuilder = new SeEntityBuilder();
+        private readonly SeEntityBuilder m_seEntityBuilder;
 
         public LowLevelObserver(GameSession gameSession)
         {
             m_gameSession = gameSession;
+            m_seEntityBuilder = new SeEntityBuilder() {Log = Log};
         }
 
         private MyCharacter Character => m_gameSession.Character;
@@ -46,12 +47,12 @@ namespace Iv4xr.SePlugin.Control
 
             var observation = new SeObservation
             {
-                    AgentID = "se0",
-                    Position = new PlainVec3D(characterPosition), // Consider reducing allocations.
-                    OrientationForward = new PlainVec3D(orientation.Forward),
-                    OrientationUp = new PlainVec3D(orientation.Up),
-                    Velocity = new PlainVec3D(GetPlayerVelocity()),
-                    Extent = m_agentExtent,
+                AgentID = "se0",
+                Position = new PlainVec3D(characterPosition), // Consider reducing allocations.
+                OrientationForward = new PlainVec3D(orientation.Forward),
+                OrientationUp = new PlainVec3D(orientation.Up),
+                Velocity = new PlainVec3D(GetPlayerVelocity()),
+                Extent = m_agentExtent,
             };
 
             return observation;
