@@ -59,7 +59,8 @@ public class InteractionTest {
         System.out.println("Got " + observation.grids.size() + " grids.");
 
         for (var grid : observation.grids) {
-            System.out.println("Got " + grid.blocks.size() + " blocks.");
+            System.out.println("Got " + grid.blocks.size() + " blocks (grid id: " + grid.id + ").");
+            System.out.println("Grid position: " + grid.position);
         }
 
         observation = environment.getSeResponse(SeRequest.command(
@@ -79,7 +80,7 @@ public class InteractionTest {
         List<SeBlock> blocks = null;
         for (var grid : observation.grids) {
             blocks = grid.blocks;
-            System.out.println("Got " + blocks.size() + " blocks.");
+            System.out.println("Got " + blocks.size() + " blocks (grid id: " + grid.id + ").");
 
             if (blocks.size() > 0)  // Take first nonempty grid.
                 break;
