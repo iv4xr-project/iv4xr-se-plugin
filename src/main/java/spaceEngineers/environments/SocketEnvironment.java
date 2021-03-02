@@ -15,7 +15,9 @@ import nl.uu.cs.aplib.mainConcepts.Environment;
 
 import java.io.*;
 import java.lang.reflect.Modifier;
+import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 
 public class SocketEnvironment extends Environment {
 
@@ -31,18 +33,22 @@ public class SocketEnvironment extends Environment {
 
     SocketEnvironment(String host, int port) {
 
-        int maxWaitTime = 20000;
+        int maxWaitTimeMs = 20000;
+        int socketConnectionTimeoutMs = 4000;
+        int socketDataTimeoutMs = 4000;
 
-        System.out.println(String.format("Trying to connect with %s on %s:%s (will time-out after %s seconds)", PrintColor.BLUE("Unity"), host, port, maxWaitTime/1000));
+        System.out.println(String.format("Trying to connect with %s on %s:%s (will time-out after %s seconds)", PrintColor.BLUE("Unity"), host, port, maxWaitTimeMs/1000));
 
         long startTime = System.nanoTime();
 
-        while (!socketReady() && millisElapsed(startTime) < maxWaitTime){
+        while (!socketReady() && millisElapsed(startTime) < maxWaitTimeMs){
 
             try {
-                socket = new Socket(host, port);
-                reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                writer = new PrintWriter(socket.getOutputStream(), true);
+                socket = new Socket();
+                socket.setSoTimeout(socketDataTimeoutMs);
+                socket.connect(new InetSocketAddress(host, port), socketConnectionTimeoutMs);
+                reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
+                writer = new PrintWriter(socket.getOutputStream(), true, StandardCharsets.UTF_8);
             } catch (IOException ignored) { }
         }
 
@@ -72,33 +78,24 @@ public class SocketEnvironment extends Environment {
     /**
      * Close the socket/reader/writer
      */
-    public boolean close() {
+    public void close() {
+        try {
+            getResponse(Request.disconnect());
+        } finally {
+            closeSafely(reader);
+            closeSafely(writer);
+            closeSafely(socket);
+        }
+    }
 
-        // try to disconnect
-        boolean success = getResponse(Request.disconnect());
-
-        if(success){
-            try {
-                if (reader != null)
-                    reader.close();
-                if (writer != null)
-                    writer.close();
-                if (socket != null)
-                    socket.close();
-
-                System.out.println(String.format("%s: Disconnected from the host", PrintColor.SUCCESS()));
-
-            } catch (IOException e) {
-                System.out.println(e.getMessage());
-                System.out.println(String.format("%s: Could not disconnect from the host by closing the socket.", PrintColor.FAILURE()));
-                return false;
+    public static void closeSafely(Closeable closeable) {
+        try {
+            if (closeable != null) {
+                closeable.close();
             }
+        } catch (IOException e) {
+            //at this point we don't care, just cleanup
         }
-        else {
-            System.out.println(String.format("%s: Unity does not respond to a disconnection request.", PrintColor.FAILURE()));
-        }
-
-        return success;
     }
 
     /**
@@ -137,7 +134,7 @@ public class SocketEnvironment extends Environment {
      */
     public <T> T getResponse(Request<T> req) {
     	// WP note:
-    	// the actual id of the agent and the id of its target (if it interacts with 
+    	// the actual id of the agent and the id of its target (if it interacts with
     	// something) are put inside the req object ... :|
         String json = (String) sendCommand("APlib", "Unity", "request", gson.toJson(req));
         // we do not have to cast to T, since req.responseType is of type Class<T>

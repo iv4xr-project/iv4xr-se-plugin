@@ -1,41 +1,46 @@
 package spaceEngineers;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import spaceEngineers.commands.*;
 
 import java.util.List;
 
+import static org.junit.Assert.assertFalse;
+
 public class InteractionTest {
+
+    SpaceEngEnvironment environment;
+
+    @BeforeEach
+    public void beforeEach() {
+        environment = SpaceEngEnvironment.localhost();
+    }
+
+    @AfterEach
+    public void afterEach() {
+        environment.close();
+        environment = null;
+    }
 
     @Test
     public void equipToolbarItemTest() {
-        var environment = SpaceEngEnvironment.localhost();
-
         var observation = environment.getSeResponse(SeRequest.command(
                 SeAgentCommand.interact("you", new InteractionArgs(InteractionType.EQUIP, 4))));
         Assertions.assertNotNull(observation);
-
-        boolean result = environment.getSeResponse(SeRequest.disconnect());
-        Assertions.assertTrue(result);
     }
 
     @Test
     public void pageAndEquipTest() {
-        var environment = SpaceEngEnvironment.localhost();
-
         var observation = environment.getSeResponse(SeRequest.command(
                 SeAgentCommand.interact("you", new InteractionArgs(InteractionType.EQUIP, 4, 2))));
         Assertions.assertNotNull(observation);
-
-        boolean result = environment.getSeResponse(SeRequest.disconnect());
-        Assertions.assertTrue(result);
     }
 
     @Test
     public void equipAndPlace() {
-        var environment = SpaceEngEnvironment.localhost();
-
         var observation = environment.getSeResponse(SeRequest.command(
                 SeAgentCommand.interact("you", new InteractionArgs(InteractionType.EQUIP,3))));
         Assertions.assertNotNull(observation);
@@ -43,15 +48,10 @@ public class InteractionTest {
         observation = environment.getSeResponse(SeRequest.command(
                 SeAgentCommand.interact("you", new InteractionArgs(InteractionType.PLACE))));
         Assertions.assertNotNull(observation);
-
-        boolean result = environment.getSeResponse(SeRequest.disconnect());
-        Assertions.assertTrue(result);
     }
 
     @Test
     public void checkNewBlock() {
-        var environment = SpaceEngEnvironment.localhost();
-
         var observation = environment.getSeResponse(SeRequest.command(
                 SeAgentCommand.observe("you", new ObservationArgs(ObservationMode.NEW_BLOCKS))));
         Assertions.assertNotNull(observation);
@@ -99,9 +99,6 @@ public class InteractionTest {
         }
 
         Assertions.assertEquals(1, blocks.size(), "There should be exactly 1 new block.");
-
-        boolean result = environment.getSeResponse(SeRequest.disconnect());
-        Assertions.assertTrue(result);
     }
 
 }

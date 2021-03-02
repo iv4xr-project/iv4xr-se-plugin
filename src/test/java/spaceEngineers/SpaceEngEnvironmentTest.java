@@ -1,6 +1,10 @@
 package spaceEngineers;
 
+import org.junit.After;
+import org.junit.Before;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import spaceEngineers.commands.ObservationArgs;
 import spaceEngineers.commands.ObservationMode;
@@ -8,18 +12,22 @@ import spaceEngineers.commands.SeAgentCommand;
 
 public class SpaceEngEnvironmentTest {
 
-    @Test
-    public void disconnectTest() {
-        var environment = SpaceEngEnvironment.localhost();
+    SpaceEngEnvironment environment;
 
-        boolean result = environment.getSeResponse(SeRequest.disconnect());
-        Assertions.assertTrue(result);
+    @BeforeEach
+    public void beforeEach() {
+        environment = SpaceEngEnvironment.localhost();
     }
+
+    @AfterEach
+    public void afterEach() {
+        environment.close();
+        environment = null;
+    }
+
 
     @Test
     public void observeTest() {
-        var environment = SpaceEngEnvironment.localhost();
-
         var observation = environment.getSeResponse(SeRequest.command(SeAgentCommand.observe("you")));
         Assertions.assertNotNull(observation);
 
@@ -27,15 +35,10 @@ public class SpaceEngEnvironmentTest {
         System.out.println("Position: " + observation.position);
         System.out.println("OrientationFwd: " + observation.orientationForward);
         System.out.println("OrientationUp : " + observation.orientationUp);
-
-        boolean result = environment.getSeResponse(SeRequest.disconnect());
-        Assertions.assertTrue(result);
     }
 
     @Test
     public void observeManyTimesTest() {
-        var environment = SpaceEngEnvironment.localhost();
-
         for (int i = 0; i < 5; i++) {
             var observation = environment.getSeResponse(SeRequest.command(SeAgentCommand.observe("you")));
             Assertions.assertNotNull(observation);
@@ -43,15 +46,10 @@ public class SpaceEngEnvironmentTest {
             System.out.println("AgentId: " + observation.agentID);
             System.out.println("Position: " + observation.position);
         }
-
-        boolean result = environment.getSeResponse(SeRequest.disconnect());
-        Assertions.assertTrue(result);
     }
 
     @Test
     public void observeEntitiesTest() {
-        var environment = SpaceEngEnvironment.localhost();
-
         var observation = environment.getSeResponse(SeRequest.command(
                 SeAgentCommand.observe("you", new ObservationArgs(ObservationMode.ENTITIES))));
         Assertions.assertNotNull(observation);
@@ -60,16 +58,11 @@ public class SpaceEngEnvironmentTest {
 
         System.out.println("Got " + observation.entities.size() + " entities.");
         System.out.println("First entity position: " + observation.entities.get(0).position);
-
-        boolean result = environment.getSeResponse(SeRequest.disconnect());
-        Assertions.assertTrue(result);
     }
 
 
     @Test
     public void observeBlocksTest() {
-        var environment = SpaceEngEnvironment.localhost();
-
         var observation = environment.getSeResponse(SeRequest.command(
                 SeAgentCommand.observe("you", new ObservationArgs(ObservationMode.BLOCKS))));
         Assertions.assertNotNull(observation);
@@ -84,8 +77,6 @@ public class SpaceEngEnvironmentTest {
         System.out.println("First block integrity: " + firstBlock.integrity);
         System.out.println("First block type: " + firstBlock.blockType);
 
-        boolean result = environment.getSeResponse(SeRequest.disconnect());
-        Assertions.assertTrue(result);
     }
 
 

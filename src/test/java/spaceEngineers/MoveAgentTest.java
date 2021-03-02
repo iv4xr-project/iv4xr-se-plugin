@@ -1,7 +1,9 @@
 package spaceEngineers;
 
 import eu.iv4xr.framework.spatial.Vec3;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import spaceEngineers.commands.MovementArgs;
 import spaceEngineers.commands.SeAgentCommand;
@@ -11,10 +13,21 @@ import java.util.function.BiConsumer;
 
 public class MoveAgentTest {
 
+    SpaceEngEnvironment environment;
+
+    @BeforeEach
+    public void beforeEach() {
+        environment = SpaceEngEnvironment.localhost();
+    }
+
+    @AfterEach
+    public void afterEach() {
+        environment.close();
+        environment = null;
+    }
+
     @Test
     public void moveTest() {
-        var environment = SpaceEngEnvironment.localhost();
-
         // Single move request is not actually visible on the character movement, see manyMovesTest below
         var observation = environment.getSeResponse(SeRequest.command(
                 SeAgentCommand.moveTowardCommand("you", new Vec3(0,0,-1), false)));
@@ -22,15 +35,10 @@ public class MoveAgentTest {
 
         System.out.println("AgentId: " + observation.agentID);
         System.out.println("Position: " + observation.position);
-
-        boolean result = environment.getSeResponse(SeRequest.disconnect());
-        Assertions.assertTrue(result);
     }
 
     @Test
     public void moveAndRotateTest() {
-        var environment = SpaceEngEnvironment.localhost();
-
         // Single move request is not actually visible on the character movement, see manyMovesTest below
         var observation = environment.getSeResponse(SeRequest.command(
                 SeAgentCommand.moveAndRotate("you", new Vec3(0,0,-1), new Vec3(0.3f, 0, 0), 0)));
@@ -38,16 +46,10 @@ public class MoveAgentTest {
 
         System.out.println("AgentId: " + observation.agentID);
         System.out.println("Position: " + observation.position);
-
-        boolean result = environment.getSeResponse(SeRequest.disconnect());
-        Assertions.assertTrue(result);
     }
 
     @Test
     public void manyMovesTest() {
-
-        var environment = SpaceEngEnvironment.localhost();
-
         var moves = new ArrayList<Vec3>();
         BiConsumer<Vec3, Integer> addMoves = (move, count) -> {
             for (int n = 0; n < count; n++)
@@ -71,16 +73,10 @@ public class MoveAgentTest {
 
             System.out.println("Position: " + observation.position);
         }
-
-        boolean result = environment.getSeResponse(SeRequest.disconnect());
-        Assertions.assertTrue(result);
     }
 
     @Test
     public void manyMovesAndRotationsTest() {
-
-        var environment = SpaceEngEnvironment.localhost();
-
         var moves = new ArrayList<MovementArgs>();
         BiConsumer<MovementArgs, Integer> addMoves = (movementArgs, count) -> {
             for (int n = 0; n < count; n++)
@@ -112,8 +108,5 @@ public class MoveAgentTest {
 
             System.out.println("Position: " + observation.position);
         }
-
-        boolean result = environment.getSeResponse(SeRequest.disconnect());
-        Assertions.assertTrue(result);
     }
 }
