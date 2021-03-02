@@ -70,6 +70,7 @@ namespace Iv4xr.SePlugin.WorldModel
         public InteractionType InteractionType;
         public int Page;
         public int Slot;
+        public bool AllowSizeChange;
     }
 
     public class AgentCommand<ArgumentType>

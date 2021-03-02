@@ -42,7 +42,7 @@ namespace Iv4xr.SePlugin.Control
         {
             if (args.InteractionType == InteractionType.EQUIP)
             {
-                EquipToolbarItem(args.Slot, args.Page);
+                EquipToolbarItem(args.Slot, args.Page, args.AllowSizeChange);
             }
             else if (args.InteractionType == InteractionType.PLACE)
             {
@@ -70,13 +70,16 @@ namespace Iv4xr.SePlugin.Control
             entityController.ControlledEntity.BeginShoot(MyShootActionEnum.PrimaryAction);
         }
 
-        private void EquipToolbarItem(int slot, int page)
+        private void EquipToolbarItem(int slot, int page, bool allowSizeChange)
         {
             var currentToolbar = MyToolbarComponent.CurrentToolbar;
 
             if (page >= 0)
                 currentToolbar.SwitchToPage(page);
 
+            if (!allowSizeChange && currentToolbar.SelectedSlot.HasValue && (currentToolbar.SelectedSlot.Value == slot))
+                return; // Already set (setting it again would change grid size).
+            
             currentToolbar.ActivateItemAtSlot(slot);
         }
 
