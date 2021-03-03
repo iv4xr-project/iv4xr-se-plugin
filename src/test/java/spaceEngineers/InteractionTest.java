@@ -28,7 +28,8 @@ public class InteractionTest {
     @Test
     public void equipToolbarItemTest() {
         var observation = environment.getSeResponse(SeRequest.command(
-                SeAgentCommand.interact("you", new InteractionArgs(InteractionType.EQUIP, 4))));
+                SeAgentCommand.interact("you",
+                        new InteractionArgs(InteractionType.EQUIP, 4, -1, true))));
         Assertions.assertNotNull(observation);
     }
 
