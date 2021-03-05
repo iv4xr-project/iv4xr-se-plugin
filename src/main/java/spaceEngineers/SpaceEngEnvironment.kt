@@ -30,9 +30,11 @@ class SpaceEngEnvironment(val socketReaderWriter: SocketReaderWriter) : W3DEnvir
     }
 
     companion object {
+        const val DEFAULT_HOSTNAME = "localhost"
+
         const val DEFAULT_PORT = 9678
 
-        private val SPACE_ENG_GSON = GsonBuilder()
+        val SPACE_ENG_GSON = GsonBuilder()
             .serializeNulls()
             .setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)
             .excludeFieldsWithModifiers(Modifier.TRANSIENT)
@@ -41,7 +43,7 @@ class SpaceEngEnvironment(val socketReaderWriter: SocketReaderWriter) : W3DEnvir
         fun localhost(): SpaceEngEnvironment {
             return SpaceEngEnvironment(
                 SocketReaderWriter(
-                    host = "localhost",
+                    host = DEFAULT_HOSTNAME,
                     port = DEFAULT_PORT,
                     gson = SPACE_ENG_GSON
                 )

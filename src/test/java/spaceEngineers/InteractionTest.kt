@@ -5,53 +5,46 @@ import org.junit.jupiter.api.Test
 import spaceEngineers.SeRequest
 import spaceEngineers.commands.*
 import testhelp.checkMockObservation
+import testhelp.controller
 import testhelp.environment
 
 
 class InteractionTest {
     @Test
-    fun equipToolbarItemTest() = environment {
-        val observation = getSeResponse(SeRequest.command(
-                SeAgentCommand.interact("you", InteractionArgs(InteractionType.EQUIP, 4, - 1, true))))
+    fun equipToolbarItemTest() = controller {
+        val observation = interact(InteractionArgs(InteractionType.EQUIP, 4, -1, true))
         checkMockObservation(observation)
     }
 
 
     @Test
-    fun pageAndEquipTest() = environment {
-        val observation = getSeResponse(SeRequest.command(
-                SeAgentCommand.interact("you", InteractionArgs(InteractionType.EQUIP, 4, 2))))
+    fun pageAndEquipTest() = controller {
+        val observation = interact(InteractionArgs(InteractionType.EQUIP, 4, 2))
         checkMockObservation(observation)
     }
 
     @Test
-    fun equipAndPlace() = environment {
-        var observation = getSeResponse(SeRequest.command(
-                SeAgentCommand.interact("you", InteractionArgs(InteractionType.EQUIP, 3))))
+    fun equipAndPlace() = controller {
+        var observation = interact(InteractionArgs(InteractionType.EQUIP, 3))
         checkMockObservation(observation)
-        observation = getSeResponse(SeRequest.command(
-                SeAgentCommand.interact("you", InteractionArgs(InteractionType.PLACE))))
+        observation = interact(InteractionArgs(InteractionType.PLACE))
         checkMockObservation(observation)
     }
 
     @Test
-    fun checkNewBlock()  = environment {
-        var observation = getSeResponse(SeRequest.command(
-                SeAgentCommand.observe("you", ObservationArgs(ObservationMode.NEW_BLOCKS))))
+    fun checkNewBlock() = controller {
+        var observation = observe(ObservationArgs(ObservationMode.NEW_BLOCKS))
         assertNotNull(observation)
         assertNotNull(observation.grids)
         println("Got " + observation.grids.size + " grids.")
         for (grid in observation.grids) {
             println("Got " + grid.blocks.size + " blocks.")
         }
-        observation = getSeResponse(SeRequest.command(
-                SeAgentCommand.interact("you", InteractionArgs(InteractionType.EQUIP, 3, 0))))
+        observation = interact(InteractionArgs(InteractionType.EQUIP, 3, 0))
         assertNotNull(observation)
-        observation = getSeResponse(SeRequest.command(
-                SeAgentCommand.interact("you", InteractionArgs(InteractionType.PLACE))))
+        observation = interact(InteractionArgs(InteractionType.PLACE))
         assertNotNull(observation)
-        observation = getSeResponse(SeRequest.command(
-                SeAgentCommand.observe("you", ObservationArgs(ObservationMode.NEW_BLOCKS))))
+        observation = observe(ObservationArgs(ObservationMode.NEW_BLOCKS))
         assertNotNull(observation)
         assertNotNull(observation.grids)
         assertTrue(observation.grids.size > 0, "Expecting non-zero grid count.")

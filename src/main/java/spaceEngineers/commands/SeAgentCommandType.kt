@@ -4,17 +4,11 @@ at Utrecht University within the Software and Game project course.
 
 ©Copyright Utrecht University (Department of Information and Computing Sciences)
 */
-
-package spaceEngineers.commands;
+package spaceEngineers.commands
 
 /**
  * Keep this enum synced with Unity!
  */
-
-public enum SeAgentCommandType
-{
-    OBSERVE,
-    MOVE_ROTATE,
-    MOVETOWARD,
-    INTERACT
+enum class SeAgentCommandType {
+    OBSERVE, MOVE_ROTATE, MOVETOWARD, INTERACT
 }

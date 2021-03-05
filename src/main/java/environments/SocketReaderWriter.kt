@@ -1,12 +1,11 @@
 package environments
 
-import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import logger.PrintColor
 import nl.uu.cs.aplib.mainConcepts.Environment
+import spaceEngineers.SeRequest
 import java.io.*
-import java.lang.IllegalArgumentException
 import java.lang.reflect.Modifier
 import java.net.InetSocketAddress
 import java.net.Socket
@@ -22,14 +21,24 @@ fun SocketReaderWriter.sendCommand_(cmd: Environment.EnvOperation): Any? {
             null
         }
         "request" -> try {
-            writer.println(json)
-            reader.readLine()
+            sendAndReceiveLine(json)
         } catch (ex: IOException) {
             println("I/O error: " + ex.message)
             null
         }
         else -> throw IllegalArgumentException("Unknown command ${cmd.command}")
     }
+}
+
+fun <T> SocketReaderWriter.processRequest(request: SeRequest<T>): T {
+    val responseJson = sendAndReceiveLine(gson.toJson(request))
+    return gson.fromJson(responseJson, request.responseType)
+}
+
+fun SocketReaderWriter.sendAndReceiveLine(line: String): String {
+    //TODO: configure gson to ignore companion object
+    writer.println(line.replace(",\"Companion\":{}", ""))
+    return reader.readLine()
 }
 
 /**
@@ -124,6 +133,7 @@ class SocketReaderWriter @JvmOverloads constructor(
     companion object {
         @JvmField
         var debug = false
+
         // Configuring the json serializer/deserializer. Register custom serializers
         // here.
         // Transient modifiers should be excluded, otherwise they will be send with json

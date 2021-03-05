@@ -10,16 +10,14 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.runner.RunWith
 import spaceEngineers.SeObservation
-import spaceEngineers.SeRequest
-import spaceEngineers.SpaceEngEnvironment
 import spaceEngineers.commands.ObservationArgs
 import spaceEngineers.commands.ObservationMode
-import spaceEngineers.commands.SeAgentCommand
+import spaceEngineers.controller.ProprietaryJsonTcpCharacterController
 import testhelp.TEST_AGENT
 
 @RunWith(Cucumber::class)
 class SpaceEngineersCucumberTest {
-    lateinit var environment: SpaceEngEnvironment
+    lateinit var environment: ProprietaryJsonTcpCharacterController
 
     val observations: MutableList<SeObservation> = mutableListOf()
 
@@ -32,20 +30,18 @@ class SpaceEngineersCucumberTest {
     fun cleanup() {
         observations.clear()
         if (this::environment.isInitialized) {
-            environment.close()
+            environment.socketReaderWriter.close()
         }
     }
 
     @Given("I am connected to server.")
     fun i_am_connected_to_mock_server() {
-        environment = SpaceEngEnvironment.localhost()
+        environment = ProprietaryJsonTcpCharacterController.localhost(agentId = TEST_AGENT)
     }
 
     @When("I request for blocks.")
     fun i_request_for_blocks() {
-        environment.getSeResponse(
-                SeRequest.command(SeAgentCommand.observe(TEST_AGENT, ObservationArgs(ObservationMode.BLOCKS)))
-        ).let { observations.add(it) }
+        environment.observe(ObservationArgs(ObservationMode.BLOCKS)).let { observations.add(it) }
     }
 
     @Then("I receive observation.")
