@@ -1,5 +1,6 @@
 package environments
 
+import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import spaceEngineers.SeRequest
@@ -10,22 +11,13 @@ import java.net.Socket
 import java.nio.charset.StandardCharsets
 
 
-fun <T> SocketReaderWriter.processRequest(request: SeRequest<T>): T {
-    val responseJson = sendAndReceiveLine(gson.toJson(request))
-    return gson.fromJson(responseJson, request.responseType)
-}
-
-fun SocketReaderWriter.sendAndReceiveLine(line: String): String {
-    //TODO: configure gson to ignore companion object
-    writer.println(line.replace(",\"Companion\":{}", ""))
-    return reader.readLine()
-}
-
 class SocketReaderWriter @JvmOverloads constructor(
-    host: String, port: Int, maxWaitTimeMs: Int = 20000,
+    host: String = DEFAULT_HOSTNAME,
+    port: Int = DEFAULT_PORT,
+    maxWaitTimeMs: Int = 20000,
     socketConnectionTimeoutMs: Int = 4000,
     socketDataTimeoutMs: Int = 4000,
-    val gson: Gson = DEFAULT_GSON
+    val gson: Gson = SPACE_ENG_GSON
 ) : AutoCloseable {
 
     lateinit var socket: Socket
@@ -55,17 +47,30 @@ class SocketReaderWriter @JvmOverloads constructor(
         }
     }
 
+    fun <T> processRequest(request: SeRequest<T>): T {
+        val responseJson = sendAndReceiveLine(gson.toJson(request))
+        return gson.fromJson(responseJson, request.responseType)
+    }
+
+    fun sendAndReceiveLine(line: String): String {
+        writer.println(line)
+        return reader.readLine()
+    }
+
     override fun close() {
         closeSafely(reader)
         closeSafely(writer)
         closeSafely(socket)
     }
 
-
     companion object {
-        private val DEFAULT_GSON = GsonBuilder()
-            .serializeNulls()
-            .excludeFieldsWithModifiers(Modifier.TRANSIENT)
+        const val DEFAULT_HOSTNAME = "localhost"
+
+        const val DEFAULT_PORT = 9678
+
+        val SPACE_ENG_GSON: Gson = GsonBuilder()
+            .setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)
+            .excludeFieldsWithModifiers(Modifier.STATIC, Modifier.TRANSIENT)
             .create()
 
         private fun millisElapsed(startTimeNano: Long): Float {

@@ -1,64 +1,31 @@
-package spaceEngineers.commands;
+package spaceEngineers.commands
 
+class SeAgentCommand
+private constructor(
+    var agentId: String,
+    var targetId: String,
+    var cmd: SeAgentCommandType,
+    var arg: Any
+) {
+    companion object {
+        fun observe(agent: String): SeAgentCommand {
+            return SeAgentCommand(agent, agent, SeAgentCommandType.OBSERVE, ObservationArgs())
+        }
 
-import spaceEngineers.model.Vec3;
+        fun observe(agent: String, observationArgs: ObservationArgs = ObservationArgs()): SeAgentCommand {
+            return SeAgentCommand(agent, agent, SeAgentCommandType.OBSERVE, observationArgs)
+        }
 
-public class SeAgentCommand {
-    public SeAgentCommandType cmd;
-    public String agentId;  // Not used.
-    public String targetId;  // Not used.
-    public Object arg;
+        fun moveAndRotate(agent: String, movementArgs: MovementArgs): SeAgentCommand {
+            return SeAgentCommand(agent, agent, SeAgentCommandType.MOVE_ROTATE, movementArgs)
+        }
 
-    /**
-     * The user is not permitted to create new agent requests
-     */
-    private SeAgentCommand(String agentId, String targetId, SeAgentCommandType cmd, Object arg) {
+        fun interact(agent: String, interactionArgs: InteractionArgs): SeAgentCommand {
+            return SeAgentCommand(agent, agent, SeAgentCommandType.INTERACT, interactionArgs)
+        }
 
-        this.agentId = agentId;
-        this.targetId = targetId;
-        this.cmd = cmd;
-        this.arg = arg;
-    }
-
-    /**
-     * The agent does not do anything. This can be used to just observe the gym.
-     */
-    public static SeAgentCommand observe(String agent) {
-        return new SeAgentCommand(agent, agent, SeAgentCommandType.OBSERVE, new ObservationArgs());
-    }
-
-    public static SeAgentCommand observe(String agent, ObservationArgs observationArgs) {
-        return new SeAgentCommand(agent, agent, SeAgentCommandType.OBSERVE, observationArgs);
-    }
-
-    /**
-     * Moves an agent in a certain direction without using a jump
-     */
-    public static SeAgentCommand moveTowardCommand(String agent, Vec3 direction) {
-        return moveTowardCommand(agent, direction, false);
-    }
-
-    public static SeAgentCommand moveAndRotate(String agent, MovementArgs movementArgs) {
-        return new SeAgentCommand(agent, agent, SeAgentCommandType.MOVE_ROTATE, movementArgs);
-    }
-
-    public static SeAgentCommand moveAndRotate(String agent, Vec3 movement, Vec3 rotation, float roll) {
-        return moveAndRotate(agent, new MovementArgs(movement, rotation, roll));
-    }
-
-    public static SeAgentCommand interact(String agent, InteractionArgs interactionArgs) {
-        return new SeAgentCommand(agent, agent, SeAgentCommandType.INTERACT, interactionArgs);
-    }
-
-
-    /**
-     * Moves an agent in a certain direction.
-     */
-    public static SeAgentCommand moveTowardCommand(String agent, Vec3 direction, boolean jump) {
-        return new SeAgentCommand(agent, agent, SeAgentCommandType.MOVETOWARD, new MoveTowardsArgs(direction, jump));
-    }
-
-    public static SeAgentCommand moveTowardCommand(String agent, MoveTowardsArgs moveTowardsArgs) {
-        return new SeAgentCommand(agent, agent, SeAgentCommandType.MOVETOWARD, moveTowardsArgs);
+        fun moveTowardCommand(agent: String, moveTowardsArgs: MoveTowardsArgs): SeAgentCommand {
+            return SeAgentCommand(agent, agent, SeAgentCommandType.MOVETOWARD, moveTowardsArgs)
+        }
     }
 }
