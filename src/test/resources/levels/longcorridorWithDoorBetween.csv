@@ -1,8 +1,0 @@
-button0,door0,,,,,,,,,
-button1,,,,,,,,,,
-|w,w,w,w,w,w,w,w,w,w,w
-w,f:a^agent0:b^button0,f,f,f,f:d>w^door0,f,f,f,f:b^button1,w
-w,w,w,w,w,w,w,w,w,w,w
-|w,w,w,w,w,w,w,w,w,w,w
-w,,,,,,,,,,w
-w,w,w,w,w,w,w,w,w,w,w

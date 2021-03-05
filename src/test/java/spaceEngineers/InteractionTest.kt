@@ -2,11 +2,12 @@ package spaceEngineers
 
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
-import spaceEngineers.SeRequest
-import spaceEngineers.commands.*
+import spaceEngineers.commands.InteractionArgs
+import spaceEngineers.commands.InteractionType
+import spaceEngineers.commands.ObservationArgs
+import spaceEngineers.commands.ObservationMode
 import testhelp.checkMockObservation
 import testhelp.controller
-import testhelp.environment
 
 
 class InteractionTest {
@@ -15,7 +16,6 @@ class InteractionTest {
         val observation = interact(InteractionArgs(InteractionType.EQUIP, 4, -1, true))
         checkMockObservation(observation)
     }
-
 
     @Test
     fun pageAndEquipTest() = controller {

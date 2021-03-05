@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Assertions
 import spaceEngineers.*
 import spaceEngineers.controller.ProprietaryJsonTcpCharacterController
 
-const val TEST_AGENT = "you"
+const val TEST_AGENT = "you\nx"
 
 fun controller(
     agentId: String = TEST_AGENT,
