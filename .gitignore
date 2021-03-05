@@ -49,3 +49,7 @@
 
 # File-based project format
 *.iws
+
+# Gradle
+.gradle
+**/build/

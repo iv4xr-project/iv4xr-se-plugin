@@ -34,7 +34,7 @@ class SocketReaderWriter @JvmOverloads constructor(
                 socket.soTimeout = socketDataTimeoutMs
                 socket.connect(InetSocketAddress(host, port), socketConnectionTimeoutMs)
                 reader = BufferedReader(InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8))
-                writer = PrintWriter(socket.getOutputStream(), true, StandardCharsets.UTF_8)
+                writer = PrintWriter(OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8), true)
                 connected = true
             } catch (ignored: IOException) {
                 exception = ignored
