@@ -1,16 +1,17 @@
-package spaceEngineers;
+package spaceEngineers.model
 
-import eu.iv4xr.framework.spatial.Vec3;
 
-public class SeBlock extends SeEntity {
-    public float maxIntegrity;
-    public float buildIntegrity;
-    public float integrity;
-    public String blockType;
-
-    public Vec3 minPosition;
-    public Vec3 maxPosition;
-    public Vec3 size;
-    public Vec3 orientationForward;
-    public Vec3 orientationUp;
+class SeBlock(
+    override val id: String,
+    override val position: Vec3,
+) : SeEntity {
+    var maxIntegrity = 0f
+    var buildIntegrity = 0f
+    var integrity = 0f
+    var blockType: String? = null
+    var minPosition: Vec3? = null
+    var maxPosition: Vec3? = null
+    var size: Vec3? = null
+    var orientationForward: Vec3? = null
+    var orientationUp: Vec3? = null
 }

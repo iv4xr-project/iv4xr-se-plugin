@@ -9,7 +9,7 @@ import io.cucumber.junit.Cucumber
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.runner.RunWith
-import spaceEngineers.SeObservation
+import spaceEngineers.model.SeObservation
 import spaceEngineers.commands.ObservationArgs
 import spaceEngineers.commands.ObservationMode
 import spaceEngineers.controller.ProprietaryJsonTcpCharacterController

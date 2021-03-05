@@ -5,7 +5,7 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import environments.SocketReaderWriter
 import environments.processRequest
-import spaceEngineers.SeObservation
+import spaceEngineers.model.SeObservation
 import spaceEngineers.SeRequest
 import spaceEngineers.commands.*
 import java.lang.reflect.Modifier

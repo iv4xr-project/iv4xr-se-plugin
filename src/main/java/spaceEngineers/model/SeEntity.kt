@@ -1,12 +1,8 @@
-package spaceEngineers;
+package spaceEngineers.model
 
-import eu.iv4xr.framework.spatial.Vec3;
 
-public class SeEntity {
-
+interface SeEntity {
     // TODO(PP): Add entity type
-    public String id;
-    public Vec3 position;
-
-    // TODO(PP): Add sub-entities to support hierarchy.
+    val id: String
+    val position: Vec3 // TODO(PP): Add sub-entities to support hierarchy.
 }

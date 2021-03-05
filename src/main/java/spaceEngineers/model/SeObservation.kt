@@ -1,17 +1,12 @@
-package spaceEngineers;
+package spaceEngineers.model
 
-import eu.iv4xr.framework.spatial.Vec3;
-import java.util.List;
 
-public class SeObservation {
-
-    public String agentID;
-    public Vec3 position;
-    public Vec3 orientationForward;
-    public Vec3 orientationUp;
-    public Vec3 velocity;
-
-    public List<SeEntity> entities;
-
-    public List<SeGrid> grids;
+class SeObservation {
+    var agentID: String? = null
+    var position: Vec3? = null
+    var orientationForward: Vec3? = null
+    var orientationUp: Vec3? = null
+    var velocity: Vec3? = null
+    var entities: List<BaseSeEntity> = emptyList()
+    var grids: List<SeGrid> = emptyList()
 }

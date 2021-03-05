@@ -6,6 +6,7 @@ import spaceEngineers.commands.InteractionArgs
 import spaceEngineers.commands.InteractionType
 import spaceEngineers.commands.ObservationArgs
 import spaceEngineers.commands.ObservationMode
+import spaceEngineers.model.SeBlock
 import testhelp.checkMockObservation
 import testhelp.controller
 

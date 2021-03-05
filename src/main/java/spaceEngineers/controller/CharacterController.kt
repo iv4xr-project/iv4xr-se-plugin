@@ -1,6 +1,6 @@
 package spaceEngineers.controller
 
-import spaceEngineers.SeObservation
+import spaceEngineers.model.SeObservation
 import spaceEngineers.commands.InteractionArgs
 import spaceEngineers.commands.MoveTowardsArgs
 import spaceEngineers.commands.MovementArgs

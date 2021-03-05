@@ -3,6 +3,7 @@ package spaceEngineers
 import communication.system.RequestType
 import spaceEngineers.commands.SeAgentCommand
 import spaceEngineers.commands.SeSessionCommand
+import spaceEngineers.model.SeObservation
 
 class SeRequest<ResponseType> @JvmOverloads constructor(
     @Transient

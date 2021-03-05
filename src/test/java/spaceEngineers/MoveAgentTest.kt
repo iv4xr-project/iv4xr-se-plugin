@@ -1,9 +1,9 @@
 package spaceEngineers
 
-import eu.iv4xr.framework.spatial.Vec3
 import org.junit.jupiter.api.Test
 import spaceEngineers.commands.MoveTowardsArgs
 import spaceEngineers.commands.MovementArgs
+import spaceEngineers.model.Vec3
 import testhelp.checkMockObservation
 import testhelp.controller
 import java.util.*

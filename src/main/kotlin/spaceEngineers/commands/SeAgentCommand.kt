@@ -1,6 +1,7 @@
 package spaceEngineers.commands;
 
-import eu.iv4xr.framework.spatial.Vec3;
+
+import spaceEngineers.model.Vec3;
 
 public class SeAgentCommand {
     public SeAgentCommandType cmd;
