@@ -76,9 +76,7 @@ namespace Iv4xr.SePlugin.Communication
 
         private string ProcessSingleRequest(RequestItem request)
         {
-            // Skip prefix "{\"Cmd\":\"AGENTCOMMAND\",\"Arg\":{\"Cmd\":\""
-            var commandName = request.Message.Substring(36, 20)
-                    .Split(new[] {"\""}, StringSplitOptions.None)[0];
+            var commandName = request.GetCmd();
 
             Log?.WriteLine($"{nameof(Dispatcher)} command prefix: '{commandName}'.");
 
