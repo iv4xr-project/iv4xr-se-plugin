@@ -1,13 +1,16 @@
 package testhelp
 
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNotNull
+
 import spaceEngineers.model.SeObservation
 import spaceEngineers.model.Vec3
+import kotlin.math.abs
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 
 fun checkMockObservation(obs: SeObservation?) {
     assertNotNull(obs)
-    obs?.let { observation ->
+    obs.let { observation ->
         assertEquals("Mock", observation.agentID)
         assertEquals(Vec3(4.0f, 2.0f, 0.0f), observation.position)
         observation.entities.first().let { entity ->
@@ -26,4 +29,8 @@ fun checkMockObservation(obs: SeObservation?) {
             }
         }
     }
+}
+
+fun assertFloatEquals(expected: Float, result: Float, diff: Float = 0.1f, message: String? = null) {
+    assertTrue(abs(expected - result) <= diff, message)
 }

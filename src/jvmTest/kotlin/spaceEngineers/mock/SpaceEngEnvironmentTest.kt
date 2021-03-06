@@ -1,4 +1,4 @@
-package spaceEngineers
+package spaceEngineers.mock
 
 import kotlin.test.*
 import spaceEngineers.commands.ObservationArgs

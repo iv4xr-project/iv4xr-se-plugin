@@ -6,7 +6,7 @@ import spaceEngineers.commands.*
 import spaceEngineers.model.SeObservation
 
 class ProprietaryJsonTcpCharacterController(val agentId: String, val socketReaderWriter: SocketReaderWriter) :
-    CharacterController {
+    CharacterController, AutoCloseable {
 
     private fun <T> SeRequest<T>.process(): T {
         return socketReaderWriter.processRequest(this)
@@ -35,5 +35,9 @@ class ProprietaryJsonTcpCharacterController(val agentId: String, val socketReade
                 socketReaderWriter = SocketReaderWriter()
             )
         }
+    }
+
+    override fun close() {
+        socketReaderWriter.close()
     }
 }

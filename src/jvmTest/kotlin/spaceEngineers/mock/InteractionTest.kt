@@ -1,4 +1,4 @@
-package spaceEngineers
+package spaceEngineers.mock
 
 import spaceEngineers.commands.InteractionArgs
 import spaceEngineers.commands.InteractionType

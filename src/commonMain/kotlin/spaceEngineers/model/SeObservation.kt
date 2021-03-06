@@ -1,12 +1,12 @@
 package spaceEngineers.model
 
 
-class SeObservation {
-    var agentID: String? = null
-    var position: Vec3? = null
-    var orientationForward: Vec3? = null
-    var orientationUp: Vec3? = null
-    var velocity: Vec3? = null
-    var entities: List<BaseSeEntity> = emptyList()
+data class SeObservation(
+    var agentID: String,
+    var position: Vec3,
+    var orientationForward: Vec3,
+    var orientationUp: Vec3,
+    var velocity: Vec3,
+    var entities: List<BaseSeEntity> = emptyList(),
     var grids: List<SeGrid> = emptyList()
-}
+)
