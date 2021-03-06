@@ -1,6 +1,6 @@
 package spaceEngineers
 
-import org.junit.Ignore
+import kotlin.test.*
 import spaceEngineers.commands.SeSessionCommand
 import testhelp.controller
 

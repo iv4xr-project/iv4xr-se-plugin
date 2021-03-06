@@ -1,6 +1,7 @@
 package spaceEngineers.commands
 
 import spaceEngineers.model.Vec3
+import kotlin.jvm.JvmOverloads
 
 
 class MovementArgs @JvmOverloads

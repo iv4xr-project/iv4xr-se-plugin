@@ -1,14 +1,16 @@
 package spaceEngineers
 
-import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.Test
 import spaceEngineers.commands.InteractionArgs
 import spaceEngineers.commands.InteractionType
 import spaceEngineers.commands.ObservationArgs
 import spaceEngineers.commands.ObservationMode
-import spaceEngineers.model.SeBlock
 import testhelp.checkMockObservation
 import testhelp.controller
+import kotlin.math.min
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 
 
 class InteractionTest {
@@ -41,22 +43,14 @@ class InteractionTest {
         for (grid in observation.grids) {
             println("Got " + grid.blocks.size + " blocks.")
         }
-        observation = interact(InteractionArgs(InteractionType.EQUIP, 3, 0))
-        assertNotNull(observation)
-        observation = interact(InteractionArgs(InteractionType.PLACE))
-        assertNotNull(observation)
+        interact(InteractionArgs(InteractionType.EQUIP, 3, 0))
+        interact(InteractionArgs(InteractionType.PLACE))
         observation = observe(ObservationArgs(ObservationMode.NEW_BLOCKS))
-        assertNotNull(observation)
-        assertNotNull(observation.grids)
-        assertTrue(observation.grids.size > 0, "Expecting non-zero grid count.")
-        var blocks: List<SeBlock>? = null
-        for (grid in observation.grids) {
-            blocks = grid.blocks
-            println("Got " + blocks.size + " blocks.")
-            if (blocks.size > 0) // Take first nonempty grid.
-                break
-        }
-        for (block in blocks!!.subList(0, Math.min(2, blocks.size))) {
+        assertTrue(observation.grids.isNotEmpty(), "Expecting non-zero grid count.")
+        val blocks = observation.grids.map { it.blocks }.firstOrNull {
+            it.isNotEmpty()
+        } ?: error ("found no grid with non-empty blocks")
+        for (block in blocks.subList(0, min(2, blocks.size))) {
             println("Block max integrity: " + block.maxIntegrity)
             println("Block build integrity: " + block.buildIntegrity)
             println("Block integrity: " + block.integrity)

@@ -7,16 +7,6 @@ import spaceEngineers.commands.MovementArgs
 import spaceEngineers.commands.ObservationArgs
 
 
-interface Vector3 : Vector2 {
-    val z: Float
-}
-
-interface Vector2 {
-    val x: Float
-    val y: Float
-}
-
-
 fun CharacterController.observe(): SeObservation {
     return observe(ObservationArgs())
 }

@@ -1,7 +1,6 @@
 package spaceEngineers
 
-import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.Test
+import kotlin.test.*
 import spaceEngineers.commands.ObservationArgs
 import spaceEngineers.commands.ObservationMode
 import spaceEngineers.controller.observe

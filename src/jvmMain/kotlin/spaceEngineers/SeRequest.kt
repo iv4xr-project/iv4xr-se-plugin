@@ -4,6 +4,7 @@ import communication.system.RequestType
 import spaceEngineers.commands.SeAgentCommand
 import spaceEngineers.commands.SeSessionCommand
 import spaceEngineers.model.SeObservation
+import kotlin.jvm.java
 
 class SeRequest<ResponseType> @JvmOverloads constructor(
     @Transient

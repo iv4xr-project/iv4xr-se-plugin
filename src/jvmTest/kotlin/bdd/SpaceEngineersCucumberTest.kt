@@ -6,9 +6,8 @@ import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import io.cucumber.junit.Cucumber
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
 import org.junit.runner.RunWith
+import kotlin.test.*
 import spaceEngineers.model.SeObservation
 import spaceEngineers.commands.ObservationArgs
 import spaceEngineers.commands.ObservationMode

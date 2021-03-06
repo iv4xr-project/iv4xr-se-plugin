@@ -1,5 +1,7 @@
 package spaceEngineers.commands
 
+import kotlin.jvm.JvmOverloads
+
 class InteractionArgs @JvmOverloads constructor(
     val interactionType: Int,
     val slot: Int = -1,
