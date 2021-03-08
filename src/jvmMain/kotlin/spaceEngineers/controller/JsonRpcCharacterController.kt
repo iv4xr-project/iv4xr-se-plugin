@@ -2,12 +2,12 @@ package spaceEngineers.controller
 
 import com.google.gson.annotations.SerializedName
 import environments.SocketReaderWriter
-import environments.callRpc
 import spaceEngineers.commands.InteractionArgs
 import spaceEngineers.commands.MoveTowardsArgs
 import spaceEngineers.commands.MovementArgs
 import spaceEngineers.commands.ObservationArgs
 import spaceEngineers.model.SeObservation
+import spaceEngineers.transport.GsonReaderWriter
 import kotlin.reflect.KFunction1
 
 data class JsonRpcRequest<T>(
@@ -39,7 +39,7 @@ data class JsonRpcResponse<T>(
     val error: JsonRpcError? = null
 )
 
-class JsonRpcCharacterController(val agentId: String, val socketReaderWriter: SocketReaderWriter) :
+class JsonRpcCharacterController(val agentId: String, val gsonReaderWriter: GsonReaderWriter) :
     CharacterController, AutoCloseable {
 
     private inline fun <reified I, reified O> processSingleParameterMethod(method: KFunction1<I, O>, parameter: I): O {
@@ -48,7 +48,7 @@ class JsonRpcCharacterController(val agentId: String, val socketReaderWriter: So
             method = method.name,
             params = mapOf(method.parameters.first().name!! to parameter)
         )
-        return socketReaderWriter.callRpc<I, O>(request).result!!
+        return gsonReaderWriter.callRpc<I, O>(request).result!!
     }
 
     override fun moveAndRotate(movementArgs: MovementArgs): SeObservation {
@@ -71,12 +71,12 @@ class JsonRpcCharacterController(val agentId: String, val socketReaderWriter: So
         fun localhost(agentId: String): JsonRpcCharacterController {
             return JsonRpcCharacterController(
                 agentId = agentId,
-                socketReaderWriter = SocketReaderWriter()
+                gsonReaderWriter = GsonReaderWriter(stringLineReaderWriter = SocketReaderWriter())
             )
         }
     }
 
     override fun close() {
-        socketReaderWriter.close()
+        gsonReaderWriter.close()
     }
 }

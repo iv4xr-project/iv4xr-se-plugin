@@ -5,7 +5,7 @@ import spaceEngineers.commands.InteractionType
 import spaceEngineers.commands.ObservationArgs
 import spaceEngineers.commands.ObservationMode
 import testhelp.checkMockObservation
-import testhelp.controller
+import testhelp.mockController
 import kotlin.math.min
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -15,19 +15,19 @@ import kotlin.test.assertTrue
 
 class InteractionTest {
     @Test
-    fun equipToolbarItemTest() = controller {
+    fun equipToolbarItemTest() = mockController {
         val observation = interact(InteractionArgs(InteractionType.EQUIP, 4, -1, true))
         checkMockObservation(observation)
     }
 
     @Test
-    fun pageAndEquipTest() = controller {
+    fun pageAndEquipTest() = mockController {
         val observation = interact(InteractionArgs(InteractionType.EQUIP, 4, 2))
         checkMockObservation(observation)
     }
 
     @Test
-    fun equipAndPlace() = controller {
+    fun equipAndPlace() = mockController {
         var observation = interact(InteractionArgs(InteractionType.EQUIP, 3))
         checkMockObservation(observation)
         observation = interact(InteractionArgs(InteractionType.PLACE))
@@ -35,7 +35,7 @@ class InteractionTest {
     }
 
     @Test
-    fun checkNewBlock() = controller {
+    fun checkNewBlock() = mockController {
         var observation = observe(ObservationArgs(ObservationMode.NEW_BLOCKS))
         assertNotNull(observation)
         assertNotNull(observation.grids)

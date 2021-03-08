@@ -5,15 +5,15 @@ import spaceEngineers.commands.ObservationArgs
 import spaceEngineers.commands.ObservationMode
 import spaceEngineers.controller.observe
 import testhelp.checkMockObservation
-import testhelp.controller
+import testhelp.mockController
 
 class SpaceEngEnvironmentTest {
     @Test
-    fun disconnectTest() = controller {
+    fun disconnectTest() = mockController {
     }
 
     @Test
-    fun observeTest() = controller {
+    fun observeTest() = mockController {
         val observation = observe()
         checkMockObservation(observation)
         println("OrientationFwd: " + observation.orientationForward)
@@ -21,7 +21,7 @@ class SpaceEngEnvironmentTest {
     }
 
     @Test
-    fun observeManyTimesTest() = controller {
+    fun observeManyTimesTest() = mockController {
         for (i in 0..4) {
             val observation = observe()
             checkMockObservation(observation)
@@ -29,7 +29,7 @@ class SpaceEngEnvironmentTest {
     }
 
     @Test
-    fun observeEntitiesTest() = controller {
+    fun observeEntitiesTest() = mockController {
         val observation = observe(ObservationArgs(ObservationMode.ENTITIES))
         assertNotNull(observation)
         assertNotNull(observation.entities)
@@ -39,7 +39,7 @@ class SpaceEngEnvironmentTest {
     }
 
     @Test
-    fun observeBlocksTest() = controller {
+    fun observeBlocksTest() = mockController {
         val observation = observe(ObservationArgs(ObservationMode.BLOCKS))
         checkMockObservation(observation)
         val blocks = observation.grids.first().blocks

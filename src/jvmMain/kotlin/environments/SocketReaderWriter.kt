@@ -3,9 +3,7 @@ package environments
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import spaceEngineers.SeRequest
-import spaceEngineers.controller.JsonRpcRequest
-import spaceEngineers.controller.JsonRpcResponse
+import spaceEngineers.transport.StringLineReaderWriter
 import java.io.*
 import java.lang.reflect.Modifier
 import java.net.InetSocketAddress
@@ -13,24 +11,12 @@ import java.net.Socket
 import java.nio.charset.StandardCharsets
 
 
-inline fun <reified I, reified O> SocketReaderWriter.callRpc(request: JsonRpcRequest<I>): JsonRpcResponse<O> {
-    val responseJson = sendAndReceiveLine(gson.toJson(request))
-    val responseJson_ = "{\"jsonrpc\":\"2.0\",\"id\":4,\"result\":" +
-            "{\"AgentID\":\"Mock\",\"Position\":{\"X\":4.0,\"Y\":2.0,\"Z\":0.0},\"OrientationForward\":{\"X\":0.0,\"Y\":0.0,\"Z\":0.0},\"OrientationUp\":{\"X\":0.0,\"Y\":0.0,\"Z\":0.0},\"Velocity\":{\"X\":0.0,\"Y\":0.0,\"Z\":0.0},\"Extent\":{\"X\":0.0,\"Y\":0.0,\"Z\":0.0},\"Entities\":[{\"Id\":\"Ente\",\"Position\":{\"X\":3.0,\"Y\":2.0,\"Z\":1.0}}],\"Grids\":[{\"Blocks\":[{\"MaxIntegrity\":10.0,\"BuildIntegrity\":1.0,\"Integrity\":5.0,\"BlockType\":\"MockBlock\",\"MinPosition\":{\"X\":0.0,\"Y\":0.0,\"Z\":0.0},\"MaxPosition\":{\"X\":0.0,\"Y\":0.0,\"Z\":0.0},\"Size\":{\"X\":0.0,\"Y\":0.0,\"Z\":0.0},\"OrientationForward\":{\"X\":0.0,\"Y\":0.0,\"Z\":0.0},\"OrientationUp\":{\"X\":0.0,\"Y\":0.0,\"Z\":0.0},\"Id\":\"blk\",\"Position\":{\"X\":5.0,\"Y\":5.0,\"Z\":5.0}}],\"Id\":null,\"Position\":{\"X\":5.0,\"Y\":5.0,\"Z\":5.0}}]}" +
-            "}"
-    val response = gson.fromJson(responseJson, JsonRpcResponse::class.java)
-    response.error?.let {
-        throw it
+fun Any?.closeIfCloseable() {
+    this?.let {
+        if (it is AutoCloseable) {
+            it.close()
+        }
     }
-    response.result?.let {
-        return JsonRpcResponse<O>(
-            id = response.id,
-            error = response.error,
-            jsonrpc = response.jsonrpc,
-            result = gson.fromJson(it.toString(), O::class.java)
-        )
-    }
-    error("no result and no error received from json")
 }
 
 class SocketReaderWriter @JvmOverloads constructor(
@@ -38,9 +24,8 @@ class SocketReaderWriter @JvmOverloads constructor(
     port: Int = DEFAULT_PORT,
     maxWaitTimeMs: Int = 20000,
     socketConnectionTimeoutMs: Int = 4000,
-    socketDataTimeoutMs: Int = 4000,
-    val gson: Gson = SPACE_ENG_GSON
-) : AutoCloseable {
+    socketDataTimeoutMs: Int = 4000
+) : AutoCloseable, StringLineReaderWriter {
 
     lateinit var socket: Socket
     lateinit var reader: BufferedReader
@@ -69,12 +54,7 @@ class SocketReaderWriter @JvmOverloads constructor(
         }
     }
 
-    fun <T> processRequest(request: SeRequest<T>): T {
-        val responseJson = sendAndReceiveLine(gson.toJson(request))
-        return gson.fromJson(responseJson, request.responseType)
-    }
-
-    fun sendAndReceiveLine(line: String): String {
+    override fun sendAndReceiveLine(line: String): String {
         writer.println(line)
         return reader.readLine()
     }

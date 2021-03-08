@@ -1,17 +1,13 @@
 package spaceEngineers.game
 
-import spaceEngineers.commands.MoveTowardsArgs
 import spaceEngineers.commands.MovementArgs
 import spaceEngineers.controller.CharacterController
 import spaceEngineers.model.Vec3
-import testhelp.checkMockObservation
-import testhelp.controller
+import testhelp.mockController
 import kotlin.test.Test
 import spaceEngineers.controller.observe
 import spaceEngineers.model.SeObservation
 import testhelp.assertFloatEquals
-import java.lang.Thread.sleep
-import kotlin.test.assertEquals
 
 
 fun CharacterController.blockingMoveForwardByDistance(distance: Float, velocity: Float = 1f, maxTries: Int = 200): SeObservation {
@@ -30,7 +26,7 @@ class MoveForwardTest {
 
 
     @Test
-    fun moveAndRotateTest() = controller {
+    fun moveAndRotateTest() = mockController {
         val basePosition = observe().position
         blockingMoveForwardByDistance(10f).let {
             assertFloatEquals(10f, basePosition.distanceTo(it.position))

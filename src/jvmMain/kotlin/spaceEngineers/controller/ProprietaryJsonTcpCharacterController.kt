@@ -4,12 +4,14 @@ import environments.SocketReaderWriter
 import spaceEngineers.SeRequest
 import spaceEngineers.commands.*
 import spaceEngineers.model.SeObservation
+import spaceEngineers.transport.AlwaysReturnSameLineReaderWriter
+import spaceEngineers.transport.GsonReaderWriter
 
-class ProprietaryJsonTcpCharacterController(val agentId: String, val socketReaderWriter: SocketReaderWriter) :
+class ProprietaryJsonTcpCharacterController(val agentId: String, val gsonReaderWriter: GsonReaderWriter) :
     CharacterController, AutoCloseable {
 
     private fun <T> SeRequest<T>.process(): T {
-        return socketReaderWriter.processRequest(this)
+        return gsonReaderWriter.processRequest(this)
     }
 
     override fun moveAndRotate(movementArgs: MovementArgs): SeObservation {
@@ -29,15 +31,29 @@ class ProprietaryJsonTcpCharacterController(val agentId: String, val socketReade
     }
 
     companion object {
-        fun localhost(agentId: String): ProprietaryJsonTcpCharacterController {
+        fun localhost(
+            agentId: String,
+            gsonReaderWriter: GsonReaderWriter = GsonReaderWriter(stringLineReaderWriter = SocketReaderWriter())
+        ): ProprietaryJsonTcpCharacterController {
             return ProprietaryJsonTcpCharacterController(
                 agentId = agentId,
-                socketReaderWriter = SocketReaderWriter()
+                gsonReaderWriter = gsonReaderWriter
+            )
+        }
+
+        fun mock(
+            agentId: String,
+            lineToReturn: String
+        ): ProprietaryJsonTcpCharacterController {
+            return ProprietaryJsonTcpCharacterController(
+                agentId = agentId, gsonReaderWriter = GsonReaderWriter(
+                    stringLineReaderWriter = AlwaysReturnSameLineReaderWriter(response = lineToReturn)
+                )
             )
         }
     }
 
     override fun close() {
-        socketReaderWriter.close()
+        gsonReaderWriter.close()
     }
 }

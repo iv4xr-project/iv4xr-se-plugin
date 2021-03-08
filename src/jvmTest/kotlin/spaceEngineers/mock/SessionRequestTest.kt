@@ -3,13 +3,13 @@ package spaceEngineers.mock
 import spaceEngineers.SeRequest
 import kotlin.test.*
 import spaceEngineers.commands.SeSessionCommand
-import testhelp.controller
+import testhelp.mockController
 
 @Ignore("Not ready for unit testing")
 class SessionRequestTest {
     // Ignore annotation somehow not working in IDEA
     //@Test
-    fun sessionLoadTest() = controller {
+    fun sessionLoadTest() = mockController {
         // TODO(PP): support relative path
         val request = SeRequest.session(
             SeSessionCommand.load(
