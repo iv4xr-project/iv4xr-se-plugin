@@ -2,7 +2,7 @@ Feature: Example how to describe block observations using cucumber.
   To demonstrate how can we define features using scenarios and automatically test them.
 
   Background:
-    Given I am connected to server.
+    Given I am using mock data source.
 
   Scenario: Requesting for blocks.
     When I request for blocks.

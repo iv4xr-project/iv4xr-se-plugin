@@ -8,10 +8,14 @@ import spaceEngineers.transport.AlwaysReturnSameLineReaderWriter
 import spaceEngineers.transport.GsonReaderWriter
 
 class ProprietaryJsonTcpCharacterController(val agentId: String, val gsonReaderWriter: GsonReaderWriter) :
-    CharacterController, AutoCloseable {
+    CharacterController, AutoCloseable, WorldController {
 
     private fun <T> SeRequest<T>.process(): T {
-        return gsonReaderWriter.processRequest(this)
+        return processRequest(this)
+    }
+
+    fun <T> processRequest(request: SeRequest<T>): T {
+        return gsonReaderWriter.processRequest(request)
     }
 
     override fun moveAndRotate(movementArgs: MovementArgs): SeObservation {
@@ -28,6 +32,10 @@ class ProprietaryJsonTcpCharacterController(val agentId: String, val gsonReaderW
 
     override fun interact(interactionArgs: InteractionArgs): SeObservation {
         return SeRequest.command(SeAgentCommand.interact(agentId, interactionArgs)).process()
+    }
+
+    override fun load(id: String) {
+        SeRequest.session(SeSessionCommand.load(id)).process()
     }
 
     companion object {

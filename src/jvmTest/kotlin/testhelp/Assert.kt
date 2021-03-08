@@ -32,5 +32,12 @@ fun checkMockObservation(obs: SeObservation?) {
 }
 
 fun assertFloatEquals(expected: Float, result: Float, diff: Float = 0.1f, message: String? = null) {
-    assertTrue(abs(expected - result) <= diff, message)
+    val calculatedDiff = abs(expected - result)
+    assertTrue(calculatedDiff <= diff, message ?: "calculated diff is $calculatedDiff")
+}
+
+fun assertVecEquals(v1: Vec3, v2: Vec3, diff: Float = 0.01f, message: String = "") {
+    assertFloatEquals(v1.x, v2.x, diff = diff, message = "$message Vectors not equal (x) ${v1.x} vs ${v2.x}")
+    assertFloatEquals(v1.y, v2.y, diff = diff, message = "$message Vectors not equal (y) ${v1.y} vs ${v2.y}")
+    assertFloatEquals(v1.z, v2.z, diff = diff, message = "$message Vectors not equal (z) ${v1.z} vs ${v2.z}")
 }

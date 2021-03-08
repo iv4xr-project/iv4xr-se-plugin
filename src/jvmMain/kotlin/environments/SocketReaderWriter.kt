@@ -24,7 +24,7 @@ class SocketReaderWriter @JvmOverloads constructor(
     port: Int = DEFAULT_PORT,
     maxWaitTimeMs: Int = 20000,
     socketConnectionTimeoutMs: Int = 4000,
-    socketDataTimeoutMs: Int = 4000
+    socketDataTimeoutMs: Int = 20000
 ) : AutoCloseable, StringLineReaderWriter {
 
     lateinit var socket: Socket

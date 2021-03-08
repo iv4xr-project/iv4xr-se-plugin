@@ -10,10 +10,15 @@ import spaceEngineers.model.SeObservation
 import testhelp.assertFloatEquals
 
 
-fun CharacterController.blockingMoveForwardByDistance(distance: Float, velocity: Float = 1f, maxTries: Int = 200): SeObservation {
+fun CharacterController.blockingMoveForwardByDistance(
+    distance: Float,
+    velocity: Float = 1f,
+    maxTries: Int = 1000
+): SeObservation {
     val startPosition = observe().position
     repeat(maxTries) {
-        moveAndRotate(MovementArgs(movement = Vec3(0f, 0f, -velocity))).let {
+        moveAndRotate(MovementArgs(movement = Vec3(0f, 0f, -velocity)))
+        observe().let {
             if (it.position.distanceTo(startPosition) >= distance) {
                 return it
             }
