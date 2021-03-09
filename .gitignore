@@ -49,3 +49,10 @@
 
 # File-based project format
 *.iws
+
+# Gradle
+.gradle
+**/build/
+
+#testing saves backup
+/src/jvmTest/resources/game-saves/**/Backup/
