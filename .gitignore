@@ -53,3 +53,6 @@
 # Gradle
 .gradle
 **/build/
+
+#testing saves backup
+/src/jvmTest/resources/game-saves/**/Backup/

@@ -71,16 +71,16 @@ class SpaceEngineersCucumberTest {
         environment.observe().let { observations.add(it) }
     }
 
-    @Then("Character is at \\({float}, {float}, {float}).")
-    fun i_see_character_at_x_y_z(x: Float, y: Float, z: Float) {
+    @Then("Character is at \\({double}, ?{double}, ?{double}).")
+    fun i_see_character_at_x_y_z(x: Double, y: Double, z: Double) {
         val position = Vec3(x, y, z)
         observations.last().let { observation ->
             assertVecEquals(position, observation.position, diff = 0.1f)
         }
     }
 
-    @Then("Character forward orientation is \\({float}, {float}, {float}).")
-    fun character_is_facing(x: Float, y: Float, z: Float) {
+    @Then("Character forward orientation is \\({double}, {double}, {double}).")
+    fun character_is_facing(x: Double, y: Double, z: Double) {
         val position = Vec3(x, y, z)
         observations.last().let { observation ->
             assertVecEquals(position, observation.orientationForward, diff = 0.1f)

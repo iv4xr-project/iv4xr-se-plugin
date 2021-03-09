@@ -37,7 +37,7 @@ fun assertFloatEquals(expected: Float, result: Float, diff: Float = 0.1f, messag
 }
 
 fun assertVecEquals(v1: Vec3, v2: Vec3, diff: Float = 0.01f, message: String = "") {
-    assertFloatEquals(v1.x, v2.x, diff = diff, message = "$message Vectors not equal (x) ${v1.x} vs ${v2.x}")
-    assertFloatEquals(v1.y, v2.y, diff = diff, message = "$message Vectors not equal (y) ${v1.y} vs ${v2.y}")
-    assertFloatEquals(v1.z, v2.z, diff = diff, message = "$message Vectors not equal (z) ${v1.z} vs ${v2.z}")
+    assertFloatEquals(v1.x, v2.x, diff = diff, message = "$message Vectors not equal (x) ${v1.x} vs ${v2.x} ($v1 vs $v2)")
+    assertFloatEquals(v1.y, v2.y, diff = diff, message = "$message Vectors not equal (y) ${v1.y} vs ${v2.y} ($v1 vs $v2)")
+    assertFloatEquals(v1.z, v2.z, diff = diff, message = "$message Vectors not equal (z) ${v1.z} vs ${v2.z} ($v1 vs $v2)")
 }

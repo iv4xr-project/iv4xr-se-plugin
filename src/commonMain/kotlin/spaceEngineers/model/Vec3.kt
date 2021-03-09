@@ -10,6 +10,10 @@ data class Vec3(
     val z: Float
 ) {
 
+    constructor(
+        x: Double, y: Double, z: Double
+    ) : this(x.toFloat(), y.toFloat(), z.toFloat())
+
     fun distanceTo(p: Vec3): Float {
         return sqrt(
             (x - p.x).pow(2.0f) +
