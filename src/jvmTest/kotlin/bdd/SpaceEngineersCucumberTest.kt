@@ -3,12 +3,13 @@ package bdd
 import environments.closeIfCloseable
 import io.cucumber.java.After
 import io.cucumber.java.Before
-import io.cucumber.java.PendingException
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import io.cucumber.junit.Cucumber
 import org.junit.runner.RunWith
+import spaceEngineers.commands.InteractionArgs
+import spaceEngineers.commands.InteractionType
 import spaceEngineers.commands.ObservationArgs
 import spaceEngineers.commands.ObservationMode
 import spaceEngineers.controller.CharacterController
@@ -18,6 +19,7 @@ import spaceEngineers.controller.observe
 import spaceEngineers.game.blockingMoveForwardByDistance
 import spaceEngineers.model.SeObservation
 import spaceEngineers.model.Vec3
+import spaceEngineers.model.allBlocks
 import testhelp.*
 import java.io.File
 import kotlin.test.assertEquals
@@ -51,6 +53,7 @@ class SpaceEngineersCucumberTest {
     @Given("I am connected to real game.")
     fun i_am_connected_to_real_game() {
         environment = ProprietaryJsonTcpCharacterController.localhost(agentId = TEST_AGENT)
+        environment.observe(ObservationArgs(ObservationMode.NEW_BLOCKS))
     }
 
     @Given("I load scenario {string}.")
@@ -110,6 +113,46 @@ class SpaceEngineersCucumberTest {
         val observation = observations.last()
         assertEquals(grids, observation.grids.size)
         assertEquals(blocks, observation.grids[0].blocks.size)
+    }
+
+    @When("Character places selects block and places it.")
+    fun character_places_selects_block_and_places_it() {
+        environment.interact(InteractionArgs(InteractionType.EQUIP, 1, 0))
+        environment.interact(InteractionArgs(InteractionType.PLACE))
+    }
+
+    @Then("I see no block of type {string}.")
+    fun i_see_no_block_of_type(string: String) {
+        val observation = environment.observe(ObservationArgs(ObservationMode.BLOCKS))
+        observations.add(observation)
+        assertTrue(
+            observation.allBlocks
+                .none { it.blockType == string }
+        )
+    }
+
+    @Then("I can see {int} new block\\(s) with data:")
+    fun i_can_see_new_block_with_data(blockCount: Int, data: List<Map<String, String>>) {
+        val observation = environment.observe(ObservationArgs(ObservationMode.NEW_BLOCKS))
+        observations.add(observation)
+        val allBlocks = observation.allBlocks
+        assertEquals(blockCount, allBlocks.size)
+        assertEquals(allBlocks.size, data.size)
+        data.forEachIndexed { index, row ->
+            val block = allBlocks[index]
+            row["blockType"]?.let {
+                assertEquals(it, block.blockType)
+            }
+            row["integrity"]?.let {
+                assertEquals(it.toFloat(), block.integrity)
+            }
+            row["maxIntegrity"]?.let {
+                assertEquals(it.toFloat(), block.maxIntegrity)
+            }
+            row["buildIntegrity"]?.let {
+                assertEquals(it.toFloat(), block.buildIntegrity)
+            }
+        }
     }
 
     @Then("Block with id {string} has {float} max integrity, {float} integrity and {float} build integrity.")

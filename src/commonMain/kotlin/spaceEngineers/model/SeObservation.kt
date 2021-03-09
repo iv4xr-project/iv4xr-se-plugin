@@ -1,5 +1,9 @@
 package spaceEngineers.model
 
+val SeObservation.allBlocks: List<SeBlock>
+    get() {
+        return this.grids.flatMap { it.blocks }
+    }
 
 data class SeObservation(
     var agentID: String,
