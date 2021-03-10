@@ -15,10 +15,18 @@ import kotlin.test.assertTrue
 
 
 class ManualGameTest {
+
     @Test
     fun equipToolbarItemTest() = controller {
         val observation = interact(InteractionArgs(InteractionType.EQUIP, 4, -1, true))
         assertNotNull(observation)
+    }
+
+    @Test
+    fun beginUseEndUseToolTest() = controller {
+        interact(InteractionArgs(InteractionType.BEGIN_USE))
+        Thread.sleep(50);
+        interact(InteractionArgs(InteractionType.END_USE))
     }
 
     @Test
