@@ -17,11 +17,13 @@ import spaceEngineers.controller.ProprietaryJsonTcpCharacterController
 import spaceEngineers.controller.WorldController
 import spaceEngineers.controller.observe
 import spaceEngineers.game.blockingMoveForwardByDistance
+import spaceEngineers.model.SeBlock
 import spaceEngineers.model.SeObservation
 import spaceEngineers.model.Vec3
 import spaceEngineers.model.allBlocks
 import testhelp.*
 import java.io.File
+import java.lang.Thread.sleep
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
@@ -53,7 +55,6 @@ class SpaceEngineersCucumberTest {
     @Given("I am connected to real game.")
     fun i_am_connected_to_real_game() {
         environment = ProprietaryJsonTcpCharacterController.localhost(agentId = TEST_AGENT)
-        environment.observe(ObservationArgs(ObservationMode.NEW_BLOCKS))
     }
 
     @Given("I load scenario {string}.")
@@ -61,6 +62,11 @@ class SpaceEngineersCucumberTest {
         environment?.let {
             check(it is WorldController)
             it.load(File("$SCENARIO_DIR$scenarioId").absolutePath)
+        }
+        //all block are new for first request
+        environment.observe(ObservationArgs(ObservationMode.NEW_BLOCKS)).let {
+            observations.add(it)
+            println(it.allBlocks.map { it.id })
         }
     }
 
@@ -103,6 +109,43 @@ class SpaceEngineersCucumberTest {
         )
     }
 
+    var blockId: String? = null //973380826
+
+    private fun observeBlocks(): List<SeBlock> {
+        return environment.observe(ObservationArgs(ObservationMode.BLOCKS)).allBlocks
+    }
+
+    private fun blockToGrind(): SeBlock {
+        return observeBlocks().first { it.id == blockId }
+    }
+
+    @When("Character grinds until to {double} integrity.")
+    fun character_grinds_until_to_integrity(integrity: Double) {
+        var currentIntegrity = blockToGrind().integrity
+        environment.interact(InteractionArgs(InteractionType.EQUIP, 5, 0))
+        sleep(500)
+        environment.interact(InteractionArgs(InteractionType.BEGIN_USE))
+        while (currentIntegrity > integrity) {
+            currentIntegrity = blockToGrind().integrity
+        }
+        environment.interact(InteractionArgs(InteractionType.END_USE))
+    }
+
+    @When("Character torches block back up to max integrity.")
+    fun character_torches_block_back_up_to_max_integrity() {
+        val blockToGrind = blockToGrind()
+        var currentIntegrity = blockToGrind.integrity
+        environment.interact(InteractionArgs(InteractionType.EQUIP, 4, 0))
+        sleep(500)
+        environment.interact(InteractionArgs(InteractionType.BEGIN_USE))
+        while (currentIntegrity < blockToGrind.maxIntegrity) {
+            currentIntegrity = blockToGrind().integrity
+
+        }
+        environment.interact(InteractionArgs(InteractionType.END_USE))
+    }
+
+
     @Then("I receive observation.")
     fun i_receive_observation() {
         assertTrue(observations.isNotEmpty())
@@ -111,8 +154,8 @@ class SpaceEngineersCucumberTest {
     @Then("I see {int} grid with {int} block.")
     fun i_see_grid_and_with_block(grids: Int, blocks: Int) {
         val observation = observations.last()
-        assertEquals(grids, observation.grids.size)
-        assertEquals(blocks, observation.grids[0].blocks.size)
+        assertEquals(grids, observation.grids?.size)
+        assertEquals(blocks, observation.grids?.first()?.blocks?.size)
     }
 
     @When("Character places selects block and places it.")
@@ -140,6 +183,7 @@ class SpaceEngineersCucumberTest {
         assertEquals(allBlocks.size, data.size)
         data.forEachIndexed { index, row ->
             val block = allBlocks[index]
+            blockId = block.id
             row["blockType"]?.let {
                 assertEquals(it, block.blockType)
             }
