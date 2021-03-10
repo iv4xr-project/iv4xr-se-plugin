@@ -95,6 +95,7 @@ namespace Iv4xr.SePlugin.Control
 
             return new SeBlock
             {
+                Id = sourceBlock.UniqueId.ToString(),  // TODO(PP): Might not be unique in rare cases or across grids
                 Position = new PlainVec3D(grid.GridIntegerToWorld(sourceBlock.Position)),
                 MaxIntegrity = sourceBlock.MaxIntegrity,
                 BuildIntegrity = sourceBlock.BuildIntegrity,
