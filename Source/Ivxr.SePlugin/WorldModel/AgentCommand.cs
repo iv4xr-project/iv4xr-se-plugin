@@ -62,7 +62,9 @@ namespace Iv4xr.SePlugin.WorldModel
     public enum InteractionType
     {
         EQUIP,
-        PLACE
+        PLACE,
+        BEGIN_USE,
+        END_USE
     }
 
     public class InteractionArgs
@@ -73,11 +75,11 @@ namespace Iv4xr.SePlugin.WorldModel
         public bool AllowSizeChange;
     }
 
-    public class AgentCommand<ArgumentType>
+    public class AgentCommand<TArgument>
     {
         public string Cmd;
         public string AgentId;
         public string TargetId;
-        public ArgumentType Arg;
+        public TArgument Arg;
     }
 }

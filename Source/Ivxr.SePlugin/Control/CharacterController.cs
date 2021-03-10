@@ -19,7 +19,7 @@ namespace Iv4xr.SePlugin.Control
 
     public class CharacterController : ICharacterController
     {
-        private IGameSession m_session;
+        private readonly IGameSession m_session;
 
         public CharacterController(IGameSession session)
         {
@@ -48,10 +48,30 @@ namespace Iv4xr.SePlugin.Control
             {
                 PlaceItem();
             }
+            else if (args.InteractionType == InteractionType.BEGIN_USE)
+            {
+                BeginUseTool();
+            }
+            else if (args.InteractionType == InteractionType.END_USE)
+            {
+                EndUseTool();
+            }
             else
             {
                 throw new ArgumentException("Unknown or not implemented interaction type.");
             }
+        }
+
+        private void BeginUseTool()
+        {
+            var entityController = GetEntityController();
+            entityController.ControlledEntity.BeginShoot(MyShootActionEnum.PrimaryAction);
+        }
+
+        private void EndUseTool()
+        {
+            var entityController = GetEntityController();
+            entityController.ControlledEntity.EndShoot(MyShootActionEnum.PrimaryAction);
         }
 
         private void PlaceItem()
