@@ -16,6 +16,8 @@ namespace Iv4xr.PluginLib
         private readonly ISessionDispatcher m_sessionDispatcher;
         private readonly RequestQueue m_requestQueue;
 
+        private const int ReadTimeoutMs = 20_000;
+
         public PluginServer(ILog log, ISessionDispatcher sessionDispatcher, RequestQueue requestQueue)
         {
             m_log = log;
@@ -77,6 +79,7 @@ namespace Iv4xr.PluginLib
                 {
                     try
                     {
+                        stream.ReadTimeout = ReadTimeoutMs;
                         ServeConnectedClient(stream);
                     }
                     catch (IOException e)
@@ -89,26 +92,17 @@ namespace Iv4xr.PluginLib
 
         private void ServeConnectedClient(NetworkStream stream)
         {
-            var buffer = new byte[4096];
-
-            int readCount;
-            while ((readCount = stream.Read(buffer, 0, buffer.Length)) != 0)
+            using (var reader = new StreamReader(stream, Encoding.ASCII))
             {
-                string message = Encoding.ASCII.GetString(buffer, 0, readCount);
-                int indexOfNewLine = message.IndexOf('\n');
-                // TODO(PP): Change to a warning (after validating it does not actually occur).
-                if ((indexOfNewLine != -1) && (indexOfNewLine != message.Length - 1))
-                    throw new NotImplementedException("Unexpected new line in the middle of message.");
+                string message;
+                while ((message = reader.ReadLine()) != null)
+                {
+                    m_log.WriteLine($"Read message: {message}");
 
-                // TODO(PP): Implement this.
-                if (indexOfNewLine == -1)
-                    throw new NotImplementedException("Reading message in multiple parts not implemented.");
-
-                m_log.WriteLine($"Read message: {message}");
-
-                ProcessMessage(stream, message, out bool disconnected);
-                if (disconnected)
-                    break;
+                    ProcessMessage(stream, message, out bool disconnected);
+                    if (disconnected)
+                        break;
+                }
             }
         }
 
