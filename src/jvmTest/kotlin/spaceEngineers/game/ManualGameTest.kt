@@ -1,9 +1,7 @@
 package spaceEngineers.game
 
-import spaceEngineers.commands.InteractionArgs
-import spaceEngineers.commands.InteractionType
-import spaceEngineers.commands.ObservationArgs
-import spaceEngineers.commands.ObservationMode
+import spaceEngineers.commands.*
+import spaceEngineers.model.Vec3
 import testhelp.checkMockObservation
 import testhelp.controller
 import testhelp.mockController
@@ -49,6 +47,7 @@ class ManualGameTest {
         } ?: error ("found no grid with non-empty blocks")
 
         for (block in blocks.subList(0, min(2, blocks.size))) {
+            println("Block id: " + block.id)
             println("Block max integrity: " + block.maxIntegrity)
             println("Block build integrity: " + block.buildIntegrity)
             println("Block integrity: " + block.integrity)
@@ -60,5 +59,32 @@ class ManualGameTest {
             println("Block orientation up : " + block.orientationUp)
         }
         assertEquals(1, blocks.size, "There should be exactly 1 new block.")
+    }
+
+    @Test
+    fun manyMovesAndRotationsTest() = controller {
+        val moves = ArrayList<MovementArgs>()
+        val addMoves = {
+                movementArgs: MovementArgs, count: Int -> for (n in 0 until count) moves.add(movementArgs)
+        }
+
+        val stepBoost = 5 // Increase to 10 to 20 to slow down the movement (and see it better)
+        val forwardArgs = MovementArgs(Vec3(0f, 0f, -1f))
+        addMoves(forwardArgs, 3 * stepBoost)
+
+        val rotateArgs = MovementArgs(Vec3.zero(), Vec3(0f, 9f, 0f), 0f)
+        addMoves(rotateArgs, 2 * stepBoost)
+        addMoves(forwardArgs, 3 * stepBoost)
+        addMoves(MovementArgs(Vec3(-1f, 0f, 0f)), 20 * stepBoost) // Left
+
+        val rollArgs = MovementArgs(Vec3.zero(), Vec3.zero(), -2f)
+        addMoves(rollArgs, 2 * stepBoost)
+
+        val allArgs = MovementArgs(Vec3(0f, 0.7f, 0.2f), Vec3(5f, 7f, 0f), 1.5f)
+        addMoves(allArgs, 4 * stepBoost)
+
+        for (move in moves) {
+            moveAndRotate(move)
+        }
     }
 }
