@@ -27,14 +27,14 @@ namespace Iv4xr.SePlugin.Session
                 var requestShell = m_jsoner.ToObject<SeRequestShell<SessionCommand>>(request.Message);
 
                 m_sessionController.LoadScenario(requestShell.Arg.ScenarioPath);
-                PluginServer.ReplyOK(request.ClientStream);
+                PluginServer.ReplyOK(request.ClientStreamWriter);
             }
             catch (Exception ex)
             {
                 Log.Exception(ex, "Error processing a request");
                 Log.WriteLine($"Full request: \"{request.Message}\"");
                 PluginServer.ReplyFalse(request
-                        .ClientStream); // Simple error response, details can be learned from the log.
+                        .ClientStreamWriter); // Simple error response, details can be learned from the log.
             }
         }
     }

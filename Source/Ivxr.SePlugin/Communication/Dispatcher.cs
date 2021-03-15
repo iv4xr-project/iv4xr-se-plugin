@@ -70,7 +70,7 @@ namespace Iv4xr.SePlugin.Communication
                 }
 
                 m_requestQueue.Replies.Add(
-                    new RequestItem(request.ClientStream, message: jsonReply));
+                    new RequestItem(request.ClientStreamWriter, message: jsonReply));
             }
         }
 

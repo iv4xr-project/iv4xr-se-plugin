@@ -80,7 +80,7 @@ namespace Iv4xr.PluginLib
                     try
                     {
                         stream.ReadTimeout = ReadTimeoutMs;
-                        ServeConnectedClient(stream);
+                        ServeConnectedClient(stream, client.ReceiveBufferSize);
                     }
                     catch (IOException e)
                     {
@@ -90,32 +90,38 @@ namespace Iv4xr.PluginLib
             }
         }
 
-        private void ServeConnectedClient(NetworkStream stream)
+        private void ServeConnectedClient(NetworkStream stream, int bufferSize)
         {
-            using (var reader = new StreamReader(stream, Encoding.ASCII))
+            var encoding = Encoding.UTF8;
+            
+            using (var reader = new StreamReader(stream, encoding, false, bufferSize))
+            using (var writer = new StreamWriter(stream, encoding, 4 * bufferSize))  // Replies are bigger.
             {
+                writer.AutoFlush = true;
+                
                 string message;
                 while ((message = reader.ReadLine()) != null)
                 {
                     m_log.WriteLine($"Read message: {message}");
 
-                    ProcessMessage(stream, message, out bool disconnected);
-                    if (disconnected)
+                    ProcessMessage(stream, writer, message, out bool disconnect);
+                    if (disconnect)
                         break;
                 }
             }
         }
 
-        private void ProcessMessage(NetworkStream clientStream, string message, out bool disconnected)
+        private void ProcessMessage(NetworkStream clientStream, StreamWriter writer, string message,
+            out bool disconnect)
         {
-            disconnected = false;
+            disconnect = false;
 
             if (!message.StartsWith("{\"Cmd\":"))
             {
                 // throw new InvalidDataException("Unexpected message header: " + message);
                 m_log.WriteLine("Unexpected message header: " + message);
                 // We disconnect here, because the outer loop can't handle a request without a reply from the queue.
-                Disconnect(clientStream, out disconnected, reply: false);
+                FlagDisconnect(writer, out disconnect, reply: false);
                 return;
             }
 
@@ -124,57 +130,54 @@ namespace Iv4xr.PluginLib
             // ReSharper disable once StringLiteralTypo
             if (command.StartsWith("\"AGENTCOM")) // AGENTCOMMAND 
             {
-                m_requestQueue.Requests.Enqueue(new RequestItem(clientStream, message));
+                m_requestQueue.Requests.Enqueue(new RequestItem(writer, message));
 
                 // TODO(PP): This tends to block when the message is not added to the queue. Rearchitecture, or at least add a timeout.
                 WaitForReplyAndSendIt();
             }
             else if (command.StartsWith("\"SESSION\""))
             {
-                m_sessionDispatcher.ProcessRequest(new RequestItem(clientStream, message));
+                m_sessionDispatcher.ProcessRequest(new RequestItem(writer, message));
             }
             else if (command.StartsWith("\"DISCONNECT\""))
             {
-                Disconnect(clientStream, out disconnected, reply: true);
+                FlagDisconnect(writer, out disconnect, reply: true);
             }
             else
             {
                 // throw new NotImplementedException("Command unknown or not implemented: " + command);
                 m_log.WriteLine("Command unknown or not implemented: " + command);
                 // We disconnect here, because the outer loop can't handle a request without a reply from the queue.
-                Disconnect(clientStream, out disconnected, reply: false);
+                FlagDisconnect(writer, out disconnect, reply: false);
             }
         }
 
-        private void Disconnect(NetworkStream clientStream, out bool disconnected, bool reply = true)
+        private void FlagDisconnect(StreamWriter writer, out bool disconnect, bool reply = true)
         {
-            Reply(clientStream, reply.ToString());
-            clientStream.Close(timeout: 100); // ms
-            disconnected = true;
+            Reply(writer, reply.ToString());
+            disconnect = true;
         }
 
         private void WaitForReplyAndSendIt()
         {
             // TODO(PP): consider adding a timeout (blocks when no reply ready)
             var reply = m_requestQueue.Replies.Take();
-            Reply(reply.ClientStream, reply.Message);
+            Reply(reply.ClientStreamWriter, reply.Message);
         }
 
-        public static void Reply(NetworkStream clientStream, string reply)
+        public static void Reply(StreamWriter writer, string reply)
         {
-            // TODO(PP): avoid allocation of a new buffer each time
-            var replyBuffer = Encoding.ASCII.GetBytes(reply + '\n');
-            clientStream.Write(replyBuffer, 0, replyBuffer.Length);
+            writer.WriteLine(reply);
         }
 
-        public static void ReplyOK(NetworkStream clientStream)
+        public static void ReplyOK(StreamWriter clientStreamWriter)
         {
-            Reply(clientStream, "true");
+            Reply(clientStreamWriter, "true");
         }
 
-        public static void ReplyFalse(NetworkStream clientStream)
+        public static void ReplyFalse(StreamWriter clientStreamWriter)
         {
-            Reply(clientStream, "false");
+            Reply(clientStreamWriter, "false");
         }
     }
 }
