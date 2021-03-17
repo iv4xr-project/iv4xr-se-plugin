@@ -27,11 +27,26 @@ import java.lang.Thread.sleep
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
+
+fun runWhileConditionUntilTimeout(
+    timeoutMs: Int = 20000,
+    conditionBlock: () -> Boolean
+) {
+    val initialTime = System.currentTimeMillis()
+    while (conditionBlock()) {
+        check(System.currentTimeMillis() - initialTime < timeoutMs) {
+            "Timeout after ${timeoutMs}ms"
+        }
+    }
+}
+
 @RunWith(Cucumber::class)
 class SpaceEngineersCucumberTest {
     lateinit var environment: CharacterController
 
     val observations: MutableList<SeObservation> = mutableListOf()
+
+    val context = SpaceEngineersTestContext()
 
     @Before
     fun setup() {
@@ -46,6 +61,10 @@ class SpaceEngineersCucumberTest {
         }
     }
 
+    fun CharacterController.equip(toolbarLocation: ToolbarLocation) {
+        interact(InteractionArgs(InteractionType.EQUIP, slot = toolbarLocation.slot, page = toolbarLocation.page))
+    }
+
     @Given("I am using mock data source.")
     fun i_am_connected_to_mock_server() {
         environment =
@@ -57,16 +76,31 @@ class SpaceEngineersCucumberTest {
         environment = ProprietaryJsonTcpCharacterController.localhost(agentId = TEST_AGENT)
     }
 
+    @Given("Toolbar has mapping:")
+    fun toolbar_has_mapping(dataTable: List<Map<String, String>>) {
+        context.updateToolbarLocation(dataTable)
+    }
+
+    @Given("Grinder is in slot {int}, page {int}.")
+    fun grinder_is_at(slot: Int, page: Int) {
+        context.grinderLocation = ToolbarLocation(slot = slot, page = page)
+    }
+
+    @Given("Torch is in slot {int}, page {int}.")
+    fun torch_is_at(slot: Int, page: Int) {
+        context.torchLocation = ToolbarLocation(slot = slot, page = page)
+    }
+
     @Given("I load scenario {string}.")
     fun i_load_scenario(scenarioId: String) {
         environment?.let {
             check(it is WorldController)
             it.load(File("$SCENARIO_DIR$scenarioId").absolutePath)
         }
-        //all block are new for first request
+        sleep(500)
+        // All blocks are new for the first request.
         environment.observe(ObservationArgs(ObservationMode.NEW_BLOCKS)).let {
             observations.add(it)
-            println(it.allBlocks.map { it.id })
         }
     }
 
@@ -109,38 +143,45 @@ class SpaceEngineersCucumberTest {
         )
     }
 
-    var blockId: String? = null //973380826
-
     private fun observeBlocks(): List<SeBlock> {
         return environment.observe(ObservationArgs(ObservationMode.BLOCKS)).allBlocks
     }
 
     private fun blockToGrind(): SeBlock {
-        return observeBlocks().first { it.id == blockId }
+        return observeBlocks().first { it.id == context.lastNewBlockId }
     }
 
-    @When("Character grinds until to {double} integrity.")
-    fun character_grinds_until_to_integrity(integrity: Double) {
-        var currentIntegrity = blockToGrind().integrity
-        environment.interact(InteractionArgs(InteractionType.EQUIP, 5, 0))
+    @When("Character grinds to {double} integrity.")
+    fun character_grinds_to_integrity(integrity: Double) {
+        environment.equip(context.grinderLocation!!)
         sleep(500)
         environment.interact(InteractionArgs(InteractionType.BEGIN_USE))
-        while (currentIntegrity > integrity) {
-            currentIntegrity = blockToGrind().integrity
+        runWhileConditionUntilTimeout {
+            blockToGrind().integrity > integrity
+        }
+        environment.interact(InteractionArgs(InteractionType.END_USE))
+    }
+
+    @When("Character grinds to {double}% integrity.")
+    fun character_grinds_until_to_integrity_percentage(percentage: Double) {
+        val integrity = blockToGrind().maxIntegrity * percentage / 100.0
+        environment.equip(context.grinderLocation!!)
+        sleep(500)
+        environment.interact(InteractionArgs(InteractionType.BEGIN_USE))
+        runWhileConditionUntilTimeout {
+            blockToGrind().integrity > integrity
         }
         environment.interact(InteractionArgs(InteractionType.END_USE))
     }
 
     @When("Character torches block back up to max integrity.")
     fun character_torches_block_back_up_to_max_integrity() {
-        val blockToGrind = blockToGrind()
-        var currentIntegrity = blockToGrind.integrity
-        environment.interact(InteractionArgs(InteractionType.EQUIP, 4, 0))
+        val maxIntegrity = blockToGrind().maxIntegrity
+        environment.equip(context.torchLocation!!)
         sleep(500)
         environment.interact(InteractionArgs(InteractionType.BEGIN_USE))
-        while (currentIntegrity < blockToGrind.maxIntegrity) {
-            currentIntegrity = blockToGrind().integrity
-
+        runWhileConditionUntilTimeout {
+            blockToGrind().integrity < maxIntegrity
         }
         environment.interact(InteractionArgs(InteractionType.END_USE))
     }
@@ -158,9 +199,10 @@ class SpaceEngineersCucumberTest {
         assertEquals(blocks, observation.grids?.first()?.blocks?.size)
     }
 
-    @When("Character places selects block and places it.")
-    fun character_places_selects_block_and_places_it() {
-        environment.interact(InteractionArgs(InteractionType.EQUIP, 1, 0))
+    @When("Character selects block {string} and places it.")
+    fun character_places_selects_block_and_places_it(blockType: String) {
+        val toolbarLocation: ToolbarLocation = context.blockToolbarLocation(blockType)
+        environment.equip(toolbarLocation)
         environment.interact(InteractionArgs(InteractionType.PLACE))
     }
 
@@ -179,11 +221,15 @@ class SpaceEngineersCucumberTest {
         val observation = environment.observe(ObservationArgs(ObservationMode.NEW_BLOCKS))
         observations.add(observation)
         val allBlocks = observation.allBlocks
-        assertEquals(blockCount, allBlocks.size)
+        assertEquals(
+            blockCount,
+            allBlocks.size,
+            "Expected to see $blockCount blocks, not ${allBlocks.size} ${allBlocks.map { it.blockType }.toSet()}."
+        )
         assertEquals(allBlocks.size, data.size)
         data.forEachIndexed { index, row ->
             val block = allBlocks[index]
-            blockId = block.id
+            context.lastNewBlockId = block.id
             row["blockType"]?.let {
                 assertEquals(it, block.blockType)
             }
