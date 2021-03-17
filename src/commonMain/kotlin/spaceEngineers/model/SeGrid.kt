@@ -1,9 +1,10 @@
 package spaceEngineers.model
 
 
-class SeGrid(
+data class SeGrid(
     override val id: String,
-    override val position: Vec3
-) : SeEntity {
+    override val position: Vec3,
     val blocks: List<SeBlock> = emptyList()
+) : SeEntity {
+
 }
