@@ -5,7 +5,11 @@ using Sandbox.Game.Screens.Helpers;
 using Sandbox.Game.World;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using Sandbox.Definitions;
+using VRage.Game;
+using VRage.ObjectBuilders;
 using VRageMath;
 
 namespace Iv4xr.SePlugin.Control
@@ -56,6 +60,10 @@ namespace Iv4xr.SePlugin.Control
             {
                 EndUseTool();
             }
+            else if (args.InteractionType == InteractionType.TOOLBAR_SET)
+            {
+                SetToolbarItem(args.Slot, args.Page, args.ItemName);
+            }
             else
             {
                 throw new ArgumentException("Unknown or not implemented interaction type.");
@@ -92,15 +100,31 @@ namespace Iv4xr.SePlugin.Control
 
         private void EquipToolbarItem(int slot, int page, bool allowSizeChange)
         {
-            var currentToolbar = MyToolbarComponent.CurrentToolbar;
+            var toolbar = MyToolbarComponent.CurrentToolbar;
+            toolbar.SwitchToPageOrNot(page);
 
-            if (page >= 0)
-                currentToolbar.SwitchToPage(page);
-
-            if (!allowSizeChange && currentToolbar.SelectedSlot.HasValue && (currentToolbar.SelectedSlot.Value == slot))
+            if (!allowSizeChange && toolbar.SelectedSlot.HasValue && (toolbar.SelectedSlot.Value == slot))
                 return; // Already set (setting it again would change grid size).
             
-            currentToolbar.ActivateItemAtSlot(slot);
+            toolbar.ActivateItemAtSlot(slot);
+        }
+
+        /// <summary>
+        /// First version. Only tools and weapons are supported for now.
+        /// </summary>
+        private static void SetToolbarItem(int slot, int page, string itemName)
+        {
+            var toolDefinitions = MyDefinitionManager.Static.GetWeaponDefinitions();
+            var toolDefinition = toolDefinitions.First(definition => definition.Id.SubtypeName == itemName);
+            
+            var toolbarItemBuilder = MyObjectBuilderSerializer.CreateNewObject<MyObjectBuilder_ToolbarItemWeapon>();
+            toolbarItemBuilder.DefinitionId = toolDefinition.Id;
+
+            var item = MyToolbarItemFactory.CreateToolbarItem(toolbarItemBuilder);
+
+            var toolbar = MyToolbarComponent.CurrentToolbar;
+            toolbar.SwitchToPageOrNot(page);
+            toolbar.SetItemAtSlot(slot, item);
         }
 
         private MyEntityController GetEntityController()

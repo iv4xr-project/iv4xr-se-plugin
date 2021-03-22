@@ -64,7 +64,8 @@ namespace Iv4xr.SePlugin.WorldModel
         EQUIP,
         PLACE,
         BEGIN_USE,
-        END_USE
+        END_USE,
+        TOOLBAR_SET,
     }
 
     public class InteractionArgs
@@ -73,6 +74,7 @@ namespace Iv4xr.SePlugin.WorldModel
         public int Page;
         public int Slot;
         public bool AllowSizeChange;
+        public string ItemName;
     }
 
     public class AgentCommand<TArgument>
