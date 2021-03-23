@@ -12,15 +12,8 @@ import spaceEngineers.commands.InteractionArgs
 import spaceEngineers.commands.InteractionType
 import spaceEngineers.commands.ObservationArgs
 import spaceEngineers.commands.ObservationMode
-import spaceEngineers.controller.CharacterController
-import spaceEngineers.controller.ProprietaryJsonTcpCharacterController
-import spaceEngineers.controller.WorldController
-import spaceEngineers.controller.observe
-import spaceEngineers.game.blockingMoveForwardByDistance
-import spaceEngineers.model.SeBlock
-import spaceEngineers.model.SeObservation
-import spaceEngineers.model.Vec3
-import spaceEngineers.model.allBlocks
+import spaceEngineers.controller.*
+import spaceEngineers.model.*
 import testhelp.*
 import java.io.File
 import java.lang.Thread.sleep
@@ -42,38 +35,36 @@ fun runWhileConditionUntilTimeout(
 
 @RunWith(Cucumber::class)
 class SpaceEngineersCucumberTest {
-    lateinit var environment: CharacterController
+    lateinit var environment: ContextControllerWrapper
 
-    val observations: MutableList<SeObservation> = mutableListOf()
-
-    val context = SpaceEngineersTestContext()
+    val context by lazy { environment.context }
 
     @Before
     fun setup() {
-        observations.clear()
     }
 
     @After
     fun cleanup() {
-        observations.clear()
         if (this::environment.isInitialized) {
+            environment.controller.closeIfCloseable()
             environment.closeIfCloseable()
         }
-    }
-
-    fun CharacterController.equip(toolbarLocation: ToolbarLocation) {
-        interact(InteractionArgs(InteractionType.EQUIP, slot = toolbarLocation.slot, page = toolbarLocation.page))
     }
 
     @Given("I am using mock data source.")
     fun i_am_connected_to_mock_server() {
         environment =
-            ProprietaryJsonTcpCharacterController.mock(agentId = TEST_AGENT, lineToReturn = TEST_MOCK_RESPONSE_LINE)
+            ContextControllerWrapper(
+                ProprietaryJsonTcpCharacterController.mock(
+                    agentId = TEST_AGENT,
+                    lineToReturn = TEST_MOCK_RESPONSE_LINE
+                )
+            )
     }
 
     @Given("I am connected to real game.")
     fun i_am_connected_to_real_game() {
-        environment = ProprietaryJsonTcpCharacterController.localhost(agentId = TEST_AGENT)
+        environment = ContextControllerWrapper(ProprietaryJsonTcpCharacterController.localhost(agentId = TEST_AGENT))
     }
 
     @Given("Toolbar has mapping:")
@@ -93,31 +84,29 @@ class SpaceEngineersCucumberTest {
 
     @Given("I load scenario {string}.")
     fun i_load_scenario(scenarioId: String) {
-        environment?.let {
-            check(it is WorldController)
-            it.load(File("$SCENARIO_DIR$scenarioId").absolutePath)
+        environment?.let { wrapper ->
+            check(wrapper.controller is WorldController)
+            (wrapper.controller as WorldController).load(File("$SCENARIO_DIR$scenarioId").absolutePath)
         }
         sleep(500)
         // All blocks are new for the first request.
-        environment.observe(ObservationArgs(ObservationMode.NEW_BLOCKS)).let {
-            observations.add(it)
-        }
+        environment.observeNewBlocks()
     }
 
     @When("I request for blocks.")
     fun i_request_for_blocks() {
-        environment.observe(ObservationArgs(ObservationMode.BLOCKS)).let { observations.add(it) }
+        environment.observeBlocks()
     }
 
     @When("I observe.")
     fun i_observe() {
-        environment.observe().let { observations.add(it) }
+        environment.observe()
     }
 
     @Then("Character is at \\({double}, ?{double}, ?{double}).")
     fun i_see_character_at_x_y_z(x: Double, y: Double, z: Double) {
         val position = Vec3(x, y, z)
-        observations.last().let { observation ->
+        context.observations.last().let { observation ->
             assertVecEquals(position, observation.position, diff = 0.1f)
         }
     }
@@ -125,21 +114,21 @@ class SpaceEngineersCucumberTest {
     @Then("Character forward orientation is \\({double}, {double}, {double}).")
     fun character_is_facing(x: Double, y: Double, z: Double) {
         val position = Vec3(x, y, z)
-        observations.last().let { observation ->
+        context.observations.last().let { observation ->
             assertVecEquals(position, observation.orientationForward, diff = 0.1f)
         }
     }
 
     @When("Character moves forward for {int} units.")
     fun character_moves_forward_for_units(units: Int) {
-        environment.blockingMoveForwardByDistance(distance = units.toFloat()).let { observations.add(it) }
+        environment.blockingMoveForwardByDistance(distance = units.toFloat()).let { context.update(it) }
     }
 
     @Then("Character is {int} units away from starting location.")
     fun character_is_units_away_from_starting_location(units: Int) {
         assertFloatEquals(
             units.toFloat(),
-            observations.first().position.distanceTo(observations.last().position)
+            context.observations.first().position.distanceTo(context.observations.last().position)
         )
     }
 
@@ -155,11 +144,11 @@ class SpaceEngineersCucumberTest {
     fun character_grinds_to_integrity(integrity: Double) {
         environment.equip(context.grinderLocation!!)
         sleep(500)
-        environment.interact(InteractionArgs(InteractionType.BEGIN_USE))
+        environment.startUsingTool()
         runWhileConditionUntilTimeout {
             blockToGrind().integrity > integrity
         }
-        environment.interact(InteractionArgs(InteractionType.END_USE))
+        environment.endUsingTool()
     }
 
     @When("Character grinds to {double}% integrity.")
@@ -167,11 +156,11 @@ class SpaceEngineersCucumberTest {
         val integrity = blockToGrind().maxIntegrity * percentage / 100.0
         environment.equip(context.grinderLocation!!)
         sleep(500)
-        environment.interact(InteractionArgs(InteractionType.BEGIN_USE))
+        environment.startUsingTool()
         runWhileConditionUntilTimeout {
             blockToGrind().integrity > integrity
         }
-        environment.interact(InteractionArgs(InteractionType.END_USE))
+        environment.endUsingTool()
     }
 
     @When("Character torches block back up to max integrity.")
@@ -179,22 +168,22 @@ class SpaceEngineersCucumberTest {
         val maxIntegrity = blockToGrind().maxIntegrity
         environment.equip(context.torchLocation!!)
         sleep(500)
-        environment.interact(InteractionArgs(InteractionType.BEGIN_USE))
+        environment.startUsingTool()
         runWhileConditionUntilTimeout {
             blockToGrind().integrity < maxIntegrity
         }
-        environment.interact(InteractionArgs(InteractionType.END_USE))
+        environment.endUsingTool()
     }
 
 
     @Then("I receive observation.")
     fun i_receive_observation() {
-        assertTrue(observations.isNotEmpty())
+        assertTrue(context.observations.isNotEmpty())
     }
 
     @Then("I see {int} grid with {int} block.")
     fun i_see_grid_and_with_block(grids: Int, blocks: Int) {
-        val observation = observations.last()
+        val observation = context.observations.last()
         assertEquals(grids, observation.grids?.size)
         assertEquals(blocks, observation.grids?.first()?.blocks?.size)
     }
@@ -209,7 +198,6 @@ class SpaceEngineersCucumberTest {
     @Then("I see no block of type {string}.")
     fun i_see_no_block_of_type(string: String) {
         val observation = environment.observe(ObservationArgs(ObservationMode.BLOCKS))
-        observations.add(observation)
         assertTrue(
             observation.allBlocks
                 .none { it.blockType == string }
@@ -219,7 +207,6 @@ class SpaceEngineersCucumberTest {
     @Then("I can see {int} new block\\(s) with data:")
     fun i_can_see_new_block_with_data(blockCount: Int, data: List<Map<String, String>>) {
         val observation = environment.observe(ObservationArgs(ObservationMode.NEW_BLOCKS))
-        observations.add(observation)
         val allBlocks = observation.allBlocks
         assertEquals(
             blockCount,
@@ -249,7 +236,7 @@ class SpaceEngineersCucumberTest {
     fun block_with_id_blk_has_max_integrity_integrity_and_build_integrity(
         id: String, maxIntegrity: Float, integrity: Float, buildIntegrity: Float
     ) {
-        val observation = observations.last()
+        val observation = context.observations.last()
         val block = observation.grids.flatMap { it.blocks }.find { it.id == id } ?: error("block $id not found")
         assertEquals(maxIntegrity, block.maxIntegrity)
         assertEquals(buildIntegrity, block.buildIntegrity)
