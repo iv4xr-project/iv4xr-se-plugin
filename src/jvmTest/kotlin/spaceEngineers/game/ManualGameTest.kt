@@ -2,9 +2,8 @@ package spaceEngineers.game
 
 import spaceEngineers.commands.*
 import spaceEngineers.model.Vec3
-import testhelp.checkMockObservation
 import testhelp.controller
-import testhelp.mockController
+import java.lang.Thread.sleep
 import kotlin.math.min
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -23,8 +22,14 @@ class ManualGameTest {
     @Test
     fun beginUseEndUseToolTest() = controller {
         interact(InteractionArgs(InteractionType.BEGIN_USE))
-        Thread.sleep(50);
+        sleep(50);
         interact(InteractionArgs(InteractionType.END_USE))
+    }
+
+    @Test
+    fun setToolbarItems() = controller {
+        interact(InteractionArgs(InteractionType.TOOLBAR_SET, 4, 0, "Welder2Item"))
+        interact(InteractionArgs(InteractionType.TOOLBAR_SET, 5, 0, "AngleGrinder2Item"))
     }
 
     @Test

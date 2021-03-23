@@ -12,5 +12,6 @@ enum class InteractionType(val value: Int) {
     EQUIP(0),
     PLACE(1),
     BEGIN_USE(2),
-    END_USE(3);
+    END_USE(3),
+    TOOLBAR_SET(4)
 }
