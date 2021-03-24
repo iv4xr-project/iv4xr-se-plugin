@@ -1,4 +1,4 @@
-package bdd
+package spaceEngineers.model
 
 data class ToolbarLocation(
     val slot: Int,
