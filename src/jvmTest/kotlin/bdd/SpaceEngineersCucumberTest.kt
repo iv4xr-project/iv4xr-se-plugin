@@ -106,7 +106,7 @@ class SpaceEngineersCucumberTest {
     @Then("Character is at \\({double}, ?{double}, ?{double}).")
     fun i_see_character_at_x_y_z(x: Double, y: Double, z: Double) {
         val position = Vec3(x, y, z)
-        context.observations.last().let { observation ->
+        context.observationHistory.last().let { observation ->
             assertVecEquals(position, observation.position, diff = 0.1f)
         }
     }
@@ -114,21 +114,21 @@ class SpaceEngineersCucumberTest {
     @Then("Character forward orientation is \\({double}, {double}, {double}).")
     fun character_is_facing(x: Double, y: Double, z: Double) {
         val position = Vec3(x, y, z)
-        context.observations.last().let { observation ->
+        context.observationHistory.last().let { observation ->
             assertVecEquals(position, observation.orientationForward, diff = 0.1f)
         }
     }
 
     @When("Character moves forward for {int} units.")
     fun character_moves_forward_for_units(units: Int) {
-        environment.blockingMoveForwardByDistance(distance = units.toFloat()).let { context.update(it) }
+        environment.blockingMoveForwardByDistance(distance = units.toFloat()).let { context.addToHistory(it) }
     }
 
     @Then("Character is {int} units away from starting location.")
     fun character_is_units_away_from_starting_location(units: Int) {
         assertFloatEquals(
             units.toFloat(),
-            context.observations.first().position.distanceTo(context.observations.last().position)
+            context.observationHistory.first().position.distanceTo(context.observationHistory.last().position)
         )
     }
 
@@ -178,12 +178,12 @@ class SpaceEngineersCucumberTest {
 
     @Then("I receive observation.")
     fun i_receive_observation() {
-        assertTrue(context.observations.isNotEmpty())
+        assertTrue(context.observationHistory.isNotEmpty())
     }
 
     @Then("I see {int} grid with {int} block.")
     fun i_see_grid_and_with_block(grids: Int, blocks: Int) {
-        val observation = context.observations.last()
+        val observation = context.observationHistory.last()
         assertEquals(grids, observation.grids?.size)
         assertEquals(blocks, observation.grids?.first()?.blocks?.size)
     }
@@ -236,7 +236,7 @@ class SpaceEngineersCucumberTest {
     fun block_with_id_blk_has_max_integrity_integrity_and_build_integrity(
         id: String, maxIntegrity: Float, integrity: Float, buildIntegrity: Float
     ) {
-        val observation = context.observations.last()
+        val observation = context.observationHistory.last()
         val block = observation.grids.flatMap { it.blocks }.find { it.id == id } ?: error("block $id not found")
         assertEquals(maxIntegrity, block.maxIntegrity)
         assertEquals(buildIntegrity, block.buildIntegrity)

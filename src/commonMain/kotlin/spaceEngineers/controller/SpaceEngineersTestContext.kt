@@ -10,7 +10,7 @@ data class SpaceEngineersTestContext(
     var lastNewBlockId: String? = null,
     val blockTypeToToolbarLocation: MutableMap<String, ToolbarLocation> = mutableMapOf(),
     var allNewestBlocks: MutableList<SeBlock> = mutableListOf(),
-    val observations: MutableList<SeObservation> = mutableListOf()
+    val observationHistory: MutableList<SeObservation> = mutableListOf()
 ) {
 
 
@@ -34,7 +34,7 @@ data class SpaceEngineersTestContext(
         allNewestBlocks.addAll(allBlocks)
     }
 
-    fun update(seObservation: SeObservation) {
-        observations.add(seObservation)
+    fun addToHistory(seObservation: SeObservation) {
+        observationHistory.add(seObservation)
     }
 }

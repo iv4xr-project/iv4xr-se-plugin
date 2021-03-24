@@ -44,23 +44,23 @@ class ContextControllerWrapper(
         )
     }
 
-    fun updateObservation(observation: SeObservation) {
-        context.update(observation)
+    private fun addToHistory(observation: SeObservation) {
+        context.addToHistory(observation)
     }
 
     override fun moveAndRotate(movementArgs: MovementArgs): SeObservation {
-        return controller.moveAndRotate(movementArgs).apply(::updateObservation)
+        return controller.moveAndRotate(movementArgs).apply(::addToHistory)
     }
 
     override fun moveTowards(moveTowardsArgs: MoveTowardsArgs): SeObservation {
-        return controller.moveTowards(moveTowardsArgs).apply(::updateObservation)
+        return controller.moveTowards(moveTowardsArgs).apply(::addToHistory)
     }
 
     override fun observe(observationArgs: ObservationArgs): SeObservation {
-        return controller.observe(observationArgs).apply(::updateObservation)
+        return controller.observe(observationArgs).apply(::addToHistory)
     }
 
     override fun interact(interactionArgs: InteractionArgs): SeObservation {
-        return controller.interact(interactionArgs).apply(::updateObservation)
+        return controller.interact(interactionArgs).apply(::addToHistory)
     }
 }

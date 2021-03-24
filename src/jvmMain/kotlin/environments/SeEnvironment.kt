@@ -111,18 +111,20 @@ class SeEnvironment(
     }
 
     fun startUsingTool(): WorldModel {
-        controller.startUsingTool().toWorldModel()
-        return observe()
+        return controller.startUsingTool().toWorldModel()
     }
 
     fun endUsingTool(): WorldModel {
-        controller.endUsingTool().toWorldModel()
-        return observe()
+        return controller.endUsingTool().toWorldModel()
     }
 
 
     fun moveForward(velocity: Float = 1f): WorldModel {
-        controller.moveForward(velocity).toWorldModel()
+        controller.moveForward(velocity)
+        /*
+         * moveForward returned observation is "before" the movement,
+         * but we want to know what happened after the movement
+         */
         return observe()
     }
 
