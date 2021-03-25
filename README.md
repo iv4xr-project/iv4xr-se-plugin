@@ -6,15 +6,17 @@ It is not intended for general uses, other than as a testing project for the dev
 
 <img src="./docs/SE-sotf1.png" width="100%">
 
-The demo is written in [Kotlin](https://kotlinlang.org/), which is a JVM language by JetBrains and it is fully interoperable with Java, i.e., it can be used seamlessly from Java while allowing us to write less code with the same functionality.
+## Kotlin
+
+The demo is written in [Kotlin](https://kotlinlang.org/), a JVM language by JetBrains which is fully interoperable with Java, i.e., it can be used seamlessly from Java while allowing us to write [less code](https://www.ideamotive.co/blog/a-complete-kotlin-guide-for-java-developers) with the same functionality.
 
 # Setup
 
 ## Requirements
 
-Project requires [aplib](https://github.com/iv4xr-project/aplib) dependency. First build `aplib` and install it to Maven local repository.
+Project requires [aplib](https://github.com/iv4xr-project/aplib) dependency. First build `aplib` and install it to the Maven local repository.
 
-Other possibility at the moment is to change dependency do JitPack:
+Other possibility at the moment is to change dependency do JitPack (in `build.gradle`):
 
 ```
 implementation 'com.github.iv4xr-project:aplib:v1.2.0'
@@ -22,7 +24,13 @@ implementation 'com.github.iv4xr-project:aplib:v1.2.0'
 
 ## How to build
 
-We are using Gradle as the build system. To build project, run Gradle task `build`:
+For easy copy-paste, here's the git clone command for this repository:
+
+```
+git clone git@github.com:iv4xr-project/iv4xrDemo-space-engineers.git
+```
+
+We are using Gradle as the build system. To build the project, run the Gradle task `build`:
 
 ```
 ./gradlew build
