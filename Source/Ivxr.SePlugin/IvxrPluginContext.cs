@@ -6,6 +6,21 @@ using System.Text;
 using Iv4xr.SePlugin.Communication;
 using Iv4xr.SePlugin.Control;
 using Iv4xr.SePlugin.Session;
+using System.Net;
+using System.Net.Sockets;
+using System.Threading;
+using Iv4xr.PluginLib;
+using Iv4xr.PluginLib.Log;
+using Iv4xr.SePlugin.Communication;
+using Iv4xr.SePlugin.Session;
+using Iv4xr.SePlugin.Control;
+using AustinHarris.JsonRpc;
+using System;
+using System.IO;
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
+using Iv4xr.SePlugin.WorldModel;
 
 namespace Iv4xr.SePlugin
 {
@@ -35,6 +50,38 @@ namespace Iv4xr.SePlugin
             var controller = new CharacterController(m_gameSession);
 
             Dispatcher = new Dispatcher(m_requestQueue, observer, controller) {Log = Log};
+            
+            new Thread(() => 
+            {
+                Thread.CurrentThread.IsBackground = true; 
+                StartJsonRpcService(observer, controller, sessionController); 
+            }).Start();
+        }
+
+        //honestly don't understand this piece and how is this object added to handler
+        private object _svc;
+        
+        void StartJsonRpcService(IObserver observer, ICharacterController characterController, SessionController sessionController)
+        {
+            // must new up an instance of the service so it can be registered to handle requests.
+            _svc = new Iv4xrJsonRpcService(observer, characterController, sessionController);
+
+            var rpcResultHandler = new AsyncCallback(
+                state =>
+                {
+                    var async = ((JsonRpcStateAsync)state);
+                    var result = async.Result;
+                    var writer = ((StreamWriter)async.AsyncState);
+
+                    writer.WriteLine(result);
+                    writer.FlushAsync();
+                });
+
+            SocketListener.start(3333, (writer, line) =>
+            {
+                var async = new JsonRpcStateAsync(rpcResultHandler, writer) { JsonRpc = line };
+                JsonRpcProcessor.Process(async, writer);
+            });
         }
 
         public void StartServer()
