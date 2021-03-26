@@ -91,45 +91,41 @@ class SeEnvironment(
     }
 
     override fun observe(agentId: String): WorldModel {
-        return controller.observe().toWorldModel()
+        return observe()
     }
 
     fun observe(): WorldModel {
-        return controller.observe().toWorldModel()
+        return controller.observer.observe().toWorldModel()
     }
 
     fun observeForNewBlocks(): WorldModel {
-        return controller.observeNewBlocks().toWorldModel()
+        return controller.observer.observeNewBlocks().toWorldModel()
     }
 
-    fun equipAndPlace(toolbarLocation: ToolbarLocation): WorldModel {
-        return controller.equipAndPlace(toolbarLocation).toWorldModel()
+    fun equipAndPlace(toolbarLocation: ToolbarLocation) {
+        controller.items.equip(toolbarLocation)
+        return controller.items.place()
     }
 
-    fun equip(toolbarLocation: ToolbarLocation): WorldModel {
-        return controller.equip(toolbarLocation).toWorldModel()
+    fun equip(toolbarLocation: ToolbarLocation) {
+        return controller.items.equip(toolbarLocation)
     }
 
-    fun startUsingTool(): WorldModel {
-        return controller.startUsingTool().toWorldModel()
+    fun startUsingTool() {
+        return controller.items.startUsingTool()
     }
 
-    fun endUsingTool(): WorldModel {
-        return controller.endUsingTool().toWorldModel()
+    fun endUsingTool() {
+        return controller.items.endUsingTool()
     }
 
 
     fun moveForward(velocity: Float = 1f): WorldModel {
-        controller.moveForward(velocity)
-        /*
-         * moveForward returned observation is "before" the movement,
-         * but we want to know what happened after the movement
-         */
-        return observe()
+        return controller.character.moveForward(velocity).toWorldModel()
     }
 
 
-    fun equipAndPlace(blockType: String): WorldModel {
+    fun equipAndPlace(blockType: String) {
         return equipAndPlace(context.blockToolbarLocation(blockType))
     }
 }

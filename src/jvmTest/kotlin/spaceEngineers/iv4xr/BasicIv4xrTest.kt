@@ -10,6 +10,7 @@ import nl.uu.cs.aplib.AplibEDSL.SEQ
 import nl.uu.cs.aplib.mainConcepts.GoalStructure
 import org.junit.jupiter.api.Test
 import spaceEngineers.controller.ContextControllerWrapper
+import spaceEngineers.controller.OldProtocolSpaceEngineers
 import spaceEngineers.controller.ProprietaryJsonTcpCharacterController
 import spaceEngineers.controller.SpaceEngineersTestContext
 import spaceEngineers.iv4xr.goal.GoalBuilder
@@ -26,7 +27,11 @@ class BasicIv4xrTest {
         val context = SpaceEngineersTestContext()
         context.blockTypeToToolbarLocation[blockType] = ToolbarLocation(1, 0)
         val controller = ProprietaryJsonTcpCharacterController.localhost(agentId)
-        val controllerWrapper = ContextControllerWrapper(controller, context = context)
+        val controllerWrapper =
+            ContextControllerWrapper(
+                spaceEngineers = OldProtocolSpaceEngineers(controller),
+                context = context
+            )
         val theEnv = SeEnvironment(
             controller = controllerWrapper,
             worldId = "simple-place-grind-torch-with-tools",

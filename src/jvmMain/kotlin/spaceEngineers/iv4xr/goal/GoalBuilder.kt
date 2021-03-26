@@ -6,8 +6,6 @@ import eu.iv4xr.framework.spatial.Vec3
 import nl.uu.cs.aplib.mainConcepts.Goal
 import nl.uu.cs.aplib.mainConcepts.GoalStructure
 import nl.uu.cs.aplib.mainConcepts.Tactic
-import spaceEngineers.commands.ObservationArgs
-import spaceEngineers.commands.ObservationMode
 import spaceEngineers.model.SeBlock
 import spaceEngineers.model.allBlocks
 import kotlin.math.abs
@@ -92,7 +90,7 @@ class GoalBuilder(
         return Goal("lastBuiltBlockIsAtPercentageIntegrity($percentage)")
             .toSolve { belief: W3DAgentState ->
                 belief.seEnv.run {
-                    controller.observe(ObservationArgs(ObservationMode.BLOCKS)).allBlocks.find { context.lastNewBlockId == it.id }
+                    controller.observer.observeBlocks().allBlocks.find { context.lastNewBlockId == it.id }
                         ?.let { foundBlock ->
                             checkFunction(foundBlock)
                         } ?: false
