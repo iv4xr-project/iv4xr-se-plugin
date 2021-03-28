@@ -1,6 +1,5 @@
 package spaceEngineers.controller
 
-import environments.closeIfCloseable
 import spaceEngineers.commands.InteractionArgs
 import spaceEngineers.commands.InteractionType
 import spaceEngineers.commands.MovementArgs
@@ -12,8 +11,8 @@ import java.io.Closeable
 
 class OldProtocolSpaceEngineers(val controller: ProprietaryJsonTcpCharacterController) : SpaceEngineers, Closeable {
     override val session: Session = object : Session {
-        override fun load(id: String) {
-            controller.load(id)
+        override fun loadScenario(scenarioPath: String) {
+            controller.loadScenario(scenarioPath)
         }
     }
 

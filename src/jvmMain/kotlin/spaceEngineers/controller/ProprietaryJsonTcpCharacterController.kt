@@ -35,8 +35,8 @@ class ProprietaryJsonTcpCharacterController(val agentId: String, val gsonReaderW
         return SeRequest.command(SeAgentCommand.interact(agentId, interactionArgs)).process()
     }
 
-    override fun load(id: String) {
-        SeRequest.session(SeSessionCommand.load(id)).process()
+    override fun loadScenario(scenarioPath: String) {
+        SeRequest.session(SeSessionCommand.load(scenarioPath)).process()
     }
 
     companion object {

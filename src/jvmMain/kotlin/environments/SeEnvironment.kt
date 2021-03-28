@@ -87,7 +87,7 @@ class SeEnvironment(
 
     override fun loadWorld() {
         val scenario = File("$SCENARIO_DIR$worldId").absolutePath
-        worldController.load(scenario)
+        worldController.loadScenario(scenario)
     }
 
     override fun observe(agentId: String): WorldModel {

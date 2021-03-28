@@ -8,10 +8,6 @@ import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import io.cucumber.junit.Cucumber
 import org.junit.runner.RunWith
-import spaceEngineers.commands.InteractionArgs
-import spaceEngineers.commands.InteractionType
-import spaceEngineers.commands.ObservationArgs
-import spaceEngineers.commands.ObservationMode
 import spaceEngineers.controller.*
 import spaceEngineers.model.*
 import testhelp.*
@@ -66,11 +62,21 @@ class SpaceEngineersCucumberTest {
 
     @Given("I am connected to real game.")
     fun i_am_connected_to_real_game() {
-        environment = ContextControllerWrapper(
-            spaceEngineers = OldProtocolSpaceEngineers(
-                ProprietaryJsonTcpCharacterController.localhost(agentId = TEST_AGENT)
+        environment =
+            ContextControllerWrapper(
+                spaceEngineers = OldProtocolSpaceEngineers(
+                    ProprietaryJsonTcpCharacterController.localhost(agentId = TEST_AGENT)
+                )
             )
-        )
+    }
+
+    @Given("I am connected to real game using json-rpc.")
+    fun i_am_connected_to_real_game_using_json_rpc() {
+
+        environment =
+            ContextControllerWrapper(
+                spaceEngineers = JsonRpcCharacterController.localhost(agentId = TEST_AGENT)
+            )
     }
 
     @Given("Toolbar has mapping:")
@@ -91,11 +97,16 @@ class SpaceEngineersCucumberTest {
     @Given("I load scenario {string}.")
     fun i_load_scenario(scenarioId: String) {
         environment?.let { wrapper ->
-            wrapper.session.load(File("$SCENARIO_DIR$scenarioId").absolutePath)
+            wrapper.session.loadScenario(File("$SCENARIO_DIR$scenarioId").absolutePath)
         }
         sleep(500)
         // All blocks are new for the first request.
-        environment.observer.observeNewBlocks()
+        environment.observer.observeNewBlocks().let {
+            assertTrue(it.allBlocks.isNotEmpty())
+        }
+        environment.observer.observeNewBlocks().let {
+            assertTrue(it.allBlocks.isEmpty())
+        }
     }
 
     @When("Character sets toolbar slot {int}, page {int} to {string}.")
