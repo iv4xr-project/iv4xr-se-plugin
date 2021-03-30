@@ -14,6 +14,7 @@ repositories {
 
 kotlin {
     jvm {
+        withJava()
         compilations.all {
             kotlinOptions.jvmTarget = '1.8'
         }
