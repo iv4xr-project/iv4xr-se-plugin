@@ -2,7 +2,7 @@ plugins {
     id 'org.jetbrains.kotlin.multiplatform' version '1.4.31'
 }
 
-group = 'nl.uu.cs.muscleai.labrecruits'
+group = 'com.github.iv4xr-project'
 version = '2.2'
 
 repositories {
