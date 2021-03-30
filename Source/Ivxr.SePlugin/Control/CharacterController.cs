@@ -1,13 +1,10 @@
-﻿using Iv4xr.SePlugin.WorldModel;
+﻿using System;
+using System.Linq;
+using Iv4xr.SePlugin.WorldModel;
+using Sandbox.Definitions;
 using Sandbox.Game.Entities;
-using Sandbox.Game.Multiplayer;
 using Sandbox.Game.Screens.Helpers;
 using Sandbox.Game.World;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Sandbox.Definitions;
 using VRage.Game;
 using VRage.ObjectBuilders;
 using VRageMath;
@@ -70,19 +67,19 @@ namespace Iv4xr.SePlugin.Control
             }
         }
 
-        private void BeginUseTool()
+        public void BeginUseTool()
         {
             var entityController = GetEntityController();
             entityController.ControlledEntity.BeginShoot(MyShootActionEnum.PrimaryAction);
         }
 
-        private void EndUseTool()
+        public void EndUseTool()
         {
             var entityController = GetEntityController();
             entityController.ControlledEntity.EndShoot(MyShootActionEnum.PrimaryAction);
         }
 
-        private void PlaceItem()
+        public void PlaceItem()
         {
             if (MySession.Static.IsAdminOrCreative())
             {
@@ -98,7 +95,7 @@ namespace Iv4xr.SePlugin.Control
             entityController.ControlledEntity.BeginShoot(MyShootActionEnum.PrimaryAction);
         }
 
-        private void EquipToolbarItem(int slot, int page, bool allowSizeChange)
+        public void EquipToolbarItem(int slot, int page, bool allowSizeChange)
         {
             var toolbar = MyToolbarComponent.CurrentToolbar;
             toolbar.SwitchToPageOrNot(page);

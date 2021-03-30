@@ -1,26 +1,11 @@
-﻿using Iv4xr.PluginLib;
-using Iv4xr.SePlugin.SeLib;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using Iv4xr.SePlugin.Communication;
-using Iv4xr.SePlugin.Control;
-using Iv4xr.SePlugin.Session;
-using System.Net;
-using System.Net.Sockets;
+﻿using System;
 using System.Threading;
-using Iv4xr.PluginLib;
-using Iv4xr.PluginLib.Log;
-using Iv4xr.SePlugin.Communication;
-using Iv4xr.SePlugin.Session;
-using Iv4xr.SePlugin.Control;
 using AustinHarris.JsonRpc;
-using System;
-using System.IO;
-using System.Net;
-using System.Net.Sockets;
-using System.Text;
-using Iv4xr.SePlugin.WorldModel;
+using Iv4xr.PluginLib;
+using Iv4xr.SePlugin.Communication;
+using Iv4xr.SePlugin.Control;
+using Iv4xr.SePlugin.SeLib;
+using Iv4xr.SePlugin.Session;
 
 namespace Iv4xr.SePlugin
 {
@@ -28,8 +13,11 @@ namespace Iv4xr.SePlugin
     {
         public ILog Log { get; private set; }
         public readonly Dispatcher Dispatcher;
+        public readonly JsonRpcDispatcher JsonRpcDispatcher;
+        public readonly JsonRpcStarter JsonRpcStarter;
 
         private readonly RequestQueue m_requestQueue = new RequestQueue();
+        private readonly RequestQueue m_jsonRpcRequestQueue = new RequestQueue();
 
         private readonly PluginServer m_server;
 
@@ -50,43 +38,16 @@ namespace Iv4xr.SePlugin
             var controller = new CharacterController(m_gameSession);
 
             Dispatcher = new Dispatcher(m_requestQueue, observer, controller) {Log = Log};
-            
-            new Thread(() => 
-            {
-                Thread.CurrentThread.IsBackground = true; 
-                StartJsonRpcService(observer, controller, sessionController); 
-            }).Start();
+            JsonRpcDispatcher = new JsonRpcDispatcher(m_jsonRpcRequestQueue) {Log = Log};
+            JsonRpcStarter = new JsonRpcStarter(m_jsonRpcRequestQueue, observer, controller, sessionController)
+                    {Log = Log};
         }
 
-        //honestly don't understand this piece and how is this object added to handler
-        private object _svc;
-        
-        void StartJsonRpcService(IObserver observer, ICharacterController characterController, SessionController sessionController)
-        {
-            // must new up an instance of the service so it can be registered to handle requests.
-            _svc = new Iv4xrJsonRpcService(observer, characterController, sessionController);
-
-            var rpcResultHandler = new AsyncCallback(
-                state =>
-                {
-                    var async = ((JsonRpcStateAsync)state);
-                    var result = async.Result;
-                    var writer = ((StreamWriter)async.AsyncState);
-
-                    writer.WriteLine(result);
-                    writer.FlushAsync();
-                });
-
-            SocketListener.start(3333, (writer, line) =>
-            {
-                var async = new JsonRpcStateAsync(rpcResultHandler, writer) { JsonRpc = line };
-                JsonRpcProcessor.Process(async, writer);
-            });
-        }
 
         public void StartServer()
         {
             m_server.Start();
+            JsonRpcStarter.Start();
         }
 
         public void InitSession()
@@ -138,5 +99,57 @@ namespace Iv4xr.SePlugin
         }
 
         #endregion
+    }
+
+    public class JsonRpcStarter
+    {
+        public ILog Log { get; set; }
+        private IObserver m_observer;
+        private CharacterController m_characterController;
+        private ISessionController m_sessionController;
+        private RequestQueue m_jsonRpcRequestQueue;
+
+        public JsonRpcStarter(RequestQueue jsonRpcRequestQueue, IObserver observer,
+            ICharacterController characterController,
+            SessionController sessionController)
+        {
+            m_jsonRpcRequestQueue = jsonRpcRequestQueue;
+            m_observer = observer;
+            m_characterController = characterController as CharacterController;
+            m_sessionController = sessionController;
+        }
+
+        //not sure how exactly this works, but library must somehow screen through existing objects and add them to rpc handling
+        //not a big fan, since this feels "global" and there's less control
+        private object _svc;
+
+        public void Start()
+        {
+            var thread = new Thread(StartSync)
+            {
+                IsBackground = true,
+                Name = "Ivrx plugin json-rpc server thread"
+            };
+            thread.Start();
+        }
+
+        public void StartSync()
+        {
+            // must new up an instance of the service so it can be registered to handle requests.
+            _svc = new Iv4xrJsonRpcService(m_observer, m_characterController, m_sessionController);
+            SocketListener.start(3333, async (writer, line) =>
+            {
+                if (line.Contains("LoadScenario"))
+                {
+                    var response = await JsonRpcProcessor.Process(line);
+                    await writer.WriteLineAsync(response);
+                    await writer.FlushAsync();
+                }
+                else
+                {
+                    m_jsonRpcRequestQueue.Requests.Enqueue(new RequestItem(writer, line));
+                }
+            });
+        }
     }
 }

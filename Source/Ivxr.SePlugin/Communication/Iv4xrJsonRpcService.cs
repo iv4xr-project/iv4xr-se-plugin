@@ -6,59 +6,84 @@ using VRageMath;
 
 namespace Iv4xr.SePlugin.Communication
 {
-    class Iv4xrJsonRpcService : JsonRpcService, IObserver, ICharacterController, ISessionController
+    public class ToolbarLocation
     {
+        public int Page;
+        public int Slot;
+    }
 
+    class Iv4xrJsonRpcService : JsonRpcService
+    {
         private IObserver m_observer;
-        private ICharacterController m_characterController;
+        private CharacterController m_characterController;
         private ISessionController m_sessionController;
 
         public Iv4xrJsonRpcService(IObserver observer, ICharacterController characterController,
-            SessionController sessionController)
+            ISessionController sessionController)
         {
             m_observer = observer;
-            m_characterController = characterController;
+            m_characterController = characterController as CharacterController;
             m_sessionController = sessionController;
         }
 
-        [JsonRpcMethod] // handles JsonRpc like : {'method':'incr','params':[5],'id':1}
-        private int incr(int i) { return i + 1; }
-
-
-        //error: {'method':'decr','params':null,'id':1}
-        //error: {'method':'decr','params':['x'],'id':1}
-        [JsonRpcMethod] // handles JsonRpc like : {'method':'decr','params':[5],'id':1}
-        private int decr(int i) { return i - 1; }
 
         //{'method':'GetObservation','params':[],'id':1}
         [JsonRpcMethod]
-        public SeObservation GetObservation()
+        public SeObservation Observe()
         {
-            return m_observer.GetObservation();
+            return m_observer.GetObservation(ObservationArgs.Default);
         }
-        
-        //[JsonRpcMethod]
-        public SeObservation GetObservation(ObservationArgs observationArgs)
+
+        [JsonRpcMethod]
+        public void Equip(ToolbarLocation toolbarLocation)
         {
+            m_characterController.Interact(new InteractionArgs
+            {
+                Page = toolbarLocation.Page,
+                Slot = toolbarLocation.Slot,
+                InteractionType = InteractionType.EQUIP,
+                AllowSizeChange = false
+            });
+            m_observer.GetObservation();
+        }
+
+        [JsonRpcMethod]
+        public void Place()
+        {
+            m_characterController.PlaceItem();
+            m_observer.GetObservation();
+        }
+
+        [JsonRpcMethod]
+        public void StartUsingTool()
+        {
+            m_characterController.BeginUseTool();
+        }
+
+        [JsonRpcMethod]
+        public void EndUsingTool()
+        {
+            m_characterController.EndUseTool();
+        }
+
+        [JsonRpcMethod]
+        public SeObservation MoveAndRotate(Vector3D movement, Vector2 rotation3, float roll)
+        {
+            m_characterController.Move(movement, rotation3, roll);
+            return m_observer.GetObservation(new ObservationArgs {ObservationMode = ObservationMode.BASIC});
+        }
+
+        [JsonRpcMethod]
+        public SeObservation ObserveBlocks()
+        {
+            return m_observer.GetObservation(new ObservationArgs {ObservationMode = ObservationMode.BLOCKS});
+        }
+
+        [JsonRpcMethod]
+        public SeObservation ObserveNewBlocks()
+        {
+            var observationArgs = new ObservationArgs {ObservationMode = ObservationMode.NEW_BLOCKS};
             return m_observer.GetObservation(observationArgs);
-        }
-
-        //[JsonRpcMethod]
-        public void Move(Vector3 move, Vector2 rotation, float roll)
-        {
-            m_characterController.Move(move, rotation, roll);
-        }
-
-        [JsonRpcMethod]
-        public void Move(MoveAndRotateArgs args)
-        {
-            m_characterController.Move(args);
-        }
-
-        [JsonRpcMethod]
-        public void Interact(InteractionArgs args)
-        {
-            m_characterController.Interact(args);
         }
 
         //{'method':'LoadScenario','params':{'scenarioPath': 'C:/Users/karel.hovorka/git/iv4xrDemo-space-engineers/src/jvmTest/resources/game-saves/simple-place-grind-torch-with-tools'},'id':1}
