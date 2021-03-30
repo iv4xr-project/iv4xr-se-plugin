@@ -2,15 +2,10 @@ package spaceEngineers.controller
 
 import com.google.gson.annotations.SerializedName
 import environments.SocketReaderWriter
-import spaceEngineers.commands.InteractionArgs
-import spaceEngineers.commands.MoveTowardsArgs
-import spaceEngineers.commands.MovementArgs
-import spaceEngineers.commands.ObservationArgs
 import spaceEngineers.model.SeObservation
 import spaceEngineers.model.ToolbarLocation
 import spaceEngineers.model.Vec3
 import spaceEngineers.transport.GsonReaderWriter
-import java.lang.Thread.sleep
 import kotlin.reflect.KFunction
 import kotlin.reflect.KFunction1
 
@@ -130,7 +125,6 @@ class JsonRpcCharacterController(
     override val session: Session = object : Session {
         override fun loadScenario(scenarioPath: String) {
             processSingleParameterMethod<String, Unit>(::loadScenario, scenarioPath, "${sessionPrefix}LoadScenario")
-            sleep(5000)
         }
     }
 

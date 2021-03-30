@@ -99,7 +99,6 @@ class SpaceEngineersCucumberTest {
         environment?.let { wrapper ->
             wrapper.session.loadScenario(File("$SCENARIO_DIR$scenarioId").absolutePath)
         }
-        sleep(500)
         // All blocks are new for the first request.
         environment.observer.observeNewBlocks().let {
             assertTrue(it.allBlocks.isNotEmpty())
