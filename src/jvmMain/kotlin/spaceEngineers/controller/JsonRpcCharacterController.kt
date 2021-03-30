@@ -74,7 +74,14 @@ inline fun <reified I, reified O> GsonReaderWriter.callRpc(request: JsonRpcReque
 
 }
 
-class JsonRpcCharacterController(val agentId: String, val gsonReaderWriter: GsonReaderWriter) :
+class JsonRpcCharacterController(
+    val agentId: String,
+    val gsonReaderWriter: GsonReaderWriter,
+    val characterPrefix: String = "Character.",
+    val itemsPrefix: String = "Items.",
+    val observerPrefix: String = "Observer.",
+    val sessionPrefix: String = "Session."
+) :
     SpaceEngineers, AutoCloseable {
 
     private inline fun <reified I, reified O> processSingleParameterMethod(
@@ -122,7 +129,7 @@ class JsonRpcCharacterController(val agentId: String, val gsonReaderWriter: Gson
 
     override val session: Session = object : Session {
         override fun loadScenario(scenarioPath: String) {
-            processSingleParameterMethod<String, Unit>(::loadScenario, scenarioPath, "LoadScenario")
+            processSingleParameterMethod<String, Unit>(::loadScenario, scenarioPath, "${sessionPrefix}LoadScenario")
             sleep(5000)
         }
     }
@@ -131,44 +138,47 @@ class JsonRpcCharacterController(val agentId: String, val gsonReaderWriter: Gson
         override fun moveAndRotate(movement: Vec3, rotation3: Vec3, roll: Float): SeObservation {
             return processParameters<Any, SeObservation>(
                 params = mapOf("movement" to movement, "rotation3" to rotation3, "roll" to roll),
-                methodName = "MoveAndRotate"
+                methodName = "${characterPrefix}MoveAndRotate"
             )
         }
     }
 
     override val items: Items = object : Items {
         override fun place() {
-            processNoParameterMethod<Unit, Unit>(::place, "Place")
+            processNoParameterMethod<Unit, Unit>(::place, "${itemsPrefix}Place")
         }
 
         override fun equip(toolbarLocation: ToolbarLocation) {
-            processSingleParameterMethod<ToolbarLocation, Unit>(::equip, toolbarLocation, "Equip")
+            processSingleParameterMethod<ToolbarLocation, Unit>(::equip, toolbarLocation, "${itemsPrefix}Equip")
         }
 
         override fun startUsingTool() {
-            processNoParameterMethod<Unit, Unit>(::startUsingTool, "StartUsingTool")
+            processNoParameterMethod<Unit, Unit>(::startUsingTool, "${itemsPrefix}StartUsingTool")
         }
 
         override fun endUsingTool() {
-            processNoParameterMethod<Unit, Unit>(::endUsingTool, "EndUsingTool")
+            processNoParameterMethod<Unit, Unit>(::endUsingTool, "${itemsPrefix}EndUsingTool")
         }
     }
 
     override val observer: Observer = object : Observer {
         override fun observe(): SeObservation {
-            return processNoParameterMethod<Unit, SeObservation>(::observe, "Observe")
+            return processNoParameterMethod<Unit, SeObservation>(::observe, "${observerPrefix}Observe")
         }
 
         override fun observeBlocks(): SeObservation {
-            return processNoParameterMethod<Unit, SeObservation>(::observeBlocks, "ObserveBlocks")
+            return processNoParameterMethod<Unit, SeObservation>(::observeBlocks, "${observerPrefix}ObserveBlocks")
         }
 
         override fun observeNewBlocks(): SeObservation {
-            return processNoParameterMethod<Unit, SeObservation>(::observeNewBlocks, "ObserveNewBlocks")
+            return processNoParameterMethod<Unit, SeObservation>(
+                ::observeNewBlocks,
+                "${observerPrefix}ObserveNewBlocks"
+            )
         }
 
         override fun observeEntities(): SeObservation {
-            return processNoParameterMethod<Unit, SeObservation>(::observeEntities, "ObserveEntities")
+            return processNoParameterMethod<Unit, SeObservation>(::observeEntities, "${observerPrefix}ObserveEntities")
         }
     }
 
