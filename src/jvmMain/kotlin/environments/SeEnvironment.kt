@@ -67,7 +67,6 @@ fun SeObservation.toWorldModel(): WorldModel {
 class SeEnvironment(
     val worldId: String,
     val controller: ContextControllerWrapper,
-    val worldController: WorldController,
     val context: SpaceEngineersTestContext
 ) : W3DEnvironment() {
     val SCENARIO_DIR = "src/jvmTest/resources/game-saves/"
@@ -75,7 +74,7 @@ class SeEnvironment(
 
     override fun loadWorld() {
         val scenario = File("$SCENARIO_DIR$worldId").absolutePath
-        worldController.loadScenario(scenario)
+        controller.session.loadScenario(scenario)
     }
 
     override fun observe(agentId: String): WorldModel {
@@ -87,9 +86,7 @@ class SeEnvironment(
     }
 
     fun observeForNewBlocks(): WorldModel {
-        return controller.observer.observeNewBlocks().apply {
-            context.updateNewBlocks(allBlocks)
-        }.toWorldModel()
+        return controller.observer.observeNewBlocks().toWorldModel()
     }
 
     fun equipAndPlace(toolbarLocation: ToolbarLocation) {

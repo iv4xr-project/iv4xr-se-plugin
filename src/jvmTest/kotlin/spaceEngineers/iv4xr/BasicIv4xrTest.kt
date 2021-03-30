@@ -8,10 +8,7 @@ import eu.iv4xr.framework.spatial.Vec3
 import nl.uu.cs.aplib.AplibEDSL.SEQ
 import nl.uu.cs.aplib.mainConcepts.GoalStructure
 import org.junit.jupiter.api.Test
-import spaceEngineers.controller.ContextControllerWrapper
-import spaceEngineers.controller.OldProtocolSpaceEngineers
-import spaceEngineers.controller.ProprietaryJsonTcpCharacterController
-import spaceEngineers.controller.SpaceEngineersTestContext
+import spaceEngineers.controller.*
 import spaceEngineers.iv4xr.goal.GoalBuilder
 import spaceEngineers.iv4xr.goal.TacticLib
 import spaceEngineers.model.ToolbarLocation
@@ -25,17 +22,15 @@ class BasicIv4xrTest {
         val blockType = "LargeHeavyBlockArmorBlock"
         val context = SpaceEngineersTestContext()
         context.blockTypeToToolbarLocation[blockType] = ToolbarLocation(1, 0)
-        val controller = ProprietaryJsonTcpCharacterController.localhost(agentId)
         val controllerWrapper =
             ContextControllerWrapper(
-                spaceEngineers = OldProtocolSpaceEngineers(controller),
+                spaceEngineers = JsonRpcCharacterController.localhost(agentId),
                 context = context
             )
         val theEnv = SeEnvironment(
             controller = controllerWrapper,
             worldId = "simple-place-grind-torch-with-tools",
-            context = context,
-            worldController = controller
+            context = context
         )
         theEnv.loadWorld()
         theEnv.observeForNewBlocks()
@@ -54,7 +49,7 @@ class BasicIv4xrTest {
         val goals = GoalBuilder()
         val tactics = TacticLib()
         val testingTask: GoalStructure = SEQ(
-            goals.agentAtPosition(Vec3(532.7066f, -45.193184f, -24.395466f), epsilon = 0.001f),
+            goals.agentAtPosition(Vec3(532.7066f, -45.193184f, -24.395466f), epsilon = 0.05f),
             goals.agentDistanceFromPosition(
                 Vec3(532.7066f, -45.193184f, -23.946253f),
                 distance = 16f,

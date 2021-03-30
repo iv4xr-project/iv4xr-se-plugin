@@ -41,12 +41,7 @@ data class JsonRpcResponse<T>(
 )
 
 inline fun <reified I, reified O> GsonReaderWriter.callRpc(request: JsonRpcRequest<I>): JsonRpcResponse<O> {
-    println(gson.toJson(request))
     val responseJson = stringLineReaderWriter.sendAndReceiveLine(gson.toJson(request))
-    val responseJson_ = "{\"jsonrpc\":\"2.0\",\"id\":4,\"result\":" +
-            "{\"AgentID\":\"Mock\",\"Position\":{\"X\":4.0,\"Y\":2.0,\"Z\":0.0},\"OrientationForward\":{\"X\":0.0,\"Y\":0.0,\"Z\":0.0},\"OrientationUp\":{\"X\":0.0,\"Y\":0.0,\"Z\":0.0},\"Velocity\":{\"X\":0.0,\"Y\":0.0,\"Z\":0.0},\"Extent\":{\"X\":0.0,\"Y\":0.0,\"Z\":0.0},\"Entities\":[{\"Id\":\"Ente\",\"Position\":{\"X\":3.0,\"Y\":2.0,\"Z\":1.0}}],\"Grids\":[{\"Blocks\":[{\"MaxIntegrity\":10.0,\"BuildIntegrity\":1.0,\"Integrity\":5.0,\"BlockType\":\"MockBlock\",\"MinPosition\":{\"X\":0.0,\"Y\":0.0,\"Z\":0.0},\"MaxPosition\":{\"X\":0.0,\"Y\":0.0,\"Z\":0.0},\"Size\":{\"X\":0.0,\"Y\":0.0,\"Z\":0.0},\"OrientationForward\":{\"X\":0.0,\"Y\":0.0,\"Z\":0.0},\"OrientationUp\":{\"X\":0.0,\"Y\":0.0,\"Z\":0.0},\"Id\":\"blk\",\"Position\":{\"X\":5.0,\"Y\":5.0,\"Z\":5.0}}],\"Id\":null,\"Position\":{\"X\":5.0,\"Y\":5.0,\"Z\":5.0}}]}" +
-            "}"
-    println(responseJson)
     val response = gson.fromJson(responseJson, JsonRpcResponse::class.java)
     response.error?.let {
         throw it
@@ -59,7 +54,6 @@ inline fun <reified I, reified O> GsonReaderWriter.callRpc(request: JsonRpcReque
             result = gson.fromJson(gson.toJson(it), O::class.java)
         )
     }
-    //error("no result and no error received from json")
     return JsonRpcResponse(
         id = response.id,
         error = response.error,

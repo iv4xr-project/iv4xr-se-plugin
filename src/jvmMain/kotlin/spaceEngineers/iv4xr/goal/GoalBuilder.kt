@@ -26,7 +26,7 @@ class GoalBuilder(
     ): GoalStructure.PrimitiveGoal {
         val goal =
             Goal("Agent at position $position with epsilon $epsilon")
-                .toSolve { belief: W3DAgentState ->
+                .toSolve { belief: SeAgentState ->
                     abs(Vec3.dist(belief.wom.position, position) - distance) < epsilon
                 }
                 .withTactic(

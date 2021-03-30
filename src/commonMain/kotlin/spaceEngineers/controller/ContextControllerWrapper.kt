@@ -1,6 +1,7 @@
 package spaceEngineers.controller
 
 import spaceEngineers.model.SeObservation
+import spaceEngineers.model.allBlocks
 
 class ContextControllerWrapper(
     val spaceEngineers: SpaceEngineers,
@@ -29,7 +30,9 @@ class ContextControllerWrapper(
         }
 
         override fun observeNewBlocks(): SeObservation {
-            return spaceEngineers.observer.observeNewBlocks().apply(::addToHistory)
+            return spaceEngineers.observer.observeNewBlocks().apply {
+                context.updateNewBlocks(allBlocks)
+            }.apply(::addToHistory)
         }
 
         override fun observeEntities(): SeObservation {
