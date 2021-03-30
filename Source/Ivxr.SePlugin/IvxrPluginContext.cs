@@ -139,7 +139,7 @@ namespace Iv4xr.SePlugin
             _svc = new Iv4xrJsonRpcService(m_observer, m_characterController, m_sessionController);
             SocketListener.start(3333, async (writer, line) =>
             {
-                if (line.Contains("LoadScenario"))
+                if (line.Contains("Session."))
                 {
                     var response = await JsonRpcProcessor.Process(line);
                     await writer.WriteLineAsync(response);
