@@ -1,12 +1,15 @@
 package environments
 
-import eu.iv4xr.framework.mainConcepts.W3DAgentState
 import eu.iv4xr.framework.mainConcepts.W3DEnvironment
 import eu.iv4xr.framework.mainConcepts.WorldEntity
 import eu.iv4xr.framework.mainConcepts.WorldModel
-import spaceEngineers.controller.*
+import spaceEngineers.controller.ContextControllerWrapper
+import spaceEngineers.controller.SpaceEngineersTestContext
+import spaceEngineers.controller.WorldController
+import spaceEngineers.controller.moveForward
 import spaceEngineers.model.*
 import java.io.File
+import java.lang.Thread.sleep
 
 fun Vec3.toIv4xrVec3(): eu.iv4xr.framework.spatial.Vec3 {
     return eu.iv4xr.framework.spatial.Vec3(x, y, z)
@@ -61,21 +64,6 @@ fun SeObservation.toWorldModel(): WorldModel {
     }
 }
 
-val W3DAgentState.seEnv: SeEnvironment
-    get() = env() as SeEnvironment
-
-fun W3DAgentState.setOrUpdate(worldModel: WorldModel) {
-    if (wom == null) {
-        wom = worldModel
-    } else {
-        wom.mergeNewObservation(worldModel)
-    }
-}
-
-fun W3DAgentState.observe() {
-    setOrUpdate(seEnv.observe())
-}
-
 class SeEnvironment(
     val worldId: String,
     val controller: ContextControllerWrapper,
@@ -99,11 +87,14 @@ class SeEnvironment(
     }
 
     fun observeForNewBlocks(): WorldModel {
-        return controller.observer.observeNewBlocks().toWorldModel()
+        return controller.observer.observeNewBlocks().apply {
+            context.updateNewBlocks(allBlocks)
+        }.toWorldModel()
     }
 
     fun equipAndPlace(toolbarLocation: ToolbarLocation) {
         controller.items.equip(toolbarLocation)
+        sleep(500)
         return controller.items.place()
     }
 
