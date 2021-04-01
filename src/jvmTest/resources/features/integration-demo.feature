@@ -9,8 +9,6 @@ Feature: Example how to describe block observations using cucumber.
       | 2    | 0    | LargeBlockCockpitSeat     |
       | 3    | 0    | LargeBlockSmallGenerator  |
       | 6    | 0    | LargeBlockGyro            |
-    And Grinder is in slot 5, page 0.
-    And Torch is in slot 4, page 0.
 
   Scenario Outline: Checking scenario character is at correct starting location and can move.
     Given I load scenario "simple-place-grind-torch-with-tools".
@@ -22,6 +20,8 @@ Feature: Example how to describe block observations using cucumber.
     Then I can see 1 new block(s) with data:
       | blockType   | integrity   | maxIntegrity | buildIntegrity |
       | <blockType> | <integrity> | <integrity>  | <integrity>    |
+    When Character sets toolbar slot 4, page 0 to "Welder2Item".
+    When Character sets toolbar slot 5, page 0 to "AngleGrinder2Item".
     When Character moves forward for 16 units.
     When Character grinds to 10.0% integrity.
     When Character torches block back up to max integrity.

@@ -28,7 +28,6 @@ class ContextControllerWrapper(
         return interact(InteractionArgs(InteractionType.END_USE))
     }
 
-
     fun equipAndPlace(toolbarLocation: ToolbarLocation): SeObservation {
         equip(toolbarLocation)
         return controller.interact(InteractionArgs(InteractionType.PLACE))
@@ -40,6 +39,17 @@ class ContextControllerWrapper(
                 InteractionType.EQUIP,
                 slot = toolbarLocation.slot,
                 page = toolbarLocation.page
+            )
+        )
+    }
+
+    fun setToolbarItem(toolbarLocation: ToolbarLocation, itemName: String): SeObservation {
+        return controller.interact(
+            InteractionArgs(
+                InteractionType.TOOLBAR_SET,
+                slot = toolbarLocation.slot,
+                page = toolbarLocation.page,
+                itemName
             )
         )
     }
