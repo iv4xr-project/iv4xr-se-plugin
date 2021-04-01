@@ -21,11 +21,7 @@ Feature: Example how to describe block observations using cucumber.
       | blockType   | integrity   | maxIntegrity | buildIntegrity |
       | <blockType> | <integrity> | <integrity>  | <integrity>    |
     When Character sets toolbar slot 4, page 0 to "Welder2Item".
-    # TODO: remove (obsolete)
-    And Torch is in slot 4, page 0.
     When Character sets toolbar slot 5, page 0 to "AngleGrinder2Item".
-    # TODO: remove (obsolete)
-    And Grinder is in slot 5, page 0.
     When Character moves forward for 16 units.
     When Character grinds to 10.0% integrity.
     When Character torches block back up to max integrity.

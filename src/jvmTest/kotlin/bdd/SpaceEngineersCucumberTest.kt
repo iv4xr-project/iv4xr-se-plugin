@@ -95,7 +95,16 @@ class SpaceEngineersCucumberTest {
 
     @When("Character sets toolbar slot {int}, page {int} to {string}.")
     fun character_sets_toolbar_slot_page_to(slot: Int, page: Int, itemName: String) {
-        environment.setToolbarItem(ToolbarLocation(slot, page), itemName)
+        val location = ToolbarLocation(slot, page)
+
+        environment.setToolbarItem(location, itemName)
+
+        // Note: maybe we should use the toolbar mapping instead, and have some way to define exact names of the tools
+        if (itemName.startsWith("Welder")) {
+            context.torchLocation = location
+        } else if (itemName.startsWith("AngleGrinder")) {
+            context.grinderLocation = location
+        }
     }
 
     @When("I request for blocks.")
