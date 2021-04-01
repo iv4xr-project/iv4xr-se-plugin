@@ -93,6 +93,11 @@ class SpaceEngineersCucumberTest {
         environment.observeNewBlocks()
     }
 
+    @When("Character sets toolbar slot {int}, page {int} to {string}.")
+    fun character_sets_toolbar_slot_page_to(slot: Int, page: Int, itemName: String) {
+        environment.setToolbarItem(ToolbarLocation(slot, page), itemName)
+    }
+
     @When("I request for blocks.")
     fun i_request_for_blocks() {
         environment.observeBlocks()
