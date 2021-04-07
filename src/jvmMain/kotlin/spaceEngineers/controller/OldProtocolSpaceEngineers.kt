@@ -39,6 +39,17 @@ class OldProtocolSpaceEngineers(val controller: ProprietaryJsonTcpCharacterContr
         override fun endUsingTool() {
             controller.interact(InteractionArgs(InteractionType.END_USE))
         }
+
+        override fun setToolbarItem(name: String, location: ToolbarLocation) {
+            controller.interact(
+                InteractionArgs(
+                    InteractionType.TOOLBAR_SET,
+                    slot = location.slot,
+                    page = location.page,
+                    name
+                )
+            )
+        }
     }
 
     override val observer: Observer = object : Observer {

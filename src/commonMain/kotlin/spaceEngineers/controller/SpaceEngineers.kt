@@ -29,4 +29,5 @@ interface Items {
     fun equip(toolbarLocation: ToolbarLocation)
     fun startUsingTool()
     fun endUsingTool()
+    fun setToolbarItem(name: String, location: ToolbarLocation)
 }

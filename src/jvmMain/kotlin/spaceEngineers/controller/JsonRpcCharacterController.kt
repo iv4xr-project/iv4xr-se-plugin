@@ -153,6 +153,13 @@ class JsonRpcCharacterController(
         override fun endUsingTool() {
             processNoParameterMethod<Unit, Unit>(::endUsingTool, "${itemsPrefix}EndUsingTool")
         }
+
+        override fun setToolbarItem(name: String, location: ToolbarLocation) {
+            processParameters<Any, Unit>(
+                params = mapOf("name" to name, "location" to location),
+                methodName = "${itemsPrefix}SetToolbarItem"
+            )
+        }
     }
 
     override val observer: Observer = object : Observer {

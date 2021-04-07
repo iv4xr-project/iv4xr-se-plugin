@@ -112,7 +112,7 @@ class SpaceEngineersCucumberTest {
     fun character_sets_toolbar_slot_page_to(slot: Int, page: Int, itemName: String) {
         val location = ToolbarLocation(slot, page)
 
-        environment.setToolbarItem(location, itemName)
+        environment.items.setToolbarItem(itemName, location)
 
         // Note: maybe we should use the toolbar mapping instead, and have some way to define exact names of the tools
         if (itemName.startsWith("Welder")) {
