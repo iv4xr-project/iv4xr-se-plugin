@@ -30,16 +30,14 @@ namespace Iv4xr.SePlugin.Communication
                 try
                 {
                     jsonReply = ProcessSingleRequest(request);
+                    request.ClientStreamWriter.WriteLine(jsonReply);
+                    request.ClientStreamWriter.Flush();
                 }
                 catch (Exception ex)
                 {
                     Log.Exception(ex, "Error processing a request");
                     Log.WriteLine($"Full request: \"{request.Message}\"");
-                    jsonReply = "false"; // Simple error response, details can be learned from the log.
                 }
-
-                request.ClientStreamWriter.WriteLine(jsonReply);
-                request.ClientStreamWriter.Flush();
             }
         }
 
