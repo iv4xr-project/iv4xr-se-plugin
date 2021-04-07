@@ -109,7 +109,7 @@ namespace Iv4xr.SePlugin.Control
         /// <summary>
         /// First version. Only tools and weapons are supported for now.
         /// </summary>
-        private static void SetToolbarItem(int slot, int page, string itemName)
+        public void SetToolbarItem(int slot, int page, string itemName)
         {
             var toolDefinitions = MyDefinitionManager.Static.GetWeaponDefinitions();
             var toolDefinition = toolDefinitions.First(definition => definition.Id.SubtypeName == itemName);
