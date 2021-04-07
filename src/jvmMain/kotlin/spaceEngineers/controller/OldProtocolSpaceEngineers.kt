@@ -73,4 +73,12 @@ class OldProtocolSpaceEngineers(val controller: ProprietaryJsonTcpCharacterContr
     override fun close() {
         controller.close()
     }
+
+    companion object {
+        fun localhost(agentId: String): OldProtocolSpaceEngineers {
+            return OldProtocolSpaceEngineers(
+                ProprietaryJsonTcpCharacterController.localhost(agentId)
+            )
+        }
+    }
 }

@@ -58,3 +58,39 @@ fun CharacterController.observe(): SeObservation {
 fun CharacterController.observe(observationMode: ObservationMode): SeObservation {
     return observe(ObservationArgs(observationMode))
 }
+
+fun Character.blockingRotateUntilOrientationForward(
+    finalOrientation: Vec3,
+    rotation: Vec3,
+    delta: Float = 0.01f,
+    maxTries: Int = 1000,
+): SeObservation {
+    repeat(maxTries) {
+        val observation = moveAndRotate(rotation3 = rotation)
+        observation.orientationForward
+            .let { orientationForward ->
+                if (finalOrientation.similar(orientationForward, delta = delta)) {
+                    return observation
+                }
+            }
+    }
+    error("timeout after $maxTries tries")
+}
+
+fun Character.blockingRotateUntilOrientationUp(
+    finalOrientation: Vec3,
+    rotation: Vec3,
+    delta: Float = 0.01f,
+    maxTries: Int = 1000,
+): SeObservation {
+    repeat(maxTries) {
+        val observation = moveAndRotate(rotation3 = rotation)
+        observation.orientationUp
+            .let { orientationUp ->
+                if (finalOrientation.similar(orientationUp, delta = delta)) {
+                    return observation
+                }
+            }
+    }
+    error("timeout after $maxTries tries")
+}

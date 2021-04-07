@@ -5,4 +5,4 @@ import kotlin.jvm.JvmOverloads
 
 
 class MovementArgs @JvmOverloads
-constructor(val movement: Vec3, val rotation3: Vec3 = Vec3.zero(), val roll: Float = 0f)
+constructor(val movement: Vec3 = Vec3.ZERO, val rotation3: Vec3 = Vec3.ZERO, val roll: Float = 0f)

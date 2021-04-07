@@ -97,7 +97,7 @@ class SpaceEngineersCucumberTest {
     @Given("I load scenario {string}.")
     fun i_load_scenario(scenarioId: String) {
         environment?.let { wrapper ->
-            wrapper.session.loadScenario(File("$SCENARIO_DIR$scenarioId").absolutePath)
+            wrapper.session.loadFromTestResources(scenarioId)
         }
         // All blocks are new for the first request.
         environment.observer.observeNewBlocks().let {
