@@ -61,4 +61,9 @@ Test scenarios also require Space Engineers running with the iv4XR plugin enable
 For now, we run BDD tests from IDEA.
 
 * Make sure you have installed [plugins](https://www.jetbrains.com/help/idea/enabling-cucumber-support-in-project.html#cucumber-plugin) `Gherkin` and `Cucumber for Java`
-* Right-click [.feature file](https://github.com/iv4xr-project/iv4xrDemo-space-engineers/tree/se-dev/src/jvmTest/resources/features) in IDEA and select "Run". 
+* Right-click [.feature file](https://github.com/iv4xr-project/iv4xrDemo-space-engineers/tree/se-dev/src/jvmTest/resources/features) in IDEA and select "Run".
+
+## Using Eclipse
+
+Eclipse does not support Kotlin multiplatform projects and so far we haven't been able to configure it to run with Kotlin JVM.
+We recommend using the project with JetBrains [IDEA](https://www.jetbrains.com/idea/download/).
