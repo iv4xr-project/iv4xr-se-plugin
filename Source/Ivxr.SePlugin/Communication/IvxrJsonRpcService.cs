@@ -6,45 +6,29 @@ using VRageMath;
 
 namespace Iv4xr.SePlugin.Communication
 {
-    public class ToolbarLocation
+    public class IvxrJsonRpcService : JsonRpcService
     {
-        public int Page;
-        public int Slot;
-    }
+        private readonly IObserver m_observer;
+        private readonly CharacterController m_characterController;
+        private readonly ISessionController m_sessionController;
 
-    class Iv4xrJsonRpcService : JsonRpcService
-    {
-        private IObserver m_observer;
-        private CharacterController m_characterController;
-        private ISessionController m_sessionController;
-
-        public Iv4xrJsonRpcService(IObserver observer, ICharacterController characterController,
-            ISessionController sessionController)
+        public IvxrJsonRpcService(DispatcherContext dispatcherContext)
         {
-            m_observer = observer;
-            m_characterController = characterController as CharacterController;
-            m_sessionController = sessionController;
+            m_observer = dispatcherContext.Observer;
+            m_characterController = dispatcherContext.CharacterController as CharacterController;
+            m_sessionController = dispatcherContext.SessionController;
         }
-
 
         [JsonRpcMethod("Items.Equip")]
         public void Equip(ToolbarLocation toolbarLocation)
         {
-            m_characterController.Interact(new InteractionArgs
-            {
-                Page = toolbarLocation.Page,
-                Slot = toolbarLocation.Slot,
-                InteractionType = InteractionType.EQUIP,
-                AllowSizeChange = false
-            });
-            m_observer.GetObservation();
+            m_characterController.EquipToolbarItem(toolbarLocation.Slot, toolbarLocation.Page, false);
         }
 
         [JsonRpcMethod("Items.Place")]
         public void Place()
         {
             m_characterController.PlaceItem();
-            m_observer.GetObservation();
         }
 
         [JsonRpcMethod("Items.StartUsingTool")]
@@ -58,7 +42,7 @@ namespace Iv4xr.SePlugin.Communication
         {
             m_characterController.EndUseTool();
         }
-        
+
         [JsonRpcMethod("Items.SetToolbarItem")]
         public void SetToolbarItem(string name, ToolbarLocation location)
         {
@@ -71,7 +55,7 @@ namespace Iv4xr.SePlugin.Communication
             m_characterController.Move(movement, rotation3, roll);
             return m_observer.GetObservation(new ObservationArgs {ObservationMode = ObservationMode.BASIC});
         }
-        
+
         [JsonRpcMethod("Observer.Observe")]
         public SeObservation Observe()
         {
@@ -90,7 +74,7 @@ namespace Iv4xr.SePlugin.Communication
             var observationArgs = new ObservationArgs {ObservationMode = ObservationMode.NEW_BLOCKS};
             return m_observer.GetObservation(observationArgs);
         }
-        
+
         [JsonRpcMethod("Session.LoadScenario")]
         public void LoadScenario(string scenarioPath)
         {

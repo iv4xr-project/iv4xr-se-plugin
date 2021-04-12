@@ -1,20 +1,7 @@
-﻿using Iv4xr.SePlugin.Control;
-using Iv4xr.SePlugin.Json;
+﻿using Iv4xr.SePlugin.Json;
 
 namespace Iv4xr.SePlugin.Communication
 {
-    public class DispatcherContext
-    {
-        public readonly IObserver Observer;
-        public readonly ICharacterController CharacterController;
-
-        public DispatcherContext(IObserver observer, ICharacterController characterController)
-        {
-            this.Observer = observer;
-            this.CharacterController = characterController;
-        }
-    }
-
     public interface IStringCommand
     {
         string Cmd { get; }

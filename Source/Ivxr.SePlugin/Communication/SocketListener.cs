@@ -8,7 +8,7 @@ namespace Iv4xr.SePlugin.Communication
 {
     public class SocketListener
     {
-        public static void start(int listenPort, Action<StreamWriter, string> handleRequest)
+        public static void Start(int listenPort, Action<StreamWriter, string> handleRequest)
         {
             var server = new TcpListener(IPAddress.Parse("127.0.0.1"), listenPort);
             server.Start();

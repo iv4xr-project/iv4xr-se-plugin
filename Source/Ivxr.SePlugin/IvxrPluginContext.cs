@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Threading;
-using AustinHarris.JsonRpc;
 using Iv4xr.PluginLib;
 using Iv4xr.SePlugin.Communication;
 using Iv4xr.SePlugin.Control;
@@ -36,11 +34,11 @@ namespace Iv4xr.SePlugin
             var lowLevelObserver = new LowLevelObserver(m_gameSession) {Log = Log};
             var observer = new Observer(lowLevelObserver) {Log = Log};
             var controller = new CharacterController(m_gameSession);
+            var dispatcherContext = new DispatcherContext(observer, controller, sessionController);
 
-            Dispatcher = new Dispatcher(m_requestQueue, observer, controller) {Log = Log};
+            Dispatcher = new Dispatcher(m_requestQueue, dispatcherContext) {Log = Log};
             JsonRpcDispatcher = new JsonRpcDispatcher(m_jsonRpcRequestQueue) {Log = Log};
-            JsonRpcStarter = new JsonRpcStarter(m_jsonRpcRequestQueue, observer, controller, sessionController)
-                    {Log = Log};
+            JsonRpcStarter = new JsonRpcStarter(m_jsonRpcRequestQueue, dispatcherContext);
         }
 
 
@@ -99,57 +97,5 @@ namespace Iv4xr.SePlugin
         }
 
         #endregion
-    }
-
-    public class JsonRpcStarter
-    {
-        public ILog Log { get; set; }
-        private IObserver m_observer;
-        private CharacterController m_characterController;
-        private ISessionController m_sessionController;
-        private RequestQueue m_jsonRpcRequestQueue;
-
-        public JsonRpcStarter(RequestQueue jsonRpcRequestQueue, IObserver observer,
-            ICharacterController characterController,
-            SessionController sessionController)
-        {
-            m_jsonRpcRequestQueue = jsonRpcRequestQueue;
-            m_observer = observer;
-            m_characterController = characterController as CharacterController;
-            m_sessionController = sessionController;
-        }
-
-        //not sure how exactly this works, but library must somehow screen through existing objects and add them to rpc handling
-        //not a big fan, since this feels "global" and there's less control
-        private object _svc;
-
-        public void Start()
-        {
-            var thread = new Thread(StartSync)
-            {
-                IsBackground = true,
-                Name = "Ivrx plugin json-rpc server thread"
-            };
-            thread.Start();
-        }
-
-        public void StartSync()
-        {
-            // must new up an instance of the service so it can be registered to handle requests.
-            _svc = new Iv4xrJsonRpcService(m_observer, m_characterController, m_sessionController);
-            SocketListener.start(3333, async (writer, line) =>
-            {
-                if (line.Contains("Session."))
-                {
-                    var response = await JsonRpcProcessor.Process(line);
-                    await writer.WriteLineAsync(response);
-                    await writer.FlushAsync();
-                }
-                else
-                {
-                    m_jsonRpcRequestQueue.Requests.Enqueue(new RequestItem(writer, line));
-                }
-            });
-        }
     }
 }
