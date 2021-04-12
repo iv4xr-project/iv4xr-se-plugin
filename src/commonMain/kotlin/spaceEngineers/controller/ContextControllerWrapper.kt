@@ -13,7 +13,6 @@ class ContextControllerWrapper(
         context.addToHistory(observation)
     }
 
-
     override val session: Session = spaceEngineers.session
 
     override val character: Character = spaceEngineers.character
@@ -26,7 +25,9 @@ class ContextControllerWrapper(
         }
 
         override fun observeBlocks(): SeObservation {
-            return spaceEngineers.observer.observeBlocks().apply(::addToHistory)
+            return spaceEngineers.observer.observeBlocks().apply(::addToHistory).apply {
+                context.updatePlatformOrientationUpIfNotSet(this)
+            }
         }
 
         override fun observeNewBlocks(): SeObservation {

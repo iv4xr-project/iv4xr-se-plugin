@@ -1,8 +1,6 @@
 package spaceEngineers.controller
 
-import spaceEngineers.model.SeBlock
-import spaceEngineers.model.SeObservation
-import spaceEngineers.model.ToolbarLocation
+import spaceEngineers.model.*
 
 data class SpaceEngineersTestContext(
     var grinderLocation: ToolbarLocation? = null,
@@ -10,9 +8,22 @@ data class SpaceEngineersTestContext(
     var lastNewBlockId: String? = null,
     val blockTypeToToolbarLocation: MutableMap<String, ToolbarLocation> = mutableMapOf(),
     var allNewestBlocks: MutableList<SeBlock> = mutableListOf(),
-    val observationHistory: MutableList<SeObservation> = mutableListOf()
+    val observationHistory: MutableList<SeObservation> = mutableListOf(),
+    var platformOrientationUp: Vec3? = null,
 ) {
 
+    fun updatePlatformOrientationUpIfNotSet(seObservation: SeObservation) {
+        if (platformOrientationUp == null) {
+            updatePlatformOrientationUp(seObservation)
+        }
+    }
+
+    fun updatePlatformOrientationUp(seObservation: SeObservation) {
+        val characterOrientationUp = seObservation.orientationUp
+        val blocks = seObservation.allBlocks
+        platformOrientationUp = blocks.map { it.orientationUp }
+            .maxByOrNull { it!!.distanceTo(characterOrientationUp) }
+    }
 
     fun updateToolbarLocation(dataTable: List<Map<String, String>>) {
         blockTypeToToolbarLocation.clear()
