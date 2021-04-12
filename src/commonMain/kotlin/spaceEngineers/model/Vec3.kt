@@ -1,36 +1,35 @@
 package spaceEngineers.model
 
 import kotlin.math.abs
-import kotlin.math.pow
 import kotlin.math.sqrt
 
 
 data class Vec3(
-    val x: Float,
-    val y: Float,
-    val z: Float
+    val x: Float = 0f,
+    val y: Float = 0f,
+    val z: Float = 0f,
 ) {
 
     constructor(
-        x: Double, y: Double, z: Double
+        x: Double = 0.0, y: Double = 0.0, z: Double = 0.0
     ) : this(x.toFloat(), y.toFloat(), z.toFloat())
 
-    fun distanceTo(p: Vec3): Float {
-        return sqrt(
-            (x - p.x).pow(2.0f) +
-                    (y - p.y).pow(2.0f) +
-                    (z - p.z).pow(2.0f)
-        )
-    }
+    constructor(
+        x: Int = 0, y: Int = 0, z: Int = 0
+    ) : this(x.toFloat(), y.toFloat(), z.toFloat())
 
-    fun dist(a: Vec3, b: Vec3): Float {
-        return (a - b).length()
+    fun distanceTo(other: Vec3): Float {
+        return (this - other).length()
     }
 
     fun similar(other: Vec3, delta: Float = 0.1f): Boolean {
         return abs(x - other.x) < delta &&
                 abs(y - other.y) < delta &&
                 abs(z - other.z) < delta
+    }
+
+    operator fun unaryMinus(): Vec3 {
+        return times(-1f)
     }
 
     operator fun minus(other: Vec3): Vec3 {
@@ -48,6 +47,10 @@ data class Vec3(
     operator fun times(b: Vec3): Float {
         val a = this
         return a.x * b.x + a.y * b.y + a.z * b.z
+    }
+
+    operator fun times(scalar: Float): Vec3 {
+        return Vec3(x * scalar, y * scalar, z * scalar)
     }
 
     fun length(): Float {
@@ -70,6 +73,9 @@ data class Vec3(
         val ROTATE_RIGHT = Vec3(0f, 1f, 0f)
         val ROTATE_UP = Vec3(-1f, 0f, 0f)
         val ROTATE_DOWN = Vec3(1f, 0f, 0f)
+        val ROTATE_UP_LEFT = Vec3(-1f, -1f, 0f).normalized()
+        val ROTATE_UP_RIGHT = Vec3(-1f, 1f, 0f).normalized()
+
 
         val ZERO by lazy {
             zero()
