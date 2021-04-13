@@ -56,7 +56,7 @@ class TacticLib {
 
     fun startUsingTool(): Tactic {
         return AplibEDSL.action("startUsingTool()").do1 { belief: SeAgentState ->
-            belief.apply { seEnv.startUsingTool() }
+            belief.apply { seEnv.beginUsingTool() }
         }.lift()
     }
 

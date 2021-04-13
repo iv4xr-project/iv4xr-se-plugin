@@ -28,7 +28,7 @@ interface Observer {
 interface Items {
     fun place()
     fun equip(toolbarLocation: ToolbarLocation)
-    fun startUsingTool()
+    fun beginUsingTool()
     fun endUsingTool()
     fun setToolbarItem(name: String, location: ToolbarLocation)
 }

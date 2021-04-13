@@ -32,7 +32,7 @@ class OldProtocolSpaceEngineers(val controller: ProprietaryJsonTcpCharacterContr
             controller.interact(InteractionArgs.equip(toolbarLocation = toolbarLocation))
         }
 
-        override fun startUsingTool() {
+        override fun beginUsingTool() {
             controller.interact(InteractionArgs(InteractionType.BEGIN_USE))
         }
 

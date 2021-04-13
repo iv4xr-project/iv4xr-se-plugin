@@ -142,8 +142,8 @@ class JsonRpcCharacterController(
             processSingleParameterMethod<ToolbarLocation, Unit>(::equip, toolbarLocation, "${itemsPrefix}Equip")
         }
 
-        override fun startUsingTool() {
-            processNoParameterMethod<Unit, Unit>(::startUsingTool, "${itemsPrefix}StartUsingTool")
+        override fun beginUsingTool() {
+            processNoParameterMethod<Unit, Unit>(::beginUsingTool, "${itemsPrefix}StartUsingTool")
         }
 
         override fun endUsingTool() {

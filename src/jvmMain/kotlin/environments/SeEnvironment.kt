@@ -98,8 +98,8 @@ class SeEnvironment(
         return controller.items.equip(toolbarLocation)
     }
 
-    fun startUsingTool() {
-        return controller.items.startUsingTool()
+    fun beginUsingTool() {
+        return controller.items.beginUsingTool()
     }
 
     fun endUsingTool() {
