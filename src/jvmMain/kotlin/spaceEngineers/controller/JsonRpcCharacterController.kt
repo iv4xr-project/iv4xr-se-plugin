@@ -189,10 +189,6 @@ class JsonRpcCharacterController(
                 "${observerPrefix}ObserveNewBlocks"
             )
         }
-
-        override fun observeEntities(): SeObservation {
-            return processNoParameterMethod<Unit, SeObservation>(::observeEntities, "${observerPrefix}ObserveEntities")
-        }
     }
 
     companion object {

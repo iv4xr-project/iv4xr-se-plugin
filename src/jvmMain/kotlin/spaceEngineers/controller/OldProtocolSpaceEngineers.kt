@@ -64,10 +64,6 @@ class OldProtocolSpaceEngineers(val controller: ProprietaryJsonTcpCharacterContr
         override fun observeNewBlocks(): SeObservation {
             return controller.observe(ObservationMode.NEW_BLOCKS)
         }
-
-        override fun observeEntities(): SeObservation {
-            return controller.observe(ObservationMode.ENTITIES)
-        }
     }
 
     override fun close() {

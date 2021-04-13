@@ -23,7 +23,6 @@ interface Observer {
     fun observe(): SeObservation
     fun observeBlocks(): SeObservation
     fun observeNewBlocks(): SeObservation
-    fun observeEntities(): SeObservation
 }
 
 interface Items {

@@ -35,9 +35,5 @@ class ContextControllerWrapper(
                 context.updateNewBlocks(allBlocks)
             }.apply(::addToHistory)
         }
-
-        override fun observeEntities(): SeObservation {
-            return spaceEngineers.observer.observeEntities().apply(::addToHistory)
-        }
     }
 }
