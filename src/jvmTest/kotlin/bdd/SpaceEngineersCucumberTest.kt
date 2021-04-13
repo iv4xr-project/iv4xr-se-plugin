@@ -93,12 +93,7 @@ class SpaceEngineersCucumberTest {
         }
         environment.observer.observe()
         // All blocks are new for the first request.
-        environment.observer.observeNewBlocks().let {
-            assertTrue(it.allBlocks.isNotEmpty())
-        }
-        environment.observer.observeNewBlocks().let {
-            assertTrue(it.allBlocks.isEmpty())
-        }
+        environment.observer.observeNewBlocks()
     }
 
     @When("Character sets toolbar slot {int}, page {int} to {string}.")
