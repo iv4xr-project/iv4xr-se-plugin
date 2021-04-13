@@ -1,12 +1,6 @@
 ﻿using Iv4xr.PluginLib;
-using Iv4xr.SePlugin.SeLib;
-using System;
 using Iv4xr.SePlugin.Communication;
-using Iv4xr.SePlugin.Control;
-using VRage.Game.ObjectBuilders.Gui;
 using VRage.Plugins;
-using VRage.Utils;
-using Sandbox.Game.World;
 
 namespace Iv4xr.SePlugin
 {

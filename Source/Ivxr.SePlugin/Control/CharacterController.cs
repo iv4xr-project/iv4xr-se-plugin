@@ -1,13 +1,10 @@
-﻿using Iv4xr.SePlugin.WorldModel;
+﻿using System;
+using System.Linq;
+using Iv4xr.SePlugin.WorldModel;
+using Sandbox.Definitions;
 using Sandbox.Game.Entities;
-using Sandbox.Game.Multiplayer;
 using Sandbox.Game.Screens.Helpers;
 using Sandbox.Game.World;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Sandbox.Definitions;
 using VRage.Game;
 using VRage.ObjectBuilders;
 using VRageMath;
@@ -70,19 +67,19 @@ namespace Iv4xr.SePlugin.Control
             }
         }
 
-        private void BeginUseTool()
+        public void BeginUseTool()
         {
             var entityController = GetEntityController();
             entityController.ControlledEntity.BeginShoot(MyShootActionEnum.PrimaryAction);
         }
 
-        private void EndUseTool()
+        public void EndUseTool()
         {
             var entityController = GetEntityController();
             entityController.ControlledEntity.EndShoot(MyShootActionEnum.PrimaryAction);
         }
 
-        private void PlaceItem()
+        public void PlaceItem()
         {
             if (MySession.Static.IsAdminOrCreative())
             {
@@ -98,7 +95,7 @@ namespace Iv4xr.SePlugin.Control
             entityController.ControlledEntity.BeginShoot(MyShootActionEnum.PrimaryAction);
         }
 
-        private void EquipToolbarItem(int slot, int page, bool allowSizeChange)
+        public void EquipToolbarItem(int slot, int page, bool allowSizeChange)
         {
             var toolbar = MyToolbarComponent.CurrentToolbar;
             toolbar.SwitchToPageOrNot(page);
@@ -112,7 +109,7 @@ namespace Iv4xr.SePlugin.Control
         /// <summary>
         /// First version. Only tools and weapons are supported for now.
         /// </summary>
-        private static void SetToolbarItem(int slot, int page, string itemName)
+        public void SetToolbarItem(int slot, int page, string itemName)
         {
             var toolDefinitions = MyDefinitionManager.Static.GetWeaponDefinitions();
             var toolDefinition = toolDefinitions.First(definition => definition.Id.SubtypeName == itemName);

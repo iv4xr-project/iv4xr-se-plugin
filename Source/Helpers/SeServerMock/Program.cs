@@ -27,8 +27,10 @@ namespace SeServerMock
 
                 var observer = new MockObserver() {Log = log};
                 var controller = new MockCharacterController() {Log = log};
+                var session = new MockSessionController() {Log = log};
+                var dispatcherContext = new DispatcherContext(observer, controller, session);
 
-                var dispatcher = new Dispatcher(requestQueue, observer, controller) {Log = log};
+                var dispatcher = new Dispatcher(requestQueue, dispatcherContext) {Log = log};
 
                 while (true)
                 {

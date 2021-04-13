@@ -20,11 +20,11 @@ namespace Iv4xr.SePlugin.Communication
 
         private readonly CommandDict m_commands;
 
-        public Dispatcher(RequestQueue requestQueue, IObserver observer, ICharacterController controller,
+        public Dispatcher(RequestQueue requestQueue, DispatcherContext dispatcherContext,
             CommandDict commands = null)
         {
             m_requestQueue = requestQueue;
-            m_context = new DispatcherContext(observer, controller);
+            m_context = dispatcherContext;
             m_commands = commands ?? DefaultCommands();
         }
 

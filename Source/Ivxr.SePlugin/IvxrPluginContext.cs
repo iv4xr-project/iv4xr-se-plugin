@@ -1,10 +1,8 @@
-﻿using Iv4xr.PluginLib;
-using Iv4xr.SePlugin.SeLib;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
+using Iv4xr.PluginLib;
 using Iv4xr.SePlugin.Communication;
 using Iv4xr.SePlugin.Control;
+using Iv4xr.SePlugin.SeLib;
 using Iv4xr.SePlugin.Session;
 
 namespace Iv4xr.SePlugin
@@ -13,8 +11,11 @@ namespace Iv4xr.SePlugin
     {
         public ILog Log { get; private set; }
         public readonly Dispatcher Dispatcher;
+        public readonly JsonRpcDispatcher JsonRpcDispatcher;
+        public readonly JsonRpcStarter JsonRpcStarter;
 
         private readonly RequestQueue m_requestQueue = new RequestQueue();
+        private readonly RequestQueue m_jsonRpcRequestQueue = new RequestQueue();
 
         private readonly PluginServer m_server;
 
@@ -33,13 +34,18 @@ namespace Iv4xr.SePlugin
             var lowLevelObserver = new LowLevelObserver(m_gameSession) {Log = Log};
             var observer = new Observer(lowLevelObserver) {Log = Log};
             var controller = new CharacterController(m_gameSession);
+            var dispatcherContext = new DispatcherContext(observer, controller, sessionController);
 
-            Dispatcher = new Dispatcher(m_requestQueue, observer, controller) {Log = Log};
+            Dispatcher = new Dispatcher(m_requestQueue, dispatcherContext) {Log = Log};
+            JsonRpcDispatcher = new JsonRpcDispatcher(m_jsonRpcRequestQueue) {Log = Log};
+            JsonRpcStarter = new JsonRpcStarter(m_jsonRpcRequestQueue, dispatcherContext);
         }
+
 
         public void StartServer()
         {
             m_server.Start();
+            JsonRpcStarter.Start();
         }
 
         public void InitSession()
