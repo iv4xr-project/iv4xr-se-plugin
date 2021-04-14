@@ -2,7 +2,8 @@ Feature: Example how to describe block observations using cucumber.
   To demonstrate how can we define features using scenarios and automatically test them.
 
   Background:
-    Given I am connected to real game.
+    Given I am connected to real game using json-rpc.
+    # Given I am connected to real game.
     And Toolbar has mapping:
       | slot | page | blockType                 |
       | 1    | 0    | LargeHeavyBlockArmorBlock |

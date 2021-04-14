@@ -37,7 +37,6 @@ class TacticLib {
         return AplibEDSL.action("moveForward($velocity)").do1 { belief: W3DAgentState ->
             belief.apply {
                 seEnv.moveForward(velocity = velocity)
-                observe()
             }
         }.lift()
     }

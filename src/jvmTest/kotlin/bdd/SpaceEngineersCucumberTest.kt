@@ -8,10 +8,6 @@ import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import io.cucumber.junit.Cucumber
 import org.junit.runner.RunWith
-import spaceEngineers.commands.InteractionArgs
-import spaceEngineers.commands.InteractionType
-import spaceEngineers.commands.ObservationArgs
-import spaceEngineers.commands.ObservationMode
 import spaceEngineers.controller.*
 import spaceEngineers.model.*
 import testhelp.*
@@ -46,7 +42,7 @@ class SpaceEngineersCucumberTest {
     @After
     fun cleanup() {
         if (this::environment.isInitialized) {
-            environment.controller.closeIfCloseable()
+            environment.spaceEngineers.closeIfCloseable()
             environment.closeIfCloseable()
         }
     }
@@ -55,16 +51,32 @@ class SpaceEngineersCucumberTest {
     fun i_am_connected_to_mock_server() {
         environment =
             ContextControllerWrapper(
-                ProprietaryJsonTcpCharacterController.mock(
-                    agentId = TEST_AGENT,
-                    lineToReturn = TEST_MOCK_RESPONSE_LINE
+                spaceEngineers = OldProtocolSpaceEngineers(
+                    ProprietaryJsonTcpCharacterController.mock(
+                        agentId = TEST_AGENT,
+                        lineToReturn = TEST_MOCK_RESPONSE_LINE
+                    )
                 )
             )
     }
 
     @Given("I am connected to real game.")
     fun i_am_connected_to_real_game() {
-        environment = ContextControllerWrapper(ProprietaryJsonTcpCharacterController.localhost(agentId = TEST_AGENT))
+        environment =
+            ContextControllerWrapper(
+                spaceEngineers = OldProtocolSpaceEngineers(
+                    ProprietaryJsonTcpCharacterController.localhost(agentId = TEST_AGENT)
+                )
+            )
+    }
+
+    @Given("I am connected to real game using json-rpc.")
+    fun i_am_connected_to_real_game_using_json_rpc() {
+
+        environment =
+            ContextControllerWrapper(
+                spaceEngineers = JsonRpcCharacterController.localhost(agentId = TEST_AGENT)
+            )
     }
 
     @Given("Toolbar has mapping:")
@@ -85,19 +97,22 @@ class SpaceEngineersCucumberTest {
     @Given("I load scenario {string}.")
     fun i_load_scenario(scenarioId: String) {
         environment?.let { wrapper ->
-            check(wrapper.controller is WorldController)
-            (wrapper.controller as WorldController).load(File("$SCENARIO_DIR$scenarioId").absolutePath)
+            wrapper.session.loadScenario(File("$SCENARIO_DIR$scenarioId").absolutePath)
         }
-        sleep(500)
         // All blocks are new for the first request.
-        environment.observeNewBlocks()
+        environment.observer.observeNewBlocks().let {
+            assertTrue(it.allBlocks.isNotEmpty())
+        }
+        environment.observer.observeNewBlocks().let {
+            assertTrue(it.allBlocks.isEmpty())
+        }
     }
 
     @When("Character sets toolbar slot {int}, page {int} to {string}.")
     fun character_sets_toolbar_slot_page_to(slot: Int, page: Int, itemName: String) {
         val location = ToolbarLocation(slot, page)
 
-        environment.setToolbarItem(location, itemName)
+        environment.items.setToolbarItem(itemName, location)
 
         // Note: maybe we should use the toolbar mapping instead, and have some way to define exact names of the tools
         if (itemName.startsWith("Welder")) {
@@ -109,12 +124,12 @@ class SpaceEngineersCucumberTest {
 
     @When("I request for blocks.")
     fun i_request_for_blocks() {
-        environment.observeBlocks()
+        environment.observer.observeBlocks()
     }
 
     @When("I observe.")
     fun i_observe() {
-        environment.observe()
+        environment.observer.observe()
     }
 
     @Then("Character is at \\({double}, ?{double}, ?{double}).")
@@ -135,7 +150,10 @@ class SpaceEngineersCucumberTest {
 
     @When("Character moves forward for {int} units.")
     fun character_moves_forward_for_units(units: Int) {
-        environment.blockingMoveForwardByDistance(distance = units.toFloat()).let { context.addToHistory(it) }
+        environment.character.blockingMoveForwardByDistance(
+            distance = units.toFloat(),
+            startPosition = environment.observer.observe().position
+        ).let { context.addToHistory(it) }
     }
 
     @Then("Character is {int} units away from starting location.")
@@ -147,7 +165,7 @@ class SpaceEngineersCucumberTest {
     }
 
     private fun observeBlocks(): List<SeBlock> {
-        return environment.observe(ObservationArgs(ObservationMode.BLOCKS)).allBlocks
+        return environment.observer.observeBlocks().allBlocks
     }
 
     private fun blockToGrind(): SeBlock {
@@ -156,37 +174,37 @@ class SpaceEngineersCucumberTest {
 
     @When("Character grinds to {double} integrity.")
     fun character_grinds_to_integrity(integrity: Double) {
-        environment.equip(context.grinderLocation!!)
+        environment.items.equip(context.grinderLocation!!)
         sleep(500)
-        environment.startUsingTool()
+        environment.items.startUsingTool()
         runWhileConditionUntilTimeout {
             blockToGrind().integrity > integrity
         }
-        environment.endUsingTool()
+        environment.items.endUsingTool()
     }
 
     @When("Character grinds to {double}% integrity.")
     fun character_grinds_until_to_integrity_percentage(percentage: Double) {
         val integrity = blockToGrind().maxIntegrity * percentage / 100.0
-        environment.equip(context.grinderLocation!!)
+        environment.items.equip(context.grinderLocation!!)
         sleep(500)
-        environment.startUsingTool()
+        environment.items.startUsingTool()
         runWhileConditionUntilTimeout {
             blockToGrind().integrity > integrity
         }
-        environment.endUsingTool()
+        environment.items.endUsingTool()
     }
 
     @When("Character torches block back up to max integrity.")
     fun character_torches_block_back_up_to_max_integrity() {
         val maxIntegrity = blockToGrind().maxIntegrity
-        environment.equip(context.torchLocation!!)
+        environment.items.equip(context.torchLocation!!)
         sleep(500)
-        environment.startUsingTool()
+        environment.items.startUsingTool()
         runWhileConditionUntilTimeout {
             blockToGrind().integrity < maxIntegrity
         }
-        environment.endUsingTool()
+        environment.items.endUsingTool()
     }
 
 
@@ -205,13 +223,13 @@ class SpaceEngineersCucumberTest {
     @When("Character selects block {string} and places it.")
     fun character_places_selects_block_and_places_it(blockType: String) {
         val toolbarLocation: ToolbarLocation = context.blockToolbarLocation(blockType)
-        environment.equip(toolbarLocation)
-        environment.interact(InteractionArgs(InteractionType.PLACE))
+        environment.items.equip(toolbarLocation)
+        environment.items.place()
     }
 
     @Then("I see no block of type {string}.")
     fun i_see_no_block_of_type(string: String) {
-        val observation = environment.observe(ObservationArgs(ObservationMode.BLOCKS))
+        val observation = environment.observer.observeBlocks()
         assertTrue(
             observation.allBlocks
                 .none { it.blockType == string }
@@ -220,7 +238,7 @@ class SpaceEngineersCucumberTest {
 
     @Then("I can see {int} new block\\(s) with data:")
     fun i_can_see_new_block_with_data(blockCount: Int, data: List<Map<String, String>>) {
-        val observation = environment.observe(ObservationArgs(ObservationMode.NEW_BLOCKS))
+        val observation = environment.observer.observeNewBlocks()
         val allBlocks = observation.allBlocks
         assertEquals(
             blockCount,

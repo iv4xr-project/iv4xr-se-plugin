@@ -11,6 +11,6 @@ class SessionRequestTest {
     @Test
     fun sessionLoadTest() = controller {
         check(this is WorldController)
-        load(TEST_SCENARIO_1_ID)
+        loadScenario(TEST_SCENARIO_1_ID)
     }
 }
