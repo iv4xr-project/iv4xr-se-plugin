@@ -11,7 +11,9 @@ interface SpaceEngineers {
     val observer: Observer
 }
 
-interface Session : WorldController
+interface Session {
+    fun loadScenario(scenarioPath: String)
+}
 
 interface Character {
     fun moveAndRotate(movement: Vec3 = Vec3.ZERO, rotation3: Vec3 = Vec3.ZERO, roll: Float = 0f): SeObservation

@@ -50,6 +50,22 @@ fun Character.blockingMoveForwardByDistance(
     error("timeout after $maxTries tries")
 }
 
+fun Character.blockingMoveBackwardsByDistance(
+    distance: Float,
+    velocity: Float = 1f,
+    maxTries: Int = 1000,
+    startPosition: Vec3,
+): SeObservation {
+    repeat(maxTries) {
+        moveForward(velocity = -velocity).let {
+            if (it.position.distanceTo(startPosition) >= distance) {
+                return it
+            }
+        }
+    }
+    error("timeout after $maxTries tries")
+}
+
 
 fun CharacterController.observe(): SeObservation {
     return observe(ObservationArgs())
