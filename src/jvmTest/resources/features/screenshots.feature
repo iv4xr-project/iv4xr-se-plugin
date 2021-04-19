@@ -4,13 +4,7 @@ Feature: Example how to describe block observations using cucumber.
   Background:
     Given I am connected to real game using json-rpc.
     # Given I am connected to real game.
-    And Toolbar has mapping:
-      | slot | page | blockType                 |
-      | 1    | 0    | LargeHeavyBlockArmorBlock |
-      | 2    | 0    | LargeBlockCockpitSeat     |
-      | 3    | 0    | LargeBlockSmallGenerator  |
-      | 6    | 0    | LargeBlockGyro            |
-    And Output directory is "C:\Users\karel.hovorka\screenshots".
+    And Output directory is "~/screenshots".
 
   Scenario Outline: Checking scenario character is at correct starting location and can move.
     Given I load scenario "simple-place-grind-torch-with-tools".
@@ -20,20 +14,24 @@ Feature: Example how to describe block observations using cucumber.
     Then I see no block of type "<blockType>".
     When Character selects block "<blockType>" and places it.
     Then I can see 1 new block(s) with data:
-      | blockType   | integrity   | maxIntegrity | buildIntegrity |
-      | <blockType> | <integrity> | <integrity>  | <integrity>    |
+      | blockType   |
+      | <blockType> |
+    When Character sets toolbar slot 0, page 0 to "<blockType>".
+    When Character sets toolbar slot 1, page 0 to "<blockType>".
+    When Character sets toolbar slot 2, page 0 to "<blockType>".
+    When Character sets toolbar slot 3, page 0 to "<blockType>".
     When Character sets toolbar slot 4, page 0 to "Welder2Item".
-    When Character sets toolbar slot 5, page 0 to "AngleGrinder2Item".
-    When Character moves forward for 15 units.
-    Then Character steps 1 units back and takes screenshot at initial integrity.
-    Then Character grinds down to 1% below each threshold, steps 1 units back and takes screenshot.
+    When Character sets toolbar slot 5, page 0 to "Welder2Item".
+    When Character sets toolbar slot 6, page 0 to "AngleGrinder2Item".
+    When Character sets toolbar slot 7, page 0 to "AngleGrinder2Item".
+    When Character moves forward for 16 units.
+    Then Character steps 2 units back and takes screenshot at initial integrity.
+    Then Character grinds down to 1% below each threshold, steps 2 units back and takes screenshot.
     Then Character saves metadata about each threshold and file names.
 
     Examples:
-      | blockType                 | integrity |
-      | LargeBlockGyro            | 63105.0   |
-      | LargeBlockSmallGenerator  | 12065.0   |
-      | LargeBlockCockpitSeat     | 7380.0    |
-      | LargeHeavyBlockArmorBlock | 16500.0   |
-
-
+      | blockType                |
+      | LargeBlockArmorCornerInv |
+      | LargeHeavyBlockArmorBlock |
+      | LargeHeavyBlockArmorCornerInv |
+      | LargeHalfArmorBlock |

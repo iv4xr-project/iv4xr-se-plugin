@@ -195,7 +195,8 @@ class SpaceEngineersCucumberTest {
 
     @When("Character selects block {string} and places it.")
     fun character_places_selects_block_and_places_it(blockType: String) {
-        val toolbarLocation: ToolbarLocation = context.blockToolbarLocation(blockType)
+        val toolbarLocation = ToolbarLocation(0, 0)
+        environment.items.setToolbarItem(blockType, toolbarLocation);
         environment.items.equip(toolbarLocation)
         environment.items.place()
         environment.items.equip(ToolbarLocation(9, 0))
@@ -259,7 +260,7 @@ class SpaceEngineersCucumberTest {
         val maxIntegrity: Float,
         val screenshots: MutableList<SingleScreenshot> = mutableListOf()
     ) {
-        constructor(block: SeBlock): this(block.blockType, block.maxIntegrity)
+        constructor(block: SeBlock) : this(block.blockType, block.maxIntegrity)
     }
 
     data class SingleScreenshot(
@@ -276,7 +277,7 @@ class SpaceEngineersCucumberTest {
 
     @Given("Output directory is {string}.")
     fun outputDirectoryIs(outputDir: String) {
-        outputDirectory = File(outputDir)
+        outputDirectory = File(outputDir.replace("~", System.getProperty("user.home")))
         outputDirectory.mkdirs()
     }
 

@@ -3,10 +3,7 @@ package spaceEngineers.controller
 import com.google.gson.annotations.SerializedName
 import com.google.gson.internal.LinkedTreeMap
 import environments.SocketReaderWriter
-import spaceEngineers.model.SeBlockDefinition
-import spaceEngineers.model.SeObservation
-import spaceEngineers.model.ToolbarLocation
-import spaceEngineers.model.Vec3
+import spaceEngineers.model.*
 import spaceEngineers.transport.GsonReaderWriter
 import kotlin.reflect.KFunction
 import kotlin.reflect.KFunction1
@@ -171,6 +168,13 @@ class JsonRpcCharacterController(
         return processParameters<String, Unit>(
             params = mapOf("absolutePath" to absolutePath),
             methodName = "Observer.TakeScreenshot"
+        )
+    }
+
+    fun getToolbar(): Toolbar {
+        return processParameters<Unit, Toolbar>(
+            params = mapOf(),
+            methodName = "Items.GetToolbar"
         )
     }
 

@@ -76,13 +76,19 @@ data class Vec3(
         val ROTATE_UP_LEFT = Vec3(-1f, -1f, 0f).normalized()
         val ROTATE_UP_RIGHT = Vec3(-1f, 1f, 0f).normalized()
 
+        val UNIT_X = Vec3(1, 0, 0)
+        val UNIT_Y = Vec3(0, 1, 0)
+        val UNIT_Z = Vec3(0, 0, 1)
+        val MAX_VALUE = Vec3(Int.MAX_VALUE, Int.MAX_VALUE, Int.MAX_VALUE)
+        val MIN_VALUE = Vec3(Int.MIN_VALUE, Int.MIN_VALUE, Int.MIN_VALUE)
+        val UP = Vec3(0, 1, 0)
+        val DOWN = Vec3(0, -1, 0)
+        val RIGHT = Vec3(1, 0, 0)
+        val LEFT = Vec3(-1, 0, 0)
+        val FORWARD = Vec3(0, 0, -1)
+        val BACKWARD = Vec3(0, 0, 1)
 
-        val ZERO by lazy {
-            zero()
-        }
-
-        fun zero(): Vec3 {
-            return Vec3(0f, 0f, 0f)
-        }
+        val ONE = Vec3(1, 1, 1)
+        val ZERO = Vec3(0f, 0f, 0f)
     }
 }
