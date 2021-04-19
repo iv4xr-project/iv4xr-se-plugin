@@ -56,6 +56,12 @@ namespace Iv4xr.SePlugin.Communication
         {
             m_characterController.SetToolbarItem(location.Slot, location.Page, name);
         }
+        
+        [JsonRpcMethod("Items.GetToolbar")]
+        public Toolbar GetToolbar()
+        {
+            return m_characterController.GetToolbar();
+        }
 
         [JsonRpcMethod("Character.MoveAndRotate")]
         public SeObservation MoveAndRotate(Vector3D movement, Vector2 rotation3, float roll)

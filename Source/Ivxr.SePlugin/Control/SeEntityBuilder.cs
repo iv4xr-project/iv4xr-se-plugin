@@ -118,8 +118,11 @@ namespace Iv4xr.SePlugin.Control
         {
             return new SeBlockDefinition()
             {
+                //Id = blockDefinition.Id.TypeId.ToString(),
                 BlockType = blockDefinition.Id.SubtypeId.String,
-                BuildProgressModels = blockDefinition.BuildProgressModels.Select(GetBuildProgressModel).ToList()
+                CubeSize = blockDefinition.CubeSize.ToString(),
+                BuildProgressModels = blockDefinition.BuildProgressModels.Select(GetBuildProgressModel).ToList(),
+                Size = blockDefinition.Size,
             };
         }
 

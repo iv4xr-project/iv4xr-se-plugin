@@ -138,20 +138,46 @@ namespace Iv4xr.SePlugin.Control
 
         private void SetToolbarWeapon(int slot, int page, string itemName)
         {
-            var toolDefinitionId =  MyDefinitionManager.Static
+            var toolDefinitionId = MyDefinitionManager.Static
                     .GetWeaponDefinitions()
                     .First(definition => definition.Id.SubtypeName == itemName).Id;
             SetToolbarItem<MyObjectBuilder_ToolbarItemWeapon>(slot, page, toolDefinitionId);
         }
 
-        private void SetToolbarItem<T>(int slot, int page, MyDefinitionId id) where T: MyObjectBuilder_ToolbarItemDefinition, new()
+        private void SetToolbarItem<T>(int slot, int page, MyDefinitionId id)
+                where T : MyObjectBuilder_ToolbarItemDefinition, new()
         {
             var toolbarItemBuilder = MyObjectBuilderSerializer.CreateNewObject<T>();
             toolbarItemBuilder.DefinitionId = id;
-            
+
             var toolbar = MyToolbarComponent.CurrentToolbar;
-            toolbar.SwitchToPageOrNot(page);
+            toolbar.SwitchToPage(page);
             toolbar.SetItemAtSlot(slot, MyToolbarItemFactory.CreateToolbarItem(toolbarItemBuilder));
+        }
+
+        public Toolbar GetToolbar()
+        {
+            var toolbar = MyToolbarComponent.CurrentToolbar;
+            return new Toolbar()
+            {
+                SlotCount = toolbar.SlotCount,
+                PageCount = toolbar.PageCount,
+                Items = new ToolbarItem[toolbar.ItemCount]
+                        .Select((index, item) => GetToolbarItem(toolbar[item]))
+                        .ToList()
+            };
+        }
+
+        private static ToolbarItem GetToolbarItem(MyToolbarItem myToolbarItem)
+        {
+            if (!(myToolbarItem is MyToolbarItemDefinition definition)) return null;
+            var id = definition.Definition.Id;
+            return new ToolbarItem()
+            {
+                Type = id.TypeId.ToString(),
+                SubType = id.SubtypeId.String,
+                Name = definition.DisplayName.ToString()
+            };
         }
 
         private MyEntityController GetEntityController()
