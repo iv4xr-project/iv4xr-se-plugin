@@ -1,11 +1,12 @@
-﻿using Iv4xr.SePlugin.Json;
+﻿using Iv4xr.SePlugin.Control;
+using Iv4xr.SePlugin.Json;
 
 namespace Iv4xr.SePlugin.Communication
 {
     public interface IStringCommand
     {
         string Cmd { get; }
-        string Execute(string message, DispatcherContext context, Jsoner jsoner);
+        string Execute(string message, ISpaceEngineers se, Jsoner jsoner);
     }
 
     public abstract class DispatcherCommand<TInput, TOutput> : IStringCommand
@@ -22,16 +23,16 @@ namespace Iv4xr.SePlugin.Communication
         /// <summary>
         /// Deserialize the command, execute & serialize response.
         /// </summary>
-        public string Execute(string message, DispatcherContext context, Jsoner jsoner)
+        public string Execute(string message, ISpaceEngineers se, Jsoner jsoner)
         {
             var inputData = jsoner.ToObject<TInput>(message);
-            var outputData = Execute(context, inputData);
+            var outputData = Execute(se, inputData);
             return jsoner.ToJson(outputData);
         }
 
         /// <summary>
         /// Execute the command while consuming and returning typed non-serialized data.
         /// </summary>
-        protected abstract TOutput Execute(DispatcherContext context, TInput data);
+        protected abstract TOutput Execute(ISpaceEngineers se, TInput data);
     }
 }

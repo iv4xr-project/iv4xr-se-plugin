@@ -16,15 +16,15 @@ namespace Iv4xr.SePlugin.Communication
 
         private readonly Jsoner m_jsoner = new Jsoner();
 
-        private readonly DispatcherContext m_context;
+        private readonly ISpaceEngineers m_se;
 
         private readonly CommandDict m_commands;
 
-        public Dispatcher(RequestQueue requestQueue, DispatcherContext dispatcherContext,
+        public Dispatcher(RequestQueue requestQueue, ISpaceEngineers se,
             CommandDict commands = null)
         {
             m_requestQueue = requestQueue;
-            m_context = dispatcherContext;
+            m_se = se;
             m_commands = commands ?? DefaultCommands();
         }
 
@@ -84,7 +84,7 @@ namespace Iv4xr.SePlugin.Communication
                 throw new NotImplementedException($"Unknown agent command: {commandName}");
 
             var command = m_commands[commandName];
-            return command.Execute(request.Message, m_context, m_jsoner);
+            return command.Execute(request.Message, m_se, m_jsoner);
         }
     }
 }

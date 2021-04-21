@@ -1,8 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Iv4xr.PluginLib;
 using Iv4xr.SePlugin.WorldModel;
+using Sandbox;
+using Sandbox.Game.Screens.Helpers;
+using Sandbox.Graphics.GUI;
+using VRage.FileSystem;
 using VRage.Game.Entity;
 using VRageMath;
 
@@ -12,6 +17,7 @@ namespace Iv4xr.SePlugin.Control
     {
         SeObservation GetObservation();
         SeObservation GetObservation(ObservationArgs observationArgs);
+        void TakeScreenshot(string absolutePath);
     }
 
     internal class Observer : IObserver
@@ -56,6 +62,16 @@ namespace Iv4xr.SePlugin.Control
             }
 
             return observation;
+        }
+
+        public void TakeScreenshot(string absolutePath)
+        {
+            // Stolen from se/Sources/TestingToolPlugin/MyTestingToolPlugin.cs
+            MyAsyncSaving.Start(null, Path.Combine(MyFileSystem.SavesPath, "..", "iv4XRtempsave"));
+            MyGuiSandbox.TakeScreenshot(
+                MySandboxGame.ScreenSize.X, MySandboxGame.ScreenSize.Y,
+                absolutePath, true, false
+            );
         }
 
         public SeObservation GetObservation()

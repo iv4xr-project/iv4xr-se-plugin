@@ -1,7 +1,4 @@
-﻿using System;
-using System.Net;
-using System.Net.Sockets;
-using System.Threading;
+﻿using System.Threading;
 using Iv4xr.PluginLib;
 using Iv4xr.PluginLib.Log;
 using Iv4xr.SePlugin.Communication;
@@ -25,12 +22,15 @@ namespace SeServerMock
                 var server = new PluginServer(log, sessionDispatcher, requestQueue);
                 server.Start();
 
-                var observer = new MockObserver() {Log = log};
-                var controller = new MockCharacterController() {Log = log};
-                var session = new MockSessionController() {Log = log};
-                var dispatcherContext = new DispatcherContext(observer, controller, session);
+                var se = new RealSpaceEngineers(
+                    new MockObserver() {Log = log},
+                    new MockCharacterController() {Log = log},
+                    sessionController,
+                    new MockItems() {Log = log},
+                    new MockDefinitions() {Log = log}
+                );
 
-                var dispatcher = new Dispatcher(requestQueue, dispatcherContext) {Log = log};
+                var dispatcher = new Dispatcher(requestQueue, se) {Log = log};
 
                 while (true)
                 {

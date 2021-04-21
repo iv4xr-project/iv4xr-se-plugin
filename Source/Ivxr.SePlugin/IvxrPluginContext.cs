@@ -27,18 +27,14 @@ namespace Iv4xr.SePlugin
             seLog.Init("ivxr-plugin.log");
             Log = seLog;
 
-            var sessionController = new SessionController() {Log = Log};
-            var sessionDispatcher = new SessionDispatcher(sessionController) {Log = Log};
+            var se = new RealSpaceEngineers(m_gameSession, Log);
+            var sessionDispatcher = new SessionDispatcher(se.Session) {Log = Log};
 
             m_server = new PluginServer(Log, sessionDispatcher, m_requestQueue);
-            var lowLevelObserver = new LowLevelObserver(m_gameSession) {Log = Log};
-            var observer = new Observer(lowLevelObserver) {Log = Log};
-            var controller = new CharacterController(m_gameSession);
-            var dispatcherContext = new DispatcherContext(observer, controller, sessionController);
 
-            Dispatcher = new Dispatcher(m_requestQueue, dispatcherContext) {Log = Log};
+            Dispatcher = new Dispatcher(m_requestQueue, se) {Log = Log};
             JsonRpcDispatcher = new JsonRpcDispatcher(m_jsonRpcRequestQueue) {Log = Log};
-            JsonRpcStarter = new JsonRpcStarter(m_jsonRpcRequestQueue, dispatcherContext);
+            JsonRpcStarter = new JsonRpcStarter(m_jsonRpcRequestQueue, se);
         }
 
 
