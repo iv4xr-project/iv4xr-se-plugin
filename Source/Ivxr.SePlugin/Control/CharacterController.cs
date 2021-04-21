@@ -111,17 +111,73 @@ namespace Iv4xr.SePlugin.Control
         /// </summary>
         public void SetToolbarItem(int slot, int page, string itemName)
         {
-            var toolDefinitions = MyDefinitionManager.Static.GetWeaponDefinitions();
-            var toolDefinition = toolDefinitions.First(definition => definition.Id.SubtypeName == itemName);
-            
-            var toolbarItemBuilder = MyObjectBuilderSerializer.CreateNewObject<MyObjectBuilder_ToolbarItemWeapon>();
-            toolbarItemBuilder.DefinitionId = toolDefinition.Id;
+            if (IsWeapon(itemName))
+            {
+                SetToolbarWeapon(slot, page, itemName);
+            }
+            else
+            {
+                SetToolbarBlock(slot, page, itemName);
+            }
+        }
 
-            var item = MyToolbarItemFactory.CreateToolbarItem(toolbarItemBuilder);
+        private bool IsWeapon(string itemName)
+        {
+            return MyDefinitionManager.Static
+                    .GetWeaponDefinitions()
+                    .Any(definition => definition.Id.SubtypeName == itemName);
+        }
+
+        private void SetToolbarBlock(int slot, int page, string itemName)
+        {
+            var toolDefinitionId = MyDefinitionManager.Static
+                    .GetAllDefinitions()
+                    .First(definition => definition.Id.SubtypeName == itemName).Id;
+            SetToolbarItem<MyObjectBuilder_ToolbarItemCubeBlock>(slot, page, toolDefinitionId);
+        }
+
+        private void SetToolbarWeapon(int slot, int page, string itemName)
+        {
+            var toolDefinitionId = MyDefinitionManager.Static
+                    .GetWeaponDefinitions()
+                    .First(definition => definition.Id.SubtypeName == itemName).Id;
+            SetToolbarItem<MyObjectBuilder_ToolbarItemWeapon>(slot, page, toolDefinitionId);
+        }
+
+        private void SetToolbarItem<T>(int slot, int page, MyDefinitionId id)
+                where T : MyObjectBuilder_ToolbarItemDefinition, new()
+        {
+            var toolbarItemBuilder = MyObjectBuilderSerializer.CreateNewObject<T>();
+            toolbarItemBuilder.DefinitionId = id;
 
             var toolbar = MyToolbarComponent.CurrentToolbar;
-            toolbar.SwitchToPageOrNot(page);
-            toolbar.SetItemAtSlot(slot, item);
+            toolbar.SwitchToPage(page);
+            toolbar.SetItemAtSlot(slot, MyToolbarItemFactory.CreateToolbarItem(toolbarItemBuilder));
+        }
+
+        public Toolbar GetToolbar()
+        {
+            var toolbar = MyToolbarComponent.CurrentToolbar;
+            return new Toolbar()
+            {
+                SlotCount = toolbar.SlotCount,
+                PageCount = toolbar.PageCount,
+                Items = new ToolbarItem[toolbar.ItemCount]
+                        .Select((index, item) => GetToolbarItem(toolbar[item]))
+                        .ToList()
+            };
+        }
+
+        private static ToolbarItem GetToolbarItem(MyToolbarItem myToolbarItem)
+        {
+            if (!(myToolbarItem is MyToolbarItemDefinition definition)) return null;
+            var id = definition.Definition.Id;
+            return new ToolbarItem()
+            {
+                Type = id.TypeId.ToString(),
+                SubType = id.SubtypeId.String,
+                Name = definition.DisplayName.ToString()
+            };
         }
 
         private MyEntityController GetEntityController()

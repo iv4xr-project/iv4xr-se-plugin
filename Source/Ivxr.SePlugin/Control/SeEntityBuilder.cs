@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Iv4xr.PluginLib;
 using Iv4xr.SePlugin.WorldModel;
+using Sandbox.Definitions;
 using Sandbox.Game.Entities;
 using Sandbox.Game.Entities.Cube;
 using VRage.Game.ModAPI;
@@ -110,6 +111,26 @@ namespace Iv4xr.SePlugin.Control
                 OrientationForward =
                         new PlainVec3D(grid.WorldMatrix.GetDirectionVector(sourceBlock.Orientation.Forward)),
                 OrientationUp = new PlainVec3D(grid.WorldMatrix.GetDirectionVector(sourceBlock.Orientation.Up))
+            };
+        }
+
+        public static SeBlockDefinition GetBuildSeBlockDefinition(MyCubeBlockDefinition blockDefinition)
+        {
+            return new SeBlockDefinition()
+            {
+                //Id = blockDefinition.Id.TypeId.ToString(),
+                BlockType = blockDefinition.Id.SubtypeId.String,
+                CubeSize = blockDefinition.CubeSize.ToString(),
+                BuildProgressModels = blockDefinition.BuildProgressModels.Select(GetBuildProgressModel).ToList(),
+                Size = blockDefinition.Size,
+            };
+        }
+
+        private static SeBuildProgressModel GetBuildProgressModel(MyCubeBlockDefinition.BuildProgressModel bpm)
+        {
+            return new SeBuildProgressModel()
+            {
+                BuildRatioUpperBound = bpm.BuildRatioUpperBound
             };
         }
 

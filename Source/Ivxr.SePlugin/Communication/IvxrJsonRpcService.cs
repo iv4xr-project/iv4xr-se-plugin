@@ -1,7 +1,15 @@
-﻿using AustinHarris.JsonRpc;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using AustinHarris.JsonRpc;
 using Iv4xr.SePlugin.Control;
 using Iv4xr.SePlugin.Session;
 using Iv4xr.SePlugin.WorldModel;
+using Sandbox;
+using Sandbox.Definitions;
+using Sandbox.Game.Screens.Helpers;
+using Sandbox.Graphics.GUI;
+using VRage.FileSystem;
 using VRageMath;
 
 namespace Iv4xr.SePlugin.Communication
@@ -48,6 +56,12 @@ namespace Iv4xr.SePlugin.Communication
         {
             m_characterController.SetToolbarItem(location.Slot, location.Page, name);
         }
+        
+        [JsonRpcMethod("Items.GetToolbar")]
+        public Toolbar GetToolbar()
+        {
+            return m_characterController.GetToolbar();
+        }
 
         [JsonRpcMethod("Character.MoveAndRotate")]
         public SeObservation MoveAndRotate(Vector3D movement, Vector2 rotation3, float roll)
@@ -73,6 +87,25 @@ namespace Iv4xr.SePlugin.Communication
         {
             var observationArgs = new ObservationArgs {ObservationMode = ObservationMode.NEW_BLOCKS};
             return m_observer.GetObservation(observationArgs);
+        }
+        
+        [JsonRpcMethod("Observer.BlockDefinitions")]
+        public List<SeBlockDefinition> ObserveBlockDefinitions()
+        {
+            return MyDefinitionManager.Static
+                    .GetDefinitionsOfType<MyCubeBlockDefinition>()
+                    .Select(SeEntityBuilder.GetBuildSeBlockDefinition)
+                    .ToList();
+        }
+        
+        [JsonRpcMethod("Observer.TakeScreenshot")]
+        public void TakeScreenshot(string absolutePath)
+        {
+            MyAsyncSaving.Start(null, Path.Combine(MyFileSystem.SavesPath, "..", "iv4XRtempsave"));
+            MyGuiSandbox.TakeScreenshot(
+                MySandboxGame.ScreenSize.X, MySandboxGame.ScreenSize.Y,
+                absolutePath, true, false
+            );
         }
 
         [JsonRpcMethod("Session.LoadScenario")]
