@@ -1,6 +1,9 @@
 package spaceEngineers.controller
 
-import spaceEngineers.commands.*
+import spaceEngineers.commands.InteractionArgs
+import spaceEngineers.commands.MovementArgs
+import spaceEngineers.commands.ObservationArgs
+import spaceEngineers.commands.ObservationMode
 import spaceEngineers.model.SeObservation
 import spaceEngineers.model.ToolbarLocation
 import spaceEngineers.model.Vec3
@@ -56,14 +59,7 @@ fun Character.blockingMoveBackwardsByDistance(
     maxTries: Int = 1000,
     startPosition: Vec3,
 ): SeObservation {
-    repeat(maxTries) {
-        moveForward(velocity = -velocity).let {
-            if (it.position.distanceTo(startPosition) >= distance) {
-                return it
-            }
-        }
-    }
-    error("timeout after $maxTries tries")
+    return blockingMoveForwardByDistance(distance, -velocity, maxTries, startPosition)
 }
 
 

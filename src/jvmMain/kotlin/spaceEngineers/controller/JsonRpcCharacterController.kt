@@ -68,7 +68,8 @@ class JsonRpcCharacterController(
     val characterPrefix: String = "Character.",
     val itemsPrefix: String = "Items.",
     val observerPrefix: String = "Observer.",
-    val sessionPrefix: String = "Session."
+    val sessionPrefix: String = "Session.",
+    val definitionsPrefix: String = "Definitions.",
 ) :
     SpaceEngineers, AutoCloseable {
 
@@ -153,30 +154,15 @@ class JsonRpcCharacterController(
                 methodName = "${itemsPrefix}SetToolbarItem"
             )
         }
-    }
 
-    fun blockDefinitions(): List<SeBlockDefinition> {
-        return processParameters<Unit, List<LinkedTreeMap<Any, Any>>>(
-            params = mapOf(),
-            methodName = "Observer.BlockDefinitions"
-        ).map {
-            gsonReaderWriter.gson.fromJson(gsonReaderWriter.gson.toJson(it), SeBlockDefinition::class.java)
+        override fun getToolbar(): Toolbar {
+            return processParameters<Unit, Toolbar>(
+                params = mapOf(),
+                methodName = "${itemsPrefix}GetToolbar"
+            )
         }
     }
 
-    fun takeScreenshot(absolutePath: String) {
-        return processParameters<String, Unit>(
-            params = mapOf("absolutePath" to absolutePath),
-            methodName = "Observer.TakeScreenshot"
-        )
-    }
-
-    fun getToolbar(): Toolbar {
-        return processParameters<Unit, Toolbar>(
-            params = mapOf(),
-            methodName = "Items.GetToolbar"
-        )
-    }
 
     override val observer: Observer = object : Observer {
         override fun observe(): SeObservation {
@@ -193,6 +179,25 @@ class JsonRpcCharacterController(
                 "${observerPrefix}ObserveNewBlocks"
             )
         }
+
+        override fun takeScreenshot(absolutePath: String) {
+            return processSingleParameterMethod<String, Unit>(
+                ::takeScreenshot,
+                absolutePath,
+                "${observerPrefix}TakeScreenshot"
+            )
+        }
+    }
+    override val definitions: Definitions = object: Definitions {
+        override fun blockDefinitions(): List<SeBlockDefinition> {
+            return processParameters<Unit, List<LinkedTreeMap<Any, Any>>>(
+                params = mapOf(),
+                methodName = "${definitionsPrefix}BlockDefinitions"
+            ).map {
+                gsonReaderWriter.gson.fromJson(gsonReaderWriter.gson.toJson(it), SeBlockDefinition::class.java)
+            }
+        }
+
     }
 
     companion object {

@@ -30,8 +30,8 @@ Feature: Example how to describe block observations using cucumber.
     Then Character saves metadata about each threshold and file names.
 
     Examples:
-      | blockType                |
-      | LargeBlockArmorCornerInv |
-      | LargeHeavyBlockArmorBlock |
+      | blockType                     |
+      | LargeBlockArmorCornerInv      |
+      | LargeHeavyBlockArmorBlock     |
       | LargeHeavyBlockArmorCornerInv |
-      | LargeHalfArmorBlock |
+      | LargeHalfArmorBlock           |

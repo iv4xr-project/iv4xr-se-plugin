@@ -5,6 +5,7 @@ import spaceEngineers.commands.InteractionType
 import spaceEngineers.commands.MovementArgs
 import spaceEngineers.commands.ObservationMode
 import spaceEngineers.model.SeObservation
+import spaceEngineers.model.Toolbar
 import spaceEngineers.model.ToolbarLocation
 import spaceEngineers.model.Vec3
 import java.io.Closeable
@@ -50,6 +51,10 @@ class OldProtocolSpaceEngineers(val controller: ProprietaryJsonTcpCharacterContr
                 )
             )
         }
+
+        override fun getToolbar(): Toolbar {
+            TODO("Not yet implemented")
+        }
     }
 
     override val observer: Observer = object : Observer {
@@ -64,7 +69,13 @@ class OldProtocolSpaceEngineers(val controller: ProprietaryJsonTcpCharacterContr
         override fun observeNewBlocks(): SeObservation {
             return controller.observe(ObservationMode.NEW_BLOCKS)
         }
+
+        override fun takeScreenshot(absolutePath: String) {
+            TODO("Not yet implemented")
+        }
     }
+    override val definitions: Definitions
+        get() = TODO("Not yet implemented")
 
     override fun close() {
         controller.close()
