@@ -32,7 +32,7 @@ class OldProtocolSpaceEngineers(val controller: ProprietaryJsonTcpCharacterContr
             controller.interact(InteractionArgs.equip(toolbarLocation = toolbarLocation))
         }
 
-        override fun startUsingTool() {
+        override fun beginUsingTool() {
             controller.interact(InteractionArgs(InteractionType.BEGIN_USE))
         }
 
@@ -63,10 +63,6 @@ class OldProtocolSpaceEngineers(val controller: ProprietaryJsonTcpCharacterContr
 
         override fun observeNewBlocks(): SeObservation {
             return controller.observe(ObservationMode.NEW_BLOCKS)
-        }
-
-        override fun observeEntities(): SeObservation {
-            return controller.observe(ObservationMode.ENTITIES)
         }
     }
 

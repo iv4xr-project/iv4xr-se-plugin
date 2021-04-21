@@ -9,7 +9,7 @@ import spaceEngineers.transport.GsonReaderWriter
 import spaceEngineers.transport.StringLineReaderWriter
 
 class ProprietaryJsonTcpCharacterController(val agentId: String, val gsonReaderWriter: GsonReaderWriter) :
-    CharacterController, AutoCloseable, WorldController {
+    CharacterController, AutoCloseable {
 
     private fun <T> SeRequest<T>.process(): T {
         return processRequest(this)
@@ -35,7 +35,7 @@ class ProprietaryJsonTcpCharacterController(val agentId: String, val gsonReaderW
         return SeRequest.command(SeAgentCommand.interact(agentId, interactionArgs)).process()
     }
 
-    override fun loadScenario(scenarioPath: String) {
+    fun loadScenario(scenarioPath: String) {
         SeRequest.session(SeSessionCommand.load(scenarioPath)).process()
     }
 

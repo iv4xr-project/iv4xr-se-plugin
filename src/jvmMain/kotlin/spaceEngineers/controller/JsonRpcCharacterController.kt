@@ -1,10 +1,9 @@
 package spaceEngineers.controller
 
 import com.google.gson.annotations.SerializedName
+import com.google.gson.internal.LinkedTreeMap
 import environments.SocketReaderWriter
-import spaceEngineers.model.SeObservation
-import spaceEngineers.model.ToolbarLocation
-import spaceEngineers.model.Vec3
+import spaceEngineers.model.*
 import spaceEngineers.transport.GsonReaderWriter
 import kotlin.reflect.KFunction
 import kotlin.reflect.KFunction1
@@ -26,7 +25,7 @@ data class JsonRpcError(
     @SerializedName("message")
     override val message: String,
     @SerializedName("data")
-    val data: String? = null
+    val data: Any? = null
 ) : Exception(message)
 
 data class JsonRpcResponse<T>(
@@ -140,8 +139,8 @@ class JsonRpcCharacterController(
             processSingleParameterMethod<ToolbarLocation, Unit>(::equip, toolbarLocation, "${itemsPrefix}Equip")
         }
 
-        override fun startUsingTool() {
-            processNoParameterMethod<Unit, Unit>(::startUsingTool, "${itemsPrefix}StartUsingTool")
+        override fun beginUsingTool() {
+            processNoParameterMethod<Unit, Unit>(::beginUsingTool, "${itemsPrefix}StartUsingTool")
         }
 
         override fun endUsingTool() {
@@ -154,6 +153,29 @@ class JsonRpcCharacterController(
                 methodName = "${itemsPrefix}SetToolbarItem"
             )
         }
+    }
+
+    fun blockDefinitions(): List<SeBlockDefinition> {
+        return processParameters<Unit, List<LinkedTreeMap<Any, Any>>>(
+            params = mapOf(),
+            methodName = "Observer.BlockDefinitions"
+        ).map {
+            gsonReaderWriter.gson.fromJson(gsonReaderWriter.gson.toJson(it), SeBlockDefinition::class.java)
+        }
+    }
+
+    fun takeScreenshot(absolutePath: String) {
+        return processParameters<String, Unit>(
+            params = mapOf("absolutePath" to absolutePath),
+            methodName = "Observer.TakeScreenshot"
+        )
+    }
+
+    fun getToolbar(): Toolbar {
+        return processParameters<Unit, Toolbar>(
+            params = mapOf(),
+            methodName = "Items.GetToolbar"
+        )
     }
 
     override val observer: Observer = object : Observer {
@@ -170,10 +192,6 @@ class JsonRpcCharacterController(
                 ::observeNewBlocks,
                 "${observerPrefix}ObserveNewBlocks"
             )
-        }
-
-        override fun observeEntities(): SeObservation {
-            return processNoParameterMethod<Unit, SeObservation>(::observeEntities, "${observerPrefix}ObserveEntities")
         }
     }
 

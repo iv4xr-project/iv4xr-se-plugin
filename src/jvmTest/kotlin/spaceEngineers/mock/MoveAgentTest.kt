@@ -49,11 +49,11 @@ class MoveAgentTest {
         val stepBoost = 1 // Increase to 10 to 20 to slow down the movement (and see it better)
         val forwardArgs = MovementArgs(Vec3(0f, 0f, -1f))
         addMoves(forwardArgs, 3 * stepBoost)
-        val rotateArgs = MovementArgs(Vec3.zero(), Vec3(0f, 9f, 0f), 0f)
+        val rotateArgs = MovementArgs(Vec3.ZERO, Vec3(0f, 9f, 0f), 0f)
         addMoves(rotateArgs, 2 * stepBoost)
         addMoves(forwardArgs, 3 * stepBoost)
         addMoves(MovementArgs(Vec3(-1f, 0f, 0f)), 20 * stepBoost) // Left
-        val rollArgs = MovementArgs(Vec3.zero(), Vec3.zero(), -2f)
+        val rollArgs = MovementArgs(Vec3.ZERO, Vec3.ZERO, -2f)
         addMoves(rollArgs, 2 * stepBoost)
         val allArgs = MovementArgs(Vec3(0f, 0.7f, 0.2f), Vec3(5f, 7f, 0f), 1.5f)
         addMoves(allArgs, 4 * stepBoost)

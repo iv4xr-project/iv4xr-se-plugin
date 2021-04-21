@@ -5,7 +5,6 @@ import eu.iv4xr.framework.mainConcepts.WorldEntity
 import eu.iv4xr.framework.mainConcepts.WorldModel
 import spaceEngineers.controller.ContextControllerWrapper
 import spaceEngineers.controller.SpaceEngineersTestContext
-import spaceEngineers.controller.WorldController
 import spaceEngineers.controller.moveForward
 import spaceEngineers.model.*
 import java.io.File
@@ -99,8 +98,8 @@ class SeEnvironment(
         return controller.items.equip(toolbarLocation)
     }
 
-    fun startUsingTool() {
-        return controller.items.startUsingTool()
+    fun beginUsingTool() {
+        return controller.items.beginUsingTool()
     }
 
     fun endUsingTool() {
