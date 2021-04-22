@@ -1,31 +1,28 @@
 package spaceEngineers.game
 
-import spaceEngineers.controller.ContextControllerWrapper
-import spaceEngineers.controller.JsonRpcCharacterController
+import spaceEngineers.controller.SpaceEngineers
 import spaceEngineers.controller.loadFromTestResources
-import spaceEngineers.model.CubeSize
 import spaceEngineers.model.ToolbarLocation
-import spaceEngineers.model.Vec3
 import spaceEngineers.model.allBlocks
-import testhelp.spaceEngineers
+import testhelp.spaceEngineersSimplePlaceGrindTorch
 import java.lang.Thread.sleep
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 
-fun JsonRpcCharacterController.checkBlockType(
+fun SpaceEngineers.checkBlockType(
     blockType: String,
     location: ToolbarLocation = ToolbarLocation(0, 0)
 ): Boolean {
     items.setToolbarItem(blockType, location)
     sleep(10)
-    val toolbar = getToolbar()
+    val toolbar = items.getToolbar()
     sleep(10)
     val toolbarItem = toolbar[location]
     return toolbarItem != null && toolbarItem.subType == blockType
 }
 
-fun JsonRpcCharacterController.checkPlacement(
+fun SpaceEngineers.checkPlacement(
     blockType: String,
     location: ToolbarLocation = ToolbarLocation(0, 0)
 ): Boolean {
@@ -43,16 +40,15 @@ class GetToolbarTest {
 
 
     @Test
-    fun getToolbar() = jsonRpcSpaceEngineers {
-        val toolbar = getToolbar()
+    fun getToolbar() = spaceEngineersSimplePlaceGrindTorch {
+        val toolbar = items.getToolbar()
         assertEquals(toolbar[ToolbarLocation(0, 0)]?.subType, "asdf")
         assertEquals(toolbar.items.size, toolbar.pageCount * toolbar.slotCount)
     }
 
     @Test
-    fun setToolbar() = jsonRpcSpaceEngineers {
-        val blockTypes = blockDefinitions().filter { it.cubeSize == CubeSize.Large && it.size == Vec3(1, 1, 1) }
-            .map { it.blockType }
+    fun setToolbar() = spaceEngineersSimplePlaceGrindTorch {
+        val blockTypes = definitions.blockDefinitions().filterForScreenshots().map { it.blockType }
 
         val location = ToolbarLocation(0, 2)
         val (success, fail) = blockTypes.partition { blockType ->
@@ -77,8 +73,7 @@ class GetToolbarTest {
     }
 
     @Test
-    fun equipSmall() = spaceEngineers {
-        session.loadFromTestResources("simple-place-grind-torch")
+    fun equipSmall() = spaceEngineersSimplePlaceGrindTorch {
         val location = ToolbarLocation(2, 1)
         observer.observeNewBlocks()
         val blockType = "SmallHeavyBlockArmorBlock"

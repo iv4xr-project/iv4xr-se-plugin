@@ -14,6 +14,23 @@ val TEST_MOCK_RESPONSE_LINE = """
 
 val TEST_SCENARIO_1_ID = File("${SCENARIO_DIR}Scenario1").absolutePath
 
+
+fun spaceEngineersSimplePlaceGrindTorch(
+    scenarioId: String = "simple-place-grind-torch",
+    agentId: String = TEST_AGENT,
+    spaceEngineers: SpaceEngineers = ContextControllerWrapper(
+        spaceEngineers = JsonRpcCharacterController.localhost(agentId)
+    ),
+    block: SpaceEngineers.() -> Unit
+) {
+    try {
+        spaceEngineers.session.loadFromTestResources(scenarioId)
+        block(spaceEngineers)
+    } finally {
+        spaceEngineers.closeIfCloseable()
+    }
+}
+
 fun mockController(
     response: String = TEST_MOCK_RESPONSE_LINE,
     agentId: String = TEST_AGENT,

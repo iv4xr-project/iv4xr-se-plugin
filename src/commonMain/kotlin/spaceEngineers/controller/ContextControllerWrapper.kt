@@ -35,5 +35,11 @@ class ContextControllerWrapper(
                 context.updateNewBlocks(allBlocks)
             }.apply(::addToHistory)
         }
+
+        override fun takeScreenshot(absolutePath: String) {
+            spaceEngineers.observer.takeScreenshot(absolutePath)
+        }
     }
+    override val definitions: Definitions = spaceEngineers.definitions
+
 }

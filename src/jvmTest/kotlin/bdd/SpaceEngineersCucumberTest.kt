@@ -303,10 +303,9 @@ class SpaceEngineersCucumberTest {
         blockScreenshotInfoByType.getOrPut(block.blockType) {
             Screenshots(block)
         }.screenshots.add(singleScreenshot)
-        val cw = environment.spaceEngineers as JsonRpcCharacterController
         val blockDir = File(outputDirectory, "${block.blockType}").apply { mkdirs() }
         val screenshotFile = File(blockDir, singleScreenshot.filename)
-        cw.takeScreenshot(screenshotFile.absolutePath)
+        environment.observer.takeScreenshot(screenshotFile.absolutePath)
     }
 
     fun observeLatestNewBlock(): SeBlock {
@@ -316,8 +315,7 @@ class SpaceEngineersCucumberTest {
     @Then("Character grinds down to {double}% below each threshold, steps {float} units back and takes screenshot.")
     fun character_grinds_down_to_below_each_threshold_and_takes_screenshot(percentage: Double, distance: Float) {
         val block = observeLatestNewBlock()
-        val cw = environment.spaceEngineers as JsonRpcCharacterController
-        val meta = cw.blockDefinitions().first { it.blockType == block.blockType }
+        val meta = environment.definitions.blockDefinitions().first { it.blockType == block.blockType }
         meta.buildProgressModels.reversed().forEach { seBuildProgressModel ->
             sleep(500)
             grindDownToPercentage((seBuildProgressModel.buildRatioUpperBound).toDouble() * 100.0 - percentage)
