@@ -61,5 +61,10 @@ namespace SeServerMock.Mocks
 
             return GetObservation();
         }
+
+        public void TakeScreenshot(string absolutePath)
+        {
+                throw new System.NotImplementedException();
+        }
     }
 }

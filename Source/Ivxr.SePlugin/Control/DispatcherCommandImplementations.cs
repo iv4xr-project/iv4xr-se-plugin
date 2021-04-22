@@ -1,6 +1,6 @@
-﻿using Iv4xr.SePlugin.WorldModel;
-using Iv4xr.PluginLib.Comm;
+﻿using Iv4xr.PluginLib.Comm;
 using Iv4xr.SePlugin.Communication;
+using Iv4xr.SePlugin.WorldModel;
 using VRageMath;
 
 namespace Iv4xr.SePlugin.Control
@@ -11,10 +11,10 @@ namespace Iv4xr.SePlugin.Control
         {
         }
 
-        protected override SeObservation Execute(DispatcherContext context,
+        protected override SeObservation Execute(ISpaceEngineers se,
             SeRequestShell<AgentCommand<ObservationArgs>> data)
         {
-            return context.Observer.GetObservation(data.Arg.Arg);
+            return se.Observer.GetObservation(data.Arg.Arg);
         }
     }
 
@@ -25,11 +25,11 @@ namespace Iv4xr.SePlugin.Control
         {
         }
 
-        protected override SeObservation Execute(DispatcherContext context,
+        protected override SeObservation Execute(ISpaceEngineers se,
             SeRequestShell<AgentCommand<MoveAndRotateArgs>> data)
         {
-            context.CharacterController.Move(data.Arg.Arg);
-            return context.Observer.GetObservation();
+            se.Character.Move(data.Arg.Arg);
+            return se.Observer.GetObservation();
         }
     }
 
@@ -39,11 +39,11 @@ namespace Iv4xr.SePlugin.Control
         {
         }
 
-        protected override SeObservation Execute(DispatcherContext context,
+        protected override SeObservation Execute(ISpaceEngineers se,
             SeRequestShell<AgentCommand<MoveCommandArgs>> data)
         {
-            context.CharacterController.Move(data.Arg.Arg.MoveIndicator, Vector2.Zero, 0.0f);
-            return context.Observer.GetObservation();
+            se.Character.Move(data.Arg.Arg.MoveIndicator, Vector2.Zero, 0.0f);
+            return se.Observer.GetObservation();
         }
     }
 
@@ -53,11 +53,11 @@ namespace Iv4xr.SePlugin.Control
         {
         }
 
-        protected override SeObservation Execute(DispatcherContext context,
+        protected override SeObservation Execute(ISpaceEngineers se,
             SeRequestShell<AgentCommand<InteractionArgs>> data)
         {
-            context.CharacterController.Interact(data.Arg.Arg);
-            return context.Observer.GetObservation();
+            se.Items.Interact(data.Arg.Arg);
+            return se.Observer.GetObservation();
         }
     }
 }

@@ -8,13 +8,13 @@ namespace Iv4xr.SePlugin.Communication
 {
     public class JsonRpcStarter
     {
-        private RequestQueue m_jsonRpcRequestQueue;
-        private DispatcherContext m_dispatcherContext;
+        private readonly RequestQueue m_jsonRpcRequestQueue;
+        private readonly ISpaceEngineers m_se;
 
-        public JsonRpcStarter(RequestQueue jsonRpcRequestQueue, DispatcherContext dispatcherContext)
+        public JsonRpcStarter(RequestQueue jsonRpcRequestQueue, ISpaceEngineers se)
         {
             m_jsonRpcRequestQueue = jsonRpcRequestQueue;
-            m_dispatcherContext = dispatcherContext;
+            m_se = se;
         }
 
         //not sure how exactly this works, but library must somehow screen through existing objects and add them to rpc handling
@@ -34,10 +34,11 @@ namespace Iv4xr.SePlugin.Communication
         private void StartSync()
         {
             // must new up an instance of the service so it can be registered to handle requests.
-            _svc = new IvxrJsonRpcService(m_dispatcherContext);
+            _svc = new IvxrJsonRpcService(m_se);
             SocketListener.Start(3333, async (writer, line) =>
             {
-                if (line.Contains("Session."))
+                //TODO: need a mechanism to distinguish between calls necessary to be done directly and calls to be done in request queue
+                if (line.Contains("LoadScenario"))
                 {
                     var response = await JsonRpcProcessor.Process(line);
                     await writer.WriteLineAsync(response);
