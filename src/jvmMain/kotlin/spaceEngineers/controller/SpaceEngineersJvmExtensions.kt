@@ -37,13 +37,20 @@ fun ContextControllerWrapper.grindDownToPercentage(blockId: String, percentage: 
     items.endUsingTool()
 }
 
-fun ContextControllerWrapper.torchBackToMax(blockId: String) {
-    val maxIntegrity = observer.blockById(blockId).maxIntegrity
+fun ContextControllerWrapper.torchUpToPercentage(blockId: String, percentage: Double) {
+
+    val integrity = observer.blockById(blockId).maxIntegrity * percentage / 100.0
+
     items.equip(context.torchLocation!!)
     Thread.sleep(500)
+
     items.beginUsingTool()
     runWhileConditionUntilTimeout {
-        observer.blockById(blockId).integrity < maxIntegrity
+        observer.blockById(blockId).integrity < integrity
     }
     items.endUsingTool()
+}
+
+fun ContextControllerWrapper.torchBackToMax(blockId: String) {
+    torchUpToPercentage(blockId, 100.0)
 }

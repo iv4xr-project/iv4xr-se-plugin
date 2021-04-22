@@ -7,9 +7,9 @@ Feature: Example how to describe block observations using cucumber.
     And Output directory is "~/screenshots".
 
   Scenario Outline: Checking scenario character is at correct starting location and can move.
-    Given I load scenario "simple-place-grind-torch-with-tools".
+    Given I load scenario "violent-survival".
     When I observe.
-    Then Character is at (532.7066, -45.193184, -24.395466).
+    Then Character is at (83813.0, -110846.6, 138588.3).
     Then Character forward orientation is (-1, 0, 0).
     Then I see no block of type "<blockType>".
     When Character selects block "<blockType>" and places it.
@@ -24,14 +24,12 @@ Feature: Example how to describe block observations using cucumber.
     When Character sets toolbar slot 5, page 0 to "Welder2Item".
     When Character sets toolbar slot 6, page 0 to "AngleGrinder2Item".
     When Character sets toolbar slot 7, page 0 to "AngleGrinder2Item".
-    When Character moves forward for 16 units.
+    When Character moves forward for 2 units.
     Then Character steps 2 units back and takes screenshot at initial integrity.
-    Then Character grinds down to 1% below each threshold, steps 2 units back and takes screenshot.
+    Then Character welds up to 1% above each threshold, steps 2 units back and takes screenshot.
     Then Character saves metadata about each threshold and file names.
 
     Examples:
       | blockType                     |
       | LargeBlockArmorCornerInv      |
       | LargeHeavyBlockArmorBlock     |
-      | LargeHeavyBlockArmorCornerInv |
-      | LargeHalfArmorBlock           |

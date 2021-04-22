@@ -16,7 +16,6 @@ import testhelp.assertFloatEquals
 import testhelp.assertVecEquals
 import java.io.File
 import java.lang.Thread.sleep
-import kotlin.system.exitProcess
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
@@ -160,6 +159,14 @@ class SpaceEngineersCucumberTest {
         return observeBlocks().first { it.id == context.lastNewBlockId }
     }
 
+    private fun grindDownToPercentage(percentage: Double) {
+        environment.grindDownToPercentage(context.lastNewBlockId!!, percentage)
+    }
+
+    private fun torchUpToPercentage(percentage: Double) {
+        environment.torchUpToPercentage(context.lastNewBlockId!!, percentage)
+    }
+
     @When("Character grinds to {double} integrity.")
     fun character_grinds_to_integrity(integrity: Double) {
         val percentage = integrity / blockToGrind().maxIntegrity * 100.0
@@ -168,18 +175,13 @@ class SpaceEngineersCucumberTest {
 
     @When("Character grinds to {double}% integrity.")
     fun character_grinds_until_to_integrity_percentage(percentage: Double) {
-        environment.grindDownToPercentage(context.lastNewBlockId!!, percentage)
-    }
-
-    fun grindDownToPercentage(percentage: Double) {
-        environment.grindDownToPercentage(context.lastNewBlockId!!, percentage)
+        grindDownToPercentage(percentage)
     }
 
     @When("Character torches block back up to max integrity.")
     fun character_torches_block_back_up_to_max_integrity() {
         environment.torchBackToMax(context.lastNewBlockId!!)
     }
-
 
     @Then("I receive observation.")
     fun i_receive_observation() {
@@ -253,7 +255,7 @@ class SpaceEngineersCucumberTest {
 
     lateinit var outputDirectory: File
 
-    val blockScreenshotInfoByType = mutableMapOf<String, Screenshots>()
+    private val blockScreenshotInfoByType = mutableMapOf<String, Screenshots>()
 
     data class Screenshots(
         val blockType: String,
@@ -319,6 +321,25 @@ class SpaceEngineersCucumberTest {
         meta.buildProgressModels.reversed().forEach { seBuildProgressModel ->
             sleep(500)
             grindDownToPercentage((seBuildProgressModel.buildRatioUpperBound).toDouble() * 100.0 - percentage)
+            sleep(500)
+            environment.items.equip(ToolbarLocation(9, 0))
+            sleep(500)
+            moveBackScreenshotAndForward(
+                block,
+                SingleScreenshot(observeLatestNewBlock(), seBuildProgressModel.buildRatioUpperBound),
+                distance
+            )
+        }
+        sleep(500)
+    }
+
+    @Then("Character welds up to {double}% above each threshold, steps {float} units back and takes screenshot.")
+    fun character_welds_up_above_each_threshold_and_takes_screenshot(percentage: Double, distance: Float) {
+        val block = observeLatestNewBlock()
+        val definition = environment.definitions.blockDefinitions().first { it.blockType == block.blockType }
+        definition.buildProgressModels.forEach { seBuildProgressModel ->
+            sleep(500)
+            torchUpToPercentage((seBuildProgressModel.buildRatioUpperBound).toDouble() * 100.0 + percentage)
             sleep(500)
             environment.items.equip(ToolbarLocation(9, 0))
             sleep(500)
