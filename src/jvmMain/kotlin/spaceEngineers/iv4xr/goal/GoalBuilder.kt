@@ -1,7 +1,6 @@
 package spaceEngineers.iv4xr.goal
 
 import environments.SeAgentState
-import eu.iv4xr.framework.mainConcepts.W3DAgentState
 import eu.iv4xr.framework.spatial.Vec3
 import nl.uu.cs.aplib.mainConcepts.Goal
 import nl.uu.cs.aplib.mainConcepts.GoalStructure

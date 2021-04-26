@@ -1,13 +1,10 @@
 package spaceEngineers.mock;
 
-import environments.SocketReaderWriter;
 import org.junit.jupiter.api.Test;
 import spaceEngineers.commands.InteractionArgs;
 import spaceEngineers.commands.InteractionType;
 import spaceEngineers.controller.ProprietaryJsonTcpCharacterController;
 import spaceEngineers.model.SeObservation;
-import spaceEngineers.transport.AlwaysReturnSameLineReaderWriter;
-import spaceEngineers.transport.GsonReaderWriter;
 import testhelp.TestUtilKt;
 
 import static testhelp.AssertKt.checkMockObservation;

@@ -5,7 +5,7 @@ import environments.SocketReaderWriter
 import environments.closeIfCloseable
 import spaceEngineers.SeRequest
 
-class GsonReaderWriter(
+open class GsonReaderWriter(
     val gson: Gson = SocketReaderWriter.SPACE_ENG_GSON,
     val stringLineReaderWriter: StringLineReaderWriter = SocketReaderWriter()
 ) : AutoCloseable {
