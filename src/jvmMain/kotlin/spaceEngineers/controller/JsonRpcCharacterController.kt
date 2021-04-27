@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName
 import com.google.gson.internal.LinkedTreeMap
 import environments.SocketReaderWriter
 import spaceEngineers.model.*
+import spaceEngineers.transport.AlwaysReturnSameLineReaderWriter
 import spaceEngineers.transport.GsonReaderWriter
 import kotlin.reflect.KFunction
 import kotlin.reflect.KFunction1
@@ -188,7 +189,7 @@ class JsonRpcCharacterController(
             )
         }
     }
-    override val definitions: Definitions = object: Definitions {
+    override val definitions: Definitions = object : Definitions {
         override fun blockDefinitions(): List<SeBlockDefinition> {
             return processParameters<Unit, List<LinkedTreeMap<Any, Any>>>(
                 params = mapOf(),
@@ -198,7 +199,16 @@ class JsonRpcCharacterController(
             }
         }
 
+        override fun allDefinitions(): List<DefinitionBase> {
+            return processParameters<Unit, List<LinkedTreeMap<Any, Any>>>(
+                params = mapOf(),
+                methodName = "${definitionsPrefix}AllDefinitions"
+            ).map {
+                gsonReaderWriter.gson.fromJson(gsonReaderWriter.gson.toJson(it), DefinitionBase::class.java)
+            }
+        }
     }
+
 
     companion object {
         fun localhost(agentId: String): JsonRpcCharacterController {
@@ -211,5 +221,14 @@ class JsonRpcCharacterController(
                 )
             )
         }
+
+        fun mock(agentId: String, lineToReturn: String): JsonRpcCharacterController {
+            return JsonRpcCharacterController(
+                agentId = agentId, gsonReaderWriter = GsonReaderWriter(
+                    stringLineReaderWriter = AlwaysReturnSameLineReaderWriter(response = lineToReturn)
+                )
+            )
+        }
+
     }
 }

@@ -37,4 +37,5 @@ interface Items {
 
 interface Definitions {
     fun blockDefinitions(): List<SeBlockDefinition>
+    fun allDefinitions(): List<DefinitionBase>
 }

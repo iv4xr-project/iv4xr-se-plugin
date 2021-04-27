@@ -3,14 +3,18 @@ package spaceEngineers.game
 import spaceEngineers.model.CubeSize
 import spaceEngineers.model.SeBlockDefinition
 import spaceEngineers.model.Vec3
-import testhelp.spaceEngineersSimplePlaceGrindTorch
+import testhelp.JSON_RESOURCES_DIR
+import testhelp.MockOrRealGameTest
+import testhelp.preferMocking
+import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotEquals
 
 
 val stringFilters = setOf("Symbol", "Neon", "Window")
 fun SeBlockDefinition.isGoodForScreenshots(): Boolean {
-    return cubeSize == CubeSize.Large &&
+    return enabled && cubeSize == CubeSize.Large &&
             size == Vec3.ONE &&
             buildProgressModels.isNotEmpty() &&
             stringFilters.none { blockType.contains(it) }
@@ -20,22 +24,67 @@ fun Iterable<SeBlockDefinition>.filterForScreenshots(): List<SeBlockDefinition> 
     return filter { it.isGoodForScreenshots() }
 }
 
-class BlockDefinitionsTest {
+
+class BlockDefinitionsTest : MockOrRealGameTest(DEFINITIONS_FILE, useMock = preferMocking) {
+
+
+    //@Test //uncomment to update definitions json file
+    fun updateDefinitionsFile() = runAndWriteResponse {
+        definitions.blockDefinitions()
+    }
 
     @Test
-    fun printDefinitionsForBdd() = spaceEngineersSimplePlaceGrindTorch {
+    fun printDefinitionsForBdd() = testContext {
         definitions.blockDefinitions().filterForScreenshots().map { it.blockType }.toSet().forEach {
             println("| $it |")
         }
     }
 
     @Test
-    fun allDefinitions() = spaceEngineersSimplePlaceGrindTorch {
+    fun allCount() = testContext {
         assertEquals(626, definitions.blockDefinitions().size)
     }
 
     @Test
-    fun duplicates() = spaceEngineersSimplePlaceGrindTorch {
+    fun allByIdCount() = testContext {
+        assertEquals(626, definitions.blockDefinitions().map { "${it.id}${it.blockType}" }.distinct().size)
+    }
+
+    @Test
+    fun emptyTypeCount() = testContext {
+        assertEquals(
+            13,
+            definitions.blockDefinitions().filter { it.blockType.isEmpty() }.map { "${it.id}${it.blockType}" }
+                .size
+        )
+        definitions.blockDefinitions().filter { it.blockType.isEmpty() }.map { "${it.id}-${it.blockType}" }
+            .forEach(::println)
+    }
+
+    @Test
+    fun enabledCount() = testContext {
+        assertEquals(626, definitions.blockDefinitions().count { it.enabled })
+    }
+
+    @Test
+    fun publicCount() = testContext {
+        assertEquals(589, definitions.blockDefinitions().count { it.public })
+    }
+
+    @Test
+    fun availableInSurvivalCount() = testContext {
+        assertEquals(626, definitions.blockDefinitions().count { it.availableInSurvival })
+    }
+
+    @Test
+    fun notPublic() = testContext {
+        definitions.blockDefinitions().filterNot { it.public }.map { it.blockType }.forEach(::println)
+        assertEquals(37, definitions.blockDefinitions().count { !it.public })
+    }
+
+
+    @Test
+    fun duplicates() = testContext {
         assertEquals(
             definitions.blockDefinitions().groupBy { it.blockType }.filter { it.value.size > 1 }.keys,
             setOf("DebugSphereLarge", "", "LargePistonBase", "SmallPistonBase")
@@ -43,7 +92,7 @@ class BlockDefinitionsTest {
     }
 
     @Test
-    fun blockTypesWithNoProgressModels() = spaceEngineersSimplePlaceGrindTorch {
+    fun blockTypesWithNoProgressModels() = testContext {
         assertEquals(
             definitions.blockDefinitions().filter { it.buildProgressModels.isEmpty() }.map { it.blockType }.toSet(),
             setOf("Monolith", "Stereolith", "DeadAstronaut", "LargeDeadAstronaut")
@@ -51,7 +100,7 @@ class BlockDefinitionsTest {
     }
 
     @Test
-    fun large1x1x1() = spaceEngineersSimplePlaceGrindTorch {
+    fun large1x1x1() = testContext {
         assertEquals(
             definitions.blockDefinitions().filterForScreenshots().size,
             202
@@ -59,7 +108,7 @@ class BlockDefinitionsTest {
     }
 
     @Test
-    fun allSmallBlocks() = spaceEngineersSimplePlaceGrindTorch {
+    fun allSmallBlocks() = testContext {
         assertEquals(
             definitions.blockDefinitions().filter { it.cubeSize == CubeSize.Small }.map { it.blockType }.size,
             260
@@ -67,7 +116,7 @@ class BlockDefinitionsTest {
     }
 
     @Test
-    fun blockDefinitionsBySize() = spaceEngineersSimplePlaceGrindTorch {
+    fun blockDefinitionsBySize() = testContext {
         val sizeToCount = definitions.blockDefinitions().filter { it.cubeSize == CubeSize.Large }.map { it.size }
             .groupBy { it.length() }
             .map { it.value.first() to it.value.size }.toMap()
@@ -95,6 +144,40 @@ class BlockDefinitionsTest {
                 Vec3(1, 2, 3) to 3
             )
         )
+    }
+
+    @Test
+    fun sameIdForSmallLarge() = testContext {
+        val blockDefinitions = definitions.blockDefinitions()
+        assertEquals(
+            blockDefinitions.first { it.blockType == "LargeHeavyBlockArmorBlock" }.id,
+            blockDefinitions.first { it.blockType == "SmallHeavyBlockArmorBlock" }.id
+        )
+
+    }
+
+    @Test
+    fun groupedById() = testContext {
+        definitions.blockDefinitions().filterForScreenshots().groupBy { it.id }
+            .map { it.key to it.value.map { it.blockType } }.forEach(::println)
+    }
+
+    @Test
+    fun differentIdForDifferentBlocks() = testContext {
+        val blockDefinitions = definitions.blockDefinitions()
+        assertNotEquals(
+            blockDefinitions.first { it.blockType == "LargeHeavyBlockArmorBlock" }.id,
+            blockDefinitions.first { it.blockType == "LargeBlockCockpitSeat" }.id
+        )
+        assertEquals(
+            blockDefinitions.first { it.blockType == "LargeHeavyBlockArmorBlock" }.id,
+            blockDefinitions.first { it.blockType == "LargeBlockArmorBlock" }.id
+        )
+    }
+
+    companion object {
+        const val DEFINITIONS_JSON = "block_definitions.json"
+        val DEFINITIONS_FILE = File("$JSON_RESOURCES_DIR${DEFINITIONS_JSON}")
     }
 
 }
