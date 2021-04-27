@@ -31,11 +31,11 @@ namespace Ivxr.SeGameLib.Tests
         [Fact]
         public void ConvertsSeObservationToJson()
         {
-            var observation = new SeObservation
+            var observation = new Observation
             {
                     AgentID = "Foo",
                     Position = new PlainVec3D(1, 2, 3),
-                    Entities = new List<SeEntity>()
+                    Entities = new List<Entity>()
             };
 
             var json = m_jsoner.ToJson(observation);

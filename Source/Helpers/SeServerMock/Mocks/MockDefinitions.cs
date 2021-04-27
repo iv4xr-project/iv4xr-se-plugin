@@ -10,9 +10,9 @@ namespace SeServerMock.Mocks
         public ILog Log { get; set; }
 
 
-        public List<SeBlockDefinition> BlockDefinitions()
+        public List<BlockDefinition> BlockDefinitions()
         {
-            return new List<SeBlockDefinition>();
+            return new List<BlockDefinition>();
         }
 
         public List<DefinitionBase> AllDefinitions()

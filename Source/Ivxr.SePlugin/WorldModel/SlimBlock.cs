@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Iv4xr.SePlugin.WorldModel
+﻿namespace Iv4xr.SePlugin.WorldModel
 {
-    public class SeBlock : SeEntity
+    public class SlimBlock : Entity
     {
         //public float GridSize;  // NOTE: pull up to Grid if we add grids.
         public float MaxIntegrity;
