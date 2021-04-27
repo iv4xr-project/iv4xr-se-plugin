@@ -3,7 +3,7 @@
 namespace Iv4xr.SePlugin.WorldModel
 {
     // Intended to be maximally compatible with Iv4xr.framework.world.WorldModel from the iv4XR Java framework.
-    public class SeObservation
+    public class Observation
     {
         public string AgentID;
 
@@ -13,8 +13,8 @@ namespace Iv4xr.SePlugin.WorldModel
         public PlainVec3D Velocity; // Agent's velocity
         public PlainVec3D Extent; // Agent's dimensions (x,y,z size/2)
 
-        public List<SeEntity> Entities;
+        public List<Entity> Entities;
 
-        public List<SeGrid> Grids;
+        public List<CubeGrid> Grids;
     }
 }

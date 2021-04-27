@@ -39,13 +39,13 @@ namespace Iv4xr.SePlugin.Control
             return Vector3D.Zero;
         }
 
-        public SeObservation GetBasicObservation()
+        public Observation GetBasicObservation()
         {
             var characterPosition = GetPlayerPosition();
 
             var orientation = Character.PositionComp.GetOrientation();
 
-            var observation = new SeObservation
+            var observation = new Observation
             {
                 AgentID = "se0",
                 Position = new PlainVec3D(characterPosition), // Consider reducing allocations.
@@ -73,7 +73,7 @@ namespace Iv4xr.SePlugin.Control
             }
         }
 
-        public List<SeGrid> CollectSurroundingBlocks(BoundingSphereD sphere, ObservationMode mode)
+        public List<CubeGrid> CollectSurroundingBlocks(BoundingSphereD sphere, ObservationMode mode)
         {
             return EnumerateSurroundingEntities(sphere)
                     .OfType<MyCubeGrid>()

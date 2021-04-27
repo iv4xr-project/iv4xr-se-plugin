@@ -15,8 +15,8 @@ namespace Iv4xr.SePlugin.Control
 {
     public interface IObserver
     {
-        SeObservation GetObservation();
-        SeObservation GetObservation(ObservationArgs observationArgs);
+        Observation GetObservation();
+        Observation GetObservation(ObservationArgs observationArgs);
         void TakeScreenshot(string absolutePath);
     }
 
@@ -31,7 +31,7 @@ namespace Iv4xr.SePlugin.Control
             m_lowLevelObserver = lowLevelObserver;
         }
 
-        public SeObservation GetObservation(ObservationArgs observationArgs)
+        public Observation GetObservation(ObservationArgs observationArgs)
         {
             var mode = ((observationArgs.ObservationMode == ObservationMode.DEFAULT)
                     ? ObservationMode.BASIC
@@ -74,18 +74,18 @@ namespace Iv4xr.SePlugin.Control
             );
         }
 
-        public SeObservation GetObservation()
+        public Observation GetObservation()
         {
             return GetObservation(ObservationArgs.Default);
         }
 
-        private List<SeEntity> CollectSurroundingEntities(BoundingSphereD sphere)
+        private List<Entity> CollectSurroundingEntities(BoundingSphereD sphere)
         {
-            var ivEntities = new List<SeEntity>();
+            var ivEntities = new List<Entity>();
 
             foreach (MyEntity entity in m_lowLevelObserver.EnumerateSurroundingEntities(sphere))
             {
-                var ivEntity = new SeEntity()
+                var ivEntity = new Entity()
                 {
                         Id = entity.Name,
                         Position = new PlainVec3D(entity.PositionComp.GetPosition())

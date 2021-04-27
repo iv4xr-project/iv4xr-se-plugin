@@ -6,14 +6,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AustinHarris.JsonRpc" Version="1.2.2" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\..\se\Sources\Sandbox.Game\Sandbox.Game.csproj" />
     <ProjectReference Include="..\..\..\se\Sources\VRage.Game\VRage.Game.csproj" />
     <ProjectReference Include="..\..\..\se\Sources\VRage\VRage.csproj" />
     <ProjectReference Include="..\Ivxr.PlugIndependentLib\Ivxr.PlugIndependentLib.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AustinHarris.JsonRpc" Version="1.2.2" />
   </ItemGroup>
 
 </Project>

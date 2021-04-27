@@ -9,20 +9,20 @@ namespace SeServerMock.Mocks
     {
         public ILog Log { get; set; }
 
-        public SeObservation GetObservation()
+        public Observation GetObservation()
         {
-            var entity = new SeEntity()
+            var entity = new Entity()
             {
                     Id = "Ente",
                     Position = new PlainVec3D(3, 2, 1)
             };
 
-            var entities = new List<SeEntity>
+            var entities = new List<Entity>
             {
                     entity
             };
 
-            var block = new SeBlock()
+            var block = new SlimBlock()
             {
                     Id = "blk",
                     Position = new PlainVec3D(5, 5, 5),
@@ -32,21 +32,21 @@ namespace SeServerMock.Mocks
                     BlockType = "MockBlock"
             };
 
-            var blocks = new List<SeBlock>
+            var blocks = new List<SlimBlock>
             {
                     block
             };
 
-            var grids = new List<SeGrid>
+            var grids = new List<CubeGrid>
             {
-                    new SeGrid()
+                    new CubeGrid()
                     {
                             Position = block.Position,
                             Blocks = blocks
                     }
             };
 
-            return new SeObservation()
+            return new Observation()
             {
                     AgentID = "Mock",
                     Position = new PlainVec3D(4, 2, 0),
@@ -55,7 +55,7 @@ namespace SeServerMock.Mocks
             };
         }
 
-        public SeObservation GetObservation(ObservationArgs observationArgs)
+        public Observation GetObservation(ObservationArgs observationArgs)
         {
             Log.WriteLine($"Observation mode: {observationArgs.ObservationMode}");
 

@@ -52,7 +52,7 @@ namespace Iv4xr.SePlugin.Communication
         }
 
         [JsonRpcMethod("Character.MoveAndRotate")]
-        public SeObservation MoveAndRotate(Vector3D movement, Vector2 rotation3, float roll)
+        public Observation MoveAndRotate(Vector3D movement, Vector2 rotation3, float roll)
         {
             m_se.Character.Move(movement, rotation3, roll);
             return m_se.Observer.GetObservation(new ObservationArgs
@@ -60,20 +60,20 @@ namespace Iv4xr.SePlugin.Communication
         }
 
         [JsonRpcMethod("Observer.Observe")]
-        public SeObservation Observe()
+        public Observation Observe()
         {
             return m_se.Observer.GetObservation(ObservationArgs.Default);
         }
 
         [JsonRpcMethod("Observer.ObserveBlocks")]
-        public SeObservation ObserveBlocks()
+        public Observation ObserveBlocks()
         {
             return m_se.Observer.GetObservation(new ObservationArgs
                     {ObservationMode = ObservationMode.BLOCKS});
         }
 
         [JsonRpcMethod("Observer.ObserveNewBlocks")]
-        public SeObservation ObserveNewBlocks()
+        public Observation ObserveNewBlocks()
         {
             var observationArgs = new ObservationArgs {ObservationMode = ObservationMode.NEW_BLOCKS};
             return m_se.Observer.GetObservation(observationArgs);
@@ -86,7 +86,7 @@ namespace Iv4xr.SePlugin.Communication
         }
 
         [JsonRpcMethod("Definitions.BlockDefinitions")]
-        public List<SeBlockDefinition> BlockDefinitions()
+        public List<BlockDefinition> BlockDefinitions()
         {
             return m_se.Definitions.BlockDefinitions();
         }

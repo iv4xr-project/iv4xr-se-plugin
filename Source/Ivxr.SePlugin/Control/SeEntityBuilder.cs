@@ -53,12 +53,12 @@ namespace Iv4xr.SePlugin.Control
             m_blockCountWarningRatio = blockCountWarningRatio;
         }
 
-        public SeGrid CreateSeGrid(MyCubeGrid sourceGrid, BoundingSphereD sphere, ObservationMode mode)
+        public CubeGrid CreateSeGrid(MyCubeGrid sourceGrid, BoundingSphereD sphere, ObservationMode mode)
         {
             var seBlocks = CreateGridBLocks(FoundBlocks(sourceGrid, sphere), mode).ToList();
             var position = sourceGrid.PositionComp.GetPosition();
 
-            return new SeGrid
+            return new CubeGrid
             {
                 Id = sourceGrid.DisplayName,
                 Position = new PlainVec3D(position),
@@ -68,7 +68,7 @@ namespace Iv4xr.SePlugin.Control
 
         private readonly PreviousBlocksFilter m_previousBlocksFilter = new PreviousBlocksFilter();
 
-        private IEnumerable<SeBlock> CreateGridBLocks(IEnumerable<MySlimBlock> foundBlocks, ObservationMode mode)
+        private IEnumerable<SlimBlock> CreateGridBLocks(IEnumerable<MySlimBlock> foundBlocks, ObservationMode mode)
         {
             var blocks = foundBlocks.Where(m_previousBlocksFilter.FilterByMode(mode));
             m_previousBlocksFilter.UpdateAfterFilter();
@@ -81,7 +81,7 @@ namespace Iv4xr.SePlugin.Control
                     $"Number of blocks {limited.Count} for grid is reaching or reached limit {m_blockCountTakeLimit}");
             }
 
-            return limited.Select(CreateSeBlock);
+            return limited.Select(CreateGridBlock);
         }
 
         private static IEnumerable<MySlimBlock> FoundBlocks(MyCubeGrid grid, BoundingSphereD sphere)
@@ -91,11 +91,11 @@ namespace Iv4xr.SePlugin.Control
             return foundBlocks;
         }
 
-        private static SeBlock CreateSeBlock(MySlimBlock sourceBlock)
+        private static SlimBlock CreateGridBlock(MySlimBlock sourceBlock)
         {
             var grid = sourceBlock.CubeGrid;
 
-            return new SeBlock
+            return new SlimBlock
             {
                 Id = sourceBlock.UniqueId.ToString(), // TODO(PP): Might not be unique in rare cases or across grids
                 Position = new PlainVec3D(grid.GridIntegerToWorld(sourceBlock.Position)),
@@ -115,9 +115,9 @@ namespace Iv4xr.SePlugin.Control
             };
         }
 
-        public static SeBlockDefinition GetBuildSeBlockDefinition(MyCubeBlockDefinition blockDefinition)
+        public static BlockDefinition GetBuildSeBlockDefinition(MyCubeBlockDefinition blockDefinition)
         {
-            return new SeBlockDefinition()
+            return new BlockDefinition()
             {
                 Id = blockDefinition.Id.TypeId.ToString(),
                 BlockType = blockDefinition.Id.SubtypeId.String,
@@ -127,14 +127,14 @@ namespace Iv4xr.SePlugin.Control
                 Public = blockDefinition.Public,
                 AvailableInSurvival = blockDefinition.AvailableInSurvival,
                 Enabled = blockDefinition.Enabled,
-                MountPoints = blockDefinition.MountPoints.Select(mp => new SeMountPoint()
+                MountPoints = blockDefinition.MountPoints.Select(mp => new MountPoint()
                         {End = mp.End, Start = mp.Start, Normal = mp.Normal}).ToList()
             };
         }
 
-        private static SeBuildProgressModel GetBuildProgressModel(MyCubeBlockDefinition.BuildProgressModel bpm)
+        private static BuildProgressModel GetBuildProgressModel(MyCubeBlockDefinition.BuildProgressModel bpm)
         {
-            return new SeBuildProgressModel()
+            return new BuildProgressModel()
             {
                 BuildRatioUpperBound = bpm.BuildRatioUpperBound
             };

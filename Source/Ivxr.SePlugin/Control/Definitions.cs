@@ -7,13 +7,13 @@ namespace Iv4xr.SePlugin.Control
 {
     public interface IDefinitions
     {
-        List<SeBlockDefinition> BlockDefinitions();
+        List<BlockDefinition> BlockDefinitions();
         List<DefinitionBase> AllDefinitions();
     }
 
     public class Definitions : IDefinitions
     {
-        public List<SeBlockDefinition> BlockDefinitions()
+        public List<BlockDefinition> BlockDefinitions()
         {
             return MyDefinitionManager.Static
                     .GetDefinitionsOfType<MyCubeBlockDefinition>()
