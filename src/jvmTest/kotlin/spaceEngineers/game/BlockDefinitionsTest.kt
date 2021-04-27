@@ -1,7 +1,7 @@
 package spaceEngineers.game
 
 import spaceEngineers.model.CubeSize
-import spaceEngineers.model.SeBlockDefinition
+import spaceEngineers.model.BlockDefinition
 import spaceEngineers.model.Vec3
 import testhelp.JSON_RESOURCES_DIR
 import testhelp.MockOrRealGameTest
@@ -13,14 +13,14 @@ import kotlin.test.assertNotEquals
 
 
 val stringFilters = setOf("Symbol", "Neon", "Window")
-fun SeBlockDefinition.isGoodForScreenshots(): Boolean {
+fun BlockDefinition.isGoodForScreenshots(): Boolean {
     return enabled && cubeSize == CubeSize.Large &&
             size == Vec3.ONE &&
             buildProgressModels.isNotEmpty() &&
             stringFilters.none { blockType.contains(it) }
 }
 
-fun Iterable<SeBlockDefinition>.filterForScreenshots(): List<SeBlockDefinition> {
+fun Iterable<BlockDefinition>.filterForScreenshots(): List<BlockDefinition> {
     return filter { it.isGoodForScreenshots() }
 }
 

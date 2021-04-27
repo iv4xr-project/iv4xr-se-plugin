@@ -1,6 +1,6 @@
 package spaceEngineers.model
 
-data class SeBuildProgressModel(
+data class BuildProgressModel(
     val buildRatioUpperBound: Float,
 ) {
 }

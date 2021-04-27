@@ -3,7 +3,7 @@ package spaceEngineers
 import communication.system.RequestType
 import spaceEngineers.commands.SeAgentCommand
 import spaceEngineers.commands.SeSessionCommand
-import spaceEngineers.model.SeObservation
+import spaceEngineers.model.Observation
 import kotlin.jvm.java
 
 class SeRequest<ResponseType> @JvmOverloads constructor(
@@ -19,8 +19,8 @@ class SeRequest<ResponseType> @JvmOverloads constructor(
         /**
          * Request an observation after executing the sent Command
          */
-        fun command(command: SeAgentCommand): SeRequest<SeObservation> {
-            return SeRequest(SeObservation::class.java, RequestType.AGENTCOMMAND, command)
+        fun command(command: SeAgentCommand): SeRequest<Observation> {
+            return SeRequest(Observation::class.java, RequestType.AGENTCOMMAND, command)
         }
 
         fun session(sessionCommand: SeSessionCommand): SeRequest<Boolean> {

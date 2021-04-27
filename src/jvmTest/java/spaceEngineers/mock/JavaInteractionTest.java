@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import spaceEngineers.commands.InteractionArgs;
 import spaceEngineers.commands.InteractionType;
 import spaceEngineers.controller.ProprietaryJsonTcpCharacterController;
-import spaceEngineers.model.SeObservation;
+import spaceEngineers.model.Observation;
 import testhelp.TestUtilKt;
 
 import static testhelp.AssertKt.checkMockObservation;
@@ -17,7 +17,7 @@ public class JavaInteractionTest {
                 TestUtilKt.TEST_AGENT,
                 TestUtilKt.getTEST_MOCK_RESPONSE_LINE()
         );
-        SeObservation observation = controller.interact(new InteractionArgs(InteractionType.EQUIP, 4, -1, true));
+        Observation observation = controller.interact(new InteractionArgs(InteractionType.EQUIP, 4, -1, true));
         checkMockObservation(observation);
     }
 }

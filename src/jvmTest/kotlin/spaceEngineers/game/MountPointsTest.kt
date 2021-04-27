@@ -1,7 +1,7 @@
 package spaceEngineers.game
 
 import spaceEngineers.model.CubeSize
-import spaceEngineers.model.SeBlockDefinition
+import spaceEngineers.model.BlockDefinition
 import spaceEngineers.model.Vec3
 import testhelp.MockOrRealGameTest
 import testhelp.preferMocking
@@ -9,7 +9,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 
-fun Iterable<SeBlockDefinition>.filterForMountPoints(): List<SeBlockDefinition> {
+fun Iterable<BlockDefinition>.filterForMountPoints(): List<BlockDefinition> {
     return filter { it.cubeSize == CubeSize.Large && it.size == Vec3.ONE }
 }
 

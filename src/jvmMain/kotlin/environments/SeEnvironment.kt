@@ -34,14 +34,14 @@ val WorldEntity.blockType: String
         return properties["blockType"] as String
     }
 
-fun SeGrid.toWorldEntity(): WorldEntity {
+fun CubeGrid.toWorldEntity(): WorldEntity {
     return WorldEntity(this.id, "grid", false).also { we ->
         we.position = position.toIv4xrVec3()
         we.elements = blocks.map { it.toWorldEntity() }.associateBy { it.id }
     }
 }
 
-fun SeBlock.toWorldEntity(): WorldEntity {
+fun SlimBlock.toWorldEntity(): WorldEntity {
     return WorldEntity(id, "block", false).also { we ->
         we.position = position.toIv4xrVec3()
         we.properties["blockType"] = blockType
@@ -54,7 +54,7 @@ fun SeBlock.toWorldEntity(): WorldEntity {
     }
 }
 
-fun SeObservation.toWorldModel(): WorldModel {
+fun Observation.toWorldModel(): WorldModel {
     return WorldModel().also { worldModel ->
         worldModel.agentId = agentID
         worldModel.position = position.toIv4xrVec3()

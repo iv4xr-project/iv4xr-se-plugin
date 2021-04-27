@@ -3,7 +3,7 @@ package spaceEngineers.controller
 import environments.SocketReaderWriter
 import spaceEngineers.SeRequest
 import spaceEngineers.commands.*
-import spaceEngineers.model.SeObservation
+import spaceEngineers.model.Observation
 import spaceEngineers.transport.AlwaysReturnSameLineReaderWriter
 import spaceEngineers.transport.GsonReaderWriter
 import spaceEngineers.transport.StringLineReaderWriter
@@ -19,19 +19,19 @@ class ProprietaryJsonTcpCharacterController(val agentId: String, val gsonReaderW
         return gsonReaderWriter.processRequest(request)
     }
 
-    override fun moveAndRotate(movementArgs: MovementArgs): SeObservation {
+    override fun moveAndRotate(movementArgs: MovementArgs): Observation {
         return SeRequest.command(SeAgentCommand.moveAndRotate(agentId, movementArgs)).process()
     }
 
-    override fun moveTowards(moveTowardsArgs: MoveTowardsArgs): SeObservation {
+    override fun moveTowards(moveTowardsArgs: MoveTowardsArgs): Observation {
         return SeRequest.command(SeAgentCommand.moveTowardCommand(agentId, moveTowardsArgs)).process()
     }
 
-    override fun observe(observationArgs: ObservationArgs): SeObservation {
+    override fun observe(observationArgs: ObservationArgs): Observation {
         return SeRequest.command(SeAgentCommand.observe(agentId, observationArgs)).process()
     }
 
-    override fun interact(interactionArgs: InteractionArgs): SeObservation {
+    override fun interact(interactionArgs: InteractionArgs): Observation {
         return SeRequest.command(SeAgentCommand.interact(agentId, interactionArgs)).process()
     }
 

@@ -5,7 +5,7 @@ import eu.iv4xr.framework.spatial.Vec3
 import nl.uu.cs.aplib.mainConcepts.Goal
 import nl.uu.cs.aplib.mainConcepts.GoalStructure
 import nl.uu.cs.aplib.mainConcepts.Tactic
-import spaceEngineers.model.SeBlock
+import spaceEngineers.model.SlimBlock
 import spaceEngineers.model.allBlocks
 import kotlin.math.abs
 
@@ -82,7 +82,7 @@ class GoalBuilder(
 
     private fun lastBuiltBlockIntegrityCheck(
         percentage: Double,
-        checkFunction: (SeBlock) -> Boolean,
+        checkFunction: (SlimBlock) -> Boolean,
         tactic: Tactic = tactics.doNothing()
     ): GoalStructure {
         Thread.sleep(500)
@@ -100,14 +100,14 @@ class GoalBuilder(
             ).lift()
     }
 
-    private fun blockIntegrityIsAbove(percentage: Double): (SeBlock) -> Boolean {
+    private fun blockIntegrityIsAbove(percentage: Double): (SlimBlock) -> Boolean {
         return fun(block): Boolean {
             val requiredIntegrity = block.maxIntegrity * percentage
             return block.integrity >= requiredIntegrity
         }
     }
 
-    private fun blockIntegrityIsBelow(percentage: Double): (SeBlock) -> Boolean {
+    private fun blockIntegrityIsBelow(percentage: Double): (SlimBlock) -> Boolean {
         return fun(block): Boolean {
             val requiredIntegrity = block.maxIntegrity * percentage
             return block.integrity <= requiredIntegrity

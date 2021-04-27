@@ -7,20 +7,20 @@ data class SpaceEngineersTestContext(
     var torchLocation: ToolbarLocation? = null,
     var lastNewBlockId: String? = null,
     val blockTypeToToolbarLocation: MutableMap<String, ToolbarLocation> = mutableMapOf(),
-    var allNewestBlocks: MutableList<SeBlock> = mutableListOf(),
-    val observationHistory: MutableList<SeObservation> = mutableListOf(),
+    var allNewestBlocks: MutableList<SlimBlock> = mutableListOf(),
+    val observationHistory: MutableList<Observation> = mutableListOf(),
     var platformOrientationUp: Vec3? = null,
 ) {
 
-    fun updatePlatformOrientationUpIfNotSet(seObservation: SeObservation) {
+    fun updatePlatformOrientationUpIfNotSet(observation: Observation) {
         if (platformOrientationUp == null) {
-            updatePlatformOrientationUp(seObservation)
+            updatePlatformOrientationUp(observation)
         }
     }
 
-    fun updatePlatformOrientationUp(seObservation: SeObservation) {
-        val characterOrientationUp = seObservation.orientationUp
-        val blocks = seObservation.allBlocks
+    fun updatePlatformOrientationUp(observation: Observation) {
+        val characterOrientationUp = observation.orientationUp
+        val blocks = observation.allBlocks
         platformOrientationUp = blocks.map { it.orientationUp }
             .maxByOrNull { it!!.distanceTo(characterOrientationUp) }
     }
@@ -38,14 +38,14 @@ data class SpaceEngineersTestContext(
         return blockTypeToToolbarLocation[blockType] ?: error("Toolbar location not set for type $blockType")
     }
 
-    fun updateNewBlocks(allBlocks: List<SeBlock>) {
+    fun updateNewBlocks(allBlocks: List<SlimBlock>) {
         allBlocks.lastOrNull()?.let {
             lastNewBlockId = it.id
         }
         allNewestBlocks.addAll(allBlocks)
     }
 
-    fun addToHistory(seObservation: SeObservation) {
-        observationHistory.add(seObservation)
+    fun addToHistory(observation: Observation) {
+        observationHistory.add(observation)
     }
 }

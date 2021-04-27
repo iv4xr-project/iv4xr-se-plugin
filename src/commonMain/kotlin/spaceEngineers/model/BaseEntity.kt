@@ -1,9 +1,9 @@
 package spaceEngineers.model
 
 
-class BaseSeEntity(
+class BaseEntity(
     override val id: String,
     override val position: Vec3
-) : SeEntity {
+) : Entity {
 
 }

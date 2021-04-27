@@ -1,10 +1,10 @@
 package spaceEngineers.model
 
 
-data class SeGrid(
+data class CubeGrid(
     override val id: String,
     override val position: Vec3,
-    val blocks: List<SeBlock> = emptyList()
-) : SeEntity {
+    val blocks: List<SlimBlock> = emptyList()
+) : Entity {
 
 }

@@ -151,11 +151,11 @@ class SpaceEngineersCucumberTest {
         )
     }
 
-    private fun observeBlocks(): List<SeBlock> {
+    private fun observeBlocks(): List<SlimBlock> {
         return environment.observer.observeBlocks().allBlocks
     }
 
-    private fun blockToGrind(): SeBlock {
+    private fun blockToGrind(): SlimBlock {
         return observeBlocks().first { it.id == context.lastNewBlockId }
     }
 
@@ -262,7 +262,7 @@ class SpaceEngineersCucumberTest {
         val maxIntegrity: Float,
         val screenshots: MutableList<SingleScreenshot> = mutableListOf()
     ) {
-        constructor(block: SeBlock) : this(block.blockType, block.maxIntegrity)
+        constructor(block: SlimBlock) : this(block.blockType, block.maxIntegrity)
     }
 
     data class SingleScreenshot(
@@ -270,7 +270,7 @@ class SpaceEngineersCucumberTest {
         val integrity: Float,
         val buildRatioUpperBound: Float
     ) {
-        constructor(block: SeBlock, buildRatioUpperBound: Float) : this(
+        constructor(block: SlimBlock, buildRatioUpperBound: Float) : this(
             filename = "${block.blockType}_${block.integrity}.png",
             integrity = block.integrity,
             buildRatioUpperBound = buildRatioUpperBound
@@ -290,7 +290,7 @@ class SpaceEngineersCucumberTest {
         }
     }
 
-    fun moveBackScreenshotAndForward(block: SeBlock, singleScreenshot: SingleScreenshot, distance: Float = 2f) {
+    fun moveBackScreenshotAndForward(block: SlimBlock, singleScreenshot: SingleScreenshot, distance: Float = 2f) {
         sleep(500)
         val startPosition = environment.observer.observe().position
         environment.character.blockingMoveBackwardsByDistance(distance, startPosition = startPosition)
@@ -301,7 +301,7 @@ class SpaceEngineersCucumberTest {
         sleep(500)
     }
 
-    fun screenshot(block: SeBlock, singleScreenshot: SingleScreenshot) {
+    fun screenshot(block: SlimBlock, singleScreenshot: SingleScreenshot) {
         blockScreenshotInfoByType.getOrPut(block.blockType) {
             Screenshots(block)
         }.screenshots.add(singleScreenshot)
@@ -310,7 +310,7 @@ class SpaceEngineersCucumberTest {
         environment.observer.takeScreenshot(screenshotFile.absolutePath)
     }
 
-    fun observeLatestNewBlock(): SeBlock {
+    fun observeLatestNewBlock(): SlimBlock {
         return environment.observer.observeBlocks().allBlocks.first { it.id == context.lastNewBlockId }
     }
 

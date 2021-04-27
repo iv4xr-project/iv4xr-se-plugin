@@ -1,10 +1,10 @@
 package spaceEngineers.model
 
 
-data class SeBlockDefinition(
+data class BlockDefinition(
     val id: String,
     val blockType: String,
-    val buildProgressModels: List<SeBuildProgressModel>,
+    val buildProgressModels: List<BuildProgressModel>,
     val size: Vec3,
     val cubeSize: CubeSize,
     val mountPoints: List<MountPoint>,

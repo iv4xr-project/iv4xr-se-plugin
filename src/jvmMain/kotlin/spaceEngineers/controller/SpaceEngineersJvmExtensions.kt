@@ -1,6 +1,6 @@
 package spaceEngineers.controller
 
-import spaceEngineers.model.SeBlock
+import spaceEngineers.model.SlimBlock
 import spaceEngineers.model.allBlocks
 import java.io.File
 
@@ -10,7 +10,7 @@ fun Session.loadFromTestResources(scenarioId: String, scenarioDir: String = SCEN
     loadScenario(File(scenarioDir, scenarioId).absolutePath)
 }
 
-fun Observer.blockById(blockId: String): SeBlock {
+fun Observer.blockById(blockId: String): SlimBlock {
     return observeBlocks().allBlocks.first { it.id == blockId }
 }
 

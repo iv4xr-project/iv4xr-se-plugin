@@ -1,11 +1,11 @@
 package spaceEngineers.model
 
 
-data class SeBlock(
+data class SlimBlock(
     override val id: String,
     override val position: Vec3,
     val blockType: String
-) : SeEntity {
+) : Entity {
     var maxIntegrity = 0f
     var buildIntegrity = 0f
     var integrity = 0f

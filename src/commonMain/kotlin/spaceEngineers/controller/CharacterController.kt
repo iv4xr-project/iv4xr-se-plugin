@@ -4,17 +4,17 @@ import spaceEngineers.commands.InteractionArgs
 import spaceEngineers.commands.MoveTowardsArgs
 import spaceEngineers.commands.MovementArgs
 import spaceEngineers.commands.ObservationArgs
-import spaceEngineers.model.SeObservation
+import spaceEngineers.model.Observation
 
 
 interface CharacterController {
 
-    fun moveAndRotate(movementArgs: MovementArgs): SeObservation
+    fun moveAndRotate(movementArgs: MovementArgs): Observation
 
-    fun moveTowards(moveTowardsArgs: MoveTowardsArgs): SeObservation
+    fun moveTowards(moveTowardsArgs: MoveTowardsArgs): Observation
 
-    fun observe(observationArgs: ObservationArgs): SeObservation
+    fun observe(observationArgs: ObservationArgs): Observation
 
-    fun interact(interactionArgs: InteractionArgs): SeObservation
+    fun interact(interactionArgs: InteractionArgs): Observation
 }
 

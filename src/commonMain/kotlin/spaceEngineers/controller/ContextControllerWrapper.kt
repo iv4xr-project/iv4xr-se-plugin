@@ -1,6 +1,6 @@
 package spaceEngineers.controller
 
-import spaceEngineers.model.SeObservation
+import spaceEngineers.model.Observation
 import spaceEngineers.model.allBlocks
 
 class ContextControllerWrapper(
@@ -9,7 +9,7 @@ class ContextControllerWrapper(
 ) : SpaceEngineers {
 
 
-    private fun addToHistory(observation: SeObservation) {
+    private fun addToHistory(observation: Observation) {
         context.addToHistory(observation)
     }
 
@@ -20,17 +20,17 @@ class ContextControllerWrapper(
     override val items: Items = spaceEngineers.items
 
     override val observer: Observer = object: Observer {
-        override fun observe(): SeObservation {
+        override fun observe(): Observation {
             return spaceEngineers.observer.observe().apply(::addToHistory)
         }
 
-        override fun observeBlocks(): SeObservation {
+        override fun observeBlocks(): Observation {
             return spaceEngineers.observer.observeBlocks().apply(::addToHistory).apply {
                 context.updatePlatformOrientationUpIfNotSet(this)
             }
         }
 
-        override fun observeNewBlocks(): SeObservation {
+        override fun observeNewBlocks(): Observation {
             return spaceEngineers.observer.observeNewBlocks().apply {
                 context.updateNewBlocks(allBlocks)
             }.apply(::addToHistory)

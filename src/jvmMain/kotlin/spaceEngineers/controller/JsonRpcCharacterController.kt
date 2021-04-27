@@ -124,8 +124,8 @@ class JsonRpcCharacterController(
     }
 
     override val character: Character = object : Character {
-        override fun moveAndRotate(movement: Vec3, rotation3: Vec3, roll: Float): SeObservation {
-            return processParameters<Any, SeObservation>(
+        override fun moveAndRotate(movement: Vec3, rotation3: Vec3, roll: Float): Observation {
+            return processParameters<Any, Observation>(
                 params = mapOf("movement" to movement, "rotation3" to rotation3, "roll" to roll),
                 methodName = "${characterPrefix}MoveAndRotate"
             )
@@ -166,16 +166,16 @@ class JsonRpcCharacterController(
 
 
     override val observer: Observer = object : Observer {
-        override fun observe(): SeObservation {
-            return processNoParameterMethod<Unit, SeObservation>(::observe, "${observerPrefix}Observe")
+        override fun observe(): Observation {
+            return processNoParameterMethod<Unit, Observation>(::observe, "${observerPrefix}Observe")
         }
 
-        override fun observeBlocks(): SeObservation {
-            return processNoParameterMethod<Unit, SeObservation>(::observeBlocks, "${observerPrefix}ObserveBlocks")
+        override fun observeBlocks(): Observation {
+            return processNoParameterMethod<Unit, Observation>(::observeBlocks, "${observerPrefix}ObserveBlocks")
         }
 
-        override fun observeNewBlocks(): SeObservation {
-            return processNoParameterMethod<Unit, SeObservation>(
+        override fun observeNewBlocks(): Observation {
+            return processNoParameterMethod<Unit, Observation>(
                 ::observeNewBlocks,
                 "${observerPrefix}ObserveNewBlocks"
             )
@@ -190,12 +190,12 @@ class JsonRpcCharacterController(
         }
     }
     override val definitions: Definitions = object : Definitions {
-        override fun blockDefinitions(): List<SeBlockDefinition> {
+        override fun blockDefinitions(): List<BlockDefinition> {
             return processParameters<Unit, List<LinkedTreeMap<Any, Any>>>(
                 params = mapOf(),
                 methodName = "${definitionsPrefix}BlockDefinitions"
             ).map {
-                gsonReaderWriter.gson.fromJson(gsonReaderWriter.gson.toJson(it), SeBlockDefinition::class.java)
+                gsonReaderWriter.gson.fromJson(gsonReaderWriter.gson.toJson(it), BlockDefinition::class.java)
             }
         }
 

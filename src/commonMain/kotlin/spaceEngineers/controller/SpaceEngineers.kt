@@ -16,13 +16,13 @@ interface Session {
 }
 
 interface Character {
-    fun moveAndRotate(movement: Vec3 = Vec3.ZERO, rotation3: Vec3 = Vec3.ZERO, roll: Float = 0f): SeObservation
+    fun moveAndRotate(movement: Vec3 = Vec3.ZERO, rotation3: Vec3 = Vec3.ZERO, roll: Float = 0f): Observation
 }
 
 interface Observer {
-    fun observe(): SeObservation
-    fun observeBlocks(): SeObservation
-    fun observeNewBlocks(): SeObservation
+    fun observe(): Observation
+    fun observeBlocks(): Observation
+    fun observeNewBlocks(): Observation
     fun takeScreenshot(absolutePath: String)
 }
 
@@ -36,6 +36,6 @@ interface Items {
 }
 
 interface Definitions {
-    fun blockDefinitions(): List<SeBlockDefinition>
+    fun blockDefinitions(): List<BlockDefinition>
     fun allDefinitions(): List<DefinitionBase>
 }
