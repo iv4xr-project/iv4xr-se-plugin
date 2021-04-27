@@ -90,6 +90,12 @@ namespace Iv4xr.SePlugin.Communication
         {
             return m_se.Definitions.BlockDefinitions();
         }
+        
+        [JsonRpcMethod("Definitions.AllDefinitions")]
+        public List<DefinitionBase> AllDefinitions()
+        {
+            return m_se.Definitions.AllDefinitions();
+        }
 
         [JsonRpcMethod("Session.LoadScenario")]
         public void LoadScenario(string scenarioPath)

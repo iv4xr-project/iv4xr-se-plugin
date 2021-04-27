@@ -14,5 +14,10 @@ namespace SeServerMock.Mocks
         {
             return new List<SeBlockDefinition>();
         }
+
+        public List<DefinitionBase> AllDefinitions()
+        {
+            return new List<DefinitionBase>();
+        }
     }
 }

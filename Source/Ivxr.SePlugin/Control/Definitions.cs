@@ -8,6 +8,7 @@ namespace Iv4xr.SePlugin.Control
     public interface IDefinitions
     {
         List<SeBlockDefinition> BlockDefinitions();
+        List<DefinitionBase> AllDefinitions();
     }
 
     public class Definitions : IDefinitions
@@ -18,6 +19,20 @@ namespace Iv4xr.SePlugin.Control
                     .GetDefinitionsOfType<MyCubeBlockDefinition>()
                     .Select(SeEntityBuilder.GetBuildSeBlockDefinition)
                     .ToList();
+        }
+
+        public List<DefinitionBase> AllDefinitions()
+        {
+            return MyDefinitionManager.Static
+                    .GetAllDefinitions().Select(
+                        blockDefinition => new DefinitionBase()
+                        {
+                            Id = blockDefinition.Id.TypeId.ToString(),
+                            BlockType = blockDefinition.Id.SubtypeId.String,
+                            Public = blockDefinition.Public,
+                            AvailableInSurvival = blockDefinition.AvailableInSurvival,
+                            Enabled = blockDefinition.Enabled,
+                        }).ToList();
         }
     }
 }

@@ -57,7 +57,7 @@ namespace Iv4xr.SePlugin.Control
         {
             var seBlocks = CreateGridBLocks(FoundBlocks(sourceGrid, sphere), mode).ToList();
             var position = sourceGrid.PositionComp.GetPosition();
-            
+
             return new SeGrid
             {
                 Id = sourceGrid.DisplayName,
@@ -72,12 +72,13 @@ namespace Iv4xr.SePlugin.Control
         {
             var blocks = foundBlocks.Where(m_previousBlocksFilter.FilterByMode(mode));
             m_previousBlocksFilter.UpdateAfterFilter();
-            
+
             var limited = blocks.Take(m_blockCountTakeLimit).ToList();
-            
+
             if (limited.Count * m_blockCountWarningRatio > m_blockCountTakeLimit)
             {
-                Log?.WriteLine($"Number of blocks {limited.Count} for grid is reaching or reached limit {m_blockCountTakeLimit}");
+                Log?.WriteLine(
+                    $"Number of blocks {limited.Count} for grid is reaching or reached limit {m_blockCountTakeLimit}");
             }
 
             return limited.Select(CreateSeBlock);
@@ -96,7 +97,7 @@ namespace Iv4xr.SePlugin.Control
 
             return new SeBlock
             {
-                Id = sourceBlock.UniqueId.ToString(),  // TODO(PP): Might not be unique in rare cases or across grids
+                Id = sourceBlock.UniqueId.ToString(), // TODO(PP): Might not be unique in rare cases or across grids
                 Position = new PlainVec3D(grid.GridIntegerToWorld(sourceBlock.Position)),
                 MaxIntegrity = sourceBlock.MaxIntegrity,
                 BuildIntegrity = sourceBlock.BuildIntegrity,
@@ -118,11 +119,16 @@ namespace Iv4xr.SePlugin.Control
         {
             return new SeBlockDefinition()
             {
-                //Id = blockDefinition.Id.TypeId.ToString(),
+                Id = blockDefinition.Id.TypeId.ToString(),
                 BlockType = blockDefinition.Id.SubtypeId.String,
                 CubeSize = blockDefinition.CubeSize.ToString(),
                 BuildProgressModels = blockDefinition.BuildProgressModels.Select(GetBuildProgressModel).ToList(),
                 Size = blockDefinition.Size,
+                Public = blockDefinition.Public,
+                AvailableInSurvival = blockDefinition.AvailableInSurvival,
+                Enabled = blockDefinition.Enabled,
+                MountPoints = blockDefinition.MountPoints.Select(mp => new SeMountPoint()
+                        {End = mp.End, Start = mp.Start, Normal = mp.Normal}).ToList()
             };
         }
 
