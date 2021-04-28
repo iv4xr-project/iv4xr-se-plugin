@@ -197,9 +197,10 @@ class SpaceEngineersCucumberTest {
 
     @When("Character selects block {string} and places it.")
     fun character_places_selects_block_and_places_it(blockType: String) {
-        val toolbarLocation = ToolbarLocation(0, 0)
+        val toolbarLocation = ToolbarLocation(4, 0)
         environment.items.setToolbarItem(blockType, toolbarLocation);
         environment.items.equip(toolbarLocation)
+        sleep(250)
         environment.items.place()
         environment.items.equip(ToolbarLocation(9, 0))
     }
