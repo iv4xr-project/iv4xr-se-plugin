@@ -200,7 +200,7 @@ class SpaceEngineersCucumberTest {
         val toolbarLocation = ToolbarLocation(4, 0)
         environment.items.setToolbarItem(blockType, toolbarLocation);
         environment.items.equip(toolbarLocation)
-        sleep(250)
+        sleep(150)
         environment.items.place()
         environment.items.equip(ToolbarLocation(9, 0))
     }
