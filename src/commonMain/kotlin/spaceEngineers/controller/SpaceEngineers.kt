@@ -16,7 +16,7 @@ interface Session {
 }
 
 interface Character {
-    fun moveAndRotate(movement: Vec3 = Vec3.ZERO, rotation3: Vec3 = Vec3.ZERO, roll: Float = 0f): Observation
+    fun moveAndRotate(movement: Vec3 = Vec3.ZERO, rotation3: Vec2 = Vec2.ZERO, roll: Float = 0f): Observation
 }
 
 interface Observer {
@@ -31,7 +31,7 @@ interface Items {
     fun equip(toolbarLocation: ToolbarLocation)
     fun beginUsingTool()
     fun endUsingTool()
-    fun setToolbarItem(name: String, location: ToolbarLocation)
+    fun setToolbarItem(name: String, toolbarLocation: ToolbarLocation)
     fun getToolbar(): Toolbar
 }
 

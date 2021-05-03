@@ -4,10 +4,7 @@ import spaceEngineers.commands.InteractionArgs
 import spaceEngineers.commands.InteractionType
 import spaceEngineers.commands.MovementArgs
 import spaceEngineers.commands.ObservationMode
-import spaceEngineers.model.Observation
-import spaceEngineers.model.Toolbar
-import spaceEngineers.model.ToolbarLocation
-import spaceEngineers.model.Vec3
+import spaceEngineers.model.*
 import java.io.Closeable
 
 class OldProtocolSpaceEngineers(val controller: ProprietaryJsonTcpCharacterController) : SpaceEngineers, Closeable {
@@ -18,7 +15,7 @@ class OldProtocolSpaceEngineers(val controller: ProprietaryJsonTcpCharacterContr
     }
 
     override val character: Character = object : Character {
-        override fun moveAndRotate(movement: Vec3, rotation3: Vec3, roll: Float): Observation {
+        override fun moveAndRotate(movement: Vec3, rotation3: Vec2, roll: Float): Observation {
             controller.moveAndRotate(MovementArgs(movement, rotation3, roll))
             return observer.observe()
         }
@@ -41,12 +38,12 @@ class OldProtocolSpaceEngineers(val controller: ProprietaryJsonTcpCharacterContr
             controller.interact(InteractionArgs(InteractionType.END_USE))
         }
 
-        override fun setToolbarItem(name: String, location: ToolbarLocation) {
+        override fun setToolbarItem(name: String, toolbarLocation: ToolbarLocation) {
             controller.interact(
                 InteractionArgs(
                     InteractionType.TOOLBAR_SET,
-                    slot = location.slot,
-                    page = location.page,
+                    slot = toolbarLocation.slot,
+                    page = toolbarLocation.page,
                     name
                 )
             )

@@ -6,6 +6,7 @@ import spaceEngineers.commands.ObservationArgs
 import spaceEngineers.commands.ObservationMode
 import spaceEngineers.model.Observation
 import spaceEngineers.model.ToolbarLocation
+import spaceEngineers.model.Vec2
 import spaceEngineers.model.Vec3
 
 fun CharacterController.equip(toolbarLocation: ToolbarLocation) {
@@ -73,7 +74,7 @@ fun CharacterController.observe(observationMode: ObservationMode): Observation {
 
 fun Character.blockingRotateUntilOrientationForward(
     finalOrientation: Vec3,
-    rotation: Vec3,
+    rotation: Vec2,
     delta: Float = 0.01f,
     maxTries: Int = 1000,
 ): Observation {
@@ -91,7 +92,7 @@ fun Character.blockingRotateUntilOrientationForward(
 
 fun Character.blockingRotateUntilOrientationUp(
     finalOrientation: Vec3,
-    rotation: Vec3,
+    rotation: Vec2,
     delta: Float = 0.01f,
     maxTries: Int = 1000,
 ): Observation {

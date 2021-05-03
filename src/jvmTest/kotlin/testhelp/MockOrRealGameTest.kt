@@ -53,7 +53,8 @@ abstract class MockOrRealGameTest(
                 agentId = TEST_AGENT,
                 gsonReaderWriter = GsonReaderWriter(
                     stringLineReaderWriter = GsonResponseToFileReaderWriter(
-                        rw = SocketReaderWriter(),
+                        rw = SocketReaderWriter(port = 3333),
+                        //rw = NamedPipeReaderWriter("StreamJsonRpcSamplePipe"),
                         file = file,
                     )
                 )

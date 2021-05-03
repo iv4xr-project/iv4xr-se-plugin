@@ -13,7 +13,7 @@ data class JsonRpcRequest<T>(
     @SerializedName("id")
     val id: Long,
     @SerializedName("jsonrpc")
-    val jsonrpc: Double = 2.0,
+    val jsonrpc: String = "2.0",
     @SerializedName("method")
     val method: String,
     @SerializedName("params")
@@ -33,7 +33,7 @@ data class JsonRpcResponse<T>(
     @SerializedName("id")
     val id: Long,
     @SerializedName("jsonrpc")
-    val jsonrpc: Double = 2.0,
+    val jsonrpc: String = "2.0",
     @SerializedName("result")
     val result: T?,
     @SerializedName("error")
@@ -124,7 +124,7 @@ class JsonRpcCharacterController(
     }
 
     override val character: Character = object : Character {
-        override fun moveAndRotate(movement: Vec3, rotation3: Vec3, roll: Float): Observation {
+        override fun moveAndRotate(movement: Vec3, rotation3: Vec2, roll: Float): Observation {
             return processParameters<Any, Observation>(
                 params = mapOf("movement" to movement, "rotation3" to rotation3, "roll" to roll),
                 methodName = "${characterPrefix}MoveAndRotate"
@@ -142,16 +142,16 @@ class JsonRpcCharacterController(
         }
 
         override fun beginUsingTool() {
-            processNoParameterMethod<Unit, Unit>(::beginUsingTool, "${itemsPrefix}StartUsingTool")
+            processNoParameterMethod<Unit, Unit>(::beginUsingTool, "${itemsPrefix}BeginUseTool")
         }
 
         override fun endUsingTool() {
-            processNoParameterMethod<Unit, Unit>(::endUsingTool, "${itemsPrefix}EndUsingTool")
+            processNoParameterMethod<Unit, Unit>(::endUsingTool, "${itemsPrefix}EndUseTool")
         }
 
-        override fun setToolbarItem(name: String, location: ToolbarLocation) {
+        override fun setToolbarItem(name: String, toolbarLocation: ToolbarLocation) {
             processParameters<Any, Unit>(
-                params = mapOf("name" to name, "location" to location),
+                params = mapOf("name" to name, "toolbarLocation" to toolbarLocation),
                 methodName = "${itemsPrefix}SetToolbarItem"
             )
         }

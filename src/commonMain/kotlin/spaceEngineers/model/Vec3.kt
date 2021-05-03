@@ -4,11 +4,17 @@ import kotlin.math.abs
 import kotlin.math.sqrt
 
 
+interface NumberVec<out T : Number> {
+    val x: T
+    val y: T
+    val z: T
+}
+
 data class Vec3(
-    val x: Float = 0f,
-    val y: Float = 0f,
-    val z: Float = 0f,
-) {
+    override val x: Float = 0f,
+    override val y: Float = 0f,
+    override val z: Float = 0f,
+) : NumberVec<Float> {
 
     constructor(
         x: Double = 0.0, y: Double = 0.0, z: Double = 0.0
@@ -64,18 +70,10 @@ data class Vec3(
     }
 
 
-    val size: Float by lazy {
-        distanceTo(ZERO)
-    }
+    val size: Float
+        get() = distanceTo(ZERO)
 
     companion object {
-        val ROTATE_LEFT = Vec3(0f, -1f, 0f)
-        val ROTATE_RIGHT = Vec3(0f, 1f, 0f)
-        val ROTATE_UP = Vec3(-1f, 0f, 0f)
-        val ROTATE_DOWN = Vec3(1f, 0f, 0f)
-        val ROTATE_UP_LEFT = Vec3(-1f, -1f, 0f).normalized()
-        val ROTATE_UP_RIGHT = Vec3(-1f, 1f, 0f).normalized()
-
         val UNIT_X = Vec3(1, 0, 0)
         val UNIT_Y = Vec3(0, 1, 0)
         val UNIT_Z = Vec3(0, 0, 1)

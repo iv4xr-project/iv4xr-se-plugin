@@ -2,6 +2,7 @@ package spaceEngineers.mock
 
 import spaceEngineers.commands.MoveTowardsArgs
 import spaceEngineers.commands.MovementArgs
+import spaceEngineers.model.Vec2
 import spaceEngineers.model.Vec3
 import testhelp.checkMockObservation
 import testhelp.mockController
@@ -20,7 +21,7 @@ class MoveAgentTest {
     @Test
     fun moveAndRotateTest() = mockController {
         // Single move request is not actually visible on the character movement, see manyMovesTest below
-        val args = MovementArgs(Vec3(0f, 0f, -1f), Vec3(0.3f, 0f, 0f), 0f)
+        val args = MovementArgs(Vec3(0f, 0f, -1f), Vec2(0.3f, 0f), 0f)
         val observation = moveAndRotate(args)
         checkMockObservation(observation)
     }
@@ -49,13 +50,13 @@ class MoveAgentTest {
         val stepBoost = 1 // Increase to 10 to 20 to slow down the movement (and see it better)
         val forwardArgs = MovementArgs(Vec3(0f, 0f, -1f))
         addMoves(forwardArgs, 3 * stepBoost)
-        val rotateArgs = MovementArgs(Vec3.ZERO, Vec3(0f, 9f, 0f), 0f)
+        val rotateArgs = MovementArgs(Vec3.ZERO, Vec2(0f, 9f), 0f)
         addMoves(rotateArgs, 2 * stepBoost)
         addMoves(forwardArgs, 3 * stepBoost)
         addMoves(MovementArgs(Vec3(-1f, 0f, 0f)), 20 * stepBoost) // Left
-        val rollArgs = MovementArgs(Vec3.ZERO, Vec3.ZERO, -2f)
+        val rollArgs = MovementArgs(Vec3.ZERO, Vec2.ZERO, -2f)
         addMoves(rollArgs, 2 * stepBoost)
-        val allArgs = MovementArgs(Vec3(0f, 0.7f, 0.2f), Vec3(5f, 7f, 0f), 1.5f)
+        val allArgs = MovementArgs(Vec3(0f, 0.7f, 0.2f), Vec2(5f, 7f), 1.5f)
         addMoves(allArgs, 4 * stepBoost)
         for (move in moves) {
             val observation = moveAndRotate(move)

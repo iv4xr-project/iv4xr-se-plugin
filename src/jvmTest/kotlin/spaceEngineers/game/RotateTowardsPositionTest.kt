@@ -3,6 +3,7 @@ package spaceEngineers.game
 import spaceEngineers.controller.blockingRotateUntilOrientationForward
 import spaceEngineers.controller.loadFromTestResources
 import spaceEngineers.model.ToolbarLocation
+import spaceEngineers.model.Vec2
 import spaceEngineers.model.Vec3
 import spaceEngineers.model.allBlocks
 import testhelp.assertVecEquals
@@ -36,7 +37,7 @@ class RotateTowardsPositionTest {
 
         character.blockingRotateUntilOrientationForward(
             finalOrientation = Vec3(0f, 0f, -1f),
-            rotation = Vec3.ROTATE_RIGHT,
+            rotation = Vec2.ROTATE_RIGHT,
             maxTries = 999999
         )
         assertVecEquals(Vec3(0f, 0f, -1f), observer.observe().orientationForward)
