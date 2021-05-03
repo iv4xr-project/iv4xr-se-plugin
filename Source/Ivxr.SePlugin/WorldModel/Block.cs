@@ -1,6 +1,6 @@
 ﻿namespace Iv4xr.SePlugin.WorldModel
 {
-    public class SlimBlock : Entity
+    public class Block : Entity
     {
         //public float GridSize;  // NOTE: pull up to Grid if we add grids.
         public float MaxIntegrity;
