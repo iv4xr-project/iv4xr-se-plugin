@@ -68,7 +68,7 @@ namespace Iv4xr.SePlugin.Control
 
         private readonly PreviousBlocksFilter m_previousBlocksFilter = new PreviousBlocksFilter();
 
-        private IEnumerable<SlimBlock> CreateGridBLocks(IEnumerable<MySlimBlock> foundBlocks, ObservationMode mode)
+        private IEnumerable<Block> CreateGridBLocks(IEnumerable<MySlimBlock> foundBlocks, ObservationMode mode)
         {
             var blocks = foundBlocks.Where(m_previousBlocksFilter.FilterByMode(mode));
             m_previousBlocksFilter.UpdateAfterFilter();
@@ -91,11 +91,11 @@ namespace Iv4xr.SePlugin.Control
             return foundBlocks;
         }
 
-        private static SlimBlock CreateGridBlock(MySlimBlock sourceBlock)
+        private static Block CreateGridBlock(MySlimBlock sourceBlock)
         {
             var grid = sourceBlock.CubeGrid;
 
-            return new SlimBlock
+            return new Block
             {
                 Id = sourceBlock.UniqueId.ToString(), // TODO(PP): Might not be unique in rare cases or across grids
                 Position = new PlainVec3D(grid.GridIntegerToWorld(sourceBlock.Position)),

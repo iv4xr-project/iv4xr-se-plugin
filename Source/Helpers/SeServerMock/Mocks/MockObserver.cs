@@ -22,7 +22,7 @@ namespace SeServerMock.Mocks
                     entity
             };
 
-            var block = new SlimBlock()
+            var block = new Block()
             {
                     Id = "blk",
                     Position = new PlainVec3D(5, 5, 5),
@@ -32,7 +32,7 @@ namespace SeServerMock.Mocks
                     BlockType = "MockBlock"
             };
 
-            var blocks = new List<SlimBlock>
+            var blocks = new List<Block>
             {
                     block
             };
