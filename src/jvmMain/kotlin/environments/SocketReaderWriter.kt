@@ -22,9 +22,9 @@ fun Any?.closeIfCloseable() {
 class SocketReaderWriter @JvmOverloads constructor(
     host: String = DEFAULT_HOSTNAME,
     port: Int = DEFAULT_PORT,
-    maxWaitTimeMs: Int = 20000,
-    socketConnectionTimeoutMs: Int = 4000,
-    socketDataTimeoutMs: Int = 20000
+    maxWaitTimeMs: Int = 45_000,
+    socketConnectionTimeoutMs: Int = 4_000,
+    socketDataTimeoutMs: Int = 45_000
 ) : AutoCloseable, StringLineReaderWriter {
 
     lateinit var socket: Socket
