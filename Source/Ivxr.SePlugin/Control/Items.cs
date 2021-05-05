@@ -14,9 +14,9 @@ namespace Iv4xr.SePlugin.Control
     {
         void Place();
 
-        void BeginUseTool();
+        void BeginUsingTool();
 
-        void EndUseTool();
+        void EndUsingTool();
 
         void Equip(ToolbarLocation toolbarLocation);
 
@@ -34,13 +34,13 @@ namespace Iv4xr.SePlugin.Control
             m_session = session;
         }
 
-        public void BeginUseTool()
+        public void BeginUsingTool()
         {
             var entityController = GetEntityController();
             entityController.ControlledEntity.BeginShoot(MyShootActionEnum.PrimaryAction);
         }
 
-        public void EndUseTool()
+        public void EndUsingTool()
         {
             var entityController = GetEntityController();
             entityController.ControlledEntity.EndShoot(MyShootActionEnum.PrimaryAction);

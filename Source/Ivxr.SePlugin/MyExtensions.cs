@@ -39,11 +39,11 @@ namespace Iv4xr.SePlugin
             }
             else if (args.InteractionType == InteractionType.BEGIN_USE)
             {
-                items.BeginUseTool();
+                items.BeginUsingTool();
             }
             else if (args.InteractionType == InteractionType.END_USE)
             {
-                items.EndUseTool();
+                items.EndUsingTool();
             }
             else if (args.InteractionType == InteractionType.TOOLBAR_SET)
             {
