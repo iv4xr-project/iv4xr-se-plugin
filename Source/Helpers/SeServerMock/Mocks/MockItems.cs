@@ -13,11 +13,11 @@ namespace SeServerMock.Mocks
         {
         }
 
-        public void BeginUseTool()
+        public void BeginUsingTool()
         {
         }
 
-        public void EndUseTool()
+        public void EndUsingTool()
         {
         }
 

@@ -102,14 +102,14 @@ namespace Iv4xr.SePlugin.Communication
             Enqueue(() => m_items.Place());
         }
 
-        public void BeginUseTool()
+        public void BeginUsingTool()
         {
-            Enqueue(() => m_items.BeginUseTool());
+            Enqueue(() => m_items.BeginUsingTool());
         }
 
-        public void EndUseTool()
+        public void EndUsingTool()
         {
-            Enqueue(() => m_items.EndUseTool());
+            Enqueue(() => m_items.EndUsingTool());
         }
 
         public void Equip(ToolbarLocation toolbarLocation)
