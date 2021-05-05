@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Text;
+﻿using System.Diagnostics.CodeAnalysis;
 using VRageMath;
 
 namespace Iv4xr.SePlugin.WorldModel
@@ -52,7 +49,7 @@ namespace Iv4xr.SePlugin.WorldModel
 
         private Vector3D m_rotation3;
 
-        public double Roll;
+        public float Roll;
 
         public Vector2 Rotation;
     }

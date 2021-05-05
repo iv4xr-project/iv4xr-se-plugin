@@ -9,7 +9,7 @@ namespace SeServerMock.Mocks
     {
         public ILog Log { get; set; }
         
-        public void PlaceBlock()
+        public void Place()
         {
         }
 
@@ -21,21 +21,17 @@ namespace SeServerMock.Mocks
         {
         }
 
-        public void EquipToolbarItem(int slot, int page)
+        public void Equip(ToolbarLocation toolbarLocation)
         {
         }
 
-        public void SetToolbarItem(int slot, int page, string itemName)
+        public void SetToolbarItem(string name, ToolbarLocation toolbarLocation)
         {
         }
 
         public Toolbar GetToolbar()
         {
             throw new System.NotImplementedException();
-        }
-
-        public void Interact(InteractionArgs args)
-        {
         }
     }
 }

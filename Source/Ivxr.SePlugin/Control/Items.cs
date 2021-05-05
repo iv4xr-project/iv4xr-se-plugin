@@ -12,23 +12,20 @@ namespace Iv4xr.SePlugin.Control
 {
     public interface IItems
     {
-        void PlaceBlock();
+        void Place();
 
         void BeginUseTool();
 
         void EndUseTool();
 
-        void EquipToolbarItem(int slot, int page);
+        void Equip(ToolbarLocation toolbarLocation);
 
-        void SetToolbarItem(int slot, int page, string itemName);
+        void SetToolbarItem(string name, ToolbarLocation toolbarLocation);
 
         Toolbar GetToolbar();
-        
-        void Interact(InteractionArgs args);
-        
     }
-    
-    public class Items: IItems
+
+    public class Items : IItems
     {
         private readonly IGameSession m_session;
 
@@ -36,36 +33,7 @@ namespace Iv4xr.SePlugin.Control
         {
             m_session = session;
         }
-        
-        public void Interact(InteractionArgs args)
-        {
-            if (args.InteractionType == InteractionType.EQUIP)
-            {
-                EquipToolbarItem(args.Slot, args.Page, args.AllowSizeChange);
-            }
-            else if (args.InteractionType == InteractionType.PLACE)
-            {
-                PlaceBlock();
-            }
-            else if (args.InteractionType == InteractionType.BEGIN_USE)
-            {
-                BeginUseTool();
-            }
-            else if (args.InteractionType == InteractionType.END_USE)
-            {
-                EndUseTool();
-            }
-            else if (args.InteractionType == InteractionType.TOOLBAR_SET)
-            {
-                SetToolbarItem(args.Slot, args.Page, args.ItemName);
-            }
-            else
-            {
-                throw new ArgumentException("Unknown or not implemented interaction type.");
-            }
-        }
-        
-        
+
         public void BeginUseTool()
         {
             var entityController = GetEntityController();
@@ -78,7 +46,7 @@ namespace Iv4xr.SePlugin.Control
             entityController.ControlledEntity.EndShoot(MyShootActionEnum.PrimaryAction);
         }
 
-        public void PlaceBlock()
+        public void Place()
         {
             if (MySession.Static.IsAdminOrCreative())
             {
@@ -94,22 +62,25 @@ namespace Iv4xr.SePlugin.Control
             entityController.ControlledEntity.BeginShoot(MyShootActionEnum.PrimaryAction);
         }
 
-        public void EquipToolbarItem(int slot, int page)
+        public void Equip(ToolbarLocation toolbarLocation)
         {
-            EquipToolbarItem(slot, page, false);
+            EquipToolbarItem(toolbarLocation, false);
         }
 
-        private void EquipToolbarItem(int slot, int page, bool allowSizeChange)
+        
+        [Obsolete("Deprecated, will create new api for allosSizeChange. Can use Equip.")]
+        public void EquipToolbarItem(ToolbarLocation toolbarLocation, bool allowSizeChange)
         {
             var toolbar = MyToolbarComponent.CurrentToolbar;
-            toolbar.SwitchToPageOrNot(page);
+            toolbar.SwitchToPageOrNot(toolbarLocation.Page);
 
-            if (!allowSizeChange && toolbar.SelectedSlot.HasValue && (toolbar.SelectedSlot.Value == slot))
+            if (!allowSizeChange && toolbar.SelectedSlot.HasValue &&
+                (toolbar.SelectedSlot.Value == toolbarLocation.Slot))
                 return; // Already set (setting it again would change grid size).
-            
-            toolbar.ActivateItemAtSlot(slot);
+
+            toolbar.ActivateItemAtSlot(toolbarLocation.Slot);
         }
-        
+
         public Toolbar GetToolbar()
         {
             var toolbar = MyToolbarComponent.CurrentToolbar;
@@ -122,8 +93,8 @@ namespace Iv4xr.SePlugin.Control
                         .ToList()
             };
         }
-        
-        
+
+
         private static ToolbarItem GetToolbarItem(MyToolbarItem myToolbarItem)
         {
             if (!(myToolbarItem is MyToolbarItemDefinition definition)) return null;
@@ -136,15 +107,15 @@ namespace Iv4xr.SePlugin.Control
             };
         }
 
-        public void SetToolbarItem(int slot, int page, string itemName)
+        public void SetToolbarItem(string name, ToolbarLocation toolbarLocation)
         {
-            if (IsWeapon(itemName))
+            if (IsWeapon(name))
             {
-                SetToolbarWeapon(slot, page, itemName);
+                SetToolbarWeapon(toolbarLocation.Slot, toolbarLocation.Page, name);
             }
             else
             {
-                SetToolbarBlock(slot, page, itemName);
+                SetToolbarBlock(toolbarLocation.Slot, toolbarLocation.Page, name);
             }
         }
 
@@ -181,7 +152,7 @@ namespace Iv4xr.SePlugin.Control
             toolbar.SwitchToPage(page);
             toolbar.SetItemAtSlot(slot, MyToolbarItemFactory.CreateToolbarItem(toolbarItemBuilder));
         }
-        
+
         private MyEntityController GetEntityController()
         {
             if (m_session.Character is null)

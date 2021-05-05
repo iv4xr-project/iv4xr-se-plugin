@@ -14,7 +14,8 @@ namespace Iv4xr.SePlugin.Control
         protected override Observation Execute(ISpaceEngineers se,
             SeRequestShell<AgentCommand<ObservationArgs>> data)
         {
-            return se.Observer.GetObservation(data.Arg.Arg);
+            var observer = se.Observer as Observer;
+            return observer.GetObservation(data.Arg.Arg.ObservationMode);
         }
     }
 
@@ -28,8 +29,9 @@ namespace Iv4xr.SePlugin.Control
         protected override Observation Execute(ISpaceEngineers se,
             SeRequestShell<AgentCommand<MoveAndRotateArgs>> data)
         {
-            se.Character.Move(data.Arg.Arg);
-            return se.Observer.GetObservation();
+            var args = data.Arg.Arg;
+            se.Character.MoveAndRotate(args.Movement, args.Rotation, args.Roll);
+            return se.Observer.Observe();
         }
     }
 
@@ -42,8 +44,7 @@ namespace Iv4xr.SePlugin.Control
         protected override Observation Execute(ISpaceEngineers se,
             SeRequestShell<AgentCommand<MoveCommandArgs>> data)
         {
-            se.Character.Move(data.Arg.Arg.MoveIndicator, Vector2.Zero, 0.0f);
-            return se.Observer.GetObservation();
+            return se.Character.MoveAndRotate(data.Arg.Arg.MoveIndicator, Vector2.Zero, 0.0f);
         }
     }
 
@@ -56,8 +57,8 @@ namespace Iv4xr.SePlugin.Control
         protected override Observation Execute(ISpaceEngineers se,
             SeRequestShell<AgentCommand<InteractionArgs>> data)
         {
-            se.Items.Interact(data.Arg.Arg);
-            return se.Observer.GetObservation();
+            (se.Items as Items).Interact(data.Arg.Arg);
+            return se.Observer.Observe();
         }
     }
 }

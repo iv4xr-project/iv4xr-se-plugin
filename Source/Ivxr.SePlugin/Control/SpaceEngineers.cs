@@ -23,7 +23,7 @@ namespace Iv4xr.SePlugin.Control
         internal RealSpaceEngineers(GameSession gameSession, ILog log)
         {
             Observer = new Observer(new LowLevelObserver(gameSession) {Log = log}) {Log = log};
-            Character = new CharacterController(gameSession);
+            Character = new CharacterController(gameSession, Observer);
             Session = new SessionController() {Log = log};
             Items = new Items(gameSession);
             Definitions = new Definitions();

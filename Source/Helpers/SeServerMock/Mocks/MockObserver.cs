@@ -59,7 +59,22 @@ namespace SeServerMock.Mocks
         {
             Log.WriteLine($"Observation mode: {observationArgs.ObservationMode}");
 
-            return GetObservation();
+            return Observe();
+        }
+
+        public Observation Observe()
+        {
+                return GetObservation();
+        }
+
+        public Observation ObserveBlocks()
+        {
+                return GetObservation();
+        }
+
+        public Observation ObserveNewBlocks()
+        {
+                return GetObservation();
         }
 
         public void TakeScreenshot(string absolutePath)

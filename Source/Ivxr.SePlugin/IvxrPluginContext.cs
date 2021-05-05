@@ -11,11 +11,10 @@ namespace Iv4xr.SePlugin
     {
         public ILog Log { get; private set; }
         public readonly Dispatcher Dispatcher;
-        public readonly JsonRpcDispatcher JsonRpcDispatcher;
         public readonly JsonRpcStarter JsonRpcStarter;
+        public readonly FuncActionDispatcher FuncActionDispatcher;
 
         private readonly RequestQueue m_requestQueue = new RequestQueue();
-        private readonly RequestQueue m_jsonRpcRequestQueue = new RequestQueue();
 
         private readonly PluginServer m_server;
 
@@ -31,10 +30,10 @@ namespace Iv4xr.SePlugin
             var sessionDispatcher = new SessionDispatcher(se.Session) {Log = Log};
 
             m_server = new PluginServer(Log, sessionDispatcher, m_requestQueue);
+            FuncActionDispatcher = new FuncActionDispatcher();
 
             Dispatcher = new Dispatcher(m_requestQueue, se) {Log = Log};
-            JsonRpcDispatcher = new JsonRpcDispatcher(m_jsonRpcRequestQueue) {Log = Log};
-            JsonRpcStarter = new JsonRpcStarter(m_jsonRpcRequestQueue, se);
+            JsonRpcStarter = new JsonRpcStarter(new SynchronizedSpaceEngineers(se, FuncActionDispatcher)) {Log = Log};
         }
 
 
