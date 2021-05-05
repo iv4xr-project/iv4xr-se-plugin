@@ -13,5 +13,10 @@ namespace SeServerMock.Mocks
         {
             throw new System.NotImplementedException();
         }
+
+        public Observation Teleport(Vector3 position)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

@@ -148,6 +148,15 @@ namespace Iv4xr.SePlugin.Communication
                 return m_observer.Observe();
             });
         }
+
+        public Observation Teleport(Vector3 position)
+        {
+            return Enqueue(() =>
+            {
+                m_character.Teleport(position);
+                return m_observer.Observe();
+            });
+        }
     }
 
     public class SynchronizedSpaceEngineers : ISpaceEngineers
