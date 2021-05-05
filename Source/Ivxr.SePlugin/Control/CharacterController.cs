@@ -8,6 +8,7 @@ namespace Iv4xr.SePlugin.Control
     public interface ICharacterController
     {
         Observation MoveAndRotate(Vector3 movement, Vector2 rotation3, float roll = 0);
+        Observation Teleport(Vector3 position);
     }
 
     public class CharacterController : ICharacterController
@@ -19,6 +20,12 @@ namespace Iv4xr.SePlugin.Control
         {
             m_session = session;
             m_observer = observer;
+        }
+        
+        public Observation Teleport(Vector3 position)
+        {
+            GetEntityController().ControlledEntity.Entity.PositionComp.SetPosition(position);
+            return m_observer.Observe();
         }
         
         public Observation MoveAndRotate(Vector3 movement, Vector2 rotation3, float roll)
