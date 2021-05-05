@@ -17,6 +17,7 @@ interface Session {
 
 interface Character {
     fun moveAndRotate(movement: Vec3 = Vec3.ZERO, rotation3: Vec2 = Vec2.ZERO, roll: Float = 0f): Observation
+    fun teleport(position: Vec3): Observation
 }
 
 interface Observer {

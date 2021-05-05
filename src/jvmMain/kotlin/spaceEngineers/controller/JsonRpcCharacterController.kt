@@ -130,6 +130,10 @@ class JsonRpcCharacterController(
                 methodName = "${characterPrefix}MoveAndRotate"
             )
         }
+
+        override fun teleport(position: Vec3): Observation {
+            return processSingleParameterMethod(::teleport, position, methodName = "${characterPrefix}Teleport")
+        }
     }
 
     override val items: Items = object : Items {

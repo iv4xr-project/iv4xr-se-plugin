@@ -19,6 +19,10 @@ class OldProtocolSpaceEngineers(val controller: ProprietaryJsonTcpCharacterContr
             controller.moveAndRotate(MovementArgs(movement, rotation3, roll))
             return observer.observe()
         }
+
+        override fun teleport(position: Vec3): Observation {
+            TODO("Not yet implemented")
+        }
     }
 
     override val items: Items = object : Items {
