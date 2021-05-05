@@ -12,16 +12,6 @@ The demo is written in [Kotlin](https://kotlinlang.org/), a JVM language by JetB
 
 # Setup
 
-## Requirements
-
-Project requires [aplib](https://github.com/iv4xr-project/aplib) dependency. First build `aplib` and install it to the Maven local repository.
-
-Other possibility at the moment is to change dependency do JitPack (in `build.gradle`):
-
-```
-implementation 'com.github.iv4xr-project:aplib:v1.2.0'
-```
-
 ## How to build
 
 For easy copy-paste, here's the git clone command for this repository:
