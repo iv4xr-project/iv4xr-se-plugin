@@ -146,11 +146,11 @@ class JsonRpcCharacterController(
         }
 
         override fun beginUsingTool() {
-            processNoParameterMethod<Unit, Unit>(::beginUsingTool, "${itemsPrefix}BeginUseTool")
+            processNoParameterMethod<Unit, Unit>(::beginUsingTool, "${itemsPrefix}BeginUsingTool")
         }
 
         override fun endUsingTool() {
-            processNoParameterMethod<Unit, Unit>(::endUsingTool, "${itemsPrefix}EndUseTool")
+            processNoParameterMethod<Unit, Unit>(::endUsingTool, "${itemsPrefix}EndUsingTool")
         }
 
         override fun setToolbarItem(name: String, toolbarLocation: ToolbarLocation) {
