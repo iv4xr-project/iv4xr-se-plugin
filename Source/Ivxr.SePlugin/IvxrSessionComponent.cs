@@ -15,9 +15,9 @@ namespace Iv4xr.SePlugin
         public override void UpdateBeforeSimulation()
         {
             base.UpdateBeforeSimulation();
-
+            
             IvxrPlugin.Dispatcher.ProcessRequests();
-            IvxrPlugin.Context.JsonRpcDispatcher.ProcessRequests();
+            IvxrPlugin.Context.FuncActionDispatcher.CallEverything();
         }
 
         protected override void UnloadData()

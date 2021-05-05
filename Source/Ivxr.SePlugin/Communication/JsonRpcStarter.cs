@@ -1,25 +1,28 @@
-﻿using System.Threading;
-using AustinHarris.JsonRpc;
+﻿using System;
+using System.IO;
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using Iv4xr.PluginLib;
 using Iv4xr.SePlugin.Control;
-using Iv4xr.SePlugin.Session;
+using StreamJsonRpc;
 
 namespace Iv4xr.SePlugin.Communication
 {
     public class JsonRpcStarter
     {
-        private readonly RequestQueue m_jsonRpcRequestQueue;
+        public ILog Log { get; set; }
+
         private readonly ISpaceEngineers m_se;
+        private readonly Action<JsonRpc, ISpaceEngineers> m_extraSetup;
 
-        public JsonRpcStarter(RequestQueue jsonRpcRequestQueue, ISpaceEngineers se)
+        public JsonRpcStarter(ISpaceEngineers se, Action<JsonRpc, ISpaceEngineers> extraSetup = null)
         {
-            m_jsonRpcRequestQueue = jsonRpcRequestQueue;
             m_se = se;
+            m_extraSetup = extraSetup;
         }
-
-        //not sure how exactly this works, but library must somehow screen through existing objects and add them to rpc handling
-        //not a big fan, since this feels "global" and there's less control
-        private object _svc;
 
         public void Start()
         {
@@ -31,23 +34,74 @@ namespace Iv4xr.SePlugin.Communication
             thread.Start();
         }
 
-        private void StartSync()
+        public void StartSync()
         {
-            // must new up an instance of the service so it can be registered to handle requests.
-            _svc = new IvxrJsonRpcService(m_se);
-            SocketListener.Start(3333, async (writer, line) =>
+            var task = StartAsync();
+        }
+
+        private async Task StartAsync(string hostname = "127.0.0.1", int listenPort = 3333)
+        {
+            var server = new TcpListener(IPAddress.Parse(hostname), listenPort);
+            server.Start();
+            Log.WriteLine(("Server started at port " + listenPort));
+            while (true)
             {
-                //TODO: need a mechanism to distinguish between calls necessary to be done directly and calls to be done in request queue
-                if (line.Contains("LoadScenario"))
+                Log.WriteLine(("Waiting for connection"));
+                try
                 {
-                    var response = await JsonRpcProcessor.Process(line);
-                    await writer.WriteLineAsync(response);
-                    await writer.FlushAsync();
+                    using (var client = await server.AcceptTcpClientAsync())
+                    using (var stream = client.GetStream())
+                    {
+                        Log.WriteLine("Client Connected..");
+                        await HandleRequestAsync(stream);
+                    }
                 }
-                else
+                catch (Exception e)
                 {
-                    m_jsonRpcRequestQueue.Requests.Enqueue(new RequestItem(writer, line));
+                    Log.WriteLine("RPCServer exception " + e);
                 }
+            }
+        }
+
+        private async Task HandleRequestAsync(Stream stream)
+        {
+            var jsonRpc = Create(stream, stream);
+            jsonRpc.StartListening();
+            Log.WriteLine($"JSON-RPC listener attached. Waiting for requests...");
+            await jsonRpc.Completion;
+            Log.WriteLine($"Connection terminated.");
+        }
+
+        private JsonRpc Create(Stream writer, Stream reader)
+        {
+            Log.WriteLine(
+                $"Connection request received. Spinning off an async Task to cater to requests.");
+            var jsonRpcMessageHandler =
+                    new NewLineDelimitedMessageHandler(writer, reader, new JsonMessageFormatter(Encoding.UTF8));
+            var jsonRpc = new JsonRpc(jsonRpcMessageHandler);
+            AddLocalRpcTargets(jsonRpc);
+            m_extraSetup?.Invoke(jsonRpc, m_se);
+            return jsonRpc;
+        }
+
+        private void AddLocalRpcTargets(JsonRpc jsonRpc)
+        {
+            jsonRpc.AddLocalRpcTarget(m_se.Character, "Character.");
+            jsonRpc.AddLocalRpcTarget(m_se.Session, "Session.");
+            jsonRpc.AddLocalRpcTarget(m_se.Items, "Items.");
+            jsonRpc.AddLocalRpcTarget(m_se.Observer, "Observer.");
+            jsonRpc.AddLocalRpcTarget(m_se.Definitions, "Definitions.");
+        }
+    }
+
+    public static class JsonRpcExtensions
+    {
+        public static void AddLocalRpcTarget<TService>(this JsonRpc jsonRpc, TService service, string prefix)
+        {
+            jsonRpc.AddLocalRpcTarget<TService>(service, new JsonRpcTargetOptions()
+            {
+                MethodNameTransform = CommonMethodNameTransforms.Prepend(prefix),
+                DisposeOnDisconnect = true
             });
         }
     }

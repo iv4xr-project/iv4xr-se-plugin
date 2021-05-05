@@ -28,12 +28,12 @@ namespace Iv4xr.SePlugin.Control
 
         private MyCharacter Character => m_gameSession.Character;
 
-        public Vector3D GetPlayerPosition()
+        private Vector3D GetPlayerPosition()
         {
             return Character.PositionComp.GetPosition();
         }
 
-        public Vector3D GetPlayerVelocity()
+        private Vector3D GetPlayerVelocity()
         {
             // TODO(PP): Calculate velocity!
             return Vector3D.Zero;
@@ -41,24 +41,38 @@ namespace Iv4xr.SePlugin.Control
 
         public Observation GetBasicObservation()
         {
-            var characterPosition = GetPlayerPosition();
-
             var orientation = Character.PositionComp.GetOrientation();
-
-            var observation = new Observation
+            return new Observation
             {
                 AgentID = "se0",
-                Position = new PlainVec3D(characterPosition), // Consider reducing allocations.
+                Position = new PlainVec3D(GetPlayerPosition()), // Consider reducing allocations.
                 OrientationForward = new PlainVec3D(orientation.Forward),
                 OrientationUp = new PlainVec3D(orientation.Up),
                 Velocity = new PlainVec3D(GetPlayerVelocity()),
                 Extent = m_agentExtent,
             };
+        }
 
+        public Observation GetNewBlocks()
+        {
+            var observation = GetBasicObservation();
+            observation.Grids = CollectSurroundingBlocks(GetBoundingSphereD(), ObservationMode.NEW_BLOCKS);
+            return observation;
+        }
+        
+        public Observation GetBlocks()
+        {
+            var observation = GetBasicObservation();
+            observation.Grids = CollectSurroundingBlocks(GetBoundingSphereD(), ObservationMode.BLOCKS);
             return observation;
         }
 
-        public IEnumerable<MyEntity> EnumerateSurroundingEntities(BoundingSphereD sphere)
+        private BoundingSphereD GetBoundingSphereD()
+        {
+            return new BoundingSphereD(GetPlayerPosition(), radius: 25.0);
+        }
+        
+        private IEnumerable<MyEntity> EnumerateSurroundingEntities(BoundingSphereD sphere)
         {
             List<MyEntity> entities = MyEntities.GetEntitiesInSphere(ref sphere);
 
@@ -73,7 +87,7 @@ namespace Iv4xr.SePlugin.Control
             }
         }
 
-        public List<CubeGrid> CollectSurroundingBlocks(BoundingSphereD sphere, ObservationMode mode)
+        private List<CubeGrid> CollectSurroundingBlocks(BoundingSphereD sphere, ObservationMode mode)
         {
             return EnumerateSurroundingEntities(sphere)
                     .OfType<MyCubeGrid>()

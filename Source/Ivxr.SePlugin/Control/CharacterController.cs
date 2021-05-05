@@ -7,30 +7,24 @@ namespace Iv4xr.SePlugin.Control
 {
     public interface ICharacterController
     {
-        void Move(Vector3 move, Vector2 rotation, float roll);
-        void Move(MoveAndRotateArgs args);
-        
+        Observation MoveAndRotate(Vector3 movement, Vector2 rotation3, float roll = 0);
     }
 
     public class CharacterController : ICharacterController
     {
         private readonly IGameSession m_session;
+        private readonly IObserver m_observer;
 
-        public CharacterController(IGameSession session)
+        public CharacterController(IGameSession session, IObserver observer)
         {
             m_session = session;
+            m_observer = observer;
         }
-
-        public void Move(MoveAndRotateArgs args)
+        
+        public Observation MoveAndRotate(Vector3 movement, Vector2 rotation3, float roll)
         {
-            Move(args.Movement, args.Rotation, (float) args.Roll);
-        }
-
-        public void Move(Vector3 movement, Vector2 rotation, float roll)
-        {
-            var entityController = GetEntityController();
-
-            entityController.ControlledEntity.MoveAndRotate(movement, rotation, roll);
+            GetEntityController().ControlledEntity.MoveAndRotate(movement, rotation3, roll);
+            return m_observer.Observe();
         }
 
 
