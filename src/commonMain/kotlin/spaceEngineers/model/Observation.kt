@@ -1,6 +1,6 @@
 package spaceEngineers.model
 
-val Observation.allBlocks: List<SlimBlock>
+val Observation.allBlocks: List<Block>
     get() {
         return this.grids.flatMap { it.blocks }
     }

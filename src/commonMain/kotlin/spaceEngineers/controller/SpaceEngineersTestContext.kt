@@ -7,7 +7,7 @@ data class SpaceEngineersTestContext(
     var torchLocation: ToolbarLocation? = null,
     var lastNewBlockId: String? = null,
     val blockTypeToToolbarLocation: MutableMap<String, ToolbarLocation> = mutableMapOf(),
-    var allNewestBlocks: MutableList<SlimBlock> = mutableListOf(),
+    var allNewestBlocks: MutableList<Block> = mutableListOf(),
     val observationHistory: MutableList<Observation> = mutableListOf(),
     var platformOrientationUp: Vec3? = null,
 ) {
@@ -38,7 +38,7 @@ data class SpaceEngineersTestContext(
         return blockTypeToToolbarLocation[blockType] ?: error("Toolbar location not set for type $blockType")
     }
 
-    fun updateNewBlocks(allBlocks: List<SlimBlock>) {
+    fun updateNewBlocks(allBlocks: List<Block>) {
         allBlocks.lastOrNull()?.let {
             lastNewBlockId = it.id
         }

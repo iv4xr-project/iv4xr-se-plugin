@@ -41,7 +41,7 @@ fun CubeGrid.toWorldEntity(): WorldEntity {
     }
 }
 
-fun SlimBlock.toWorldEntity(): WorldEntity {
+fun Block.toWorldEntity(): WorldEntity {
     return WorldEntity(id, "block", false).also { we ->
         we.position = position.toIv4xrVec3()
         we.properties["blockType"] = blockType

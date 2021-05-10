@@ -1,7 +1,7 @@
 package spaceEngineers.model
 
 
-data class SlimBlock(
+data class Block(
     override val id: String,
     override val position: Vec3,
     val blockType: String
