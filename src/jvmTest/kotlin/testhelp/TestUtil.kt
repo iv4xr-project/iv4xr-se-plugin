@@ -1,6 +1,6 @@
 package testhelp
 
-import environments.closeIfCloseable
+import spaceEngineers.transport.closeIfCloseable
 import spaceEngineers.controller.*
 import java.io.File
 

@@ -1,6 +1,6 @@
 package testhelp
 
-import environments.SocketReaderWriter
+import spaceEngineers.transport.SocketReaderWriter
 import spaceEngineers.controller.JsonRpcCharacterController
 import spaceEngineers.controller.SpaceEngineers
 import spaceEngineers.controller.loadFromTestResources

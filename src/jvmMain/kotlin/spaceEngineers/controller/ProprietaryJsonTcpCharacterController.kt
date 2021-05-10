@@ -1,6 +1,6 @@
 package spaceEngineers.controller
 
-import environments.SocketReaderWriter
+import spaceEngineers.transport.SocketReaderWriter
 import spaceEngineers.SeRequest
 import spaceEngineers.commands.*
 import spaceEngineers.model.Observation

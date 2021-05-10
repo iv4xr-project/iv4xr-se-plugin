@@ -2,7 +2,7 @@ package spaceEngineers.controller
 
 import com.google.gson.annotations.SerializedName
 import com.google.gson.internal.LinkedTreeMap
-import environments.SocketReaderWriter
+import spaceEngineers.transport.SocketReaderWriter
 import spaceEngineers.model.*
 import spaceEngineers.transport.AlwaysReturnSameLineReaderWriter
 import spaceEngineers.transport.GsonReaderWriter

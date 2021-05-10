@@ -1,8 +1,6 @@
 package spaceEngineers.transport
 
 import com.google.gson.Gson
-import environments.SocketReaderWriter
-import environments.closeIfCloseable
 import spaceEngineers.SeRequest
 
 open class GsonReaderWriter(

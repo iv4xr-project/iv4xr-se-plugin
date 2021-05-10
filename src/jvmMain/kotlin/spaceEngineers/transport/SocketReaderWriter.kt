@@ -1,9 +1,8 @@
-package environments
+package spaceEngineers.transport
 
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import spaceEngineers.transport.StringLineReaderWriter
 import java.io.*
 import java.lang.reflect.Modifier
 import java.net.InetSocketAddress

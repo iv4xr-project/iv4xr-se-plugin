@@ -1,6 +1,5 @@
 package spaceEngineers.transport
 
-import environments.closeIfCloseable
 import java.io.File
 
 class GsonResponseToFileReaderWriter(val rw: StringLineReaderWriter, val file: File) : StringLineReaderWriter,
