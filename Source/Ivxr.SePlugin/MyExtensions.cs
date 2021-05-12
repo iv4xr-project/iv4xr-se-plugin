@@ -4,11 +4,17 @@ using Iv4xr.SePlugin.WorldModel;
 using Sandbox.Game.Multiplayer;
 using Sandbox.Game.Screens.Helpers;
 using Sandbox.Game.World;
+using VRageMath;
 
 namespace Iv4xr.SePlugin
 {
     public static class MyExtensions
     {
+        public static PlainVec3D ToPlain(this Vector3D vector)
+        {
+            return new PlainVec3D(vector);
+        }
+        
         public static bool IsAdminOrCreative(this MySession session)
         {
             // copied from MyCubePlacer.Shoot

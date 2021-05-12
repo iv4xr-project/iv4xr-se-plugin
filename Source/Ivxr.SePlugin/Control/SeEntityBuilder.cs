@@ -57,12 +57,16 @@ namespace Iv4xr.SePlugin.Control
         {
             var seBlocks = CreateGridBLocks(FoundBlocks(sourceGrid, sphere), mode).ToList();
             var position = sourceGrid.PositionComp.GetPosition();
+            var orientationUp = sourceGrid.PositionComp.GetOrientation().Up;
+            var orientationForward = sourceGrid.PositionComp.GetOrientation().Forward;
 
             return new CubeGrid
             {
                 Id = sourceGrid.DisplayName,
-                Position = new PlainVec3D(position),
-                Blocks = seBlocks
+                Position = position.ToPlain(),
+                Blocks = seBlocks,
+                OrientationForward = orientationForward.ToPlain(),
+                OrientationUp = orientationUp.ToPlain()
             };
         }
 
