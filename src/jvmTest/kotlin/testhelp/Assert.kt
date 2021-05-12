@@ -11,12 +11,8 @@ import kotlin.test.assertTrue
 fun checkMockObservation(obs: Observation?) {
     assertNotNull(obs)
     obs.let { observation ->
-        assertEquals("Mock", observation.agentID)
+        assertEquals("Mock", observation.id)
         assertEquals(Vec3(4.0f, 2.0f, 0.0f), observation.position)
-        observation.entities.first().let { entity ->
-            assertEquals("Ente", entity.id)
-            assertEquals(Vec3(3f, 2f, 1f), entity.position)
-        }
         observation.grids.first().let { grid ->
             assertEquals(1, grid.blocks.size)
             grid.blocks.first().let { block ->

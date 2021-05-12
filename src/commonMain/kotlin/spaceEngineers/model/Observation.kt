@@ -6,11 +6,10 @@ val Observation.allBlocks: List<Block>
     }
 
 data class Observation(
-    var agentID: String,
-    var position: Vec3,
-    var orientationForward: Vec3,
-    var orientationUp: Vec3,
-    var velocity: Vec3,
-    var entities: List<BaseEntity> = emptyList(),
-    var grids: List<CubeGrid> = emptyList()
-)
+    override val id: String,
+    override val position: Vec3,
+    override val orientationForward: Vec3,
+    override val orientationUp: Vec3,
+    val velocity: Vec3,
+    val grids: List<CubeGrid> = emptyList()
+) : Entity

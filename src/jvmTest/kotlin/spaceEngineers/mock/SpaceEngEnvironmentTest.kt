@@ -29,16 +29,6 @@ class SpaceEngEnvironmentTest {
     }
 
     @Test
-    fun observeEntitiesTest() = mockController {
-        val observation = observe(ObservationArgs(ObservationMode.ENTITIES))
-        assertNotNull(observation)
-        assertNotNull(observation.entities)
-        assertTrue(observation.entities.size > 0)
-        println("Got " + observation.entities.size + " entities.")
-        println("First entity position: " + observation.entities[0].position)
-    }
-
-    @Test
     fun observeBlocksTest() = mockController {
         val observation = observe(ObservationArgs(ObservationMode.BLOCKS))
         checkMockObservation(observation)

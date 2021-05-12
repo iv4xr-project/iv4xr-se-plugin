@@ -56,7 +56,7 @@ fun Block.toWorldEntity(): WorldEntity {
 
 fun Observation.toWorldModel(): WorldModel {
     return WorldModel().also { worldModel ->
-        worldModel.agentId = agentID
+        worldModel.agentId = id
         worldModel.position = position.toIv4xrVec3()
         worldModel.velocity = velocity.toIv4xrVec3()
         worldModel.elements = grids?.map { it.toWorldEntity() }?.associateBy { it.id } ?: emptyMap()
