@@ -1,11 +1,9 @@
-﻿using VRageMath;
-
-namespace Iv4xr.SePlugin.WorldModel
+﻿namespace Iv4xr.SePlugin.WorldModel
 {
     public class MountPoint
     {
-        public Vector3I Normal;
-        public Vector3 Start;
-        public Vector3 End;
+        public PlainVec3I Normal;
+        public PlainVec3D Start;
+        public PlainVec3D End;
     }
 }

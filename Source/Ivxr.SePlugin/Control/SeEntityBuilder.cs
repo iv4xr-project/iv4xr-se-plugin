@@ -102,20 +102,19 @@ namespace Iv4xr.SePlugin.Control
             return new Block
             {
                 Id = sourceBlock.UniqueId.ToString(), // TODO(PP): Might not be unique in rare cases or across grids
-                Position = new PlainVec3D(grid.GridIntegerToWorld(sourceBlock.Position)),
+                Position = grid.GridIntegerToWorld(sourceBlock.Position).ToPlain(),
                 MaxIntegrity = sourceBlock.MaxIntegrity,
                 BuildIntegrity = sourceBlock.BuildIntegrity,
                 Integrity = sourceBlock.Integrity,
                 BlockType = GetSeBlockType(sourceBlock),
-                MinPosition = new PlainVec3D(grid.GridIntegerToWorld(sourceBlock.Min)),
-                MaxPosition = new PlainVec3D(grid.GridIntegerToWorld(sourceBlock.Max)),
+                MinPosition = grid.GridIntegerToWorld(sourceBlock.Min).ToPlain(),
+                MaxPosition = grid.GridIntegerToWorld(sourceBlock.Max).ToPlain(),
 
                 // Note: it does not have to be the same as block.Min - block.Max (because of rotations)
-                Size = new PlainVec3D(sourceBlock.BlockDefinition.Size),
+                Size = sourceBlock.BlockDefinition.Size.ToPlain(),
 
-                OrientationForward =
-                        new PlainVec3D(grid.WorldMatrix.GetDirectionVector(sourceBlock.Orientation.Forward)),
-                OrientationUp = new PlainVec3D(grid.WorldMatrix.GetDirectionVector(sourceBlock.Orientation.Up))
+                OrientationForward = grid.WorldMatrix.GetDirectionVector(sourceBlock.Orientation.Forward).ToPlain(),
+                OrientationUp = grid.WorldMatrix.GetDirectionVector(sourceBlock.Orientation.Up).ToPlain()
             };
         }
 
@@ -127,12 +126,12 @@ namespace Iv4xr.SePlugin.Control
                 BlockType = blockDefinition.Id.SubtypeId.String,
                 CubeSize = blockDefinition.CubeSize.ToString(),
                 BuildProgressModels = blockDefinition.BuildProgressModels.Select(GetBuildProgressModel).ToList(),
-                Size = blockDefinition.Size,
+                Size = blockDefinition.Size.ToPlain(),
                 Public = blockDefinition.Public,
                 AvailableInSurvival = blockDefinition.AvailableInSurvival,
                 Enabled = blockDefinition.Enabled,
                 MountPoints = blockDefinition.MountPoints.Select(mp => new MountPoint()
-                        {End = mp.End, Start = mp.Start, Normal = mp.Normal}).ToList()
+                        {End = mp.End.ToPlain(), Start = mp.Start.ToPlain(), Normal = mp.Normal.ToPlain()}).ToList()
             };
         }
 

@@ -45,10 +45,10 @@ namespace Iv4xr.SePlugin.Control
             return new Observation
             {
                 Id = "se0",
-                Position = new PlainVec3D(GetPlayerPosition()), // Consider reducing allocations.
-                OrientationForward = new PlainVec3D(orientation.Forward),
-                OrientationUp = new PlainVec3D(orientation.Up),
-                Velocity = new PlainVec3D(GetPlayerVelocity()),
+                Position = GetPlayerPosition().ToPlain(), // Consider reducing allocations.
+                OrientationForward = orientation.Forward.ToPlain(),
+                OrientationUp = orientation.Up.ToPlain(),
+                Velocity = GetPlayerVelocity().ToPlain(),
                 Extent = m_agentExtent,
             };
         }

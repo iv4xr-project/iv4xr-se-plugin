@@ -11,6 +11,6 @@
 
         public PlainVec3D MinPosition;
         public PlainVec3D MaxPosition;
-        public PlainVec3D Size;
+        public PlainVec3I Size;
     }
 }
