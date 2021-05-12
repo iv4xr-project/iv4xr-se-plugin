@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using VRageMath;
 
 namespace Iv4xr.SePlugin.WorldModel
 {
@@ -10,7 +9,7 @@ namespace Iv4xr.SePlugin.WorldModel
         public List<BuildProgressModel> BuildProgressModels;
         //public string Model;
         public string CubeSize;
-        public Vector3I Size;
+        public PlainVec3I Size;
         public List<MountPoint> MountPoints;
         public bool Public;
         public bool AvailableInSurvival;

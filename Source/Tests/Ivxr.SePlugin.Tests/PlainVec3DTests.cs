@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Iv4xr.SePlugin;
 using Iv4xr.SePlugin.Json;
 using Iv4xr.SePlugin.WorldModel;
 using VRageMath;
@@ -18,7 +14,7 @@ namespace Ivxr.SeGameLib.Tests
             var vector3D = new Vector3D(1, 2, 3);
 
             var plainVec = new PlainVec3D(1, 2, 3);
-            var convertedPlainVec = new PlainVec3D(vector3D);
+            var convertedPlainVec = vector3D.ToPlain();
 
             var jsoner = new Jsoner();
 

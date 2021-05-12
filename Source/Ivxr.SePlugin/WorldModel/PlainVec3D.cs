@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using VRageMath;
-
+﻿
 namespace Iv4xr.SePlugin.WorldModel
 {
     /// <summary>
@@ -19,13 +15,6 @@ namespace Iv4xr.SePlugin.WorldModel
             X = x;
             Y = y;
             Z = z;
-        }
-
-        public PlainVec3D(Vector3D vector3D)
-        {
-            X = vector3D.X;
-            Y = vector3D.Y;
-            Z = vector3D.Z;
         }
     }
 }

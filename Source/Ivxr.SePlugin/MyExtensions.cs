@@ -12,7 +12,17 @@ namespace Iv4xr.SePlugin
     {
         public static PlainVec3D ToPlain(this Vector3D vector)
         {
-            return new PlainVec3D(vector);
+            return new PlainVec3D(vector.X, vector.Y, vector.Z);
+        }
+
+        public static PlainVec3D ToPlain(this Vector3 vector)
+        {
+            return new PlainVec3D(vector.X, vector.Y, vector.Z);
+        }
+
+        public static PlainVec3I ToPlain(this Vector3I vector)
+        {
+            return new PlainVec3I(vector.X, vector.Y, vector.Z);
         }
         
         public static bool IsAdminOrCreative(this MySession session)
