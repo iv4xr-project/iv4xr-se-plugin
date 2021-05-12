@@ -8,7 +8,7 @@ namespace Iv4xr.SePlugin.Control
     public interface ICharacterController
     {
         Observation MoveAndRotate(Vector3 movement, Vector2 rotation3, float roll = 0);
-        Observation Teleport(Vector3 position);
+        Observation Teleport(Vector3 position, Vector3? orientationForward = null, Vector3? orientationUp = null);
     }
 
     public class CharacterController : ICharacterController
@@ -22,9 +22,25 @@ namespace Iv4xr.SePlugin.Control
             m_observer = observer;
         }
         
-        public Observation Teleport(Vector3 position)
+        public Observation Teleport(Vector3 position, Vector3? orientationForward, Vector3? orientationUp)
         {
-            GetEntityController().ControlledEntity.Entity.PositionComp.SetPosition(position);
+            if (orientationForward == null && orientationUp == null)
+            {
+                GetEntityController().ControlledEntity.Entity.PositionComp.SetPosition(position);
+                return m_observer.Observe();
+            }
+
+            if (orientationForward == null || orientationUp == null)
+            {
+                throw new InvalidOperationException("Either both or none of the orientations are supposed to be set");
+            }
+
+            var matrix = MatrixD.CreateWorld(
+                new Vector3D(position),
+                orientationForward ?? Vector3.Zero,
+                orientationUp ?? Vector3.Zero
+            );
+            GetEntityController().Player.Character.PositionComp.SetWorldMatrix(ref matrix);
             return m_observer.Observe();
         }
         

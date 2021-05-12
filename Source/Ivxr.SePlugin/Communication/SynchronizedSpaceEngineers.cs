@@ -149,11 +149,11 @@ namespace Iv4xr.SePlugin.Communication
             });
         }
 
-        public Observation Teleport(Vector3 position)
+        public Observation Teleport(Vector3 position, Vector3? orientationForward, Vector3? orientationUp)
         {
             return Enqueue(() =>
             {
-                m_character.Teleport(position);
+                m_character.Teleport(position, orientationForward, orientationUp);
                 return m_observer.Observe();
             });
         }

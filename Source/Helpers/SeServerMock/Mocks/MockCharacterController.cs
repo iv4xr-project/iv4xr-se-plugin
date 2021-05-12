@@ -14,7 +14,7 @@ namespace SeServerMock.Mocks
             throw new System.NotImplementedException();
         }
 
-        public Observation Teleport(Vector3 position)
+        public Observation Teleport(Vector3 position, Vector3? orientationForward, Vector3? orientationUp)
         {
             throw new System.NotImplementedException();
         }
