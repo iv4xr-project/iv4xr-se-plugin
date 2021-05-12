@@ -131,8 +131,15 @@ class JsonRpcCharacterController(
             )
         }
 
-        override fun teleport(position: Vec3): Observation {
-            return processSingleParameterMethod(::teleport, position, methodName = "${characterPrefix}Teleport")
+        override fun teleport(position: Vec3, orientationForward: Vec3?, orientationUp: Vec3?): Observation {
+            return processParameters<Any?, Observation>(
+                params = mapOf(
+                    "position" to position,
+                    "orientationForward" to orientationForward,
+                    "orientationUp" to orientationUp
+                ),
+                methodName = "${characterPrefix}Teleport"
+            )
         }
     }
 
