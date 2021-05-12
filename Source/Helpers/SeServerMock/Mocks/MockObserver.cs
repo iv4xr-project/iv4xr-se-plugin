@@ -11,17 +11,6 @@ namespace SeServerMock.Mocks
 
         public Observation GetObservation()
         {
-            var entity = new Entity()
-            {
-                    Id = "Ente",
-                    Position = new PlainVec3D(3, 2, 1)
-            };
-
-            var entities = new List<Entity>
-            {
-                    entity
-            };
-
             var block = new Block()
             {
                     Id = "blk",
@@ -48,9 +37,8 @@ namespace SeServerMock.Mocks
 
             return new Observation()
             {
-                    AgentID = "Mock",
+                    Id = "Mock",
                     Position = new PlainVec3D(4, 2, 0),
-                    Entities = entities,
                     Grids = grids
             };
         }

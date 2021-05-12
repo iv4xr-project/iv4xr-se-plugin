@@ -1,8 +1,7 @@
 ﻿namespace Iv4xr.SePlugin.WorldModel
 {
-    public class Entity
+    public class Entity: Pose
     {
         public string Id;
-        public PlainVec3D Position;
     }
 }

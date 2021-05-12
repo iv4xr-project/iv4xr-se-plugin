@@ -44,7 +44,7 @@ namespace Iv4xr.SePlugin.Control
             var orientation = Character.PositionComp.GetOrientation();
             return new Observation
             {
-                AgentID = "se0",
+                Id = "se0",
                 Position = new PlainVec3D(GetPlayerPosition()), // Consider reducing allocations.
                 OrientationForward = new PlainVec3D(orientation.Forward),
                 OrientationUp = new PlainVec3D(orientation.Up),
