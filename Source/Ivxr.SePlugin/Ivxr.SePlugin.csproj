@@ -6,15 +6,30 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\se\Sources\Sandbox.Game\Sandbox.Game.csproj" />
-    <ProjectReference Include="..\..\..\se\Sources\VRage.Game\VRage.Game.csproj" />
-    <ProjectReference Include="..\..\..\se\Sources\VRage\VRage.csproj" />
     <ProjectReference Include="..\Ivxr.PlugIndependentLib\Ivxr.PlugIndependentLib.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="AustinHarris.JsonRpc" Version="1.2.2" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Sandbox.Game">
+      <HintPath>..\..\BinaryDependencies\Sandbox.Game.dll</HintPath>
+    </Reference>
+    <Reference Include="VRage">
+      <HintPath>..\..\BinaryDependencies\VRage.dll</HintPath>
+    </Reference>
+    <Reference Include="VRage.Game">
+      <HintPath>..\..\BinaryDependencies\VRage.Game.dll</HintPath>
+    </Reference>
+    <Reference Include="VRage.Library">
+      <HintPath>..\..\BinaryDependencies\VRage.Library.dll</HintPath>
+    </Reference>
+    <Reference Include="VRage.Math">
+      <HintPath>..\..\BinaryDependencies\VRage.Math.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

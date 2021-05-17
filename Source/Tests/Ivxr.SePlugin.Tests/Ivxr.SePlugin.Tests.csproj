@@ -42,6 +42,9 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="VRage.Math, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\..\BinaryDependencies\VRage.Math.dll</HintPath>
+    </Reference>
     <Reference Include="xunit.abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
       <HintPath>..\..\..\Solutions\packages\xunit.abstractions.2.0.3\lib\net35\xunit.abstractions.dll</HintPath>
     </Reference>
@@ -68,10 +71,6 @@
     <Analyzer Include="..\..\..\Solutions\packages\xunit.analyzers.0.10.0\analyzers\dotnet\cs\xunit.analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\se\Sources\VRage.Math\VRage.Math.csproj">
-      <Project>{40CE67D5-C89F-4A56-AE52-85DB1BEA07FE}</Project>
-      <Name>VRage.Math</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Ivxr.PlugIndependentLib\Ivxr.PlugIndependentLib.csproj">
       <Project>{CE782082-F8E9-4FE5-A04D-89ED99084E95}</Project>
       <Name>Ivxr.PlugIndependentLib</Name>
