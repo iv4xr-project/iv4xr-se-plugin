@@ -95,10 +95,10 @@ namespace Iv4xr.SePlugin.Communication
     {
         public static void AddLocalRpcTarget<TService>(this JsonRpc jsonRpc, TService service, string prefix)
         {
-            jsonRpc.AddLocalRpcTarget<TService>(service, new JsonRpcTargetOptions()
+            jsonRpc.AddLocalRpcTarget(service, new JsonRpcTargetOptions()
             {
                 MethodNameTransform = CommonMethodNameTransforms.Prepend(prefix),
-                DisposeOnDisconnect = true
+                //DisposeOnDisconnect = true
             });
         }
     }

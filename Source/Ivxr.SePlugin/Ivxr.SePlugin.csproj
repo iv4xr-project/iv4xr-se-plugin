@@ -14,7 +14,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageReference Include="StreamJsonRpc" Version="2.6.121" />
+    <PackageReference Include="StreamJsonRpc" Version="2.3.112" />
   </ItemGroup>
 
 </Project>
