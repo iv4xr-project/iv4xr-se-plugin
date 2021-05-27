@@ -26,6 +26,11 @@ class Vec3Test {
     }
 
     @Test
+    fun between() {
+        assertEquals(Vec3(3, 3, 3), (Vec3(1, 1, 1) + Vec3(5, 5, 5)) / 2f)
+    }
+
+    @Test
     fun minus() {
         assertEquals(ZERO, x1 - x1)
         assertEquals(ZERO, xn1 - xn1)
