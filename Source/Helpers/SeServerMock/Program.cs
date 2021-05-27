@@ -1,12 +1,9 @@
-﻿using System.Net.Sockets;
-using System.Text;
-using System.Threading;
+﻿using System.Threading;
 using Iv4xr.PluginLib;
 using Iv4xr.PluginLib.Log;
 using Iv4xr.SePlugin.Communication;
 using Iv4xr.SePlugin.Control;
 using SeServerMock.Mocks;
-using StreamJsonRpc;
 
 namespace SeServerMock
 {
@@ -28,25 +25,6 @@ namespace SeServerMock
 
             RunOldDispatcher(se, log);
             //RunJsonRpc(se, log);
-        }
-
-        private static void RunJsonRpc(ISpaceEngineers se, ILog log)
-        {
-            var jsonRpcStarter = new JsonRpcStarter(se) {Log = log};
-            jsonRpcStarter.Start();
-            var client = Client();
-            var result = client.AllDefinitions();
-            Thread.Sleep(9999999);
-        }
-
-        private static IDefinitions Client()
-        {
-            TcpClient client = new TcpClient("localhost", 3333);
-            var stream = client.GetStream();
-            var formatter = new JsonMessageFormatter(Encoding.UTF8);
-            var messageHandler = new NewLineDelimitedMessageHandler(stream, stream, formatter);
-            var proxy = JsonRpc.Attach<IDefinitions>(messageHandler);
-            return proxy;
         }
 
         private static void RunOldDispatcher(ISpaceEngineers se, ILog log)

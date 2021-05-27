@@ -5,9 +5,9 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using AustinHarris.JsonRpc;
 using Iv4xr.PluginLib;
 using Iv4xr.SePlugin.Control;
-using StreamJsonRpc;
 
 namespace Iv4xr.SePlugin.Communication
 {
@@ -15,11 +15,14 @@ namespace Iv4xr.SePlugin.Communication
     {
         public ILog Log { get; set; }
 
+        private static AustinJsonRpcSpaceEngineers service;
+
         private readonly ISpaceEngineers m_se;
 
         public JsonRpcStarter(ISpaceEngineers se)
         {
             m_se = se;
+            service = new AustinJsonRpcSpaceEngineers(se);
         }
 
         public void Start()
@@ -63,43 +66,33 @@ namespace Iv4xr.SePlugin.Communication
 
         private async Task HandleRequestAsync(Stream stream)
         {
-            var jsonRpc = Create(stream, stream);
-            jsonRpc.StartListening();
+
+            var reader = new StreamReader(stream, Encoding.UTF8);
+            var writer = new StreamWriter(stream, new UTF8Encoding(false));
             Log.WriteLine($"JSON-RPC listener attached. Waiting for requests...");
-            await jsonRpc.Completion;
+            while (!reader.EndOfStream)
+            {
+                var line = reader.ReadLine();
+                handleRequest(writer, line);
+            }
             Log.WriteLine($"Connection terminated.");
         }
 
-        private JsonRpc Create(Stream writer, Stream reader)
+        private void handleRequest(StreamWriter writer, string line)
         {
-            Log.WriteLine(
-                $"Connection request received. Spinning off an async Task to cater to requests.");
-            var jsonRpcMessageHandler =
-                    new NewLineDelimitedMessageHandler(writer, reader, new JsonMessageFormatter(Encoding.UTF8));
-            var jsonRpc = new JsonRpc(jsonRpcMessageHandler);
-            AddLocalRpcTargets(jsonRpc);
-            return jsonRpc;
+            var rpcResultHandler = new AsyncCallback(
+                state =>
+                {
+                    var async_ = ((JsonRpcStateAsync)state);
+                    var result = async_.Result;
+                    var writer_ = ((StreamWriter)async_.AsyncState);
+
+                    writer_.WriteLine(result);
+                    writer_.FlushAsync();
+                });
+            var async = new JsonRpcStateAsync(rpcResultHandler, writer) { JsonRpc = line };
+            JsonRpcProcessor.Process(async, writer);
         }
 
-        private void AddLocalRpcTargets(JsonRpc jsonRpc)
-        {
-            jsonRpc.AddLocalRpcTarget(m_se.Character, "Character.");
-            jsonRpc.AddLocalRpcTarget(m_se.Session, "Session.");
-            jsonRpc.AddLocalRpcTarget(m_se.Items, "Items.");
-            jsonRpc.AddLocalRpcTarget(m_se.Observer, "Observer.");
-            jsonRpc.AddLocalRpcTarget(m_se.Definitions, "Definitions.");
-        }
-    }
-
-    public static class JsonRpcExtensions
-    {
-        public static void AddLocalRpcTarget<TService>(this JsonRpc jsonRpc, TService service, string prefix)
-        {
-            jsonRpc.AddLocalRpcTarget<TService>(service, new JsonRpcTargetOptions()
-            {
-                MethodNameTransform = CommonMethodNameTransforms.Prepend(prefix),
-                DisposeOnDisconnect = true
-            });
-        }
     }
 }
