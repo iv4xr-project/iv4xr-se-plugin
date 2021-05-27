@@ -4,6 +4,8 @@ using Iv4xr.PluginLib;
 using Iv4xr.SePlugin.WorldModel;
 using Sandbox.Game.Entities;
 using Sandbox.Game.Entities.Character;
+using Sandbox.Game.Weapons;
+using Sandbox.Game.World;
 using VRage.Game.Entity;
 using VRageMath;
 
@@ -35,8 +37,8 @@ namespace Iv4xr.SePlugin.Control
 
         private Vector3D GetPlayerVelocity()
         {
-            // TODO(PP): Calculate velocity!
-            return Vector3D.Zero;
+            Character.GetNetState(out var client);
+            return client.MovementDirection * client.MovementSpeed;
         }
 
         public Observation GetBasicObservation()
@@ -49,8 +51,30 @@ namespace Iv4xr.SePlugin.Control
                 OrientationForward = orientation.Forward.ToPlain(),
                 OrientationUp = orientation.Up.ToPlain(),
                 Velocity = GetPlayerVelocity().ToPlain(),
-                Extent = m_agentExtent,
+                Extent = PlayerExtent(),
+                Camera = new Pose()
+                {
+                    Position = MySector.MainCamera.Position.ToPlain(),
+                    OrientationForward = MySector.MainCamera.ForwardVector.ToPlain(),
+                    OrientationUp = MySector.MainCamera.UpVector.ToPlain(),
+                },
+                JetpackRunning = Character.JetpackComp.TurnedOn,
+                HeadLocalXAngle = Character.HeadLocalXAngle,
+                HeadLocalYAngle = Character.HeadLocalYAngle,
+                TargetBlock = TargetBlock(),
             };
+        }
+
+        private PlainVec3D PlayerExtent()
+        {
+            return Character.PositionComp.LocalAABB.Size.ToPlain();
+        }
+
+        private Block TargetBlock()
+        {
+            if (!(Character.CurrentWeapon is MyEngineerToolBase wp)) return null;
+            var slimBlock = wp.GetTargetBlock();
+            return slimBlock == null ? null : m_seEntityBuilder.CreateGridBlock(slimBlock);
         }
 
         public Observation GetNewBlocks()

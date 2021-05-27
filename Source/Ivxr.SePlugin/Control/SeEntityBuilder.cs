@@ -95,7 +95,7 @@ namespace Iv4xr.SePlugin.Control
             return foundBlocks;
         }
 
-        private static Block CreateGridBlock(MySlimBlock sourceBlock)
+        public Block CreateGridBlock(MySlimBlock sourceBlock)
         {
             var grid = sourceBlock.CubeGrid;
 

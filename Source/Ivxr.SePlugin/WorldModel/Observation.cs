@@ -9,5 +9,10 @@ namespace Iv4xr.SePlugin.WorldModel
         public PlainVec3D Extent; // Agent's dimensions (x,y,z size/2)
 
         public List<CubeGrid> Grids;
+        public Pose Camera;
+        public bool JetpackRunning;
+        public float HeadLocalXAngle;
+        public float HeadLocalYAngle;
+        public Block TargetBlock;
     }
 }
