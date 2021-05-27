@@ -18,5 +18,15 @@ namespace SeServerMock.Mocks
         {
             throw new System.NotImplementedException();
         }
+
+        public Observation TurnOnJetpack()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Observation TurnOffJetpack()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

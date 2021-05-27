@@ -157,6 +157,24 @@ namespace Iv4xr.SePlugin.Communication
                 return m_observer.Observe();
             });
         }
+
+        public Observation TurnOnJetpack()
+        {
+            return Enqueue(() =>
+            {
+                m_character.TurnOnJetpack();
+                return m_observer.Observe();
+            });
+        }
+
+        public Observation TurnOffJetpack()
+        {
+            return Enqueue(() =>
+            {
+                m_character.TurnOffJetpack();
+                return m_observer.Observe();
+            });
+        }
     }
 
     public class SynchronizedSpaceEngineers : ISpaceEngineers

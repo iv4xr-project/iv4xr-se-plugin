@@ -141,6 +141,20 @@ class JsonRpcCharacterController(
                 methodName = "${characterPrefix}Teleport"
             )
         }
+
+        override fun turnOnJetpack(): Observation {
+            return processNoParameterMethod<Unit, Observation>(
+                method = ::turnOnJetpack,
+                "${characterPrefix}TurnOnJetpack"
+            )
+        }
+
+        override fun turnOffJetpack(): Observation {
+            return processNoParameterMethod<Unit, Observation>(
+                method = ::turnOffJetpack,
+                "${characterPrefix}TurnOffJetpack"
+            )
+        }
     }
 
     override val items: Items = object : Items {
