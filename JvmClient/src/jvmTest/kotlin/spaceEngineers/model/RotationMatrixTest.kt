@@ -1,9 +1,8 @@
 package spaceEngineers.model
 
+import spaceEngineers.model.extensions.times
 import testhelp.assertFloatEquals
 import testhelp.assertVecEquals
-import testhelp.spaceEngineersSimplePlaceGrindTorch
-import java.lang.Thread.sleep
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -22,20 +21,6 @@ class RotationMatrixTest {
                 diff,
                 message = "error for index: $index $fl vs ${m2.values[index]}"
             )
-        }
-    }
-
-    //@Test
-    fun getFromGame() = spaceEngineersSimplePlaceGrindTorch {
-        character.teleport(position = Vec3.ZERO, orientationForward = Vec3.FORWARD, orientationUp = Vec3.UP)
-        observer.observe().let { observation ->
-            println(observation.orientationForward)
-            println(observation.orientationUp)
-        }
-        character.teleport(position = Vec3.ZERO, orientationForward = Vec3.UP, orientationUp = Vec3.BACKWARD)
-        observer.observe().let { observation ->
-            println(observation.orientationForward)
-            println(observation.orientationUp)
         }
     }
 
@@ -110,14 +95,7 @@ class RotationMatrixTest {
             4, 5, 6,
             7, 8, 9
         )
-        println(matrix)
         val v = Vec3(2, 1, 3)
-        println(v)
         assertEquals(Vec3(13, 31, 49), matrix * v)
-    }
-
-    @Test
-    fun positionWithinMountPoint() {
-        val position = Vec3(x = 5.0, y = 2.5, z = 5.0)
     }
 }

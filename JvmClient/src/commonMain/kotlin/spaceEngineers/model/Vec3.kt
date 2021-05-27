@@ -4,25 +4,6 @@ import kotlin.math.abs
 import kotlin.math.sqrt
 
 
-interface NumberVec<out T : Number> {
-    val x: T
-    val y: T
-    val z: T
-}
-
-fun NumberVec<Float>.crossProduct(b: NumberVec<Float>): Vec3 {
-    val a = this
-    return Vec3(
-        a.y * b.z - a.z * b.y,
-        a.z * b.x - a.x * b.z,
-        a.x * b.y - a.y * b.x
-    )
-}
-
-fun NumberVec<Float>.toArray(): FloatArray {
-    return floatArrayOf(x, y, z)
-}
-
 data class Vec3(
     override val x: Float = 0f,
     override val y: Float = 0f,

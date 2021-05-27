@@ -16,8 +16,8 @@ abstract class MockOrRealGameTest(
     val scenarioId: String = SIMPLE_PLACE_GRIND_TORCH,
 ) {
 
-    fun testContext(block: SpaceEngineers.() -> Unit) {
-        if (useMock) {
+    fun testContext(mock: Boolean = useMock, block: SpaceEngineers.() -> Unit) {
+        if (mock) {
             mockGameContext(block)
         } else {
             realGameContext(block = block)

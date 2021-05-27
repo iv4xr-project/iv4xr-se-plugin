@@ -5,7 +5,7 @@ import spaceEngineers.controller.loadFromTestResources
 import spaceEngineers.model.ToolbarLocation
 import spaceEngineers.model.Vec2
 import spaceEngineers.model.Vec3
-import spaceEngineers.model.allBlocks
+import spaceEngineers.model.extensions.allBlocks
 import testhelp.assertVecEquals
 import testhelp.spaceEngineers
 import java.lang.Thread.sleep

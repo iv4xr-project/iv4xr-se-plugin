@@ -1,10 +1,5 @@
 package spaceEngineers.model
 
-val Observation.allBlocks: List<Block>
-    get() {
-        return this.grids.flatMap { it.blocks }
-    }
-
 data class Observation(
     override val id: String,
     override val position: Vec3,

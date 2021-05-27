@@ -1,16 +1,27 @@
 package spaceEngineers.game
 
-import spaceEngineers.model.CubeSize
+import spaceEngineers.commands.SeSessionCommand
 import spaceEngineers.model.BlockDefinition
+import spaceEngineers.model.CubeSize
 import spaceEngineers.model.Vec3
+import spaceEngineers.model.extensions.isSidePoint
 import testhelp.JSON_RESOURCES_DIR
 import testhelp.MockOrRealGameTest
+import testhelp.SIMPLE_PLACE_GRIND_TORCH
 import testhelp.preferMocking
 import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 
+fun BlockDefinition.isGoodForBig(): Boolean {
+    return enabled && cubeSize == CubeSize.Large &&
+            buildProgressModels.isNotEmpty()
+}
+
+fun Iterable<BlockDefinition>.filterForBig(): List<BlockDefinition> {
+    return filter { it.isGoodForBig() }
+}
 
 val stringFilters = setOf("Symbol", "Neon", "Window")
 fun BlockDefinition.isGoodForScreenshots(): Boolean {
@@ -24,12 +35,17 @@ fun Iterable<BlockDefinition>.filterForScreenshots(): List<BlockDefinition> {
     return filter { it.isGoodForScreenshots() }
 }
 
+fun Iterable<BlockDefinition>.filterSidePoints(): List<BlockDefinition> {
+    return filter { it.mountPoints.any { mountPoint -> mountPoint.isSidePoint() } }
+}
+
 
 class BlockDefinitionsTest : MockOrRealGameTest(DEFINITIONS_FILE, useMock = preferMocking) {
 
 
-    //@Test //uncomment to update definitions json file
+    @Test //uncomment to update definitions json file
     fun updateDefinitionsFile() = runAndWriteResponse {
+        SeSessionCommand.load(SIMPLE_PLACE_GRIND_TORCH)
         definitions.blockDefinitions()
     }
 
@@ -88,6 +104,38 @@ class BlockDefinitionsTest : MockOrRealGameTest(DEFINITIONS_FILE, useMock = pref
         assertEquals(
             definitions.blockDefinitions().groupBy { it.blockType }.filter { it.value.size > 1 }.keys,
             setOf("DebugSphereLarge", "", "LargePistonBase", "SmallPistonBase")
+        )
+    }
+
+    @Test
+    fun bigWithNiceMountPoints() = testContext {
+        assertEquals(
+            definitions.blockDefinitions().filterForBig()
+                .filterSidePoints().size,
+            272
+        )
+        definitions.blockDefinitions()
+            .filterForBig()
+            .filterSidePoints()
+            .filter { it.id == "MyObjectBuilder_CubeBlock" }
+            //.filter { it.mountPoints.any { it.default } }
+            .forEach { blockDefinition ->
+                println("${blockDefinition.id} ${blockDefinition.blockType}")
+                println(blockDefinition.mountPoints)
+            }
+    }
+
+    @Test
+    fun mountPointCount() = testContext {
+        assertEquals(
+            definitions.blockDefinitions().filterForBig()
+                .filterSidePoints().flatMap { it.mountPoints }.size,
+            1582
+        )
+        assertEquals(
+            definitions.blockDefinitions().filterForBig()
+                .filterSidePoints().flatMap { it.mountPoints.filter { it.enabled } }.size,
+            1578
         )
     }
 

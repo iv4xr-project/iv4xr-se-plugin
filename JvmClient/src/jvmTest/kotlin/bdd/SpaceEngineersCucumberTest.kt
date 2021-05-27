@@ -1,6 +1,5 @@
 package bdd
 
-import spaceEngineers.transport.closeIfCloseable
 import io.cucumber.java.After
 import io.cucumber.java.Before
 import io.cucumber.java.en.Given
@@ -9,7 +8,14 @@ import io.cucumber.java.en.When
 import io.cucumber.junit.Cucumber
 import org.junit.runner.RunWith
 import spaceEngineers.controller.*
-import spaceEngineers.model.*
+import spaceEngineers.model.Block
+import spaceEngineers.model.ToolbarLocation
+import spaceEngineers.model.Vec3
+import spaceEngineers.model.extensions.allBlocks
+import spaceEngineers.model.extensions.mountPointToRealWorldPosition
+import spaceEngineers.model.extensions.orientationTowardsMountPoint
+import spaceEngineers.model.extensions.orientationUpTowardsMountPoint
+import spaceEngineers.transport.closeIfCloseable
 import testhelp.TEST_AGENT
 import testhelp.TEST_MOCK_RESPONSE_LINE
 import testhelp.assertFloatEquals
@@ -87,9 +93,7 @@ class SpaceEngineersCucumberTest {
 
     @Given("I load scenario {string}.")
     fun i_load_scenario(scenarioId: String) {
-        environment?.let { wrapper ->
-            wrapper.session.loadFromTestResources(scenarioId)
-        }
+        environment.session.loadFromTestResources(scenarioId)
         environment.observer.observe()
         // All blocks are new for the first request.
         environment.observer.observeNewBlocks()

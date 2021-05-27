@@ -20,6 +20,14 @@ interface Character {
     fun teleport(position: Vec3, orientationForward: Vec3? = null, orientationUp: Vec3? = null): Observation
     fun turnOnJetpack(): Observation
     fun turnOffJetpack(): Observation
+
+
+    companion object {
+        /**
+         * Distance between position of camera (head) and position of character (center) in game units.
+         */
+        const val DISTANCE_CENTER_CAMERA = 1.6369286f
+    }
 }
 
 interface Observer {
