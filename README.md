@@ -13,11 +13,11 @@ It's not necessary to build anything to try out this plugin. This section descri
 
 1. Obtain the binary release of Space Engineers (buy it on Steam or get a key). Install the game.
 2. Obtain a binary release of the plugin. Look for [releases](https://github.com/iv4xr-project/iv4xr-se-plugin/releases) in this repository and for Assets of the chosen release. Download the two DLL libraries.
-3. IMPORTANT: Make sure Windows is OK to run the libraries. Windows 10 blocks "randomly" downloaded libraries. To unblock them, right-click each of them and open file properties. Look for Security section on the bottom part of the General tab. You might see a message: "*This file came from another computer and might be blocked...*". If so, check the `Unblock` checkbox.
+3. IMPORTANT: Make sure Windows is OK to run the libraries. **Windows 10 blocks "randomly" downloaded libraries.** To unblock them, right-click each of them and open file properties. Look for Security section on the bottom part of the General tab. You might see a message: "*This file came from another computer and might be blocked...*". If so, check the `Unblock` checkbox.
    (If you skip this step, the game will probably crash with a message: `System.NotSupportedException`: *An attempt was made to load an assembly from a network location...*)
-4. Put the plugin libraries into the folder with the game binaries. A common location is `C:\Program Files (x86)\Steam\steamapps\common\SpaceEngineers\Bin64`.
+4. Put the plugin libraries (and its dependencies) into the folder with the game binaries. A common location is `C:\Program Files (x86)\Steam\steamapps\common\SpaceEngineers\Bin64`.
    Tip: It's you can put the libraries into a subfolder (such as `ivxr-debug`). Or, it can be a symbolic link to the build folder of the plugin project. In that case, you must prefix the name of each library with `ivxr-debug\` in the following step. 
-5. Right-click on the game title in the Steam library list and open its properties window. Click on the **Set launch options...** button. Add the option `-plugin` and list the libraries. The result should be something like this: `-plugin Ivxr.PlugIndependentLib.dll Ivxr.SePlugin.dll`.
+5. Right-click on the game title in the Steam library list and open its properties window. Click on the **Set launch options...** button. Add the option `-plugin` followed by the location of the main plugin library. Library dependencies will be loaded automatically – just make sure they are in the same folder or some other searched location. The resulting options line should look something like this: `-plugin Ivxr.SePlugin.dll`.
 6. Run the game. (If the game crashes, make sure you've seen step 3.)
 7. Start a scenario. (It's necessary to do it manually for now. Should be done automatically by the testing framework in the future.)
 8. If the plugin works correctly, a TCP/IP server is listening for JSON-based commands on a fixed port number. (The current development version uses the port number 9678.) 
@@ -41,7 +41,7 @@ There's a Java project derived from the Lab Recruits demo that contains a demo c
 
 ## How to build
 
-The plug-in requires Space Engineers libraries to compile. There are two ways how to provide the libraries: as binaries (dlls) or as sources. Both are described below.
+The plug-in requires Space Engineers libraries to compile. There are two ways how to provide the libraries: as binaries (DLLs) or as sources. Both options are described below.
 
 The resulting plug-in (a couple of .NET libraries) works with the official Steam version of Space Engineers without any modification of the game.
 
