@@ -59,6 +59,7 @@
     <Compile Include="JsonerTests.cs" />
     <Compile Include="PlainVec3DTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="VectorTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -131,7 +131,16 @@ namespace Iv4xr.SePlugin.Control
                 AvailableInSurvival = blockDefinition.AvailableInSurvival,
                 Enabled = blockDefinition.Enabled,
                 MountPoints = blockDefinition.MountPoints.Select(mp => new MountPoint()
-                        {End = mp.End.ToPlain(), Start = mp.Start.ToPlain(), Normal = mp.Normal.ToPlain()}).ToList()
+                {
+                    End = mp.End.ToPlainF(), 
+                    Start = mp.Start.ToPlainF(), 
+                    Normal = mp.Normal.ToPlain(),
+                    Default =  mp.Default,
+                    Enabled = mp.Enabled,
+                    ExclusionMask = mp.ExclusionMask,
+                    PropertiesMask = mp.PropertiesMask,
+                    PressurizedWhenOpen = mp.PressurizedWhenOpen
+                }).ToList()
             };
         }
 

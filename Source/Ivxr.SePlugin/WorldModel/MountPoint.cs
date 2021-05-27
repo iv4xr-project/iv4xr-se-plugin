@@ -3,7 +3,12 @@
     public class MountPoint
     {
         public PlainVec3I Normal;
-        public PlainVec3D Start;
-        public PlainVec3D End;
+        public PlainVec3F Start;
+        public PlainVec3F End;
+        public bool Enabled;
+        public bool Default;
+        public bool PressurizedWhenOpen;
+        public byte ExclusionMask;
+        public byte PropertiesMask;
     }
 }
