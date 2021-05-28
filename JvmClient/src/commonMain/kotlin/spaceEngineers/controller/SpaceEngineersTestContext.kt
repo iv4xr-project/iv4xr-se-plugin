@@ -1,6 +1,7 @@
 package spaceEngineers.controller
 
 import spaceEngineers.model.*
+import spaceEngineers.model.extensions.allBlocks
 
 data class SpaceEngineersTestContext(
     var grinderLocation: ToolbarLocation? = null,
@@ -22,15 +23,15 @@ data class SpaceEngineersTestContext(
         val characterOrientationUp = observation.orientationUp
         val blocks = observation.allBlocks
         platformOrientationUp = blocks.map { it.orientationUp }
-            .maxByOrNull { it!!.distanceTo(characterOrientationUp) }
+            .maxByOrNull { it.distanceTo(characterOrientationUp) }
     }
 
     fun updateToolbarLocation(dataTable: List<Map<String, String>>) {
         blockTypeToToolbarLocation.clear()
         blockTypeToToolbarLocation.putAll(
-            dataTable.map {
+            dataTable.associate {
                 it["blockType"]!! to ToolbarLocation(slot = it["slot"]!!.toInt(), page = it["page"]!!.toInt())
-            }.toMap()
+            }
         )
     }
 

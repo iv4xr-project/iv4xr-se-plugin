@@ -4,12 +4,6 @@ import kotlin.math.abs
 import kotlin.math.sqrt
 
 
-interface NumberVec<out T : Number> {
-    val x: T
-    val y: T
-    val z: T
-}
-
 data class Vec3(
     override val x: Float = 0f,
     override val y: Float = 0f,

@@ -1,7 +1,7 @@
 package spaceEngineers.controller
 
-import spaceEngineers.model.Block
-import spaceEngineers.model.allBlocks
+import spaceEngineers.model.*
+import spaceEngineers.model.extensions.allBlocks
 import java.io.File
 
 val SCENARIO_DIR = "src/jvmTest/resources/game-saves/"

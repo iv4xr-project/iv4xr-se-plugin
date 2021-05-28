@@ -6,7 +6,7 @@ import nl.uu.cs.aplib.mainConcepts.Goal
 import nl.uu.cs.aplib.mainConcepts.GoalStructure
 import nl.uu.cs.aplib.mainConcepts.Tactic
 import spaceEngineers.model.Block
-import spaceEngineers.model.allBlocks
+import spaceEngineers.model.extensions.allBlocks
 import kotlin.math.abs
 
 class GoalBuilder(

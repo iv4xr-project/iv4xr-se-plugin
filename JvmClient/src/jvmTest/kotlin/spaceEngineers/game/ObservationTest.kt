@@ -1,6 +1,6 @@
 package spaceEngineers.game
 
-import spaceEngineers.model.allBlocks
+import spaceEngineers.model.extensions.allBlocks
 import testhelp.JSON_RESOURCES_DIR
 import testhelp.MockOrRealGameTest
 import testhelp.preferMocking

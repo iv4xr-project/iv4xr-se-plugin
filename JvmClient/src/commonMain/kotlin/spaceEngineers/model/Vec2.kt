@@ -3,12 +3,6 @@ package spaceEngineers.model
 import kotlin.math.sqrt
 
 
-interface NumberVec2<out T : Number> {
-    val x: T
-    val y: T
-}
-
-
 data class Vec2(
     override val x: Float = 0f,
     override val y: Float = 0f,

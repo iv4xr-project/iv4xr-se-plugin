@@ -3,7 +3,7 @@ package spaceEngineers.game
 import spaceEngineers.controller.SpaceEngineers
 import spaceEngineers.controller.loadFromTestResources
 import spaceEngineers.model.ToolbarLocation
-import spaceEngineers.model.allBlocks
+import spaceEngineers.model.extensions.allBlocks
 import testhelp.spaceEngineersSimplePlaceGrindTorch
 import java.lang.Thread.sleep
 import kotlin.test.Test

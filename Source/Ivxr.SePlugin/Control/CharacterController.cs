@@ -1,5 +1,6 @@
 ﻿using System;
 using Iv4xr.SePlugin.WorldModel;
+using Sandbox.Game.Entities.Character;
 using Sandbox.Game.World;
 using VRageMath;
 
@@ -9,6 +10,8 @@ namespace Iv4xr.SePlugin.Control
     {
         Observation MoveAndRotate(Vector3 movement, Vector2 rotation3, float roll = 0);
         Observation Teleport(Vector3 position, Vector3? orientationForward = null, Vector3? orientationUp = null);
+        Observation TurnOnJetpack();
+        Observation TurnOffJetpack();
     }
 
     public class CharacterController : ICharacterController
@@ -22,6 +25,18 @@ namespace Iv4xr.SePlugin.Control
             m_observer = observer;
         }
         
+        public Observation TurnOnJetpack()
+        {
+            Character.JetpackComp.TurnOnJetpack(true);
+            return m_observer.Observe();
+        }
+        
+        public Observation TurnOffJetpack()
+        {
+            Character.JetpackComp.TurnOnJetpack(false);
+            return m_observer.Observe();
+        }
+
         public Observation Teleport(Vector3 position, Vector3? orientationForward, Vector3? orientationUp)
         {
             if (orientationForward == null && orientationUp == null)
@@ -63,5 +78,7 @@ namespace Iv4xr.SePlugin.Control
 
             return entityController;
         }
+        
+        private MyCharacter Character => m_session.Character;
     }
 }

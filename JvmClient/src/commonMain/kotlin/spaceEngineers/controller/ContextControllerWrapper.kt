@@ -1,7 +1,7 @@
 package spaceEngineers.controller
 
 import spaceEngineers.model.Observation
-import spaceEngineers.model.allBlocks
+import spaceEngineers.model.extensions.allBlocks
 
 class ContextControllerWrapper(
     val spaceEngineers: SpaceEngineers,
