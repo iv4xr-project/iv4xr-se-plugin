@@ -89,7 +89,7 @@ class GoalBuilder(
         return Goal("lastBuiltBlockIsAtPercentageIntegrity($percentage)")
             .toSolve { belief: SeAgentState ->
                 belief.seEnv.run {
-                    controller.observer.observeBlocks().allBlocks.find { context.lastNewBlockId == it.id }
+                    controller.observer.observeBlocks().allBlocks.find { context.lastNewBlock?.id == it.id }
                         ?.let { foundBlock ->
                             checkFunction(foundBlock)
                         } ?: false

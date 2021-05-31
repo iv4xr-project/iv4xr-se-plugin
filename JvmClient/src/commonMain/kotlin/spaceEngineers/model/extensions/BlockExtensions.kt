@@ -8,7 +8,7 @@ fun Block.mountPointToRealWorldPosition(
     offset: Float = 1.25f
 ): Vec3 {
     val block = this
-    val matrix = RotationMatrix.fromForwardAndUp(orientationForward, orientationUp)
+    val matrix = RotationMatrix.fromPose(this)
     val positionWithinBlock = (mountPoint.start + mountPoint.end) * 0.5f * 2.5f
     val centerOfBlock = (blockDefinition.size * 0.5f * 2.5f);
     val mountPointPositionWithinBlock = matrix * -(positionWithinBlock - centerOfBlock + mountPoint.normal * offset)

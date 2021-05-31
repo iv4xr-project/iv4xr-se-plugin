@@ -5,7 +5,7 @@ import eu.iv4xr.framework.mainConcepts.WorldEntity
 import eu.iv4xr.framework.mainConcepts.WorldModel
 import spaceEngineers.controller.ContextControllerWrapper
 import spaceEngineers.controller.SpaceEngineersTestContext
-import spaceEngineers.controller.moveForward
+import spaceEngineers.controller.extensions.moveForward
 import spaceEngineers.model.*
 import java.io.File
 import java.lang.Thread.sleep

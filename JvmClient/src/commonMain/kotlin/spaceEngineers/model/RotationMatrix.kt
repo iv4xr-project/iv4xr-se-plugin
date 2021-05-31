@@ -45,6 +45,10 @@ inline class RotationMatrix(
     }
 
     companion object {
+        fun fromPose(pose: Pose): RotationMatrix {
+            return fromForwardAndUp(pose.orientationForward, pose.orientationUp)
+        }
+
         fun fromForwardAndUp(forward: Vec3, up: Vec3): RotationMatrix {
             check(forward != up) {
                 "orientations cannot be same"

@@ -6,12 +6,14 @@ import spaceEngineers.model.extensions.allBlocks
 data class SpaceEngineersTestContext(
     var grinderLocation: ToolbarLocation? = null,
     var torchLocation: ToolbarLocation? = null,
-    var lastNewBlockId: String? = null,
+    var lastNewBlock: Block? = null,
     val blockTypeToToolbarLocation: MutableMap<String, ToolbarLocation> = mutableMapOf(),
     var allNewestBlocks: MutableList<Block> = mutableListOf(),
     val observationHistory: MutableList<Observation> = mutableListOf(),
     var platformOrientationUp: Vec3? = null,
 ) {
+
+    val lastNewBlockId: String? = lastNewBlock?.id
 
     fun updatePlatformOrientationUpIfNotSet(observation: Observation) {
         if (platformOrientationUp == null) {
@@ -41,7 +43,7 @@ data class SpaceEngineersTestContext(
 
     fun updateNewBlocks(allBlocks: List<Block>) {
         allBlocks.lastOrNull()?.let {
-            lastNewBlockId = it.id
+            lastNewBlock = it
         }
         allNewestBlocks.addAll(allBlocks)
     }

@@ -1,14 +1,12 @@
 package spaceEngineers.game
 
-import spaceEngineers.controller.blockingRotateUntilOrientationForward
-import spaceEngineers.controller.loadFromTestResources
-import spaceEngineers.model.ToolbarLocation
+import kotlinx.coroutines.delay
+import spaceEngineers.controller.extensions.blockingRotateUntilOrientationForward
+import spaceEngineers.controller.extensions.blockingRotateUntilOrientationUp
 import spaceEngineers.model.Vec2
 import spaceEngineers.model.Vec3
-import spaceEngineers.model.extensions.allBlocks
 import testhelp.assertVecEquals
-import testhelp.spaceEngineers
-import java.lang.Thread.sleep
+import testhelp.spaceEngineersSimplePlaceGrindTorchSuspend
 import kotlin.test.Test
 
 
@@ -16,30 +14,40 @@ class RotateTowardsPositionTest {
 
 
     @Test
-    fun rotateTowardsPosition() = spaceEngineers {
-        val scenarioId = "simple-place-grind-torch-with-tools"
-        session.loadFromTestResources(scenarioId)
-        sleep(1000)
-        observer.observeNewBlocks()
-        items.equip(ToolbarLocation(1, 0))
-        sleep(1000)
-        items.place()
-        sleep(1000)
-        items.equip(ToolbarLocation(9, 0))
-
-
-        val type = "LargeHeavyBlockArmorBlock"
-        val newBlocksObservation = observer.observeBlocks()
-        val block = newBlocksObservation.allBlocks.first { it.blockType == type }
-        val orientationTowardsBlock = (block.position - newBlocksObservation.position).normalized()
-        assertVecEquals(Vec3(-0.997f, 0.066f, 0.02f), orientationTowardsBlock, diff = 0.1f)
-        assertVecEquals(orientationTowardsBlock, newBlocksObservation.orientationForward, diff = 0.1f)
-
-        character.blockingRotateUntilOrientationForward(
-            finalOrientation = Vec3(0f, 0f, -1f),
-            rotation = Vec2.ROTATE_RIGHT,
-            maxTries = 999999
+    fun rotateTowardsPosition() = spaceEngineersSimplePlaceGrindTorchSuspend {
+        val observation = observer.observe()
+        delay(500)
+        character.turnOnJetpack()
+        delay(500)
+        character.teleport(
+            position = observation.position,
+            orientationForward = Vec3.FORWARD,
+            orientationUp = Vec3.UP,
         )
-        assertVecEquals(Vec3(0f, 0f, -1f), observer.observe().orientationForward)
+        delay(500)
+        character.turnOffJetpack()
+        delay(500)
+        blockingRotateUntilOrientationForward(
+            finalOrientation = Vec3.LEFT,
+            rotation = Vec2.ROTATE_LEFT,
+        )
+        assertVecEquals(Vec3.LEFT, observer.observe().orientationForward)
+    }
+
+
+    @Test
+    fun rotateTowardsPositionUp() = spaceEngineersSimplePlaceGrindTorchSuspend {
+        val observation = observer.observe()
+        character.teleport(
+            position = observation.position,
+            orientationForward = Vec3.FORWARD,
+            orientationUp = Vec3.UP,
+        )
+        blockingRotateUntilOrientationUp(
+            finalOrientation = Vec3(0f, 1f, 1f).normalized(),
+            rotation = Vec2.ROTATE_UP,
+        )
+        assertVecEquals(Vec3(0f, 1f, 1f).normalized(), observer.observe().camera.orientationUp)
+        assertVecEquals(Vec3(0f, 1f, -1f).normalized(), observer.observe().camera.orientationForward)
     }
 }
