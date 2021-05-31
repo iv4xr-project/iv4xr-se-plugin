@@ -1,5 +1,6 @@
 package testhelp
 
+import kotlinx.coroutines.runBlocking
 import spaceEngineers.transport.closeIfCloseable
 import spaceEngineers.controller.*
 import java.io.File
@@ -15,6 +16,22 @@ val TEST_MOCK_RESPONSE_LINE = """
 val TEST_SCENARIO_1_ID = File("${SCENARIO_DIR}Scenario1").absolutePath
 val SIMPLE_PLACE_GRIND_TORCH = "simple-place-grind-torch"
 
+
+fun spaceEngineersSimplePlaceGrindTorchSuspend(
+    scenarioId: String = SIMPLE_PLACE_GRIND_TORCH,
+    agentId: String = TEST_AGENT,
+    spaceEngineers: JsonRpcCharacterController = JsonRpcCharacterController.localhost(agentId),
+    block: suspend JsonRpcCharacterController.() -> Unit
+) {
+    try {
+        spaceEngineers.session.loadFromTestResources(scenarioId)
+        runBlocking {
+            block(spaceEngineers)
+        }
+    } finally {
+        spaceEngineers.closeIfCloseable()
+    }
+}
 
 fun spaceEngineersSimplePlaceGrindTorch(
     scenarioId: String = SIMPLE_PLACE_GRIND_TORCH,
@@ -54,6 +71,22 @@ fun controller(
     }
 }
 
+fun spaceEngineersSuspend(
+    agentId: String = TEST_AGENT,
+    spaceEngineers: SpaceEngineers = ContextControllerWrapper(
+        spaceEngineers = JsonRpcCharacterController.localhost(agentId)
+    ),
+    block: suspend SpaceEngineers.() -> Unit
+) {
+    try {
+        runBlocking {
+            block(spaceEngineers)
+        }
+    } finally {
+        spaceEngineers.closeIfCloseable()
+    }
+}
+
 fun spaceEngineers(
     agentId: String = TEST_AGENT,
     spaceEngineers: SpaceEngineers = ContextControllerWrapper(
@@ -62,7 +95,9 @@ fun spaceEngineers(
     block: SpaceEngineers.() -> Unit
 ) {
     try {
-        block(spaceEngineers)
+        runBlocking {
+            block(spaceEngineers)
+        }
     } finally {
         spaceEngineers.closeIfCloseable()
     }

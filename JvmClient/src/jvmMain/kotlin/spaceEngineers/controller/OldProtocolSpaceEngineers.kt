@@ -1,9 +1,6 @@
 package spaceEngineers.controller
 
-import spaceEngineers.commands.InteractionArgs
-import spaceEngineers.commands.InteractionType
-import spaceEngineers.commands.MovementArgs
-import spaceEngineers.commands.ObservationMode
+import spaceEngineers.commands.*
 import spaceEngineers.model.*
 import java.io.Closeable
 
@@ -68,15 +65,15 @@ class OldProtocolSpaceEngineers(val controller: ProprietaryJsonTcpCharacterContr
 
     override val observer: Observer = object : Observer {
         override fun observe(): Observation {
-            return controller.observe(ObservationMode.DEFAULT)
+            return controller.observe(ObservationArgs(ObservationMode.DEFAULT))
         }
 
         override fun observeBlocks(): Observation {
-            return controller.observe(ObservationMode.BLOCKS)
+            return controller.observe(ObservationArgs(ObservationMode.BLOCKS))
         }
 
         override fun observeNewBlocks(): Observation {
-            return controller.observe(ObservationMode.NEW_BLOCKS)
+            return controller.observe(ObservationArgs(ObservationMode.NEW_BLOCKS))
         }
 
         override fun takeScreenshot(absolutePath: String) {

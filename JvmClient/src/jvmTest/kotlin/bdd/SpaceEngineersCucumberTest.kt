@@ -6,15 +6,14 @@ import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import io.cucumber.junit.Cucumber
+import kotlinx.coroutines.runBlocking
 import org.junit.runner.RunWith
 import spaceEngineers.controller.*
+import spaceEngineers.controller.extensions.*
 import spaceEngineers.model.Block
 import spaceEngineers.model.ToolbarLocation
 import spaceEngineers.model.Vec3
 import spaceEngineers.model.extensions.allBlocks
-import spaceEngineers.model.extensions.mountPointToRealWorldPosition
-import spaceEngineers.model.extensions.orientationTowardsMountPoint
-import spaceEngineers.model.extensions.orientationUpTowardsMountPoint
 import spaceEngineers.transport.closeIfCloseable
 import testhelp.TEST_AGENT
 import testhelp.TEST_MOCK_RESPONSE_LINE
@@ -45,7 +44,7 @@ class SpaceEngineersCucumberTest {
     }
 
     @Given("I am using mock data source.")
-    fun i_am_connected_to_mock_server() {
+    fun i_am_connected_to_mock_server() = runBlocking {
         environment =
             ContextControllerWrapper(
                 spaceEngineers = OldProtocolSpaceEngineers(
@@ -58,7 +57,7 @@ class SpaceEngineersCucumberTest {
     }
 
     @Given("I am connected to real game.")
-    fun i_am_connected_to_real_game() {
+    fun i_am_connected_to_real_game() = runBlocking {
         environment =
             ContextControllerWrapper(
                 spaceEngineers = OldProtocolSpaceEngineers(
@@ -68,7 +67,7 @@ class SpaceEngineersCucumberTest {
     }
 
     @Given("I am connected to real game using json-rpc.")
-    fun i_am_connected_to_real_game_using_json_rpc() {
+    fun i_am_connected_to_real_game_using_json_rpc() = runBlocking {
 
         environment =
             ContextControllerWrapper(
@@ -140,11 +139,12 @@ class SpaceEngineersCucumberTest {
     }
 
     @When("Character moves forward for {float} units.")
-    fun character_moves_forward_for_units(units: Float) {
-        environment.character.blockingMoveForwardByDistance(
+    fun character_moves_forward_for_units(units: Float) = runBlocking {
+        environment.blockingMoveForwardByDistance(
             distance = units,
             startPosition = environment.observer.observe().position
-        ).let { context.addToHistory(it) }
+        )
+        environment.observer.observe()
     }
 
     @Then("Character is {int} units away from starting location.")
@@ -163,28 +163,28 @@ class SpaceEngineersCucumberTest {
         return observeBlocks().first { it.id == context.lastNewBlockId }
     }
 
-    private fun grindDownToPercentage(percentage: Double) {
-        environment.grindDownToPercentage(context.lastNewBlockId!!, percentage)
+    private suspend fun grindDownToPercentage(percentage: Double) {
+        environment.grindDownToPercentage(context.lastNewBlock!!, percentage)
     }
 
-    private fun torchUpToPercentage(percentage: Double) {
-        environment.torchUpToPercentage(context.lastNewBlockId!!, percentage)
+    private suspend fun torchUpToPercentage(percentage: Double) {
+        environment.torchUpToPercentage(context.lastNewBlock!!, percentage, torchLocation = context.torchLocation!!)
     }
 
     @When("Character grinds to {double} integrity.")
-    fun character_grinds_to_integrity(integrity: Double) {
+    fun character_grinds_to_integrity(integrity: Double) = runBlocking {
         val percentage = integrity / blockToGrind().maxIntegrity * 100.0
         grindDownToPercentage(percentage)
     }
 
     @When("Character grinds to {double}% integrity.")
-    fun character_grinds_until_to_integrity_percentage(percentage: Double) {
+    fun character_grinds_until_to_integrity_percentage(percentage: Double) = runBlocking {
         grindDownToPercentage(percentage)
     }
 
     @When("Character torches block back up to max integrity.")
-    fun character_torches_block_back_up_to_max_integrity() {
-        environment.torchBackToMax(context.lastNewBlockId!!)
+    fun character_torches_block_back_up_to_max_integrity() = runBlocking {
+        environment.torchBackToMax(context.lastNewBlock!!)
     }
 
     @Then("I receive observation.")
@@ -201,7 +201,8 @@ class SpaceEngineersCucumberTest {
 
     @When("Character selects block {string} and places it.")
     fun character_places_selects_block_and_places_it(blockType: String) {
-        val toolbarLocation = environment.items.getToolbar().findLocation(blockType) ?: error("cannot find $blockType in toolbar")
+        val toolbarLocation =
+            environment.items.getToolbar().findLocation(blockType) ?: error("cannot find $blockType in toolbar")
         environment.items.setToolbarItem(blockType, toolbarLocation);
         environment.items.equip(toolbarLocation)
         sleep(150)
@@ -230,7 +231,7 @@ class SpaceEngineersCucumberTest {
         assertEquals(allBlocks.size, data.size)
         data.forEachIndexed { index, row ->
             val block = allBlocks[index]
-            context.lastNewBlockId = block.id
+            context.lastNewBlock = block
             row["blockType"]?.let {
                 assertEquals(it, block.blockType)
             }
@@ -295,14 +296,14 @@ class SpaceEngineersCucumberTest {
         }
     }
 
-    fun moveBackScreenshotAndForward(block: Block, singleScreenshot: SingleScreenshot, distance: Float = 2f) {
+    fun moveBackScreenshotAndForward(block: Block, singleScreenshot: SingleScreenshot, distance: Float = 2f) = runBlocking {
         sleep(500)
         val startPosition = environment.observer.observe().position
-        environment.character.blockingMoveBackwardsByDistance(distance, startPosition = startPosition)
+        environment.blockingMoveBackwardsByDistance(distance, startPosition = startPosition)
         screenshot(block, singleScreenshot)
         sleep(500)
         val endPosition = environment.observer.observe().position
-        environment.character.blockingMoveForwardByDistance(distance, startPosition = endPosition)
+        environment.blockingMoveForwardByDistance(distance, startPosition = endPosition)
         sleep(500)
     }
 
@@ -320,42 +321,44 @@ class SpaceEngineersCucumberTest {
     }
 
     @Then("Character grinds down to {double}% below each threshold, steps {float} units back and takes screenshot.")
-    fun character_grinds_down_to_below_each_threshold_and_takes_screenshot(percentage: Double, distance: Float) {
-        val block = observeLatestNewBlock()
-        val meta = environment.definitions.blockDefinitions().first { it.blockType == block.blockType }
-        meta.buildProgressModels.reversed().forEach { seBuildProgressModel ->
+    fun character_grinds_down_to_below_each_threshold_and_takes_screenshot(percentage: Double, distance: Float) =
+        runBlocking {
+            val block = observeLatestNewBlock()
+            val meta = environment.definitions.blockDefinitions().first { it.blockType == block.blockType }
+            meta.buildProgressModels.reversed().forEach { seBuildProgressModel ->
+                sleep(500)
+                grindDownToPercentage((seBuildProgressModel.buildRatioUpperBound).toDouble() * 100.0 - percentage)
+                sleep(500)
+                environment.items.equip(ToolbarLocation(9, 0))
+                sleep(500)
+                moveBackScreenshotAndForward(
+                    block,
+                    SingleScreenshot(observeLatestNewBlock(), seBuildProgressModel.buildRatioUpperBound),
+                    distance
+                )
+            }
             sleep(500)
-            grindDownToPercentage((seBuildProgressModel.buildRatioUpperBound).toDouble() * 100.0 - percentage)
-            sleep(500)
-            environment.items.equip(ToolbarLocation(9, 0))
-            sleep(500)
-            moveBackScreenshotAndForward(
-                block,
-                SingleScreenshot(observeLatestNewBlock(), seBuildProgressModel.buildRatioUpperBound),
-                distance
-            )
         }
-        sleep(500)
-    }
 
     @Then("Character welds up to {double}% above each threshold, steps {float} units back and takes screenshot.")
-    fun character_welds_up_above_each_threshold_and_takes_screenshot(percentage: Double, distance: Float) {
-        val block = observeLatestNewBlock()
-        val definition = environment.definitions.blockDefinitions().first { it.blockType == block.blockType }
-        definition.buildProgressModels.forEach { seBuildProgressModel ->
+    fun character_welds_up_above_each_threshold_and_takes_screenshot(percentage: Double, distance: Float) =
+        runBlocking {
+            val block = observeLatestNewBlock()
+            val definition = environment.definitions.blockDefinitions().first { it.blockType == block.blockType }
+            definition.buildProgressModels.forEach { seBuildProgressModel ->
+                sleep(500)
+                torchUpToPercentage((seBuildProgressModel.buildRatioUpperBound).toDouble() * 100.0 + percentage)
+                sleep(500)
+                environment.items.equip(ToolbarLocation(9, 0))
+                sleep(500)
+                moveBackScreenshotAndForward(
+                    block,
+                    SingleScreenshot(observeLatestNewBlock(), seBuildProgressModel.buildRatioUpperBound),
+                    distance
+                )
+            }
             sleep(500)
-            torchUpToPercentage((seBuildProgressModel.buildRatioUpperBound).toDouble() * 100.0 + percentage)
-            sleep(500)
-            environment.items.equip(ToolbarLocation(9, 0))
-            sleep(500)
-            moveBackScreenshotAndForward(
-                block,
-                SingleScreenshot(observeLatestNewBlock(), seBuildProgressModel.buildRatioUpperBound),
-                distance
-            )
         }
-        sleep(500)
-    }
 
     @Then("Character saves metadata about each threshold and file names.")
     fun character_saves_metadata_about_each_threshold_and_file_names() {

@@ -3,7 +3,7 @@ package spaceEngineers.mock
 import kotlin.test.*
 import spaceEngineers.commands.ObservationArgs
 import spaceEngineers.commands.ObservationMode
-import spaceEngineers.controller.observe
+import spaceEngineers.controller.extensions.observe
 import testhelp.checkMockObservation
 import testhelp.mockController
 
