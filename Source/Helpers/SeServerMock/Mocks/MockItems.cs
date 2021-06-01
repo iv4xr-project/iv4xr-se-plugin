@@ -2,6 +2,7 @@
 using Iv4xr.PluginLib;
 using Iv4xr.SePlugin.Control;
 using Iv4xr.SePlugin.WorldModel;
+using VRageMath;
 
 namespace SeServerMock.Mocks
 {
@@ -11,6 +12,11 @@ namespace SeServerMock.Mocks
         
         public void Place()
         {
+        }
+
+        public void PlaceAt(string blockType, Vector3 position, Vector3 orientationForward, Vector3 orientationUp)
+        {
+            throw new System.NotImplementedException();
         }
 
         public void BeginUsingTool()

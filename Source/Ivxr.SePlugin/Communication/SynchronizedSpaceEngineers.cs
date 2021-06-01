@@ -102,6 +102,11 @@ namespace Iv4xr.SePlugin.Communication
             Enqueue(() => m_items.Place());
         }
 
+        public void PlaceAt(string blockType, Vector3 position, Vector3 orientationForward, Vector3 orientationUp)
+        {
+            Enqueue(() => m_items.PlaceAt(blockType, position, orientationForward, orientationUp));
+        }
+
         public void BeginUsingTool()
         {
             Enqueue(() => m_items.BeginUsingTool());

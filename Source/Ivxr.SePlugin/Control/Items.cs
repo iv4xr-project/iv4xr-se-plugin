@@ -7,12 +7,15 @@ using Sandbox.Game.Screens.Helpers;
 using Sandbox.Game.World;
 using VRage.Game;
 using VRage.ObjectBuilders;
+using VRageMath;
 
 namespace Iv4xr.SePlugin.Control
 {
     public interface IItems
     {
         void Place();
+
+        void PlaceAt(string blockType, Vector3 position, Vector3 orientationForward, Vector3 orientationUp);
 
         void BeginUsingTool();
 
@@ -32,6 +35,13 @@ namespace Iv4xr.SePlugin.Control
         public Items(IGameSession session)
         {
             m_session = session;
+        }
+
+        private readonly BlockPlacer m_blockPlacer = new BlockPlacer();
+
+        public void PlaceAt(string blockType, Vector3 position, Vector3 orientationForward, Vector3 orientationUp)
+        {
+            m_blockPlacer.PlaceBlock(blockType, position, orientationForward, orientationUp);
         }
 
         public void BeginUsingTool()

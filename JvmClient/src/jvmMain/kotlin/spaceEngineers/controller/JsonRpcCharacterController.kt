@@ -162,6 +162,18 @@ class JsonRpcCharacterController(
             processNoParameterMethod<Unit, Unit>(::place, "${itemsPrefix}Place")
         }
 
+        override fun placeAt(blockType: String, position: Vec3, orientationForward: Vec3, orientationUp: Vec3) {
+            processParameters<Any, Unit>(
+                params = mapOf(
+                    "blockType" to blockType,
+                    "position" to position,
+                    "orientationForward" to orientationForward,
+                    "orientationUp" to orientationUp,
+                ),
+                methodName = "${itemsPrefix}PlaceAt"
+            )
+        }
+
         override fun equip(toolbarLocation: ToolbarLocation) {
             processSingleParameterMethod<ToolbarLocation, Unit>(::equip, toolbarLocation, "${itemsPrefix}Equip")
         }
