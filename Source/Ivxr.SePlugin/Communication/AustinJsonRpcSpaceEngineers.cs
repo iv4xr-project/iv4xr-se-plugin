@@ -87,6 +87,12 @@ namespace Iv4xr.SePlugin.Communication
             m_se.Items.Place();
         }
 
+        [JsonRpcMethod("Items.PlaceAt")]
+        void PlaceAt(string blockType, Vector3 position, Vector3 orientationForward, Vector3 orientationUp)
+        {
+            m_se.Items.PlaceAt(blockType, position, orientationForward, orientationUp);
+        }
+
         [JsonRpcMethod("Items.BeginUsingTool")]
         void BeginUsingTool()
         {

@@ -35,6 +35,10 @@ class OldProtocolSpaceEngineers(val controller: ProprietaryJsonTcpCharacterContr
             controller.interact(InteractionArgs(InteractionType.PLACE))
         }
 
+        override fun placeAt(blockType: String, position: Vec3, orientationForward: Vec3, orientationUp: Vec3) {
+            TODO("Not yet implemented")
+        }
+
         override fun equip(toolbarLocation: ToolbarLocation) {
             controller.interact(InteractionArgs.equip(toolbarLocation = toolbarLocation))
         }
