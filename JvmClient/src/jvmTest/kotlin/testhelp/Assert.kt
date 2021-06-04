@@ -38,3 +38,9 @@ fun assertVecEquals(v1: Vec3, v2: Vec3, diff: Float = 0.01f, message: String = "
     assertFloatEquals(v1.y, v2.y, diff = diff, message = "$message Vectors not equal (y) ${v1.y} vs ${v2.y} ($v1 vs $v2)")
     assertFloatEquals(v1.z, v2.z, diff = diff, message = "$message Vectors not equal (z) ${v1.z} vs ${v2.z} ($v1 vs $v2)")
 }
+
+fun assertMountPointEquals(mp1: MountPoint, mp2: MountPoint, delta: Float = 0.01f) {
+    assertVecEquals(mp1.normal, mp2.normal, delta)
+    assertVecEquals(mp1.start, mp2.start, delta)
+    assertVecEquals(mp1.end, mp2.end, delta)
+}

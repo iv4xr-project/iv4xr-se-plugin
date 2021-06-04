@@ -2,18 +2,21 @@ package bdd
 
 import io.cucumber.java.After
 import io.cucumber.java.Before
+import io.cucumber.java.PendingException
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import io.cucumber.junit.Cucumber
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.junit.runner.RunWith
 import spaceEngineers.controller.*
 import spaceEngineers.controller.extensions.*
 import spaceEngineers.model.Block
+import spaceEngineers.model.RotationMatrix
 import spaceEngineers.model.ToolbarLocation
 import spaceEngineers.model.Vec3
-import spaceEngineers.model.extensions.allBlocks
+import spaceEngineers.model.extensions.*
 import spaceEngineers.transport.closeIfCloseable
 import testhelp.TEST_AGENT
 import testhelp.TEST_MOCK_RESPONSE_LINE
@@ -99,7 +102,7 @@ class SpaceEngineersCucumberTest {
     }
 
     @When("Character sets toolbar slot {int}, page {int} to {string}.")
-    fun character_sets_toolbar_slot_page_to(slot: Int, page: Int, itemName: String) {
+    fun character_sets_toolbar_slot_page_to(slot: Int, page: Int, itemName: String) = runBlocking {
         val location = ToolbarLocation(slot, page)
 
         environment.items.setToolbarItem(itemName, location)
@@ -140,12 +143,24 @@ class SpaceEngineersCucumberTest {
 
     @When("Character moves forward for {float} units.")
     fun character_moves_forward_for_units(units: Float) = runBlocking {
+        delay(10)
         environment.blockingMoveForwardByDistance(
+            distance = units,
+            startPosition = environment.observer.observe().position
+        )
+        delay(100)
+        environment.observer.observe()
+    }
+
+    @When("Character moves backward for {float} units.")
+    fun character_moves_backward_for_units(units: Float) = runBlocking {
+        environment.blockingMoveBackwardsByDistance(
             distance = units,
             startPosition = environment.observer.observe().position
         )
         environment.observer.observe()
     }
+
 
     @Then("Character is {int} units away from starting location.")
     fun character_is_units_away_from_starting_location(units: Int) {
@@ -296,16 +311,17 @@ class SpaceEngineersCucumberTest {
         }
     }
 
-    fun moveBackScreenshotAndForward(block: Block, singleScreenshot: SingleScreenshot, distance: Float = 2f) = runBlocking {
-        sleep(500)
-        val startPosition = environment.observer.observe().position
-        environment.blockingMoveBackwardsByDistance(distance, startPosition = startPosition)
-        screenshot(block, singleScreenshot)
-        sleep(500)
-        val endPosition = environment.observer.observe().position
-        environment.blockingMoveForwardByDistance(distance, startPosition = endPosition)
-        sleep(500)
-    }
+    fun moveBackScreenshotAndForward(block: Block, singleScreenshot: SingleScreenshot, distance: Float = 2f) =
+        runBlocking {
+            delay(500)
+            val startPosition = environment.observer.observe().position
+            environment.blockingMoveBackwardsByDistance(distance + 0.1f, startPosition = startPosition)
+            screenshot(block, singleScreenshot)
+            delay(500)
+            val endPosition = environment.observer.observe().position
+            environment.blockingMoveForwardByDistance(distance, startPosition = endPosition)
+            delay(500)
+        }
 
     fun screenshot(block: Block, singleScreenshot: SingleScreenshot) {
         blockScreenshotInfoByType.getOrPut(block.blockType) {
@@ -317,7 +333,7 @@ class SpaceEngineersCucumberTest {
     }
 
     fun observeLatestNewBlock(): Block {
-        return environment.observer.observeBlocks().allBlocks.first { it.id == context.lastNewBlockId }
+        return context.lastNewBlock ?: environment.observer.observeNewBlocks().allBlocks.last()
     }
 
     @Then("Character grinds down to {double}% below each threshold, steps {float} units back and takes screenshot.")
@@ -373,4 +389,73 @@ class SpaceEngineersCucumberTest {
         ).writeText(cw.gsonReaderWriter.gson.toJson(blockScreenshotInfoByType[block.blockType]))
     }
 
+
+    @When("Character teleports to first mount point of {string}.")
+    fun character_teleports_to_first_mount_point_of(blockType: String) {
+        sleep(1000)
+        val block = observeBlocks().first { it.blockType == blockType }
+        assertEquals(block.blockType, blockType)
+        val definition = environment.definitions.blockDefinitions().first { it.blockType == blockType }
+        definition.mountPoints.any { mountpoint ->
+            val orientationForward_ = block.orientationTowardsMountPoint(mountpoint)
+            val orientationUp_ = block.orientationUpTowardsMountPoint(mountpoint)
+            environment.character.teleport(
+                block.mountPointToRealWorldPosition(
+                    mountpoint,
+                    definition,
+                    offset = 0.5f // (should be z-size of character)
+                ) - orientationUp_ * Character.DISTANCE_CENTER_CAMERA,
+                orientationUp = orientationUp_,
+                orientationForward = orientationForward_
+            )
+            environment.items.equip(ToolbarLocation(1, 0))
+            sleep(1000)
+            println("target block: ${environment.observer.observe().targetBlock}")
+            environment.observer.observe().targetBlock?.apply { println(this) }?.blockType == blockType
+        }.let {
+            assertTrue(it)
+        }
+    }
+
+
+    @Then("Character takes screenshots from {string} {string} units away.")
+    fun character_takes_screenshots_from_units_away(angles: String, distanceStr: String) = runBlocking {
+        val distance: Float = distanceStr?.toFloat()
+        environment.observer.observeNewBlocks()
+        val block = context.lastNewBlock!!
+        val positions = mapOf(
+            Vec3.FORWARD to Vec3.UP,
+            Vec3.BACKWARD to Vec3.UP,
+            Vec3.LEFT to Vec3.UP,
+            Vec3.RIGHT to Vec3.UP,
+            Vec3.UP to Vec3.FORWARD,
+            Vec3.DOWN to Vec3.BACKWARD,
+        )
+        val matrix = RotationMatrix.fromPose(block)
+        val blockDefinition = environment.definitions.blockDefinitions().first { it.blockType == block.blockType }!!
+        positions.forEach { (forward, up) ->
+            val centerOfBlock = (blockDefinition.size * 0.5f * 2.5f);
+            val mountPointPositionWithinBlock = matrix * -(forward * distance - centerOfBlock * 0f)
+
+            val characterPosition = block.centerPosition - mountPointPositionWithinBlock
+            val cameraPosition = characterPosition + (matrix * up).normalized() * Character.DISTANCE_CENTER_CAMERA
+
+            environment.character.teleport(
+                position = cameraPosition,
+                orientationForward = (-matrix * forward).normalized(),
+                orientationUp = (-matrix * up).normalized()
+            )
+            delay(2000)
+        }
+    }
+
+    @Then("Character grinds down to {int}% below each threshold and takes screenshots from {string} {string} units away.")
+    fun character_grinds_down_to_below_each_threshold_and_takes_screenshots_from_units_away(
+        int1: Int?,
+        string: String?,
+        string2: String?
+    ) {
+        // Write code here that turns the phrase above into concrete actions
+        throw PendingException()
+    }
 }
