@@ -20,9 +20,17 @@ namespace Iv4xr.SePlugin.Control
         public IObserver Observer { get; }
         public IDefinitions Definitions { get; }
 
-        internal RealSpaceEngineers(GameSession gameSession, ILog log)
+        internal RealSpaceEngineers(
+            GameSession gameSession,
+            ILog log,
+            double observationRadius = Control.Observer.DefaultRadius)
         {
-            Observer = new Observer(new LowLevelObserver(gameSession) {Log = log}) {Log = log};
+            Observer = new Observer(new LowLevelObserver(gameSession) {Log = log})
+            {
+                Log = log,
+                Radius = observationRadius
+            };
+            
             Character = new CharacterController(gameSession, Observer);
             Session = new SessionController() {Log = log};
             Items = new Items(gameSession);

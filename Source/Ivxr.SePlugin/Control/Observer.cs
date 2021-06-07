@@ -21,6 +21,14 @@ namespace Iv4xr.SePlugin.Control
     {
         public ILog Log { get; set; }
 
+        public double Radius
+        {
+            get => m_lowLevelObserver.Radius;
+            set => m_lowLevelObserver.Radius = value;
+        }
+        
+        public const double DefaultRadius = 25.0d;
+
         private readonly LowLevelObserver m_lowLevelObserver;
 
         public Observer(LowLevelObserver lowLevelObserver)
