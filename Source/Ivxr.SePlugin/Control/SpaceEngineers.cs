@@ -1,4 +1,5 @@
 ﻿using Iv4xr.PluginLib;
+using Iv4xr.SePlugin.Config;
 using Iv4xr.SePlugin.Session;
 
 namespace Iv4xr.SePlugin.Control
@@ -20,15 +21,12 @@ namespace Iv4xr.SePlugin.Control
         public IObserver Observer { get; }
         public IDefinitions Definitions { get; }
 
-        internal RealSpaceEngineers(
-            GameSession gameSession,
-            ILog log,
-            double observationRadius = Control.Observer.DefaultRadius)
+        internal RealSpaceEngineers(GameSession gameSession, ILog log, PluginConfig config)
         {
             Observer = new Observer(new LowLevelObserver(gameSession) {Log = log})
             {
                 Log = log,
-                Radius = observationRadius
+                Radius = config.ObservationRadius
             };
             
             Character = new CharacterController(gameSession, Observer);

@@ -12,17 +12,22 @@ namespace Iv4xr.PluginLib
 {
     public class PluginServer
     {
+        public const int DefaultPort = 9678;
+        
         private ILog m_log;
         private readonly ISessionDispatcher m_sessionDispatcher;
         private readonly RequestQueue m_requestQueue;
+        private readonly int m_port;
 
         private const int ReadTimeoutMs = 20_000;
 
-        public PluginServer(ILog log, ISessionDispatcher sessionDispatcher, RequestQueue requestQueue)
+        public PluginServer(ILog log, ISessionDispatcher sessionDispatcher, RequestQueue requestQueue,
+            int port = DefaultPort)
         {
             m_log = log;
             m_sessionDispatcher = sessionDispatcher;
             m_requestQueue = requestQueue;
+            m_port = port;
         }
 
         public void SetLog(ILog log)
@@ -62,7 +67,7 @@ namespace Iv4xr.PluginLib
 
         private TcpListener Listen()
         {
-            var listener = new TcpListener(IPAddress.Any, 9678);
+            var listener = new TcpListener(IPAddress.Any, m_port);
             listener.Start();
             m_log.WriteLine($"Listening at {listener.LocalEndpoint}");
 

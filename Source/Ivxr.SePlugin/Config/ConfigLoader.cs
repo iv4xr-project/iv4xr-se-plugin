@@ -30,7 +30,6 @@ namespace Iv4xr.SePlugin.Config
             if (!File.Exists(GetConfigPath()))
             {
                 SaveDefault();
-                return new PluginConfig();
             }
 
             try
