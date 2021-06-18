@@ -27,14 +27,20 @@ namespace Iv4xr.SePlugin.Config
 
         public PluginConfig LoadOrSaveDefault()
         {
-            if (!File.Exists(GetConfigPath()))
-            {
-                SaveDefault();
-            }
-
             try
             {
-                return Load();
+                if (!File.Exists(GetConfigPath()))
+                {
+                    SaveDefault();
+                }
+                
+                var config = Load();
+                
+                (new ConfigValidator(Log)).EnforceValidConfig(config);
+                
+                Log?.WriteLine($"Using configuration:\n{(new Jsoner()).ToJson(config)}");
+
+                return config;
             }
             catch (Exception e)
             {
@@ -46,8 +52,8 @@ namespace Iv4xr.SePlugin.Config
         private PluginConfig Load()
         {
             var text = File.ReadAllText(GetConfigPath());
-            Log?.WriteLine($"Config file read:\n{text}");
 
+            // This will use defaults for missing values, as they are pre-filled by the PluginConfig constructor.
             return (new Jsoner()).ToObject<PluginConfig>(text);
         }
 

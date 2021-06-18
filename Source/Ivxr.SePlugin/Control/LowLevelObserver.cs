@@ -21,8 +21,7 @@ namespace Iv4xr.SePlugin.Control
             get => m_radius;
             set
             {
-                if (value <= 0.0d)
-                    throw new ArgumentOutOfRangeException($"{nameof(Radius)} must be positive and non-zero.");
+                Observer.ValidateRadius(value);
                 m_radius = value;
             }
         }
