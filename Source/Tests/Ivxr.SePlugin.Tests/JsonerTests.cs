@@ -3,8 +3,9 @@ using System;
 using Iv4xr.SePlugin.WorldModel;
 using VRageMath;
 using Xunit;
-using System.Collections.Generic;
 using Iv4xr.PluginLib.Comm;
+using Iv4xr.SePlugin.Config;
+using Iv4xr.SePlugin.Control;
 
 namespace Ivxr.SeGameLib.Tests
 {
@@ -111,6 +112,16 @@ namespace Ivxr.SeGameLib.Tests
             Assert.Equal(-1.0f, args.Movement.Z, Precision);
             Assert.Equal(0.3f, args.Rotation.X, Precision); // Check for correct mapping Rotation3 -> Rotation
             Assert.Equal(0.0f, args.Rotation.Y, Precision);
+        }
+
+        [Fact]
+        public void JsonerKeepsDefaultValues()
+        {
+            const string configJson = "{\"JsonRpcPort\":3333}";
+
+            var config = m_jsoner.ToObject<PluginConfig>(configJson);
+            
+            Assert.Equal(Observer.DefaultRadius, config.ObservationRadius);
         }
 
         /* (don't even show this in the list)
