@@ -67,7 +67,8 @@ We recommend using the project with JetBrains [IDEA](https://www.jetbrains.com/i
 - 5 small blocks to one big block. (So small block cube is 0.5x0.5x0.5 distance units.)
 - Engineer character can fit onto space of 2x3x2 in small bocks (1x1.5x1 game units), however size in code is 1x1.8x1.
 - Position of character is in center, camera is not. Offset vector between center of character and camera is:
-  (x=0.0, y=1.6369286, z=0)
+  (x=0, y=1.6369286, z=0). Use `Character.DISTANCE_CENTER_CAMERA` constant.
+- Block position doesn't always have to be in the center of the block. To locate the center of the block, use midway between `minPosition` and `maxPosition` (extension function `centerPosition`).
 
 ### Character and camera orientation
 
