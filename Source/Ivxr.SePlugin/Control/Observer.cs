@@ -21,6 +21,20 @@ namespace Iv4xr.SePlugin.Control
     {
         public ILog Log { get; set; }
 
+        public double Radius
+        {
+            get => m_lowLevelObserver.Radius;
+            set => m_lowLevelObserver.Radius = value;
+        }
+
+        public static void ValidateRadius(double radius)
+        {
+            if (radius <= 0.0d)
+                throw new Exception("Radius must be positive and non-zero.");
+        }
+        
+        public const double DefaultRadius = 25.0d;
+
         private readonly LowLevelObserver m_lowLevelObserver;
 
         public Observer(LowLevelObserver lowLevelObserver)

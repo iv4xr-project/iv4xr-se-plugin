@@ -1,6 +1,7 @@
 ﻿using System;
 using Iv4xr.PluginLib;
 using Iv4xr.SePlugin.Communication;
+using Iv4xr.SePlugin.Config;
 using Iv4xr.SePlugin.Control;
 using Iv4xr.SePlugin.SeLib;
 using Iv4xr.SePlugin.Session;
@@ -26,14 +27,20 @@ namespace Iv4xr.SePlugin
             seLog.Init("ivxr-plugin.log");
             Log = seLog;
 
-            var se = new RealSpaceEngineers(m_gameSession, Log);
+            var configLoader = new ConfigLoader(Log);
+            var config = configLoader.LoadOrSaveDefault();
+
+            var se = new RealSpaceEngineers(m_gameSession, Log, config);
             var sessionDispatcher = new SessionDispatcher(se.Session) {Log = Log};
 
-            m_server = new PluginServer(Log, sessionDispatcher, m_requestQueue);
+            m_server = new PluginServer(Log, sessionDispatcher, m_requestQueue, config.Port);
             FuncActionDispatcher = new FuncActionDispatcher();
 
             Dispatcher = new Dispatcher(m_requestQueue, se) {Log = Log};
-            JsonRpcStarter = new JsonRpcStarter(new SynchronizedSpaceEngineers(se, FuncActionDispatcher)) {Log = Log};
+            JsonRpcStarter = new JsonRpcStarter(
+                new SynchronizedSpaceEngineers(se, FuncActionDispatcher),
+                port: config.JsonRpcPort
+                ) {Log = Log};
         }
 
 

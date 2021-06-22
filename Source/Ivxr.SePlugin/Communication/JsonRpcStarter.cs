@@ -15,13 +15,20 @@ namespace Iv4xr.SePlugin.Communication
     {
         public ILog Log { get; set; }
 
+        public const int DefaultPort = 3333;
+
+        private readonly string m_hostname;
+        private readonly int m_port;
+
         private static AustinJsonRpcSpaceEngineers service;
 
         private readonly ISpaceEngineers m_se;
 
-        public JsonRpcStarter(ISpaceEngineers se)
+        public JsonRpcStarter(ISpaceEngineers se, string hostname = "127.0.0.1", int port = DefaultPort)
         {
             m_se = se;
+            m_hostname = hostname;
+            m_port = port;
             service = new AustinJsonRpcSpaceEngineers(se);
         }
 
@@ -30,21 +37,22 @@ namespace Iv4xr.SePlugin.Communication
             var thread = new Thread(StartSync)
             {
                 IsBackground = true,
-                Name = "Ivrx plugin json-rpc server thread"
+                Name = "Iv4xr plugin json-rpc server thread"
             };
+            
             thread.Start();
         }
 
-        public void StartSync()
+        private void StartSync()
         {
             var task = StartAsync();
         }
 
-        private async Task StartAsync(string hostname = "127.0.0.1", int listenPort = 3333)
+        private async Task StartAsync()
         {
-            var server = new TcpListener(IPAddress.Parse(hostname), listenPort);
+            var server = new TcpListener(IPAddress.Parse(m_hostname), m_port);
             server.Start();
-            Log.WriteLine(("Server started at port " + listenPort));
+            Log.WriteLine(("Server started at port " + m_port));
             while (true)
             {
                 Log.WriteLine(("Waiting for connection"));

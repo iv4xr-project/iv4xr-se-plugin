@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Iv4xr.PluginLib;
@@ -14,6 +15,18 @@ namespace Iv4xr.SePlugin.Control
     internal class LowLevelObserver
     {
         public ILog Log { get; set; }
+
+        public double Radius
+        {
+            get => m_radius;
+            set
+            {
+                Observer.ValidateRadius(value);
+                m_radius = value;
+            }
+        }
+
+        private double m_radius = Observer.DefaultRadius;
 
         private readonly GameSession m_gameSession;
 
@@ -93,7 +106,7 @@ namespace Iv4xr.SePlugin.Control
 
         private BoundingSphereD GetBoundingSphereD()
         {
-            return new BoundingSphereD(GetPlayerPosition(), radius: 25.0);
+            return new BoundingSphereD(GetPlayerPosition(), m_radius);
         }
         
         private IEnumerable<MyEntity> EnumerateSurroundingEntities(BoundingSphereD sphere)
