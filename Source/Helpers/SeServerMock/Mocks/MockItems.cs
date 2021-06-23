@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Iv4xr.PluginLib;
+﻿using Iv4xr.PluginLib;
 using Iv4xr.SePlugin.Control;
 using Iv4xr.SePlugin.WorldModel;
 using VRageMath;
@@ -12,6 +11,11 @@ namespace SeServerMock.Mocks
         
         public void Place()
         {
+        }
+
+        public void Remove(string blockId)
+        {
+            throw new System.NotImplementedException();
         }
 
         public void PlaceAt(string blockType, Vector3 position, Vector3 orientationForward, Vector3 orientationUp)

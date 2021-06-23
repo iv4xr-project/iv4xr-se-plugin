@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Iv4xr.SePlugin.WorldModel;
 using Sandbox.Definitions;
 using Sandbox.Game.Entities;
+using Sandbox.Game.Entities.Cube;
 using Sandbox.Game.Screens.Helpers;
 using Sandbox.Game.World;
 using VRage.Game;
@@ -14,6 +17,8 @@ namespace Iv4xr.SePlugin.Control
     public interface IItems
     {
         void Place();
+
+        void Remove(string blockId);
 
         void PlaceAt(string blockType, Vector3 position, Vector3 orientationForward, Vector3 orientationUp);
 
@@ -31,10 +36,12 @@ namespace Iv4xr.SePlugin.Control
     public class Items : IItems
     {
         private readonly IGameSession m_session;
+        private readonly LowLevelObserver m_observer;
 
         public Items(IGameSession session)
         {
             m_session = session;
+            m_observer = new LowLevelObserver(m_session);
         }
 
         private readonly BlockPlacer m_blockPlacer = new BlockPlacer();
@@ -42,6 +49,18 @@ namespace Iv4xr.SePlugin.Control
         public void PlaceAt(string blockType, Vector3 position, Vector3 orientationForward, Vector3 orientationUp)
         {
             m_blockPlacer.PlaceBlock(blockType, position, orientationForward, orientationUp);
+        }
+
+        public void Remove(string blockId)
+        {
+            var grid = m_observer.GetGridContainingBlock(blockId);
+            if (grid == null)
+            {
+                throw new ValidationException("Block with id not found");
+            }
+
+            var block = m_observer.GetBlocksOf(grid).FirstOrDefault(b => b.UniqueId.ToString() == blockId);
+            grid.RemoveBlock(block);
         }
 
         public void BeginUsingTool()
@@ -77,7 +96,7 @@ namespace Iv4xr.SePlugin.Control
             EquipToolbarItem(toolbarLocation, false);
         }
 
-        
+
         [Obsolete("Deprecated, will create new api for allosSizeChange. Can use Equip.")]
         public void EquipToolbarItem(ToolbarLocation toolbarLocation, bool allowSizeChange)
         {

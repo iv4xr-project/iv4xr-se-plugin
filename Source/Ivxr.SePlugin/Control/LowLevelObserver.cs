@@ -5,6 +5,7 @@ using Iv4xr.PluginLib;
 using Iv4xr.SePlugin.WorldModel;
 using Sandbox.Game.Entities;
 using Sandbox.Game.Entities.Character;
+using Sandbox.Game.Entities.Cube;
 using Sandbox.Game.Weapons;
 using Sandbox.Game.World;
 using VRage.Game.Entity;
@@ -28,14 +29,14 @@ namespace Iv4xr.SePlugin.Control
 
         private double m_radius = Observer.DefaultRadius;
 
-        private readonly GameSession m_gameSession;
+        private readonly IGameSession m_gameSession;
 
         private readonly PlainVec3D
                 m_agentExtent = new PlainVec3D(0.5, 1, 0.5); // TODO(PP): It's just a quick guess, check the reality.
 
         private readonly SeEntityBuilder m_seEntityBuilder;
 
-        public LowLevelObserver(GameSession gameSession)
+        public LowLevelObserver(IGameSession gameSession)
         {
             m_gameSession = gameSession;
             m_seEntityBuilder = new SeEntityBuilder() {Log = Log};
@@ -96,7 +97,7 @@ namespace Iv4xr.SePlugin.Control
             observation.Grids = CollectSurroundingBlocks(GetBoundingSphereD(), ObservationMode.NEW_BLOCKS);
             return observation;
         }
-        
+
         public Observation GetBlocks()
         {
             var observation = GetBasicObservation();
@@ -104,11 +105,19 @@ namespace Iv4xr.SePlugin.Control
             return observation;
         }
 
-        private BoundingSphereD GetBoundingSphereD()
+        public BoundingSphereD GetBoundingSphereD()
         {
             return new BoundingSphereD(GetPlayerPosition(), m_radius);
         }
-        
+
+        public HashSet<MySlimBlock> GetBlocksOf(MyCubeGrid grid)
+        {
+            var foundBlocks = new HashSet<MySlimBlock>();
+            var sphere = GetBoundingSphereD();
+            grid.GetBlocksInsideSphere(ref sphere, foundBlocks);
+            return foundBlocks;
+        }
+
         private IEnumerable<MyEntity> EnumerateSurroundingEntities(BoundingSphereD sphere)
         {
             List<MyEntity> entities = MyEntities.GetEntitiesInSphere(ref sphere);
@@ -129,6 +138,16 @@ namespace Iv4xr.SePlugin.Control
             return EnumerateSurroundingEntities(sphere)
                     .OfType<MyCubeGrid>()
                     .Select(grid => m_seEntityBuilder.CreateSeGrid(grid, sphere, mode)).ToList();
+        }
+
+        public MyCubeGrid GetGridContainingBlock(string blockId)
+        {
+            BoundingSphereD sphere = GetBoundingSphereD();
+            return EnumerateSurroundingEntities(sphere)
+                    .OfType<MyCubeGrid>().ToList().FirstOrDefault(grid =>
+                    {
+                        return GetBlocksOf(grid).FirstOrDefault(block => block.UniqueId.ToString() == blockId) != null;
+                    });
         }
     }
 }

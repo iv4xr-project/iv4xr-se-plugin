@@ -101,6 +101,11 @@ namespace Iv4xr.SePlugin.Communication
         {
             Enqueue(() => m_items.Place());
         }
+        
+        public void Remove(string blockId)
+        {
+            Enqueue(() => m_items.Remove(blockId));
+        }
 
         public void PlaceAt(string blockType, Vector3 position, Vector3 orientationForward, Vector3 orientationUp)
         {
