@@ -39,6 +39,10 @@ class OldProtocolSpaceEngineers(val controller: ProprietaryJsonTcpCharacterContr
             TODO("Not yet implemented")
         }
 
+        override fun remove(blockId: String) {
+            TODO("Not yet implemented")
+        }
+
         override fun equip(toolbarLocation: ToolbarLocation) {
             controller.interact(InteractionArgs.equip(toolbarLocation = toolbarLocation))
         }

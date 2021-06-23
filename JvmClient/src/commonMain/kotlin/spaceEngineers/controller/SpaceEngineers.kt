@@ -57,6 +57,7 @@ interface Observer {
 interface Items {
     fun place()
     fun placeAt(blockType: String, position: Vec3, orientationForward: Vec3, orientationUp: Vec3)
+    fun remove(blockId: String)
     fun equip(toolbarLocation: ToolbarLocation)
     fun beginUsingTool()
     fun endUsingTool()
