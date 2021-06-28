@@ -58,6 +58,7 @@ interface Items {
     fun place()
     fun placeAt(blockType: String, position: Vec3, orientationForward: Vec3, orientationUp: Vec3)
     fun remove(blockId: String)
+    fun setIntegrity(blockId: String, integrity: Float)
     fun equip(toolbarLocation: ToolbarLocation)
     fun beginUsingTool()
     fun endUsingTool()

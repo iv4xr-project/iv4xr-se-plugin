@@ -43,6 +43,10 @@ class OldProtocolSpaceEngineers(val controller: ProprietaryJsonTcpCharacterContr
             TODO("Not yet implemented")
         }
 
+        override fun setIntegrity(blockId: String, integrity: Float) {
+            TODO("Not yet implemented")
+        }
+
         override fun equip(toolbarLocation: ToolbarLocation) {
             controller.interact(InteractionArgs.equip(toolbarLocation = toolbarLocation))
         }

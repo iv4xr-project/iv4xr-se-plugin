@@ -5,7 +5,7 @@ data class BlockDefinition(
     val id: String,
     val blockType: String,
     /**
-     * List containing integrity thresholds, that change block state (and visual model).
+     * List containing integrity thresholds that change block state (and visual model).
      */
     val buildProgressModels: List<BuildProgressModel>,
     /**

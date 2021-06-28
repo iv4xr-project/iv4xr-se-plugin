@@ -14,7 +14,7 @@ fun Block.mountPointToRealWorldPosition(
     blockDefinition: BlockDefinition,
     offset: Float = 0f
 ): Vec3 {
-    val positionRelativeToBlockCenter = (mountPoint.start + mountPoint.end) * 0.5f * blockDefinition.cubeSize.sideSize
+    val positionRelativeToBlockCenter = (mountPoint.start + mountPoint.end) * 0.5f * blockDefinition.cubeSize.value
     return pointFromCenter(
         blockDefinition,
         positionRelativeToBlockCenter + mountPoint.normal * offset
@@ -22,7 +22,7 @@ fun Block.mountPointToRealWorldPosition(
 }
 
 fun Block.pointFromCenter(blockDefinition: BlockDefinition, positionRelativeToBlockCenter: Vec3): Vec3 {
-    val centerOfBlock = (blockDefinition.size * 0.5f * blockDefinition.cubeSize.sideSize)
+    val centerOfBlock = (blockDefinition.size * 0.5f * blockDefinition.cubeSize.value)
     val mountPointPositionWithinBlock = rotationMatrix * -(positionRelativeToBlockCenter - centerOfBlock)
     return (centerPosition - mountPointPositionWithinBlock)
 }
