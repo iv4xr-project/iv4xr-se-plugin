@@ -4,23 +4,65 @@ using System.Threading.Tasks;
 
 namespace Iv4xr.SePlugin.Communication
 {
+    internal class CallResult
+    {
+        public dynamic ReturnValue { private set; get; }
+        public Exception Exception { private set; get; }
+        public bool IsException { private set; get; }
+
+        public dynamic ReturnOrThrow()
+        {
+            if (IsException)
+            {
+                throw Exception;
+            }
+
+            return ReturnValue;
+        }
+
+        public static CallResult FromException(Exception exception)
+        {
+            return new CallResult()
+            {
+                Exception = exception,
+                IsException = true,
+            };
+        }
+
+        public static CallResult FromResult(dynamic result)
+        {
+            return new CallResult()
+            {
+                ReturnValue = result,
+                IsException = false,
+            };
+        }
+    }
+
     internal class FuncToRunOnGameLoop
     {
         private readonly Func<dynamic> m_function;
-        private readonly BlockingCollection<dynamic> m_result;
+        private readonly BlockingCollection<CallResult> m_result;
 
         public FuncToRunOnGameLoop(Func<dynamic> function)
         {
             m_function = function;
-            m_result = new BlockingCollection<dynamic>();
+            m_result = new BlockingCollection<CallResult>();
         }
 
         public void Execute()
         {
-            m_result.Add(m_function());
+            try
+            {
+                m_result.Add(CallResult.FromResult(m_function()));
+            }
+            catch (Exception exception)
+            {
+                m_result.Add(CallResult.FromException(exception));
+            }
         }
 
-        public dynamic Take()
+        public CallResult Take()
         {
             return m_result.Take();
         }
@@ -36,7 +78,7 @@ namespace Iv4xr.SePlugin.Communication
             var functionToRun = new FuncToRunOnGameLoop(func);
             m_functions.Enqueue(functionToRun);
             await Task.Yield();
-            return functionToRun.Take();
+            return functionToRun.Take().ReturnOrThrow();
         }
 
         public async Task<object> EnqueueAsync(Action func)
@@ -49,7 +91,7 @@ namespace Iv4xr.SePlugin.Communication
             var taskToRun = new FuncToRunOnGameLoop(func);
             m_functions.Enqueue(taskToRun);
             Task.Yield();
-            return taskToRun.Take();
+            return taskToRun.Take().ReturnOrThrow();
         }
 
         public object Enqueue(Action func)
