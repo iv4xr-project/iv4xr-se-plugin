@@ -98,6 +98,13 @@ namespace Iv4xr.SePlugin.Communication
         {
             m_se.Items.Remove(blockId);
         }
+        
+        [JsonRpcMethod("Items.SetIntegrity")]
+        void SetIntegrity(string blockId, float integrity)
+        {
+            m_se.Items.SetIntegrity(blockId, integrity);
+        }
+
 
         [JsonRpcMethod("Items.BeginUsingTool")]
         void BeginUsingTool()
