@@ -92,6 +92,12 @@ namespace Iv4xr.SePlugin.Communication
         {
             m_se.Items.PlaceAt(blockType, position, orientationForward, orientationUp);
         }
+        
+        [JsonRpcMethod("Items.Remove")]
+        void Remove(string blockId)
+        {
+            m_se.Items.Remove(blockId);
+        }
 
         [JsonRpcMethod("Items.BeginUsingTool")]
         void BeginUsingTool()

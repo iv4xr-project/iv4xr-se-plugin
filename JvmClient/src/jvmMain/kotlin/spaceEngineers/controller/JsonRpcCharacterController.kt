@@ -174,6 +174,14 @@ class JsonRpcCharacterController(
             )
         }
 
+        override fun remove(blockId: String) {
+            processSingleParameterMethod<String, Unit>(
+                ::remove,
+                methodName = "${itemsPrefix}Remove",
+                parameter = blockId
+            )
+        }
+
         override fun equip(toolbarLocation: ToolbarLocation) {
             processSingleParameterMethod<ToolbarLocation, Unit>(::equip, toolbarLocation, "${itemsPrefix}Equip")
         }
