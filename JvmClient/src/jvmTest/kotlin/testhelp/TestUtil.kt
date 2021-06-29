@@ -47,30 +47,6 @@ fun spaceEngineersSimplePlaceGrindTorch(
     }
 }
 
-fun mockController(
-    response: String = TEST_MOCK_RESPONSE_LINE,
-    agentId: String = TEST_AGENT,
-    characterController: CharacterController = ProprietaryJsonTcpCharacterController.mock(
-        agentId = agentId,
-        lineToReturn = response
-    ),
-    block: CharacterController .() -> Unit
-) {
-    controller(agentId = agentId, characterController = characterController, block = block)
-}
-
-fun controller(
-    agentId: String = TEST_AGENT,
-    characterController: CharacterController = ProprietaryJsonTcpCharacterController.localhost(agentId),
-    block: CharacterController.() -> Unit
-) {
-    try {
-        block(characterController)
-    } finally {
-        characterController.closeIfCloseable()
-    }
-}
-
 fun spaceEngineersSuspend(
     agentId: String = TEST_AGENT,
     spaceEngineers: SpaceEngineers = ContextControllerWrapper(
