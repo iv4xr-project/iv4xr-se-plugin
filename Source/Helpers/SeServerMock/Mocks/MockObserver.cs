@@ -43,13 +43,6 @@ namespace SeServerMock.Mocks
             };
         }
 
-        public Observation GetObservation(ObservationArgs observationArgs)
-        {
-            Log.WriteLine($"Observation mode: {observationArgs.ObservationMode}");
-
-            return Observe();
-        }
-
         public Observation Observe()
         {
                 return GetObservation();

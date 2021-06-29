@@ -46,34 +46,5 @@ namespace Iv4xr.SePlugin
  
             toolbar.SwitchToPage(page);
         }
-        
-        [Obsolete("Remove when removing the old protocol")]
-        public static void Interact(this Items items, InteractionArgs args)
-        {
-            if (args.InteractionType == InteractionType.EQUIP)
-            {
-                items.EquipToolbarItem(new ToolbarLocation() {Slot = args.Slot, Page = args.Page}, args.AllowSizeChange);
-            }
-            else if (args.InteractionType == InteractionType.PLACE)
-            {
-                items.Place();
-            }
-            else if (args.InteractionType == InteractionType.BEGIN_USE)
-            {
-                items.BeginUsingTool();
-            }
-            else if (args.InteractionType == InteractionType.END_USE)
-            {
-                items.EndUsingTool();
-            }
-            else if (args.InteractionType == InteractionType.TOOLBAR_SET)
-            {
-                items.SetToolbarItem(args.ItemName, new ToolbarLocation() {Slot = args.Slot, Page = args.Page});
-            }
-            else
-            {
-                throw new ArgumentException("Unknown or not implemented interaction type.");
-            }
-        }
     }
 }

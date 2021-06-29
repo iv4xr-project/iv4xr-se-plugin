@@ -67,55 +67,6 @@ namespace Ivxr.SeGameLib.Tests
         }
 
         [Fact]
-        public void DeserializesAgentCommandRequest()
-        {
-            string requestJson = "{\"Cmd\":\"AGENTCOMMAND\",\"Arg\":{\"Cmd\":\"MOVETOWARD\"," +
-                                 "\"AgentId\":\"you\",\"TargetId\":\"you\"," +
-                                 "\"Arg\":5.5}}";
-
-            var request = m_jsoner.ToObject<SeRequestShell<AgentCommand<double>>>(requestJson);
-
-            Assert.Equal(5.5, request.Arg.Arg, Precision);
-        }
-
-        [Fact]
-        public void DeserializesMoveCommandArgs()
-        {
-            string argsJson = "{\"Object1\":{\"X\":0.0,\"Y\":0.0,\"Z\":-1.0},\"Object2\":false}";
-
-            var args = m_jsoner.ToObject<MoveCommandArgs>(argsJson);
-
-            Assert.Equal(-1.0d, args.MoveIndicator.Z, Precision);
-        }
-
-        [Fact]
-        public void DeserializesMoveCommand()
-        {
-            string requestJson = "{\"Cmd\":\"AGENTCOMMAND\",\"Arg\":{\"Cmd\":\"MOVETOWARD\"," +
-                                 "\"AgentId\":\"you\",\"TargetId\":\"you\"," +
-                                 "\"Arg\":{\"Object1\":{\"X\":0.0,\"Y\":0.0,\"Z\":-1.0},\"Object2\":false}}}";
-
-            var request = m_jsoner.ToObject<SeRequestShell<AgentCommand<MoveCommandArgs>>>(requestJson);
-
-            Assert.Equal(-1.0d, request.Arg.Arg.MoveIndicator.Z, Precision);
-        }
-
-        [Fact]
-        public void DeserializesMoveAndRotateCommand()
-        {
-            string requestJson = "{\"Cmd\":\"AGENTCOMMAND\",\"Arg\":{\"Cmd\":\"MOVE_ROTATE\"," +
-                                 "\"AgentId\":\"you\",\"TargetId\":\"you\"," +
-                                 "\"Arg\":{\"Movement\":{\"X\":0.0,\"Y\":0.0,\"Z\":-1.0},\"Rotation3\":{\"X\":0.3,\"Y\":0.0,\"Z\":0.0},\"Roll\":0.0}}}";
-
-            var request = m_jsoner.ToObject<SeRequestShell<AgentCommand<MoveAndRotateArgs>>>(requestJson);
-
-            var args = request.Arg.Arg;
-            Assert.Equal(-1.0f, args.Movement.Z, Precision);
-            Assert.Equal(0.3f, args.Rotation.X, Precision); // Check for correct mapping Rotation3 -> Rotation
-            Assert.Equal(0.0f, args.Rotation.Y, Precision);
-        }
-
-        [Fact]
         public void JsonerKeepsDefaultValues()
         {
             const string configJson = "{\"JsonRpcPort\":3333}";
