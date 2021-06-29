@@ -43,29 +43,6 @@ class SpaceEngineersCucumberTest {
         }
     }
 
-    @Given("I am using mock data source.")
-    fun i_am_connected_to_mock_server() = runBlocking {
-        environment =
-            ContextControllerWrapper(
-                spaceEngineers = OldProtocolSpaceEngineers(
-                    ProprietaryJsonTcpCharacterController.mock(
-                        agentId = TEST_AGENT,
-                        lineToReturn = TEST_MOCK_RESPONSE_LINE
-                    )
-                )
-            )
-    }
-
-    @Given("I am connected to real game.")
-    fun i_am_connected_to_real_game() = runBlocking {
-        environment =
-            ContextControllerWrapper(
-                spaceEngineers = OldProtocolSpaceEngineers(
-                    ProprietaryJsonTcpCharacterController.localhost(agentId = TEST_AGENT)
-                )
-            )
-    }
-
     @Given("I am connected to real game using json-rpc.")
     fun i_am_connected_to_real_game_using_json_rpc() = runBlocking {
 
