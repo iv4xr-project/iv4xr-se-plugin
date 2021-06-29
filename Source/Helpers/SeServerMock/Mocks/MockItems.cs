@@ -18,6 +18,11 @@ namespace SeServerMock.Mocks
             throw new System.NotImplementedException();
         }
 
+        public void SetIntegrity(string blockId, float integrity)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public void PlaceAt(string blockType, Vector3 position, Vector3 orientationForward, Vector3 orientationUp)
         {
             throw new System.NotImplementedException();

@@ -182,6 +182,16 @@ class JsonRpcCharacterController(
             )
         }
 
+        override fun setIntegrity(blockId: String, integrity: Float) {
+            processParameters<Any, Unit>(
+                params = mapOf(
+                    "blockId" to blockId,
+                    "integrity" to integrity,
+                ),
+                methodName = "${itemsPrefix}SetIntegrity"
+            )
+        }
+
         override fun equip(toolbarLocation: ToolbarLocation) {
             processSingleParameterMethod<ToolbarLocation, Unit>(::equip, toolbarLocation, "${itemsPrefix}Equip")
         }

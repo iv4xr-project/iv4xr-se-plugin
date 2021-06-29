@@ -107,6 +107,11 @@ namespace Iv4xr.SePlugin.Communication
             Enqueue(() => m_items.Remove(blockId));
         }
 
+        public void SetIntegrity(string blockId, float integrity)
+        {
+            Enqueue(() => m_items.SetIntegrity(blockId, integrity));
+        }
+
         public void PlaceAt(string blockType, Vector3 position, Vector3 orientationForward, Vector3 orientationUp)
         {
             Enqueue(() => m_items.PlaceAt(blockType, position, orientationForward, orientationUp));
