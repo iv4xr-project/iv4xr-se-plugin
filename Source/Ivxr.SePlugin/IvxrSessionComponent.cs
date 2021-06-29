@@ -16,7 +16,6 @@ namespace Iv4xr.SePlugin
         {
             base.UpdateBeforeSimulation();
             
-            IvxrPlugin.Dispatcher.ProcessRequests();
             IvxrPlugin.Context.FuncActionDispatcher.CallEverything();
         }
 
