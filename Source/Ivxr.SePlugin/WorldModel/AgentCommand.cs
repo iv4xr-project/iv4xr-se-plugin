@@ -49,7 +49,7 @@ namespace Iv4xr.SePlugin.WorldModel
 
         private Vector3D m_rotation3;
 
-        public float Roll;
+        public double Roll;
 
         public Vector2 Rotation;
     }

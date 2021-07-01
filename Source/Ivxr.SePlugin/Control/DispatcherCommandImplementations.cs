@@ -30,7 +30,7 @@ namespace Iv4xr.SePlugin.Control
             SeRequestShell<AgentCommand<MoveAndRotateArgs>> data)
         {
             var args = data.Arg.Arg;
-            se.Character.MoveAndRotate(args.Movement, args.Rotation, args.Roll);
+            se.Character.MoveAndRotate(args.Movement, args.Rotation, (float)args.Roll);
             return se.Observer.Observe();
         }
     }
