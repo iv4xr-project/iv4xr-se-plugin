@@ -19,9 +19,9 @@ Feature: Example how to describe block observations using cucumber.
       | <blockType> |
     When Character sets toolbar slot 0, page 0 to "Welder2Item".
     When Character sets toolbar slot 1, page 0 to "AngleGrinder2Item".
-    When Character moves forward for 9 units.
-    Then Character steps 2 units back and takes screenshot at initial integrity.
-    Then Character grinds down to 1% below each threshold, steps 2 units back and takes screenshot.
+    When Character moves forward for 14 units.
+    Then Character steps 3 units back and takes screenshot at initial integrity.
+    Then Character grinds down to 1% below each threshold, steps 3 units back and takes screenshot.
     Then Character saves metadata about each threshold and file names.
 
     Examples:

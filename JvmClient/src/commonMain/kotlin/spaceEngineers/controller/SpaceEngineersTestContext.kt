@@ -13,7 +13,8 @@ data class SpaceEngineersTestContext(
     var platformOrientationUp: Vec3? = null,
 ) {
 
-    val lastNewBlockId: String? = lastNewBlock?.id
+    val lastNewBlockId: String?
+        get() = lastNewBlock?.id
 
     fun updatePlatformOrientationUpIfNotSet(observation: Observation) {
         if (platformOrientationUp == null) {
