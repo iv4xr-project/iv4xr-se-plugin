@@ -317,7 +317,7 @@ class SpaceEngineersCucumberTest {
     }
 
     fun observeLatestNewBlock(): Block {
-        return environment.observer.observeBlocks().allBlocks.first { it.id == context.lastNewBlockId }
+        return environment.observer.observeBlocks().allBlocks.firstOrNull { it.id == context.lastNewBlockId } ?: error("block with id ${context.lastNewBlockId} not found")
     }
 
     @Then("Character grinds down to {double}% below each threshold, steps {float} units back and takes screenshot.")
