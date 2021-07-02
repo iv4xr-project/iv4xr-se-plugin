@@ -10,6 +10,7 @@ data class SpaceEngineersTestContext(
     val blockTypeToToolbarLocation: MutableMap<String, ToolbarLocation> = mutableMapOf(),
     var allNewestBlocks: MutableList<Block> = mutableListOf(),
     val observationHistory: MutableList<Observation> = mutableListOf(),
+    val characterObservationHistory: MutableList<CharacterObservation> = mutableListOf(),
     var platformOrientationUp: Vec3? = null,
 ) {
 
@@ -23,7 +24,7 @@ data class SpaceEngineersTestContext(
     }
 
     fun updatePlatformOrientationUp(observation: Observation) {
-        val characterOrientationUp = observation.orientationUp
+        val characterOrientationUp = observation.character.orientationUp
         val blocks = observation.allBlocks
         platformOrientationUp = blocks.map { it.orientationUp }
             .maxByOrNull { it.distanceTo(characterOrientationUp) }
@@ -51,5 +52,9 @@ data class SpaceEngineersTestContext(
 
     fun addToHistory(observation: Observation) {
         observationHistory.add(observation)
+    }
+
+    fun addToHistory(observation: CharacterObservation) {
+        characterObservationHistory.add(observation)
     }
 }

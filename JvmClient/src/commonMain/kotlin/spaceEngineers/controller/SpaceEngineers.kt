@@ -8,8 +8,31 @@ interface SpaceEngineers {
     val items: Items
     val observer: Observer
     val definitions: Definitions
+    val blocks: Blocks
+    val admin: SpaceEngineersAdmin
 }
 
+interface SpaceEngineersAdmin {
+    val blocks: BlocksAdmin
+    val character: CharacterAdmin
+}
+
+interface BlocksAdmin {
+    fun placeAt(blockType: String, position: Vec3, orientationForward: Vec3, orientationUp: Vec3)
+    fun remove(blockId: String)
+    fun setIntegrity(blockId: String, integrity: Float)
+}
+
+interface CharacterAdmin {
+    /**
+     * @param position A position within the game scenario itself in system coordinates, uses game units.
+     * @param orientationForward Forward vector together with up vector define the character orientation.
+     *      Either both or none of them have to be set. The orientation is relative to the system.
+     *      They should be normalised vectors and perpendicular.
+     * @param orientationUp Complementary vector to the forward vector.
+     */
+    fun teleport(position: Vec3, orientationForward: Vec3? = null, orientationUp: Vec3? = null): Observation
+}
 
 interface Session {
     fun loadScenario(scenarioPath: String)
@@ -26,15 +49,6 @@ interface Character {
      * @see Vec2.ROTATE_UP and other constants for examples.
      */
     fun moveAndRotate(movement: Vec3 = Vec3.ZERO, rotation3: Vec2 = Vec2.ZERO, roll: Float = 0f): Observation
-
-    /**
-     * @param position A position within the game scenario itself in system coordinates, uses game units.
-     * @param orientationForward Forward vector together with up vector define the character orientation.
-     *      Either both or none of them have to be set. The orientation is relative to the system.
-     *      They should be normalised vectors and perpendicular.
-     * @param orientationUp Complementary vector to the forward vector.
-     */
-    fun teleport(position: Vec3, orientationForward: Vec3? = null, orientationUp: Vec3? = null): Observation
     fun turnOnJetpack(): Observation
     fun turnOffJetpack(): Observation
 
@@ -48,22 +62,22 @@ interface Character {
 }
 
 interface Observer {
-    fun observe(): Observation
+    fun observe(): CharacterObservation
     fun observeBlocks(): Observation
     fun observeNewBlocks(): Observation
     fun takeScreenshot(absolutePath: String)
 }
 
 interface Items {
-    fun place()
-    fun placeAt(blockType: String, position: Vec3, orientationForward: Vec3, orientationUp: Vec3)
-    fun remove(blockId: String)
-    fun setIntegrity(blockId: String, integrity: Float)
     fun equip(toolbarLocation: ToolbarLocation)
     fun beginUsingTool()
     fun endUsingTool()
     fun setToolbarItem(name: String, toolbarLocation: ToolbarLocation)
     fun getToolbar(): Toolbar
+}
+
+interface Blocks {
+    fun place()
 }
 
 interface Definitions {

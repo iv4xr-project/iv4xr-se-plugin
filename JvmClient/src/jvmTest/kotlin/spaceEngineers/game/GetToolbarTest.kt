@@ -30,7 +30,7 @@ fun SpaceEngineers.checkPlacement(
     sleep(10)
     items.equip(location)
     sleep(10)
-    items.place()
+    blocks.place()
     sleep(10)
     return observer.observeNewBlocks().allBlocks.let { it.isNotEmpty() && it.first().blockType == blockType }
 }
@@ -79,7 +79,7 @@ class GetToolbarTest {
         val blockType = "SmallHeavyBlockArmorBlock"
         items.setToolbarItem(blockType, location)
         items.equip(location)
-        items.place()
+        blocks.place()
         val blocks = observer.observeNewBlocks().allBlocks
         assertEquals(1, blocks.size)
         val block = blocks.first()

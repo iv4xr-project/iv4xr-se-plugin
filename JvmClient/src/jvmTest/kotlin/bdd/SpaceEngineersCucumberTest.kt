@@ -16,7 +16,6 @@ import spaceEngineers.model.Vec3
 import spaceEngineers.model.extensions.allBlocks
 import spaceEngineers.transport.closeIfCloseable
 import testhelp.TEST_AGENT
-import testhelp.TEST_MOCK_RESPONSE_LINE
 import testhelp.assertFloatEquals
 import testhelp.assertVecEquals
 import java.io.File
@@ -48,7 +47,7 @@ class SpaceEngineersCucumberTest {
 
         environment =
             ContextControllerWrapper(
-                spaceEngineers = JsonRpcCharacterController.localhost(agentId = TEST_AGENT)
+                spaceEngineers = JsonRpcSpaceEngineers.localhost(agentId = TEST_AGENT)
             )
     }
 
@@ -103,7 +102,7 @@ class SpaceEngineersCucumberTest {
     fun i_see_character_at_x_y_z(x: Double, y: Double, z: Double) {
         val position = Vec3(x, y, z)
         context.observationHistory.last().let { observation ->
-            assertVecEquals(position, observation.position, diff = 0.1f)
+            assertVecEquals(position, observation.character.position, diff = 0.1f)
         }
     }
 
@@ -111,7 +110,7 @@ class SpaceEngineersCucumberTest {
     fun character_is_facing(x: Double, y: Double, z: Double) {
         val position = Vec3(x, y, z)
         context.observationHistory.last().let { observation ->
-            assertVecEquals(position, observation.orientationForward, diff = 0.1f)
+            assertVecEquals(position, observation.character.orientationForward, diff = 0.1f)
         }
     }
 
@@ -128,7 +127,7 @@ class SpaceEngineersCucumberTest {
     fun character_is_units_away_from_starting_location(units: Int) {
         assertFloatEquals(
             units.toFloat(),
-            context.observationHistory.first().position.distanceTo(context.observationHistory.last().position)
+            context.observationHistory.first().character.position.distanceTo(context.observationHistory.last().character.position)
         )
     }
 
@@ -183,7 +182,7 @@ class SpaceEngineersCucumberTest {
         environment.items.setToolbarItem(blockType, toolbarLocation);
         environment.items.equip(toolbarLocation)
         sleep(150)
-        environment.items.place()
+        environment.blocks.place()
         environment.items.equip(ToolbarLocation(9, 0))
     }
 
@@ -340,7 +339,7 @@ class SpaceEngineersCucumberTest {
     @Then("Character saves metadata about each threshold and file names.")
     fun character_saves_metadata_about_each_threshold_and_file_names() {
         val block = observeLatestNewBlock()
-        val cw = environment.spaceEngineers as JsonRpcCharacterController
+        val cw = environment.spaceEngineers as JsonRpcSpaceEngineers
         //val meta = cw.blockDefinitions().first { it.blockType == block.blockType }
         val blockDir = File(outputDirectory, "${block.blockType}").apply { mkdirs() }
         //File(blockDir, "blockDefinition.json").writeText(cw.gsonReaderWriter.gson.toJson(meta))

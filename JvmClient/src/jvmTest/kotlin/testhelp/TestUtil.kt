@@ -20,8 +20,8 @@ val SIMPLE_PLACE_GRIND_TORCH = "simple-place-grind-torch"
 fun spaceEngineersSimplePlaceGrindTorchSuspend(
     scenarioId: String = SIMPLE_PLACE_GRIND_TORCH,
     agentId: String = TEST_AGENT,
-    spaceEngineers: JsonRpcCharacterController = JsonRpcCharacterController.localhost(agentId),
-    block: suspend JsonRpcCharacterController.() -> Unit
+    spaceEngineers: JsonRpcSpaceEngineers = JsonRpcSpaceEngineers.localhost(agentId),
+    block: suspend JsonRpcSpaceEngineers.() -> Unit
 ) {
     try {
         spaceEngineers.session.loadFromTestResources(scenarioId)
@@ -36,8 +36,8 @@ fun spaceEngineersSimplePlaceGrindTorchSuspend(
 fun spaceEngineersSimplePlaceGrindTorch(
     scenarioId: String = SIMPLE_PLACE_GRIND_TORCH,
     agentId: String = TEST_AGENT,
-    spaceEngineers: JsonRpcCharacterController = JsonRpcCharacterController.localhost(agentId),
-    block: JsonRpcCharacterController.() -> Unit
+    spaceEngineers: JsonRpcSpaceEngineers = JsonRpcSpaceEngineers.localhost(agentId),
+    block: JsonRpcSpaceEngineers.() -> Unit
 ) {
     try {
         spaceEngineers.session.loadFromTestResources(scenarioId)
@@ -50,7 +50,7 @@ fun spaceEngineersSimplePlaceGrindTorch(
 fun spaceEngineersSuspend(
     agentId: String = TEST_AGENT,
     spaceEngineers: SpaceEngineers = ContextControllerWrapper(
-        spaceEngineers = JsonRpcCharacterController.localhost(agentId)
+        spaceEngineers = JsonRpcSpaceEngineers.localhost(agentId)
     ),
     block: suspend SpaceEngineers.() -> Unit
 ) {
@@ -66,7 +66,7 @@ fun spaceEngineersSuspend(
 fun spaceEngineers(
     agentId: String = TEST_AGENT,
     spaceEngineers: SpaceEngineers = ContextControllerWrapper(
-        spaceEngineers = JsonRpcCharacterController.localhost(agentId)
+        spaceEngineers = JsonRpcSpaceEngineers.localhost(agentId)
     ),
     block: SpaceEngineers.() -> Unit
 ) {
@@ -82,7 +82,7 @@ fun spaceEngineers(
 fun spaceEngineersWithContext(
     agentId: String = TEST_AGENT,
     spaceEngineers: ContextControllerWrapper = ContextControllerWrapper(
-        spaceEngineers = JsonRpcCharacterController.localhost(agentId)
+        spaceEngineers = JsonRpcSpaceEngineers.localhost(agentId)
     ),
     block: ContextControllerWrapper.() -> Unit
 ) {
@@ -96,7 +96,7 @@ fun spaceEngineersWithContext(
 fun mockFileResponse(
     response: String,
     agentId: String = TEST_AGENT,
-    spaceEngineers: JsonRpcCharacterController = JsonRpcCharacterController.mock(
+    spaceEngineers: JsonRpcSpaceEngineers = JsonRpcSpaceEngineers.mock(
         agentId = agentId,
         lineToReturn = response
     ),

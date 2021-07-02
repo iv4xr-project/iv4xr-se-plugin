@@ -63,7 +63,7 @@ inline fun <reified I, reified O> GsonReaderWriter.callRpc(request: JsonRpcReque
 
 }
 
-class JsonRpcCharacterController(
+class JsonRpcSpaceEngineers(
     val agentId: String,
     val gsonReaderWriter: GsonReaderWriter,
     val characterPrefix: String = "Character.",
@@ -71,6 +71,8 @@ class JsonRpcCharacterController(
     val observerPrefix: String = "Observer.",
     val sessionPrefix: String = "Session.",
     val definitionsPrefix: String = "Definitions.",
+    val blocksPrefix: String = "Items.",
+    val adminPrefix: String = "Admin.",
 ) :
     SpaceEngineers, AutoCloseable {
 
@@ -131,17 +133,6 @@ class JsonRpcCharacterController(
             )
         }
 
-        override fun teleport(position: Vec3, orientationForward: Vec3?, orientationUp: Vec3?): Observation {
-            return processParameters<Any?, Observation>(
-                params = mapOf(
-                    "position" to position,
-                    "orientationForward" to orientationForward,
-                    "orientationUp" to orientationUp
-                ),
-                methodName = "${characterPrefix}Teleport"
-            )
-        }
-
         override fun turnOnJetpack(): Observation {
             return processNoParameterMethod<Unit, Observation>(
                 method = ::turnOnJetpack,
@@ -158,40 +149,6 @@ class JsonRpcCharacterController(
     }
 
     override val items: Items = object : Items {
-        override fun place() {
-            processNoParameterMethod<Unit, Unit>(::place, "${itemsPrefix}Place")
-        }
-
-        override fun placeAt(blockType: String, position: Vec3, orientationForward: Vec3, orientationUp: Vec3) {
-            processParameters<Any, Unit>(
-                params = mapOf(
-                    "blockType" to blockType,
-                    "position" to position,
-                    "orientationForward" to orientationForward,
-                    "orientationUp" to orientationUp,
-                ),
-                methodName = "${itemsPrefix}PlaceAt"
-            )
-        }
-
-        override fun remove(blockId: String) {
-            processSingleParameterMethod<String, Unit>(
-                ::remove,
-                methodName = "${itemsPrefix}Remove",
-                parameter = blockId
-            )
-        }
-
-        override fun setIntegrity(blockId: String, integrity: Float) {
-            processParameters<Any, Unit>(
-                params = mapOf(
-                    "blockId" to blockId,
-                    "integrity" to integrity,
-                ),
-                methodName = "${itemsPrefix}SetIntegrity"
-            )
-        }
-
         override fun equip(toolbarLocation: ToolbarLocation) {
             processSingleParameterMethod<ToolbarLocation, Unit>(::equip, toolbarLocation, "${itemsPrefix}Equip")
         }
@@ -219,10 +176,62 @@ class JsonRpcCharacterController(
         }
     }
 
+    override val blocks: Blocks = object : Blocks {
+        override fun place() {
+            processNoParameterMethod<Unit, Unit>(::place, "${blocksPrefix}Place")
+        }
+    }
+    override val admin: SpaceEngineersAdmin = object : SpaceEngineersAdmin {
+        override val blocks: BlocksAdmin = object : BlocksAdmin {
+            override fun placeAt(blockType: String, position: Vec3, orientationForward: Vec3, orientationUp: Vec3) {
+                processParameters<Any, Unit>(
+                    params = mapOf(
+                        "blockType" to blockType,
+                        "position" to position,
+                        "orientationForward" to orientationForward,
+                        "orientationUp" to orientationUp,
+                    ),
+                    methodName = "${adminPrefix}${blocksPrefix}PlaceAt"
+                )
+            }
+
+            override fun remove(blockId: String) {
+                processSingleParameterMethod<String, Unit>(
+                    ::remove,
+                    methodName = "${adminPrefix}${blocksPrefix}Remove",
+                    parameter = blockId
+                )
+            }
+
+            override fun setIntegrity(blockId: String, integrity: Float) {
+                processParameters<Any, Unit>(
+                    params = mapOf(
+                        "blockId" to blockId,
+                        "integrity" to integrity,
+                    ),
+                    methodName = "${adminPrefix}${blocksPrefix}SetIntegrity"
+                )
+            }
+        }
+
+        override val character: CharacterAdmin = object : CharacterAdmin {
+            override fun teleport(position: Vec3, orientationForward: Vec3?, orientationUp: Vec3?): Observation {
+                return processParameters<Any?, Observation>(
+                    params = mapOf(
+                        "position" to position,
+                        "orientationForward" to orientationForward,
+                        "orientationUp" to orientationUp
+                    ),
+                    methodName = "${adminPrefix}${characterPrefix}Teleport"
+                )
+            }
+        }
+
+    }
 
     override val observer: Observer = object : Observer {
-        override fun observe(): Observation {
-            return processNoParameterMethod<Unit, Observation>(::observe, "${observerPrefix}Observe")
+        override fun observe(): CharacterObservation {
+            return processNoParameterMethod<Unit, CharacterObservation>(::observe, "${observerPrefix}Observe")
         }
 
         override fun observeBlocks(): Observation {
@@ -266,8 +275,8 @@ class JsonRpcCharacterController(
 
 
     companion object {
-        fun localhost(agentId: String): JsonRpcCharacterController {
-            return JsonRpcCharacterController(
+        fun localhost(agentId: String): JsonRpcSpaceEngineers {
+            return JsonRpcSpaceEngineers(
                 agentId = agentId,
                 gsonReaderWriter = GsonReaderWriter(
                     stringLineReaderWriter = SocketReaderWriter(
@@ -277,8 +286,8 @@ class JsonRpcCharacterController(
             )
         }
 
-        fun mock(agentId: String, lineToReturn: String): JsonRpcCharacterController {
-            return JsonRpcCharacterController(
+        fun mock(agentId: String, lineToReturn: String): JsonRpcSpaceEngineers {
+            return JsonRpcSpaceEngineers(
                 agentId = agentId, gsonReaderWriter = GsonReaderWriter(
                     stringLineReaderWriter = AlwaysReturnSameLineReaderWriter(response = lineToReturn)
                 )
