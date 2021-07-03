@@ -4,15 +4,16 @@ import kotlinx.coroutines.withTimeout
 import kotlinx.coroutines.yield
 import spaceEngineers.controller.Character
 import spaceEngineers.controller.SpaceEngineers
+import spaceEngineers.model.CharacterObservation
 import spaceEngineers.model.Observation
 import spaceEngineers.model.Vec2
 import spaceEngineers.model.Vec3
 
-fun Character.moveForward(velocity: Float = 1f): Observation {
+fun Character.moveForward(velocity: Float = 1f): CharacterObservation {
     return moveAndRotate(movement = Vec3.FORWARD * velocity)
 }
 
-fun Character.moveBackward(velocity: Float = 1f): Observation {
+fun Character.moveBackward(velocity: Float = 1f): CharacterObservation {
     return moveAndRotate(movement = Vec3.BACKWARD * velocity)
 }
 
