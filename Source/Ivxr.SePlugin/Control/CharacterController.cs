@@ -7,7 +7,7 @@ using VRageMath;
 
 namespace Iv4xr.SePlugin.Control
 {
-    public class CharacterController : ICharacterController
+    public class CharacterController : ICharacterController, ICharacterAdmin
     {
         private readonly IGameSession m_session;
         private readonly IObserver m_observer;
