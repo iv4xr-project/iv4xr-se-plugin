@@ -71,7 +71,7 @@ class JsonRpcSpaceEngineers(
     val observerPrefix: String = "Observer.",
     val sessionPrefix: String = "Session.",
     val definitionsPrefix: String = "Definitions.",
-    val blocksPrefix: String = "Items.",
+    val blocksPrefix: String = "Blocks.",
     val adminPrefix: String = "Admin.",
 ) :
     SpaceEngineers, AutoCloseable {
@@ -126,22 +126,22 @@ class JsonRpcSpaceEngineers(
     }
 
     override val character: Character = object : Character {
-        override fun moveAndRotate(movement: Vec3, rotation3: Vec2, roll: Float): Observation {
-            return processParameters<Any, Observation>(
+        override fun moveAndRotate(movement: Vec3, rotation3: Vec2, roll: Float): CharacterObservation {
+            return processParameters<Any, CharacterObservation>(
                 params = mapOf("movement" to movement, "rotation3" to rotation3, "roll" to roll),
                 methodName = "${characterPrefix}MoveAndRotate"
             )
         }
 
-        override fun turnOnJetpack(): Observation {
-            return processNoParameterMethod<Unit, Observation>(
+        override fun turnOnJetpack(): CharacterObservation {
+            return processNoParameterMethod<Unit, CharacterObservation>(
                 method = ::turnOnJetpack,
                 "${characterPrefix}TurnOnJetpack"
             )
         }
 
-        override fun turnOffJetpack(): Observation {
-            return processNoParameterMethod<Unit, Observation>(
+        override fun turnOffJetpack(): CharacterObservation {
+            return processNoParameterMethod<Unit, CharacterObservation>(
                 method = ::turnOffJetpack,
                 "${characterPrefix}TurnOffJetpack"
             )
@@ -215,8 +215,8 @@ class JsonRpcSpaceEngineers(
         }
 
         override val character: CharacterAdmin = object : CharacterAdmin {
-            override fun teleport(position: Vec3, orientationForward: Vec3?, orientationUp: Vec3?): Observation {
-                return processParameters<Any?, Observation>(
+            override fun teleport(position: Vec3, orientationForward: Vec3?, orientationUp: Vec3?): CharacterObservation {
+                return processParameters<Any?, CharacterObservation>(
                     params = mapOf(
                         "position" to position,
                         "orientationForward" to orientationForward,
