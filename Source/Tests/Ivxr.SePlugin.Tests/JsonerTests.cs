@@ -1,10 +1,7 @@
 ﻿using Iv4xr.SePlugin.Json;
-using System;
-using System.IO;
 using Iv4xr.SePlugin.WorldModel;
 using VRageMath;
 using Xunit;
-using Iv4xr.PluginLib.Comm;
 using Iv4xr.SePlugin.Config;
 using Iv4xr.SePlugin.Control;
 

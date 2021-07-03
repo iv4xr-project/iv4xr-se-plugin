@@ -112,7 +112,7 @@ namespace Iv4xr.SePlugin.Communication
             Enqueue(() => m_items.SetIntegrity(blockId, integrity));
         }
 
-        public void PlaceAt(string blockType, Vector3 position, Vector3 orientationForward, Vector3 orientationUp)
+        public void PlaceAt(string blockType, PlainVec3D position, PlainVec3D orientationForward, PlainVec3D orientationUp)
         {
             Enqueue(() => m_items.PlaceAt(blockType, position, orientationForward, orientationUp));
         }
@@ -155,7 +155,7 @@ namespace Iv4xr.SePlugin.Communication
             m_observer = observer;
         }
 
-        public Observation MoveAndRotate(Vector3 movement, Vector2 rotation3, float roll = 0)
+        public Observation MoveAndRotate(PlainVec3D movement, PlainVec2F rotation3, float roll = 0)
         {
             return Enqueue(() =>
             {
@@ -164,7 +164,7 @@ namespace Iv4xr.SePlugin.Communication
             });
         }
 
-        public Observation Teleport(Vector3 position, Vector3? orientationForward, Vector3? orientationUp)
+        public Observation Teleport(PlainVec3D position, PlainVec3D? orientationForward, PlainVec3D? orientationUp)
         {
             return Enqueue(() =>
             {

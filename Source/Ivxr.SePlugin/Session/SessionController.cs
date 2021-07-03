@@ -6,11 +6,6 @@ using System.Text;
 
 namespace Iv4xr.SePlugin.Session
 {
-    public interface ISessionController
-    {
-        void LoadScenario(string scenarioPath);
-    }
-
     public class SessionController : ISessionController
     {
         public ILog Log { get; set; }

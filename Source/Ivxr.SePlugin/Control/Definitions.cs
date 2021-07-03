@@ -5,12 +5,6 @@ using Sandbox.Definitions;
 
 namespace Iv4xr.SePlugin.Control
 {
-    public interface IDefinitions
-    {
-        List<BlockDefinition> BlockDefinitions();
-        List<DefinitionBase> AllDefinitions();
-    }
-
     public class Definitions : IDefinitions
     {
         public List<BlockDefinition> BlockDefinitions()

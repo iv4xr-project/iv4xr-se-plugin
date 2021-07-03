@@ -21,7 +21,6 @@ namespace Iv4xr.SePlugin.Config
         /// </summary>
         public void EnforceValidConfig(PluginConfig config)
         {
-            config.Port = EnforceValidPort(config.Port, Default.Port, "Port");
             config.JsonRpcPort = EnforceValidPort(config.JsonRpcPort, Default.JsonRpcPort, "JsonRpcPort");
             
             EnforceValidObservationRadius(config);

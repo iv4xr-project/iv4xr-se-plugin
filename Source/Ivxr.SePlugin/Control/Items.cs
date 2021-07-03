@@ -15,27 +15,6 @@ using VRageMath;
 
 namespace Iv4xr.SePlugin.Control
 {
-    public interface IItems
-    {
-        void Place();
-
-        void Remove(string blockId);
-
-        void SetIntegrity(string blockId, float integrity);
-
-        void PlaceAt(string blockType, Vector3 position, Vector3 orientationForward, Vector3 orientationUp);
-
-        void BeginUsingTool();
-
-        void EndUsingTool();
-
-        void Equip(ToolbarLocation toolbarLocation);
-
-        void SetToolbarItem(string name, ToolbarLocation toolbarLocation);
-
-        Toolbar GetToolbar();
-    }
-
     public class Items : IItems
     {
         private readonly IGameSession m_session;
@@ -62,9 +41,11 @@ namespace Iv4xr.SePlugin.Control
             block.UpdateVisual();
         }
 
-        public void PlaceAt(string blockType, Vector3 position, Vector3 orientationForward, Vector3 orientationUp)
+        public void PlaceAt(string blockType, PlainVec3D position, PlainVec3D orientationForward,
+            PlainVec3D orientationUp)
         {
-            m_blockPlacer.PlaceBlock(blockType, position, orientationForward, orientationUp);
+            m_blockPlacer.PlaceBlock(blockType, position.ToVector3(), orientationForward.ToVector3(),
+                orientationUp.ToVector3());
         }
 
         public void Remove(string blockId)
