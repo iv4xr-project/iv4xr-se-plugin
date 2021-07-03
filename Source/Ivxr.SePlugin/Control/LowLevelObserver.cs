@@ -12,7 +12,7 @@ using VRageMath;
 
 namespace Iv4xr.SePlugin.Control
 {
-    internal class LowLevelObserver
+    public class LowLevelObserver
     {
         public ILog Log { get; set; }
 

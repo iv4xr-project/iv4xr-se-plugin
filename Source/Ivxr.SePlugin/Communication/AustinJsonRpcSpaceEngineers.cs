@@ -20,10 +20,10 @@ namespace Iv4xr.SePlugin.Communication
             return m_se.Character.MoveAndRotate(movement, rotation3, roll);
         }
 
-        [JsonRpcMethod("Character.Teleport")]
+        [JsonRpcMethod("Admin.Character.Teleport")]
         CharacterObservation Teleport(PlainVec3D position, PlainVec3D? orientationForward = null, PlainVec3D? orientationUp = null)
         {
-            return m_se.Character.Teleport(position, orientationForward, orientationUp);
+            return m_se.Admin.Character.Teleport(position, orientationForward, orientationUp);
         }
 
         [JsonRpcMethod("Character.TurnOnJetpack")]
@@ -80,28 +80,28 @@ namespace Iv4xr.SePlugin.Communication
             return m_se.Definitions.AllDefinitions();
         }
 
-        [JsonRpcMethod("Items.Place")]
+        [JsonRpcMethod("Blocks.Place")]
         void Place()
         {
-            m_se.Items.Place();
+            m_se.Blocks.Place();
         }
 
-        [JsonRpcMethod("Items.PlaceAt")]
+        [JsonRpcMethod("Admin.Blocks.PlaceAt")]
         void PlaceAt(string blockType, PlainVec3D position, PlainVec3D orientationForward, PlainVec3D orientationUp)
         {
-            m_se.Items.PlaceAt(blockType, position, orientationForward, orientationUp);
+            m_se.Admin.Blocks.PlaceAt(blockType, position, orientationForward, orientationUp);
         }
         
-        [JsonRpcMethod("Items.Remove")]
+        [JsonRpcMethod("Admin.Blocks.Remove")]
         void Remove(string blockId)
         {
-            m_se.Items.Remove(blockId);
+            m_se.Admin.Blocks.Remove(blockId);
         }
         
-        [JsonRpcMethod("Items.SetIntegrity")]
+        [JsonRpcMethod("Admin.Blocks.SetIntegrity")]
         void SetIntegrity(string blockId, float integrity)
         {
-            m_se.Items.SetIntegrity(blockId, integrity);
+            m_se.Admin.Blocks.SetIntegrity(blockId, integrity);
         }
 
 
