@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Iv4xr.PluginLib;
-using Iv4xr.SePlugin.WorldModel;
+using Iv4xr.PluginLib.WorldModel;
 using Sandbox.Definitions;
 using Sandbox.Game.Entities;
 using Sandbox.Game.Entities.Cube;

@@ -1,6 +1,4 @@
-﻿using Iv4xr.SePlugin.Session;
-
-namespace Iv4xr.SePlugin.Control
+﻿namespace Iv4xr.PluginLib.Control
 {
     public interface ISpaceEngineers
     {
