@@ -30,7 +30,7 @@ namespace Ivxr.SeGameLib.Tests
         [Fact]
         public void ConvertsSeObservationToJson()
         {
-            var observation = new Observation
+            var observation = new CharacterObservation()
             {
                     Id = "Foo",
                     Position = new PlainVec3D(1, 2, 3)

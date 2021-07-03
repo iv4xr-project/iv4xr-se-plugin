@@ -9,22 +9,22 @@ namespace SeServerMock.Mocks
     {
         public ILog Log { get; set; }
         
-        public Observation MoveAndRotate(PlainVec3D movement, PlainVec2F rotation3, float roll)
+        public CharacterObservation MoveAndRotate(PlainVec3D movement, PlainVec2F rotation3, float roll)
         {
             throw new NotImplementedException();
         }
 
-        public Observation Teleport(PlainVec3D position, PlainVec3D? orientationForward, PlainVec3D? orientationUp)
+        public CharacterObservation Teleport(PlainVec3D position, PlainVec3D? orientationForward, PlainVec3D? orientationUp)
         {
             throw new NotImplementedException();
         }
 
-        public Observation TurnOnJetpack()
+        public CharacterObservation TurnOnJetpack()
         {
             throw new NotImplementedException();
         }
 
-        public Observation TurnOffJetpack()
+        public CharacterObservation TurnOffJetpack()
         {
             throw new NotImplementedException();
         }
