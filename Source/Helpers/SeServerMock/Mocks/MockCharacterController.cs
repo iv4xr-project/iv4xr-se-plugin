@@ -9,12 +9,12 @@ namespace SeServerMock.Mocks
     {
         public ILog Log { get; set; }
         
-        public Observation MoveAndRotate(Vector3 movement, Vector2 rotation3, float roll)
+        public Observation MoveAndRotate(PlainVec3D movement, PlainVec2F rotation3, float roll)
         {
             throw new System.NotImplementedException();
         }
 
-        public Observation Teleport(Vector3 position, Vector3? orientationForward, Vector3? orientationUp)
+        public Observation Teleport(PlainVec3D position, PlainVec3D? orientationForward, PlainVec3D? orientationUp)
         {
             throw new System.NotImplementedException();
         }

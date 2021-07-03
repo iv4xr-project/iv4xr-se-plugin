@@ -20,6 +20,21 @@ namespace Iv4xr.SePlugin
             return new PlainVec3D(vector.X, vector.Y, vector.Z);
         }
         
+        public static Vector3 ToVector3(this PlainVec3D vector)
+        {
+            return new Vector3(vector.X, vector.Y, vector.Z);
+        }
+        
+        public static Vector2 ToVector2(this PlainVec2F vector)
+        {
+            return new Vector2(vector.X, vector.Y);
+        }
+        
+        public static Vector3D ToVector3D(this PlainVec3D vector)
+        {
+            return new Vector3D(vector.X, vector.Y, vector.Z);
+        }
+        
         public static PlainVec3F ToPlainF(this Vector3 vector)
         {
             return new PlainVec3F(vector.X, vector.Y, vector.Z);

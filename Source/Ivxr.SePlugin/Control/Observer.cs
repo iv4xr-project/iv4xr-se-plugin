@@ -9,14 +9,6 @@ using VRage.FileSystem;
 
 namespace Iv4xr.SePlugin.Control
 {
-    public interface IObserver
-    {
-        Observation Observe();
-        Observation ObserveBlocks();
-        Observation ObserveNewBlocks();
-        void TakeScreenshot(string absolutePath);
-    }
-
     internal class Observer : IObserver
     {
         public ILog Log { get; set; }

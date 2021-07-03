@@ -16,13 +16,13 @@ namespace Iv4xr.SePlugin.Communication
         }
 
         [JsonRpcMethod("Character.MoveAndRotate")]
-        Observation MoveAndRotate(Vector3 movement, Vector2 rotation3, float roll = 0)
+        Observation MoveAndRotate(PlainVec3D movement, PlainVec2F rotation3, float roll = 0)
         {
             return m_se.Character.MoveAndRotate(movement, rotation3, roll);
         }
 
         [JsonRpcMethod("Character.Teleport")]
-        Observation Teleport(Vector3 position, Vector3? orientationForward = null, Vector3? orientationUp = null)
+        Observation Teleport(PlainVec3D position, PlainVec3D? orientationForward = null, PlainVec3D? orientationUp = null)
         {
             return m_se.Character.Teleport(position, orientationForward, orientationUp);
         }
@@ -88,7 +88,7 @@ namespace Iv4xr.SePlugin.Communication
         }
 
         [JsonRpcMethod("Items.PlaceAt")]
-        void PlaceAt(string blockType, Vector3 position, Vector3 orientationForward, Vector3 orientationUp)
+        void PlaceAt(string blockType, PlainVec3D position, PlainVec3D orientationForward, PlainVec3D orientationUp)
         {
             m_se.Items.PlaceAt(blockType, position, orientationForward, orientationUp);
         }

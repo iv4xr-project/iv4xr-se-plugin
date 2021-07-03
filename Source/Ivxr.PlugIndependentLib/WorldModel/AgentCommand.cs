@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using VRageMath;
 
 namespace Iv4xr.SePlugin.WorldModel
 {
