@@ -18,19 +18,19 @@ namespace Iv4xr.SePlugin.Control
             m_observer = observer;
         }
         
-        public Observation TurnOnJetpack()
+        public CharacterObservation TurnOnJetpack()
         {
             Character.JetpackComp.TurnOnJetpack(true);
             return m_observer.Observe();
         }
         
-        public Observation TurnOffJetpack()
+        public CharacterObservation TurnOffJetpack()
         {
             Character.JetpackComp.TurnOnJetpack(false);
             return m_observer.Observe();
         }
 
-        public Observation Teleport(PlainVec3D position, PlainVec3D? orientationForward, PlainVec3D? orientationUp)
+        public CharacterObservation Teleport(PlainVec3D position, PlainVec3D? orientationForward, PlainVec3D? orientationUp)
         {
             var vecPosition = new Vector3D(position.ToVector3());
             if (orientationForward == null && orientationUp == null)
@@ -53,7 +53,7 @@ namespace Iv4xr.SePlugin.Control
             return m_observer.Observe();
         }
         
-        public Observation MoveAndRotate(PlainVec3D movement, PlainVec2F rotation3, float roll)
+        public CharacterObservation MoveAndRotate(PlainVec3D movement, PlainVec2F rotation3, float roll)
         {
             GetEntityController().ControlledEntity.MoveAndRotate(movement.ToVector3(), rotation3.ToVector2(), roll);
             return m_observer.Observe();

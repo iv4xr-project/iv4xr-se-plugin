@@ -54,10 +54,10 @@ namespace Iv4xr.SePlugin.Control
             return client.MovementDirection * client.MovementSpeed;
         }
 
-        public Observation GetBasicObservation()
+        public CharacterObservation GetCharacterObservation()
         {
             var orientation = Character.PositionComp.GetOrientation();
-            return new Observation
+            return new CharacterObservation
             {
                 Id = "se0",
                 Position = GetPlayerPosition().ToPlain(), // Consider reducing allocations.
@@ -92,16 +92,20 @@ namespace Iv4xr.SePlugin.Control
 
         public Observation GetNewBlocks()
         {
-            var observation = GetBasicObservation();
-            observation.Grids = CollectSurroundingBlocks(GetBoundingSphereD(), ObservationMode.NEW_BLOCKS);
-            return observation;
+            return new Observation()
+            {
+                Character = GetCharacterObservation(),
+                Grids = CollectSurroundingBlocks(GetBoundingSphereD(), ObservationMode.NEW_BLOCKS)
+            };
         }
 
         public Observation GetBlocks()
         {
-            var observation = GetBasicObservation();
-            observation.Grids = CollectSurroundingBlocks(GetBoundingSphereD(), ObservationMode.BLOCKS);
-            return observation;
+            return new Observation()
+            {
+                Character = GetCharacterObservation(),
+                Grids = CollectSurroundingBlocks(GetBoundingSphereD(), ObservationMode.BLOCKS)
+            };
         }
 
         public BoundingSphereD GetBoundingSphereD()

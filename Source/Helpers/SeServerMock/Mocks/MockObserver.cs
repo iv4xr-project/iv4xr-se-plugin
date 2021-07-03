@@ -9,58 +9,65 @@ namespace SeServerMock.Mocks
     {
         public ILog Log { get; set; }
 
+        public CharacterObservation GetCharacterObservation()
+        {
+            return new CharacterObservation()
+            {
+                Id = "Mock",
+                Position = new PlainVec3D(4, 2, 0),
+            };
+        }
+
         public Observation GetObservation()
         {
             var block = new Block()
             {
-                    Id = "blk",
-                    Position = new PlainVec3D(5, 5, 5),
-                    MaxIntegrity = 10f,
-                    BuildIntegrity = 1.0f,
-                    Integrity = 5.0f,
-                    BlockType = "MockBlock"
+                Id = "blk",
+                Position = new PlainVec3D(5, 5, 5),
+                MaxIntegrity = 10f,
+                BuildIntegrity = 1.0f,
+                Integrity = 5.0f,
+                BlockType = "MockBlock"
             };
 
             var blocks = new List<Block>
             {
-                    block
+                block
             };
 
             var grids = new List<CubeGrid>
             {
-                    new CubeGrid()
-                    {
-                            Position = block.Position,
-                            Blocks = blocks
-                    }
+                new CubeGrid()
+                {
+                    Position = block.Position,
+                    Blocks = blocks
+                }
             };
-
             return new Observation()
             {
-                    Id = "Mock",
-                    Position = new PlainVec3D(4, 2, 0),
-                    Grids = grids
+                Character = GetCharacterObservation(),
+                Grids = grids
             };
         }
 
-        public Observation Observe()
+        public CharacterObservation Observe()
         {
-                return GetObservation();
+            return GetCharacterObservation();
         }
 
         public Observation ObserveBlocks()
         {
-                return GetObservation();
+            return GetObservation();
         }
 
         public Observation ObserveNewBlocks()
         {
-                return GetObservation();
+            return GetObservation();
         }
 
         public void TakeScreenshot(string absolutePath)
         {
-                throw new System.NotImplementedException();
+            throw new System.NotImplementedException();
         }
     }
 }

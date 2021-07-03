@@ -66,7 +66,7 @@ namespace Iv4xr.SePlugin.Communication
             m_observer = observer;
         }
 
-        public Observation Observe()
+        public CharacterObservation Observe()
         {
             return Enqueue(() => m_observer.Observe());
         }
@@ -154,7 +154,7 @@ namespace Iv4xr.SePlugin.Communication
             m_observer = observer;
         }
 
-        public Observation MoveAndRotate(PlainVec3D movement, PlainVec2F rotation3, float roll = 0)
+        public CharacterObservation MoveAndRotate(PlainVec3D movement, PlainVec2F rotation3, float roll = 0)
         {
             return Enqueue(() =>
             {
@@ -163,7 +163,7 @@ namespace Iv4xr.SePlugin.Communication
             });
         }
 
-        public Observation Teleport(PlainVec3D position, PlainVec3D? orientationForward, PlainVec3D? orientationUp)
+        public CharacterObservation Teleport(PlainVec3D position, PlainVec3D? orientationForward, PlainVec3D? orientationUp)
         {
             return Enqueue(() =>
             {
@@ -172,7 +172,7 @@ namespace Iv4xr.SePlugin.Communication
             });
         }
 
-        public Observation TurnOnJetpack()
+        public CharacterObservation TurnOnJetpack()
         {
             return Enqueue(() =>
             {
@@ -181,7 +181,7 @@ namespace Iv4xr.SePlugin.Communication
             });
         }
 
-        public Observation TurnOffJetpack()
+        public CharacterObservation TurnOffJetpack()
         {
             return Enqueue(() =>
             {

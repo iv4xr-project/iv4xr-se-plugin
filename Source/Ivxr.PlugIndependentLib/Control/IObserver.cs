@@ -4,7 +4,7 @@ namespace Iv4xr.PluginLib.Control
 {
     public interface IObserver
     {
-        Observation Observe();
+        CharacterObservation Observe();
         Observation ObserveBlocks();
         Observation ObserveNewBlocks();
         void TakeScreenshot(string absolutePath);

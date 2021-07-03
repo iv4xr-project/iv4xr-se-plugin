@@ -15,25 +15,25 @@ namespace Iv4xr.SePlugin.Communication
         }
 
         [JsonRpcMethod("Character.MoveAndRotate")]
-        Observation MoveAndRotate(PlainVec3D movement, PlainVec2F rotation3, float roll = 0)
+        CharacterObservation MoveAndRotate(PlainVec3D movement, PlainVec2F rotation3, float roll = 0)
         {
             return m_se.Character.MoveAndRotate(movement, rotation3, roll);
         }
 
         [JsonRpcMethod("Character.Teleport")]
-        Observation Teleport(PlainVec3D position, PlainVec3D? orientationForward = null, PlainVec3D? orientationUp = null)
+        CharacterObservation Teleport(PlainVec3D position, PlainVec3D? orientationForward = null, PlainVec3D? orientationUp = null)
         {
             return m_se.Character.Teleport(position, orientationForward, orientationUp);
         }
 
         [JsonRpcMethod("Character.TurnOnJetpack")]
-        Observation TurnOnJetpack()
+        CharacterObservation TurnOnJetpack()
         {
             return m_se.Character.TurnOnJetpack();
         }
 
         [JsonRpcMethod("Character.TurnOffJetpack")]
-        Observation TurnOffJetpack()
+        CharacterObservation TurnOffJetpack()
         {
             return m_se.Character.TurnOffJetpack();
         }
@@ -45,7 +45,7 @@ namespace Iv4xr.SePlugin.Communication
         }
 
         [JsonRpcMethod("Observer.Observe")]
-        Observation Observe()
+        CharacterObservation Observe()
         {
             return m_se.Observer.Observe();
         }
