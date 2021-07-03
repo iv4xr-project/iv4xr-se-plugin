@@ -7,7 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using AustinHarris.JsonRpc;
 using Iv4xr.PluginLib;
-using Iv4xr.SePlugin.Control;
+using Iv4xr.PluginLib.Control;
 
 namespace Iv4xr.SePlugin.Communication
 {

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using Iv4xr.SePlugin.WorldModel;
+using Iv4xr.PluginLib.WorldModel;
 
-namespace Iv4xr.SePlugin.Control
+namespace Iv4xr.PluginLib.Control
 {
     public interface IDefinitions
     {

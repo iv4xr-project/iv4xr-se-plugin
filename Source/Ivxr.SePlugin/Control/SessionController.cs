@@ -1,10 +1,8 @@
 ﻿using Iv4xr.PluginLib;
+using Iv4xr.PluginLib.Control;
 using Sandbox.Game.World;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Iv4xr.SePlugin.Session
+namespace Iv4xr.SePlugin.Control
 {
     public class SessionController : ISessionController
     {

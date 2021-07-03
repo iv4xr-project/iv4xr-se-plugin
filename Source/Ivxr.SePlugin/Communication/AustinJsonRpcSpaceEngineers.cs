@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using AustinHarris.JsonRpc;
-using Iv4xr.SePlugin.Control;
-using Iv4xr.SePlugin.WorldModel;
-using VRageMath;
+using Iv4xr.PluginLib.Control;
+using Iv4xr.PluginLib.WorldModel;
 
 namespace Iv4xr.SePlugin.Communication
 {

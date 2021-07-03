@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Iv4xr.SePlugin.WorldModel
+namespace Iv4xr.PluginLib.WorldModel
 {
     public class Toolbar
     {

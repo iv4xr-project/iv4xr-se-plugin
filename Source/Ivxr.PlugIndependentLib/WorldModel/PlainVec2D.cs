@@ -1,5 +1,5 @@
 ﻿
-namespace Iv4xr.SePlugin.WorldModel
+namespace Iv4xr.PluginLib.WorldModel
 {
     public struct PlainVec2D
     {

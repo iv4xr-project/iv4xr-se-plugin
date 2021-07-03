@@ -1,6 +1,6 @@
 ﻿using Iv4xr.PluginLib;
-using Iv4xr.SePlugin.Control;
-using Iv4xr.SePlugin.WorldModel;
+using Iv4xr.PluginLib.Control;
+using Iv4xr.PluginLib.WorldModel;
 
 namespace SeServerMock.Mocks
 {
