@@ -19,6 +19,7 @@ if not exist "%source_dir%" (
 echo Copying files from:
 echo %source_dir%
 
+copy "%source_dir%\Sandbox.Common.dll"
 copy "%source_dir%\Sandbox.Game.dll"
 copy "%source_dir%\VRage.dll"
 copy "%source_dir%\VRage.Game.dll"
