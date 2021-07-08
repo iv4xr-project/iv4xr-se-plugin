@@ -15,6 +15,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="Sandbox.Common">
+      <HintPath>..\..\BinaryDependencies\Sandbox.Common.dll</HintPath>
+    </Reference>
     <Reference Include="Sandbox.Game">
       <HintPath>..\..\BinaryDependencies\Sandbox.Game.dll</HintPath>
     </Reference>
