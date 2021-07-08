@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 using Iv4xr.SePlugin.WorldModel;
@@ -52,12 +51,15 @@ namespace Iv4xr.SePlugin.Control
         public void SetIntegrity(string blockId, float integrity)
         {
             var grid = m_observer.GetGridContainingBlock(blockId);
-            if (grid == null) throw new ValidationException("Block with id not found");
+            if (grid == null) throw new ArgumentException("Block with id not found");
+
             var block = m_observer.GetBlocksOf(grid).FirstOrDefault(b => b.UniqueId.ToString() == blockId);
-            if (block == null) throw new ValidationException("Block with id not found");
+            if (block == null) throw new ArgumentException("Block with id not found");
+
             var method = block.ComponentStack.GetType().GetMethod("SetIntegrity",
                 BindingFlags.NonPublic | BindingFlags.Instance);
-            if (method == null) throw new ValidationException("Method not found");
+            if (method == null) throw new InvalidOperationException("Method not found");
+
             method.Invoke(block.ComponentStack, new object[] {integrity, integrity});
             block.UpdateVisual();
         }
@@ -72,7 +74,7 @@ namespace Iv4xr.SePlugin.Control
             var grid = m_observer.GetGridContainingBlock(blockId);
             if (grid == null)
             {
-                throw new ValidationException("Block with id not found");
+                throw new InvalidOperationException("Block with id not found");
             }
 
             var block = m_observer.GetBlocksOf(grid).FirstOrDefault(b => b.UniqueId.ToString() == blockId);
@@ -113,7 +115,7 @@ namespace Iv4xr.SePlugin.Control
         }
 
 
-        [Obsolete("Deprecated, will create new api for allosSizeChange. Can use Equip.")]
+        [Obsolete("Deprecated, will create new api for allowSizeChange. Can use Equip.")]
         public void EquipToolbarItem(ToolbarLocation toolbarLocation, bool allowSizeChange)
         {
             var toolbar = MyToolbarComponent.CurrentToolbar;
