@@ -10,4 +10,10 @@
       <ProjectReference Include="..\..\Ivxr.SePlugin\Ivxr.SePlugin.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Reference Include="VRage.Math">
+        <HintPath>..\..\..\BinaryDependencies\VRage.Math.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
 </Project>
