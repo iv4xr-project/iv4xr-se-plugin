@@ -1,15 +1,10 @@
-package spaceEngineers.game
+package spaceEngineers.game.mockable
 
-import spaceEngineers.controller.loadFromTestResources
 import spaceEngineers.model.BlockDefinition
 import spaceEngineers.model.CubeSize
 import spaceEngineers.model.Vec3
 import spaceEngineers.model.extensions.isSidePoint
-import testhelp.JSON_RESOURCES_DIR
 import testhelp.MockOrRealGameTest
-import testhelp.SIMPLE_PLACE_GRIND_TORCH
-import testhelp.preferMocking
-import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
@@ -40,14 +35,7 @@ fun Iterable<BlockDefinition>.filterSidePoints(): List<BlockDefinition> {
 }
 
 
-class BlockDefinitionsTest : MockOrRealGameTest(DEFINITIONS_FILE, useMock = preferMocking) {
-
-
-    //@Test //uncomment to update definitions json file
-    fun updateDefinitionsFile() = runAndWriteResponse {
-        session.loadFromTestResources(SIMPLE_PLACE_GRIND_TORCH)
-        definitions.blockDefinitions()
-    }
+class BlockDefinitionsTest : MockOrRealGameTest(inMockResourcesDirectory("BlockDefinitionsTest.txt")) {
 
     @Test
     fun printDefinitionsForBdd() = testContext {
@@ -68,13 +56,15 @@ class BlockDefinitionsTest : MockOrRealGameTest(DEFINITIONS_FILE, useMock = pref
 
     @Test
     fun emptyTypeCount() = testContext {
-        assertEquals(
-            13,
-            definitions.blockDefinitions().filter { it.blockType.isEmpty() }.map { "${it.id}${it.blockType}" }
-                .size
-        )
-        definitions.blockDefinitions().filter { it.blockType.isEmpty() }.map { "${it.id}-${it.blockType}" }
-            .forEach(::println)
+        definitions.blockDefinitions().let { blockDefinitions ->
+            assertEquals(
+                13,
+                blockDefinitions.filter { it.blockType.isEmpty() }.map { "${it.id}${it.blockType}" }
+                    .size
+            )
+            blockDefinitions.filter { it.blockType.isEmpty() }.map { "${it.id}-${it.blockType}" }
+                .forEach(::println)
+        }
     }
 
     @Test
@@ -94,8 +84,12 @@ class BlockDefinitionsTest : MockOrRealGameTest(DEFINITIONS_FILE, useMock = pref
 
     @Test
     fun notPublic() = testContext {
-        definitions.blockDefinitions().filterNot { it.public }.map { it.blockType }.forEach(::println)
-        assertEquals(37, definitions.blockDefinitions().count { !it.public })
+        definitions.blockDefinitions().let {
+            blockDefinitions ->
+            blockDefinitions.filterNot { it.public }.map { it.blockType }.forEach(::println)
+            assertEquals(37, blockDefinitions.count { !it.public })
+
+        }
     }
 
 
@@ -109,34 +103,40 @@ class BlockDefinitionsTest : MockOrRealGameTest(DEFINITIONS_FILE, useMock = pref
 
     @Test
     fun bigWithNiceMountPoints() = testContext {
-        assertEquals(
-            definitions.blockDefinitions().filterForBig()
+        definitions.blockDefinitions().let {
+            blockDefinitions ->
+            assertEquals(
+                blockDefinitions.filterForBig()
                 .filterSidePoints().size,
             272
-        )
-        definitions.blockDefinitions()
-            .filterForBig()
-            .filterSidePoints()
-            .filter { it.id == "MyObjectBuilder_CubeBlock" }
-            //.filter { it.mountPoints.any { it.default } }
-            .forEach { blockDefinition ->
-                println("${blockDefinition.id} ${blockDefinition.blockType}")
-                println(blockDefinition.mountPoints)
-            }
+            )
+            blockDefinitions
+                .filterForBig()
+                .filterSidePoints()
+                .filter { it.id == "MyObjectBuilder_CubeBlock" }
+                //.filter { it.mountPoints.any { it.default } }
+                .forEach { blockDefinition ->
+                    println("${blockDefinition.id} ${blockDefinition.blockType}")
+                    println(blockDefinition.mountPoints)
+                }
+
+        }
     }
 
     @Test
     fun mountPointCount() = testContext {
-        assertEquals(
-            definitions.blockDefinitions().filterForBig()
-                .filterSidePoints().flatMap { it.mountPoints }.size,
-            1582
-        )
-        assertEquals(
-            definitions.blockDefinitions().filterForBig()
-                .filterSidePoints().flatMap { it.mountPoints.filter { it.enabled } }.size,
-            1578
-        )
+        definitions.blockDefinitions().let { blockDefinitions ->
+            assertEquals(
+                blockDefinitions.filterForBig()
+                    .filterSidePoints().flatMap { it.mountPoints }.size,
+                1582
+            )
+            assertEquals(
+                blockDefinitions.filterForBig()
+                    .filterSidePoints().flatMap { it.mountPoints.filter { it.enabled } }.size,
+                1578
+            )
+        }
     }
 
     @Test
@@ -221,11 +221,6 @@ class BlockDefinitionsTest : MockOrRealGameTest(DEFINITIONS_FILE, useMock = pref
             blockDefinitions.first { it.blockType == "LargeHeavyBlockArmorBlock" }.id,
             blockDefinitions.first { it.blockType == "LargeBlockArmorBlock" }.id
         )
-    }
-
-    companion object {
-        const val DEFINITIONS_JSON = "block_definitions.json"
-        val DEFINITIONS_FILE = File("$JSON_RESOURCES_DIR${DEFINITIONS_JSON}")
     }
 
 }

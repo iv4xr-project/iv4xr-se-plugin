@@ -1,21 +1,11 @@
-package spaceEngineers.game
+package spaceEngineers.game.mockable
 
-import testhelp.JSON_RESOURCES_DIR
 import testhelp.MockOrRealGameTest
-import testhelp.preferMocking
-import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 
-class AllDefinitionsTest : MockOrRealGameTest(jsonMockFile = DEFINITIONS_FILE, useMock = preferMocking) {
-
-
-    //@Test //uncomment to update definitions json file
-    fun updateDefinitionsFile() = runAndWriteResponse {
-        definitions.allDefinitions()
-    }
-
+class AllDefinitionsTest : MockOrRealGameTest(mockFile = inMockResourcesDirectory("AllDefinitionsTest.txt")) {
 
     @Test
     fun allCount() = testContext {
@@ -91,10 +81,4 @@ class AllDefinitionsTest : MockOrRealGameTest(jsonMockFile = DEFINITIONS_FILE, u
             w.id
         )
     }
-
-    companion object {
-        const val DEFINITIONS_JSON = "all_definitions.json"
-        val DEFINITIONS_FILE = File("${JSON_RESOURCES_DIR}${DEFINITIONS_JSON}")
-    }
-
 }

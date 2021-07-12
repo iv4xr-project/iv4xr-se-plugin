@@ -1,23 +1,13 @@
-package spaceEngineers.game
+package spaceEngineers.game.mockable
 
 import spaceEngineers.model.extensions.allBlocks
-import testhelp.JSON_RESOURCES_DIR
 import testhelp.MockOrRealGameTest
-import testhelp.preferMocking
-import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
 
-class ObservationTest : MockOrRealGameTest(jsonMockFile = DEFINITIONS_FILE, useMock = preferMocking) {
-
-
-    //@Test //uncomment to update definitions json file
-    fun updateDefinitionsFile() = runAndWriteResponse {
-        observer.observeBlocks()
-    }
-
+class ObservationTest : MockOrRealGameTest(mockFile = inMockResourcesDirectory("ObservationTest.txt")) {
 
     @Test
     fun allCount() = testContext {
@@ -40,12 +30,5 @@ class ObservationTest : MockOrRealGameTest(jsonMockFile = DEFINITIONS_FILE, useM
             2,
             observer.observeBlocks().allBlocks.map { it.orientationForward }.distinct().size
         )
-        println(observer.observeBlocks().allBlocks.map { it.orientationForward }.distinct())
     }
-
-    companion object {
-        const val DEFINITIONS_JSON = "observation.json"
-        val DEFINITIONS_FILE = File("${JSON_RESOURCES_DIR}${DEFINITIONS_JSON}")
-    }
-
 }

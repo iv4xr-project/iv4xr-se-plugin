@@ -2,9 +2,10 @@ package spaceEngineers.game
 
 import spaceEngineers.controller.SpaceEngineers
 import spaceEngineers.controller.loadFromTestResources
+import spaceEngineers.game.mockable.filterForScreenshots
 import spaceEngineers.model.ToolbarLocation
 import spaceEngineers.model.extensions.allBlocks
-import testhelp.spaceEngineersSimplePlaceGrindTorch
+import testhelp.MockOrRealGameTest
 import java.lang.Thread.sleep
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -36,18 +37,18 @@ fun SpaceEngineers.checkPlacement(
 }
 
 
-class GetToolbarTest {
+class GetToolbarTest : MockOrRealGameTest(forceRealGame = true) {
 
 
     @Test
-    fun getToolbar() = spaceEngineersSimplePlaceGrindTorch {
+    fun getToolbar() = testContext {
         val toolbar = items.getToolbar()
-        assertEquals(toolbar[ToolbarLocation(0, 0)]?.subType, "asdf")
+        assertEquals(toolbar[ToolbarLocation(0, 0)]?.subType, "LargeBlockArmorBlock")
         assertEquals(toolbar.items.size, toolbar.pageCount * toolbar.slotCount)
     }
 
     @Test
-    fun setToolbar() = spaceEngineersSimplePlaceGrindTorch {
+    fun setToolbar() = testContext {
         val blockTypes = definitions.blockDefinitions().filterForScreenshots().map { it.blockType }
 
         val location = ToolbarLocation(0, 2)
@@ -73,7 +74,7 @@ class GetToolbarTest {
     }
 
     @Test
-    fun equipSmall() = spaceEngineersSimplePlaceGrindTorch {
+    fun equipSmall() = testContext {
         val location = ToolbarLocation(2, 1)
         observer.observeNewBlocks()
         val blockType = "SmallHeavyBlockArmorBlock"

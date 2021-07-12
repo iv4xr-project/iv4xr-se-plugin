@@ -5,16 +5,17 @@ import spaceEngineers.controller.extensions.blockingRotateUntilOrientationForwar
 import spaceEngineers.controller.extensions.blockingRotateUntilOrientationUp
 import spaceEngineers.model.Vec2
 import spaceEngineers.model.Vec3
+import testhelp.MockOrRealGameTest
 import testhelp.assertVecEquals
 import testhelp.spaceEngineersSimplePlaceGrindTorchSuspend
 import kotlin.test.Test
 
 
-class RotateTowardsPositionTest {
+class RotateTowardsPositionTes: MockOrRealGameTest() {
 
 
     @Test
-    fun rotateTowardsPosition() = spaceEngineersSimplePlaceGrindTorchSuspend {
+    fun rotateTowardsPosition() = testContext {
         val observation = observer.observe()
         delay(500)
         character.turnOnJetpack()
@@ -36,7 +37,7 @@ class RotateTowardsPositionTest {
 
 
     @Test
-    fun rotateTowardsPositionUp() = spaceEngineersSimplePlaceGrindTorchSuspend {
+    fun rotateTowardsPositionUp() = testContext {
         val observation = observer.observe()
         admin.character.teleport(
             position = observation.position,

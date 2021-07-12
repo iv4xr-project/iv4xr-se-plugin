@@ -1,17 +1,17 @@
-package spaceEngineers.game
+package spaceEngineers.game.mockable
 
 import spaceEngineers.model.Vec3
-import testhelp.spaceEngineersSimplePlaceGrindTorch
+import testhelp.MockOrRealGameTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 
 
-class TeleportTest {
+class TeleportTest : MockOrRealGameTest() {
 
 
     @Test
-    fun teleportPosition() = spaceEngineersSimplePlaceGrindTorch {
+    fun teleportPosition() = testContext {
         val distance = 50f
         val observation = observer.observe()
         admin.character.teleport(observation.position.let { it.copy(x = it.x + distance) })
@@ -19,7 +19,7 @@ class TeleportTest {
     }
 
     @Test
-    fun rotate() = spaceEngineersSimplePlaceGrindTorch {
+    fun rotate() = testContext {
         val x = Vec3(1, 0, 0)
         var observation = observer.observe()
         assertNotEquals(x, observation.orientationForward)
