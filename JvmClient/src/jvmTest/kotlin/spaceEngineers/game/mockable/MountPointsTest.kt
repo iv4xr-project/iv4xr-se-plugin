@@ -1,10 +1,9 @@
-package spaceEngineers.game
+package spaceEngineers.game.mockable
 
-import spaceEngineers.model.CubeSize
 import spaceEngineers.model.BlockDefinition
+import spaceEngineers.model.CubeSize
 import spaceEngineers.model.Vec3
 import testhelp.MockOrRealGameTest
-import testhelp.preferMocking
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -13,7 +12,7 @@ fun Iterable<BlockDefinition>.filterForMountPoints(): List<BlockDefinition> {
     return filter { it.cubeSize == CubeSize.Large && it.size == Vec3.ONE }
 }
 
-class MountPointsTest: MockOrRealGameTest(BlockDefinitionsTest.DEFINITIONS_FILE, useMock = preferMocking) {
+class MountPointsTest: MockOrRealGameTest(mockFile = inMockResourcesDirectory("MountPointsTest.txt")) {
 
 
     @Test

@@ -62,7 +62,6 @@ suspend fun SpaceEngineers.blockingRotateUntilOrientationUp(
     delta: Float = 0.01f,
     timeoutMs: Long = 30000,
 ) {
-    println(finalOrientation)
     withTimeout(timeoutMs) {
         while (observer.observe().let {
                 !finalOrientation.similar(

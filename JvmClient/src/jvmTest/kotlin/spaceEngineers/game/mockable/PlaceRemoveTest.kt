@@ -1,20 +1,19 @@
-package spaceEngineers.game
+package spaceEngineers.game.mockable
 
 import spaceEngineers.model.Vec3
 import spaceEngineers.model.extensions.allBlocks
-import testhelp.spaceEngineers
+import testhelp.MockOrRealGameTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 
-class PlaceRemoveTest {
+class PlaceRemoveTest : MockOrRealGameTest() {
 
     @Test
-    fun placeAndRemove() = spaceEngineers() {
+    fun placeAndRemove() = testContext {
         val blockType = "RealWheel"
         val z = 1000
-        //session.loadFromTestResources("simple-place-grind-torch")
         admin.character.teleport(Vec3(0, 0, z + 15), Vec3.FORWARD, Vec3.UP)
         observer.observeNewBlocks()
         admin.blocks.placeAt(blockType, Vec3(0, 0, z + 0), Vec3.FORWARD, Vec3.UP)

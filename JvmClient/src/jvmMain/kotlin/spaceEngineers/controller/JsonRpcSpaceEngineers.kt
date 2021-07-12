@@ -6,6 +6,8 @@ import spaceEngineers.transport.SocketReaderWriter
 import spaceEngineers.model.*
 import spaceEngineers.transport.AlwaysReturnSameLineReaderWriter
 import spaceEngineers.transport.GsonReaderWriter
+import spaceEngineers.transport.PresetLinesReaderWriter
+import java.io.File
 import kotlin.reflect.KFunction
 import kotlin.reflect.KFunction1
 
@@ -286,10 +288,30 @@ class JsonRpcSpaceEngineers(
             )
         }
 
+        fun mock(agentId: String, file: File): JsonRpcSpaceEngineers {
+            val text = file.readText().trimEnd()
+            val lines = text.lines()
+            return if (lines.size > 1) {
+                mock(agentId = agentId, lines = lines)
+            } else {
+                mock(agentId = agentId, lineToReturn = lines.first())
+            }
+        }
+
         fun mock(agentId: String, lineToReturn: String): JsonRpcSpaceEngineers {
             return JsonRpcSpaceEngineers(
-                agentId = agentId, gsonReaderWriter = GsonReaderWriter(
+                agentId = agentId,
+                gsonReaderWriter = GsonReaderWriter(
                     stringLineReaderWriter = AlwaysReturnSameLineReaderWriter(response = lineToReturn)
+                )
+            )
+        }
+
+        fun mock(agentId: String, lines: List<String>): JsonRpcSpaceEngineers {
+            return JsonRpcSpaceEngineers(
+                agentId = agentId,
+                gsonReaderWriter = GsonReaderWriter(
+                    stringLineReaderWriter = PresetLinesReaderWriter(lines = lines)
                 )
             )
         }

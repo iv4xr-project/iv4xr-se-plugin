@@ -1,24 +1,22 @@
-package spaceEngineers.game
+package spaceEngineers.game.mockable
 
-import spaceEngineers.controller.loadFromTestResources
 import spaceEngineers.model.Vec3
 import spaceEngineers.model.extensions.allBlocks
 import spaceEngineers.model.extensions.blockById
+import testhelp.MockOrRealGameTest
 import testhelp.assertFloatEquals
-import testhelp.spaceEngineers
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
 
-class SetIntegrityTest {
+class SetIntegrityTest :
+    MockOrRealGameTest() {
 
     @Test
-    fun set40percent() = spaceEngineers() {
+    fun set40percent() = testContext {
         val blockType = "LargeHeavyBlockArmorBlock"
         val z = 1000
         val integrityPercentage = 0.4f
-        session.loadFromTestResources("simple-place-grind-torch")
         admin.character.teleport(Vec3(0, 0, z + 15), Vec3.FORWARD, Vec3.UP)
         observer.observeNewBlocks()
         admin.blocks.placeAt(blockType, Vec3(0, 0, z + 0), Vec3.FORWARD, Vec3.UP)
