@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Iv4xr.PluginLib.Json;
 using LitJson;
 
 namespace Iv4xr.SePlugin.Json
@@ -15,11 +16,11 @@ namespace Iv4xr.SePlugin.Json
     /// * Utf8Json, maybe even faster, see (but probably not maintained)
     /// https://michaelscodingspot.com/the-battle-of-c-to-json-serializers-in-net-core-3/
     /// </summary>
-    public class Jsoner
+    public class Jsoner: IJsoner
     {
         private readonly JsonWriter m_writer = new JsonWriter();
 
-        public string ToJson(object obj)
+        public string ToJson<T>(T obj)
         {
             m_writer.Reset();
 
