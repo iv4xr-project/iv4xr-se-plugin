@@ -1,4 +1,5 @@
-﻿using Iv4xr.SePlugin.Json;
+﻿using Iv4xr.PluginLib.Json;
+using Iv4xr.SePlugin.Json;
 using Iv4xr.PluginLib.WorldModel;
 using VRageMath;
 using Xunit;
@@ -9,7 +10,7 @@ namespace Ivxr.SeGameLib.Tests
 {
     public class JsonerTests
     {
-        private readonly Jsoner m_jsoner = new Jsoner();
+        private readonly IJsoner m_jsoner = new Jsoner();
 
         private const int Precision = 4;
 

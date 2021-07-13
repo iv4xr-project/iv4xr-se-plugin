@@ -3,6 +3,7 @@ using Iv4xr.PluginLib;
 using Iv4xr.SePlugin.Communication;
 using Iv4xr.SePlugin.Config;
 using Iv4xr.SePlugin.Control;
+using Iv4xr.SePlugin.Json;
 using Iv4xr.SePlugin.SeLib;
 
 namespace Iv4xr.SePlugin
@@ -21,7 +22,7 @@ namespace Iv4xr.SePlugin
             seLog.Init("ivxr-plugin.log");
             Log = seLog;
 
-            var configLoader = new ConfigLoader(Log);
+            var configLoader = new ConfigLoader(Log, new Jsoner());
             var config = configLoader.LoadOrSaveDefault();
 
             var se = new RealSpaceEngineers(m_gameSession, Log, config);
