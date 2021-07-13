@@ -1,8 +1,7 @@
 ﻿using System;
 using System.IO;
-using Havok;
 using Iv4xr.PluginLib;
-using Iv4xr.SePlugin.Json;
+using Iv4xr.PluginLib.Json;
 using VRage.FileSystem;
 
 namespace Iv4xr.SePlugin.Config
@@ -10,17 +9,19 @@ namespace Iv4xr.SePlugin.Config
     public class ConfigLoader
     {
         public ILog Log { get; set; }
+        public IJsoner Jsoner { get; }
         
         private const string CONFIG_FILE = "ivxr-plugin.config";
 
-        public ConfigLoader(ILog log)
+        public ConfigLoader(ILog log, IJsoner jsoner)
         {
             Log = log;
+            Jsoner = jsoner;
         }
 
         public void SaveDefault()
         {
-            var jsonConfig = (new Jsoner()).ToJson(new PluginConfig());
+            var jsonConfig = Jsoner.ToJson(new PluginConfig());
             
             File.WriteAllText(GetConfigPath(), jsonConfig);
         }
@@ -38,7 +39,7 @@ namespace Iv4xr.SePlugin.Config
                 
                 (new ConfigValidator(Log)).EnforceValidConfig(config);
                 
-                Log?.WriteLine($"Using configuration:\n{(new Jsoner()).ToJson(config)}");
+                Log?.WriteLine($"Using configuration:\n{Jsoner.ToJson(config)}");
 
                 return config;
             }
@@ -54,7 +55,7 @@ namespace Iv4xr.SePlugin.Config
             var text = File.ReadAllText(GetConfigPath());
 
             // This will use defaults for missing values, as they are pre-filled by the PluginConfig constructor.
-            return (new Jsoner()).ToObject<PluginConfig>(text);
+            return Jsoner.ToObject<PluginConfig>(text);
         }
 
         private static string GetConfigPath()
