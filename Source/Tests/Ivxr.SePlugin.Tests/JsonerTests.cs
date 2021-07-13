@@ -41,7 +41,7 @@ namespace Ivxr.SeGameLib.Tests
 
             Assert.Equal("{\"Velocity\":{\"X\":0.0,\"Y\":0.0,\"Z\":0.0}," +
                          "\"Extent\":{\"X\":0.0,\"Y\":0.0,\"Z\":0.0}," +
-                         "\"Grids\":null,\"Camera\":null,\"JetpackRunning\":false," +
+                         "\"Camera\":null,\"JetpackRunning\":false," +
                          "\"HeadLocalXAngle\":0.0,\"HeadLocalYAngle\":0.0,\"TargetBlock\":null,\"Id\":\"Foo\"," +
                          "\"Position\":{\"X\":1.0,\"Y\":2.0,\"Z\":3.0}," +
                          "\"OrientationForward\":{\"X\":0.0,\"Y\":0.0,\"Z\":0.0}," +
