@@ -1,4 +1,4 @@
-﻿namespace Iv4xr.SePlugin.WorldModel
+﻿namespace Iv4xr.PluginLib.WorldModel
 {
     public class Block : Entity
     {

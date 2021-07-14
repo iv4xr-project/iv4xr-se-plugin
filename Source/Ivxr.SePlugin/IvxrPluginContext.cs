@@ -4,7 +4,6 @@ using Iv4xr.SePlugin.Communication;
 using Iv4xr.SePlugin.Config;
 using Iv4xr.SePlugin.Control;
 using Iv4xr.SePlugin.SeLib;
-using Iv4xr.SePlugin.Session;
 
 namespace Iv4xr.SePlugin
 {

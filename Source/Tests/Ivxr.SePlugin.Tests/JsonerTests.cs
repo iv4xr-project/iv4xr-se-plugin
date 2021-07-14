@@ -1,10 +1,7 @@
 ﻿using Iv4xr.SePlugin.Json;
-using System;
-using System.IO;
-using Iv4xr.SePlugin.WorldModel;
+using Iv4xr.PluginLib.WorldModel;
 using VRageMath;
 using Xunit;
-using Iv4xr.PluginLib.Comm;
 using Iv4xr.SePlugin.Config;
 using Iv4xr.SePlugin.Control;
 
@@ -33,7 +30,7 @@ namespace Ivxr.SeGameLib.Tests
         [Fact]
         public void ConvertsSeObservationToJson()
         {
-            var observation = new Observation
+            var observation = new CharacterObservation()
             {
                     Id = "Foo",
                     Position = new PlainVec3D(1, 2, 3)

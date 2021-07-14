@@ -1,7 +1,7 @@
-﻿using Iv4xr.PluginLib;
-using Iv4xr.SePlugin.Control;
-using Iv4xr.SePlugin.WorldModel;
-using VRageMath;
+﻿using System;
+using Iv4xr.PluginLib;
+using Iv4xr.PluginLib.Control;
+using Iv4xr.PluginLib.WorldModel;
 
 namespace SeServerMock.Mocks
 {
@@ -9,24 +9,24 @@ namespace SeServerMock.Mocks
     {
         public ILog Log { get; set; }
         
-        public Observation MoveAndRotate(Vector3 movement, Vector2 rotation3, float roll)
+        public CharacterObservation MoveAndRotate(PlainVec3D movement, PlainVec2F rotation3, float roll)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
-        public Observation Teleport(Vector3 position, Vector3? orientationForward, Vector3? orientationUp)
+        public CharacterObservation Teleport(PlainVec3D position, PlainVec3D? orientationForward, PlainVec3D? orientationUp)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
-        public Observation TurnOnJetpack()
+        public CharacterObservation TurnOnJetpack()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
-        public Observation TurnOffJetpack()
+        public CharacterObservation TurnOffJetpack()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }

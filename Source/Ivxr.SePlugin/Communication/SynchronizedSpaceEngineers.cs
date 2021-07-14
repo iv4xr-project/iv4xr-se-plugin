@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Iv4xr.PluginLib.Control;
 using Iv4xr.SePlugin.Control;
-using Iv4xr.SePlugin.Session;
-using Iv4xr.SePlugin.WorldModel;
-using VRageMath;
+using Iv4xr.PluginLib.WorldModel;
 
 namespace Iv4xr.SePlugin.Communication
 {
@@ -42,7 +41,8 @@ namespace Iv4xr.SePlugin.Communication
     {
         private readonly IDefinitions m_definitions;
 
-        public DefinitionsOnGameLoop(IDefinitions definitions, FuncActionDispatcher funcActionDispatcher) : base(funcActionDispatcher)
+        public DefinitionsOnGameLoop(IDefinitions definitions, FuncActionDispatcher funcActionDispatcher) : base(
+            funcActionDispatcher)
         {
             m_definitions = definitions;
         }
@@ -62,12 +62,13 @@ namespace Iv4xr.SePlugin.Communication
     {
         private readonly IObserver m_observer;
 
-        public ObserverOnGameLoop(IObserver observer, FuncActionDispatcher funcActionDispatcher) : base(funcActionDispatcher)
+        public ObserverOnGameLoop(IObserver observer, FuncActionDispatcher funcActionDispatcher) : base(
+            funcActionDispatcher)
         {
             m_observer = observer;
         }
 
-        public Observation Observe()
+        public CharacterObservation Observe()
         {
             return Enqueue(() => m_observer.Observe());
         }
@@ -88,6 +89,48 @@ namespace Iv4xr.SePlugin.Communication
         }
     }
 
+    public class BlocksOnGameLoop : AbstractServiceOnGameLoop, IBlocks
+    {
+        private readonly IBlocks m_blocks;
+
+        public BlocksOnGameLoop(IBlocks blocks, FuncActionDispatcher funcActionDispatcher) : base(funcActionDispatcher)
+        {
+            m_blocks = blocks;
+        }
+
+        public void Place()
+        {
+            Enqueue(() => m_blocks.Place());
+        }
+    }
+
+    public class BlocksAdminOnGameLoop : AbstractServiceOnGameLoop, IBlocksAdmin
+    {
+        private readonly IBlocksAdmin m_blocks;
+
+        public BlocksAdminOnGameLoop(IBlocksAdmin blocks, FuncActionDispatcher funcActionDispatcher) : base(
+            funcActionDispatcher)
+        {
+            m_blocks = blocks;
+        }
+
+        public void Remove(string blockId)
+        {
+            Enqueue(() => m_blocks.Remove(blockId));
+        }
+
+        public void SetIntegrity(string blockId, float integrity)
+        {
+            Enqueue(() => m_blocks.SetIntegrity(blockId, integrity));
+        }
+
+        public void PlaceAt(string blockType, PlainVec3D position, PlainVec3D orientationForward,
+            PlainVec3D orientationUp)
+        {
+            Enqueue(() => m_blocks.PlaceAt(blockType, position, orientationForward, orientationUp));
+        }
+    }
+
     public class ItemsOnGameLoop : AbstractServiceOnGameLoop, IItems
     {
         private readonly IItems m_items;
@@ -95,26 +138,6 @@ namespace Iv4xr.SePlugin.Communication
         public ItemsOnGameLoop(IItems items, FuncActionDispatcher funcActionDispatcher) : base(funcActionDispatcher)
         {
             m_items = items;
-        }
-
-        public void Place()
-        {
-            Enqueue(() => m_items.Place());
-        }
-        
-        public void Remove(string blockId)
-        {
-            Enqueue(() => m_items.Remove(blockId));
-        }
-
-        public void SetIntegrity(string blockId, float integrity)
-        {
-            Enqueue(() => m_items.SetIntegrity(blockId, integrity));
-        }
-
-        public void PlaceAt(string blockType, Vector3 position, Vector3 orientationForward, Vector3 orientationUp)
-        {
-            Enqueue(() => m_items.PlaceAt(blockType, position, orientationForward, orientationUp));
         }
 
         public void BeginUsingTool()
@@ -143,19 +166,44 @@ namespace Iv4xr.SePlugin.Communication
         }
     }
 
-    public class CharacterOnGameLoop : AbstractServiceOnGameLoop, ICharacterController
+    public class CharacterAdminOnGameLoop : AbstractServiceOnGameLoop, ICharacterAdmin
     {
-        private readonly ICharacterController m_character;
+        private readonly ICharacterAdmin m_character;
         private readonly IObserver m_observer;
 
-        public CharacterOnGameLoop(ICharacterController character, IObserver observer, FuncActionDispatcher funcActionDispatcher) :
+        public CharacterAdminOnGameLoop(ICharacterAdmin character, IObserver observer,
+            FuncActionDispatcher funcActionDispatcher) :
                 base(funcActionDispatcher)
         {
             m_character = character;
             m_observer = observer;
         }
 
-        public Observation MoveAndRotate(Vector3 movement, Vector2 rotation3, float roll = 0)
+        public CharacterObservation Teleport(PlainVec3D position, PlainVec3D? orientationForward,
+            PlainVec3D? orientationUp)
+        {
+            return Enqueue(() =>
+            {
+                m_character.Teleport(position, orientationForward, orientationUp);
+                return m_observer.Observe();
+            });
+        }
+    }
+
+    public class CharacterOnGameLoop : AbstractServiceOnGameLoop, ICharacterController
+    {
+        private readonly ICharacterController m_character;
+        private readonly IObserver m_observer;
+
+        public CharacterOnGameLoop(ICharacterController character, IObserver observer,
+            FuncActionDispatcher funcActionDispatcher) :
+                base(funcActionDispatcher)
+        {
+            m_character = character;
+            m_observer = observer;
+        }
+
+        public CharacterObservation MoveAndRotate(PlainVec3D movement, PlainVec2F rotation3, float roll = 0)
         {
             return Enqueue(() =>
             {
@@ -164,16 +212,7 @@ namespace Iv4xr.SePlugin.Communication
             });
         }
 
-        public Observation Teleport(Vector3 position, Vector3? orientationForward, Vector3? orientationUp)
-        {
-            return Enqueue(() =>
-            {
-                m_character.Teleport(position, orientationForward, orientationUp);
-                return m_observer.Observe();
-            });
-        }
-
-        public Observation TurnOnJetpack()
+        public CharacterObservation TurnOnJetpack()
         {
             return Enqueue(() =>
             {
@@ -182,7 +221,7 @@ namespace Iv4xr.SePlugin.Communication
             });
         }
 
-        public Observation TurnOffJetpack()
+        public CharacterObservation TurnOffJetpack()
         {
             return Enqueue(() =>
             {
@@ -199,6 +238,8 @@ namespace Iv4xr.SePlugin.Communication
         public IItems Items { get; }
         public IObserver Observer { get; }
         public IDefinitions Definitions { get; }
+        public IBlocks Blocks { get; }
+        public ISpaceEngineersAdmin Admin { get; }
 
 
         public SynchronizedSpaceEngineers(ISpaceEngineers se, FuncActionDispatcher funcActionDispatcher)
@@ -208,6 +249,11 @@ namespace Iv4xr.SePlugin.Communication
             Items = new ItemsOnGameLoop(se.Items, funcActionDispatcher);
             Observer = new ObserverOnGameLoop(se.Observer, funcActionDispatcher);
             Definitions = new DefinitionsOnGameLoop(se.Definitions, funcActionDispatcher);
+            Blocks = new BlocksOnGameLoop(se.Blocks, funcActionDispatcher);
+            Admin = new SpaceEngineersAdmin(
+                new CharacterAdminOnGameLoop(se.Admin.Character, se.Observer, funcActionDispatcher),
+                new BlocksAdminOnGameLoop(se.Admin.Blocks, funcActionDispatcher)
+            );
         }
     }
 }

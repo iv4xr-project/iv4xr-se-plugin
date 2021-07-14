@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using AustinHarris.JsonRpc;
-using Iv4xr.SePlugin.Control;
-using Iv4xr.SePlugin.WorldModel;
-using VRageMath;
+using Iv4xr.PluginLib.Control;
+using Iv4xr.PluginLib.WorldModel;
 
 namespace Iv4xr.SePlugin.Communication
 {
@@ -16,25 +15,25 @@ namespace Iv4xr.SePlugin.Communication
         }
 
         [JsonRpcMethod("Character.MoveAndRotate")]
-        Observation MoveAndRotate(Vector3 movement, Vector2 rotation3, float roll = 0)
+        CharacterObservation MoveAndRotate(PlainVec3D movement, PlainVec2F rotation3, float roll = 0)
         {
             return m_se.Character.MoveAndRotate(movement, rotation3, roll);
         }
 
-        [JsonRpcMethod("Character.Teleport")]
-        Observation Teleport(Vector3 position, Vector3? orientationForward = null, Vector3? orientationUp = null)
+        [JsonRpcMethod("Admin.Character.Teleport")]
+        CharacterObservation Teleport(PlainVec3D position, PlainVec3D? orientationForward = null, PlainVec3D? orientationUp = null)
         {
-            return m_se.Character.Teleport(position, orientationForward, orientationUp);
+            return m_se.Admin.Character.Teleport(position, orientationForward, orientationUp);
         }
 
         [JsonRpcMethod("Character.TurnOnJetpack")]
-        Observation TurnOnJetpack()
+        CharacterObservation TurnOnJetpack()
         {
             return m_se.Character.TurnOnJetpack();
         }
 
         [JsonRpcMethod("Character.TurnOffJetpack")]
-        Observation TurnOffJetpack()
+        CharacterObservation TurnOffJetpack()
         {
             return m_se.Character.TurnOffJetpack();
         }
@@ -46,7 +45,7 @@ namespace Iv4xr.SePlugin.Communication
         }
 
         [JsonRpcMethod("Observer.Observe")]
-        Observation Observe()
+        CharacterObservation Observe()
         {
             return m_se.Observer.Observe();
         }
@@ -81,28 +80,28 @@ namespace Iv4xr.SePlugin.Communication
             return m_se.Definitions.AllDefinitions();
         }
 
-        [JsonRpcMethod("Items.Place")]
+        [JsonRpcMethod("Blocks.Place")]
         void Place()
         {
-            m_se.Items.Place();
+            m_se.Blocks.Place();
         }
 
-        [JsonRpcMethod("Items.PlaceAt")]
-        void PlaceAt(string blockType, Vector3 position, Vector3 orientationForward, Vector3 orientationUp)
+        [JsonRpcMethod("Admin.Blocks.PlaceAt")]
+        void PlaceAt(string blockType, PlainVec3D position, PlainVec3D orientationForward, PlainVec3D orientationUp)
         {
-            m_se.Items.PlaceAt(blockType, position, orientationForward, orientationUp);
+            m_se.Admin.Blocks.PlaceAt(blockType, position, orientationForward, orientationUp);
         }
         
-        [JsonRpcMethod("Items.Remove")]
+        [JsonRpcMethod("Admin.Blocks.Remove")]
         void Remove(string blockId)
         {
-            m_se.Items.Remove(blockId);
+            m_se.Admin.Blocks.Remove(blockId);
         }
         
-        [JsonRpcMethod("Items.SetIntegrity")]
+        [JsonRpcMethod("Admin.Blocks.SetIntegrity")]
         void SetIntegrity(string blockId, float integrity)
         {
-            m_se.Items.SetIntegrity(blockId, integrity);
+            m_se.Admin.Blocks.SetIntegrity(blockId, integrity);
         }
 
 

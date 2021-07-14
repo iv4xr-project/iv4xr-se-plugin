@@ -1,8 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Iv4xr.PluginLib;
-using Iv4xr.SePlugin.WorldModel;
+using Iv4xr.PluginLib.WorldModel;
 using Sandbox.Game.Entities;
 using Sandbox.Game.Entities.Character;
 using Sandbox.Game.Entities.Cube;
@@ -13,7 +12,7 @@ using VRageMath;
 
 namespace Iv4xr.SePlugin.Control
 {
-    internal class LowLevelObserver
+    public class LowLevelObserver
     {
         public ILog Log { get; set; }
 
@@ -55,10 +54,10 @@ namespace Iv4xr.SePlugin.Control
             return client.MovementDirection * client.MovementSpeed;
         }
 
-        public Observation GetBasicObservation()
+        public CharacterObservation GetCharacterObservation()
         {
             var orientation = Character.PositionComp.GetOrientation();
-            return new Observation
+            return new CharacterObservation
             {
                 Id = "se0",
                 Position = GetPlayerPosition().ToPlain(), // Consider reducing allocations.
@@ -93,16 +92,20 @@ namespace Iv4xr.SePlugin.Control
 
         public Observation GetNewBlocks()
         {
-            var observation = GetBasicObservation();
-            observation.Grids = CollectSurroundingBlocks(GetBoundingSphereD(), ObservationMode.NEW_BLOCKS);
-            return observation;
+            return new Observation()
+            {
+                Character = GetCharacterObservation(),
+                Grids = CollectSurroundingBlocks(GetBoundingSphereD(), ObservationMode.NEW_BLOCKS)
+            };
         }
 
         public Observation GetBlocks()
         {
-            var observation = GetBasicObservation();
-            observation.Grids = CollectSurroundingBlocks(GetBoundingSphereD(), ObservationMode.BLOCKS);
-            return observation;
+            return new Observation()
+            {
+                Character = GetCharacterObservation(),
+                Grids = CollectSurroundingBlocks(GetBoundingSphereD(), ObservationMode.BLOCKS)
+            };
         }
 
         public BoundingSphereD GetBoundingSphereD()

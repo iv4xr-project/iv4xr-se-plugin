@@ -1,16 +1,9 @@
 ﻿using Iv4xr.PluginLib;
+using Iv4xr.PluginLib.Control;
 using Sandbox.Game.World;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Iv4xr.SePlugin.Session
+namespace Iv4xr.SePlugin.Control
 {
-    public interface ISessionController
-    {
-        void LoadScenario(string scenarioPath);
-    }
-
     public class SessionController : ISessionController
     {
         public ILog Log { get; set; }

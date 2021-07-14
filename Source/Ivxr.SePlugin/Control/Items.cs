@@ -1,82 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Reflection;
-using Iv4xr.SePlugin.WorldModel;
+using Iv4xr.PluginLib.Control;
+using Iv4xr.PluginLib.WorldModel;
 using Sandbox.Definitions;
 using Sandbox.Game.Entities;
-using Sandbox.Game.Entities.Cube;
 using Sandbox.Game.Screens.Helpers;
 using Sandbox.Game.World;
 using VRage.Game;
 using VRage.ObjectBuilders;
-using VRageMath;
 
 namespace Iv4xr.SePlugin.Control
 {
-    public interface IItems
-    {
-        void Place();
-
-        void Remove(string blockId);
-
-        void SetIntegrity(string blockId, float integrity);
-
-        void PlaceAt(string blockType, Vector3 position, Vector3 orientationForward, Vector3 orientationUp);
-
-        void BeginUsingTool();
-
-        void EndUsingTool();
-
-        void Equip(ToolbarLocation toolbarLocation);
-
-        void SetToolbarItem(string name, ToolbarLocation toolbarLocation);
-
-        Toolbar GetToolbar();
-    }
-
     public class Items : IItems
     {
         private readonly IGameSession m_session;
         private readonly LowLevelObserver m_observer;
 
-        public Items(IGameSession session)
+        public Items(IGameSession session, LowLevelObserver observer)
         {
             m_session = session;
-            m_observer = new LowLevelObserver(m_session);
-        }
-
-        private readonly BlockPlacer m_blockPlacer = new BlockPlacer();
-
-        public void SetIntegrity(string blockId, float integrity)
-        {
-            var grid = m_observer.GetGridContainingBlock(blockId);
-            if (grid == null) throw new ValidationException("Block with id not found");
-            var block = m_observer.GetBlocksOf(grid).FirstOrDefault(b => b.UniqueId.ToString() == blockId);
-            if (block == null) throw new ValidationException("Block with id not found");
-            var method = block.ComponentStack.GetType().GetMethod("SetIntegrity",
-                BindingFlags.NonPublic | BindingFlags.Instance);
-            if (method == null) throw new ValidationException("Method not found");
-            method.Invoke(block.ComponentStack, new object[] {integrity, integrity});
-            block.UpdateVisual();
-        }
-
-        public void PlaceAt(string blockType, Vector3 position, Vector3 orientationForward, Vector3 orientationUp)
-        {
-            m_blockPlacer.PlaceBlock(blockType, position, orientationForward, orientationUp);
-        }
-
-        public void Remove(string blockId)
-        {
-            var grid = m_observer.GetGridContainingBlock(blockId);
-            if (grid == null)
-            {
-                throw new ValidationException("Block with id not found");
-            }
-
-            var block = m_observer.GetBlocksOf(grid).FirstOrDefault(b => b.UniqueId.ToString() == blockId);
-            grid.RemoveBlock(block);
+            m_observer = observer;
         }
 
         public void BeginUsingTool()
@@ -89,22 +32,6 @@ namespace Iv4xr.SePlugin.Control
         {
             var entityController = GetEntityController();
             entityController.ControlledEntity.EndShoot(MyShootActionEnum.PrimaryAction);
-        }
-
-        public void Place()
-        {
-            if (MySession.Static.IsAdminOrCreative())
-            {
-                if (MyCubeBuilder.Static is null)
-                    throw new NullReferenceException("Cube builder is null.");
-
-                MyCubeBuilder.Static.Add();
-                return;
-            }
-
-            // else: use tool's primary action in the survival mode
-            var entityController = GetEntityController();
-            entityController.ControlledEntity.BeginShoot(MyShootActionEnum.PrimaryAction);
         }
 
         public void Equip(ToolbarLocation toolbarLocation)

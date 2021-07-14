@@ -1,7 +1,8 @@
 using System;
 using System.IO;
 using Iv4xr.PluginLib;
-using Iv4xr.SePlugin.WorldModel;
+using Iv4xr.PluginLib.Control;
+using Iv4xr.PluginLib.WorldModel;
 using Sandbox;
 using Sandbox.Game.Screens.Helpers;
 using Sandbox.Graphics.GUI;
@@ -9,14 +10,6 @@ using VRage.FileSystem;
 
 namespace Iv4xr.SePlugin.Control
 {
-    public interface IObserver
-    {
-        Observation Observe();
-        Observation ObserveBlocks();
-        Observation ObserveNewBlocks();
-        void TakeScreenshot(string absolutePath);
-    }
-
     internal class Observer : IObserver
     {
         public ILog Log { get; set; }
@@ -42,25 +35,9 @@ namespace Iv4xr.SePlugin.Control
             m_lowLevelObserver = lowLevelObserver;
         }
 
-        public Observation GetObservation(ObservationMode observationMode)
+        public CharacterObservation Observe()
         {
-            switch (observationMode)
-            {
-                case ObservationMode.BASIC:
-                    return m_lowLevelObserver.GetBasicObservation();
-                case ObservationMode.NEW_BLOCKS:
-                    return m_lowLevelObserver.GetNewBlocks();
-                case ObservationMode.BLOCKS:
-                    return m_lowLevelObserver.GetBlocks();
-                default:
-                    throw new ArgumentOutOfRangeException("ObservationMode", observationMode.ToString());
-            }
-        }
-
-
-        public Observation Observe()
-        {
-            return m_lowLevelObserver.GetBasicObservation();
+            return m_lowLevelObserver.GetCharacterObservation();
         }
 
         public Observation ObserveBlocks()

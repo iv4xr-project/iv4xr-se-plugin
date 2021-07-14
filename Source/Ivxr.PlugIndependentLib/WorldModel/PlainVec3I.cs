@@ -1,5 +1,5 @@
 ﻿
-namespace Iv4xr.SePlugin.WorldModel
+namespace Iv4xr.PluginLib.WorldModel
 {
     /// <summary>
     /// Yet another Vector3I class. This time without any properties for easy (JSON) serialization.

@@ -1,20 +1,13 @@
 ﻿using System;
-using Iv4xr.SePlugin.WorldModel;
+using Iv4xr.PluginLib.Control;
+using Iv4xr.PluginLib.WorldModel;
 using Sandbox.Game.Entities.Character;
 using Sandbox.Game.World;
 using VRageMath;
 
 namespace Iv4xr.SePlugin.Control
 {
-    public interface ICharacterController
-    {
-        Observation MoveAndRotate(Vector3 movement, Vector2 rotation3, float roll = 0);
-        Observation Teleport(Vector3 position, Vector3? orientationForward = null, Vector3? orientationUp = null);
-        Observation TurnOnJetpack();
-        Observation TurnOffJetpack();
-    }
-
-    public class CharacterController : ICharacterController
+    public class CharacterController : ICharacterController, ICharacterAdmin
     {
         private readonly IGameSession m_session;
         private readonly IObserver m_observer;
@@ -25,23 +18,24 @@ namespace Iv4xr.SePlugin.Control
             m_observer = observer;
         }
         
-        public Observation TurnOnJetpack()
+        public CharacterObservation TurnOnJetpack()
         {
             Character.JetpackComp.TurnOnJetpack(true);
             return m_observer.Observe();
         }
         
-        public Observation TurnOffJetpack()
+        public CharacterObservation TurnOffJetpack()
         {
             Character.JetpackComp.TurnOnJetpack(false);
             return m_observer.Observe();
         }
 
-        public Observation Teleport(Vector3 position, Vector3? orientationForward, Vector3? orientationUp)
+        public CharacterObservation Teleport(PlainVec3D position, PlainVec3D? orientationForward, PlainVec3D? orientationUp)
         {
+            var vecPosition = new Vector3D(position.ToVector3());
             if (orientationForward == null && orientationUp == null)
             {
-                GetEntityController().ControlledEntity.Entity.PositionComp.SetPosition(position);
+                GetEntityController().ControlledEntity.Entity.PositionComp.SetPosition(vecPosition);
                 return m_observer.Observe();
             }
 
@@ -51,17 +45,17 @@ namespace Iv4xr.SePlugin.Control
             }
 
             var matrix = MatrixD.CreateWorld(
-                new Vector3D(position),
-                orientationForward ?? Vector3.Zero,
-                orientationUp ?? Vector3.Zero
+                vecPosition,
+                orientationForward?.ToVector3() ?? Vector3.Zero,
+                orientationUp?.ToVector3() ?? Vector3.Zero
             );
             GetEntityController().Player.Character.PositionComp.SetWorldMatrix(ref matrix);
             return m_observer.Observe();
         }
         
-        public Observation MoveAndRotate(Vector3 movement, Vector2 rotation3, float roll)
+        public CharacterObservation MoveAndRotate(PlainVec3D movement, PlainVec2F rotation3, float roll)
         {
-            GetEntityController().ControlledEntity.MoveAndRotate(movement, rotation3, roll);
+            GetEntityController().ControlledEntity.MoveAndRotate(movement.ToVector3(), rotation3.ToVector2(), roll);
             return m_observer.Observe();
         }
 
