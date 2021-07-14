@@ -2,7 +2,6 @@
 using System.IO;
 using Iv4xr.PluginLib;
 using Iv4xr.PluginLib.Json;
-using VRage.FileSystem;
 
 namespace Iv4xr.SePlugin.Config
 {
@@ -10,13 +9,13 @@ namespace Iv4xr.SePlugin.Config
     {
         public ILog Log { get; set; }
         public IJsoner Jsoner { get; }
+        public string ConfigPath { get; }
         
-        private const string CONFIG_FILE = "ivxr-plugin.config";
-
-        public ConfigLoader(ILog log, IJsoner jsoner)
+        public ConfigLoader(ILog log, IJsoner jsoner, string configPath)
         {
             Log = log;
             Jsoner = jsoner;
+            ConfigPath = configPath;
         }
 
         public void SaveDefault()
@@ -58,9 +57,9 @@ namespace Iv4xr.SePlugin.Config
             return Jsoner.ToObject<PluginConfig>(text);
         }
 
-        private static string GetConfigPath()
+        private string GetConfigPath()
         {
-            return Path.Combine(MyFileSystem.UserDataPath, CONFIG_FILE);
+            return ConfigPath;
         }
     }
 }

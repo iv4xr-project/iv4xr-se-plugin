@@ -35,7 +35,7 @@ namespace Ivxr.SeGameLib.Tests
 
             var config = m_jsoner.ToObject<PluginConfig>(configJson);
             
-            Assert.Equal(Observer.DefaultRadius, config.ObservationRadius);
+            Assert.Equal(PluginConfig.DEFAULT_RADIUS, config.ObservationRadius);
         }
 
         /* (don't even show this in the list)

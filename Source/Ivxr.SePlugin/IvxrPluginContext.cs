@@ -1,10 +1,12 @@
 ﻿using System;
+using System.IO;
 using Iv4xr.PluginLib;
 using Iv4xr.SePlugin.Communication;
 using Iv4xr.SePlugin.Config;
 using Iv4xr.SePlugin.Control;
 using Iv4xr.SePlugin.Json;
 using Iv4xr.SePlugin.SeLib;
+using VRage.FileSystem;
 
 namespace Iv4xr.SePlugin
 {
@@ -13,6 +15,7 @@ namespace Iv4xr.SePlugin
         public ILog Log { get; private set; }
         public readonly JsonRpcStarter JsonRpcStarter;
         public readonly FuncActionDispatcher FuncActionDispatcher;
+        private const string CONFIG_FILE = "ivxr-plugin.config";
 
         private readonly GameSession m_gameSession = new GameSession();
 
@@ -22,7 +25,8 @@ namespace Iv4xr.SePlugin
             seLog.Init("ivxr-plugin.log");
             Log = seLog;
 
-            var configLoader = new ConfigLoader(Log, new Jsoner());
+            var configPath = Path.Combine(MyFileSystem.UserDataPath, CONFIG_FILE);
+            var configLoader = new ConfigLoader(Log, new Jsoner(), configPath);
             var config = configLoader.LoadOrSaveDefault();
 
             var se = new RealSpaceEngineers(m_gameSession, Log, config);
