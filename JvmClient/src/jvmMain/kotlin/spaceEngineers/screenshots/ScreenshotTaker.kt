@@ -2,7 +2,7 @@ package spaceEngineers.screenshots
 
 import com.google.gson.Gson
 import spaceEngineers.controller.Character.Companion.DISTANCE_CENTER_CAMERA
-import spaceEngineers.controller.JsonRpcCharacterController
+import spaceEngineers.controller.JsonRpcSpaceEngineers
 import spaceEngineers.controller.SpaceEngineers
 import spaceEngineers.model.*
 import spaceEngineers.screenshots.NamedOrientations.*
@@ -14,7 +14,7 @@ import java.lang.Thread.sleep
 
 fun main() {
     ScreenshotTaker(
-        se = JsonRpcCharacterController.localhost("agentId"),
+        se = JsonRpcSpaceEngineers.localhost("agentId"),
         outputDirectory = File(System.getProperty("user.home"), "screenshots_v2")
     ).run()
 }
@@ -82,7 +82,7 @@ class ScreenshotTaker(
     }
 
     private fun takeScreenshots(blockDefinition: BlockDefinition): Screenshots {
-        se.character.teleport(position = blockPosition + Vec3(x = 10))
+        se.admin.character.teleport(position = blockPosition + Vec3(x = 10))
         return Screenshots(
             blockType = blockDefinition.blockType,
             screenshots = orientations.flatMap { namedOrientation ->
@@ -97,15 +97,15 @@ class ScreenshotTaker(
         blockDefinition: BlockDefinition,
         namedOrientation: NamedOrientations
     ): List<SingleScreenshot> {
-        se.observer.observeBlocks().allBlocks.forEach { se.items.remove(it.id) }
-        se.items.placeAt(
+        se.observer.observeBlocks().allBlocks.forEach { se.admin.blocks.remove(it.id) }
+        se.admin.blocks.placeAt(
             blockDefinition.blockType,
             blockPosition,
             namedOrientation.orientationForward,
             namedOrientation.orientationUp
         )
         val block = se.observer.observeNewBlocks().allBlocks.last()
-        se.character.teleport(
+        se.admin.character.teleport(
             block.centerPosition + Vec3(
                 y = -DISTANCE_CENTER_CAMERA,
                 z = screenshotDistance(
@@ -117,7 +117,7 @@ class ScreenshotTaker(
         )
         return (listOf(BuildProgressModel(1f)) + blockDefinition.buildProgressModels.reversed()).map { seBuildProgressModel ->
             val integrity = block.maxIntegrity * (seBuildProgressModel.buildRatioUpperBound - ratioBelowThreshold)
-            se.items.setIntegrity(block.id, integrity)
+            se.admin.blocks.setIntegrity(block.id, integrity)
             sleep(100)
             val singleScreenshot = SingleScreenshot(
                 orientationName = namedOrientation.name,
@@ -140,7 +140,7 @@ class ScreenshotTaker(
             sleep(200)
             singleScreenshot
         }.apply {
-            se.items.remove(block.id)
+            se.admin.blocks.remove(block.id)
             sleep(50)
         }
     }

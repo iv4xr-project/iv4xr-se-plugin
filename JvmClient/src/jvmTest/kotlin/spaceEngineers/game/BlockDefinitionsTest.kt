@@ -1,6 +1,6 @@
 package spaceEngineers.game
 
-import spaceEngineers.commands.SeSessionCommand
+import spaceEngineers.controller.loadFromTestResources
 import spaceEngineers.model.BlockDefinition
 import spaceEngineers.model.CubeSize
 import spaceEngineers.model.Vec3
@@ -43,9 +43,9 @@ fun Iterable<BlockDefinition>.filterSidePoints(): List<BlockDefinition> {
 class BlockDefinitionsTest : MockOrRealGameTest(DEFINITIONS_FILE, useMock = preferMocking) {
 
 
-    @Test //uncomment to update definitions json file
+    //@Test //uncomment to update definitions json file
     fun updateDefinitionsFile() = runAndWriteResponse {
-        SeSessionCommand.load(SIMPLE_PLACE_GRIND_TORCH)
+        session.loadFromTestResources(SIMPLE_PLACE_GRIND_TORCH)
         definitions.blockDefinitions()
     }
 

@@ -1,5 +1,6 @@
 package spaceEngineers.controller
 
+import spaceEngineers.model.CharacterObservation
 import spaceEngineers.model.Observation
 import spaceEngineers.model.extensions.allBlocks
 
@@ -13,6 +14,10 @@ class ContextControllerWrapper(
         context.addToHistory(observation)
     }
 
+    private fun addToHistory(observation: CharacterObservation) {
+        context.addToHistory(observation)
+    }
+
     override val session: Session = spaceEngineers.session
 
     override val character: Character = spaceEngineers.character
@@ -20,7 +25,7 @@ class ContextControllerWrapper(
     override val items: Items = spaceEngineers.items
 
     override val observer: Observer = object: Observer {
-        override fun observe(): Observation {
+        override fun observe(): CharacterObservation {
             return spaceEngineers.observer.observe().apply(::addToHistory)
         }
 
@@ -41,5 +46,7 @@ class ContextControllerWrapper(
         }
     }
     override val definitions: Definitions = spaceEngineers.definitions
+    override val blocks: Blocks = spaceEngineers.blocks
+    override val admin: SpaceEngineersAdmin = spaceEngineers.admin
 
 }

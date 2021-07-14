@@ -55,11 +55,17 @@ fun Block.toWorldEntity(): WorldEntity {
 }
 
 fun Observation.toWorldModel(): WorldModel {
+    return character.toWorldModel().also { worldModel ->
+        worldModel.elements = grids?.map { it.toWorldEntity() }?.associateBy { it.id } ?: emptyMap()
+    }
+}
+
+fun CharacterObservation.toWorldModel(): WorldModel {
     return WorldModel().also { worldModel ->
         worldModel.agentId = id
         worldModel.position = position.toIv4xrVec3()
         worldModel.velocity = velocity.toIv4xrVec3()
-        worldModel.elements = grids?.map { it.toWorldEntity() }?.associateBy { it.id } ?: emptyMap()
+        worldModel.elements = emptyMap()
     }
 }
 
@@ -91,7 +97,7 @@ class SeEnvironment(
     fun equipAndPlace(toolbarLocation: ToolbarLocation) {
         controller.items.equip(toolbarLocation)
         sleep(500)
-        return controller.items.place()
+        return controller.blocks.place()
     }
 
     fun equip(toolbarLocation: ToolbarLocation) {

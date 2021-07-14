@@ -47,7 +47,6 @@ namespace Iv4xr.SePlugin.Control
             switch (observationMode)
             {
                 case ObservationMode.BASIC:
-                case ObservationMode.DEFAULT:
                     return m_lowLevelObserver.GetBasicObservation();
                 case ObservationMode.NEW_BLOCKS:
                     return m_lowLevelObserver.GetNewBlocks();

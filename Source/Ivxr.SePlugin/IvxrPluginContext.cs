@@ -11,13 +11,8 @@ namespace Iv4xr.SePlugin
     public class IvxrPluginContext : IDisposable
     {
         public ILog Log { get; private set; }
-        public readonly Dispatcher Dispatcher;
         public readonly JsonRpcStarter JsonRpcStarter;
         public readonly FuncActionDispatcher FuncActionDispatcher;
-
-        private readonly RequestQueue m_requestQueue = new RequestQueue();
-
-        private readonly PluginServer m_server;
 
         private readonly GameSession m_gameSession = new GameSession();
 
@@ -31,12 +26,9 @@ namespace Iv4xr.SePlugin
             var config = configLoader.LoadOrSaveDefault();
 
             var se = new RealSpaceEngineers(m_gameSession, Log, config);
-            var sessionDispatcher = new SessionDispatcher(se.Session) {Log = Log};
-
-            m_server = new PluginServer(Log, sessionDispatcher, m_requestQueue, config.Port);
+            
             FuncActionDispatcher = new FuncActionDispatcher();
-
-            Dispatcher = new Dispatcher(m_requestQueue, se) {Log = Log};
+            
             JsonRpcStarter = new JsonRpcStarter(
                 new SynchronizedSpaceEngineers(se, FuncActionDispatcher),
                 port: config.JsonRpcPort
@@ -46,7 +38,6 @@ namespace Iv4xr.SePlugin
 
         public void StartServer()
         {
-            m_server.Start();
             JsonRpcStarter.Start();
         }
 
@@ -66,13 +57,6 @@ namespace Iv4xr.SePlugin
         {
             if (alreadyDisposed)
                 return;
-
-            if (disposing)
-            {
-                // dispose managed state (managed objects).
-                m_server.Stop();
-                m_requestQueue.Dispose();
-            }
 
             // TODO: Set large fields to null.
 

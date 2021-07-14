@@ -1,7 +1,7 @@
 package testhelp
 
 import spaceEngineers.transport.SocketReaderWriter
-import spaceEngineers.controller.JsonRpcCharacterController
+import spaceEngineers.controller.JsonRpcSpaceEngineers
 import spaceEngineers.controller.SpaceEngineers
 import spaceEngineers.controller.loadFromTestResources
 import spaceEngineers.transport.GsonReaderWriter
@@ -49,7 +49,7 @@ abstract class MockOrRealGameTest(
             scenario: String = SIMPLE_PLACE_GRIND_TORCH,
             block: SpaceEngineers.() -> Unit
         ) {
-            val spaceEngineers = JsonRpcCharacterController(
+            val spaceEngineers = JsonRpcSpaceEngineers(
                 agentId = TEST_AGENT,
                 gsonReaderWriter = GsonReaderWriter(
                     stringLineReaderWriter = GsonResponseToFileReaderWriter(

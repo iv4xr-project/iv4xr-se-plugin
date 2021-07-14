@@ -19,7 +19,7 @@ class RotateTowardsPositionTest {
         delay(500)
         character.turnOnJetpack()
         delay(500)
-        character.teleport(
+        admin.character.teleport(
             position = observation.position,
             orientationForward = Vec3.FORWARD,
             orientationUp = Vec3.UP,
@@ -38,7 +38,7 @@ class RotateTowardsPositionTest {
     @Test
     fun rotateTowardsPositionUp() = spaceEngineersSimplePlaceGrindTorchSuspend {
         val observation = observer.observe()
-        character.teleport(
+        admin.character.teleport(
             position = observation.position,
             orientationForward = Vec3.FORWARD,
             orientationUp = Vec3.UP,

@@ -22,35 +22,7 @@ namespace SeServerMock
                 new MockItems() {Log = log},
                 new MockDefinitions() {Log = log}
             );
-
-            RunOldDispatcher(se, log);
             //RunJsonRpc(se, log);
-        }
-
-        private static void RunOldDispatcher(ISpaceEngineers se, ILog log)
-        {
-            using (var requestQueue = new RequestQueue())
-            {
-                var dispatcher = new Dispatcher(requestQueue, se) {Log = log};
-                while (true)
-                {
-                    dispatcher.ProcessRequests();
-
-                    /*
-                    while (requestQueue.Requests.TryDequeue(out Request request))
-                    {
-                        log.WriteLine("dequeued: " + request.Message);
-    
-                        requestQueue.Replies.Add(
-                            new Request(request.ClientStream, $"Got {request.Message.Length} bytes, thanks!"));
-                    }
-                    */
-
-                    Thread.Sleep(5);
-                }
-
-                // server.Start(waitForFinish: true);
-            }
         }
     }
 }
