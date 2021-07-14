@@ -1,6 +1,5 @@
 ﻿using System;
 using Iv4xr.PluginLib;
-using Iv4xr.SePlugin.Control;
 
 namespace Iv4xr.SePlugin.Config
 {
@@ -30,7 +29,7 @@ namespace Iv4xr.SePlugin.Config
         {
             try
             {
-                Observer.ValidateRadius(config.ObservationRadius);
+                ValidateRadius(config.ObservationRadius);
             }
             catch (Exception e)
             {
@@ -48,6 +47,12 @@ namespace Iv4xr.SePlugin.Config
                            + $" Using the default value {defaultPort}.");
             
             return defaultPort;
+        }
+        
+        public static void ValidateRadius(double radius)
+        {
+            if (radius <= 0.0d)
+                throw new Exception("Radius must be positive and non-zero.");
         }
     }
 }
