@@ -1,5 +1,6 @@
 ﻿using Iv4xr.PluginLib.Json;
 using Iv4xr.PluginLib.WorldModel;
+using Iv4xr.SePlugin.Config;
 using Xunit;
 
 namespace Ivxr.PlugIndependentLib.Tests
@@ -47,5 +48,14 @@ namespace Ivxr.PlugIndependentLib.Tests
         }
 
 
+        [Fact]
+        public void JsonerKeepsDefaultValues()
+        {
+            const string configJson = "{\"JsonRpcPort\":3333}";
+
+            var config = m_jsoner.ToObject<PluginConfig>(configJson);
+            
+            Assert.Equal(PluginConfig.DEFAULT_RADIUS, config.ObservationRadius);
+        }
     }
 }

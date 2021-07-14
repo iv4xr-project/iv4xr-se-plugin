@@ -8,14 +8,13 @@ using System.Threading.Tasks;
 using AustinHarris.JsonRpc;
 using Iv4xr.PluginLib;
 using Iv4xr.PluginLib.Control;
+using Iv4xr.SePlugin.Config;
 
 namespace Iv4xr.SePlugin.Communication
 {
     public class JsonRpcStarter
     {
         public ILog Log { get; set; }
-
-        public const int DefaultPort = 3333;
 
         private readonly string m_hostname;
         private readonly int m_port;
@@ -24,7 +23,7 @@ namespace Iv4xr.SePlugin.Communication
 
         private readonly ISpaceEngineers m_se;
 
-        public JsonRpcStarter(ISpaceEngineers se, string hostname = "127.0.0.1", int port = DefaultPort)
+        public JsonRpcStarter(ISpaceEngineers se, string hostname = "127.0.0.1", int port = PluginConfig.DEFAULT_PORT)
         {
             m_se = se;
             m_hostname = hostname;
