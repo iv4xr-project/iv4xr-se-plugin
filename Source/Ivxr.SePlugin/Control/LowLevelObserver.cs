@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Iv4xr.PluginLib;
 using Iv4xr.PluginLib.WorldModel;
+using Iv4xr.SePlugin.Config;
 using Sandbox.Game.Entities;
 using Sandbox.Game.Entities.Character;
 using Sandbox.Game.Entities.Cube;
@@ -21,12 +22,12 @@ namespace Iv4xr.SePlugin.Control
             get => m_radius;
             set
             {
-                Observer.ValidateRadius(value);
+                ConfigValidator.ValidateRadius(value);
                 m_radius = value;
             }
         }
 
-        private double m_radius = Observer.DefaultRadius;
+        private double m_radius = PluginConfig.DEFAULT_RADIUS;
 
         private readonly IGameSession m_gameSession;
 
