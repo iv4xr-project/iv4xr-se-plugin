@@ -3,6 +3,7 @@ package spaceEngineers.controller
 import spaceEngineers.transport.AlwaysReturnSameLineReaderWriter
 import spaceEngineers.transport.PresetLinesReaderWriter
 import spaceEngineers.transport.SocketReaderWriter
+import spaceEngineers.transport.StringLineReaderWriter
 import java.io.File
 
 class KotlinJsonRpcSpaceEngineersBuilder: JsonRpcSpaceEngineersBuilder {
@@ -36,5 +37,12 @@ class KotlinJsonRpcSpaceEngineersBuilder: JsonRpcSpaceEngineersBuilder {
             agentId = agentId,
             stringLineReaderWriter = PresetLinesReaderWriter(lines)
         )
+    }
+
+    override fun fromStringLineReaderWriter(
+        agentId: String,
+        stringLineReaderWriter: StringLineReaderWriter
+    ): JsonRpcSpaceEngineers {
+        return JsonRpcSpaceEngineers(agentId, stringLineReaderWriter)
     }
 }

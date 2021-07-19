@@ -3,8 +3,9 @@ package spaceEngineers.controller
 import kotlinx.serialization.*
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
-import spaceEngineers.transport.JsonRpcRequest
-import spaceEngineers.transport.JsonRpcResponse
+import spaceEngineers.transport.jsonrpc.JsonRpcResponse
+import spaceEngineers.transport.jsonrpc.KotlinJsonRpcRequest
+import spaceEngineers.transport.jsonrpc.KotlinJsonRpcResponse
 import spaceEngineers.transport.StringLineReaderWriter
 import kotlin.random.Random
 import kotlin.reflect.KClass
@@ -35,7 +36,7 @@ abstract class RpcSerializer(
     val stringLineReaderWriter: StringLineReaderWriter,
 ) {
 
-    protected inline fun <reified I : Any, reified O : Any> processSingleParameterMethod(
+    inline fun <reified I : Any, reified O : Any> processSingleParameterMethod(
         method: KFunction<O>,
         parameter: I,
         parameterName: String,
@@ -56,40 +57,56 @@ abstract class RpcSerializer(
     }
 
     @OptIn(ExperimentalStdlibApi::class)
-    protected inline fun <reified O : Any> processParameters(
+    inline fun <reified O : Any> processParameters(
         method: KFunction<O?>,
         parameters: List<TypedParameter<*>>,
         methodName: String = method.name,
     ): O {
-        val request = JsonRpcRequest(
-            id = Random.nextLong(),
+        return callRpc<O>(
+            stringLineReaderWriter,
+            encodeRequest(method, parameters, methodName),
+            typeOf<KotlinJsonRpcResponse<O>>()
+        )
+    }
+
+    open fun nextRequestId(): Long {
+        return Random.nextLong()
+    }
+
+    open fun <O : Any> encodeRequest(
+        method: KFunction<O?>,
+        parameters: List<TypedParameter<*>>,
+        methodName: String = method.name
+    ): String {
+        return json.encodeToString(KotlinJsonRpcRequest(
+            id = nextRequestId(),
             method = methodName,
             params = parameters.associate { it.toJsonElementPair() }
-        )
-        return callRpc<O>(stringLineReaderWriter, request, parameters, typeOf<JsonRpcResponse<O>>())
+        ))
     }
 
-    @OptIn(ExperimentalStdlibApi::class)
-    open fun <O : Any> callRpc(
-        rw: StringLineReaderWriter,
-        request: JsonRpcRequest,
-        parameters: List<TypedParameter<*>>,
-        ktype: KType
-    ): O {
-        return callRpc_<O>(rw, request, ktype).result ?: Unit as O
-
-    }
-
-    fun <O : Any> callRpc_(rw: StringLineReaderWriter, request: JsonRpcRequest, ktype: KType): JsonRpcResponse<O> {
-        val responseJson = rw.sendAndReceiveLine(json.encodeToString(request))
-        val response = json.decodeFromString<JsonRpcResponse<O>>(
-            serializer(ktype) as KSerializer<JsonRpcResponse<O>>,
+    open fun <O : Any> decodeResponse(responseJson: String, ktype: KType): JsonRpcResponse<O> {
+        return json.decodeFromString<KotlinJsonRpcResponse<O>>(
+            serializer(ktype) as KSerializer<KotlinJsonRpcResponse<O>>,
             responseJson
         )
+    }
+
+    open fun <O : Any> decodeAndUnwrap(responseJson: String, ktype: KType): O {
+        val response = decodeResponse<O>(responseJson, ktype)
+        return unwrap(response)
+    }
+
+    private fun <O : Any> unwrap(response: JsonRpcResponse<O>): O {
         response.error?.let {
-            throw it
+            throw it as Exception
         }
-        return response
+        return response.result ?: Unit as O
+    }
+
+    fun <O : Any> callRpc(rw: StringLineReaderWriter, encodedRequest: String, ktype: KType): O {
+        val responseJson = rw.sendAndReceiveLine(encodedRequest)
+        return decodeAndUnwrap<O>(responseJson, ktype)
     }
 
 

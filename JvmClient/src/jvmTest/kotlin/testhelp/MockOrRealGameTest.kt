@@ -4,7 +4,6 @@ import spaceEngineers.controller.JsonRpcSpaceEngineers
 import spaceEngineers.controller.JsonRpcSpaceEngineersBuilder
 import spaceEngineers.controller.SpaceEngineers
 import spaceEngineers.controller.loadFromTestResources
-import spaceEngineers.transport.GsonReaderWriter
 import spaceEngineers.transport.GsonResponseAppendToFileReaderWriter
 import spaceEngineers.transport.SocketReaderWriter
 import spaceEngineers.transport.StringLineReaderWriter
@@ -59,10 +58,7 @@ abstract class MockOrRealGameTest(
 
     private fun getSpaceEngineers(forceRealGame: Boolean, file: File): JsonRpcSpaceEngineers {
         return if (useRealGame(forceRealGame, file)) {
-            JsonRpcSpaceEngineers(
-                agentId = agentId,
-                stringLineReaderWriter = readerWriter(file)
-            )
+            JsonRpcSpaceEngineersBuilder.fromStringLineReaderWriter(agentId, readerWriter(file))
         } else {
             JsonRpcSpaceEngineersBuilder.mock(agentId, file)
         }
