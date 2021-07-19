@@ -3,10 +3,11 @@ package spaceEngineers.controller
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import com.google.gson.reflect.TypeToken
-import spaceEngineers.transport.JsonRpcRequest
-import spaceEngineers.transport.SocketReaderWriter
-import spaceEngineers.transport.StringLineReaderWriter
+import spaceEngineers.transport.*
+import spaceEngineers.transport.jsonrpc.JsonRpcResponse
+import spaceEngineers.transport.jsonrpc.JsonRpcError
 import java.lang.reflect.Type
+import kotlin.reflect.KFunction
 import kotlin.reflect.KType
 import kotlin.reflect.KTypeProjection
 
@@ -24,23 +25,23 @@ data class GsonRpcRequest(
 
 data class GsonRpcError(
     @SerializedName("code")
-    val code: Int,
+    override val code: Int,
     @SerializedName("message")
     override val message: String,
     @SerializedName("data")
-    val data: Any? = null
-) : Exception(message)
+    override val data: Any? = null
+) : Exception(message), JsonRpcError<Any>
 
-data class GsonRpcResponse<T>(
+data class GsonRpcResponse<T : Any>(
     @SerializedName("id")
-    val id: Long,
+    override val id: Long? = null,
     @SerializedName("jsonrpc")
-    val jsonrpc: String = "2.0",
+    override val jsonrpc: String = "2.0",
     @SerializedName("result")
-    val result: T?,
+    override val result: T?,
     @SerializedName("error")
-    val error: GsonRpcError? = null
-)
+    override val error: GsonRpcError? = null
+) : JsonRpcResponse<T>
 
 class GsonRpcSpaceEngineers(
     agentId: String,
@@ -64,18 +65,20 @@ class GsonRpcSpaceEngineers(
     blocksPrefix = blocksPrefix,
     adminPrefix = adminPrefix,
 ) {
-    override fun <O : Any> callRpc(
-        rw: StringLineReaderWriter,
-        request: JsonRpcRequest,
+
+    override fun <O : Any> encodeRequest(
+        method: KFunction<O?>,
         parameters: List<TypedParameter<*>>,
-        ktype: KType
-    ): O {
-        val gsonRequest = GsonRpcRequest(
-            id = request.id,
-            method = request.method,
+        methodName: String
+    ): String {
+        return gson.toJson(GsonRpcRequest(
+            id = nextRequestId(),
+            method = methodName,
             params = parameters.associate { it.name to it.value }
-        )
-        val responseJson = stringLineReaderWriter.sendAndReceiveLine(gson.toJson(gsonRequest))
+        ))
+    }
+
+    override fun <O : Any> decodeAndUnwrap(responseJson: String, ktype: KType): O {
         val response = gson.fromJson(responseJson, GsonRpcResponse::class.java)
         response.error?.let {
             throw it
@@ -101,4 +104,5 @@ class GsonRpcSpaceEngineers(
         }
         return Unit as O
     }
+
 }
