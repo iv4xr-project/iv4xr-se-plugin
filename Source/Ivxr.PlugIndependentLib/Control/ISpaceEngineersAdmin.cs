@@ -4,6 +4,7 @@ namespace Iv4xr.PluginLib.Control
 {
     public interface ISpaceEngineersAdmin
     {
+        void SetFrameLimitEnabled(bool enabled);
         ICharacterAdmin Character { get; }
         IBlocksAdmin Blocks { get; }
     }

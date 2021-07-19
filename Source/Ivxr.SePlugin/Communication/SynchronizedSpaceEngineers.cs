@@ -231,6 +231,32 @@ namespace Iv4xr.SePlugin.Communication
         }
     }
 
+    public class SynchronizedSpaceEngineersAdmin : AbstractServiceOnGameLoop, ISpaceEngineersAdmin
+    {
+        public ISpaceEngineersAdmin Admin { get; }
+        
+        public void SetFrameLimitEnabled(bool enabled)
+        {
+            Enqueue(() => { Admin.SetFrameLimitEnabled(enabled); });
+        }
+
+        public ICharacterAdmin Character
+        {
+            get { return Admin.Character; }
+        }
+
+        public IBlocksAdmin Blocks
+        {
+            get { return Admin.Blocks; }
+        }
+
+        public SynchronizedSpaceEngineersAdmin(ISpaceEngineersAdmin admin, FuncActionDispatcher funcActionDispatcher) :
+                base(funcActionDispatcher)
+        {
+            Admin = admin;
+        }
+    }
+
     public class SynchronizedSpaceEngineers : ISpaceEngineers
     {
         public ICharacterController Character { get; }
@@ -250,10 +276,10 @@ namespace Iv4xr.SePlugin.Communication
             Observer = new ObserverOnGameLoop(se.Observer, funcActionDispatcher);
             Definitions = new DefinitionsOnGameLoop(se.Definitions, funcActionDispatcher);
             Blocks = new BlocksOnGameLoop(se.Blocks, funcActionDispatcher);
-            Admin = new SpaceEngineersAdmin(
+            Admin = new SynchronizedSpaceEngineersAdmin(new SpaceEngineersAdmin(
                 new CharacterAdminOnGameLoop(se.Admin.Character, se.Observer, funcActionDispatcher),
                 new BlocksAdminOnGameLoop(se.Admin.Blocks, funcActionDispatcher)
-            );
+            ), funcActionDispatcher);
         }
     }
 }

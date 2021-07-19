@@ -1,6 +1,7 @@
 ﻿using Iv4xr.PluginLib;
 using Iv4xr.PluginLib.Control;
 using Iv4xr.SePlugin.Config;
+using Sandbox;
 
 namespace Iv4xr.SePlugin.Control
 {
@@ -51,6 +52,11 @@ namespace Iv4xr.SePlugin.Control
 
     public class SpaceEngineersAdmin : ISpaceEngineersAdmin
     {
+        public void SetFrameLimitEnabled(bool enabled)
+        {
+            MySandboxGame.Static.EnableMaxSpeed = !enabled;
+        }
+
         public ICharacterAdmin Character { get; }
         public IBlocksAdmin Blocks { get; }
 

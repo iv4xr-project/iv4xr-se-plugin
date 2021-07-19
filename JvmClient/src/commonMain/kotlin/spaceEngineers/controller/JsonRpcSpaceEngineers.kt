@@ -155,6 +155,15 @@ open class JsonRpcSpaceEngineers(
             }
         }
 
+        override fun setFrameLimitEnabled(enabled: Boolean) {
+            return processSingleParameterMethod(
+                method = ::setFrameLimitEnabled,
+                methodName = "${adminPrefix}SetFrameLimitEnabled",
+                parameter = enabled,
+                parameterName = "enabled",
+                parameterType = Boolean::class,
+            )
+        }
     }
 
     override val observer: Observer = object : Observer {
