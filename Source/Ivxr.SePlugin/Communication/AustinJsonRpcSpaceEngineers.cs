@@ -104,6 +104,11 @@ namespace Iv4xr.SePlugin.Communication
             m_se.Admin.Blocks.SetIntegrity(blockId, integrity);
         }
 
+        [JsonRpcMethod("Admin.SetFrameLimitEnabled")]
+        void SetFrameLimitEnabled(bool enabled)
+        {
+            m_se.Admin.SetFrameLimitEnabled(enabled);
+        }
 
         [JsonRpcMethod("Items.BeginUsingTool")]
         void BeginUsingTool()

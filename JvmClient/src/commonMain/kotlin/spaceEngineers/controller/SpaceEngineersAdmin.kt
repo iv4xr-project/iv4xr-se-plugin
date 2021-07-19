@@ -6,6 +6,7 @@ import spaceEngineers.model.Vec3
 interface SpaceEngineersAdmin {
     val blocks: BlocksAdmin
     val character: CharacterAdmin
+    fun setFrameLimitEnabled(enabled: Boolean)
 }
 
 interface BlocksAdmin {
