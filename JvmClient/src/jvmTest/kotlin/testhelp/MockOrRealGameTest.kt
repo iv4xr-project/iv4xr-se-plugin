@@ -1,6 +1,7 @@
 package testhelp
 
 import spaceEngineers.controller.JsonRpcSpaceEngineers
+import spaceEngineers.controller.JsonRpcSpaceEngineersBuilder
 import spaceEngineers.controller.SpaceEngineers
 import spaceEngineers.controller.loadFromTestResources
 import spaceEngineers.transport.GsonReaderWriter
@@ -60,12 +61,10 @@ abstract class MockOrRealGameTest(
         return if (useRealGame(forceRealGame, file)) {
             JsonRpcSpaceEngineers(
                 agentId = agentId,
-                gsonReaderWriter = GsonReaderWriter(
-                    stringLineReaderWriter = readerWriter(file)
-                )
+                stringLineReaderWriter = readerWriter(file)
             )
         } else {
-            JsonRpcSpaceEngineers.mock(agentId, file)
+            JsonRpcSpaceEngineersBuilder.mock(agentId, file)
         }
     }
 
