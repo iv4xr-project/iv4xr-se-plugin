@@ -1,12 +1,18 @@
 package spaceEngineers.model
 
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 import kotlin.math.abs
 import kotlin.math.sqrt
 
 
+@Serializable
 data class Vec3(
+    @SerialName("X")
     override val x: Float = 0f,
+    @SerialName("Y")
     override val y: Float = 0f,
+    @SerialName("Z")
     override val z: Float = 0f,
 ) : NumberVec<Float> {
 

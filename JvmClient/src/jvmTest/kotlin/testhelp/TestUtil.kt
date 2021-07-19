@@ -19,7 +19,7 @@ val SIMPLE_PLACE_GRIND_TORCH = "simple-place-grind-torch"
 fun spaceEngineersSimplePlaceGrindTorchSuspend(
     scenarioId: String = SIMPLE_PLACE_GRIND_TORCH,
     agentId: String = TEST_AGENT,
-    spaceEngineers: JsonRpcSpaceEngineers = JsonRpcSpaceEngineers.localhost(agentId),
+    spaceEngineers: JsonRpcSpaceEngineers = JsonRpcSpaceEngineersBuilder.localhost(agentId),
     block: suspend JsonRpcSpaceEngineers.() -> Unit
 ) {
     try {
@@ -35,7 +35,7 @@ fun spaceEngineersSimplePlaceGrindTorchSuspend(
 fun spaceEngineersSuspend(
     agentId: String = TEST_AGENT,
     spaceEngineers: SpaceEngineers = ContextControllerWrapper(
-        spaceEngineers = JsonRpcSpaceEngineers.localhost(agentId)
+        spaceEngineers = JsonRpcSpaceEngineersBuilder.localhost(agentId)
     ),
     block: suspend SpaceEngineers.() -> Unit
 ) {
@@ -51,7 +51,7 @@ fun spaceEngineersSuspend(
 fun spaceEngineers(
     agentId: String = TEST_AGENT,
     spaceEngineers: SpaceEngineers = ContextControllerWrapper(
-        spaceEngineers = JsonRpcSpaceEngineers.localhost(agentId)
+        spaceEngineers = JsonRpcSpaceEngineersBuilder.localhost(agentId)
     ),
     block: SpaceEngineers.() -> Unit
 ) {

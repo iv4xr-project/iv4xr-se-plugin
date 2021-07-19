@@ -3,6 +3,9 @@ package spaceEngineers.transport
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import spaceEngineers.controller.ContextControllerWrapper
+import spaceEngineers.controller.JsonRpcSpaceEngineers
+import spaceEngineers.controller.SpaceEngineers
 import java.io.*
 import java.lang.reflect.Modifier
 import java.net.InetSocketAddress
@@ -14,6 +17,19 @@ fun Any?.closeIfCloseable() {
     this?.let {
         if (it is AutoCloseable) {
             it.close()
+        }
+    }
+}
+
+fun SpaceEngineers?.closeIfCloseable() {
+    this?.let {
+        if (it is ContextControllerWrapper) {
+            it.spaceEngineers.closeIfCloseable()
+        }
+        if (it is JsonRpcSpaceEngineers) {
+            if (it.stringLineReaderWriter is AutoCloseable) {
+                it.stringLineReaderWriter.close()
+            }
         }
     }
 }
@@ -67,7 +83,7 @@ class SocketReaderWriter @JvmOverloads constructor(
     companion object {
         const val DEFAULT_HOSTNAME = "localhost"
 
-        const val DEFAULT_PORT = 9678
+        const val DEFAULT_PORT = 3333
 
         val SPACE_ENG_GSON: Gson = GsonBuilder()
             .setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)

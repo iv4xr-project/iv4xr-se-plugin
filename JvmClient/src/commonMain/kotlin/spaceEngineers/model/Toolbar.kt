@@ -1,8 +1,15 @@
 package spaceEngineers.model
 
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class Toolbar(
+    @SerialName("Items")
     val items: List<ToolbarItem?>,
+    @SerialName("SlotCount")
     val slotCount: Int,
+    @SerialName("PageCount")
     val pageCount: Int
 ) {
 

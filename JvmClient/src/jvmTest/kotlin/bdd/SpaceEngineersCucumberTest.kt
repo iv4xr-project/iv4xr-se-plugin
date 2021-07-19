@@ -14,6 +14,8 @@ import spaceEngineers.model.Block
 import spaceEngineers.model.ToolbarLocation
 import spaceEngineers.model.Vec3
 import spaceEngineers.model.extensions.allBlocks
+import spaceEngineers.transport.GsonReaderWriter
+import spaceEngineers.transport.SocketReaderWriter
 import spaceEngineers.transport.closeIfCloseable
 import testhelp.TEST_AGENT
 import testhelp.assertFloatEquals
@@ -47,7 +49,7 @@ class SpaceEngineersCucumberTest {
 
         environment =
             ContextControllerWrapper(
-                spaceEngineers = JsonRpcSpaceEngineers.localhost(agentId = TEST_AGENT)
+                spaceEngineers = JsonRpcSpaceEngineersBuilder.localhost(agentId = TEST_AGENT)
             )
     }
 
@@ -346,7 +348,7 @@ class SpaceEngineersCucumberTest {
         File(
             blockDir,
             "screenshotInfo.json"
-        ).writeText(cw.gsonReaderWriter.gson.toJson(blockScreenshotInfoByType[block.blockType]))
+        ).writeText(SocketReaderWriter.SPACE_ENG_GSON.toJson(blockScreenshotInfoByType[block.blockType]))
     }
 
 }

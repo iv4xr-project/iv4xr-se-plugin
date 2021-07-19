@@ -2,19 +2,22 @@ package spaceEngineers.screenshots
 
 import com.google.gson.Gson
 import spaceEngineers.controller.Character.Companion.DISTANCE_CENTER_CAMERA
-import spaceEngineers.controller.JsonRpcSpaceEngineers
+import spaceEngineers.controller.JsonRpcSpaceEngineersBuilder
 import spaceEngineers.controller.SpaceEngineers
-import spaceEngineers.model.*
-import spaceEngineers.screenshots.NamedOrientations.*
+import spaceEngineers.model.BlockDefinition
+import spaceEngineers.model.BuildProgressModel
+import spaceEngineers.model.CubeSize
+import spaceEngineers.model.Vec3
 import spaceEngineers.model.extensions.allBlocks
 import spaceEngineers.model.extensions.centerPosition
+import spaceEngineers.screenshots.NamedOrientations.*
 import spaceEngineers.transport.SocketReaderWriter
 import java.io.File
 import java.lang.Thread.sleep
 
 fun main() {
     ScreenshotTaker(
-        se = JsonRpcSpaceEngineers.localhost("agentId"),
+        se = JsonRpcSpaceEngineersBuilder.localhost("agentId"),
         outputDirectory = File(System.getProperty("user.home"), "screenshots_v2")
     ).run()
 }

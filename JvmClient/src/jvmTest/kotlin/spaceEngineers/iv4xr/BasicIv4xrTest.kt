@@ -24,7 +24,7 @@ class BasicIv4xrTest {
         context.blockTypeToToolbarLocation[blockType] = ToolbarLocation(1, 0)
         val controllerWrapper =
             ContextControllerWrapper(
-                spaceEngineers = JsonRpcSpaceEngineers.localhost(agentId),
+                spaceEngineers = JsonRpcSpaceEngineersBuilder.localhost(agentId),
                 context = context
             )
         val theEnv = SeEnvironment(
