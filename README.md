@@ -67,12 +67,12 @@ The resulting plug-in (a couple of .NET libraries) works with the official Steam
 
 ### How to build with game binaries
 
-We are developing the plugin using source dependencies; therefore, it is necessary to perform a few steps to switch to binary dependencies: provide the library binaries and switch the references to those binaries.
+We are developing the plugin using source dependencies; therefore, it is necessary to perform a few steps to switch to binary dependencies: provide the library binaries and switch the references to those binaries. We assume you have installed the official release of the game from Steam.
 
 1. **Obtain the Space Engineers libraries.** Locate the script `copydeps.bat` in the `BinaryDependencies` directory.
    1. If you have your Steam installation of Space Engineers in the default path, then just run the script and the binaries will be copied to the directory. The default path is `C:\Program Files (x86)\Steam\steamapps\common\SpaceEngineers\Bin64`.
    2. If you have SE in some other path, provide it as the first argument to the script. (Or copy the libraries listed in the script manually.)
-2. **Switch references from project dependencies to binary ones.** You can do it manually, or you can apply (cherry-pick) a commit pointed to by the branch `binary-deps-switch`. (Currently it's commit `ac91499066ae`, but it can change as we rebase it on newer history.)
+2. **Switch references from project dependencies to binary ones.** You can do it manually, or you can apply (cherry-pick) a commit pointed to by the branch `binary-deps-switch`. (Currently it's commit `fa7c536f57`, but it can change as we rebase it on newer history.)
 3. **Open the solution and build it.** Find the VS solution file `Iv4xrPluginBinaryDeps.sln` in the `Solutions` folder. It's just a solution containing only the plugin projects, not the SE projects – the switch to the binaries has to be done in each of the projects, as described in the previous step. Open the solution and build it. You can than run the game with the plugin as described above.
 
 ### How to build if you have SE sources
