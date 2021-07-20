@@ -40,7 +40,7 @@ namespace Iv4xr.SePlugin.Control
         }
 
 
-        [Obsolete("Deprecated, will create new api for allosSizeChange. Can use Equip.")]
+        [Obsolete("Deprecated, will create new api for allowSizeChange. Can use Equip.")]
         public void EquipToolbarItem(ToolbarLocation toolbarLocation, bool allowSizeChange)
         {
             var toolbar = MyToolbarComponent.CurrentToolbar;
