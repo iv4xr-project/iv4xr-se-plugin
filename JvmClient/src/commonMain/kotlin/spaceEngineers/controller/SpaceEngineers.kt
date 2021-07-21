@@ -17,6 +17,7 @@ interface Session {
 }
 
 interface Character {
+    fun use()
     /**
      * @param movement Unit vector representing direction of a movement.
      *      The direction is relative to the character itself, not coordinates of the system.

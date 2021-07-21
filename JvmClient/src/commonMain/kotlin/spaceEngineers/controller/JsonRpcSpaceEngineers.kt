@@ -30,6 +30,13 @@ open class JsonRpcSpaceEngineers(
     }
 
     override val character: Character = object : Character {
+        override fun use() {
+            return processNoParameterMethod<Unit>(
+                method = ::use,
+                methodName = "${characterPrefix}Use"
+            )
+        }
+
         override fun moveAndRotate(movement: Vec3, rotation3: Vec2, roll: Float): CharacterObservation {
             return processParameters<CharacterObservation>(
                 parameters = listOf(

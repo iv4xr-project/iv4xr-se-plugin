@@ -51,6 +51,7 @@ namespace Iv4xr.PluginLib.Control
         CharacterObservation MoveAndRotate(PlainVec3D movement, PlainVec2F rotation3, float roll = 0);
         CharacterObservation TurnOnJetpack();
         CharacterObservation TurnOffJetpack();
+        void Use();
     }
 
     public interface IBlocks

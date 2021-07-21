@@ -30,6 +30,11 @@ namespace Iv4xr.SePlugin.Control
             return m_observer.Observe();
         }
 
+        public void Use()
+        {
+            MySession.Static.ControlledEntity.Use();
+        }
+
         public CharacterObservation Teleport(PlainVec3D position, PlainVec3D? orientationForward, PlainVec3D? orientationUp)
         {
             var vecPosition = new Vector3D(position.ToVector3());
