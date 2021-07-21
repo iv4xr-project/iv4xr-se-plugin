@@ -37,6 +37,12 @@ namespace Iv4xr.SePlugin.Communication
         {
             return m_se.Character.TurnOffJetpack();
         }
+        
+        [JsonRpcMethod("Character.Use")]
+        void Use()
+        {
+            m_se.Character.Use();
+        }
 
         [JsonRpcMethod("Session.LoadScenario")]
         void LoadScenario(string scenarioPath)

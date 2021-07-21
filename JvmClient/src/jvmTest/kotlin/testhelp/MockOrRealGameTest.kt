@@ -16,6 +16,7 @@ abstract class MockOrRealGameTest(
     private val forceRealGame: Boolean = false,
     private val forceWrite: Boolean = false,
     private val scenarioId: String = SIMPLE_PLACE_GRIND_TORCH,
+    private val loadScenario: Boolean = true,
 ) {
 
     var useRealGame: Boolean = forceRealGame
@@ -42,7 +43,9 @@ abstract class MockOrRealGameTest(
     ) {
         val spaceEngineers = getSpaceEngineers(forceRealGame, file)
         useRealGame = useRealGame(forceRealGame, file)
-        spaceEngineers.session.loadFromTestResources(scenarioId)
+        if (loadScenario) {
+            spaceEngineers.session.loadFromTestResources(scenarioId)
+        }
         spaceEngineersSuspend(agentId = agentId, spaceEngineers = spaceEngineers, block = block)
     }
 

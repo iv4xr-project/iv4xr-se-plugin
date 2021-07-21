@@ -229,6 +229,14 @@ namespace Iv4xr.SePlugin.Communication
                 return m_observer.Observe();
             });
         }
+
+        public void Use()
+        {
+            Enqueue(() =>
+            {
+                m_character.Use();
+            });
+        }
     }
 
     public class SynchronizedSpaceEngineersAdmin : AbstractServiceOnGameLoop, ISpaceEngineersAdmin
