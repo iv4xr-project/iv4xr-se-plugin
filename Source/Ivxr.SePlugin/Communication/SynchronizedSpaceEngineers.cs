@@ -140,16 +140,6 @@ namespace Iv4xr.SePlugin.Communication
             m_items = items;
         }
 
-        public void BeginUsingTool()
-        {
-            Enqueue(() => m_items.BeginUsingTool());
-        }
-
-        public void EndUsingTool()
-        {
-            Enqueue(() => m_items.EndUsingTool());
-        }
-
         public void Equip(ToolbarLocation toolbarLocation)
         {
             Enqueue(() => m_items.Equip(toolbarLocation));
@@ -228,6 +218,16 @@ namespace Iv4xr.SePlugin.Communication
                 m_character.TurnOffJetpack();
                 return m_observer.Observe();
             });
+        }
+
+        public void BeginUsingTool()
+        {
+            Enqueue(() => m_character.BeginUsingTool());
+        }
+
+        public void EndUsingTool()
+        {
+            Enqueue(() => m_character.EndUsingTool());
         }
 
         public void Use()

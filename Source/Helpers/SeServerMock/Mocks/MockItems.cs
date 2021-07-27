@@ -27,14 +27,6 @@ namespace SeServerMock.Mocks
             throw new System.NotImplementedException();
         }
 
-        public void BeginUsingTool()
-        {
-        }
-
-        public void EndUsingTool()
-        {
-        }
-
         public void Equip(ToolbarLocation toolbarLocation)
         {
         }

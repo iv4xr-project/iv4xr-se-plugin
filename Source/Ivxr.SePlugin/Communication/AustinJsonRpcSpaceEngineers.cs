@@ -116,16 +116,16 @@ namespace Iv4xr.SePlugin.Communication
             m_se.Admin.SetFrameLimitEnabled(enabled);
         }
 
-        [JsonRpcMethod("Items.BeginUsingTool")]
+        [JsonRpcMethod("Character.BeginUsingTool")]
         void BeginUsingTool()
         {
-            m_se.Items.BeginUsingTool();
+            m_se.Character.BeginUsingTool();
         }
 
-        [JsonRpcMethod("Items.EndUsingTool")]
+        [JsonRpcMethod("Character.EndUsingTool")]
         void EndUsingTool()
         {
-            m_se.Items.EndUsingTool();
+            m_se.Character.EndUsingTool();
         }
 
         [JsonRpcMethod("Items.Equip")]

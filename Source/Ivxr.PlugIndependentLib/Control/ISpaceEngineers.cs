@@ -29,10 +29,6 @@ namespace Iv4xr.PluginLib.Control
 
     public interface IItems
     {
-        void BeginUsingTool();
-
-        void EndUsingTool();
-
         void Equip(ToolbarLocation toolbarLocation);
 
         void SetToolbarItem(string name, ToolbarLocation toolbarLocation);
@@ -51,6 +47,8 @@ namespace Iv4xr.PluginLib.Control
         CharacterObservation MoveAndRotate(PlainVec3D movement, PlainVec2F rotation3, float roll = 0);
         CharacterObservation TurnOnJetpack();
         CharacterObservation TurnOffJetpack();
+        void BeginUsingTool();
+        void EndUsingTool();
         void Use();
     }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using Iv4xr.PluginLib.Control;
 using Iv4xr.PluginLib.WorldModel;
+using Sandbox.Game.Entities;
 using Sandbox.Game.Entities.Character;
 using Sandbox.Game.World;
 using VRageMath;
@@ -30,6 +31,18 @@ namespace Iv4xr.SePlugin.Control
             return m_observer.Observe();
         }
 
+        public void BeginUsingTool()
+        {
+            var entityController = GetEntityController();
+            entityController.ControlledEntity.BeginShoot(MyShootActionEnum.PrimaryAction);
+        }
+
+        public void EndUsingTool()
+        {
+            var entityController = GetEntityController();
+            entityController.ControlledEntity.EndShoot(MyShootActionEnum.PrimaryAction);
+        }
+        
         public void Use()
         {
             MySession.Static.ControlledEntity.Use();
