@@ -31,6 +31,8 @@ interface Character {
     fun turnOnJetpack(): CharacterObservation
     fun turnOffJetpack(): CharacterObservation
 
+    fun beginUsingTool()
+    fun endUsingTool()
 
     companion object {
         /**
@@ -49,8 +51,6 @@ interface Observer {
 
 interface Items {
     fun equip(toolbarLocation: ToolbarLocation)
-    fun beginUsingTool()
-    fun endUsingTool()
     fun setToolbarItem(name: String, toolbarLocation: ToolbarLocation)
     fun getToolbar(): Toolbar
 }

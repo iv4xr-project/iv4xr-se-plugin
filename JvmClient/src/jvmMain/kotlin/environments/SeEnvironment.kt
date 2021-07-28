@@ -105,11 +105,11 @@ class SeEnvironment(
     }
 
     fun beginUsingTool() {
-        return controller.items.beginUsingTool()
+        return controller.character.beginUsingTool()
     }
 
     fun endUsingTool() {
-        return controller.items.endUsingTool()
+        return controller.character.endUsingTool()
     }
 
 

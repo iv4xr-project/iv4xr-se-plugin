@@ -62,6 +62,14 @@ open class JsonRpcSpaceEngineers(
                 methodName = "${characterPrefix}TurnOffJetpack"
             )
         }
+
+        override fun beginUsingTool() {
+            processNoParameterMethod<Unit>(::beginUsingTool, "${characterPrefix}BeginUsingTool")
+        }
+
+        override fun endUsingTool() {
+            processNoParameterMethod<Unit>(::endUsingTool, "${characterPrefix}EndUsingTool")
+        }
     }
 
     override val items: Items = object : Items {
@@ -73,14 +81,6 @@ open class JsonRpcSpaceEngineers(
                 parameterType = ToolbarLocation::class,
                 methodName = "${itemsPrefix}Equip"
             )
-        }
-
-        override fun beginUsingTool() {
-            processNoParameterMethod<Unit>(::beginUsingTool, "${itemsPrefix}BeginUsingTool")
-        }
-
-        override fun endUsingTool() {
-            processNoParameterMethod<Unit>(::endUsingTool, "${itemsPrefix}EndUsingTool")
         }
 
         override fun setToolbarItem(name: String, toolbarLocation: ToolbarLocation) {
