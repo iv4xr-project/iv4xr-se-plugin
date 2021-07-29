@@ -15,5 +15,6 @@ namespace Iv4xr.PluginLib.WorldModel
         public float HeadLocalXAngle;
         public float HeadLocalYAngle;
         public Block TargetBlock;
+        public UseObject TargetUseObject;
     }
 }

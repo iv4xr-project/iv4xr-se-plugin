@@ -42,7 +42,7 @@ namespace Ivxr.PlugIndependentLib.Tests
             Assert.Equal("{\"Velocity\":{\"X\":0.0,\"Y\":0.0,\"Z\":0.0}," +
                          "\"Extent\":{\"X\":0.0,\"Y\":0.0,\"Z\":0.0}," +
                          "\"Camera\":null,\"JetpackRunning\":false,\"HelmetEnabled\":true,\"HealthRatio\":0.5," +
-                         "\"HeadLocalXAngle\":0.0,\"HeadLocalYAngle\":0.0,\"TargetBlock\":null,\"Id\":\"Foo\"," +
+                         "\"HeadLocalXAngle\":0.0,\"HeadLocalYAngle\":0.0,\"TargetBlock\":null,\"TargetUseObject\":null,\"Id\":\"Foo\"," +
                          "\"Position\":{\"X\":1.0,\"Y\":2.0,\"Z\":3.0}," +
                          "\"OrientationForward\":{\"X\":0.0,\"Y\":0.0,\"Z\":0.0}," +
                          "\"OrientationUp\":{\"X\":0.0,\"Y\":0.0,\"Z\":0.0}}",

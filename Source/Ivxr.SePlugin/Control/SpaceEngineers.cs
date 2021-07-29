@@ -27,7 +27,7 @@ namespace Iv4xr.SePlugin.Control
             Session = new SessionController() {Log = log};
             Items = new Items(gameSession, lowLevelObserveer);
             Definitions = new Definitions();
-            var characterController = new CharacterController(gameSession, Observer);
+            var characterController = new CharacterController(gameSession, Observer, lowLevelObserveer);
             Character = characterController;
             var blocks = new Blocks(gameSession, lowLevelObserveer);
             Blocks = blocks;

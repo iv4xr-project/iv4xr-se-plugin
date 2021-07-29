@@ -167,6 +167,18 @@ open class JsonRpcSpaceEngineers(
                     methodName = "${adminPrefix}${characterPrefix}Teleport"
                 )
             }
+
+            override fun use(blockId: String, functionIndex: Int, action: Int) {
+                return processParameters<Unit>(
+                    parameters = listOf(
+                        TypedParameter("blockId", blockId, String::class),
+                        TypedParameter("functionIndex", functionIndex, Int::class),
+                        TypedParameter("action", action, Int::class),
+                    ),
+                    method = ::use,
+                    methodName = "${adminPrefix}${characterPrefix}Use"
+                )
+            }
         }
 
         override fun setFrameLimitEnabled(enabled: Boolean) {
