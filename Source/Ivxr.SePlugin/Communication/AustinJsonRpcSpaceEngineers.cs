@@ -38,6 +38,12 @@ namespace Iv4xr.SePlugin.Communication
             return m_se.Character.TurnOffJetpack();
         }
         
+        [JsonRpcMethod("Character.SwitchHelmet")]
+        CharacterObservation SwitchHelmet()
+        {
+            return m_se.Character.SwitchHelmet();
+        }
+        
         [JsonRpcMethod("Character.Use")]
         void Use()
         {

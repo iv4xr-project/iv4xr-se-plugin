@@ -31,7 +31,9 @@ namespace Ivxr.PlugIndependentLib.Tests
             var observation = new CharacterObservation()
             {
                     Id = "Foo",
-                    Position = new PlainVec3D(1, 2, 3)
+                    Position = new PlainVec3D(1, 2, 3),
+                    HelmetEnabled = true,
+                    HealthRatio = (float) 0.5,
             };
 
             var json = m_jsoner.ToJson(observation);
@@ -39,7 +41,7 @@ namespace Ivxr.PlugIndependentLib.Tests
 
             Assert.Equal("{\"Velocity\":{\"X\":0.0,\"Y\":0.0,\"Z\":0.0}," +
                          "\"Extent\":{\"X\":0.0,\"Y\":0.0,\"Z\":0.0}," +
-                         "\"Camera\":null,\"JetpackRunning\":false," +
+                         "\"Camera\":null,\"JetpackRunning\":false,\"HelmetEnabled\":true,\"HealthRatio\":0.5," +
                          "\"HeadLocalXAngle\":0.0,\"HeadLocalYAngle\":0.0,\"TargetBlock\":null,\"Id\":\"Foo\"," +
                          "\"Position\":{\"X\":1.0,\"Y\":2.0,\"Z\":3.0}," +
                          "\"OrientationForward\":{\"X\":0.0,\"Y\":0.0,\"Z\":0.0}," +

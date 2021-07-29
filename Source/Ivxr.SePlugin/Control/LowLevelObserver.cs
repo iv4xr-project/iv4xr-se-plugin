@@ -73,6 +73,8 @@ namespace Iv4xr.SePlugin.Control
                     OrientationUp = MySector.MainCamera.UpVector.ToPlain(),
                 },
                 JetpackRunning = Character.JetpackComp.TurnedOn,
+                HelmetEnabled = Character.OxygenComponent.HelmetEnabled,
+                HealthRatio = Character.StatComp.HealthRatio,
                 HeadLocalXAngle = Character.HeadLocalXAngle,
                 HeadLocalYAngle = Character.HeadLocalYAngle,
                 TargetBlock = TargetBlock(),

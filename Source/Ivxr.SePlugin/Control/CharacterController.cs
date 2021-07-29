@@ -30,6 +30,12 @@ namespace Iv4xr.SePlugin.Control
             Character.JetpackComp.TurnOnJetpack(false);
             return m_observer.Observe();
         }
+        
+        public CharacterObservation SwitchHelmet()
+        {
+            Character.OxygenComponent.SwitchHelmet();
+            return m_observer.Observe();
+        }
 
         public void BeginUsingTool()
         {

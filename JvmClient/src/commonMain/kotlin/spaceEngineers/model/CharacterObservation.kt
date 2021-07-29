@@ -19,6 +19,10 @@ data class CharacterObservation(
     val extent: Vec3,
     @SerialName("JetpackRunning")
     val jetpackRunning: Boolean,
+    @SerialName("HelmetEnabled")
+    val helmetEnabled: Boolean = true,
+    @SerialName("HealthRatio")
+    val healthRatio: Float = 1f,
     @SerialName("Camera")
     val camera: BasePose,
     @SerialName("HeadLocalXAngle")

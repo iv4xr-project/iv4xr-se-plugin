@@ -29,6 +29,16 @@ namespace SeServerMock.Mocks
             throw new NotImplementedException();
         }
 
+        public CharacterObservation SwitchHelmet()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Use()
+        {
+            throw new NotImplementedException();
+        }
+
         public void BeginUsingTool()
         {
             throw new NotImplementedException();

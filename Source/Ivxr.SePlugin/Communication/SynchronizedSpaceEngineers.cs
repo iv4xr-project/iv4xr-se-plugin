@@ -220,6 +220,11 @@ namespace Iv4xr.SePlugin.Communication
             });
         }
 
+        public CharacterObservation SwitchHelmet()
+        {
+            return Enqueue(() => m_character.SwitchHelmet());
+        }
+
         public void BeginUsingTool()
         {
             Enqueue(() => m_character.BeginUsingTool());

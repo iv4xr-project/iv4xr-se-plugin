@@ -70,6 +70,13 @@ open class JsonRpcSpaceEngineers(
         override fun endUsingTool() {
             processNoParameterMethod<Unit>(::endUsingTool, "${characterPrefix}EndUsingTool")
         }
+
+        override fun switchHelmet(): CharacterObservation {
+            return processNoParameterMethod<CharacterObservation>(
+                method = ::switchHelmet,
+                methodName = "${characterPrefix}SwitchHelmet"
+            )
+        }
     }
 
     override val items: Items = object : Items {
