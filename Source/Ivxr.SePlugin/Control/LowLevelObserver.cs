@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Iv4xr.PluginLib;
@@ -5,6 +6,7 @@ using Iv4xr.PluginLib.WorldModel;
 using Iv4xr.SePlugin.Config;
 using Sandbox.Game.Entities;
 using Sandbox.Game.Entities.Character;
+using Sandbox.Game.Entities.Character.Components;
 using Sandbox.Game.Entities.Cube;
 using Sandbox.Game.Weapons;
 using Sandbox.Game.World;
@@ -78,6 +80,7 @@ namespace Iv4xr.SePlugin.Control
                 HeadLocalXAngle = Character.HeadLocalXAngle,
                 HeadLocalYAngle = Character.HeadLocalYAngle,
                 TargetBlock = TargetBlock(),
+                TargetUseObject = UseObject(),
             };
         }
 
@@ -88,9 +91,26 @@ namespace Iv4xr.SePlugin.Control
 
         private Block TargetBlock()
         {
+            return TargetWeaponBlock() ?? TargetDetectorBlock();
+        }
+
+        private Block TargetWeaponBlock()
+        {
             if (!(Character.CurrentWeapon is MyEngineerToolBase wp)) return null;
             var slimBlock = wp.GetTargetBlock();
             return slimBlock == null ? null : m_seEntityBuilder.CreateGridBlock(slimBlock);
+        }
+        
+        private Block TargetDetectorBlock()
+        {
+            var detector = Character.Components.Get<MyCharacterDetectorComponent>();
+            return detector?.UseObject?.Owner is MyCubeBlock block ? m_seEntityBuilder.CreateGridBlock(block.SlimBlock) : null;
+        }
+
+        private UseObject UseObject()
+        {
+            var detector = Character.Components.Get<MyCharacterDetectorComponent>();
+            return detector?.UseObject != null ? m_seEntityBuilder.CreateUseObject(detector.UseObject) : null;
         }
 
         public Observation GetNewBlocks()
@@ -152,8 +172,26 @@ namespace Iv4xr.SePlugin.Control
             return EnumerateSurroundingEntities(sphere)
                     .OfType<MyCubeGrid>().ToList().FirstOrDefault(grid =>
                     {
-                        return GetBlocksOf(grid).FirstOrDefault(block => block.UniqueId.ToString() == blockId) != null;
+                        return GetBlocksOf(grid).FirstOrDefault(block => block.UniqueId.ToString() == blockId) !=
+                               null;
                     });
+        }
+
+        public MySlimBlock GetBlockByIdOrNull(string blockId)
+        {
+            var grid = GetGridContainingBlock(blockId);
+            return grid == null ? null : GetBlocksOf(grid).FirstOrDefault(b => b.UniqueId.ToString() == blockId);
+        }
+        
+        public MySlimBlock GetBlockById(string blockId)
+        {
+            var block = GetBlockByIdOrNull(blockId);
+            if (block == null)
+            {
+                throw new ArgumentException("block not found");
+            }
+
+            return block;
         }
     }
 }
