@@ -30,6 +30,7 @@ interface Character {
     fun moveAndRotate(movement: Vec3 = Vec3.ZERO, rotation3: Vec2 = Vec2.ZERO, roll: Float = 0f): CharacterObservation
     fun turnOnJetpack(): CharacterObservation
     fun turnOffJetpack(): CharacterObservation
+    fun switchHelmet(): CharacterObservation
 
     fun beginUsingTool()
     fun endUsingTool()
