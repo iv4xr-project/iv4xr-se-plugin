@@ -31,7 +31,7 @@ namespace Iv4xr.SePlugin
 
             var se = new RealSpaceEngineers(m_gameSession, Log, config);
             
-            FuncActionDispatcher = new FuncActionDispatcher();
+            FuncActionDispatcher = new FuncActionDispatcher(seLog);
             
             JsonRpcStarter = new JsonRpcStarter(
                 new SynchronizedSpaceEngineers(se, FuncActionDispatcher),
