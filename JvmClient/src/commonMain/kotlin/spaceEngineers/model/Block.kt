@@ -27,4 +27,8 @@ data class Block(
     var maxPosition: Vec3,
     @SerialName("Size")
     var size: Vec3,
+    @SerialName("UseObjects")
+    val useObjects: List<UseObject> = emptyList(),
+    @SerialName("Functional")
+    val functional: Boolean = false,
 ) : Entity

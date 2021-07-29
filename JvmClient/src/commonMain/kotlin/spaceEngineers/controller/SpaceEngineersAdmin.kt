@@ -24,4 +24,5 @@ interface CharacterAdmin {
      * @param orientationUp Complementary vector to the forward vector.
      */
     fun teleport(position: Vec3, orientationForward: Vec3? = null, orientationUp: Vec3? = null): CharacterObservation
+    fun use(blockId: String, functionIndex: Int, action: Int)
 }

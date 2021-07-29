@@ -31,4 +31,6 @@ data class CharacterObservation(
     val headLocalYAngle: Float,
     @SerialName("TargetBlock")
     val targetBlock: Block?,
+    @SerialName("TargetUseObject")
+    val targetUseObject: UseObject? = null,
 ) : Entity

@@ -6,6 +6,7 @@ using Iv4xr.PluginLib.WorldModel;
 using Sandbox.Definitions;
 using Sandbox.Game.Entities;
 using Sandbox.Game.Entities.Cube;
+using VRage.Game.Entity.UseObject;
 using VRage.Game.ModAPI;
 using VRageMath;
 
@@ -70,6 +71,17 @@ namespace Iv4xr.SePlugin.Control
             };
         }
 
+        public List<UseObject> GetUseObjects(MySlimBlock block)
+        {
+            if (block?.FatBlock?.UseObjectsComponent == null)
+            {
+                return new List<UseObject>();
+            }
+            var objects = new List<IMyUseObject>();
+            block.FatBlock.UseObjectsComponent.GetInteractiveObjects(objects);
+            return objects.Select(CreateUseObject).ToList();
+        }
+
         private readonly PreviousBlocksFilter m_previousBlocksFilter = new PreviousBlocksFilter();
 
         private IEnumerable<Block> CreateGridBLocks(IEnumerable<MySlimBlock> foundBlocks, ObservationMode mode)
@@ -95,6 +107,18 @@ namespace Iv4xr.SePlugin.Control
             return foundBlocks;
         }
 
+        public UseObject CreateUseObject(IMyUseObject obj)
+        {
+            return new UseObject()
+            {
+                Name = obj.GetType().Name,
+                SupportedActions = (int) obj.SupportedActions,
+                PrimaryAction = (int) obj.PrimaryAction,
+                SecondaryAction = (int) obj.SecondaryAction,
+                ContinuousUsage = obj.ContinuousUsage,
+            };
+        }
+
         public Block CreateGridBlock(MySlimBlock sourceBlock)
         {
             var grid = sourceBlock.CubeGrid;
@@ -114,7 +138,9 @@ namespace Iv4xr.SePlugin.Control
                 Size = sourceBlock.BlockDefinition.Size.ToPlain(),
 
                 OrientationForward = grid.WorldMatrix.GetDirectionVector(sourceBlock.Orientation.Forward).ToPlain(),
-                OrientationUp = grid.WorldMatrix.GetDirectionVector(sourceBlock.Orientation.Up).ToPlain()
+                OrientationUp = grid.WorldMatrix.GetDirectionVector(sourceBlock.Orientation.Up).ToPlain(),
+                Functional = sourceBlock.FatBlock?.IsFunctional ?? false,
+                UseObjects = GetUseObjects(sourceBlock),
             };
         }
 
@@ -132,10 +158,10 @@ namespace Iv4xr.SePlugin.Control
                 Enabled = blockDefinition.Enabled,
                 MountPoints = blockDefinition.MountPoints.Select(mp => new MountPoint()
                 {
-                    End = mp.End.ToPlainF(), 
-                    Start = mp.Start.ToPlainF(), 
+                    End = mp.End.ToPlainF(),
+                    Start = mp.Start.ToPlainF(),
                     Normal = mp.Normal.ToPlain(),
-                    Default =  mp.Default,
+                    Default = mp.Default,
                     Enabled = mp.Enabled,
                     ExclusionMask = mp.ExclusionMask,
                     PropertiesMask = mp.PropertiesMask,

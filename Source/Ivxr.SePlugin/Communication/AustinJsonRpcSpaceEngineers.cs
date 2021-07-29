@@ -26,6 +26,12 @@ namespace Iv4xr.SePlugin.Communication
             return m_se.Admin.Character.Teleport(position, orientationForward, orientationUp);
         }
 
+        [JsonRpcMethod("Admin.Character.Use")]
+        void Use(string blockId, int functionIndex, int action)
+        {
+            m_se.Admin.Character.Use(blockId, functionIndex, action);
+        }
+
         [JsonRpcMethod("Character.TurnOnJetpack")]
         CharacterObservation TurnOnJetpack()
         {
