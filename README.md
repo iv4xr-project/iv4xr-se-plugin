@@ -1,5 +1,5 @@
 # iv4xr-se-plugin
-Integration of **[Space Engineers](https://www.spaceengineersgame.com/)** to the **iv4XR framework**. You can find the project page at [iv4xr-project.eu](https://iv4xr-project.eu/).
+A plugin providing integration of **[Space Engineers](https://www.spaceengineersgame.com/)** to the **iv4XR framework**. You can find the project page at [iv4xr-project.eu](https://iv4xr-project.eu/).
 
 Status: Prototype / early development
 
@@ -13,6 +13,7 @@ It's not necessary to build anything to try out this plugin. This section descri
 
 1. Obtain the binary release of Space Engineers (buy it on Steam or get a key). Install the game.
 2. Obtain a binary release of the plugin. Look for [releases](https://github.com/iv4xr-project/iv4xr-se-plugin/releases) in this repository and for Assets of the chosen release. Download the two DLL libraries.
+   1. If you want the latest changes or you'd like to edit the code, you can also build it from the sources (even if you don't have Space Engineers source code), see the section **How to build** below.
 3. IMPORTANT: Make sure Windows is OK to run the libraries. **Windows 10 blocks "randomly" downloaded libraries.** To unblock them, right-click each of them and open file properties. Look for Security section on the bottom part of the General tab. You might see a message: "*This file came from another computer and might be blocked...*". If so, check the `Unblock` checkbox.
    (If you skip this step, the game will probably crash with a message: `System.NotSupportedException`: *An attempt was made to load an assembly from a network location...*)
 4. Obtain other libraries as described in the section **3rd Party Dependencies** below.
@@ -34,7 +35,7 @@ Apart from the game libraries, the plugin requires two additional libraries to r
 There are many ways how to obtain the libraries. One of them is the following:
 
 * Check-out the [JSON-RPC.NET master branch on GitHub](https://github.com/Astn/JSON-RPC.NET).
-  * *Side note: The releases are not updated (compared to NuGet packages), but the the last [release v1.1.74](https://github.com/Astn/JSON-RPC.NET/releases/tag/v1.1.74) works as well. You can try it if the master branch does not.* 
+  * *Side note: The binary releases are not updated (compared to NuGet packages), but the the last [release v1.1.74](https://github.com/Astn/JSON-RPC.NET/releases/tag/v1.1.74) works as well. You can try it if the master branch does not.* 
 * Build the solution including the test project (tested with Visual Studio 2019).
 * You will find the `AustinHarris.JsonRpc.dll` library in this path:
   `Json-Rpc\bin\Debug\netstandard2.0`
@@ -43,23 +44,9 @@ There are many ways how to obtain the libraries. One of them is the following:
 
 Note: If you build the project from the sources as described in the section **How to Build**, the libraries are downloaded via NuGet packages in the same way.
 
-## API
-
-The network protocol is just some proof of concept for now, so it's possible it will change. It is based on [the Lab Recruits demo](https://github.com/iv4xr-project/iv4xrDemo). The protocol is based on JSON commands split by newlines.
-
-Currently implemented commands:
-
-- *Session* command: **Load** – Loads a scenario.
-- **Observe** – experimental; returns list of entities and their location in the agent's surrounding. It has several different modes. One of them is to return only new blocks not reported in past observations.
-- **MoveAndRotate** – allows to move and and rotate the agent in all directions.
-- **Interact** – implements some rudimentary commands for building new blocks in the game. Current interaction types:
-  - Equip – Selects a block or tool from the toolbar as the current tool.
-  - Place – Places a new block into the game if the conditions are right.
-- Disconnect
-
-There's a Java project derived from the Lab Recruits demo that contains a demo client in the form of unit tests. The [repository is here](https://github.com/iv4xr-project/iv4xrDemo-space-engineers).
-
 ## How to build
+
+First of all, you don't *have to* build it from sources. There are also binary releases (but, of course, they can be outdated).
 
 The plug-in requires Space Engineers libraries to compile. There are two ways how to provide the libraries: as binaries (DLLs) or as sources. Both options are described below.
 
@@ -85,6 +72,14 @@ There's a VS solution file `SpaceEngineers_ivxr.sln` in this repository (in the 
 
 Before starting the build of the solution, make sure a correct build configuration is selected. Either **Debug** or **Release** configuration and the **x64** platform.
 
+## API
+
+The network protocol is based on [JSON-RPC 2.0](https://www.jsonrpc.org/specification). The protocol (individual API) is now more stable than in the beginning of the development, but it's still possible it will change as we learn new things.
+
+For an up to date list of provided API calls see the interface `ISpaceEngineers` in the project **`Ivxr.PlugIndependentLib`** (it currently resides [here](https://github.com/iv4xr-project/iv4xr-se-plugin/blob/main/Source/Ivxr.PlugIndependentLib/Control/ISpaceEngineers.cs)). 
+
+You can also check out the [JvmClient](https://github.com/iv4xr-project/iv4xr-se-plugin/tree/main/JvmClient) in this repository for client side implementation of the interface in Kotlin and examples how to use it.
+
 ## Architecture Overview
 
 Overview of the solution projects:
@@ -92,10 +87,11 @@ Overview of the solution projects:
 * **`Ivxr.SePlugin`** – The **main plugin project**. Contains most of the important logic. It is one of the plugin libraries, the main one.
   * See the project details below.
 * **`Ivxr.SePlugin.Tests`** – Unit tests for the main project.
-* **`Ivxr.PlugIndependentLib`** – Contains service code that is *entirely independent of the Space Engineers codebase* for better dependency management and easier testing.
-  * Currently contains mostly the TCP/IP server and some basic interfaces such as the logging interface.
+* **`Ivxr.PlugIndependentLib`** – Contains service code that is *entirely independent of the Space Engineers codebase* for better dependency management and easier testing. Also contains **the definition of the C# API** which is exposed via JSON-RPC.
+  * D `ISpaceEngineers` – the main interface grouping other interfaces such as `ICharacterController`, `ISpaceEngineersAdmin`, and others.
+  * Contains some basic interfaces such as the logging interface.
   * It is a secondary plugin library.
-  * Notable classes: `PluginServer` – a TCP/IP server.
+  * The TCP/IP server has now been replaced by the JSON-RPC library.
 * **`SeServerMock`** – A testing project which runs a TCP/IP server based on the infrastructure from the two main libraries and using some simple mock implementations of the classes which would normally depend on a running game.
 
 #### Project details: `Ivxr.SePlugin`
