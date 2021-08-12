@@ -1,4 +1,7 @@
-# iv4xr-se-plugin
+<img src="./JvmClient/docs/iv4xr_logo_1200dpi.png" align="right" width="15%">
+
+# iv4XR Space Engineers Plugin
+
 A plugin providing integration of **[Space Engineers](https://www.spaceengineersgame.com/)** to the **iv4XR framework**. You can find the project page at [iv4xr-project.eu](https://iv4xr-project.eu/).
 
 Status: Prototype / early development
@@ -6,6 +9,8 @@ Status: Prototype / early development
 ## Introduction
 
 Space Engineers is a sandbox game by Keen Software House. This project is a plugin for the game which enables its integration with the iv4XR testing framework. The plugin runs a TCP/IP server with JSON-based API. It allows to access surrounding of the player's character in a structured form (a World Object Model, WOM) and to control the character. Those are the two defining features, more will be added during the development.
+
+<img src="./JvmClient/docs/SE-sotf1.png" width="100%">
 
 ## How to run the game with this plugin
 
