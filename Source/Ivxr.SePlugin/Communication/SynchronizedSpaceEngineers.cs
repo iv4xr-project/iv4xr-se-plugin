@@ -178,6 +178,11 @@ namespace Iv4xr.SePlugin.Communication
                 return m_observer.Observe();
             });
         }
+
+        public void Use(string blockId, int functionIndex, int action)
+        {
+            Enqueue(() => m_character.Use(blockId, functionIndex, action));
+        }
     }
 
     public class CharacterOnGameLoop : AbstractServiceOnGameLoop, ICharacterController

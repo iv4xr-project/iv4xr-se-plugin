@@ -1,4 +1,6 @@
-﻿namespace Iv4xr.PluginLib.WorldModel
+﻿using System.Collections.Generic;
+
+namespace Iv4xr.PluginLib.WorldModel
 {
     public class Block : Entity
     {
@@ -12,5 +14,7 @@
         public PlainVec3D MinPosition;
         public PlainVec3D MaxPosition;
         public PlainVec3I Size;
+        public bool Functional;
+        public List<UseObject> UseObjects;
     }
 }

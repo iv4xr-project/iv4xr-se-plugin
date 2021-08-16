@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using Iv4xr.PluginLib.Control;
 using Iv4xr.PluginLib.WorldModel;
 using Sandbox.Game.Entities;
 using Sandbox.Game.Entities.Character;
 using Sandbox.Game.World;
+using VRage.Game.Entity.UseObject;
+using VRage.ModAPI;
 using VRageMath;
 
 namespace Iv4xr.SePlugin.Control
@@ -12,19 +15,21 @@ namespace Iv4xr.SePlugin.Control
     {
         private readonly IGameSession m_session;
         private readonly IObserver m_observer;
+        private readonly LowLevelObserver m_lowLevelObserver;
 
-        public CharacterController(IGameSession session, IObserver observer)
+        public CharacterController(IGameSession session, IObserver observer, LowLevelObserver lowLevelObserver)
         {
             m_session = session;
             m_observer = observer;
+            m_lowLevelObserver = lowLevelObserver;
         }
-        
+
         public CharacterObservation TurnOnJetpack()
         {
             Character.JetpackComp.TurnOnJetpack(true);
             return m_observer.Observe();
         }
-        
+
         public CharacterObservation TurnOffJetpack()
         {
             Character.JetpackComp.TurnOnJetpack(false);
@@ -54,7 +59,17 @@ namespace Iv4xr.SePlugin.Control
             MySession.Static.ControlledEntity.Use();
         }
 
-        public CharacterObservation Teleport(PlainVec3D position, PlainVec3D? orientationForward, PlainVec3D? orientationUp)
+        public void Use(string blockId, int functionIndex, int action)
+        {
+            var block = m_lowLevelObserver.GetBlockById(blockId);
+            var objects = new List<IMyUseObject>();
+            block.FatBlock.UseObjectsComponent.GetInteractiveObjects(objects);
+            var obj = objects[functionIndex];
+            obj.Use((UseActionEnum) action, Character);
+        }
+
+        public CharacterObservation Teleport(PlainVec3D position, PlainVec3D? orientationForward,
+            PlainVec3D? orientationUp)
         {
             var vecPosition = new Vector3D(position.ToVector3());
             if (orientationForward == null && orientationUp == null)
@@ -76,7 +91,7 @@ namespace Iv4xr.SePlugin.Control
             GetEntityController().Player.Character.PositionComp.SetWorldMatrix(ref matrix);
             return m_observer.Observe();
         }
-        
+
         public CharacterObservation MoveAndRotate(PlainVec3D movement, PlainVec2F rotation3, float roll)
         {
             GetEntityController().ControlledEntity.MoveAndRotate(movement.ToVector3(), rotation3.ToVector2(), roll);
@@ -96,7 +111,7 @@ namespace Iv4xr.SePlugin.Control
 
             return entityController;
         }
-        
+
         private MyCharacter Character => m_session.Character;
     }
 }
