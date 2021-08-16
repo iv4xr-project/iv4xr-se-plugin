@@ -54,7 +54,7 @@ class BasicIv4xrTest {
                 Vec3(532.7066f, -45.193184f, -23.946253f),
                 distance = 16f,
                 epsilon = 0.1f,
-                tactic = tactics.moveForward(1f),
+                tactic = tactics.moveForward(),
             ),
             goals.blockOfTypeExists(
                 blockType,

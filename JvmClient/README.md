@@ -74,6 +74,19 @@ To locate the center of the block, use midway between `minPosition` and `maxPosi
 - This works for 3d person camera mode, unknown for other modes.
 - There is possibility to move camera around character. What is happening with internal variables is not explored.
 
+
+## Moving character
+
+
+- Method `moveAndRotate` accepts movement vector. Vector represents direction. 
+- It's value defines type (speed) of movement. If it's less than 0.4, it is slow movement. If less than or equal to 1.6, it is walk. If over 1.6, it is sprint.
+- Use convenience extension methods `normalizeAsWalk`, `normalizeAsRun`, `normalizeAsSprint` to adjust vector size to your needs.
+- Check `CharacterMovementType` enum class for more information and to check constants.
+
+## Rotating character
+
+TODO: Explore how roll and rotation vector size affects rotation.
+
 ## Blocks
 
 Blocks are the main concept of the game. Some data and behaviour is better documented to avoid confusion.

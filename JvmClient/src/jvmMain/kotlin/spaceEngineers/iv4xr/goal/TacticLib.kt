@@ -31,10 +31,10 @@ class TacticLib {
         }.lift()
     }
 
-    fun moveForward(velocity: Float = 1f): Tactic {
-        return AplibEDSL.action("moveForward($velocity)").do1 { belief: SeAgentState ->
+    fun moveForward(): Tactic {
+        return AplibEDSL.action("moveForward").do1 { belief: SeAgentState ->
             belief.apply {
-                seEnv.moveForward(velocity = velocity)
+                seEnv.moveForward()
             }
         }.lift()
     }
