@@ -7,6 +7,7 @@ import spaceEngineers.controller.ContextControllerWrapper
 import spaceEngineers.controller.SpaceEngineersTestContext
 import spaceEngineers.controller.extensions.moveForward
 import spaceEngineers.model.*
+import spaceEngineers.model.extensions.centerPosition
 import java.io.File
 import java.lang.Thread.sleep
 
@@ -48,9 +49,12 @@ fun Block.toWorldEntity(): WorldEntity {
         we.properties["integrity"] = integrity
         we.properties["maxIntegrity"] = maxIntegrity
         we.properties["buildIntegrity"] = buildIntegrity
-        size?.let {
-            we.extent = it.toIv4xrVec3()
-        }
+        we.extent = size.toIv4xrVec3()
+        we.properties["centerPosition"] = centerPosition.toIv4xrVec3()
+        we.properties["maxPosition"] = maxPosition.toIv4xrVec3()
+        we.properties["minPosition"] = minPosition.toIv4xrVec3()
+        we.properties["orientationForward"] = orientationForward.toIv4xrVec3()
+        we.properties["orientationUp"] = orientationUp.toIv4xrVec3()
     }
 }
 
