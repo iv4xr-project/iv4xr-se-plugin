@@ -119,6 +119,7 @@ public class Test_SimpleInteractionsWithSE {
             primObs = theEnv.getController().getObserver().observe() ;
             hdir =  primObs.getOrientationForward() ;
             System.out.println(">> pos :" + obs.position) ;
+            System.out.println(">> extent :" + primObs.getExtent()) ;
             System.out.println(">> hdir:" + angle(hdir.getX(), hdir.getZ())) ;
             System.out.println(">> hdir:" + primObs.getOrientationForward()) ;
             System.out.println(">> vdir:" + primObs.getOrientationUp()) ;
@@ -133,7 +134,7 @@ public class Test_SimpleInteractionsWithSE {
         obs = toWorldModel(primObsX) ; // static method...
 
         System.out.println("\n\nWOM: #elements " + obs.elements.size())  ;
-        System.out.println("     #grid-elems " + primObsX.getGrids().size())  ;
+        System.out.println("Raw obs #grid-elems " + primObsX.getGrids().size())  ;
 
 
         i = 0 ;
