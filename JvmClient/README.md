@@ -58,10 +58,11 @@ We recommend using the project with JetBrains [IDEA](https://www.jetbrains.com/i
 
 - One big block size is 2.5 game distance units. Some vectors are sent in game distance units, some are sent in "cubes".
 - Block size is in large cubes so for example 1x1x1 large block is 2.5x2.5x2.5 in game distance units.
+- Use enum `CubeSize` and/or `LARGE_BLOCK_CUBE_SIDE_SIZE`, `SMALL_BLOCK_CUBE_SIDE_SIZE` constants for converting.
 - 5 small blocks to one big block. (So small block cube is 0.5x0.5x0.5 distance units.)
-- Engineer character can fit onto space of 2x3x2 in small bocks (1x1.5x1 game units), however size in code is 1x1.8x1.
-- Position of character is in center, camera is not. Offset vector between center of character and camera is:
-  (x=0, y=1.6369286, z=0). Use `Character.DISTANCE_CENTER_CAMERA` constant.
+- Engineer character can fit onto space of 2x3x2 in small blocks (1x1.5x1 game units), however size in code is 1x1.8x1.
+- Position of character is at the bottom, camera is not. Offset vector between the bottom of character and the camera is:
+  (x=0, y=1.6369286, z=0). Use `Character.DISTANCE_CENTER_CAMERA` constant (or you can use difference between position and camera position).
 - Block `position` is always between `minPosition` and `maxPosition`, 
 but it doesn't always have to be in the center of the block (or sometimes it's identical to `minPosition`).
 To locate the center of the block, use midway between `minPosition` and `maxPosition` (extension function `centerPosition`).
