@@ -1,12 +1,9 @@
-package USE;
+package UUspaceagent;
 
-import environments.SeEnvironment;
 import eu.iv4xr.framework.spatial.Vec3;
 import spaceEngineers.model.Block;
 import spaceEngineers.model.CubeSize;
 import spaceEngineers.model.extensions.BlockExtensionsKt;
-
-import java.util.Vector;
 
 public class SEBlockFunctions {
 
@@ -18,7 +15,7 @@ public class SEBlockFunctions {
         Vec3 logicalSize = fromSEVec3(block.getSize()) ;
         boolean isLargeBlock = block.getBlockType().contains("Large") ;
         if(isLargeBlock) return Vec3.mul(logicalSize,CubeSize.Large.getValue()) ;
-        else Vec3.mul(logicalSize,CubeSize.Small.getValue()) ;
+        else return Vec3.mul(logicalSize,CubeSize.Small.getValue()) ;
     }
 
     /**

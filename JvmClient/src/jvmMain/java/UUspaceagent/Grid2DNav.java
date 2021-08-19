@@ -1,4 +1,4 @@
-package USE;
+package UUspaceagent;
 
 import eu.iv4xr.framework.extensions.pathfinding.Navigatable;
 import eu.iv4xr.framework.spatial.Obstacle;
@@ -7,7 +7,6 @@ import nl.uu.cs.aplib.utils.Pair;
 import spaceEngineers.model.Block;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Implements a 2D grid-navigation graph. This assumes navigation over a flat 2D surface, within
@@ -68,7 +67,23 @@ public class Grid2DNav implements Navigatable<Pair<Integer,Integer>>{
     public Pair<Integer,Integer> gridProjectedLocation(Vec3 p) {
         int x = (int) (Math.signum(p.x) * Math.floor(Math.abs(p.x) / SQUARE_SIZE)) ;
         int z = (int) (Math.signum(p.z) * Math.floor(Math.abs(p.z) / SQUARE_SIZE)) ;
-        return new Pair(x,z) ;
+        return new Pair<>(x,z) ;
+    }
+
+    public Vec3 getSquareCenterLocation(Pair<Integer,Integer> sq) {
+        float x = (((float) sq.fst) + 0.5f) *SQUARE_SIZE + origin.x ;
+        float z = (((float) sq.snd) + 0.5f) *SQUARE_SIZE + origin.z ;
+        return new Vec3(x,origin.y,z) ;
+    }
+
+    /**
+     * Square-distance from a location p to the center of a square; p is assumed to be on the grid
+     * (so we ignore its y-value).
+     */
+    public float squareDistanceToSquare(Vec3 p, Pair<Integer,Integer> sq) {
+        Vec3 q = getSquareCenterLocation(sq) ;
+        q.y = p.y ;
+        return Vec3.sub(q,p).lengthSq() ;
     }
 
     /**
@@ -107,9 +122,10 @@ public class Grid2DNav implements Navigatable<Pair<Integer,Integer>>{
         var corner2 = gridProjectedLocation(maxCorner) ;
         var obstacle = new Obstacle<>(block.getId()) ;
         // all squares between these two corners are blocked:
+        // TODO: doors must be handled differently, to calculate their passable corridors!
         for(int x = corner1.fst; x<=corner2.fst; x++) {
             for (int z = corner1.snd; z<=corner2.snd; z++) {
-                var square = new Pair(x,z) ;
+                var square = new Pair<>(x,z) ;
                 var olist = knownObstacles.get(square) ;
                 if (olist == null) {
                     olist = new LinkedList<>() ;
@@ -161,15 +177,18 @@ public class Grid2DNav implements Navigatable<Pair<Integer,Integer>>{
     }
 
     /**
-     * Set the state of obstacles with the given ID to be as indicated by the boolean
-     * flag: true would make them blocking, and false would make them non-blocking.
+     * Set the obstructing-state of a door to be as indicated by the boolean
+     * flag: true would make it blocking (closed), and false would make it non-blocking (open).
+     *
+     * TODO: this is NOT correct. We need to calculate the passable corridor of a door,
+     * and only unblock this corridor.
      */
-    public void  setObstacleBlockingState(String blockId, boolean blocking) {
+    public void  setObstacleBlockingState(Block door, boolean blocking) {
         for(var olist : knownObstacles.values()) {
             // olist is all obstacles that obstruct some same square, so now check
             // if one in olist match the given id above:
             for (var o : olist) {
-                if (o.obstacle.equals(blockId)) {
+                if (o.obstacle.equals(door.getId())) {
                     o.isBlocking = blocking ;
                     // since in the implementation obstacles are shared, we can return:
                     return ;
@@ -184,7 +203,7 @@ public class Grid2DNav implements Navigatable<Pair<Integer,Integer>>{
         for (int x = p.fst-1 ; x <= p.fst+1 ; x++) {
             for (int z = p.snd-1; z <= p.snd+1 ; z++) {
                 if(x==p.fst && z==p.snd) continue;
-                var neighbourSquare = new Pair(x,z) ; // a neighbouring square
+                var neighbourSquare = new Pair<>(x,z) ; // a neighbouring square
                 var obstacle = knownObstacles.get(neighbourSquare) ;
                 if(obstacle.stream().anyMatch(o -> o.isBlocking)) continue;
                 candidates.add(neighbourSquare) ;
@@ -196,7 +215,7 @@ public class Grid2DNav implements Navigatable<Pair<Integer,Integer>>{
     @Override
     public float heuristic(Pair<Integer, Integer> from, Pair<Integer, Integer> to) {
         // using Manhattan distance...
-        return (float) SQUARE_SIZE * Math.abs(to.fst - from.fst) + Math.abs(to.snd - from.snd) ;
+        return (float) (SQUARE_SIZE * Math.abs(to.fst - from.fst) + Math.abs(to.snd - from.snd)) ;
     }
 
     @Override

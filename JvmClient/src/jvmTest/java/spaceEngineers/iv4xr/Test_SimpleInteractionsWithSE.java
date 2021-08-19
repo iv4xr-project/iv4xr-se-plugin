@@ -111,10 +111,14 @@ public class Test_SimpleInteractionsWithSE {
         System.out.println(">> velo:" + obs.velocity) ;
 
         int i = 0 ;
-        while(i<12) {
-            //obs = theEnv.moveForward(5f) ;
-            theEnv.getController().getCharacter().moveAndRotate(new Vec3(0,0,0), new Vec2(0,40),0) ;
-            //theEnv.getController().getCharacter().moveAndRotate(new Vec3(5,0,0), new Vec2(0,1),0) ;
+        while(i<20) {
+            obs = theEnv.moveForward(5f) ;
+            if (i<0) {
+                theEnv.getController().getCharacter().moveAndRotate(new Vec3(0,0,0), new Vec2(0,40),0) ;
+            }
+            else {
+                theEnv.getController().getCharacter().moveAndRotate(new Vec3(0,0,-36), new Vec2(0,0),0) ;
+            }
             obs = theEnv.observe() ;
             primObs = theEnv.getController().getObserver().observe() ;
             hdir =  primObs.getOrientationForward() ;
@@ -136,6 +140,9 @@ public class Test_SimpleInteractionsWithSE {
         System.out.println("\n\nWOM: #elements " + obs.elements.size())  ;
         System.out.println("Raw obs #grid-elems " + primObsX.getGrids().size())  ;
 
+        boolean printBlockInfo = true ;
+
+        if (!printBlockInfo) return ;
 
         i = 0 ;
         for(var e : obs.elements.values()) {
