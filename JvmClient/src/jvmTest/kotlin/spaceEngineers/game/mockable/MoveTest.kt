@@ -47,7 +47,7 @@ class MoveTest : MockOrRealGameTest(loadScenario = false) {
 
 
     @Test
-    fun singleWalkBackward100Times() = testContext {
+    fun singleWalkBackward3Times() = testContext {
         val position = observer.observe().position
         repeat(3) {
             character.moveBackward(CharacterMovementType.WALK)

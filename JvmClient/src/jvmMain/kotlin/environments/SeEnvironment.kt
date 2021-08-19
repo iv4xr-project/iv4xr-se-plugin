@@ -118,7 +118,7 @@ class SeEnvironment(
 
 
     fun moveForward(): WorldModel {
-        return controller.character.moveForward(CharacterMovementType.WALK).toWorldModel()
+        return controller.character.moveForward(CharacterMovementType.RUN).toWorldModel()
     }
 
 

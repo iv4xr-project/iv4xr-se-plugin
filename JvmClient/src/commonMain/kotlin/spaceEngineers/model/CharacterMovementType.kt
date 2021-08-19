@@ -9,7 +9,7 @@ enum class CharacterMovementType(val speed: Float) {
         const val SPRINT_THRESHOLD = 1.6f
 
         fun fromValue(value: Float): CharacterMovementType {
-            //yes it's less and then less or equal, from SE code
+            // Yes it's less and then less or equal, from SE code.
             return if (value < WALK_THRESHOLD) {
                 WALK
             } else if (value <= SPRINT_THRESHOLD) {

@@ -23,7 +23,7 @@ suspend fun SpaceEngineers.blockingMoveByDistance(
     startPosition: Vec3,
     timeoutMs: Long = 20000,
     orientation: Vec3,
-    characterMovementType: CharacterMovementType = CharacterMovementType.WALK,
+    characterMovementType: CharacterMovementType = CharacterMovementType.RUN,
 ) {
     withTimeout(timeoutMs) {
         while (observer.observe().position.distanceTo(startPosition) < distance) {
@@ -37,7 +37,7 @@ suspend fun SpaceEngineers.blockingMoveForwardByDistance(
     distance: Float,
     startPosition: Vec3,
     timeoutMs: Long = 20000,
-    characterMovementType: CharacterMovementType = CharacterMovementType.WALK,
+    characterMovementType: CharacterMovementType = CharacterMovementType.RUN,
 ) {
     blockingMoveByDistance(distance = distance, startPosition = startPosition, timeoutMs = timeoutMs, characterMovementType = characterMovementType, orientation = Vec3.FORWARD)
 }
@@ -46,7 +46,7 @@ suspend fun SpaceEngineers.blockingMoveBackwardsByDistance(
     distance: Float,
     startPosition: Vec3,
     timeoutMs: Long = 20000,
-    characterMovementType: CharacterMovementType = CharacterMovementType.WALK,
+    characterMovementType: CharacterMovementType = CharacterMovementType.RUN,
 ) {
     blockingMoveByDistance(distance = distance, startPosition = startPosition, timeoutMs = timeoutMs, characterMovementType = characterMovementType, orientation = Vec3.BACKWARD)
 }
