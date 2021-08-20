@@ -1,4 +1,4 @@
-package UUspaceagent;
+package uuspaceagent;
 
 import eu.iv4xr.framework.spatial.Vec3;
 import nl.uu.cs.aplib.mainConcepts.Tactic;

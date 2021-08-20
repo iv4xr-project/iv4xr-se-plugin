@@ -1,5 +1,7 @@
-package UUspaceagent;
+package uuspaceagent;
 
+import eu.iv4xr.framework.mainConcepts.WorldEntity;
+import eu.iv4xr.framework.mainConcepts.WorldModel;
 import eu.iv4xr.framework.spatial.Vec3;
 import spaceEngineers.model.Block;
 import spaceEngineers.model.CubeSize;
@@ -38,6 +40,23 @@ public class SEBlockFunctions {
         Vec3 pos =  fromSEVec3(BlockExtensionsKt.getCenterPosition(block)) ;
         Vec3 halfsize = Vec3.mul(getActualSize(block), 0.5f)  ;
         return Vec3.add(pos,halfsize) ;
+    }
+
+    static private WorldEntity findWorldEntity(WorldEntity we, String id) {
+        if (id.equals(we.id)) return we ;
+        for (WorldEntity f : we.elements.values()) {
+            WorldEntity z = findWorldEntity(f,id) ;
+            if (z != null) return z ;
+        }
+        return null ;
+    }
+
+    static public WorldEntity findWorldEntity(WorldModel wom, String id) {
+        for(var f : wom.elements.values()) {
+            var e = findWorldEntity(f,id) ;
+            if (e != null) return e ;
+        }
+        return null ;
     }
 
 }

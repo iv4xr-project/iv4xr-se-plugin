@@ -1,4 +1,4 @@
-package UUspaceagent;
+package uuspaceagent;
 
 import eu.iv4xr.framework.extensions.pathfinding.Navigatable;
 import eu.iv4xr.framework.spatial.Obstacle;

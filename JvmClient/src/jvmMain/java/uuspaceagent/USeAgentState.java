@@ -1,8 +1,9 @@
-package UUspaceagent;
+package uuspaceagent;
 
 
 //import eu.iv4xr.framework.mainConcepts.W3DAgentState;
 import environments.SeEnvironment;
+import environments.SeEnvironmentKt;
 import eu.iv4xr.framework.extensions.pathfinding.AStar;
 import eu.iv4xr.framework.extensions.pathfinding.Pathfinder;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
@@ -13,11 +14,12 @@ import nl.uu.cs.aplib.utils.Pair;
 import spaceEngineers.model.CharacterObservation;
 import spaceEngineers.model.Observation;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static UUspaceagent.SEBlockFunctions.fromSEVec3;
+import static uuspaceagent.SEBlockFunctions.fromSEVec3;
 
 public class USeAgentState extends State {
 
@@ -54,7 +56,7 @@ public class USeAgentState extends State {
         agentWE.properties.put("orientationUp", fromSEVec3(obs.getOrientationUp())) ;
         agentWE.properties.put("jetpackRunning", obs.getJetpackRunning()) ;
         agentWE.properties.put("healthRatio", obs.getHealthRatio()) ;
-        agentWE.properties.put("targetBlock", obs.getTargetBlock().getId()) ;
+        //agentWE.properties.put("targetBlock", obs.getTargetBlock().getId()) ;  -> this is null now
         return agentWE ;
     }
 
@@ -66,13 +68,22 @@ public class USeAgentState extends State {
         // get the new WOM. Currently it does not include agent's extended properties, so we add them
         // explicitly here:
         WorldModel newWom = env().observe() ;
+        // HACK: because wom that comes from SE has its wom.elements read-only :|
+        var origElements = newWom.elements ;
+        newWom.elements = new HashMap<>() ;
+        for (var e : origElements.entrySet()) newWom.elements.put(e.getKey(),e.getValue()) ;
         CharacterObservation agentObs = env().getController().getObserver().observe() ;
         newWom.elements.put(this.agentId, agentAdditionalInfo(agentObs)) ;
+
 
         // The obtained wom also does not include blocks observed. So we get them explicitly here:
         // Well, we will get ALL blocks. Note that S=some blocks may change state or disappear,
         // compared to what the agent currently has it its state.wom.
         Observation gridsAndBlocksStates = env().getController().getObserver().observeBlocks() ;
+        WorldModel gridsAndBlocksStatesWM = SeEnvironmentKt.toWorldModel(gridsAndBlocksStates) ;
+        for(var e : gridsAndBlocksStatesWM.elements.entrySet()) {
+            newWom.elements.put(e.getKey(), e.getValue()) ;
+        }
 
         if(grid2D.origin == null) {
             // TODO .. we should also reset the grid if the agent flies to a new plane.
