@@ -113,14 +113,17 @@ public class TacticLib {
      * Optimize a path such that every segment v1,v2,v3 that lie on the same line, then we remove
      * v2 from the path.
      */
-    static List<Pair<Integer,Integer>> smoothenPath(List<Pair<Integer,Integer>> path) {
+    public static List<Pair<Integer,Integer>> smoothenPath(List<Pair<Integer,Integer>> path) {
         if(path.size() <= 2) return path ;
         int k = 0 ;
         while(k < path.size() - 2) {
             var v1 = path.get(k) ;
             var v2 = path.get(k+1) ;
             var v3 = path.get(k+2) ;
-            if( (v2.fst - v1.fst == v3.fst - v2.fst)  && (v2.snd - v1.snd == v3.snd - v2.snd)) {
+            float gradient_v1v2 = gradient2D(v2.fst - v1.fst, v2.snd - v1.snd) ;
+            float gradient_v2v3 = gradient2D(v3.fst - v2.fst, v3.snd - v2.snd) ;
+            //if( (v2.fst - v1.fst == v3.fst - v2.fst)  && (v2.snd - v1.snd == v3.snd - v2.snd)) {
+            if(gradient_v1v2 == gradient_v2v3) {
                 // dy and dx between (v1,v2) and between (v2,v3) are the same
                 // then they lie along the same line. We then drop v2:
                 path.remove(k+1) ;
@@ -130,6 +133,19 @@ public class TacticLib {
             }
         }
         return path ;
+    }
+
+
+    // for calculating the grasdient dz/dx ... rounded to 0.001
+    static float gradient2D(int dx, int dz) {
+        if(dx == 0) {
+            if (dz>0) return Float.POSITIVE_INFINITY ;
+            if (dz<0) return Float.NEGATIVE_INFINITY ;
+            return 0 ;
+        }
+        float gradient = 1000f * ((float) dz) / ((float) dx) ;
+        gradient = ((float) Math.round(gradient) )/1000f ;
+        return gradient ;
     }
 
 }

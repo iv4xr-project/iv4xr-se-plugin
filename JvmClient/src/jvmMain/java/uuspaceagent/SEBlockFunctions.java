@@ -16,7 +16,10 @@ public class SEBlockFunctions {
     public static Vec3 getActualSize(Block block) {
         Vec3 logicalSize = fromSEVec3(block.getSize()) ;
         boolean isLargeBlock = block.getBlockType().contains("Large") ;
-        if(isLargeBlock) return Vec3.mul(logicalSize,CubeSize.Large.getValue()) ;
+        if(isLargeBlock)  {
+            var size = Vec3.mul(logicalSize,CubeSize.Large.getValue()) ;
+            return size ;
+        }
         else return Vec3.mul(logicalSize,CubeSize.Small.getValue()) ;
     }
 

@@ -41,6 +41,10 @@ public class USeAgentState extends State {
     List<String> getAllBlockIDs() {
         List<String> blockIds = new LinkedList<>() ;
         for(var e : wom.elements.values()) {
+            if(e.type.equals("block")) {
+                blockIds.add(e.id) ;
+                continue ;
+            }
             for(var b : e.elements.values()) {
                 if (b.type.equals("block")) {
                     blockIds.add(b.id) ;
@@ -90,6 +94,7 @@ public class USeAgentState extends State {
             grid2D.resetGrid(newWom.position);
         }
         if(wom == null) {
+            // this is the first observation
             wom = newWom ;
         }
         else {
@@ -115,18 +120,18 @@ public class USeAgentState extends State {
             }
         }
         // updating the "navigational-2DGrid:
+        var blocksInWom =  getAllBlockIDs() ;
         List<String> toBeRemoved = grid2D.allObstacleIDs.stream()
-                .filter(id -> ! getAllBlockIDs().contains(id))
+                .filter(id -> !blocksInWom.contains(id))
                 .collect(Collectors.toList());
-        // removing obstacles that no longer exist:
+        // first, removing obstacles that no longer exist:
         for(var id : toBeRemoved) {
             grid2D.removeObstacle(id);
         }
-        // adding newly observed blocks:
+        // then, there may also be new blocks ... we add them to the nav-grid:
         // TODO: this assumes doors are initially closed. Calculating blocked squares
         // for open-doors is more complicated. TODO.
-        Observation newBlocks = env().getController().getObserver().observeNewBlocks() ;
-        for(var gr : newBlocks.getGrids()) {
+        for(var gr : gridsAndBlocksStates.getGrids()) {
             grid2D.addObstacle(gr.getBlocks());
         }
         // updating dynamic blocking-state: (e.g. handling doors)

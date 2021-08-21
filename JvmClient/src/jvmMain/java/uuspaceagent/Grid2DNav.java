@@ -65,6 +65,7 @@ public class Grid2DNav implements Navigatable<Pair<Integer,Integer>>{
 
 
     public Pair<Integer,Integer> gridProjectedLocation(Vec3 p) {
+        p = Vec3.sub(p,origin) ;
         int x = (int) (Math.signum(p.x) * Math.floor(Math.abs(p.x) / SQUARE_SIZE)) ;
         int z = (int) (Math.signum(p.z) * Math.floor(Math.abs(p.z) / SQUARE_SIZE)) ;
         return new Pair<>(x,z) ;
@@ -104,7 +105,13 @@ public class Grid2DNav implements Navigatable<Pair<Integer,Integer>>{
 
         // check if the block is below the 2D grid, and hence can be ignored:
         Vec3 maxCorner = SEBlockFunctions.getBaseMaxCorner(block) ; // should add rotation if it is not a cube. TODO.
-        if(maxCorner.y <= origin.y) return ;
+
+        // Adding 0.1 offset for some bit of seemingly inaccuracy in the sampling of the agent's
+        // ground position, which is used as the base of the origin position of this grid.
+        // Without this offset, blocks that are just below the grid surface, and touching it to form
+        // the grid's solid floor will appear as obstacles.
+        float correction_offset = 0.1f ;
+        if(maxCorner.y <= origin.y + correction_offset) return ; // adding 0.1 for inaccuracy....
 
         // check if the block is above the agent's height, and hence can be ignored too:
         Vec3 minCorner = SEBlockFunctions.getBaseMinCorner(block) ; // should add rotation if it is not a cube. TODO.
@@ -121,8 +128,10 @@ public class Grid2DNav implements Navigatable<Pair<Integer,Integer>>{
         var corner1 = gridProjectedLocation(minCorner) ;
         var corner2 = gridProjectedLocation(maxCorner) ;
         var obstacle = new Obstacle<>(block.getId()) ;
+        obstacle.isBlocking = true ;
         // all squares between these two corners are blocked:
         // TODO: doors must be handled differently, to calculate their passable corridors!
+        boolean added = false ;
         for(int x = corner1.fst; x<=corner2.fst; x++) {
             for (int z = corner1.snd; z<=corner2.snd; z++) {
                 var square = new Pair<>(x,z) ;
@@ -132,10 +141,12 @@ public class Grid2DNav implements Navigatable<Pair<Integer,Integer>>{
                     knownObstacles.put(square,olist) ;
                 }
                 olist.add(obstacle) ;
+                added = true ;
+                //System.out.println(">>>>> Gird2DNav: adding " + block.getId()) ;
             }
         }
         // so the block is added as an obstacle. Add it to here too:
-        allObstacleIDs.add(block.getId()) ;
+        if(added) allObstacleIDs.add(block.getId()) ;
     }
 
     public void addObstacle(Collection<Block> blocks) {
@@ -205,7 +216,7 @@ public class Grid2DNav implements Navigatable<Pair<Integer,Integer>>{
                 if(x==p.fst && z==p.snd) continue;
                 var neighbourSquare = new Pair<>(x,z) ; // a neighbouring square
                 var obstacle = knownObstacles.get(neighbourSquare) ;
-                if(obstacle.stream().anyMatch(o -> o.isBlocking)) continue;
+                if(obstacle!=null && obstacle.stream().anyMatch(o -> o.isBlocking)) continue;
                 candidates.add(neighbourSquare) ;
             }
         }
