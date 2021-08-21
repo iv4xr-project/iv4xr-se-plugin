@@ -10,6 +10,8 @@ import nl.uu.cs.aplib.mainConcepts.*;
 import static environments.SeEnvironmentKt.toWorldModel;
 import static nl.uu.cs.aplib.AplibEDSL.* ;
 import static eu.iv4xr.framework.Iv4xrEDSL.* ;
+import static uuspaceagent.TestUtils.console;
+
 import org.junit.jupiter.api.Test;
 import spaceEngineers.controller.ContextControllerWrapper;
 //import spaceEngineers.controller.JsonRpcCharacterController;
@@ -22,7 +24,7 @@ public class Test_SimpleInteractionsWithSE {
 
     //@Test
     public void example_of_deploying_a_goal_to_SE() throws InterruptedException {
-        System.out.println("*** start test...") ;
+        console("*** start test...") ;
         var agentId = "agentId" ;
         var blockType = "LargeHeavyBlockArmorBlock" ;
         var context = new SpaceEngineersTestContext() ;
@@ -60,7 +62,7 @@ public class Test_SimpleInteractionsWithSE {
         int i = 0 ;
         while(i<200) {
             testAgent.update();
-            System.out.println("*** " + i + " " + myAgentState.wom.agentId +  " @" + myAgentState.wom.position) ;
+            console("*** " + i + " " + myAgentState.wom.agentId +  " @" + myAgentState.wom.position) ;
             if(i==2) {
                 // debug here...
             }
@@ -81,7 +83,7 @@ public class Test_SimpleInteractionsWithSE {
 
     @Test
     public void test_env_interactions() throws InterruptedException {
-        System.out.println("*** start test...") ;
+        console("*** start test...") ;
         var agentId = "agentId" ;
         var blockType = "LargeHeavyBlockArmorBlock" ;
         var context = new SpaceEngineersTestContext() ;
@@ -105,10 +107,10 @@ public class Test_SimpleInteractionsWithSE {
         CharacterObservation primObs = theEnv.getController().getObserver().observe() ;
         var hdir =  primObs.getOrientationForward() ;
         obs = theEnv.observe() ;
-        System.out.println(">> pos :" + obs.position) ;
-        System.out.println(">> hdir:" + angle(hdir.getX(), hdir.getZ())) ;
-        System.out.println(">> vdir:" + primObs.getOrientationUp()) ;
-        System.out.println(">> velo:" + obs.velocity) ;
+        console(">> pos :" + obs.position) ;
+        console(">> hdir:" + angle(hdir.getX(), hdir.getZ())) ;
+        console(">> vdir:" + primObs.getOrientationUp()) ;
+        console(">> velo:" + obs.velocity) ;
 
         int i = 0 ;
         while(i<20) {
@@ -122,12 +124,12 @@ public class Test_SimpleInteractionsWithSE {
             obs = theEnv.observe() ;
             primObs = theEnv.getController().getObserver().observe() ;
             hdir =  primObs.getOrientationForward() ;
-            System.out.println(">> pos :" + obs.position) ;
-            System.out.println(">> extent :" + primObs.getExtent()) ;
-            System.out.println(">> hdir:" + angle(hdir.getX(), hdir.getZ())) ;
-            System.out.println(">> hdir:" + primObs.getOrientationForward()) ;
-            System.out.println(">> vdir:" + primObs.getOrientationUp()) ;
-            System.out.println(">> velo:" + obs.velocity) ;
+            console(">> pos :" + obs.position) ;
+            console(">> extent :" + primObs.getExtent()) ;
+            console(">> hdir:" + angle(hdir.getX(), hdir.getZ())) ;
+            console(">> hdir:" + primObs.getOrientationForward()) ;
+            console(">> vdir:" + primObs.getOrientationUp()) ;
+            console(">> velo:" + obs.velocity) ;
             Thread.sleep(10);
             i++ ;
         }
@@ -137,8 +139,8 @@ public class Test_SimpleInteractionsWithSE {
         Observation primObsX = theEnv.getController().getObserver().observeBlocks() ;
         obs = toWorldModel(primObsX) ; // static method...
 
-        System.out.println("\n\nWOM: #elements " + obs.elements.size())  ;
-        System.out.println("Raw obs #grid-elems " + primObsX.getGrids().size())  ;
+        console("\n\nWOM: #elements " + obs.elements.size())  ;
+        console("Raw obs #grid-elems " + primObsX.getGrids().size())  ;
 
         boolean printBlockInfo = true ;
 
@@ -146,18 +148,18 @@ public class Test_SimpleInteractionsWithSE {
 
         i = 0 ;
         for(var e : obs.elements.values()) {
-             System.out.println(" === Entity " + i + ": " + e.id + " (" + e.type + ")") ;
-             System.out.println("     Pos: " + e.position) ;
+             console(" === Entity " + i + ": " + e.id + " (" + e.type + ")") ;
+             console("     Pos: " + e.position) ;
              for(var prop : e.properties.entrySet()) {
-                 System.out.println("    " + prop.getKey() + ": " + prop.getValue()) ;
+                 console("    " + prop.getKey() + ": " + prop.getValue()) ;
              }
              int k = 0 ;
              for (var f : e.elements.values()) {
-                 System.out.println("       >> Sub: " + k + ": " + f.id + " (" + f.type + ")") ;
-                 System.out.println("          Pos:    " + f.position) ;
-                 System.out.println("          Extent: " + f.extent) ;
+                 console("       >> Sub: " + k + ": " + f.id + " (" + f.type + ")") ;
+                 console("          Pos:    " + f.position) ;
+                 console("          Extent: " + f.extent) ;
                  for(var prop : f.properties.entrySet()) {
-                     System.out.println("          " + prop.getKey() + ": " + prop.getValue()) ;
+                     console("          " + prop.getKey() + ": " + prop.getValue()) ;
                  }
                  k++ ;
              }

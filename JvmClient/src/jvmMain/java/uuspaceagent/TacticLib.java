@@ -12,16 +12,14 @@ import static nl.uu.cs.aplib.AplibEDSL.* ;
 
 public class TacticLib {
 
-    public static float EPSILON_TO_NODE_IN_2D_PATH_NAVIGATION = 0.4f ;
-    public static float SQEPSILON_TO_NODE_IN_2D_PATH_NAVIGATION = 0.16f ;
-
     /**
      * Expressed in terms of cos(angle). Below is cos(10-degree):
      */
     public static float EPSILON_DIRECTION_ANGLE = (float) Math.cos(Math.toRadians(10f));
-    public static float TURNING_SPEED = 20f ;
+    public static float TURNING_SPEED = 5f ;
     /**
      * Walking speed. Set as 10f in the forward direction (relative to the agent's orientation).
+     * The negative is intentional and correct :)
      */
     public static spaceEngineers.model.Vec3 WALK_SPEED = new spaceEngineers.model.Vec3(0,0,-10f) ;
 
@@ -42,16 +40,16 @@ public class TacticLib {
                     // follow the path, direct the agent to the next node in the path (actually, the first
                     // node in the path, since we remove a node if it is passed):
                     var nextNode = state.currentPathToFollow.get(0) ;
-                    var nextNodePos = state.grid2D.getSquareCenterLocation(nextNode) ;
-                    var agentPos = state.wom.position ;
-                    if(state.grid2D.squareDistanceToSquare(agentPos,nextNode) <= SQEPSILON_TO_NODE_IN_2D_PATH_NAVIGATION) {
-                        // agent is already close enough to this next-node destination. Mark the node
+                    var agentSq = state.grid2D.gridProjectedLocation(state.wom.position) ;
+                    if(agentSq.equals(nextNode)) {
+                        // agent is already in the same square as the next-node destination-square. Mark the node
                         // as reached (so, we remove it from the plan):
                         state.currentPathToFollow.remove(0) ;
                         return state ;
                     }
                     // direction vector to the next node:
-                    Vec3 dirToGo = Vec3.sub(nextNodePos,agentPos).normalized() ;
+                    var nextNodePos = state.grid2D.getSquareCenterLocation(nextNode) ;
+                    Vec3 dirToGo = Vec3.sub(nextNodePos,state.wom.position).normalized() ;
                     Vec3 agentHdir = state.orientationForward() .normalized();
                     // for calculating 2D rotation we ignore the y-value:
                     dirToGo.y = 0 ;
@@ -66,33 +64,52 @@ public class TacticLib {
                     }
                     // check if we have to turn clockwise or counter-clockwise
                     Vec3 normalVector = Vec3.cross(agentHdir,dirToGo) ;
-                    if (normalVector.y < 0) {
-                        // the dir-to-go is to the "left"/counter-clockwise direction
-                        turningSpeed = - turningSpeed ;
+                    if(Math.abs(normalVector.y) < 0.01) {
+                        turningSpeed = 0 ;
                     }
+                    else {
+                        if (normalVector.y > 0) {
+                            // the dir-to-go is to the "left"/counter-clockwise direction
+                            turningSpeed = - turningSpeed ;
+                        }
+                    }
+
+                    System.out.println("xxxx dir-to-go: " + dirToGo) ;
+                    System.out.println("==== hdir : " + agentHdir) ;
+                    System.out.println("==== alpha: " + Math.toDegrees(Math.acos(cos_alpha))) ;
+                    System.out.println("==== alpha-dir: " + normalVector.y) ;
+
                     Vec2 turningVector = new Vec2(0, turningSpeed) ;
+
                     // Now send a command to move the agent:
-                    state.env().getController().getCharacter().moveAndRotate(WALK_SPEED, turningVector, 0) ; // the last is "roll"
+                    var forward_speed = WALK_SPEED ;
+                    //if(cos_alpha<=0) forward_speed = new spaceEngineers.model.Vec3(0,0,0) ;
+                    state.env().getController().getCharacter().moveAndRotate(forward_speed , turningVector, 0) ; // the last is "roll"
                     // moving will take some time. We will now return the state at this moment.
-                    // The state will be sampled again after some delta time, in the next agent-update.
+                    // The state will be sampled again after some d
+                    //
+                    //
+                    //
+                    //
+                    // elta time, in the next agent-update.
                     return state ;
                 } )
                 .on((USeAgentState state)  -> {
                     if (state.wom==null) return null ;
-                    var agentPos = state.wom.position ;
+                    //var agentPos = state.wom.position ;
+                    var agentSq = state.grid2D.gridProjectedLocation(state.wom.position) ;
                     var destinationSq = state.grid2D.gridProjectedLocation(destination) ;
-                    if (state.grid2D.squareDistanceToSquare(agentPos,destinationSq) <= SQEPSILON_TO_NODE_IN_2D_PATH_NAVIGATION) {
+                    //if (state.grid2D.squareDistanceToSquare(agentPos,destinationSq) <= SQEPSILON_TO_NODE_IN_2D_PATH_NAVIGATION) {
+                    if(agentSq.equals(destinationSq)) {
                         // the agent is already at the destination. Just return the path, and indicate that
                         // we have arrived at the destination:
                         return new Pair<>(state.currentPathToFollow,true) ;
                     }
                     int currentPathLength = state.currentPathToFollow.size() ;
                     if (currentPathLength == 0
-                            || state.grid2D.squareDistanceToSquare(destination, state.currentPathToFollow.get(currentPathLength - 1)) > SQEPSILON_TO_NODE_IN_2D_PATH_NAVIGATION)
+                            || ! destinationSq.equals(state.currentPathToFollow.get(currentPathLength - 1)))
                     {  // there is no path planned, or there is an ongoing path, but it goes to a different target
-                        var sqAgent= state.grid2D.gridProjectedLocation(agentPos) ;
-                        var destSq = state.grid2D.gridProjectedLocation(destination) ;
-                        List<Pair<Integer,Integer>> path = state.pathfinder2D.findPath(state.grid2D, sqAgent, destSq)  ;
+                        List<Pair<Integer,Integer>> path = state.pathfinder2D.findPath(state.grid2D, agentSq, destinationSq)  ;
                         if (path == null) {
                             // the pathfinder cannot find a path. The tactic is then not enabled:
                             return null ;

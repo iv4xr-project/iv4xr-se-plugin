@@ -142,7 +142,7 @@ public class Grid2DNav implements Navigatable<Pair<Integer,Integer>>{
                 }
                 olist.add(obstacle) ;
                 added = true ;
-                //System.out.println(">>>>> Gird2DNav: adding " + block.getId()) ;
+                //console(">>>>> Gird2DNav: adding " + block.getId()) ;
             }
         }
         // so the block is added as an obstacle. Add it to here too:
