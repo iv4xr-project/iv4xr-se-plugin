@@ -115,8 +115,8 @@ public class Test_SimpleInteractionsWithSE {
         int i = 0 ;
         while(i<20) {
             obs = theEnv.moveForward(5f) ;
-            if (i<0) {
-                theEnv.getController().getCharacter().moveAndRotate(new Vec3(0,0,0), new Vec2(0,40),0) ;
+            if (i<20) {
+                theEnv.getController().getCharacter().moveAndRotate(new Vec3(0,0,0), new Vec2(0,20),0) ;
             }
             else {
                 theEnv.getController().getCharacter().moveAndRotate(new Vec3(0,0,-36), new Vec2(0,0),0) ;

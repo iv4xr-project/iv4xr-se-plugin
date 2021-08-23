@@ -13,17 +13,27 @@ import static nl.uu.cs.aplib.AplibEDSL.* ;
 public class TacticLib {
 
     /**
+     * If the angle between the agent's current direction and the direction to go is less
+     * than this number, we slow the agent's turning speed.
      * Expressed in terms of cos(angle). Below is cos(10-degree):
      */
     public static float EPSILON_DIRECTION_ANGLE = (float) Math.cos(Math.toRadians(10f));
-    public static float TURNING_SPEED = 5f ;
+
+    public static float TURNING_SPEED = 20f ;
+
     /**
      * Walking speed. Set as 10f in the forward direction (relative to the agent's orientation).
      * The negative is intentional and correct :)
      */
     public static spaceEngineers.model.Vec3 WALK_SPEED = new spaceEngineers.model.Vec3(0,0,-10f) ;
 
-    public static Tactic navigateTo(Vec3 destination) {
+    public static Tactic navigate2DTo(Vec3 destination) {
+
+        // a threshold to say that the agent is close enough to the center of a square.
+        // expressed in its square:
+        float dth = 1.3f * Grid2DNav.SQUARE_SIZE ;
+        final float distance_to_sq_threshold = dth*dth ;
+
         return action("navigateTo").do2((USeAgentState state)
                         -> (Pair<List<Pair<Integer,Integer>>, Boolean> queryResult) -> {
                     var path = queryResult.fst ;
@@ -40,15 +50,16 @@ public class TacticLib {
                     // follow the path, direct the agent to the next node in the path (actually, the first
                     // node in the path, since we remove a node if it is passed):
                     var nextNode = state.currentPathToFollow.get(0) ;
+                    var nextNodePos = state.grid2D.getSquareCenterLocation(nextNode) ;
                     var agentSq = state.grid2D.gridProjectedLocation(state.wom.position) ;
-                    if(agentSq.equals(nextNode)) {
+                    //if(agentSq.equals(nextNode)) {
+                    if(Vec3.sub(nextNodePos,state.wom.position).lengthSq() <= distance_to_sq_threshold) {
                         // agent is already in the same square as the next-node destination-square. Mark the node
                         // as reached (so, we remove it from the plan):
                         state.currentPathToFollow.remove(0) ;
                         return state ;
                     }
                     // direction vector to the next node:
-                    var nextNodePos = state.grid2D.getSquareCenterLocation(nextNode) ;
                     Vec3 dirToGo = Vec3.sub(nextNodePos,state.wom.position).normalized() ;
                     Vec3 agentHdir = state.orientationForward() .normalized();
                     // for calculating 2D rotation we ignore the y-value:
@@ -56,33 +67,47 @@ public class TacticLib {
                     agentHdir.y = 0 ;
                     // angle between the dir-to-go and the agent's own direction (expressed as cos(angle)):
                     var cos_alpha = Vec3.dot(agentHdir,dirToGo) ;
-                    float turningSpeed = TURNING_SPEED ;
-                    if(cos_alpha >= EPSILON_DIRECTION_ANGLE) {
-                        // the angle between the agent's own direction and target direction is less than 10-degree
-                        // we reduce the turning-speed:
-                        turningSpeed = TURNING_SPEED*0.25f ;
-                    }
-                    // check if we have to turn clockwise or counter-clockwise
                     Vec3 normalVector = Vec3.cross(agentHdir,dirToGo) ;
-                    if(Math.abs(normalVector.y) < 0.01) {
+
+                    float turningSpeed = TURNING_SPEED ;
+                    var forward_speed = WALK_SPEED ;
+                    if(1 - cos_alpha < 0.01) { // the angle is quite aligned to where we have to go, no turning
                         turningSpeed = 0 ;
+                        // slow down if the target is closer:
+                        var distsq = Vec3.sub(nextNodePos,state.wom.position).lengthSq() ;
+                        if(distsq <= 1f) {
+                            forward_speed = forward_speed.times(0.33f) ;
+                        }
                     }
                     else {
+                        // else, for now we will turn without moving. :|
+                        forward_speed = new spaceEngineers.model.Vec3(0,0,0)  ;
+                        if(cos_alpha >= EPSILON_DIRECTION_ANGLE) {
+                            // the angle between the agent's own direction and target direction is less than 10-degree
+                            // we reduce the turning-speed:
+                            turningSpeed = TURNING_SPEED*0.25f ;
+                        }
+                        // check if we have to turn clockwise or counter-clockwise
                         if (normalVector.y > 0) {
                             // the dir-to-go is to the "left"/counter-clockwise direction
                             turningSpeed = - turningSpeed ;
                         }
                     }
 
-                    System.out.println("xxxx dir-to-go: " + dirToGo) ;
+                    System.out.println("xxxx target: " + nextNode + ": " + nextNodePos
+                            + ", agent @" + agentSq + ":"+ state.wom.position) ;
+                    System.out.println("==== dir-to-go: " + dirToGo) ;
                     System.out.println("==== hdir : " + agentHdir) ;
-                    System.out.println("==== alpha: " + Math.toDegrees(Math.acos(cos_alpha))) ;
-                    System.out.println("==== alpha-dir: " + normalVector.y) ;
+
+                    System.out.println("==== cpsalpha: " + cos_alpha + ", alpha: " + Math.toDegrees(Math.acos(cos_alpha))) ;
+                    System.out.println("==== normal.y: " + normalVector.y) ;
+                    System.out.println("==== turning speed: " + turningSpeed) ;
+                    System.out.println("==== forward speed: " + forward_speed) ;
 
                     Vec2 turningVector = new Vec2(0, turningSpeed) ;
 
                     // Now send a command to move the agent:
-                    var forward_speed = WALK_SPEED ;
+
                     //if(cos_alpha<=0) forward_speed = new spaceEngineers.model.Vec3(0,0,0) ;
                     state.env().getController().getCharacter().moveAndRotate(forward_speed , turningVector, 0) ; // the last is "roll"
                     // moving will take some time. We will now return the state at this moment.
@@ -99,9 +124,12 @@ public class TacticLib {
                     //var agentPos = state.wom.position ;
                     var agentSq = state.grid2D.gridProjectedLocation(state.wom.position) ;
                     var destinationSq = state.grid2D.gridProjectedLocation(destination) ;
+                    var destinationSqCenterPos = state.grid2D.getSquareCenterLocation(destinationSq) ;
                     //if (state.grid2D.squareDistanceToSquare(agentPos,destinationSq) <= SQEPSILON_TO_NODE_IN_2D_PATH_NAVIGATION) {
-                    if(agentSq.equals(destinationSq)) {
-                        // the agent is already at the destination. Just return the path, and indicate that
+                    //if(agentSq.equals(destinationSq)) {
+                    if(Vec3.sub(destinationSqCenterPos,state.wom.position).lengthSq() <= distance_to_sq_threshold) {
+
+                            // the agent is already at the destination. Just return the path, and indicate that
                         // we have arrived at the destination:
                         return new Pair<>(state.currentPathToFollow,true) ;
                     }

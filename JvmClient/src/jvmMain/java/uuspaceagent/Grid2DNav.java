@@ -122,7 +122,7 @@ public class Grid2DNav implements Navigatable<Pair<Integer,Integer>>{
         // assumes that the block is UNROTATED.
         // TODO: a more general approach.
         // add some padding due to agent's body width:
-        Vec3 padding = Vec3.mul(new Vec3(AGENT_WIDTH,AGENT_WIDTH,AGENT_WIDTH), 0.5f) ;
+        Vec3 padding = Vec3.mul(new Vec3(AGENT_WIDTH,AGENT_WIDTH,AGENT_WIDTH), 0.6f) ;
         minCorner = Vec3.sub(minCorner,padding) ;
         maxCorner = Vec3.add(maxCorner,padding) ;
         var corner1 = gridProjectedLocation(minCorner) ;

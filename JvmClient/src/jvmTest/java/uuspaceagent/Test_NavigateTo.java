@@ -6,8 +6,6 @@ import nl.uu.cs.aplib.mainConcepts.* ;
 import nl.uu.cs.aplib.utils.Pair;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-
 import static nl.uu.cs.aplib.AplibEDSL.* ;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static uuspaceagent.PrintInfos.showWOMAgent;
@@ -35,14 +33,19 @@ public class Test_NavigateTo {
         console(showWOMAgent(state.wom));
 
         var sqAgent = state.grid2D.gridProjectedLocation(state.wom.position) ;
-        var sqDesitnation = state.grid2D.gridProjectedLocation(destination) ;
+        var sqDestination = state.grid2D.gridProjectedLocation(destination) ;
+        var centerOfSqDestination = state.grid2D.getSquareCenterLocation(sqDestination) ;
+
+        float dth = 1.3f * Grid2DNav.SQUARE_SIZE ;
+        final float distance_to_sq_threshold = dth*dth ;
 
         GoalStructure G = goal("close to destination")
                 .toSolve((USeAgentState st) -> {
-                    var currentAgentSq = st.grid2D.gridProjectedLocation(st.wom.position) ;
-                    return currentAgentSq.equals(sqDesitnation) ;
+                    //var currentAgentSq = st.grid2D.gridProjectedLocation(st.wom.position) ;
+                    //return currentAgentSq.equals(sqDestination) ;
+                    return Vec3.sub(centerOfSqDestination,state.wom.position).lengthSq() <= distance_to_sq_threshold ;
                 })
-                .withTactic(TacticLib.navigateTo(destination))
+                .withTactic(TacticLib.navigate2DTo(destination))
                 .lift() ;
 
         agent.setGoal(G) ;
@@ -56,6 +59,23 @@ public class Test_NavigateTo {
             if (turn >= 1400) break ;
         }
         return new Pair<>(agent,G) ;
+    }
+
+    /**
+     * Test navigating to a very close square. Mainly to see if the agent turning in the
+     * right direction.
+     */
+    //@Test
+    public void test_nav_to_veryclose_square() throws InterruptedException {
+        // agent start location should be around: <10.119276,-5.0025,55.681934>
+        // orientationForward: <-0.043967947,-2.0614608E-4,0.9990329> ... so looking towards z-axis
+
+        Vec3 dest = new Vec3(9,-5,55.68f) ;
+        //Vec3 dest = new Vec3(11.5f,-5,55.68f) ;
+        var agent_and_goal = test_navigateTo(dest) ;
+        var G = agent_and_goal.snd ;
+        G.printGoalStructureStatus();
+        assertTrue(G.getStatus().success());
     }
 
     /**
@@ -74,7 +94,7 @@ public class Test_NavigateTo {
     /**
      * Reachable, but the agent will have to bend a bit.
      */
-    @Test
+    //@Test
     public void test2() throws InterruptedException {
         // navigating to (10,-5,65) ... this is just before the buttons-panel
         Vec3 dest = new Vec3(10,-5,73) ;
@@ -84,6 +104,19 @@ public class Test_NavigateTo {
         assertTrue(G.getStatus().success());
     }
 
+    /**
+     * The agent has to make a U-turn to pass over a sticking wall.
+     */
+    @Test
+    public void test3() throws InterruptedException {
+        // This is a position in front of a sliding-door. It is reachable from the
+        // agent's start position.
+        Vec3 dest = new Vec3(19,-5,65) ;
+        var agent_and_goal = test_navigateTo(dest) ;
+        var G = agent_and_goal.snd ;
+        G.printGoalStructureStatus();
+        assertTrue(G.getStatus().success());
+    }
 
 
 }
