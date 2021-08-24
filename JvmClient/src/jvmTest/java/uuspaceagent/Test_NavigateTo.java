@@ -22,7 +22,7 @@ public class Test_NavigateTo {
      */
     public Pair<TestAgent,GoalStructure> test_navigateTo(Vec3 destination) throws InterruptedException {
         console("*** start test...") ;
-        var agentAndState = loadSE("myworld-3")  ;
+        var agentAndState = loadSE("myworld-3 with open door") ; // loadSE("myworld-3")  ;
         TestAgent agent = agentAndState.fst ;
         USeAgentState state = agentAndState.snd ;
         Thread.sleep(1000);
@@ -36,14 +36,14 @@ public class Test_NavigateTo {
         var sqDestination = state.grid2D.gridProjectedLocation(destination) ;
         var centerOfSqDestination = state.grid2D.getSquareCenterLocation(sqDestination) ;
 
-        float dth = 1.3f * Grid2DNav.SQUARE_SIZE ;
-        final float distance_to_sq_threshold = dth*dth ;
+        //float dth = 1.3f * Grid2DNav.SQUARE_SIZE ;
+        //final float distance_to_sq_threshold = dth*dth ;
 
         GoalStructure G = goal("close to destination")
                 .toSolve((USeAgentState st) -> {
                     //var currentAgentSq = st.grid2D.gridProjectedLocation(st.wom.position) ;
                     //return currentAgentSq.equals(sqDestination) ;
-                    return Vec3.sub(centerOfSqDestination,state.wom.position).lengthSq() <= distance_to_sq_threshold ;
+                    return Vec3.sub(centerOfSqDestination,state.wom.position).lengthSq() <= TacticLib.THRESHOLD_SQUARED_DISTANCE_TO_SQUARE ;
                 })
                 .withTactic(TacticLib.navigate2DTo(destination))
                 .lift() ;
@@ -52,9 +52,9 @@ public class Test_NavigateTo {
 
         int turn= 0 ;
         while(G.getStatus().inProgress()) {
-            console(">> [" + turn + "] " + showWOMAgent(state.wom));
+            //console(">> [" + turn + "] " + showWOMAgent(state.wom));
             agent.update();
-            Thread.sleep(50);
+            //Thread.sleep(50);
             turn++ ;
             if (turn >= 1400) break ;
         }
@@ -107,7 +107,7 @@ public class Test_NavigateTo {
     /**
      * The agent has to make a U-turn to pass over a sticking wall.
      */
-    @Test
+    //@Test
     public void test3() throws InterruptedException {
         // This is a position in front of a sliding-door. It is reachable from the
         // agent's start position.
@@ -118,5 +118,15 @@ public class Test_NavigateTo {
         assertTrue(G.getStatus().success());
     }
 
+    @Test
+    public void test4() throws InterruptedException {
+        // This is a position in front of a sliding-door. It is reachable from the
+        // agent's start position.
+        Vec3 dest = new Vec3(19,-5,58) ;
+        var agent_and_goal = test_navigateTo(dest) ;
+        var G = agent_and_goal.snd ;
+        G.printGoalStructureStatus();
+        assertTrue(G.getStatus().success());
+    }
 
 }

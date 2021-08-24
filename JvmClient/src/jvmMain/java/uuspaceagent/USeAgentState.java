@@ -38,21 +38,6 @@ public class USeAgentState extends State {
         return (SeEnvironment) super.env() ;
     }
 
-    List<String> getAllBlockIDs() {
-        List<String> blockIds = new LinkedList<>() ;
-        for(var e : wom.elements.values()) {
-            if(e.type.equals("block")) {
-                blockIds.add(e.id) ;
-                continue ;
-            }
-            for(var b : e.elements.values()) {
-                if (b.type.equals("block")) {
-                    blockIds.add(b.id) ;
-                }
-            }
-        }
-        return blockIds ;
-    }
 
     WorldEntity agentAdditionalInfo(CharacterObservation obs) {
         WorldEntity agentWE = new WorldEntity(this.agentId, "agentMoreInfo", true) ;
@@ -83,9 +68,9 @@ public class USeAgentState extends State {
         // The obtained wom also does not include blocks observed. So we get them explicitly here:
         // Well, we will get ALL blocks. Note that S=some blocks may change state or disappear,
         // compared to what the agent currently has it its state.wom.
-        Observation gridsAndBlocksStates = env().getController().getObserver().observeBlocks() ;
-        WorldModel gridsAndBlocksStatesWM = SeEnvironmentKt.toWorldModel(gridsAndBlocksStates) ;
-        for(var e : gridsAndBlocksStatesWM.elements.entrySet()) {
+        Observation rawGridsAndBlocksStates = env().getController().getObserver().observeBlocks() ;
+        WorldModel gridsAndBlocksStates = SeEnvironmentKt.toWorldModel(rawGridsAndBlocksStates) ;
+        for(var e : gridsAndBlocksStates.elements.entrySet()) {
             newWom.elements.put(e.getKey(), e.getValue()) ;
         }
 
@@ -120,7 +105,7 @@ public class USeAgentState extends State {
             }
         }
         // updating the "navigational-2DGrid:
-        var blocksInWom =  getAllBlockIDs() ;
+        var blocksInWom =  SEBlockFunctions.getAllBlockIDs(wom) ;
         List<String> toBeRemoved = grid2D.allObstacleIDs.stream()
                 .filter(id -> !blocksInWom.contains(id))
                 .collect(Collectors.toList());
@@ -131,8 +116,13 @@ public class USeAgentState extends State {
         // then, there may also be new blocks ... we add them to the nav-grid:
         // TODO: this assumes doors are initially closed. Calculating blocked squares
         // for open-doors is more complicated. TODO.
-        for(var gr : gridsAndBlocksStates.getGrids()) {
-            grid2D.addObstacle(gr.getBlocks());
+        for(var block : SEBlockFunctions.getAllBlocks(gridsAndBlocksStates)) {
+            grid2D.addObstacle(block);
+            // check if it is a door, and get its open/close state:
+            Boolean isOpen = SEBlockFunctions.geSlideDoorState(block) ;
+            if (isOpen != null) {
+                grid2D.setObstacleBlockingState(block,! isOpen);
+            }
         }
         // updating dynamic blocking-state: (e.g. handling doors)
         // TODO!

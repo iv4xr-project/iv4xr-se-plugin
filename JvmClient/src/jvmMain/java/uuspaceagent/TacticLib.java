@@ -13,11 +13,23 @@ import static nl.uu.cs.aplib.AplibEDSL.* ;
 public class TacticLib {
 
     /**
-     * If the angle between the agent's current direction and the direction to go is less
-     * than this number, we slow the agent's turning speed.
+     * If the angle between the agent's current direction and the direction-to-go is less
+     * than this threshold, we slow the agent's turning speed, to mitigate that it might
+     * overshoot the intended direction to go.
      * Expressed in terms of cos(angle). Below is cos(10-degree):
      */
-    public static float EPSILON_DIRECTION_ANGLE = (float) Math.cos(Math.toRadians(10f));
+    public static float THRESHOLD_ANGLE_TO_SLOW_TURNING = (float) Math.cos(Math.toRadians(10f));
+
+    /**
+     * When the agent's distance to a square's center is less or equal to this threshold, the
+     * square is considered as visited. This distance is a about the square size, so the agent
+     * might actually in the neighboring square. This threshold is introduced to avoid the
+     * agent from getting stuck because it keeps overshooting the center of a target square.
+     *
+     * The threshold is not expressed literally as distance, but for efficiency it is expressed
+     * as the square of the distance (so that we don't have to keep calculating square-roots).
+     */
+    public static float THRESHOLD_SQUARED_DISTANCE_TO_SQUARE = Grid2DNav.SQUARE_SIZE * Grid2DNav.SQUARE_SIZE ; //1.3f * Grid2DNav.SQUARE_SIZE * 1.3f * Grid2DNav.SQUARE_SIZE
 
     public static float TURNING_SPEED = 20f ;
 
@@ -28,11 +40,6 @@ public class TacticLib {
     public static spaceEngineers.model.Vec3 WALK_SPEED = new spaceEngineers.model.Vec3(0,0,-10f) ;
 
     public static Tactic navigate2DTo(Vec3 destination) {
-
-        // a threshold to say that the agent is close enough to the center of a square.
-        // expressed in its square:
-        float dth = 1.3f * Grid2DNav.SQUARE_SIZE ;
-        final float distance_to_sq_threshold = dth*dth ;
 
         return action("navigateTo").do2((USeAgentState state)
                         -> (Pair<List<Pair<Integer,Integer>>, Boolean> queryResult) -> {
@@ -53,7 +60,7 @@ public class TacticLib {
                     var nextNodePos = state.grid2D.getSquareCenterLocation(nextNode) ;
                     var agentSq = state.grid2D.gridProjectedLocation(state.wom.position) ;
                     //if(agentSq.equals(nextNode)) {
-                    if(Vec3.sub(nextNodePos,state.wom.position).lengthSq() <= distance_to_sq_threshold) {
+                    if(Vec3.sub(nextNodePos,state.wom.position).lengthSq() <= THRESHOLD_SQUARED_DISTANCE_TO_SQUARE) {
                         // agent is already in the same square as the next-node destination-square. Mark the node
                         // as reached (so, we remove it from the plan):
                         state.currentPathToFollow.remove(0) ;
@@ -82,7 +89,7 @@ public class TacticLib {
                     else {
                         // else, for now we will turn without moving. :|
                         forward_speed = new spaceEngineers.model.Vec3(0,0,0)  ;
-                        if(cos_alpha >= EPSILON_DIRECTION_ANGLE) {
+                        if(cos_alpha >= THRESHOLD_ANGLE_TO_SLOW_TURNING) {
                             // the angle between the agent's own direction and target direction is less than 10-degree
                             // we reduce the turning-speed:
                             turningSpeed = TURNING_SPEED*0.25f ;
@@ -94,6 +101,7 @@ public class TacticLib {
                         }
                     }
 
+                    /*
                     System.out.println("xxxx target: " + nextNode + ": " + nextNodePos
                             + ", agent @" + agentSq + ":"+ state.wom.position) ;
                     System.out.println("==== dir-to-go: " + dirToGo) ;
@@ -103,6 +111,7 @@ public class TacticLib {
                     System.out.println("==== normal.y: " + normalVector.y) ;
                     System.out.println("==== turning speed: " + turningSpeed) ;
                     System.out.println("==== forward speed: " + forward_speed) ;
+                    */
 
                     Vec2 turningVector = new Vec2(0, turningSpeed) ;
 
@@ -127,7 +136,7 @@ public class TacticLib {
                     var destinationSqCenterPos = state.grid2D.getSquareCenterLocation(destinationSq) ;
                     //if (state.grid2D.squareDistanceToSquare(agentPos,destinationSq) <= SQEPSILON_TO_NODE_IN_2D_PATH_NAVIGATION) {
                     //if(agentSq.equals(destinationSq)) {
-                    if(Vec3.sub(destinationSqCenterPos,state.wom.position).lengthSq() <= distance_to_sq_threshold) {
+                    if(Vec3.sub(destinationSqCenterPos,state.wom.position).lengthSq() <= THRESHOLD_SQUARED_DISTANCE_TO_SQUARE) {
 
                             // the agent is already at the destination. Just return the path, and indicate that
                         // we have arrived at the destination:
