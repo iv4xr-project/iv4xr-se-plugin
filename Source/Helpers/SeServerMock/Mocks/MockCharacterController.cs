@@ -43,5 +43,10 @@ namespace SeServerMock.Mocks
         {
             throw new NotImplementedException();
         }
+
+        public void Use()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
