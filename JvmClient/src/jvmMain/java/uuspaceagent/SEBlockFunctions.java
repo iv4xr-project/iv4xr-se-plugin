@@ -73,7 +73,7 @@ public class SEBlockFunctions {
         // for now we don't do its up-orientation.
         Vec3 forwardOrientation = (Vec3) block.getProperty("orientationForward") ;
         Vec3 x_axis = new Vec3(1,0,0) ;
-        Matrix3D rotation = Matrix3D.getRotationXZ(x_axis,forwardOrientation) ;
+        Matrix3D rotation = Matrix3D.getRotationXZ(forwardOrientation,x_axis) ;
         Vec3 rotatedCenterAtFrontFace = rotation.apply(centerAtFrontFace) ;
 
         // the rotated position is relative to the block's center position.

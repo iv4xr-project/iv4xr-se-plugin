@@ -89,15 +89,16 @@ public class GoalAndTacticLib {
     public static <AgentState> GoalStructure  DEPLOYonce(TestAgent agent, Function<AgentState,GoalStructure> dynamicgoal) {
         Boolean[] deployed = {false} ;
         GoalStructure G = goal("deploy once")
-                .toSolve((AgentState state) -> true )
+                .toSolve((AgentState state) -> false )
                 .withTactic(FIRSTof(
                         action("deploying a goal")
                             .do1((AgentState state) -> {
                                 agent.addAfter(dynamicgoal.apply(state));
                                 deployed[0] = true ;
+                                //System.out.println(">>> action: deployed[0] = " + deployed[0]) ;
                                 return state ;
                                 })
-                            .on(state -> ! deployed[0])
+                            .on_(state -> ! deployed[0] )
                             .lift(),
                         ABORT())
                 ).lift();
@@ -117,12 +118,22 @@ public class GoalAndTacticLib {
             WorldEntity block = SEBlockFunctions.findClosestBlock(state.wom,blockType,radius) ;
             if (block == null) return FAIL("Autofail: no " + blockType + " can be found!") ;
 
+            Vec3 intermediatePosition = SEBlockFunctions.getSideCenterPoint(block,side,delta + 1.5f) ;
             Vec3 goalPosition = SEBlockFunctions.getSideCenterPoint(block,side,delta) ;
+            Vec3 blockCenter = (Vec3) block.getProperty("centerPosition") ;
 
-            return close2Dto("close to a " + blockType + " @"
+            return SEQ(close2Dto("close to the " + blockType + " @"
                             + block.position
-                            + " ," + side,
-                            goalPosition) ;
+                            + " ," + side + ", targeting " + intermediatePosition,
+                            intermediatePosition),
+                      veryclose2DTo("very close to the " + blockType + " @"
+                              + block.position
+                              + " ," + side + ", targeting " + goalPosition,
+                              goalPosition),
+                      face2DToward("facing towards " + blockType + " @"
+                              + block.position
+                              + " ," + side, blockCenter)
+                    ) ;
         }) ;
 
         return G ;
@@ -303,9 +314,13 @@ public class GoalAndTacticLib {
         if (goalname == null) {
             goalname = "very close to " + p ;
         }
-        float threshold = Grid2DNav.AGENT_WIDTH * 0.5f ;
+        //float threshold = Grid2DNav.AGENT_WIDTH * 0.5f * Grid2DNav.AGENT_WIDTH * 0.5f ;
+        float threshold = 1.7f ; // magic number :|
         return goal(goalname)
-                .toSolve((Float square_distance) -> square_distance <= threshold)
+                .toSolve((Float square_distance) -> {
+                    System.out.println(">> sq-dist " + square_distance) ;
+                    return square_distance <= threshold ;
+                })
                 .withTactic(FIRSTof(straightlineMove2DTowards(p).lift() , ABORT()))
                 .lift() ;
     }
@@ -327,7 +342,7 @@ public class GoalAndTacticLib {
                     Vec3 speed = SEBlockFunctions.fromSEVec3(WALK_SPEED) ;
                     var sqDistance = Vec3.sub(destination,state.wom.position).lengthSq() ;
                     if(sqDistance <= 1) { // reduce speed if we get close
-                        speed = Vec3.mul(speed,0.33f) ;
+                        speed = new Vec3(0,0,-1) ;
                     }
                     Vec3 forwardOrientation = state.orientationForward() ;
                     // location of the destination relative to the agent:
@@ -341,7 +356,7 @@ public class GoalAndTacticLib {
                     state.env().getController().getCharacter().moveAndRotate(SEBlockFunctions.toSEVec3(speed) ,turningVector, 0) ; // the last is "roll"
                     return sqDistance ;
                 })
-                .on((USeAgentState state) -> Vec3.sub(destination, state.wom.position).lengthSq() <= 0.03)
+                .on_((USeAgentState state) -> Vec3.sub(destination, state.wom.position).lengthSq() >= 0.01)
                 ;
     }
 
