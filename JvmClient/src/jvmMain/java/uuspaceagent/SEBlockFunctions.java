@@ -9,6 +9,7 @@ import spaceEngineers.model.extensions.BlockExtensionsKt;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Utility functions related to SE blocks.
@@ -17,6 +18,10 @@ public class SEBlockFunctions {
 
     public static Vec3 fromSEVec3(spaceEngineers.model.Vec3 p) {
         return new Vec3(p.getX(), p.getY(), p.getZ()) ;
+    }
+
+    public static spaceEngineers.model.Vec3 toSEVec3(Vec3 p) {
+        return new spaceEngineers.model.Vec3(p.x, p.y, p.z) ;
     }
 
     /*
@@ -41,15 +46,40 @@ public class SEBlockFunctions {
         else return Vec3.mul(logicalSize,CubeSize.Small.getValue()) ;
     }
 
-
-    /*
-    public static Vec3 getBaseMinCorner(Block block) {
-        // center position:
-        Vec3 pos =  fromSEVec3(BlockExtensionsKt.getCenterPosition(block)) ;
-        Vec3 halfsize = Vec3.mul(getActualSize(block), 0.5f)  ;
-        return Vec3.sub(pos,halfsize) ;
+    public enum BlockSides {
+        FRONT, BACK, LEFT, RIGHT, TOP, BOTTOM
     }
-    */
+
+    /**
+     * Get the center of a given side of the block, plus some delta distance perpendicular to
+     * that side.
+     * TODO: This still assumes the block is not vertically tilted.
+     */
+    public static Vec3 getSideCenterPoint(WorldEntity block, BlockSides side, float delta) {
+        Vec3 center = new Vec3(0,0,0) ;
+        switch (side) {
+            case FRONT : center.x  +=  getActualSize(block).x * 0.5f + delta ; break ;
+            case BACK  : center.x  -=  getActualSize(block).x * 0.5f + delta ; break ;
+            case RIGHT : center.z  +=  getActualSize(block).z * 0.5f + delta ; break ;
+            case LEFT  : center.z  -=  getActualSize(block).z * 0.5f + delta ; break ;
+            case TOP    : center.y +=  getActualSize(block).y * 0.5f + delta ; break ;
+            case BOTTOM : center.y -=  getActualSize(block).y * 0.5f + delta ; break ;
+        }
+
+        // the location of block-center, projected to its "front face", and add the delta :
+        Vec3 centerAtFrontFace = center ;
+
+        // now, rotate that centerAtFrontFace location according to the block's forward orientation:
+        // for now we don't do its up-orientation.
+        Vec3 forwardOrientation = (Vec3) block.getProperty("orientationForward") ;
+        Vec3 x_axis = new Vec3(1,0,0) ;
+        Matrix3D rotation = Matrix3D.getRotationXZ(x_axis,forwardOrientation) ;
+        Vec3 rotatedCenterAtFrontFace = rotation.apply(centerAtFrontFace) ;
+
+        // the rotated position is relative to the block's center position.
+        // We now add the block's actual center, and that should be it:
+        return Vec3.add((Vec3) block.getProperty("centerPosition"), rotatedCenterAtFrontFace) ;
+    }
 
     /**
      * Get the position of the corner, with minimum x,y,z, assuming the block is
@@ -61,15 +91,6 @@ public class SEBlockFunctions {
         Vec3 halfsize = Vec3.mul(getActualSize(block), 0.5f)  ;
         return Vec3.sub(pos,halfsize) ;
     }
-
-    /*
-    public static Vec3 getBaseMaxCorner(Block block) {
-        // center position:
-        Vec3 pos =  fromSEVec3(BlockExtensionsKt.getCenterPosition(block)) ;
-        Vec3 halfsize = Vec3.mul(getActualSize(block), 0.5f)  ;
-        return Vec3.add(pos,halfsize) ;
-    }
-    */
 
     /**
      * Get the position of the corner with the largest x,y,z, assuming the block is
@@ -91,6 +112,10 @@ public class SEBlockFunctions {
         return null ;
     }
 
+    /**
+     * Recursively search a wom for an entity with the given id. The search is recursive in
+     * the sense that it will also search in among sub-entities.
+     */
     static public WorldEntity findWorldEntity(WorldModel wom, String id) {
         for(var f : wom.elements.values()) {
             var e = findWorldEntity(f,id) ;
@@ -144,6 +169,29 @@ public class SEBlockFunctions {
             return true ;
         }
         return null ;
+    }
+
+    /**
+     * Find the closest block (from the agent's current position) with the given block-type,
+     * within the given radius.
+     */
+    public static WorldEntity findClosestBlock(WorldModel wom, String blockType, float radius) {
+        var sqradius = radius*radius ;
+        var candidates =  SEBlockFunctions.getAllBlocks(wom)
+                .stream()
+                .filter(e -> blockType.equals(e.getStringProperty("blockType"))
+                        && Vec3.sub(e.position, wom.position).lengthSq() <= sqradius)
+                .collect(Collectors.toList());
+        if(candidates.isEmpty()) return null ;
+
+        if(candidates.size() == 1) return candidates.get(0) ;
+
+        // if there are more than one, sort the candidates to get the closest one:
+        candidates.sort((e1,e2) -> Float.compare(
+                 Vec3.sub(e1.position,wom.position).lengthSq()
+                ,Vec3.sub(e2.position,wom.position).lengthSq())) ;
+
+        return candidates.get(0) ;
     }
 
 

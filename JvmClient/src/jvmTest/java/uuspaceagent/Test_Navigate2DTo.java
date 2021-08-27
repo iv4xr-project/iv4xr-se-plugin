@@ -13,14 +13,14 @@ import static uuspaceagent.TestUtils.console;
 import static uuspaceagent.TestUtils.loadSE;
 
 /**
- * Testing auto-navigation using the navigateTo tactic.
+ * Testing 2D grid-based auto-navigation using the navigate2DToTAC tactic.
  */
-public class Test_NavigateTo {
+public class Test_Navigate2DTo {
 
     /**
      * Auto-navigate to a given point.
      */
-    public Pair<TestAgent,GoalStructure> test_navigateTo(Vec3 destination) throws InterruptedException {
+    public Pair<TestAgent,GoalStructure> test_navigate2DTo(Vec3 destination) throws InterruptedException {
         console("*** start test...") ;
         var agentAndState = loadSE("myworld-3 with open door") ; // loadSE("myworld-3")  ;
         TestAgent agent = agentAndState.fst ;
@@ -43,9 +43,9 @@ public class Test_NavigateTo {
                 .toSolve((USeAgentState st) -> {
                     //var currentAgentSq = st.grid2D.gridProjectedLocation(st.wom.position) ;
                     //return currentAgentSq.equals(sqDestination) ;
-                    return Vec3.sub(centerOfSqDestination,state.wom.position).lengthSq() <= TacticLib.THRESHOLD_SQUARED_DISTANCE_TO_SQUARE ;
+                    return Vec3.sub(centerOfSqDestination,state.wom.position).lengthSq() <= GoalAndTacticLib.THRESHOLD_SQUARED_DISTANCE_TO_SQUARE ;
                 })
-                .withTactic(TacticLib.navigate2DTo(destination))
+                .withTactic(GoalAndTacticLib.navigate2DToTAC(destination))
                 .lift() ;
 
         agent.setGoal(G) ;
@@ -72,7 +72,7 @@ public class Test_NavigateTo {
 
         Vec3 dest = new Vec3(9,-5,55.68f) ;
         //Vec3 dest = new Vec3(11.5f,-5,55.68f) ;
-        var agent_and_goal = test_navigateTo(dest) ;
+        var agent_and_goal = test_navigate2DTo(dest) ;
         var G = agent_and_goal.snd ;
         G.printGoalStructureStatus();
         assertTrue(G.getStatus().success());
@@ -85,7 +85,7 @@ public class Test_NavigateTo {
     public void test1() throws InterruptedException {
         // navigating to (10,-5,65) ... this is just before the buttons-panel
         Vec3 dest = new Vec3(10,-5,65) ;
-        var agent_and_goal = test_navigateTo(dest) ;
+        var agent_and_goal = test_navigate2DTo(dest) ;
         var G = agent_and_goal.snd ;
         G.printGoalStructureStatus();
         assertTrue(G.getStatus().success());
@@ -98,32 +98,37 @@ public class Test_NavigateTo {
     public void test2() throws InterruptedException {
         // navigating to (10,-5,65) ... this is just before the buttons-panel
         Vec3 dest = new Vec3(10,-5,73) ;
-        var agent_and_goal = test_navigateTo(dest) ;
+        var agent_and_goal = test_navigate2DTo(dest) ;
         var G = agent_and_goal.snd ;
         G.printGoalStructureStatus();
         assertTrue(G.getStatus().success());
     }
 
     /**
-     * The agent has to make a U-turn to pass over a sticking wall.
+     * Navigate to a position some distance before a door. The agent has to make a U-turn to pass
+     * over a sticking wall.
      */
     //@Test
     public void test3() throws InterruptedException {
         // This is a position in front of a sliding-door. It is reachable from the
         // agent's start position.
         Vec3 dest = new Vec3(19,-5,65) ;
-        var agent_and_goal = test_navigateTo(dest) ;
+        var agent_and_goal = test_navigate2DTo(dest) ;
         var G = agent_and_goal.snd ;
         G.printGoalStructureStatus();
         assertTrue(G.getStatus().success());
     }
 
+    /**
+     * Navigate to a position beyond an open door. This is to test the ability of the 2D
+     * grid nav to recognize inner corridors of a door.
+     */
     @Test
     public void test4() throws InterruptedException {
         // This is a position in front of a sliding-door. It is reachable from the
         // agent's start position.
         Vec3 dest = new Vec3(19,-5,58) ;
-        var agent_and_goal = test_navigateTo(dest) ;
+        var agent_and_goal = test_navigate2DTo(dest) ;
         var G = agent_and_goal.snd ;
         G.printGoalStructureStatus();
         assertTrue(G.getStatus().success());

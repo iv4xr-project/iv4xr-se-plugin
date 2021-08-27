@@ -1,15 +1,10 @@
 package uuspaceagent;
 
-import environments.SeEnvironment;
 import eu.iv4xr.framework.mainConcepts.TestAgent;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.spatial.Vec3;
 import nl.uu.cs.aplib.utils.Pair;
 import org.junit.jupiter.api.Test;
-import spaceEngineers.controller.ContextControllerWrapper;
-import spaceEngineers.controller.JsonRpcSpaceEngineersBuilder;
-import spaceEngineers.controller.SpaceEngineersTestContext;
-import spaceEngineers.model.ToolbarLocation;
 
 import java.util.List;
 
@@ -115,7 +110,7 @@ public class Test_Grid2DNav_pathfinding {
         console(PrintInfos.showObstacle(state,sqDesitnation));
 
         assertTrue(path.size() > 0) ;
-        path = TacticLib.smoothenPath(path) ;
+        path = GoalAndTacticLib.smoothenPath(path) ;
         assertTrue(path.size() > 0) ;
         int k = 0 ;
         for(var sq : path) {
@@ -169,7 +164,7 @@ public class Test_Grid2DNav_pathfinding {
         path = test_pathfinder(state,dest3).snd ;
         assertTrue(path.size() > 0 ) ;
 
-        path = TacticLib.smoothenPath(path) ;
+        path = GoalAndTacticLib.smoothenPath(path) ;
 
         console(">> path.to " + dest3);
         console(PrintInfos.indent(PrintInfos.show2DPath(state,path),5)) ;
@@ -183,7 +178,7 @@ public class Test_Grid2DNav_pathfinding {
         path = test_pathfinder(state,dest4).snd ;
         assertTrue(path.size() > 0 ) ;
 
-        path = TacticLib.smoothenPath(path) ;
+        path = GoalAndTacticLib.smoothenPath(path) ;
 
         console(">> path.to " + dest4);
         console(PrintInfos.indent(PrintInfos.show2DPath(state,path),5)) ;
@@ -208,7 +203,7 @@ public class Test_Grid2DNav_pathfinding {
         var sqDesitnation1 = state.grid2D.gridProjectedLocation(dest) ;
         assertTrue(path.size() > 0) ;
 
-        path = TacticLib.smoothenPath(path) ;
+        path = GoalAndTacticLib.smoothenPath(path) ;
         console(">> path.to " + dest);
         console(PrintInfos.indent(PrintInfos.show2DPath(state,path),5)) ;
 
@@ -217,7 +212,7 @@ public class Test_Grid2DNav_pathfinding {
         console("Checking path to " + dest + " (should be reachable)");
         path = test_pathfinder(state,dest).snd ;
         assertTrue(path.size() > 0) ;
-        path = TacticLib.smoothenPath(path) ;
+        path = GoalAndTacticLib.smoothenPath(path) ;
         console(">> path.to " + dest);
         console(PrintInfos.indent(PrintInfos.show2DPath(state,path),5)) ;
 
