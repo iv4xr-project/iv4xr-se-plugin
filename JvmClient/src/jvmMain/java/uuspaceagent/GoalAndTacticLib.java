@@ -38,7 +38,7 @@ public class GoalAndTacticLib {
      */
     public static float THRESHOLD_SQUARED_DISTANCE_TO_SQUARE = Grid2DNav.SQUARE_SIZE * Grid2DNav.SQUARE_SIZE ; //1.3f * Grid2DNav.SQUARE_SIZE * 1.3f * Grid2DNav.SQUARE_SIZE
 
-    public static float TURNING_SPEED = 20f ;
+    public static float TURNING_SPEED = 10f ;
 
     /**
      * Walking speed (as defined by SE). Set as -0.3f. The negative is intentional and correct :)
@@ -51,37 +51,42 @@ public class GoalAndTacticLib {
     public static float RUN_SPEED = -0.4f ;
 
     static Vec3 FORWARDV3= new Vec3(0,0,1) ;
-    static Vec3 ZEROV3 = new Vec3(0,0,1) ;
+    static Vec3 ZEROV3 = new Vec3(0,0,0) ;
     static Vec2 ZEROV2 = new Vec2(0,0) ;
 
     /**
-     * A more intelligent primitive "move". This will run for several frame updates if the destination
-     * is still far ( >= 1), else it switches to walking. When running, to make the agent run it will
-     * send a "move" command to SE in a rapid successions. The parameter "duration" specifies how many moves
-     * this method will send. Through out this duration, we will be blind to changes from SE.
+     * A more intelligent and performant primitive "move". This will run for several frame updates
+     * if the destination is still far ( >= 1), else it switches to walking. When running, to make
+     * the agent run it will send a "move" command to SE in a rapid successions. The parameter
+     * "duration" specifies how many moves this method will send. Because between the command the
+     * Java side does no computation, this means that the whole series can be executed more rapidly
+     * by SE, producing faster moves. However, throughout this duration, we will be blind to changes
+     * from SE.
+     *
+     * The method returns an observation if it did at least one move. If the agent is already
+     * (very close to) at the destination the method will not do any move and will return null.
      */
     public static CharacterObservation moveTo(USeAgentState agentState, Vec3 destination, Integer duration) {
-        Vec3 forwardSpeed = FORWARDV3 ;
         Vec3 destinationRelativeLocation = Vec3.sub(destination,agentState.wom.position) ;
         float sqDistance = destinationRelativeLocation.lengthSq() ;
-        boolean running = false ;
         if (sqDistance <= 0.01) {
-            // quite close to the destination
-            forwardSpeed = ZEROV3 ;
+            // already very close to the destination
+            return null ;
+        }
+        // else, decide if we should run or walk:
+        boolean running = false ;
+        Vec3 forwardSpeed = FORWARDV3 ;
+        if( sqDistance <= 1) {
+            forwardSpeed = Vec3.mul(forwardSpeed,WALK_SPEED) ;
         }
         else {
-            // decide if we should run or walk:
-            if( sqDistance <= 1) {
-                forwardSpeed = Vec3.mul(forwardSpeed,WALK_SPEED) ;
-            }
-            else {
-                running = true ;
-                forwardSpeed = Vec3.mul(forwardSpeed,RUN_SPEED) ;
-            }
-            // adjust the forward vector to make it angles towards the destination
-            Matrix3D rotation = Matrix3D.getRotationXZ(destinationRelativeLocation, agentState.orientationForward()) ;
-            forwardSpeed = rotation.apply(forwardSpeed) ;
+            running = true ;
+            forwardSpeed = Vec3.mul(forwardSpeed,RUN_SPEED) ;
         }
+        // adjust the forward vector to make it angles towards the destination
+        Matrix3D rotation = Matrix3D.getRotationXZ(destinationRelativeLocation, agentState.orientationForward()) ;
+        forwardSpeed = rotation.apply(forwardSpeed) ;
+
         if (!running || duration==null) {
             duration = 1 ;  // for walking, we will only maintain the move for one update
         }
@@ -97,8 +102,52 @@ public class GoalAndTacticLib {
     }
 
     public static CharacterObservation turnTo(USeAgentState agentState, Vec3 destination, Integer duration) {
+        // direction vector to the next node:
+        Vec3 dirToGo = Vec3.sub(destination,agentState.wom.position) ;
+        Vec3 agentHdir = agentState.orientationForward() ;
+        // for calculating 2D rotation we ignore the y-value:
+        dirToGo.y = 0 ;
+        agentHdir.y = 0 ;
+        dirToGo = dirToGo.normalized() ;
+        agentHdir = agentHdir.normalized() ;
+        // angle between the dir-to-go and the agent's own direction (expressed as cos(angle)):
+        var cos_alpha = Vec3.dot(agentHdir,dirToGo) ;
+        if(1 - cos_alpha < 0.01) {
+            // the angle is already quite aligned to the direction of where we have to go, no turning.
+            return null ;
+        }
 
-        return null ;
+        float turningSpeed = TURNING_SPEED ;
+        boolean fastturning = true ;
+
+        Vec3 normalVector = Vec3.cross(agentHdir,dirToGo) ;
+
+        if(cos_alpha >= THRESHOLD_ANGLE_TO_SLOW_TURNING) {
+            // the angle between the agent's own direction and target direction is less than 10-degree
+            // we reduce the turning-speed:
+            turningSpeed = TURNING_SPEED*0.25f ;
+            fastturning = false ;
+        }
+        // check if we have to turn clockwise or counter-clockwise
+        if (normalVector.y > 0) {
+            // the dir-to-go is to the "left"/counter-clockwise direction
+            turningSpeed = - turningSpeed ;
+        }
+        if(!fastturning || duration == null) {
+            duration = 1 ;
+        }
+        Vec2 turningVector = new Vec2(0, turningSpeed) ;
+
+        // now send the turning commands:
+        CharacterObservation obs = null ;
+        for (int k=0; k<duration; k++) {
+            obs = agentState.env().getController().getCharacter().moveAndRotate(
+                    SEBlockFunctions.toSEVec3(ZEROV3),
+                    turningVector,
+                    0) ; // the last is "roll"
+        }
+
+        return obs ;
     }
 
     /**
@@ -230,6 +279,12 @@ public class GoalAndTacticLib {
                         state.currentPathToFollow.remove(0) ;
                         return state ;
                     }
+                    var obs = turnTo(state,nextNodePos,7) ;
+                    if (obs != null) {
+                        // we did turning, we won't move.
+                        return state ;
+                    }
+                    /*
                     // direction vector to the next node:
                     Vec3 dirToGo = Vec3.sub(nextNodePos,state.wom.position) ;
                     Vec3 agentHdir = state.orientationForward() ;
@@ -267,6 +322,7 @@ public class GoalAndTacticLib {
                         }
                     }
 
+                     */
                     /*
                     System.out.println("xxxx target: " + nextNode + ": " + nextNodePos
                             + ", agent @" + agentSq + ":"+ state.wom.position) ;
@@ -279,6 +335,7 @@ public class GoalAndTacticLib {
                     System.out.println("==== forward speed: " + forward_speed) ;
                     */
 
+            /*
                     Vec2 turningVector = new Vec2(0, turningSpeed) ;
                     spaceEngineers.model.Vec3 forwardVector = new spaceEngineers.model.Vec3(0,0,1 * forward_speed) ;
 
@@ -290,7 +347,9 @@ public class GoalAndTacticLib {
                     else {
                         moveTo(state,nextNodePos,7) ;
                     }
+                    */
 
+                    moveTo(state,nextNodePos,7) ;
 
                     // moving will take some time. We will now return the state at this moment.
                     // The state will be sampled again after some d

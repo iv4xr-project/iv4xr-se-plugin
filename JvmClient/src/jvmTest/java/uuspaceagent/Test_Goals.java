@@ -61,13 +61,28 @@ public class Test_Goals {
         assertTrue(G.getStatus().failed());
     }
 
-    @Test
-    public void test_closeTo_Block() throws InterruptedException {
+    //@Test
+    public void test_closeTo_Block_1() throws InterruptedException {
         // This is a position that is unreachable, so this goal should abort
         console("*** start test...") ;
         var agentAndState = deployAgent();
         GoalStructure G = GoalAndTacticLib.close2Dto(agentAndState.fst,
                 "LargeBlockSlideDoor",
+                SEBlockFunctions.BlockSides.FRONT,
+                20f,
+                0.5f);
+        test_Goal(agentAndState.fst, agentAndState.snd, G) ;
+        G.printGoalStructureStatus();
+        assertTrue(G.getStatus().success());
+    }
+
+    @Test
+    public void test_closeTo_Block_2() throws InterruptedException {
+        // This is a position that is unreachable, so this goal should abort
+        console("*** start test...") ;
+        var agentAndState = deployAgent();
+        GoalStructure G = GoalAndTacticLib.close2Dto(agentAndState.fst,
+                "LargeBlockBatteryBlock",
                 SEBlockFunctions.BlockSides.FRONT,
                 20f,
                 0.5f);
