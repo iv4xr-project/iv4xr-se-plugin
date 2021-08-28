@@ -2,10 +2,12 @@ package uuspaceagent;
 
 import eu.iv4xr.framework.mainConcepts.TestAgent;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
+import eu.iv4xr.framework.mainConcepts.WorldModel;
 import eu.iv4xr.framework.spatial.Vec3;
 import nl.uu.cs.aplib.mainConcepts.*;
 import static nl.uu.cs.aplib.AplibEDSL.* ;
 import nl.uu.cs.aplib.utils.Pair;
+import spaceEngineers.model.CharacterObservation;
 import spaceEngineers.model.Vec2;
 
 
@@ -39,10 +41,65 @@ public class GoalAndTacticLib {
     public static float TURNING_SPEED = 20f ;
 
     /**
-     * Walking speed. Set as 10f in the forward direction (relative to the agent's orientation).
-     * The negative is intentional and correct :)
+     * Walking speed (as defined by SE). Set as -0.3f. The negative is intentional and correct :)
      */
-    public static spaceEngineers.model.Vec3 WALK_SPEED = new spaceEngineers.model.Vec3(0,0,-10f) ;
+    public static float WALK_SPEED = -0.3f ;
+
+    /***
+     * At this speed the agent should run.
+     */
+    public static float RUN_SPEED = -0.4f ;
+
+    static Vec3 FORWARDV3= new Vec3(0,0,1) ;
+    static Vec3 ZEROV3 = new Vec3(0,0,1) ;
+    static Vec2 ZEROV2 = new Vec2(0,0) ;
+
+    /**
+     * A more intelligent primitive "move". This will run for several frame updates if the destination
+     * is still far ( >= 1), else it switches to walking. When running, to make the agent run it will
+     * send a "move" command to SE in a rapid successions. The parameter "duration" specifies how many moves
+     * this method will send. Through out this duration, we will be blind to changes from SE.
+     */
+    public static CharacterObservation moveTo(USeAgentState agentState, Vec3 destination, Integer duration) {
+        Vec3 forwardSpeed = FORWARDV3 ;
+        Vec3 destinationRelativeLocation = Vec3.sub(destination,agentState.wom.position) ;
+        float sqDistance = destinationRelativeLocation.lengthSq() ;
+        boolean running = false ;
+        if (sqDistance <= 0.01) {
+            // quite close to the destination
+            forwardSpeed = ZEROV3 ;
+        }
+        else {
+            // decide if we should run or walk:
+            if( sqDistance <= 1) {
+                forwardSpeed = Vec3.mul(forwardSpeed,WALK_SPEED) ;
+            }
+            else {
+                running = true ;
+                forwardSpeed = Vec3.mul(forwardSpeed,RUN_SPEED) ;
+            }
+            // adjust the forward vector to make it angles towards the destination
+            Matrix3D rotation = Matrix3D.getRotationXZ(destinationRelativeLocation, agentState.orientationForward()) ;
+            forwardSpeed = rotation.apply(forwardSpeed) ;
+        }
+        if (!running || duration==null) {
+            duration = 1 ;  // for walking, we will only maintain the move for one update
+        }
+        // now move... sustain it for the given duration:
+        CharacterObservation obs = null ;
+        for(int k=0; k<duration; k++) {
+            obs = agentState.env().getController().getCharacter().moveAndRotate(
+                    SEBlockFunctions.toSEVec3(forwardSpeed)
+                    ,ZEROV2,
+                    0) ; // the last is "roll"
+        }
+        return obs ;
+    }
+
+    public static CharacterObservation turnTo(USeAgentState agentState, Vec3 destination, Integer duration) {
+
+        return null ;
+    }
 
     /**
      * A goal that is solved when the agent manage to be in some distance close to a
@@ -192,12 +249,12 @@ public class GoalAndTacticLib {
                         // slow down if the target is closer:
                         var distsq = Vec3.sub(nextNodePos,state.wom.position).lengthSq() ;
                         if(distsq <= 1f) {
-                            forward_speed = forward_speed.times(0.33f) ;
+                            forward_speed = forward_speed * 0.33f ;
                         }
                     }
                     else {
                         // else, for now we will turn without moving. :|
-                        forward_speed = new spaceEngineers.model.Vec3(0,0,0)  ;
+                        forward_speed = 0 ;
                         if(cos_alpha >= THRESHOLD_ANGLE_TO_SLOW_TURNING) {
                             // the angle between the agent's own direction and target direction is less than 10-degree
                             // we reduce the turning-speed:
@@ -223,11 +280,18 @@ public class GoalAndTacticLib {
                     */
 
                     Vec2 turningVector = new Vec2(0, turningSpeed) ;
+                    spaceEngineers.model.Vec3 forwardVector = new spaceEngineers.model.Vec3(0,0,1 * forward_speed) ;
 
                     // Now send a command to move the agent:
-
                     //if(cos_alpha<=0) forward_speed = new spaceEngineers.model.Vec3(0,0,0) ;
-                    state.env().getController().getCharacter().moveAndRotate(forward_speed , turningVector, 0) ; // the last is "roll"
+                    if (turningSpeed != 0) {
+                        state.env().getController().getCharacter().moveAndRotate(forwardVector , turningVector, 0) ; // the last is "roll"
+                    }
+                    else {
+                        moveTo(state,nextNodePos,7) ;
+                    }
+
+
                     // moving will take some time. We will now return the state at this moment.
                     // The state will be sampled again after some d
                     //
@@ -339,21 +403,8 @@ public class GoalAndTacticLib {
 
         return action("straight line move to " + destination)
                 .do1((USeAgentState state) -> {
-                    Vec3 speed = SEBlockFunctions.fromSEVec3(WALK_SPEED) ;
                     var sqDistance = Vec3.sub(destination,state.wom.position).lengthSq() ;
-                    if(sqDistance <= 1) { // reduce speed if we get close
-                        speed = new Vec3(0,0,-1) ;
-                    }
-                    Vec3 forwardOrientation = state.orientationForward() ;
-                    // location of the destination relative to the agent:
-                    Vec3 destinationRelativeLocation = Vec3.sub(destination,state.wom.position) ;
-                    // the rotation from the forward direction toward the destination:
-                    Matrix3D rotation = Matrix3D.getRotationXZ(destinationRelativeLocation,forwardOrientation) ;
-                    // now apply the rotation towards the forward speed vector:
-                    speed = rotation.apply(speed) ;
-                    // now move with that speed:
-                    Vec2 turningVector = new Vec2(0,0) ; // no turning ... we will just strafe
-                    state.env().getController().getCharacter().moveAndRotate(SEBlockFunctions.toSEVec3(speed) ,turningVector, 0) ; // the last is "roll"
+                    moveTo(state,destination,7) ;
                     return sqDistance ;
                 })
                 .on_((USeAgentState state) -> Vec3.sub(destination, state.wom.position).lengthSq() >= 0.01)
