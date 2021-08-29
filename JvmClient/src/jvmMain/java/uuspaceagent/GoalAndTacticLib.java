@@ -1,5 +1,6 @@
 package uuspaceagent;
 
+import environments.SeEnvironmentKt;
 import eu.iv4xr.framework.mainConcepts.TestAgent;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
@@ -8,6 +9,8 @@ import nl.uu.cs.aplib.mainConcepts.*;
 import static nl.uu.cs.aplib.AplibEDSL.* ;
 import nl.uu.cs.aplib.utils.Pair;
 import spaceEngineers.model.CharacterObservation;
+import spaceEngineers.model.Observation;
+import spaceEngineers.model.ToolbarLocation;
 import spaceEngineers.model.Vec2;
 
 
@@ -37,7 +40,7 @@ public class GoalAndTacticLib {
      * as the square of the distance (so that we don't have to keep calculating square-roots).
      */
     public static float THRESHOLD_SQUARED_DISTANCE_TO_SQUARE = Grid2DNav.SQUARE_SIZE * Grid2DNav.SQUARE_SIZE ; //1.3f * Grid2DNav.SQUARE_SIZE * 1.3f * Grid2DNav.SQUARE_SIZE
-
+    public static float THRESHOLD_SQUARED_DISTANCE_TO_POINT= 1.7f ; // magic number ... :|
     public static float TURNING_SPEED = 10f ;
 
     /**
@@ -66,7 +69,7 @@ public class GoalAndTacticLib {
      * The method returns an observation if it did at least one move. If the agent is already
      * (very close to) at the destination the method will not do any move and will return null.
      */
-    public static CharacterObservation moveTo(USeAgentState agentState, Vec3 destination, Integer duration) {
+    public static CharacterObservation moveTo(USeAgentState agentState, Vec3 destination, int duration) {
         Vec3 destinationRelativeLocation = Vec3.sub(destination,agentState.wom.position) ;
         float sqDistance = destinationRelativeLocation.lengthSq() ;
         if (sqDistance <= 0.01) {
@@ -74,29 +77,31 @@ public class GoalAndTacticLib {
             return null ;
         }
         // else, decide if we should run or walk:
-        boolean running = false ;
-        Vec3 forwardSpeed = FORWARDV3 ;
-        if( sqDistance <= 1) {
-            forwardSpeed = Vec3.mul(forwardSpeed,WALK_SPEED) ;
-        }
-        else {
-            running = true ;
-            forwardSpeed = Vec3.mul(forwardSpeed,RUN_SPEED) ;
-        }
+        boolean running = true ;
+        Vec3 forwardRun  = Vec3.mul(FORWARDV3,RUN_SPEED) ;
+        Vec3 forwardWalk = Vec3.mul(FORWARDV3,WALK_SPEED) ;
+        if( sqDistance <= 1) running = false ;
         // adjust the forward vector to make it angles towards the destination
         Matrix3D rotation = Matrix3D.getRotationXZ(destinationRelativeLocation, agentState.orientationForward()) ;
-        forwardSpeed = rotation.apply(forwardSpeed) ;
+        forwardRun  = rotation.apply(forwardRun) ;
+        forwardWalk = rotation.apply(forwardWalk) ;
 
-        if (!running || duration==null) {
-            duration = 1 ;  // for walking, we will only maintain the move for one update
-        }
+        //if (!running || duration==null) {
+        //    duration = 1 ;  // for walking, we will only maintain the move for one update
+        //}
         // now move... sustain it for the given duration:
         CharacterObservation obs = null ;
+        float threshold = THRESHOLD_SQUARED_DISTANCE_TO_POINT - 0.15f ;
         for(int k=0; k<duration; k++) {
             obs = agentState.env().getController().getCharacter().moveAndRotate(
-                    SEBlockFunctions.toSEVec3(forwardSpeed)
+                    SEBlockFunctions.toSEVec3(running ? forwardRun : forwardWalk)
                     ,ZEROV2,
-                    0) ; // the last is "roll"
+                    0) ; // the last is "roll" ;
+            sqDistance = Vec3.sub(SEBlockFunctions.fromSEVec3(obs.getPosition()),destination).lengthSq() ;
+            if(Vec3.sub(SEBlockFunctions.fromSEVec3(obs.getPosition()),destination).lengthSq() <= threshold) {
+                break ;
+            }
+            if (sqDistance <= 1f) running = false ;
         }
         return obs ;
     }
@@ -148,6 +153,17 @@ public class GoalAndTacticLib {
         }
 
         return obs ;
+    }
+
+    /**
+     * This will send successive grind-commends to SE. The number of commands is specified
+     * by the parameter "duration". The method does not check if in between the targeted
+     * block is actually already destroyed.
+     */
+    public static void grind(USeAgentState state, int duration) {
+        for(int k=0; k<duration; k++) {
+            state.env().beginUsingTool();
+        }
     }
 
     /**
@@ -222,7 +238,7 @@ public class GoalAndTacticLib {
         GoalStructure G = DEPLOYonce(agent, (USeAgentState state) -> {
 
             WorldEntity block = SEBlockFunctions.findClosestBlock(state.wom,blockType,radius) ;
-            if (block == null) return FAIL("Autofail: no " + blockType + " can be found!") ;
+            if (block == null) return FAIL("Navigating autofail: no " + blockType + " can be found!") ;
 
             Vec3 intermediatePosition = SEBlockFunctions.getSideCenterPoint(block,side,delta + 1.5f) ;
             Vec3 goalPosition = SEBlockFunctions.getSideCenterPoint(block,side,delta) ;
@@ -242,6 +258,53 @@ public class GoalAndTacticLib {
                     ) ;
         }) ;
 
+        return G ;
+    }
+
+    public static GoalStructure grinded(TestAgent agent, String blockType, float targetIntegrity) {
+
+
+        GoalStructure G = DEPLOYonce(agent, (USeAgentState state) -> {
+            WorldEntity target = SEBlockFunctions.findClosestBlock(state.wom,blockType,5f) ;
+            if(target == null) {
+                return FAIL("Grinding autofail: no " + blockType + " cannot be found!") ;
+            }
+            String targetId = target.id ;
+            GoalStructure H = SEQ(
+                    goal("Grinder equiped")
+                        .toSolve(v -> true )
+                        .withTactic(action("Equiping grinding")
+                                .do1((USeAgentState st)-> {
+                                    st.env().equip(new ToolbarLocation(0,0));
+                                    return 1 ;
+                                })
+                                .lift())
+                        .lift(),
+
+                    goal("block " + targetId + "(" + blockType + ") is grinded to integrity " + targetIntegrity + " or less")
+                        .toSolve((WorldEntity e) -> e == null || ((float) e.getProperty("integrity") <= targetIntegrity))
+                        .withTactic(action("Grinding")
+                                .do1((USeAgentState st) -> {
+                                    grind(state,50);
+                                    Observation rawGridsAndBlocksStates = st.env().getController().getObserver().observeBlocks() ;
+                                    WorldModel gridsAndBlocksStates = SeEnvironmentKt.toWorldModel(rawGridsAndBlocksStates) ;
+                                    return SEBlockFunctions.findWorldEntity(st.wom,targetId) ;
+                                })
+                        .lift())
+                    .lift(),
+
+                    goal("Grinder unequiped")
+                            .toSolve(v -> true )
+                            .withTactic(action("Equiping grinding")
+                                    .do1((USeAgentState st)-> {
+                                        st.env().equip(new ToolbarLocation(9,0));
+                                        return 1 ;
+                                    })
+                                    .lift())
+                            .lift()
+                    ) ;
+            return H ;
+        }) ;
         return G ;
     }
 
@@ -349,7 +412,7 @@ public class GoalAndTacticLib {
                     }
                     */
 
-                    moveTo(state,nextNodePos,7) ;
+                    moveTo(state,nextNodePos,10) ;
 
                     // moving will take some time. We will now return the state at this moment.
                     // The state will be sampled again after some d
@@ -437,12 +500,10 @@ public class GoalAndTacticLib {
         if (goalname == null) {
             goalname = "very close to " + p ;
         }
-        //float threshold = Grid2DNav.AGENT_WIDTH * 0.5f * Grid2DNav.AGENT_WIDTH * 0.5f ;
-        float threshold = 1.7f ; // magic number :|
         return goal(goalname)
                 .toSolve((Float square_distance) -> {
-                    System.out.println(">> sq-dist " + square_distance) ;
-                    return square_distance <= threshold ;
+                    //System.out.println(">> sq-dist " + square_distance) ;
+                    return square_distance <= THRESHOLD_SQUARED_DISTANCE_TO_POINT ;
                 })
                 .withTactic(FIRSTof(straightlineMove2DTowards(p).lift() , ABORT()))
                 .lift() ;

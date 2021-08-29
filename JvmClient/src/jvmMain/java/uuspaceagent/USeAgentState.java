@@ -11,6 +11,7 @@ import eu.iv4xr.framework.mainConcepts.WorldModel;
 import eu.iv4xr.framework.spatial.Vec3;
 import nl.uu.cs.aplib.agents.State ;
 import nl.uu.cs.aplib.utils.Pair;
+import spaceEngineers.model.Block;
 import spaceEngineers.model.CharacterObservation;
 import spaceEngineers.model.Observation;
 
@@ -29,6 +30,12 @@ public class USeAgentState extends State {
     public Pathfinder<Pair<Integer,Integer>> pathfinder2D = new AStar<>() ;
     public List<Pair<Integer,Integer>> currentPathToFollow = new LinkedList<>();
 
+    /**
+     * SE does not seem to send time-stamp, so we will keep track the number of state-updates
+     * as a replacement of time-stamp.
+     */
+    long updateCount = 0 ;
+
     public USeAgentState(String agentId) {
         this.agentId = agentId ;
     }
@@ -40,12 +47,13 @@ public class USeAgentState extends State {
 
 
     WorldEntity agentAdditionalInfo(CharacterObservation obs) {
+        Block targetBlock = obs.getTargetBlock();
         WorldEntity agentWE = new WorldEntity(this.agentId, "agentMoreInfo", true) ;
         agentWE.properties.put("orientationForward", fromSEVec3(obs.getOrientationForward())) ;
         agentWE.properties.put("orientationUp", fromSEVec3(obs.getOrientationUp())) ;
         agentWE.properties.put("jetpackRunning", obs.getJetpackRunning()) ;
         agentWE.properties.put("healthRatio", obs.getHealthRatio()) ;
-        //agentWE.properties.put("targetBlock", obs.getTargetBlock().getId()) ;  -> this is null now
+        agentWE.properties.put("targetBlock", targetBlock == null ? null : targetBlock.getId()) ;
         return agentWE ;
     }
 
@@ -57,6 +65,7 @@ public class USeAgentState extends State {
         // get the new WOM. Currently it does not include agent's extended properties, so we add them
         // explicitly here:
         WorldModel newWom = env().observe() ;
+        assignTimeStamp(newWom,updateCount) ;
         // HACK: because wom that comes from SE has its wom.elements read-only :|
         var origElements = newWom.elements ;
         newWom.elements = new HashMap<>() ;
@@ -64,15 +73,21 @@ public class USeAgentState extends State {
         CharacterObservation agentObs = env().getController().getObserver().observe() ;
         newWom.elements.put(this.agentId, agentAdditionalInfo(agentObs)) ;
 
-
         // The obtained wom also does not include blocks observed. So we get them explicitly here:
         // Well, we will get ALL blocks. Note that S=some blocks may change state or disappear,
         // compared to what the agent currently has it its state.wom.
         Observation rawGridsAndBlocksStates = env().getController().getObserver().observeBlocks() ;
         WorldModel gridsAndBlocksStates = SeEnvironmentKt.toWorldModel(rawGridsAndBlocksStates) ;
+        // HACK: make the grids and blocks marked as dynamic elements. SE sends them as non-dymanic
+        // that will cause them to be ignored by mergeObservation.
+        SEBlockFunctions.hackForceDynamicFlag(gridsAndBlocksStates) ;
+        // assign a fresh timestamp too:
+        assignTimeStamp(gridsAndBlocksStates,updateCount) ;
         for(var e : gridsAndBlocksStates.elements.entrySet()) {
             newWom.elements.put(e.getKey(), e.getValue()) ;
         }
+        // updating the count:
+        updateCount++ ;
 
         if(grid2D.origin == null) {
             // TODO .. we should also reset the grid if the agent flies to a new plane.
@@ -81,29 +96,31 @@ public class USeAgentState extends State {
         if(wom == null) {
             // this is the first observation
             wom = newWom ;
+            // we are done then...
+            return ;
         }
-        else {
-            // MERGING the two woms:
-            wom.mergeNewObservation(newWom) ;
 
-            // HOWEVER, some blocks and grids-of-blocks may have been destroyed, hence
-            // do not exist anymore. We need to remove them from state.wom. This is handled
-            // below.
-            // First, remove disappearing "cube-grids" (composition of blocks)
-            List<String> tobeRemoved = wom.elements.keySet().stream()
+        // MERGING the two woms:
+        wom.mergeNewObservation(newWom) ;
+
+        // HOWEVER, some blocks and grids-of-blocks may have been destroyed, hence
+        // do not exist anymore. We need to remove them from state.wom. This is handled
+        // below.
+        // First, remove disappearing "cube-grids" (composition of blocks)
+        List<String> tobeRemoved = wom.elements.keySet().stream()
                     .filter(id -> ! newWom.elements.keySet().contains(id))
                     .collect(Collectors.toList());
-            for(var id : tobeRemoved) wom.elements.remove(id) ;
-            // Then, we remove disappearing blocks (from grids that remain):
-            for(var cubegridOld : wom.elements.values()) {
-                var cubeGridNew = newWom.elements.get(cubegridOld.id) ;
-                tobeRemoved.clear();
-                tobeRemoved = cubegridOld.elements.keySet().stream()
-                        .filter(blockId -> ! cubeGridNew.elements.keySet().contains(blockId))
-                        .collect(Collectors.toList());
-                for(var blockId : tobeRemoved) cubegridOld.elements.remove(blockId) ;
-            }
+        for(var id : tobeRemoved) wom.elements.remove(id) ;
+        // Then, we remove disappearing blocks (from grids that remain):
+        for(var cubegridOld : wom.elements.values()) {
+            var cubeGridNew = newWom.elements.get(cubegridOld.id) ;
+            tobeRemoved.clear();
+            tobeRemoved = cubegridOld.elements.keySet().stream()
+                    .filter(blockId -> ! cubeGridNew.elements.keySet().contains(blockId))
+                    .collect(Collectors.toList());
+            for(var blockId : tobeRemoved) cubegridOld.elements.remove(blockId) ;
         }
+
         // updating the "navigational-2DGrid:
         var blocksInWom =  SEBlockFunctions.getAllBlockIDs(wom) ;
         List<String> toBeRemoved = grid2D.allObstacleIDs.stream()
@@ -140,6 +157,16 @@ public class USeAgentState extends State {
 
     boolean jetpackRunning() {
         return (boolean) wom.elements.get(agentId).properties.get("jetpackRunning") ;
+
+    }
+
+    // helpers function
+
+    static void assignTimeStamp(WorldModel wom, long time) {
+        wom.timestamp = time ;
+        for(var e : wom.elements.values()) {
+            e.assignTimeStamp(time);
+        }
     }
 
 

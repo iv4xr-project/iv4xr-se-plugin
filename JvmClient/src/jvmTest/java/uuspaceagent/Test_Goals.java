@@ -6,6 +6,7 @@ import nl.uu.cs.aplib.mainConcepts.GoalStructure;
 import nl.uu.cs.aplib.utils.Pair;
 import org.junit.jupiter.api.Test;
 
+import static nl.uu.cs.aplib.AplibEDSL.SEQ;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static uuspaceagent.PrintInfos.*;
 import static uuspaceagent.TestUtils.*;
@@ -76,7 +77,7 @@ public class Test_Goals {
         assertTrue(G.getStatus().success());
     }
 
-    @Test
+    //@Test
     public void test_closeTo_Block_2() throws InterruptedException {
         // This is a position that is unreachable, so this goal should abort
         console("*** start test...") ;
@@ -86,6 +87,24 @@ public class Test_Goals {
                 SEBlockFunctions.BlockSides.FRONT,
                 20f,
                 0.5f);
+        test_Goal(agentAndState.fst, agentAndState.snd, G) ;
+        G.printGoalStructureStatus();
+        assertTrue(G.getStatus().success());
+    }
+
+    @Test
+    public void test_navigated_and_grind() throws InterruptedException {
+        // This is a position that is unreachable, so this goal should abort
+        console("*** start test...") ;
+        var agentAndState = deployAgent();
+        GoalStructure G = SEQ(
+                GoalAndTacticLib.close2Dto(agentAndState.fst,
+                    "LargeBlockBatteryBlock",
+                    SEBlockFunctions.BlockSides.FRONT,
+                    20f,
+                    0.5f),
+                GoalAndTacticLib.grinded(agentAndState.fst,"LargeBlockBatteryBlock", 5000)
+        );
         test_Goal(agentAndState.fst, agentAndState.snd, G) ;
         G.printGoalStructureStatus();
         assertTrue(G.getStatus().success());

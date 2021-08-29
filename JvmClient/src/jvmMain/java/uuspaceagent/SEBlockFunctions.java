@@ -194,5 +194,31 @@ public class SEBlockFunctions {
         return candidates.get(0) ;
     }
 
+    /**
+     * HACK: this will replace grids and blocks packaged in this world model with the same
+     * entity but marked as dynamic. SE send them as non-dynamic, which causes them to
+     * be ignored when merhing woms.
+     */
+    public static void hackForceDynamicFlag(WorldModel gridsAndBlocks) {
+        for(var entry : gridsAndBlocks.elements.entrySet()) {
+            entry.setValue(hackForceDynamicFlag(entry.getValue())) ;
+        }
+    }
+
+    public static WorldEntity hackForceDynamicFlag(WorldEntity e) {
+        WorldEntity f = new WorldEntity(e.id, e.type, true) ;
+        f.timestamp = e.timestamp ;
+        f.lastStutterTimestamp = e.lastStutterTimestamp ;
+        f.position = e.position ;
+        f.extent = e.extent ;
+        f.velocity = e.velocity ;
+        f.properties = e.properties ;
+        f.elements = e.elements ;
+        for(var entry : f.elements.entrySet()) {
+            entry.setValue(hackForceDynamicFlag(entry.getValue())) ;
+        }
+        return f ;
+    }
+
 
 }
