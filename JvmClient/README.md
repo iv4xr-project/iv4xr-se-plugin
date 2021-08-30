@@ -142,6 +142,9 @@ That is normal game behaviour. When placing block programmatically using hack pl
 
 ### Welding and grinding
 
+Using different welders and grinders gives different results.
+They have different speed and different reach. Below is a formula, that tries to help with determining grinding/welding speed.
+
 #### Shared constants:
 
 ```
@@ -150,18 +153,14 @@ ToolCooldownMs = 250 //not sure if this ever changes, never did for me
 
 #### Welder constants and formula
 
-Welder
-SpeedMultiplier: 1
-DistanceMultiplier: 1
-Welder2
-SpeedMultiplier: 1.5
-DistanceMultiplier: 1.2
-Welder3
-SpeedMultiplier: 2
-DistanceMultiplier: 1.4
-Welder4
-SpeedMultiplier: 5
-DistanceMultiplier: 1.6
+
+| Welder | SpeedMultiplier | DistanceMultiplier|
+| --- | --- | --- |
+| Welder  | 1   | 1   |
+| Welder2 | 1.5 | 1.2 |
+| Welder3 | 2   | 1.4 |
+| Welder4 | 5   | 1.6 |
+
 
 ```
 WELDER_AMOUNT_PER_SECOND = 1 //constant
@@ -174,18 +173,12 @@ WelderSpeedMultiplier * SpeedMultiplier * WELDER_AMOUNT_PER_SECOND * ToolCooldow
 
 #### Angle grinder constants and formula
 
-AngleGrinder
-SpeedMultiplier: 1
-DistanceMultiplier: 1
-AngleGrinder2
-SpeedMultiplier: 1.5
-DistanceMultiplier: 1.2
-AngleGrinder3
-SpeedMultiplier: 2
-DistanceMultiplier: 1.4
-AngleGrinder4
-SpeedMultiplier: 5
-DistanceMultiplier: 1.6
+| Grinder | SpeedMultiplier | DistanceMultiplier|
+| --- | --- | --- |
+| AngleGrinder  | 1   | 1   |
+| AngleGrinder2 | 1.5 | 1.2 |
+| AngleGrinder3 | 2   | 1.4 |
+| AngleGrinder4 | 5   | 1.6 |
 
 
 ```
