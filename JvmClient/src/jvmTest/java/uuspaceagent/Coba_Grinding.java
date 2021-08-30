@@ -16,22 +16,26 @@ public class Coba_Grinding {
 
         state.updateState();
 
+        System.out.println("** Equiping grinder");
+        state.env().equip(new ToolbarLocation(0,0));
+
+        state.updateState();
+
         WorldEntity agentInfo = state.wom.elements.get(state.agentId) ;
         System.out.println("** Agent's info: " + PrintInfos.showWorldEntity(agentInfo));
 
+        /*
         System.out.println("======");
         CharacterObservation cobs = state.env().getController().getObserver().observe() ;
         if(cobs.getTargetBlock() != null) {
             System.out.println("=== target block: " + cobs.getTargetBlock().getId());
         }
-
+        */
 
         WorldEntity target = SEBlockFunctions.findClosestBlock(state.wom, "LargeBlockBatteryBlock", 10) ;
         String batteryId = target.id ;
         System.out.println("** target state: " + PrintInfos.showWorldEntity(target));
 
-        System.out.println("** Equiping grinder");
-        state.env().equip(new ToolbarLocation(0,0));
         System.out.println("** start grinding ");
         for(int k=0; k<1000; k++) {
             state.env().beginUsingTool();
@@ -45,7 +49,9 @@ public class Coba_Grinding {
                 }
                 else {
                     System.out.println("** target state: " + PrintInfos.showWorldEntity(target));
-                    // state.env().getController().getObserver().takeScreenshot("xxxxxx");
+                    //state.env().getController().getObserver().takeScreenshot("C:\\Users\\uprim\\AppData\\Roaming\\SpaceEngineers\\Screenshots\\shot" + k + ".png");
+                    state.env().getController().getObserver().takeScreenshot("C:\\workshop\\projects\\iv4xr\\Screenshots\\shot" + k + ".png");
+                    //state.env().getController().getObserver().takeScreenshot("C:\\workshop\\projects\\iv4xr\\shot" + k + ".png");
                 }
             }
         }

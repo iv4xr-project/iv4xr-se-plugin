@@ -1,6 +1,7 @@
 package uuspaceagent;
 
 import eu.iv4xr.framework.mainConcepts.TestAgent;
+import eu.iv4xr.framework.mainConcepts.TestDataCollector;
 import eu.iv4xr.framework.spatial.Vec3;
 import nl.uu.cs.aplib.mainConcepts.GoalStructure;
 import nl.uu.cs.aplib.utils.Pair;
@@ -93,20 +94,35 @@ public class Test_Goals {
     }
 
     @Test
-    public void test_navigated_and_grind() throws InterruptedException {
+    public void test_navigate_and_grind() throws InterruptedException {
         // This is a position that is unreachable, so this goal should abort
         console("*** start test...") ;
         var agentAndState = deployAgent();
+        TestAgent agent = agentAndState.fst ;
+        agent.setTestDataCollector(new TestDataCollector()) ;
+
         GoalStructure G = SEQ(
-                GoalAndTacticLib.close2Dto(agentAndState.fst,
+                GoalAndTacticLib.close2Dto(agent,
                     "LargeBlockBatteryBlock",
                     SEBlockFunctions.BlockSides.FRONT,
                     20f,
                     0.5f),
-                GoalAndTacticLib.grinded(agentAndState.fst,"LargeBlockBatteryBlock", 5000)
+                GoalAndTacticLib.targetBlockOK(agent, e ->
+                        "LargeBlockBatteryBlock".equals(e.getStringProperty("blockType"))
+                        && (float) e.getProperty("integrity") == (float) e.getProperty("maxIntegrity"),
+                        false
+                ),
+                GoalAndTacticLib.photo("C:\\workshop\\projects\\iv4xr\\Screenshots\\LargeBlockBatteryBlock.png"),
+                GoalAndTacticLib.grinded(agent,0.5f),
+                GoalAndTacticLib.targetBlockOK(agent, e ->
+                                (float) e.getProperty("integrity") <= 0.5f * (float) e.getProperty("maxIntegrity"),
+                        false
+                ),
+                GoalAndTacticLib.photo("C:\\workshop\\projects\\iv4xr\\Screenshots\\LargeBlockBatteryBlock_at_50.png")
         );
-        test_Goal(agentAndState.fst, agentAndState.snd, G) ;
+        test_Goal(agent, agentAndState.snd, G) ;
         G.printGoalStructureStatus();
         assertTrue(G.getStatus().success());
+        assertTrue(agent.getTestDataCollector().getNumberOfPassVerdictsSeen() == 2) ;
     }
 }

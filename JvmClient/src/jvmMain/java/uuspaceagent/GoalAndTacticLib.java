@@ -1,6 +1,7 @@
 package uuspaceagent;
 
 import environments.SeEnvironmentKt;
+import eu.iv4xr.framework.mainConcepts.ObservationEvent;
 import eu.iv4xr.framework.mainConcepts.TestAgent;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
@@ -16,6 +17,7 @@ import spaceEngineers.model.Vec2;
 
 import java.util.List;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static nl.uu.cs.aplib.AplibEDSL.* ;
@@ -58,16 +60,17 @@ public class GoalAndTacticLib {
     static Vec2 ZEROV2 = new Vec2(0,0) ;
 
     /**
-     * A more intelligent and performant primitive "move". This will run for several frame updates
-     * if the destination is still far ( >= 1), else it switches to walking. When running, to make
-     * the agent run it will send a "move" command to SE in a rapid successions. The parameter
-     * "duration" specifies how many moves this method will send. Because between the command the
-     * Java side does no computation, this means that the whole series can be executed more rapidly
-     * by SE, producing faster moves. However, throughout this duration, we will be blind to changes
-     * from SE.
+     * A more intelligent and performant primitive "move". This sends a burst of successive move
+     * commands to SE with little computation in between. This results in fast(er) move. The number
+     * of commands sent is specified by the parameter "duration", though the burst is stopped once
+     * the agent is very close to the destination (some threshold). The agent will run, if the
+     * distance to the destination is >= 1, else it will walk.
      *
-     * The method returns an observation if it did at least one move. If the agent is already
-     * (very close to) at the destination the method will not do any move and will return null.
+     * Note that during the burst we will be blind to changes from SE.
+     *
+     * The method returns an observation if it did at least one move. If at the beginning the agent
+     * is already (very close to) at the destination the method will not do any move and will
+     * return null.
      */
     public static CharacterObservation moveTo(USeAgentState agentState, Vec3 destination, int duration) {
         Vec3 destinationRelativeLocation = Vec3.sub(destination,agentState.wom.position) ;
@@ -98,15 +101,29 @@ public class GoalAndTacticLib {
                     ,ZEROV2,
                     0) ; // the last is "roll" ;
             sqDistance = Vec3.sub(SEBlockFunctions.fromSEVec3(obs.getPosition()),destination).lengthSq() ;
-            if(Vec3.sub(SEBlockFunctions.fromSEVec3(obs.getPosition()),destination).lengthSq() <= threshold) {
+            if(sqDistance <= threshold) {
                 break ;
             }
-            if (sqDistance <= 1f) running = false ;
+            if (running && sqDistance <= 1f) running = false ;
         }
         return obs ;
     }
 
-    public static CharacterObservation turnTo(USeAgentState agentState, Vec3 destination, Integer duration) {
+    /**
+     * A primitive method that sends a burst of successive turn-angle commands to SE. The number
+     * of the commands is specified by the parameter duration. The agent will turn on its place
+     * so that it would face the given destination. The parameter "cosAlphaThreshold" specifies how far
+     * the agent should turn. It would turn until the angle alpha between its forward direction
+     * and the straight line between itself and destination is alpha. The cosAlphaThreshold expresses
+     * this alpha in terms of cos(alpha).
+     *
+     * The method will burst the turning, if the remaining angle towards alpha is still large,
+     * afterwhich it will not burst (so it will just send one turn-command and return).
+     *
+     * If at the beginning the angle to destination is less than alpha this method returns null,
+     * and else it returns an observation at the end of the turns.
+     */
+    public static CharacterObservation turnTo(USeAgentState agentState, Vec3 destination, float cosAlphaThreshold, Integer duration) {
         // direction vector to the next node:
         Vec3 dirToGo = Vec3.sub(destination,agentState.wom.position) ;
         Vec3 agentHdir = agentState.orientationForward() ;
@@ -117,7 +134,8 @@ public class GoalAndTacticLib {
         agentHdir = agentHdir.normalized() ;
         // angle between the dir-to-go and the agent's own direction (expressed as cos(angle)):
         var cos_alpha = Vec3.dot(agentHdir,dirToGo) ;
-        if(1 - cos_alpha < 0.01) {
+        //if(1 - cos_alpha < 0.01) {
+        if(cos_alpha > cosAlphaThreshold) {
             // the angle is already quite aligned to the direction of where we have to go, no turning.
             return null ;
         }
@@ -227,6 +245,13 @@ public class GoalAndTacticLib {
         return FIRSTof(G) ;
     }
 
+    public static <AgentState,Proposal> GoalStructure LIFT(String goalname, Action a) {
+        return goal(goalname)
+                .toSolve( (Proposal p) -> true)
+                .withTactic(a.lift())
+                .lift() ;
+    }
+
     public static GoalStructure close2Dto(TestAgent agent,
                                           String blockType,
                                           SEBlockFunctions.BlockSides side,
@@ -261,28 +286,86 @@ public class GoalAndTacticLib {
         return G ;
     }
 
-    public static GoalStructure grinded(TestAgent agent, String blockType, float targetIntegrity) {
+    public static GoalStructure grinderEquiped() {
+        return LIFT("Grinder equiped",
+                  action("equip grinder").do1((USeAgentState state) -> {
+                     state.env().equip(new ToolbarLocation(0,0));
+                     return true ;
+                  })
+                ) ;
+    }
+
+    public static GoalStructure barehandEquiped() {
+        return LIFT("Grinder equiped",
+                action("equip grinder").do1((USeAgentState state) -> {
+                    state.env().equip(new ToolbarLocation(0,9));
+                    return true ;
+                })
+        ) ;
+    }
+
+    public static GoalStructure photo(String fname) {
+        return LIFT("Screenshot made",
+                action("Snapping a picture").do1((USeAgentState state) -> {
+                    state.env().getController().getObserver().takeScreenshot(fname);
+                    return true ;
+                })
+        ) ;
+    }
 
 
-        GoalStructure G = DEPLOYonce(agent, (USeAgentState state) -> {
-            WorldEntity target = SEBlockFunctions.findClosestBlock(state.wom,blockType,5f) ;
+    public static GoalStructure targetBlockOK(TestAgent agent, Predicate<WorldEntity> predicate, boolean abortIfFail) {
+
+        Tactic checkAction = action("checking a predicate")
+                .do1(state -> true)
+                .on_((USeAgentState state) -> {
+                    WorldEntity target = state.targetBlock() ;
+                    boolean ok = true ;
+                    if (target == null) {
+                        ok = false ;
+                    }
+                    else {
+                        ok = predicate.test(target) ;
+                    }
+                    var datacollector = agent.getTestDataCollector() ;
+                    if (datacollector != null) {
+                        ObservationEvent.VerdictEvent verdict = new ObservationEvent.VerdictEvent(
+                                "Checking target block",
+                                target == null ? "target is null" : "" + target.type + "@" + target.position,
+                                ok
+                                ) ;
+                        datacollector.registerEvent(agent.getId(),verdict);
+                    }
+                    return ok ;
+                })
+                .lift() ;
+
+        Tactic success = action("success").do1((USeAgentState state) -> true).lift() ;
+
+        return SEQ(
+           grinderEquiped(),
+           goal("target entity passes a check")
+                   .toSolve(b -> true)
+                   .withTactic(
+                      abortIfFail ? FIRSTof(checkAction,ABORT()) : FIRSTof(checkAction,success))
+                   .lift(),
+           barehandEquiped()
+        ) ;
+    }
+
+    public static GoalStructure grinded(TestAgent agent, float targetIntegrity) {
+
+        GoalStructure grind = DEPLOYonce(agent, (USeAgentState state) -> {
+            WorldEntity target = state.targetBlock() ;
             if(target == null) {
-                return FAIL("Grinding autofail: no " + blockType + " cannot be found!") ;
+                return FAIL("Grinding autofail: there is no target block.") ;
             }
             String targetId = target.id ;
-            GoalStructure H = SEQ(
-                    goal("Grinder equiped")
-                        .toSolve(v -> true )
-                        .withTactic(action("Equiping grinding")
-                                .do1((USeAgentState st)-> {
-                                    st.env().equip(new ToolbarLocation(0,0));
-                                    return 1 ;
-                                })
-                                .lift())
-                        .lift(),
+            float precentageTagetIntegrity = 100 * targetIntegrity ;
+            float integrityThreshold = ((float) target.getProperty("maxIntegrity")) * targetIntegrity ;
 
-                    goal("block " + targetId + "(" + blockType + ") is grinded to integrity " + targetIntegrity + " or less")
-                        .toSolve((WorldEntity e) -> e == null || ((float) e.getProperty("integrity") <= targetIntegrity))
+            return goal("block " + targetId + "(" + target.getStringProperty("blockType") + ") is grinded to integrity <= " + precentageTagetIntegrity + "%")
+                        .toSolve((WorldEntity e) -> e == null || ((float) e.getProperty("integrity") <= integrityThreshold))
                         .withTactic(action("Grinding")
                                 .do1((USeAgentState st) -> {
                                     grind(state,50);
@@ -291,21 +374,18 @@ public class GoalAndTacticLib {
                                     return SEBlockFunctions.findWorldEntity(st.wom,targetId) ;
                                 })
                         .lift())
-                    .lift(),
-
-                    goal("Grinder unequiped")
-                            .toSolve(v -> true )
-                            .withTactic(action("Equiping grinding")
-                                    .do1((USeAgentState st)-> {
-                                        st.env().equip(new ToolbarLocation(9,0));
-                                        return 1 ;
-                                    })
-                                    .lift())
-                            .lift()
-                    ) ;
-            return H ;
+                    .lift() ;
         }) ;
-        return G ;
+
+        GoalStructure stopGrinding = LIFT("Grinding stopped",
+                action("stop grinding")
+                     .do1((USeAgentState st) -> {
+                         st.env().endUsingTool();
+                         return true ;
+                      })
+                ) ;
+
+        return SEQ(grinderEquiped(), grind, stopGrinding, barehandEquiped()) ;
     }
 
     /**
@@ -342,7 +422,7 @@ public class GoalAndTacticLib {
                         state.currentPathToFollow.remove(0) ;
                         return state ;
                     }
-                    var obs = turnTo(state,nextNodePos,7) ;
+                    var obs = turnTo(state,nextNodePos, 0.75f,10) ;
                     if (obs != null) {
                         // we did turning, we won't move.
                         return state ;
@@ -412,7 +492,7 @@ public class GoalAndTacticLib {
                     }
                     */
 
-                    moveTo(state,nextNodePos,10) ;
+                    moveTo(state,nextNodePos,20) ;
 
                     // moving will take some time. We will now return the state at this moment.
                     // The state will be sampled again after some d
@@ -549,6 +629,41 @@ public class GoalAndTacticLib {
      */
     public static Action rotateXY(Vec3 destination) {
 
+        float cosAlphaThreshold  = 0.99f ;
+        float cosAlphaThreshold_ = 0.995f ;
+
+        return action("turning towards " + destination)
+                .on((USeAgentState state) ->{
+                    Vec3 dirToGo = Vec3.sub(destination,state.wom.position) ;
+                    Vec3 forwardOrientation = state.orientationForward() ;
+                    dirToGo.y = 0 ;
+                    forwardOrientation.y = 0 ;
+                    dirToGo = dirToGo.normalized() ;
+                    forwardOrientation = forwardOrientation.normalized() ;
+                    var cos_alpha = Vec3.dot(forwardOrientation,dirToGo) ;
+                    if(cos_alpha >= cosAlphaThreshold) { // the angle is quite aligned, the action is disabled
+                        return null ;
+                    }
+                    return cos_alpha ;
+                })
+                .do2((USeAgentState state) -> (Float cos_alpha) -> {
+                    CharacterObservation obs = turnTo(state,destination,cosAlphaThreshold_,10) ;
+                    if(obs == null) {
+                        return cos_alpha ;
+                    }
+                    Vec3 dirToGo = Vec3.sub(destination,state.wom.position) ;
+                    Vec3 forwardOrientation = SEBlockFunctions.fromSEVec3(obs.getOrientationForward()) ;
+                    dirToGo.y = 0 ;
+                    forwardOrientation.y = 0 ;
+                    dirToGo = dirToGo.normalized() ;
+                    forwardOrientation = forwardOrientation.normalized() ;
+                    cos_alpha = Vec3.dot(forwardOrientation,dirToGo) ;
+                    return cos_alpha ;
+                }) ;
+    }
+
+    public static Action rotateXYxxx(Vec3 destination) {
+
         Vec3 ZERO = new Vec3(0,0,0) ;
 
         return action("turning towards " + destination)
@@ -560,9 +675,9 @@ public class GoalAndTacticLib {
                     dirToGo = dirToGo.normalized() ;
                     forwardOrientation = forwardOrientation.normalized() ;
                     var cos_alpha = Vec3.dot(forwardOrientation,dirToGo) ;
-                    System.out.println("** dir-to-go: " + dirToGo);
-                    System.out.println("** hdir: " + forwardOrientation);
-                    System.out.println("** cos_alpha: " + cos_alpha);
+                    //System.out.println("** dir-to-go: " + dirToGo);
+                    //System.out.println("** hdir: " + forwardOrientation);
+                    //System.out.println("** cos_alpha: " + cos_alpha);
 
 
                     float turningSpeed = TURNING_SPEED ;

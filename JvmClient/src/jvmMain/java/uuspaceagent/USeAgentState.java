@@ -65,13 +65,13 @@ public class USeAgentState extends State {
         // get the new WOM. Currently it does not include agent's extended properties, so we add them
         // explicitly here:
         WorldModel newWom = env().observe() ;
-        assignTimeStamp(newWom,updateCount) ;
         // HACK: because wom that comes from SE has its wom.elements read-only :|
         var origElements = newWom.elements ;
         newWom.elements = new HashMap<>() ;
         for (var e : origElements.entrySet()) newWom.elements.put(e.getKey(),e.getValue()) ;
         CharacterObservation agentObs = env().getController().getObserver().observe() ;
         newWom.elements.put(this.agentId, agentAdditionalInfo(agentObs)) ;
+        assignTimeStamp(newWom,updateCount) ;
 
         // The obtained wom also does not include blocks observed. So we get them explicitly here:
         // Well, we will get ALL blocks. Note that S=some blocks may change state or disappear,
@@ -149,6 +149,12 @@ public class USeAgentState extends State {
 
     Vec3 orientationForward() {
         return (Vec3) wom.elements.get(agentId).properties.get("orientationForward") ;
+    }
+
+    WorldEntity targetBlock() {
+        var targetId = wom.elements.get(agentId).getStringProperty ("targetBlock") ;
+        if (targetId == null) return null ;
+        return SEBlockFunctions.findWorldEntity(wom,targetId) ;
     }
 
     float healthRatio() {
