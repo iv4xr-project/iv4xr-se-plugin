@@ -36,14 +36,14 @@ val WorldEntity.blockType: String
     }
 
 fun CubeGrid.toWorldEntity(): WorldEntity {
-    return WorldEntity(this.id, "grid", false).also { we ->
+    return WorldEntity(this.id, "grid", true).also { we ->
         we.position = position.toIv4xrVec3()
         we.elements = blocks.map { it.toWorldEntity() }.associateBy { it.id }
     }
 }
 
 fun Block.toWorldEntity(): WorldEntity {
-    return WorldEntity(id, "block", false).also { we ->
+    return WorldEntity(id, "block", true).also { we ->
         we.position = position.toIv4xrVec3()
         we.properties["blockType"] = blockType
         we.properties["integrity"] = integrity
