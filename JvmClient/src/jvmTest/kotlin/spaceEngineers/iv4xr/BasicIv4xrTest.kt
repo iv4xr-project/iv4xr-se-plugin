@@ -9,6 +9,7 @@ import nl.uu.cs.aplib.AplibEDSL.SEQ
 import nl.uu.cs.aplib.mainConcepts.GoalStructure
 import org.junit.jupiter.api.Test
 import spaceEngineers.controller.*
+import spaceEngineers.controller.SpaceEngineers.Companion.DEFAULT_AGENT_ID
 import spaceEngineers.iv4xr.goal.GoalBuilder
 import spaceEngineers.iv4xr.goal.TacticLib
 import spaceEngineers.model.ToolbarLocation
@@ -18,7 +19,7 @@ import kotlin.test.assertTrue
 class BasicIv4xrTest {
     @Test
     fun placeGrindDownTorchUp() {
-        val agentId = "agentId"
+        val agentId = DEFAULT_AGENT_ID
         val blockType = "LargeHeavyBlockArmorBlock"
         val context = SpaceEngineersTestContext()
         context.blockTypeToToolbarLocation[blockType] = ToolbarLocation(1, 0)

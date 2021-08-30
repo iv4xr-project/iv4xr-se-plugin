@@ -10,6 +10,10 @@ interface SpaceEngineers {
     val definitions: Definitions
     val blocks: Blocks
     val admin: SpaceEngineersAdmin
+
+    companion object {
+        const val DEFAULT_AGENT_ID = "se0"
+    }
 }
 
 interface Session {
