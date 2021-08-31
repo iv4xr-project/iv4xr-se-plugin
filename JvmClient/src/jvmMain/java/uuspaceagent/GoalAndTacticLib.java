@@ -18,9 +18,6 @@ import spaceEngineers.model.Vec2;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
-
-import static nl.uu.cs.aplib.AplibEDSL.* ;
 
 public class GoalAndTacticLib {
 
@@ -42,7 +39,9 @@ public class GoalAndTacticLib {
      * as the square of the distance (so that we don't have to keep calculating square-roots).
      */
     public static float THRESHOLD_SQUARED_DISTANCE_TO_SQUARE = Grid2DNav.SQUARE_SIZE * Grid2DNav.SQUARE_SIZE ; //1.3f * Grid2DNav.SQUARE_SIZE * 1.3f * Grid2DNav.SQUARE_SIZE
+
     public static float THRESHOLD_SQUARED_DISTANCE_TO_POINT= 1.7f ; // magic number ... :|
+
     public static float TURNING_SPEED = 10f ;
 
     /**
@@ -174,9 +173,9 @@ public class GoalAndTacticLib {
     }
 
     /**
-     * This will send successive grind-commends to SE. The number of commands is specified
-     * by the parameter "duration". The method does not check if in between the targeted
-     * block is actually already destroyed.
+     * A primitive method that will send successive grind-commends to SE. The number of commands
+     * is specified by the parameter "duration". The method does not check if in between
+     * the targeted block is actually already destroyed.
      */
     public static void grind(USeAgentState state, int duration) {
         for(int k=0; k<duration; k++) {
@@ -215,69 +214,60 @@ public class GoalAndTacticLib {
         return close2Dto(null,targetLocation) ;
     }
 
-    public static GoalStructure FAIL(String gname) {
-        return goal(gname)
-            .toSolve((USeAgentState st) -> false)
-            .withTactic(ABORT())
-            .lift() ; }
-
     /**
-     * The combinator will "dynamically" deploy a goal to be executed/adopted after executing this
-     * combinator. The paramerter dynamic goal takes the agent current state and constructs a goal H
-     * based on it, and this H is the one that is deployed.
+     * A goal that is solved when the agent manage to get close (the distance is specified by delta) to the center of a
+     * specified face (front/back/ left/right) of the nearest block of the specified block-type, within the given
+     * radius. The goal fails if there is no such block in the given radius, or if the agent cannot find a path
+     * to the closest one.
+     *
+     * NOTE: for now the block should be a cube, and upright.
      */
-    public static <AgentState> GoalStructure  DEPLOYonce(TestAgent agent, Function<AgentState,GoalStructure> dynamicgoal) {
-        Boolean[] deployed = {false} ;
-        GoalStructure G = goal("deploy once")
-                .toSolve((AgentState state) -> false )
-                .withTactic(FIRSTof(
-                        action("deploying a goal")
-                            .do1((AgentState state) -> {
-                                agent.addAfter(dynamicgoal.apply(state));
-                                deployed[0] = true ;
-                                //System.out.println(">>> action: deployed[0] = " + deployed[0]) ;
-                                return state ;
-                                })
-                            .on_(state -> ! deployed[0] )
-                            .lift(),
-                        ABORT())
-                ).lift();
-        return FIRSTof(G) ;
-    }
-
-    public static <AgentState,Proposal> GoalStructure LIFT(String goalname, Action a) {
-        return goal(goalname)
-                .toSolve( (Proposal p) -> true)
-                .withTactic(a.lift())
-                .lift() ;
-    }
-
     public static GoalStructure close2Dto(TestAgent agent,
                                           String blockType,
                                           SEBlockFunctions.BlockSides side,
                                           float radius,
                                           float delta) {
-
         float sqradius = radius * radius ;
+
+        return close2Dto(agent,
+                "type " + blockType,
+                (USeAgentState state) -> (WorldEntity e)
+                        ->
+                        blockType.equals(e.getStringProperty("blockType"))
+                        && Vec3.sub(e.position, state.wom.position).lengthSq() <= sqradius,
+                side,
+                delta
+                ) ;
+    }
+
+    /**
+     * Use this to target a block using a generic selector function.
+     */
+    public static GoalStructure close2Dto(TestAgent agent,
+                                          String selectorDesc,
+                                          Function<USeAgentState, Predicate<WorldEntity>> selector,
+                                          SEBlockFunctions.BlockSides side,
+                                          float delta) {
+
 
         GoalStructure G = DEPLOYonce(agent, (USeAgentState state) -> {
 
-            WorldEntity block = SEBlockFunctions.findClosestBlock(state.wom,blockType,radius) ;
-            if (block == null) return FAIL("Navigating autofail: no " + blockType + " can be found!") ;
+            WorldEntity block = SEBlockFunctions.findClosestBlock(state.wom,selector.apply(state)) ;
+            if (block == null) return FAIL("Navigating autofail; no block can be found: " + selectorDesc) ;
 
             Vec3 intermediatePosition = SEBlockFunctions.getSideCenterPoint(block,side,delta + 1.5f) ;
             Vec3 goalPosition = SEBlockFunctions.getSideCenterPoint(block,side,delta) ;
             Vec3 blockCenter = (Vec3) block.getProperty("centerPosition") ;
 
-            return SEQ(close2Dto("close to the " + blockType + " @"
+            return SEQ(close2Dto("close to a block of property " + selectorDesc + " @"
                             + block.position
                             + " ," + side + ", targeting " + intermediatePosition,
                             intermediatePosition),
-                      veryclose2DTo("very close to the " + blockType + " @"
+                      veryclose2DTo("very close to a block of property " + selectorDesc + " @"
                               + block.position
                               + " ," + side + ", targeting " + goalPosition,
                               goalPosition),
-                      face2DToward("facing towards " + blockType + " @"
+                      face2DToward("facing towards a block of property " + selectorDesc + " @"
                               + block.position
                               + " ," + side, blockCenter)
                     ) ;
@@ -287,7 +277,7 @@ public class GoalAndTacticLib {
     }
 
     public static GoalStructure grinderEquiped() {
-        return LIFT("Grinder equiped",
+        return lift("Grinder equiped",
                   action("equip grinder").do1((USeAgentState state) -> {
                      state.env().equip(new ToolbarLocation(0,0));
                      return true ;
@@ -296,7 +286,7 @@ public class GoalAndTacticLib {
     }
 
     public static GoalStructure barehandEquiped() {
-        return LIFT("Grinder equiped",
+        return lift("Grinder equiped",
                 action("equip grinder").do1((USeAgentState state) -> {
                     state.env().equip(new ToolbarLocation(0,9));
                     return true ;
@@ -305,7 +295,7 @@ public class GoalAndTacticLib {
     }
 
     public static GoalStructure photo(String fname) {
-        return LIFT("Screenshot made",
+        return lift("Screenshot made",
                 action("Snapping a picture").do1((USeAgentState state) -> {
                     state.env().getController().getObserver().takeScreenshot(fname);
                     return true ;
@@ -377,7 +367,7 @@ public class GoalAndTacticLib {
                     .lift() ;
         }) ;
 
-        GoalStructure stopGrinding = LIFT("Grinding stopped",
+        GoalStructure stopGrinding = lift("Grinding stopped",
                 action("stop grinding")
                      .do1((USeAgentState st) -> {
                          st.env().endUsingTool();
@@ -427,80 +417,7 @@ public class GoalAndTacticLib {
                         // we did turning, we won't move.
                         return state ;
                     }
-                    /*
-                    // direction vector to the next node:
-                    Vec3 dirToGo = Vec3.sub(nextNodePos,state.wom.position) ;
-                    Vec3 agentHdir = state.orientationForward() ;
-                    // for calculating 2D rotation we ignore the y-value:
-                    dirToGo.y = 0 ;
-                    agentHdir.y = 0 ;
-                    dirToGo = dirToGo.normalized() ;
-                    agentHdir = agentHdir.normalized() ;
-                    // angle between the dir-to-go and the agent's own direction (expressed as cos(angle)):
-                    var cos_alpha = Vec3.dot(agentHdir,dirToGo) ;
-                    Vec3 normalVector = Vec3.cross(agentHdir,dirToGo) ;
-
-                    float turningSpeed = TURNING_SPEED ;
-                    var forward_speed = WALK_SPEED ;
-                    if(1 - cos_alpha < 0.01) { // the angle is quite aligned to where we have to go, no turning
-                        turningSpeed = 0 ;
-                        // slow down if the target is closer:
-                        var distsq = Vec3.sub(nextNodePos,state.wom.position).lengthSq() ;
-                        if(distsq <= 1f) {
-                            forward_speed = forward_speed * 0.33f ;
-                        }
-                    }
-                    else {
-                        // else, for now we will turn without moving. :|
-                        forward_speed = 0 ;
-                        if(cos_alpha >= THRESHOLD_ANGLE_TO_SLOW_TURNING) {
-                            // the angle between the agent's own direction and target direction is less than 10-degree
-                            // we reduce the turning-speed:
-                            turningSpeed = TURNING_SPEED*0.25f ;
-                        }
-                        // check if we have to turn clockwise or counter-clockwise
-                        if (normalVector.y > 0) {
-                            // the dir-to-go is to the "left"/counter-clockwise direction
-                            turningSpeed = - turningSpeed ;
-                        }
-                    }
-
-                     */
-                    /*
-                    System.out.println("xxxx target: " + nextNode + ": " + nextNodePos
-                            + ", agent @" + agentSq + ":"+ state.wom.position) ;
-                    System.out.println("==== dir-to-go: " + dirToGo) ;
-                    System.out.println("==== hdir : " + agentHdir) ;
-
-                    System.out.println("==== cpsalpha: " + cos_alpha + ", alpha: " + Math.toDegrees(Math.acos(cos_alpha))) ;
-                    System.out.println("==== normal.y: " + normalVector.y) ;
-                    System.out.println("==== turning speed: " + turningSpeed) ;
-                    System.out.println("==== forward speed: " + forward_speed) ;
-                    */
-
-            /*
-                    Vec2 turningVector = new Vec2(0, turningSpeed) ;
-                    spaceEngineers.model.Vec3 forwardVector = new spaceEngineers.model.Vec3(0,0,1 * forward_speed) ;
-
-                    // Now send a command to move the agent:
-                    //if(cos_alpha<=0) forward_speed = new spaceEngineers.model.Vec3(0,0,0) ;
-                    if (turningSpeed != 0) {
-                        state.env().getController().getCharacter().moveAndRotate(forwardVector , turningVector, 0) ; // the last is "roll"
-                    }
-                    else {
-                        moveTo(state,nextNodePos,7) ;
-                    }
-                    */
-
                     moveTo(state,nextNodePos,20) ;
-
-                    // moving will take some time. We will now return the state at this moment.
-                    // The state will be sampled again after some d
-                    //
-                    //
-                    //
-                    //
-                    // elta time, in the next agent-update.
                     return state ;
                 } )
                 .on((USeAgentState state)  -> {
@@ -661,52 +578,5 @@ public class GoalAndTacticLib {
                     return cos_alpha ;
                 }) ;
     }
-
-    public static Action rotateXYxxx(Vec3 destination) {
-
-        Vec3 ZERO = new Vec3(0,0,0) ;
-
-        return action("turning towards " + destination)
-                .on((USeAgentState state) ->{
-                    Vec3 dirToGo = Vec3.sub(destination,state.wom.position) ;
-                    Vec3 forwardOrientation = state.orientationForward() ;
-                    dirToGo.y = 0 ;
-                    forwardOrientation.y = 0 ;
-                    dirToGo = dirToGo.normalized() ;
-                    forwardOrientation = forwardOrientation.normalized() ;
-                    var cos_alpha = Vec3.dot(forwardOrientation,dirToGo) ;
-                    //System.out.println("** dir-to-go: " + dirToGo);
-                    //System.out.println("** hdir: " + forwardOrientation);
-                    //System.out.println("** cos_alpha: " + cos_alpha);
-
-
-                    float turningSpeed = TURNING_SPEED ;
-                    if(1 - cos_alpha < 0.005) { // the angle is quite aligned, the action is disabled
-                        return null ;
-                    }
-                    else {
-                        Vec3 normalVector = Vec3.cross(forwardOrientation,dirToGo) ;
-                        if(cos_alpha >= THRESHOLD_ANGLE_TO_SLOW_TURNING) {
-                            // the angle between the agent's own direction and target direction is less than 10-degree
-                            // we reduce the turning-speed:
-                            turningSpeed = TURNING_SPEED*0.25f ;
-                        }
-                        if (normalVector.y > 0) {
-                            // the dir-to-go is to the "left"/counter-clockwise direction
-                            turningSpeed = - turningSpeed ;
-                        }
-                        return new Pair<Float,Float>(cos_alpha, turningSpeed) ;
-                    }
-                })
-                .do2((USeAgentState state) -> (Pair<Float,Float> queryResult) -> {
-                    float cos_alpha = queryResult.fst ;
-                    float turningSpeed = queryResult.snd ;
-                    Vec2 turningVector = new Vec2(0,turningSpeed) ; // no turning ... we will just strafe
-                    state.env().getController().getCharacter().moveAndRotate(SEBlockFunctions.toSEVec3(ZERO) ,turningVector, 0) ; // the last is "roll"
-                    return cos_alpha ;
-                }) ;
-    }
-
-
 
 }

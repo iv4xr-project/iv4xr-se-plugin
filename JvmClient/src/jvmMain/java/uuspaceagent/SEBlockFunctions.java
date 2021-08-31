@@ -9,6 +9,7 @@ import spaceEngineers.model.extensions.BlockExtensionsKt;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -176,11 +177,19 @@ public class SEBlockFunctions {
      * within the given radius.
      */
     public static WorldEntity findClosestBlock(WorldModel wom, String blockType, float radius) {
-        var sqradius = radius*radius ;
+        float sqradius = radius*radius ;
+        return findClosestBlock(wom,
+                   e -> blockType.equals(e.getStringProperty("blockType"))
+                        && Vec3.sub(e.position, wom.position).lengthSq() <= sqradius) ;
+    }
+
+    /**
+     * Return the closest block with the specified property (the selector).
+     */
+    public static WorldEntity findClosestBlock(WorldModel wom, Predicate<WorldEntity> selector) {
         var candidates =  SEBlockFunctions.getAllBlocks(wom)
                 .stream()
-                .filter(e -> blockType.equals(e.getStringProperty("blockType"))
-                        && Vec3.sub(e.position, wom.position).lengthSq() <= sqradius)
+                .filter(e -> selector.test(e))
                 .collect(Collectors.toList());
         if(candidates.isEmpty()) return null ;
 

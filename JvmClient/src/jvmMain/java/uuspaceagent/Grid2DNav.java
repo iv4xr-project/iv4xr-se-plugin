@@ -27,8 +27,9 @@ import java.util.*;
  *    (3) for now the blocks should be cubes. For non-cubes we need to take their orientation
  *        into account. TODO.
  *
- *  TODO: for now we don't check if a square on the grid is SOLID (e.g. it could be a gaping
- *  hole in space). We can do this by maintaining a list of squares with solid floor.
+ *  TODO: for now we don't check if a square on the grid is actually a SOLID floor (e.g. it
+ *  could be a gaping hole in space). We can do this by maintaining a list of squares
+ *  with solid floor.
  */
 public class Grid2DNav implements Navigatable<Pair<Integer,Integer>>{
 
