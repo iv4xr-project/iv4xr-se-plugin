@@ -51,6 +51,13 @@ interface Observer {
     fun observe(): CharacterObservation
     fun observeBlocks(): Observation
     fun observeNewBlocks(): Observation
+
+    /**
+     * Creates screenshot in the game. If there's an error, no exception is thrown (swallowed by the game itself).
+     * Creates directories that do not exist if necessary.
+     * If this method doesn't do anything it's usually a problem with the path or permissions on the filesystem.
+     * @param absolutePath Absolute path to final image. For example `C:/Screenshots/image.png`
+     */
     fun takeScreenshot(absolutePath: String)
 }
 
