@@ -12,7 +12,7 @@ namespace Iv4xr.SePlugin.Control
         {
             return MyDefinitionManager.Static
                     .GetDefinitionsOfType<MyCubeBlockDefinition>()
-                    .Select(SeEntityBuilder.GetBuildSeBlockDefinition)
+                    .Select(EntityBuilder.GetBuildSeBlockDefinition)
                     .ToList();
         }
 

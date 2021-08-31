@@ -36,12 +36,12 @@ namespace Iv4xr.SePlugin.Control
         private readonly PlainVec3D
                 m_agentExtent = new PlainVec3D(0.5, 1, 0.5); // TODO(PP): It's just a quick guess, check the reality.
 
-        private readonly SeEntityBuilder m_seEntityBuilder;
+        private readonly EntityBuilder m_entityBuilder;
 
         public LowLevelObserver(IGameSession gameSession)
         {
             m_gameSession = gameSession;
-            m_seEntityBuilder = new SeEntityBuilder() {Log = Log};
+            m_entityBuilder = new EntityBuilder() {Log = Log};
         }
 
         private MyCharacter Character => m_gameSession.Character;
@@ -98,19 +98,19 @@ namespace Iv4xr.SePlugin.Control
         {
             if (!(Character.CurrentWeapon is MyEngineerToolBase wp)) return null;
             var slimBlock = wp.GetTargetBlock();
-            return slimBlock == null ? null : m_seEntityBuilder.CreateGridBlock(slimBlock);
+            return slimBlock == null ? null : m_entityBuilder.CreateGridBlock(slimBlock);
         }
         
         private Block TargetDetectorBlock()
         {
             var detector = Character.Components.Get<MyCharacterDetectorComponent>();
-            return detector?.UseObject?.Owner is MyCubeBlock block ? m_seEntityBuilder.CreateGridBlock(block.SlimBlock) : null;
+            return detector?.UseObject?.Owner is MyCubeBlock block ? m_entityBuilder.CreateGridBlock(block.SlimBlock) : null;
         }
 
         private UseObject UseObject()
         {
             var detector = Character.Components.Get<MyCharacterDetectorComponent>();
-            return detector?.UseObject != null ? m_seEntityBuilder.CreateUseObject(detector.UseObject) : null;
+            return detector?.UseObject != null ? m_entityBuilder.CreateUseObject(detector.UseObject) : null;
         }
 
         public Observation GetNewBlocks()
@@ -118,7 +118,7 @@ namespace Iv4xr.SePlugin.Control
             return new Observation()
             {
                 Character = GetCharacterObservation(),
-                Grids = CollectSurroundingBlocks(GetBoundingSphereD(), ObservationMode.NEW_BLOCKS)
+                Grids = CollectSurroundingBlocks(GetBoundingSphere(), ObservationMode.NEW_BLOCKS)
             };
         }
 
@@ -127,19 +127,24 @@ namespace Iv4xr.SePlugin.Control
             return new Observation()
             {
                 Character = GetCharacterObservation(),
-                Grids = CollectSurroundingBlocks(GetBoundingSphereD(), ObservationMode.BLOCKS)
+                Grids = CollectSurroundingBlocks(GetBoundingSphere(), ObservationMode.BLOCKS)
             };
         }
 
-        public BoundingSphereD GetBoundingSphereD()
+        internal BoundingSphereD GetBoundingSphere()
         {
-            return new BoundingSphereD(GetPlayerPosition(), m_radius);
+            return GetBoundingSphere(m_radius);
+        }
+
+        internal BoundingSphereD GetBoundingSphere(double radius)
+        {
+            return new BoundingSphereD(GetPlayerPosition(), radius);
         }
 
         public HashSet<MySlimBlock> GetBlocksOf(MyCubeGrid grid)
         {
             var foundBlocks = new HashSet<MySlimBlock>();
-            var sphere = GetBoundingSphereD();
+            var sphere = GetBoundingSphere();
             grid.GetBlocksInsideSphere(ref sphere, foundBlocks);
             return foundBlocks;
         }
@@ -159,16 +164,16 @@ namespace Iv4xr.SePlugin.Control
             }
         }
 
-        private List<CubeGrid> CollectSurroundingBlocks(BoundingSphereD sphere, ObservationMode mode)
+        internal List<CubeGrid> CollectSurroundingBlocks(BoundingSphereD sphere, ObservationMode mode)
         {
             return EnumerateSurroundingEntities(sphere)
                     .OfType<MyCubeGrid>()
-                    .Select(grid => m_seEntityBuilder.CreateSeGrid(grid, sphere, mode)).ToList();
+                    .Select(grid => m_entityBuilder.CreateSeGrid(grid, sphere, mode)).ToList();
         }
 
         public MyCubeGrid GetGridContainingBlock(string blockId)
         {
-            BoundingSphereD sphere = GetBoundingSphereD();
+            BoundingSphereD sphere = GetBoundingSphere();
             return EnumerateSurroundingEntities(sphere)
                     .OfType<MyCubeGrid>().ToList().FirstOrDefault(grid =>
                     {

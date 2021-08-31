@@ -40,7 +40,7 @@ namespace Iv4xr.SePlugin.Control
         }
     }
 
-    internal class SeEntityBuilder
+    internal class EntityBuilder
     {
         public ILog Log { get; set; }
 
@@ -48,7 +48,7 @@ namespace Iv4xr.SePlugin.Control
 
         private readonly float m_blockCountWarningRatio;
 
-        public SeEntityBuilder(int blockCountTakeLimit = 10_000, float blockCountWarningRatio = 0.9f)
+        public EntityBuilder(int blockCountTakeLimit = 10_000, float blockCountWarningRatio = 0.9f)
         {
             m_blockCountTakeLimit = blockCountTakeLimit;
             m_blockCountWarningRatio = blockCountWarningRatio;
