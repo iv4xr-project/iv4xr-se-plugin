@@ -32,9 +32,9 @@ public class Test_Navigate2DTo {
         //  orientationForward: <-0.043967947,-2.0614608E-4,0.9990329> ... so looking towards z-axis
         console(showWOMAgent(state.wom));
 
-        var sqAgent = state.grid2D.gridProjectedLocation(state.wom.position) ;
-        var sqDestination = state.grid2D.gridProjectedLocation(destination) ;
-        var centerOfSqDestination = state.grid2D.getSquareCenterLocation(sqDestination) ;
+        var sqAgent = state.navgrid.gridProjectedLocation(state.wom.position) ;
+        var sqDestination = state.navgrid.gridProjectedLocation(destination) ;
+        var centerOfSqDestination = state.navgrid.getSquareCenterLocation(sqDestination) ;
 
         //float dth = 1.3f * Grid2DNav.SQUARE_SIZE ;
         //final float distance_to_sq_threshold = dth*dth ;

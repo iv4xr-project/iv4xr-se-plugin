@@ -2,7 +2,6 @@ package uuspaceagent;
 
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
-import nl.uu.cs.aplib.utils.Pair;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -71,13 +70,13 @@ public class PrintInfos {
     }
 
     /**
-     * For printing the obstacles that block a given 2D-square on the 2D-nav-grid maintained by
+     * For printing the obstacles that block a given unit-cube on the nav-grid maintained by
      * the given agent-state.
      */
-    public static String showObstacle(USeAgentState state, Pair<Integer,Integer> sq) {
+    public static String showObstacle(USeAgentState state, DPos3 cube) {
         StringBuffer z = new StringBuffer() ;
-        z.append(">> Obstacles on " + sq + ", center:" + state.grid2D.getSquareCenterLocation(sq)) ;
-        var obstacles = state.grid2D.knownObstacles.get(sq) ;
+        z.append(">> Obstacles on " + cube + ", center:" + state.navgrid.getSquareCenterLocation(cube)) ;
+        var obstacles = state.navgrid.knownObstacles.get(cube) ;
         if(obstacles == null || obstacles.isEmpty()) {
             z.append(" none") ;
             return z.toString() ;
@@ -93,7 +92,7 @@ public class PrintInfos {
         return z.toString() ;
     }
 
-    public static String show2DPath(USeAgentState state, List<Pair<Integer,Integer>> path) {
+    public static String showPath(USeAgentState state, List<DPos3> path) {
         StringBuffer z = new StringBuffer() ;
         if (path == null) {
             z.append("the path is null") ;
@@ -105,9 +104,9 @@ public class PrintInfos {
         }
         z.append("path.size: " + path.size()) ;
         int k = 0 ;
-        for(var sq : path) {
-            z.append("\n" + "> Node " + k + ":" + sq + ", center:" + state.grid2D.getSquareCenterLocation(sq));
-            var obstacles = state.grid2D.knownObstacles.get(sq) ;
+        for(var cube : path) {
+            z.append("\n" + "> Node " + k + ":" + cube + ", center:" + state.navgrid.getSquareCenterLocation(cube));
+            var obstacles = state.navgrid.knownObstacles.get(cube) ;
             if (obstacles == null || obstacles.isEmpty()) {
                 z.append(", no-obstacle") ;
             }

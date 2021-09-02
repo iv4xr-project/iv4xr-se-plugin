@@ -40,26 +40,26 @@ public class Test_Grid2DNav_pathfinding {
         Thread.sleep(1000);
         // do a single update, and check that we if we have the structures:
         state.updateState();
-        assertTrue(state.grid2D.allObstacleIDs.size() > 0 ) ;
+        assertTrue(state.navgrid.allObstacleIDs.size() > 0 ) ;
         console(showWOMElements(state.wom)) ;
         console("=========\n") ;
-        console("#obstacles:" + state.grid2D.allObstacleIDs.size()) ;
+        console("#obstacles:" + state.navgrid.allObstacleIDs.size()) ;
 
-        for(var o : state.grid2D.allObstacleIDs) {
+        for(var o : state.navgrid.allObstacleIDs) {
             WorldEntity we = findWorldEntity(state.wom,o) ;
             console("  Obs: " + o + " (" + we.properties.get("blockType") + ")");
             // check is o appears in the map of known obstacles:
-            assertTrue(state.grid2D.knownObstacles.values().stream()
+            assertTrue(state.navgrid.knownObstacles.values().stream()
                     .anyMatch(obstacles ->
                             obstacles.stream().anyMatch(obs -> obs.obstacle.equals(o)))) ;
         }
-        assertTrue(state.grid2D.allObstacleIDs.stream()
+        assertTrue(state.navgrid.allObstacleIDs.stream()
                 .anyMatch(id -> findWorldEntity(state.wom,id).properties.get("blockType").equals("SurvivalKitLarge"))) ;
-        assertTrue(state.grid2D.allObstacleIDs.stream()
+        assertTrue(state.navgrid.allObstacleIDs.stream()
                 .anyMatch(id -> findWorldEntity(state.wom,id).properties.get("blockType").equals("Window1x1FlatInv"))) ;
-        assertTrue(state.grid2D.allObstacleIDs.stream()
+        assertTrue(state.navgrid.allObstacleIDs.stream()
                 .anyMatch(id -> findWorldEntity(state.wom,id).properties.get("blockType").equals("LargeBlockSlideDoor"))) ;
-        assertTrue(state.grid2D.allObstacleIDs.stream()
+        assertTrue(state.navgrid.allObstacleIDs.stream()
                 .anyMatch(id -> findWorldEntity(state.wom,id).properties.get("blockType").equals("LargeBlockBatteryBlock")));
     }
 
@@ -83,9 +83,9 @@ public class Test_Grid2DNav_pathfinding {
 
         // navigating to (10,-5,40) ... this is beyond the closed maze where the agent now is.
         // Should not be reachable:
-        var sqAgent = state.grid2D.gridProjectedLocation(state.wom.position) ;
-        var sqDesitnation = state.grid2D.gridProjectedLocation(destination) ;
-        List<Pair<Integer,Integer>> path = state.pathfinder2D.findPath(state.grid2D,sqAgent,sqDesitnation) ;
+        var sqAgent = state.navgrid.gridProjectedLocation(state.wom.position) ;
+        var sqDesitnation = state.navgrid.gridProjectedLocation(destination) ;
+        List<Pair<Integer,Integer>> path = state.pathfinder2D.findPath(state.navgrid,sqAgent,sqDesitnation) ;
         return new Pair<>(state,path) ;
     }
 
@@ -103,8 +103,8 @@ public class Test_Grid2DNav_pathfinding {
         var state = agent_and_path.fst ;
         var path = agent_and_path.snd ;
 
-        var sqAgent = state.grid2D.gridProjectedLocation(state.wom.position) ;
-        var sqDesitnation = state.grid2D.gridProjectedLocation(destination) ;
+        var sqAgent = state.navgrid.gridProjectedLocation(state.wom.position) ;
+        var sqDesitnation = state.navgrid.gridProjectedLocation(destination) ;
 
         console(PrintInfos.showObstacle(state,sqAgent));
         console(PrintInfos.showObstacle(state,sqDesitnation));
@@ -114,7 +114,7 @@ public class Test_Grid2DNav_pathfinding {
         assertTrue(path.size() > 0) ;
         int k = 0 ;
         for(var sq : path) {
-            console(">> Node " + k + ":" + sq + ", center:" + state.grid2D.getSquareCenterLocation(sq));
+            console(">> Node " + k + ":" + sq + ", center:" + state.navgrid.getSquareCenterLocation(sq));
             k++ ;
         }
         // check that the start of the path is the same square as the agent,
@@ -140,8 +140,8 @@ public class Test_Grid2DNav_pathfinding {
         var agent_and_path = test_pathfinder(null,dest1) ;
         var state = agent_and_path.fst ;
         var path = agent_and_path.snd ;
-        var sqAgent = state.grid2D.gridProjectedLocation(state.wom.position) ;
-        var sqDesitnation1 = state.grid2D.gridProjectedLocation(dest1) ;
+        var sqAgent = state.navgrid.gridProjectedLocation(state.wom.position) ;
+        var sqDesitnation1 = state.navgrid.gridProjectedLocation(dest1) ;
         assertTrue(path == null) ;
 
         // destination (10,-5,70). This is actually visible, but the pathfinding does not
@@ -152,7 +152,7 @@ public class Test_Grid2DNav_pathfinding {
         Vec3 dest2 = new Vec3(10,-5,70) ;
         console("Checking path to " + dest2 + " (should be unreachable)");
         path = test_pathfinder(state,dest2).snd ;
-        var sqDesitnation2 = state.grid2D.gridProjectedLocation(dest2) ;
+        var sqDesitnation2 = state.navgrid.gridProjectedLocation(dest2) ;
         assertTrue(path == null) ;
 
         // the following destination is near the far window, near the buttons-pannel. Despite
@@ -160,20 +160,20 @@ public class Test_Grid2DNav_pathfinding {
         // actually does, there is anough space to reach the destination below.
         Vec3 dest3 = new Vec3(10,-5,73) ;
         console("Checking path to " + dest3 + " (reachable)");
-        var sqDesitnation3 = state.grid2D.gridProjectedLocation(dest3) ;
+        var sqDesitnation3 = state.navgrid.gridProjectedLocation(dest3) ;
         path = test_pathfinder(state,dest3).snd ;
         assertTrue(path.size() > 0 ) ;
 
         path = GoalAndTacticLib.smoothenPath(path) ;
 
         console(">> path.to " + dest3);
-        console(PrintInfos.indent(PrintInfos.show2DPath(state,path),5)) ;
+        console(PrintInfos.indent(PrintInfos.showPath(state,path),5)) ;
 
         // This is a position in front of a sliding-door. It is reachable from the
         // agent's start position.
         Vec3 dest4 = new Vec3(19,-5,65) ;
         console("Checking path to " + dest4 + " (reachable)");
-        var sqDesitnation4 = state.grid2D.gridProjectedLocation(dest4) ;
+        var sqDesitnation4 = state.navgrid.gridProjectedLocation(dest4) ;
         console(PrintInfos.showObstacle(state,sqDesitnation4));
         path = test_pathfinder(state,dest4).snd ;
         assertTrue(path.size() > 0 ) ;
@@ -181,7 +181,7 @@ public class Test_Grid2DNav_pathfinding {
         path = GoalAndTacticLib.smoothenPath(path) ;
 
         console(">> path.to " + dest4);
-        console(PrintInfos.indent(PrintInfos.show2DPath(state,path),5)) ;
+        console(PrintInfos.indent(PrintInfos.showPath(state,path),5)) ;
     }
 
     /**
@@ -199,13 +199,13 @@ public class Test_Grid2DNav_pathfinding {
         var agent_and_path = test_pathfinder(null,dest) ;
         var state = agent_and_path.fst ;
         var path = agent_and_path.snd ;
-        var sqAgent = state.grid2D.gridProjectedLocation(state.wom.position) ;
-        var sqDesitnation1 = state.grid2D.gridProjectedLocation(dest) ;
+        var sqAgent = state.navgrid.gridProjectedLocation(state.wom.position) ;
+        var sqDesitnation1 = state.navgrid.gridProjectedLocation(dest) ;
         assertTrue(path.size() > 0) ;
 
         path = GoalAndTacticLib.smoothenPath(path) ;
         console(">> path.to " + dest);
-        console(PrintInfos.indent(PrintInfos.show2DPath(state,path),5)) ;
+        console(PrintInfos.indent(PrintInfos.showPath(state,path),5)) ;
 
         System.out.println("=========================") ;
         dest = new Vec3(11.5f,-5,55.68f) ;
@@ -214,7 +214,7 @@ public class Test_Grid2DNav_pathfinding {
         assertTrue(path.size() > 0) ;
         path = GoalAndTacticLib.smoothenPath(path) ;
         console(">> path.to " + dest);
-        console(PrintInfos.indent(PrintInfos.show2DPath(state,path),5)) ;
+        console(PrintInfos.indent(PrintInfos.showPath(state,path),5)) ;
 
     }
 }

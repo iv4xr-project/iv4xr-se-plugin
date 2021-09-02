@@ -84,7 +84,7 @@ public class SEBlockFunctions {
 
     /**
      * Get the position of the corner, with minimum x,y,z, assuming the block is
-     * un-rotated.
+     * xyz-aligned.
      */
     public static Vec3 getBaseMinCorner(WorldEntity block) {
         // center position:
@@ -95,7 +95,7 @@ public class SEBlockFunctions {
 
     /**
      * Get the position of the corner with the largest x,y,z, assuming the block is
-     * un-rotated.
+     * xyz-aligned.
      */
     public static Vec3 getBaseMaxCorner(WorldEntity block) {
         // center position:

@@ -26,9 +26,9 @@ public class USeAgentState extends State {
 
     public String agentId ;
     public WorldModel wom ;
-    public Grid2DNav grid2D = new Grid2DNav() ;
-    public Pathfinder<Pair<Integer,Integer>> pathfinder2D = new AStar<>() ;
-    public List<Pair<Integer,Integer>> currentPathToFollow = new LinkedList<>();
+    public NavGrid navgrid = new NavGrid() ;
+    public Pathfinder<DPos3> pathfinder2D = new AStar<>() ;
+    public List<DPos3> currentPathToFollow = new LinkedList<>();
 
     /**
      * SE does not seem to send time-stamp, so we will keep track the number of state-updates
@@ -89,9 +89,9 @@ public class USeAgentState extends State {
         // updating the count:
         updateCount++ ;
 
-        if(grid2D.origin == null) {
+        if(navgrid.origin == null) {
             // TODO .. we should also reset the grid if the agent flies to a new plane.
-            grid2D.resetGrid(newWom.position);
+            navgrid.resetGrid(newWom.position);
         }
         if(wom == null) {
             // this is the first observation
@@ -123,22 +123,22 @@ public class USeAgentState extends State {
 
         // updating the "navigational-2DGrid:
         var blocksInWom =  SEBlockFunctions.getAllBlockIDs(wom) ;
-        List<String> toBeRemoved = grid2D.allObstacleIDs.stream()
+        List<String> toBeRemoved = navgrid.allObstacleIDs.stream()
                 .filter(id -> !blocksInWom.contains(id))
                 .collect(Collectors.toList());
         // first, removing obstacles that no longer exist:
         for(var id : toBeRemoved) {
-            grid2D.removeObstacle(id);
+            navgrid.removeObstacle(id);
         }
         // then, there may also be new blocks ... we add them to the nav-grid:
         // TODO: this assumes doors are initially closed. Calculating blocked squares
         // for open-doors is more complicated. TODO.
         for(var block : SEBlockFunctions.getAllBlocks(gridsAndBlocksStates)) {
-            grid2D.addObstacle(block);
+            navgrid.addObstacle(block);
             // check if it is a door, and get its open/close state:
             Boolean isOpen = SEBlockFunctions.geSlideDoorState(block) ;
             if (isOpen != null) {
-                grid2D.setObstacleBlockingState(block,! isOpen);
+                navgrid.setObstacleBlockingState(block,! isOpen);
             }
         }
         // updating dynamic blocking-state: (e.g. handling doors)
@@ -166,7 +166,7 @@ public class USeAgentState extends State {
 
     }
 
-    // helpers function
+    // helper functions
 
     static void assignTimeStamp(WorldModel wom, long time) {
         wom.timestamp = time ;

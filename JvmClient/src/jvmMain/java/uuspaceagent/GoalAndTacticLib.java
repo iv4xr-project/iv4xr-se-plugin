@@ -38,7 +38,7 @@ public class GoalAndTacticLib {
      * The threshold is not expressed literally as distance, but for efficiency it is expressed
      * as the square of the distance (so that we don't have to keep calculating square-roots).
      */
-    public static float THRESHOLD_SQUARED_DISTANCE_TO_SQUARE = Grid2DNav.SQUARE_SIZE * Grid2DNav.SQUARE_SIZE ; //1.3f * Grid2DNav.SQUARE_SIZE * 1.3f * Grid2DNav.SQUARE_SIZE
+    public static float THRESHOLD_SQUARED_DISTANCE_TO_SQUARE = NavGrid.CUBE_SIZE * NavGrid.CUBE_SIZE; //1.3f * Grid2DNav.SQUARE_SIZE * 1.3f * Grid2DNav.SQUARE_SIZE
 
     public static float THRESHOLD_SQUARED_DISTANCE_TO_POINT= 1.7f ; // magic number ... :|
 
@@ -198,7 +198,7 @@ public class GoalAndTacticLib {
         GoalStructure G = goal(goalname)
                 .toSolve((USeAgentState state) -> {
                     if(targetSquareCenter_[0] == null) {
-                        targetSquareCenter_[0] = state.grid2D.getSquareCenterLocation(state.grid2D.gridProjectedLocation(targetLocation));
+                        targetSquareCenter_[0] = state.navgrid.getSquareCenterLocation(state.navgrid.gridProjectedLocation(targetLocation));
                     }
                     var targetSquareCenter = targetSquareCenter_[0] ;
                     return Vec3.sub(targetSquareCenter,state.wom.position).lengthSq() <= THRESHOLD_SQUARED_DISTANCE_TO_SQUARE ;
@@ -388,7 +388,7 @@ public class GoalAndTacticLib {
     public static Tactic navigate2DToTAC(Vec3 destination) {
 
         return action("navigateTo").do2((USeAgentState state)
-                        -> (Pair<List<Pair<Integer,Integer>>, Boolean> queryResult) -> {
+                        -> (Pair<List<DPos3>, Boolean> queryResult) -> {
                     var path = queryResult.fst ;
                     var arrivedAtDestination = queryResult.snd ;
                     if (arrivedAtDestination) {
@@ -403,8 +403,8 @@ public class GoalAndTacticLib {
                     // follow the path, direct the agent to the next node in the path (actually, the first
                     // node in the path, since we remove a node if it is passed):
                     var nextNode = state.currentPathToFollow.get(0) ;
-                    var nextNodePos = state.grid2D.getSquareCenterLocation(nextNode) ;
-                    var agentSq = state.grid2D.gridProjectedLocation(state.wom.position) ;
+                    var nextNodePos = state.navgrid.getSquareCenterLocation(nextNode) ;
+                    var agentSq = state.navgrid.gridProjectedLocation(state.wom.position) ;
                     //if(agentSq.equals(nextNode)) {
                     if(Vec3.sub(nextNodePos,state.wom.position).lengthSq() <= THRESHOLD_SQUARED_DISTANCE_TO_SQUARE) {
                         // agent is already in the same square as the next-node destination-square. Mark the node
@@ -423,9 +423,9 @@ public class GoalAndTacticLib {
                 .on((USeAgentState state)  -> {
                     if (state.wom==null) return null ;
                     //var agentPos = state.wom.position ;
-                    var agentSq = state.grid2D.gridProjectedLocation(state.wom.position) ;
-                    var destinationSq = state.grid2D.gridProjectedLocation(destination) ;
-                    var destinationSqCenterPos = state.grid2D.getSquareCenterLocation(destinationSq) ;
+                    var agentSq = state.navgrid.gridProjectedLocation(state.wom.position) ;
+                    var destinationSq = state.navgrid.gridProjectedLocation(destination) ;
+                    var destinationSqCenterPos = state.navgrid.getSquareCenterLocation(destinationSq) ;
                     //if (state.grid2D.squareDistanceToSquare(agentPos,destinationSq) <= SQEPSILON_TO_NODE_IN_2D_PATH_NAVIGATION) {
                     //if(agentSq.equals(destinationSq)) {
                     if(Vec3.sub(destinationSqCenterPos,state.wom.position).lengthSq() <= THRESHOLD_SQUARED_DISTANCE_TO_SQUARE) {
@@ -438,7 +438,7 @@ public class GoalAndTacticLib {
                     if (currentPathLength == 0
                             || ! destinationSq.equals(state.currentPathToFollow.get(currentPathLength - 1)))
                     {  // there is no path planned, or there is an ongoing path, but it goes to a different target
-                        List<Pair<Integer,Integer>> path = state.pathfinder2D.findPath(state.grid2D, agentSq, destinationSq)  ;
+                        List<DPos3> path = state.pathfinder2D.findPath(state.navgrid, agentSq, destinationSq)  ;
                         if (path == null) {
                             // the pathfinder cannot find a path. The tactic is then not enabled:
                             return null ;
@@ -459,19 +459,21 @@ public class GoalAndTacticLib {
      * Optimize a path such that every segment v1,v2,v3 that lie on the same line, then we remove
      * v2 from the path.
      */
-    public static List<Pair<Integer,Integer>> smoothenPath(List<Pair<Integer,Integer>> path) {
+    public static List<DPos3> smoothenPath(List<DPos3> path) {
         if(path.size() <= 2) return path ;
         int k = 0 ;
         while(k < path.size() - 2) {
-            var v1 = path.get(k) ;
-            var v2 = path.get(k+1) ;
-            var v3 = path.get(k+2) ;
-            float gradient_v1v2 = gradient2D(v2.fst - v1.fst, v2.snd - v1.snd) ;
-            float gradient_v2v3 = gradient2D(v3.fst - v2.fst, v3.snd - v2.snd) ;
-            //if( (v2.fst - v1.fst == v3.fst - v2.fst)  && (v2.snd - v1.snd == v3.snd - v2.snd)) {
-            if(gradient_v1v2 == gradient_v2v3) {
-                // dy and dx between (v1,v2) and between (v2,v3) are the same
-                // then they lie along the same line. We then drop v2:
+            var v1 = path.get(k).toVec3() ;
+            var v2 = path.get(k+1).toVec3() ;
+            var v3 = path.get(k+2).toVec3() ;
+
+            var gradient_v1v2 = Vec3.sub(v2,v1).normalized() ;
+            var gradient_v2v3 = Vec3.sub(v3,v2).normalized() ;
+            float cos_alpha = Vec3.dot(gradient_v1v2, gradient_v2v3) ;
+            if (cos_alpha >= 0.99) {
+                // the gradients v1-->v2 and v2-->v3 are the same or almost the same,
+                // so v1--v2--v3 are on the same line, or almost at the same line.
+                // We then remove v2:
                 path.remove(k+1) ;
             }
             else {
@@ -481,17 +483,6 @@ public class GoalAndTacticLib {
         return path ;
     }
 
-    // for calculating the grasdient dz/dx ... rounded to 0.001
-    static float gradient2D(int dx, int dz) {
-        if(dx == 0) {
-            if (dz>0) return Float.POSITIVE_INFINITY ;
-            if (dz<0) return Float.NEGATIVE_INFINITY ;
-            return 0 ;
-        }
-        float gradient = 1000f * ((float) dz) / ((float) dx) ;
-        gradient = ((float) Math.round(gradient) )/1000f ;
-        return gradient ;
-    }
 
     public static GoalStructure veryclose2DTo(String goalname, Vec3 p) {
         if (goalname == null) {
