@@ -171,6 +171,13 @@ namespace Iv4xr.SePlugin.Control
                     .Select(grid => m_entityBuilder.CreateSeGrid(grid, sphere, mode)).ToList();
         }
 
+        internal IEnumerable<MyCubeGrid> CollectSurroundingRawBlocks(BoundingSphereD sphere,
+            ObservationMode mode = ObservationMode.BLOCKS)
+        {
+            return EnumerateSurroundingEntities(sphere)
+                    .OfType<MyCubeGrid>();
+        }
+
         public MyCubeGrid GetGridContainingBlock(string blockId)
         {
             BoundingSphereD sphere = GetBoundingSphere();
