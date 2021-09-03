@@ -39,7 +39,9 @@ public class SEBlockFunctions {
 
     public static Vec3 getActualSize(WorldEntity block) {
         Vec3 logicalSize = block.extent ;
-        boolean isLargeBlock = block.getStringProperty("blockType").contains("Large") ;
+        var blockType = block.getStringProperty("blockType") ;
+        boolean isLargeBlock = blockType.contains("Large")
+                || blockType.contains("Window1x1");
         if(isLargeBlock)  {
             var size = Vec3.mul(logicalSize,CubeSize.Large.getValue()) ;
             return size ;

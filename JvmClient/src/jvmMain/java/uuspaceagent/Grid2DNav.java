@@ -79,8 +79,11 @@ public class Grid2DNav implements Navigatable<Pair<Integer,Integer>>{
 
     public Pair<Integer,Integer> gridProjectedLocation(Vec3 p) {
         p = Vec3.sub(p,origin) ;
-        int x = (int) ((Math.signum(p.x) * Math.floor(Math.abs(p.x) / SQUARE_SIZE))) ;
-        int z = (int) ((Math.signum(p.z) * Math.floor(Math.abs(p.z) / SQUARE_SIZE))) ;
+        //int x = (int) ((Math.signum(p.x) * Math.floor(Math.abs(p.x) / SQUARE_SIZE))) ;
+        //int z = (int) ((Math.signum(p.z) * Math.floor(Math.abs(p.z) / SQUARE_SIZE))) ;
+        // this should work too:
+        int x = (int) (Math.floor(p.x / SQUARE_SIZE)) ;
+        int z = (int) (Math.floor(p.z / SQUARE_SIZE)) ;
         return new Pair<>(x,z) ;
     }
 
