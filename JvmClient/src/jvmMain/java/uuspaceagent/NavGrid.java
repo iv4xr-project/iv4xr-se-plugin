@@ -119,11 +119,23 @@ public class NavGrid implements Navigatable<DPos3>{
      */
     public DPos3 gridProjectedLocation(Vec3 p) {
         p = Vec3.sub(p,origin) ;
+        /*
         int x = (int) (Math.floor(p.x / CUBE_SIZE)) ;
         int y = (int) (Math.floor(p.y / CUBE_SIZE)) ;
         int z = (int) (Math.floor(p.z / CUBE_SIZE)) ;
+        */
+        int x = myFloor(p.x / CUBE_SIZE) ;
+        int y = myFloor(p.y / CUBE_SIZE) ;
+        int z = myFloor(p.z / CUBE_SIZE) ;
+
         return new DPos3(x,y,z) ;
     }
+
+    public static int myFloor(float x) {
+        return (int) Math.floor(x) ;
+    }
+
+
 
     /**
      * Return the actual location of the center of a unit cube; the location is expressed

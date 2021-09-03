@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import spaceEngineers.transport.SocketReaderWriterKt;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static uuspaceagent.PrintInfos.*;
@@ -141,15 +142,47 @@ public class Test_Grid2DNav_pathfinding {
 
         // navigating to (10,-5,40) ... this is beyond the closed maze where the agent now is.
         // Should not be reachable:
-        Vec3 dest1 = new Vec3(10,-5,35) ;
+        Vec3 dest1 = new Vec3(10,-5,40) ;
         console("Checking path to " + dest1 + " (should be unreachable)");
         var agent_and_path = test_pathfinder(null,dest1) ;
         var state = agent_and_path.fst ;
         var path = agent_and_path.snd ;
+
+        /* for debugging:
+
         var sqAgent = state.navgrid.gridProjectedLocation(state.wom.position) ;
         var sqDesitnation1 = state.navgrid.gridProjectedLocation(dest1) ;
         path = GoalAndTacticLib.smoothenPath(path) ;
         System.out.println("** Path: " + PrintInfos.showPath(state,path));
+
+        var nearblocks = SEBlockFunctions.getAllBlocks(state.wom)
+                        .stream()
+                .filter(e -> Vec3.sub((Vec3) e.getProperty("centerPosition"), new Vec3(9.5f,-4.75f,75f)).length() <= 5)
+                .collect(Collectors.toList()) ;
+
+        int j=0 ;
+        for(var B : nearblocks) {
+            float dist = Vec3.sub((Vec3) B.getProperty("centerPosition"), new Vec3(7.5f,-4.75f,76.5f)).length() ;
+            console(">>> near-block " + j + ", dist=" + dist + ";  " + PrintInfos.showWorldEntity(B)) ;
+            console("    -- #blocked: " + state.navgrid.getObstructedCubes(B).size());
+            Vec3 maxCorner = SEBlockFunctions.getBaseMaxCorner(B) ;
+            Vec3 minCorner = SEBlockFunctions.getBaseMinCorner(B) ;
+
+            Vec3 hpadding = Vec3.mul(new Vec3(NavGrid.AGENT_WIDTH,0, NavGrid.AGENT_WIDTH), 0.6f) ;
+            Vec3 vpadding = new Vec3(0, NavGrid.AGENT_HEIGHT, 0) ;
+            minCorner = Vec3.sub(minCorner,hpadding) ;
+            minCorner = Vec3.sub(minCorner, vpadding) ;
+            maxCorner = Vec3.add(maxCorner,hpadding) ;
+            var corner1 = state.navgrid.gridProjectedLocation(minCorner) ;
+            var corner2 =  state.navgrid.gridProjectedLocation(maxCorner) ;
+            console("    -- min-corner: " +corner1);
+            console("    -- max-corner: " +corner2);
+
+            j++ ;
+        }
+         */
+                                ;
+
         assertTrue(path == null) ;
 
         // destination (10,-5,70). This is actually visible, but the pathfinding does not
