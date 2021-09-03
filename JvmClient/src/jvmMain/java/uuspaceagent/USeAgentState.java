@@ -96,40 +96,40 @@ public class USeAgentState extends State {
         if(wom == null) {
             // this is the first observation
             wom = newWom ;
-            // we are done then...
-            return ;
         }
+        else {
+            // MERGING the two woms:
+            wom.mergeNewObservation(newWom) ;
 
-        // MERGING the two woms:
-        wom.mergeNewObservation(newWom) ;
-
-        // HOWEVER, some blocks and grids-of-blocks may have been destroyed, hence
-        // do not exist anymore. We need to remove them from state.wom. This is handled
-        // below.
-        // First, remove disappearing "cube-grids" (composition of blocks)
-        List<String> tobeRemoved = wom.elements.keySet().stream()
+            // HOWEVER, some blocks and grids-of-blocks may have been destroyed, hence
+            // do not exist anymore. We need to remove them from state.wom. This is handled
+            // below.
+            // First, remove disappearing "cube-grids" (composition of blocks)
+            List<String> tobeRemoved = wom.elements.keySet().stream()
                     .filter(id -> ! newWom.elements.keySet().contains(id))
                     .collect(Collectors.toList());
-        for(var id : tobeRemoved) wom.elements.remove(id) ;
-        // Then, we remove disappearing blocks (from grids that remain):
-        for(var cubegridOld : wom.elements.values()) {
-            var cubeGridNew = newWom.elements.get(cubegridOld.id) ;
-            tobeRemoved.clear();
-            tobeRemoved = cubegridOld.elements.keySet().stream()
-                    .filter(blockId -> ! cubeGridNew.elements.keySet().contains(blockId))
+            for(var id : tobeRemoved) wom.elements.remove(id) ;
+            // Then, we remove disappearing blocks (from grids that remain):
+            for(var cubegridOld : wom.elements.values()) {
+                var cubeGridNew = newWom.elements.get(cubegridOld.id) ;
+                tobeRemoved.clear();
+                tobeRemoved = cubegridOld.elements.keySet().stream()
+                        .filter(blockId -> ! cubeGridNew.elements.keySet().contains(blockId))
+                        .collect(Collectors.toList());
+                for(var blockId : tobeRemoved) cubegridOld.elements.remove(blockId) ;
+            }
+
+            // updating the "navigational-2DGrid:
+            var blocksInWom =  SEBlockFunctions.getAllBlockIDs(wom) ;
+            List<String> toBeRemoved = navgrid.allObstacleIDs.stream()
+                    .filter(id -> !blocksInWom.contains(id))
                     .collect(Collectors.toList());
-            for(var blockId : tobeRemoved) cubegridOld.elements.remove(blockId) ;
+            // first, removing obstacles that no longer exist:
+            for(var id : toBeRemoved) {
+                navgrid.removeObstacle(id);
+            }
         }
 
-        // updating the "navigational-2DGrid:
-        var blocksInWom =  SEBlockFunctions.getAllBlockIDs(wom) ;
-        List<String> toBeRemoved = navgrid.allObstacleIDs.stream()
-                .filter(id -> !blocksInWom.contains(id))
-                .collect(Collectors.toList());
-        // first, removing obstacles that no longer exist:
-        for(var id : toBeRemoved) {
-            navgrid.removeObstacle(id);
-        }
         // then, there may also be new blocks ... we add them to the nav-grid:
         // TODO: this assumes doors are initially closed. Calculating blocked squares
         // for open-doors is more complicated. TODO.

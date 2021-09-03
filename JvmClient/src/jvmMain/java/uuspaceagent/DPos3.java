@@ -24,11 +24,10 @@ public class DPos3 implements Serializable {
      * be converted to (3,-3,0).
      */
     public DPos3(Vec3 v) {
-        x = (int) Math.floor(v.x) ; Math.f
+        x = (int) Math.floor(v.x) ;
         y = (int) Math.floor(v.y) ;
         z = (int) Math.floor(v.z) ;
     }
-
 
     @Override
     public boolean equals(Object o) {
@@ -41,6 +40,11 @@ public class DPos3 implements Serializable {
     @Override
     public int hashCode() {
        return 961*x +31*y + z ;
+    }
+
+    @Override
+    public String toString() {
+        return "(" + x + "," + y + "," + z + ")" ;
     }
 
     public Vec3 toVec3() {

@@ -5,6 +5,7 @@ import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.spatial.Vec3;
 import nl.uu.cs.aplib.utils.Pair;
 import org.junit.jupiter.api.Test;
+import spaceEngineers.transport.SocketReaderWriterKt;
 
 import java.util.List;
 
@@ -40,6 +41,7 @@ public class Test_Grid2DNav_pathfinding {
         Thread.sleep(1000);
         // do a single update, and check that we if we have the structures:
         state.updateState();
+
         assertTrue(state.navgrid.allObstacleIDs.size() > 0 ) ;
         console(showWOMElements(state.wom)) ;
         console("=========\n") ;
@@ -61,6 +63,8 @@ public class Test_Grid2DNav_pathfinding {
                 .anyMatch(id -> findWorldEntity(state.wom,id).properties.get("blockType").equals("LargeBlockSlideDoor"))) ;
         assertTrue(state.navgrid.allObstacleIDs.stream()
                 .anyMatch(id -> findWorldEntity(state.wom,id).properties.get("blockType").equals("LargeBlockBatteryBlock")));
+
+        SocketReaderWriterKt.closeIfCloseable(state.env());
     }
 
     /**
@@ -68,13 +72,15 @@ public class Test_Grid2DNav_pathfinding {
      * If the given state is null, a gameworld will be loaded and a single update is done to
      * produce a state.
      */
-    Pair<USeAgentState,List<Pair<Integer,Integer>>> test_pathfinder(USeAgentState state, Vec3 destination) throws InterruptedException {
+    Pair<USeAgentState,List<DPos3>> test_pathfinder(USeAgentState state, Vec3 destination) throws InterruptedException {
         if(state == null) {
             var agentAndState = loadSE("myworld-3")  ;
             TestAgent agent = agentAndState.fst ;
             state = agentAndState.snd ;
             Thread.sleep(1000);
             state.updateState();
+            state.updateState();
+
         }
 
         // agent start location should be around: <10.119276,-5.0025,55.681934>
@@ -85,7 +91,7 @@ public class Test_Grid2DNav_pathfinding {
         // Should not be reachable:
         var sqAgent = state.navgrid.gridProjectedLocation(state.wom.position) ;
         var sqDesitnation = state.navgrid.gridProjectedLocation(destination) ;
-        List<Pair<Integer,Integer>> path = state.pathfinder2D.findPath(state.navgrid,sqAgent,sqDesitnation) ;
+        List<DPos3> path = state.pathfinder2D.findPath(state.navgrid,sqAgent,sqDesitnation) ;
         return new Pair<>(state,path) ;
     }
 
@@ -129,19 +135,21 @@ public class Test_Grid2DNav_pathfinding {
      * This tests path-finding to several locations, some are reachable and some not.
      * @throws InterruptedException
      */
-    //@Test
+    @Test
     public void test_pathfinder2() throws InterruptedException {
         console("*** start test...") ;
 
         // navigating to (10,-5,40) ... this is beyond the closed maze where the agent now is.
         // Should not be reachable:
-        Vec3 dest1 = new Vec3(10,-5,40) ;
+        Vec3 dest1 = new Vec3(10,-5,35) ;
         console("Checking path to " + dest1 + " (should be unreachable)");
         var agent_and_path = test_pathfinder(null,dest1) ;
         var state = agent_and_path.fst ;
         var path = agent_and_path.snd ;
         var sqAgent = state.navgrid.gridProjectedLocation(state.wom.position) ;
         var sqDesitnation1 = state.navgrid.gridProjectedLocation(dest1) ;
+        path = GoalAndTacticLib.smoothenPath(path) ;
+        System.out.println("** Path: " + PrintInfos.showPath(state,path));
         assertTrue(path == null) ;
 
         // destination (10,-5,70). This is actually visible, but the pathfinding does not
@@ -182,12 +190,13 @@ public class Test_Grid2DNav_pathfinding {
 
         console(">> path.to " + dest4);
         console(PrintInfos.indent(PrintInfos.showPath(state,path),5)) ;
+        SocketReaderWriterKt.closeIfCloseable(state.env());
     }
 
     /**
      * Just few simple location left and right of the agent to test turning.
      */
-    @Test
+    //@Test
     public void test_pathfinder3() throws InterruptedException {
         console("*** start test...") ;
 
@@ -216,5 +225,6 @@ public class Test_Grid2DNav_pathfinding {
         console(">> path.to " + dest);
         console(PrintInfos.indent(PrintInfos.showPath(state,path),5)) ;
 
+        SocketReaderWriterKt.closeIfCloseable(state.env());
     }
 }

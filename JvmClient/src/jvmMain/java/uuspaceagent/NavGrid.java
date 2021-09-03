@@ -349,7 +349,7 @@ public class NavGrid implements Navigatable<DPos3>{
         for (int x = p.x-1 ; x <= p.x+1 ; x++) {
             int ymin = 0 ;
             int ymax = 0 ;
-            if (! enableFlying) {
+            if (enableFlying) {
                 ymin = Math.max(0,p.y-1) ;
                 ymax = p.y+1 ;
             }
