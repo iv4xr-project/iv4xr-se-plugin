@@ -129,7 +129,7 @@ public class Test_Grid2DNav_pathfinding {
      * This tests path-finding to several locations, some are reachable and some not.
      * @throws InterruptedException
      */
-    //@Test
+    @Test
     public void test_pathfinder2() throws InterruptedException {
         console("*** start test...") ;
 
@@ -187,7 +187,7 @@ public class Test_Grid2DNav_pathfinding {
     /**
      * Just few simple location left and right of the agent to test turning.
      */
-    @Test
+    //@Test
     public void test_pathfinder3() throws InterruptedException {
         console("*** start test...") ;
 
