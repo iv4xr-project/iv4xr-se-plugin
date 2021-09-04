@@ -186,11 +186,11 @@ public class GoalAndTacticLib {
     /**
      * A goal that is solved when the agent manage to be in some distance close to a
      * given destination. The destination itself should be reachable from the agent
-     * current position. The solver for this goal is the tactic navigate2DToTAC.
+     * current position. The solver for this goal is the tactic navigateToTAC.
      *
      * The goal is aborted if the destination is not reachable.
      */
-    public static GoalStructure close2Dto(String goalname, Vec3 targetLocation) {
+    public static GoalStructure closeTo(String goalname, Vec3 targetLocation) {
         Vec3[] targetSquareCenter_ = {null} ; // a state to memoize some calculations
         if(goalname == null) {
             goalname = "close to location " + targetLocation ;
@@ -204,14 +204,14 @@ public class GoalAndTacticLib {
                     return Vec3.sub(targetSquareCenter,state.wom.position).lengthSq() <= THRESHOLD_SQUARED_DISTANCE_TO_SQUARE ;
                 })
                 .withTactic(
-                        FIRSTof(navigate2DToTAC(targetLocation), ABORT())
+                        FIRSTof(navigateToTAC(targetLocation), ABORT())
                 )
                 .lift() ;
         return G ;
     }
 
-    public static GoalStructure close2Dto(Vec3 targetLocation) {
-        return close2Dto(null,targetLocation) ;
+    public static GoalStructure closeTo(Vec3 targetLocation) {
+        return closeTo(null,targetLocation) ;
     }
 
     /**
@@ -222,14 +222,14 @@ public class GoalAndTacticLib {
      *
      * NOTE: for now the block should be a cube, and upright.
      */
-    public static GoalStructure close2Dto(TestAgent agent,
-                                          String blockType,
-                                          SEBlockFunctions.BlockSides side,
-                                          float radius,
-                                          float delta) {
+    public static GoalStructure closeTo(TestAgent agent,
+                                        String blockType,
+                                        SEBlockFunctions.BlockSides side,
+                                        float radius,
+                                        float delta) {
         float sqradius = radius * radius ;
 
-        return close2Dto(agent,
+        return closeTo(agent,
                 "type " + blockType,
                 (USeAgentState state) -> (WorldEntity e)
                         ->
@@ -243,11 +243,11 @@ public class GoalAndTacticLib {
     /**
      * Use this to target a block using a generic selector function.
      */
-    public static GoalStructure close2Dto(TestAgent agent,
-                                          String selectorDesc,
-                                          Function<USeAgentState, Predicate<WorldEntity>> selector,
-                                          SEBlockFunctions.BlockSides side,
-                                          float delta) {
+    public static GoalStructure closeTo(TestAgent agent,
+                                        String selectorDesc,
+                                        Function<USeAgentState, Predicate<WorldEntity>> selector,
+                                        SEBlockFunctions.BlockSides side,
+                                        float delta) {
 
 
         GoalStructure G = DEPLOYonce(agent, (USeAgentState state) -> {
@@ -259,7 +259,14 @@ public class GoalAndTacticLib {
             Vec3 goalPosition = SEBlockFunctions.getSideCenterPoint(block,side,delta) ;
             Vec3 blockCenter = (Vec3) block.getProperty("centerPosition") ;
 
-            return SEQ(close2Dto("close to a block of property " + selectorDesc + " @"
+            // because the agent's position is actually its feet position, we take the corresponding
+            // positions at the base of the block as goals. So we project goalPosition and intermediatePosition
+            // above to positions at the base of the block.
+            Vec3 size = SEBlockFunctions.getActualSize(block) ;
+            intermediatePosition.y -= size.y * 0.5 ;
+            goalPosition.y -= size.y * 0.5 ;
+
+            return SEQ(closeTo("close to a block of property " + selectorDesc + " @"
                             + block.position
                             + " ," + side + ", targeting " + intermediatePosition,
                             intermediatePosition),
@@ -385,7 +392,7 @@ public class GoalAndTacticLib {
      * located. Then it travels to some point with the distance at most d to the center of S.
      * D is the square root of THRESHOLD_SQUARED_DISTANCE_TO_SQUARE.
      */
-    public static Tactic navigate2DToTAC(Vec3 destination) {
+    public static Tactic navigateToTAC(Vec3 destination) {
 
         return action("navigateTo").do2((USeAgentState state)
                         -> (Pair<List<DPos3>, Boolean> queryResult) -> {

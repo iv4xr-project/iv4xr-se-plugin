@@ -45,7 +45,7 @@ public class Test_Goals {
         console("*** start test...") ;
         Vec3 dest = new Vec3(19,-5,65) ;
         var agentAndState = deployAgent();
-        GoalStructure G = GoalAndTacticLib.close2Dto(dest) ;
+        GoalStructure G = GoalAndTacticLib.closeTo(dest) ;
         test_Goal(agentAndState.fst, agentAndState.snd, G) ;
         G.printGoalStructureStatus();
         assertTrue(G.getStatus().success());
@@ -57,7 +57,7 @@ public class Test_Goals {
         console("*** start test...") ;
         Vec3 dest = new Vec3(10,-5,40) ;
         var agentAndState = deployAgent();
-        GoalStructure G = GoalAndTacticLib.close2Dto(dest) ;
+        GoalStructure G = GoalAndTacticLib.closeTo(dest) ;
         test_Goal(agentAndState.fst, agentAndState.snd, G) ;
         G.printGoalStructureStatus();
         assertTrue(G.getStatus().failed());
@@ -68,7 +68,7 @@ public class Test_Goals {
         // This is a position that is unreachable, so this goal should abort
         console("*** start test...") ;
         var agentAndState = deployAgent();
-        GoalStructure G = GoalAndTacticLib.close2Dto(agentAndState.fst,
+        GoalStructure G = GoalAndTacticLib.closeTo(agentAndState.fst,
                 "LargeBlockSlideDoor",
                 SEBlockFunctions.BlockSides.FRONT,
                 20f,
@@ -83,7 +83,7 @@ public class Test_Goals {
         // This is a position that is unreachable, so this goal should abort
         console("*** start test...") ;
         var agentAndState = deployAgent();
-        GoalStructure G = GoalAndTacticLib.close2Dto(agentAndState.fst,
+        GoalStructure G = GoalAndTacticLib.closeTo(agentAndState.fst,
                 "LargeBlockBatteryBlock",
                 SEBlockFunctions.BlockSides.FRONT,
                 20f,
@@ -102,7 +102,7 @@ public class Test_Goals {
         agent.setTestDataCollector(new TestDataCollector()) ;
 
         GoalStructure G = SEQ(
-                GoalAndTacticLib.close2Dto(agent,
+                GoalAndTacticLib.closeTo(agent,
                     "LargeBlockBatteryBlock",
                     SEBlockFunctions.BlockSides.FRONT,
                     20f,

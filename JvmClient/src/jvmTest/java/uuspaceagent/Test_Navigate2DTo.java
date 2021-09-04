@@ -45,7 +45,7 @@ public class Test_Navigate2DTo {
                     //return currentAgentSq.equals(sqDestination) ;
                     return Vec3.sub(centerOfSqDestination,state.wom.position).lengthSq() <= GoalAndTacticLib.THRESHOLD_SQUARED_DISTANCE_TO_SQUARE ;
                 })
-                .withTactic(GoalAndTacticLib.navigate2DToTAC(destination))
+                .withTactic(GoalAndTacticLib.navigateToTAC(destination))
                 .lift() ;
 
         agent.setGoal(G) ;
