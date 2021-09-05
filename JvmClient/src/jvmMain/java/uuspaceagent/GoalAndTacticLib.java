@@ -84,7 +84,7 @@ public class GoalAndTacticLib {
         Vec3 forwardWalk = Vec3.mul(FORWARDV3,WALK_SPEED) ;
         if( sqDistance <= 1) running = false ;
         // adjust the forward vector to make it angles towards the destination
-        Matrix3D rotation = Matrix3D.getRotationXZ(destinationRelativeLocation, agentState.orientationForward()) ;
+        Matrix3D rotation = Matrix3D.getYRotation(destinationRelativeLocation, agentState.orientationForward()) ;
         forwardRun  = rotation.apply(forwardRun) ;
         forwardWalk = rotation.apply(forwardWalk) ;
 
@@ -534,17 +534,17 @@ public class GoalAndTacticLib {
         }
         return goal(goalname)
                 .toSolve((Float cos_alpha) -> 1 - cos_alpha <= 0.01)
-                .withTactic(FIRSTof(rotateXY(p).lift() , ABORT()))
+                .withTactic(FIRSTof(rotateY(p).lift() , ABORT()))
                 .lift() ;
     }
 
     /**
-     * When invoked repeatedly, this action turns the agent until it horizontally faces towards the
-     * given destination. The turning is on the XZ plane (so, the y coordinates on all poins in the
-     * agent would stays the same). When the agent faces towards the destination (with some epsilon),
-     * the action is no longer enabled.
+     * When invoked repeatedly, this action turns the agent around its y-axis until it horizontally
+     * faces towards the given destination. The turning is on the XZ plane (so, the y coordinates
+     * on all poins in the agent would stays the same). When the agent faces towards the
+     * destination (with some epsilon), the action is no longer enabled.
      */
-    public static Action rotateXY(Vec3 destination) {
+    public static Action rotateY(Vec3 destination) {
 
         float cosAlphaThreshold  = 0.99f ;
         float cosAlphaThreshold_ = 0.995f ;

@@ -3,9 +3,7 @@ package uuspaceagent;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
 import eu.iv4xr.framework.spatial.Vec3;
-import spaceEngineers.model.Block;
 import spaceEngineers.model.CubeSize;
-import spaceEngineers.model.extensions.BlockExtensionsKt;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -76,7 +74,7 @@ public class SEBlockFunctions {
         // for now we don't do its up-orientation.
         Vec3 forwardOrientation = (Vec3) block.getProperty("orientationForward") ;
         Vec3 x_axis = new Vec3(1,0,0) ;
-        Matrix3D rotation = Matrix3D.getRotationXZ(forwardOrientation,x_axis) ;
+        Matrix3D rotation = Matrix3D.getYRotation(forwardOrientation,x_axis) ;
         Vec3 rotatedCenterAtFrontFace = rotation.apply(centerAtFrontFace) ;
 
         // the rotated position is relative to the block's center position.
