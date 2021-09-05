@@ -20,7 +20,7 @@ import static uuspaceagent.TestUtils.loadSE;
  * Testing the underlying pathfinding calculation (we dpn't actually move the agent.
  * We just test that the pathfinder can correctlly calculate paths).
  */
-public class Test_Grid2DNav_pathfinding {
+public class Test_NavGrid_pathfinding {
 
     //@Test
     public void test_0() {
@@ -73,12 +73,13 @@ public class Test_Grid2DNav_pathfinding {
      * If the given state is null, a gameworld will be loaded and a single update is done to
      * produce a state.
      */
-    Pair<USeAgentState,List<DPos3>> test_pathfinder(USeAgentState state, Vec3 destination) throws InterruptedException {
+    Pair<USeAgentState,List<DPos3>> test_pathfinder(USeAgentState state, Vec3 destination, boolean enable3D) throws InterruptedException {
         if(state == null) {
             var agentAndState = loadSE("myworld-3")  ;
             TestAgent agent = agentAndState.fst ;
             state = agentAndState.snd ;
             Thread.sleep(1000);
+            state.navgrid.enableFlying = enable3D ;
             state.updateState();
             state.updateState();
 
@@ -97,16 +98,16 @@ public class Test_Grid2DNav_pathfinding {
     }
 
     /**
-     * Test that the pathfinder is able to find a path to a target that is on a clear and straightlne
+     * Test that the pathfinder is able to find a path to a target that is on a 2D clear and straight-line
      * direction from the agent.
      * We will also check pathSmoothing (removing intermediate nodes in straight-line segments in the path).
      */
     //@Test
-    public void test_pathfinder1() throws InterruptedException {
+    public void test_2Dpathfinder1() throws InterruptedException {
         console("*** start test...") ;
         // navigating to (10,-5,65) ... this is just before the buttons-panel
         Vec3 destination = new Vec3(10,-5,65) ;
-        var agent_and_path = test_pathfinder(null,destination) ;
+        var agent_and_path = test_pathfinder(null,destination,false) ; // false --> 2D-pathfinding
         var state = agent_and_path.fst ;
         var path = agent_and_path.snd ;
 
@@ -133,18 +134,18 @@ public class Test_Grid2DNav_pathfinding {
 
 
     /**
-     * This tests path-finding to several locations, some are reachable and some not.
+     * This tests 2D path-finding to several locations, some are reachable and some not.
      * @throws InterruptedException
      */
-    @Test
-    public void test_pathfinder2() throws InterruptedException {
+    //@Test
+    public void test_2Dpathfinder2() throws InterruptedException {
         console("*** start test...") ;
 
         // navigating to (10,-5,40) ... this is beyond the closed maze where the agent now is.
         // Should not be reachable:
         Vec3 dest1 = new Vec3(10,-5,40) ;
         console("Checking path to " + dest1 + " (should be unreachable)");
-        var agent_and_path = test_pathfinder(null,dest1) ;
+        var agent_and_path = test_pathfinder(null,dest1,false) ;
         var state = agent_and_path.fst ;
         var path = agent_and_path.snd ;
 
@@ -192,7 +193,7 @@ public class Test_Grid2DNav_pathfinding {
         // pathfinder (actually it is Grid2DNav that should be improved).
         Vec3 dest2 = new Vec3(10,-5,70) ;
         console("Checking path to " + dest2 + " (should be unreachable)");
-        path = test_pathfinder(state,dest2).snd ;
+        path = test_pathfinder(state,dest2,false).snd ;
         var sqDesitnation2 = state.navgrid.gridProjectedLocation(dest2) ;
         assertTrue(path == null) ;
 
@@ -202,7 +203,7 @@ public class Test_Grid2DNav_pathfinding {
         Vec3 dest3 = new Vec3(10,-5,73) ;
         console("Checking path to " + dest3 + " (reachable)");
         var sqDesitnation3 = state.navgrid.gridProjectedLocation(dest3) ;
-        path = test_pathfinder(state,dest3).snd ;
+        path = test_pathfinder(state,dest3,false).snd ;
         assertTrue(path.size() > 0 ) ;
 
         path = GoalAndTacticLib.smoothenPath(path) ;
@@ -216,7 +217,7 @@ public class Test_Grid2DNav_pathfinding {
         console("Checking path to " + dest4 + " (reachable)");
         var sqDesitnation4 = state.navgrid.gridProjectedLocation(dest4) ;
         console(PrintInfos.showObstacle(state,sqDesitnation4));
-        path = test_pathfinder(state,dest4).snd ;
+        path = test_pathfinder(state,dest4,false).snd ;
         assertTrue(path.size() > 0 ) ;
 
         path = GoalAndTacticLib.smoothenPath(path) ;
@@ -230,7 +231,7 @@ public class Test_Grid2DNav_pathfinding {
      * Just few simple location left and right of the agent to test turning.
      */
     //@Test
-    public void test_pathfinder3() throws InterruptedException {
+    public void test_2Dpathfinder3() throws InterruptedException {
         console("*** start test...") ;
 
         // agent start location should be around: <10.119276,-5.0025,55.681934>
@@ -238,7 +239,7 @@ public class Test_Grid2DNav_pathfinding {
 
         Vec3 dest = new Vec3(9,-5,55.68f) ;
         console("Checking path to " + dest + " (should be reachable)");
-        var agent_and_path = test_pathfinder(null,dest) ;
+        var agent_and_path = test_pathfinder(null,dest,false) ;
         var state = agent_and_path.fst ;
         var path = agent_and_path.snd ;
         var sqAgent = state.navgrid.gridProjectedLocation(state.wom.position) ;
@@ -252,7 +253,7 @@ public class Test_Grid2DNav_pathfinding {
         System.out.println("=========================") ;
         dest = new Vec3(11.5f,-5,55.68f) ;
         console("Checking path to " + dest + " (should be reachable)");
-        path = test_pathfinder(state,dest).snd ;
+        path = test_pathfinder(state,dest,false).snd ;
         assertTrue(path.size() > 0) ;
         path = GoalAndTacticLib.smoothenPath(path) ;
         console(">> path.to " + dest);
@@ -260,4 +261,21 @@ public class Test_Grid2DNav_pathfinding {
 
         SocketReaderWriterKt.closeIfCloseable(state.env());
     }
+
+    @Test
+    public void test_3Dpathfinding1() throws InterruptedException {
+        console("*** start test...") ;
+
+        // navigating to (10,-5,40) ... this is beyond the closed maze where the agent now is.
+        // The location is 2D-unreachable, but it is 3D-reachable.
+        Vec3 dest1 = new Vec3(10,-5,40) ;
+        console("Checking path to " + dest1 + " (should be unreachable)");
+        var agent_and_path = test_pathfinder(null,dest1,true) ;
+        var state = agent_and_path.fst ;
+        var path = agent_and_path.snd ;
+        assertTrue(path.size() > 0);
+        console("** path: " + PrintInfos.showPath(state, GoalAndTacticLib.smoothenPath(path))) ;
+    }
+
+
 }

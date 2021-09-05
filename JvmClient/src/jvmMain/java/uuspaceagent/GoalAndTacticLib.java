@@ -59,13 +59,15 @@ public class GoalAndTacticLib {
     static Vec2 ZEROV2 = new Vec2(0,0) ;
 
     /**
-     * A more intelligent and performant primitive "move". This sends a burst of successive move
-     * commands to SE with little computation in between. This results in fast(er) move. The number
+     * A more intelligent and performant primitive "move" (than the primitive "moveAndRotate"). This
+     * method sends a burst of successive move commands to SE with little computation in between.
+     * This results in fast(er) move. The number
      * of commands sent is specified by the parameter "duration", though the burst is stopped once
      * the agent is very close to the destination (some threshold). The agent will run, if the
      * distance to the destination is >= 1, else it will walk.
      *
-     * Note that during the burst we will be blind to changes from SE.
+     * Note: (1) the mothod will not turn the direction the agent is facing,
+     * and (2) that during the burst we will be blind to changes from SE.
      *
      * The method returns an observation if it did at least one move. If at the beginning the agent
      * is already (very close to) at the destination the method will not do any move and will
@@ -84,7 +86,7 @@ public class GoalAndTacticLib {
         Vec3 forwardWalk = Vec3.mul(FORWARDV3,WALK_SPEED) ;
         if( sqDistance <= 1) running = false ;
         // adjust the forward vector to make it angles towards the destination
-        Matrix3D rotation = Matrix3D.getRotationXZ(destinationRelativeLocation, agentState.orientationForward()) ;
+        Matrix3D rotation = Matrix3D.getYRotation(destinationRelativeLocation, agentState.orientationForward()) ;
         forwardRun  = rotation.apply(forwardRun) ;
         forwardWalk = rotation.apply(forwardWalk) ;
 
@@ -109,20 +111,24 @@ public class GoalAndTacticLib {
     }
 
     /**
-     * A primitive method that sends a burst of successive turn-angle commands to SE. The number
-     * of the commands is specified by the parameter duration. The agent will turn on its place
-     * so that it would face the given destination. The parameter "cosAlphaThreshold" specifies how far
-     * the agent should turn. It would turn until the angle alpha between its forward direction
-     * and the straight line between itself and destination is alpha. The cosAlphaThreshold expresses
-     * this alpha in terms of cos(alpha).
+     * A primitive method that sends a burst of successive turn-angle commands to SE. This
+     * method will only change the agent's forward facing vector. It does not change the
+     * agent's up-facing vector. (so, it is like moving the agent's head horizontally,
+     * but not vertically).
+     *
+     * The number of the turn-commands bursted is specified by the parameter duration. The agent
+     * will turn on its place so that it would face the given destination. The parameter
+     * "cosAlphaThreshold" specifies how far the agent should turn. It would turn until the angle
+     * alpha between its forward direction and the straight line between itself and destination
+     * is alpha. The cosAlphaThreshold expresses this alpha in terms of cos(alpha).
      *
      * The method will burst the turning, if the remaining angle towards alpha is still large,
-     * afterwhich it will not burst (so it will just send one turn-command and return).
+     * after which it will not burst (so it will just send one turn-command and return).
      *
      * If at the beginning the angle to destination is less than alpha this method returns null,
      * and else it returns an observation at the end of the turns.
      */
-    public static CharacterObservation turnTo(USeAgentState agentState, Vec3 destination, float cosAlphaThreshold, Integer duration) {
+    public static CharacterObservation xzTurnTo(USeAgentState agentState, Vec3 destination, float cosAlphaThreshold, Integer duration) {
         // direction vector to the next node:
         Vec3 dirToGo = Vec3.sub(destination,agentState.wom.position) ;
         Vec3 agentHdir = agentState.orientationForward() ;
@@ -419,7 +425,7 @@ public class GoalAndTacticLib {
                         state.currentPathToFollow.remove(0) ;
                         return state ;
                     }
-                    var obs = turnTo(state,nextNodePos, 0.75f,10) ;
+                    var obs = xzTurnTo(state,nextNodePos, 0.75f,10) ;
                     if (obs != null) {
                         // we did turning, we won't move.
                         return state ;
@@ -532,7 +538,7 @@ public class GoalAndTacticLib {
         }
         return goal(goalname)
                 .toSolve((Float cos_alpha) -> 1 - cos_alpha <= 0.01)
-                .withTactic(FIRSTof(rotateXY(p).lift() , ABORT()))
+                .withTactic(FIRSTof(rotatexz(p).lift() , ABORT()))
                 .lift() ;
     }
 
@@ -542,7 +548,7 @@ public class GoalAndTacticLib {
      * agent would stays the same). When the agent faces towards the destination (with some epsilon),
      * the action is no longer enabled.
      */
-    public static Action rotateXY(Vec3 destination) {
+    public static Action rotatexz(Vec3 destination) {
 
         float cosAlphaThreshold  = 0.99f ;
         float cosAlphaThreshold_ = 0.995f ;
@@ -562,7 +568,7 @@ public class GoalAndTacticLib {
                     return cos_alpha ;
                 })
                 .do2((USeAgentState state) -> (Float cos_alpha) -> {
-                    CharacterObservation obs = turnTo(state,destination,cosAlphaThreshold_,10) ;
+                    CharacterObservation obs = xzTurnTo(state,destination,cosAlphaThreshold_,10) ;
                     if(obs == null) {
                         return cos_alpha ;
                     }

@@ -28,7 +28,9 @@ public class Matrix3D {
 
     /**
      * Get a rotation matrix that would rotate the vector v towards the vector target,
-     * where the rotation is on the XZ plane (so, the y-values would remain the same).
+     * where the rotation
+     *
+     * is on the XZ plane (so, the y-values would remain the same).
      * The two vectors v and target are assume tobe on the same XZ plane (they have
      * the same y-values).
      *
@@ -37,7 +39,7 @@ public class Matrix3D {
      * Once the rotation matrix is obtained, it can be applied to a Vec3 position
      * to calculate the new position as the result of the rotation.
      */
-    public static Matrix3D getRotationXZ(Vec3 v, Vec3 target) {
+    public static Matrix3D getYRotation(Vec3 v, Vec3 target) {
         v = v.copy() ; v.y = 0 ;
         target = target.copy() ; target.y = 0 ;
         v = v.normalized() ;
