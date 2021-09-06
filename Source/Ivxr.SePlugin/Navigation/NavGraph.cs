@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using Iv4xr.PluginLib.WorldModel;
 using Iv4xr.SePlugin.Control;
@@ -29,16 +30,27 @@ namespace Iv4xr.SePlugin.Navigation
             // TODO: guess which face of the blocks in the grid is "up" (which surface to walk on)
             // perhaps compare the angle of all vectors with the up vector of the character?
             
-            CreateGraph(grid);
+            // TODO: offset the start position to be below the character's feet
+            CreateGraph(grid, m_lowLevelObserver.GetPlayerPosition());
         }
 
-        private void CreateGraph(MyCubeGrid grid)
+        private void CreateGraph(MyCubeGrid grid, Vector3D start)
         {
             var map = new Dictionary<Vector3I, IMySlimBlock>(capacity: 256);
+
+            IMySlimBlock startBlock;
+            var minDistance = double.MaxValue;
 
             foreach (var block in grid.GetBlocks())
             {
                 map[block.Position] = block;
+
+                var distanceSquared = (grid.GridIntegerToWorld(block.Position) - start).LengthSquared();
+                if (distanceSquared < minDistance)
+                {
+                    minDistance = distanceSquared;
+                    startBlock = block;
+                }
             }
         }
     }
