@@ -46,7 +46,7 @@ namespace Iv4xr.SePlugin.Control
 
         private MyCharacter Character => m_gameSession.Character;
 
-        private Vector3D GetPlayerPosition()
+        internal Vector3D GetPlayerPosition()
         {
             return Character.PositionComp.GetPosition();
         }
@@ -169,6 +169,13 @@ namespace Iv4xr.SePlugin.Control
             return EnumerateSurroundingEntities(sphere)
                     .OfType<MyCubeGrid>()
                     .Select(grid => m_entityBuilder.CreateSeGrid(grid, sphere, mode)).ToList();
+        }
+
+        internal IEnumerable<MyCubeGrid> CollectSurroundingRawBlocks(BoundingSphereD sphere,
+            ObservationMode mode = ObservationMode.BLOCKS)
+        {
+            return EnumerateSurroundingEntities(sphere)
+                    .OfType<MyCubeGrid>();
         }
 
         public MyCubeGrid GetGridContainingBlock(string blockId)
