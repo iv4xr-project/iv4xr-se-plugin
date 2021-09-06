@@ -16,7 +16,7 @@ public class Matrix3D {
         b = new Vec3(elements[3], elements[4], elements[5]) ;
         c = new Vec3(elements[6], elements[7], elements[8]) ;
     }
-
+    
     /**
      * Apply the transformation defined by this mattrix on a position v, to obtain a new
      * position as the result of the transformation. E.g. the transformation can define
@@ -28,13 +28,14 @@ public class Matrix3D {
 
     /**
      * Get a rotation matrix that would rotate the vector v towards the vector target,
-     * where the rotation
-     *
-     * is on the XZ plane (so, the y-values would remain the same).
+     * where the rotation is around the y-axis (so, the y-values would remain the same).
      * The two vectors v and target are assume tobe on the same XZ plane (they have
      * the same y-values).
      *
      * The rotation is anchored at v's origin (so, (0,0,0)).
+     *
+     * Applying the rotation matrix on v would make it point to the same direction as
+     * the vector target, projected to the xz-plane.
      *
      * Once the rotation matrix is obtained, it can be applied to a Vec3 position
      * to calculate the new position as the result of the rotation.

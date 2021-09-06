@@ -47,16 +47,24 @@ public class GoalAndTacticLib {
     /**
      * Walking speed (as defined by SE). Set as -0.3f. The negative is intentional and correct :)
      */
-    public static float WALK_SPEED = -0.3f ;
+    public static float WALK_SPEED = 0.3f ;
 
     /***
      * At this speed the agent should run.
      */
-    public static float RUN_SPEED = -0.4f ;
+    public static float RUN_SPEED = 0.4f ;
 
     static Vec3 FORWARDV3= new Vec3(0,0,1) ;
     static Vec3 ZEROV3 = new Vec3(0,0,0) ;
     static Vec2 ZEROV2 = new Vec2(0,0) ;
+
+    /**
+     * Fix the polarity of move-vector (to be given to the method moveAndRotate(). We
+     * reverse the polarity of the values for x and z axis.
+     */
+    public static Vec3 fixPolarityMoveVector(Vec3 v) {
+        return new Vec3(- v.x,  v.y, - v.z) ;
+    }
 
     /**
      * A more intelligent and performant primitive "move" (than the primitive "moveAndRotate"). This
@@ -80,15 +88,27 @@ public class GoalAndTacticLib {
             // already very close to the destination
             return null ;
         }
+        System.out.println(">>> agent @ " + agentState.wom.position + ", dest: " + destination
+           + ", rel-direction: " + destinationRelativeLocation);
+        System.out.println("    forward-vector: " + agentState.orientationForward());
         // else, decide if we should run or walk:
         boolean running = true ;
         Vec3 forwardRun  = Vec3.mul(FORWARDV3,RUN_SPEED) ;
         Vec3 forwardWalk = Vec3.mul(FORWARDV3,WALK_SPEED) ;
         if( sqDistance <= 1) running = false ;
         // adjust the forward vector to make it angles towards the destination
-        Matrix3D rotation = Matrix3D.getYRotation(destinationRelativeLocation, agentState.orientationForward()) ;
-        forwardRun  = rotation.apply(forwardRun) ;
-        forwardWalk = rotation.apply(forwardWalk) ;
+        if(! agentState.jetpackRunning()) {
+            // 2D movement on surface:
+            Matrix3D rotation = Matrix3D.getYRotation(destinationRelativeLocation, agentState.orientationForward()) ;
+            forwardRun  = rotation.apply(forwardRun) ;
+            forwardWalk = rotation.apply(forwardWalk) ;
+            System.out.println(">>> no-fly forwardRun: " + forwardRun);
+        }
+        else {
+            forwardRun = rotate(forwardRun, destinationRelativeLocation, agentState.orientationForward()) ;
+            forwardWalk = rotate(forwardWalk, destinationRelativeLocation, agentState.orientationForward()) ;
+            System.out.println(">>> FLY forwardRun: " + forwardRun);
+        }
 
         //if (!running || duration==null) {
         //    duration = 1 ;  // for walking, we will only maintain the move for one update
@@ -98,7 +118,7 @@ public class GoalAndTacticLib {
         float threshold = THRESHOLD_SQUARED_DISTANCE_TO_POINT - 0.15f ;
         for(int k=0; k<duration; k++) {
             obs = agentState.env().getController().getCharacter().moveAndRotate(
-                    SEBlockFunctions.toSEVec3(running ? forwardRun : forwardWalk)
+                    SEBlockFunctions.toSEVec3(running ? fixPolarityMoveVector(forwardRun) : fixPolarityMoveVector(forwardWalk))
                     ,ZEROV2,
                     0) ; // the last is "roll" ;
             sqDistance = Vec3.sub(SEBlockFunctions.fromSEVec3(obs.getPosition()),destination).lengthSq() ;
@@ -110,11 +130,46 @@ public class GoalAndTacticLib {
         return obs ;
     }
 
+
+    /**
+     * Let t, v, and target be three vectors that same the same starting point, let's call it o.
+     * The method will rotate t, anchored at o, with the same angle as the angle between v and
+     * and target.
+     *
+     * More precisely, we turn the vector t around the axis w, with the angle alpha.
+     * The axis w is the normal vector between v and target, and alpha is the angle between
+     * v and target.
+     *
+     * The method is non-detructive (it does not change v), but rather returns a copy that would
+     * be the resulting rotated t.
+     */
+    public static Vec3 rotate(Vec3 t, Vec3 v, Vec3 target) {
+        v = v.normalized() ;
+        target = target.normalized() ;
+        float cosalpha = Vec3.dot(target,v) ;
+        Vec3 cross = Vec3.cross(target,v) ;
+        float sinalpha =cross.length() ;
+        // float sinalpha = (float) Math.sin(Math.acos(cosalpha)) ;
+        //System.out.println(">>> alpha via dot: " + Math.toDegrees(Math.acos(cosalpha))
+        //                + ", alpha via cross: " + Math.toDegrees(Math.asin(sinalpha))) ;
+        Vec3 k = cross.normalized() ;
+
+        if (Vec3.dot(k,cross) < 0 ) {
+            sinalpha = - sinalpha ;
+        }
+
+        var w1 = Vec3.mul(t,cosalpha) ;
+        var w2 = Vec3.mul(Vec3.cross(k,t), sinalpha) ;
+        var w3 = Vec3.mul(k, Vec3.dot(k,t) * (1 - cosalpha)) ;
+        return Vec3.add(w1, Vec3.add(w2,w3)) ;
+    }
+
+
     /**
      * A primitive method that sends a burst of successive turn-angle commands to SE. This
-     * method will only change the agent's forward facing vector. It does not change the
-     * agent's up-facing vector. (so, it is like moving the agent's head horizontally,
-     * but not vertically).
+     * method will only change the agent's forward facing vector. So, it rotates the agent's
+     * forward vector around the agent's y-axis. It does not change the agent's up-facing
+     * vector either. (so, it is like moving the agent's head horizontally, but not vertically).
      *
      * The number of the turn-commands bursted is specified by the parameter duration. The agent
      * will turn on its place so that it would face the given destination. The parameter
@@ -128,13 +183,22 @@ public class GoalAndTacticLib {
      * If at the beginning the angle to destination is less than alpha this method returns null,
      * and else it returns an observation at the end of the turns.
      */
-    public static CharacterObservation xzTurnTo(USeAgentState agentState, Vec3 destination, float cosAlphaThreshold, Integer duration) {
+    public static CharacterObservation yTurnTo(USeAgentState agentState, Vec3 destination, float cosAlphaThreshold, Integer duration) {
         // direction vector to the next node:
         Vec3 dirToGo = Vec3.sub(destination,agentState.wom.position) ;
         Vec3 agentHdir = agentState.orientationForward() ;
         // for calculating 2D rotation we ignore the y-value:
         dirToGo.y = 0 ;
         agentHdir.y = 0 ;
+
+
+        if(dirToGo.lengthSq() < THRESHOLD_SQUARED_DISTANCE_TO_SQUARE) {
+            // the destination is too close within the agent's y-cylinder;
+            // don't bother to rotate then
+            //return  null ;
+        }
+
+
         dirToGo = dirToGo.normalized() ;
         agentHdir = agentHdir.normalized() ;
         // angle between the dir-to-go and the agent's own direction (expressed as cos(angle)):
@@ -404,6 +468,19 @@ public class GoalAndTacticLib {
                         -> (Pair<List<DPos3>, Boolean> queryResult) -> {
                     var path = queryResult.fst ;
                     var arrivedAtDestination = queryResult.snd ;
+
+                    // check first if we should turn on/off jetpack:
+                    if(state.wom.position.y - state.navgrid.origin.y <= NavGrid.AGENT_HEIGHT
+                       && path.get(0).y == 0 && state.jetpackRunning()
+                    ) {
+                        state.env().getController().getCharacter().turnOffJetpack() ;
+                    }
+                    else {
+                        if (path.get(0).y > 0 && !state.jetpackRunning()) {
+                            state.env().getController().getCharacter().turnOnJetpack() ;
+                        }
+                    }
+
                     if (arrivedAtDestination) {
                         state.currentPathToFollow.clear();
                         return state ;
@@ -425,7 +502,8 @@ public class GoalAndTacticLib {
                         state.currentPathToFollow.remove(0) ;
                         return state ;
                     }
-                    var obs = xzTurnTo(state,nextNodePos, 0.75f,10) ;
+                    CharacterObservation obs = null ;
+                    // obs = yTurnTo(state,nextNodePos, 0.75f,10) ;
                     if (obs != null) {
                         // we did turning, we won't move.
                         return state ;
@@ -457,6 +535,7 @@ public class GoalAndTacticLib {
                             return null ;
                         }
                         path = smoothenPath(path) ;
+                        System.out.println("### PATH: " + PrintInfos.showPath(state,path));
                         return new Pair<>(path,false) ;
                     }
                     else {
@@ -538,17 +617,17 @@ public class GoalAndTacticLib {
         }
         return goal(goalname)
                 .toSolve((Float cos_alpha) -> 1 - cos_alpha <= 0.01)
-                .withTactic(FIRSTof(rotatexz(p).lift() , ABORT()))
+                .withTactic(FIRSTof(yRotate(p).lift() , ABORT()))
                 .lift() ;
     }
 
     /**
      * When invoked repeatedly, this action turns the agent until it horizontally faces towards the
-     * given destination. The turning is on the XZ plane (so, the y coordinates on all poins in the
-     * agent would stays the same). When the agent faces towards the destination (with some epsilon),
-     * the action is no longer enabled.
+     * given destination. The turning is around the y-axis (so, on the XZ plane; the y coordinates on all
+     * points in the agent would stay the same). When the agent faces towards the destination
+     * (with some epsilon), the action is no longer enabled.
      */
-    public static Action rotatexz(Vec3 destination) {
+    public static Action yRotate(Vec3 destination) {
 
         float cosAlphaThreshold  = 0.99f ;
         float cosAlphaThreshold_ = 0.995f ;
@@ -568,7 +647,7 @@ public class GoalAndTacticLib {
                     return cos_alpha ;
                 })
                 .do2((USeAgentState state) -> (Float cos_alpha) -> {
-                    CharacterObservation obs = xzTurnTo(state,destination,cosAlphaThreshold_,10) ;
+                    CharacterObservation obs = yTurnTo(state,destination,cosAlphaThreshold_,10) ;
                     if(obs == null) {
                         return cos_alpha ;
                     }
