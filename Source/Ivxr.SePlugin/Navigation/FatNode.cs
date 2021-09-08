@@ -6,11 +6,11 @@ namespace Iv4xr.SePlugin.Navigation
     /// <summary>
     /// Apart from position, stores also edges leading to connected vertices.
     /// </summary>
-    public class FatVertex
+    public class FatNode
     {
         public readonly PlainVec3D Position;
 
-        public readonly List<FatVertex> Neighbours = new List<FatVertex>(capacity: 8);
+        public readonly List<FatNode> Neighbours = new List<FatNode>(capacity: 8);
 
     }
 }

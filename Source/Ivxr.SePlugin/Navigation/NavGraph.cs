@@ -10,13 +10,38 @@ using VRageMath;
 
 namespace Iv4xr.SePlugin.Navigation
 {
+
     public class NavGraph
     {
-        private readonly LowLevelObserver m_lowLevelObserver;
+        public readonly List<FatNode> Nodes = new List<FatNode>();
+    }
+    
+    public class NavGraphEditor
+    {
+        private class GridLocation
+        {
+            public GridLocation(IMySlimBlock block)
+            {
+                Block = block;
+            }
+
+            public IMySlimBlock Block;
+            public bool Visited = false;
+            public FatNode Node;
+        }
         
-        public NavGraph(LowLevelObserver lowLevelObserver)
+        private readonly LowLevelObserver m_lowLevelObserver;
+
+        private NavGraph m_graph = new NavGraph();
+        
+        public NavGraphEditor(LowLevelObserver lowLevelObserver)
         {
             m_lowLevelObserver = lowLevelObserver;
+        }
+
+        public NavGraph GetGraph()
+        {
+            return m_graph;
         }
         
         private void CreateGraph()
@@ -31,19 +56,20 @@ namespace Iv4xr.SePlugin.Navigation
             // perhaps compare the angle of all vectors with the up vector of the character?
             
             // TODO: offset the start position to be below the character's feet
-            CreateGraph(grid, m_lowLevelObserver.GetPlayerPosition());
+            // TODO: calculate which direction is actually up
+            CreateGraph(grid, m_lowLevelObserver.GetPlayerPosition(), Vector3I.Up);
         }
 
-        private void CreateGraph(MyCubeGrid grid, Vector3D start)
+        private void CreateGraph(MyCubeGrid grid, Vector3D start, Vector3I up)
         {
-            var map = new Dictionary<Vector3I, IMySlimBlock>(capacity: 256);
+            var map = new Dictionary<Vector3I, GridLocation>(capacity: 256);
 
-            IMySlimBlock startBlock;
+            IMySlimBlock startBlock = null;
             var minDistance = double.MaxValue;
 
             foreach (var block in grid.GetBlocks())
             {
-                map[block.Position] = block;
+                map[block.Position] = new GridLocation(block);
 
                 var distanceSquared = (grid.GridIntegerToWorld(block.Position) - start).LengthSquared();
                 if (distanceSquared < minDistance)
@@ -52,6 +78,50 @@ namespace Iv4xr.SePlugin.Navigation
                     startBlock = block;
                 }
             }
+
+            if (startBlock is null)
+                return;
+
+            var steps = new StepVectors(up);
+            var cubeQueue = new Queue<IMySlimBlock>();
+            
+            cubeQueue.Enqueue(startBlock);
+
+            while (cubeQueue.Count > 0)
+            {
+                var currentCube = cubeQueue.Dequeue();
+                var currentPosition = currentCube.Position;
+                
+                map[currentPosition].Visited = true;
+                
+                // check for obstacles (2 blocks above the site)
+                if (map.ContainsKey(currentPosition + up) || map.ContainsKey(currentPosition + 2*up))
+                    continue;
+
+                var fatNode = new FatNode();
+                map[currentPosition].Node = fatNode;
+                m_graph.Nodes.Add(fatNode);
+
+                foreach (var step in steps.EnumerateSides())  // TODO enumerate side neighbors
+                {
+                    if (!map.ContainsKey(currentPosition + step))
+                        continue;
+                    
+                    var peakedLocation = map[currentPosition + step];
+                    if (peakedLocation.Visited)
+                    {
+                        if (peakedLocation.Node != null)
+                            fatNode.Neighbours.Add(peakedLocation.Node);
+                    }
+                    else
+                    {
+                        // TODO: check for obstacles even before enqueueing the block?
+                        cubeQueue.Enqueue(peakedLocation.Block);
+                    }
+                }
+            }
+            
+            
         }
     }
 }
