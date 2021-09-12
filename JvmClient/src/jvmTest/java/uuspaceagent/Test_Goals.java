@@ -7,6 +7,7 @@ import nl.uu.cs.aplib.mainConcepts.GoalStructure;
 import nl.uu.cs.aplib.utils.Pair;
 import org.junit.jupiter.api.Test;
 
+import static nl.uu.cs.aplib.AplibEDSL.DEPLOYonce;
 import static nl.uu.cs.aplib.AplibEDSL.SEQ;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static uuspaceagent.PrintInfos.*;
@@ -45,7 +46,8 @@ public class Test_Goals {
         console("*** start test...") ;
         Vec3 dest = new Vec3(19,-5,65) ;
         var agentAndState = deployAgent();
-        GoalStructure G = GoalAndTacticLib.closeTo(dest) ;
+        var agent = agentAndState.fst ;
+        GoalStructure G = DEPLOYonce(agent,GoalAndTacticLib.closeTo(dest)) ;
         test_Goal(agentAndState.fst, agentAndState.snd, G) ;
         G.printGoalStructureStatus();
         assertTrue(G.getStatus().success());
@@ -57,7 +59,8 @@ public class Test_Goals {
         console("*** start test...") ;
         Vec3 dest = new Vec3(10,-5,40) ;
         var agentAndState = deployAgent();
-        GoalStructure G = GoalAndTacticLib.closeTo(dest) ;
+        var agent = agentAndState.fst ;
+        GoalStructure G = DEPLOYonce(agent,GoalAndTacticLib.closeTo(dest)) ;
         test_Goal(agentAndState.fst, agentAndState.snd, G) ;
         G.printGoalStructureStatus();
         assertTrue(G.getStatus().failed());
@@ -68,11 +71,12 @@ public class Test_Goals {
         // This is a position that is unreachable, so this goal should abort
         console("*** start test...") ;
         var agentAndState = deployAgent();
-        GoalStructure G = GoalAndTacticLib.closeTo(agentAndState.fst,
+        var agent = agentAndState.fst ;
+        GoalStructure G = DEPLOYonce(agent,GoalAndTacticLib.closeTo(agentAndState.fst,
                 "LargeBlockSlideDoor",
                 SEBlockFunctions.BlockSides.FRONT,
                 20f,
-                0.5f);
+                0.5f));
         test_Goal(agentAndState.fst, agentAndState.snd, G) ;
         G.printGoalStructureStatus();
         assertTrue(G.getStatus().success());
@@ -83,11 +87,12 @@ public class Test_Goals {
         // This is a position that is unreachable, so this goal should abort
         console("*** start test...") ;
         var agentAndState = deployAgent();
-        GoalStructure G = GoalAndTacticLib.closeTo(agentAndState.fst,
+        var agent = agentAndState.fst ;
+        GoalStructure G = DEPLOYonce(agent,GoalAndTacticLib.closeTo(agentAndState.fst,
                 "LargeBlockBatteryBlock",
                 SEBlockFunctions.BlockSides.FRONT,
                 20f,
-                0.5f);
+                0.5f));
         test_Goal(agentAndState.fst, agentAndState.snd, G) ;
         G.printGoalStructureStatus();
         assertTrue(G.getStatus().success());
@@ -101,12 +106,11 @@ public class Test_Goals {
         TestAgent agent = agentAndState.fst ;
         agent.setTestDataCollector(new TestDataCollector()) ;
 
-        GoalStructure G = SEQ(
-                GoalAndTacticLib.closeTo(agent,
+        GoalStructure G = SEQ(DEPLOYonce(agent,GoalAndTacticLib.closeTo(agent,
                     "LargeBlockBatteryBlock",
                     SEBlockFunctions.BlockSides.FRONT,
                     20f,
-                    0.5f),
+                    0.5f)),
                 GoalAndTacticLib.targetBlockOK(agent, e ->
                         "LargeBlockBatteryBlock".equals(e.getStringProperty("blockType"))
                         && (float) e.getProperty("integrity") == (float) e.getProperty("maxIntegrity"),
@@ -120,6 +124,7 @@ public class Test_Goals {
                 ),
                 GoalAndTacticLib.photo("C:\\workshop\\projects\\iv4xr\\Screenshots\\LargeBlockBatteryBlock_at_50.png")
         );
+        Thread.sleep(5000);
         test_Goal(agent, agentAndState.snd, G) ;
         G.printGoalStructureStatus();
         assertTrue(G.getStatus().success());

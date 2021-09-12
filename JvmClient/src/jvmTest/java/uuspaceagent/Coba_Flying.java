@@ -55,8 +55,8 @@ public class Coba_Flying {
     }
 
 
-    @Test
-    public void test2() throws InterruptedException {
+    //@Test
+    public void testFlyDifferentDirections() throws InterruptedException {
 
         var state = loadSE("myworld-3").snd;
 
@@ -91,12 +91,12 @@ public class Coba_Flying {
         destination = new Vec3(9.54f,3f,54.2f) ;
         moveTo(state, destination) ;
 
-        console("####  Moving to x+:");
+        console("####  Moving to x-:");
         state.updateState();
-        destination = new Vec3(18f,3f,60f) ;
+        destination = new Vec3(5f,3f,45f) ;
         moveTo(state, destination) ;
 
-        console("####  Moving to x-:");
+        console("####  Moving to x+:");
         state.updateState();
         destination = new Vec3(9.54f,3f,54.2f) ;
         moveTo(state, destination) ;
@@ -105,5 +105,52 @@ public class Coba_Flying {
         state.updateState();
         destination = new Vec3(9.54f,-5f,54.2f) ;
         moveTo(state, destination) ;
+    }
+
+    @Test
+    public void testFlyAndYrotate() throws InterruptedException {
+        var state = loadSE("myworld-3").snd;
+
+        state.updateState();
+
+        System.out.println("** Trying to FLY");
+
+        state.updateState();
+        state.navgrid.enableFlying = true ;
+        state.env().getController().getCharacter().turnOnJetpack() ;
+        state.updateState();
+
+        WorldEntity agentInfo = state.wom.elements.get(state.agentId);
+        console("** Agent's info: " + PrintInfos.showWorldEntity(agentInfo));
+        console("** Agent @ " + state.wom.position);
+
+        //Thread.sleep(5000) ;
+
+
+        // agent se0 @<9.549925,-5.0025005,54.149185>, hdir:<-0.0064151124,1.6736684E-4,0.99997944>, vdir:<-3.9837923E-5,1.0,-1.6762585E-4>, health:1.0, jet:true
+
+        //Vec3 destination = new Vec3(11.5f,-1.5f,60f) ;
+        console("####  Moving up:");
+        state.updateState();
+        Vec3 destination = new Vec3(9.54f,4f,54.2f) ;
+        moveTo(state, destination) ;
+
+        state.updateState();
+         destination = new Vec3(9.54f,1f,65f) ;
+        moveTo(state, destination) ;
+
+        state.updateState();
+        destination = new Vec3(9.54f,4f,54.2f) ;
+        moveTo(state, destination) ;
+
+        // rotate
+        console("####  rotating around Y:");
+        state.updateState();
+        console("** Agent @ " + state.wom.position);
+        destination = new Vec3(9.54f,4f,50f) ;
+        GoalAndTacticLib.yTurnTo(state, destination, 0.98f, 400) ;
+
+        state.updateState();
+        console("** Agent @ " + state.wom.position);
     }
 }

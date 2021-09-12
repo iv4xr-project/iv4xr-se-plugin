@@ -6,6 +6,7 @@ import nl.uu.cs.aplib.mainConcepts.GoalStructure;
 import nl.uu.cs.aplib.utils.Pair;
 import org.junit.jupiter.api.Test;
 
+import static nl.uu.cs.aplib.AplibEDSL.DEPLOYonce;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static uuspaceagent.PrintInfos.showWOMAgent;
 import static uuspaceagent.TestUtils.console;
@@ -41,12 +42,16 @@ public class Test_Flying {
     public void test_flying_to_some_location() throws InterruptedException {
         // This is a position that is unreachable, so this goal should abort
         console("*** start test...") ;
-        //Vec3 dest = new Vec3(10,-5,40) ;
-        Vec3 dest = new Vec3(10,3,56) ;
+        //Thread.sleep(5000);
+        Vec3 dest = new Vec3(10,-5,40) ;
+        //Vec3 dest = new Vec3(10,5,53.7f) ;
+        //Vec3 dest = new Vec3(25,-5,60) ;
+        //Vec3 dest = new Vec3(10,3,56) ;
         var agentAndState = deployAgent();
+        var agent = agentAndState.fst ;
         var state = agentAndState.snd ;
         state.navgrid.enableFlying = true ;
-        GoalStructure G = GoalAndTacticLib.closeTo(dest) ;
+        GoalStructure G = DEPLOYonce(agent,GoalAndTacticLib.closeTo(dest)) ;
         test_Goal(agentAndState.fst, agentAndState.snd, G) ;
         G.printGoalStructureStatus();
         console(("#### Remaining PATH to follow: " + PrintInfos.showPath(state,state.currentPathToFollow)));

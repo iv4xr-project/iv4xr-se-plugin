@@ -48,10 +48,17 @@ public class Matrix3D {
         float cosalpha = Vec3.dot(v,target) ;
         Vec3 cross = Vec3.cross(v,target) ;
         float sinalpha = Math.signum(cross.y) * cross.length() ;
+        /* this is wrong:
         return new Matrix3D(
                 cosalpha, 0, - sinalpha,
                 0, 1, 0,
                 sinalpha, 0, cosalpha
+        ) ;
+         */
+        return new Matrix3D(
+                cosalpha, 0, sinalpha,
+                0, 1, 0,
+                - sinalpha, 0, cosalpha
         ) ;
     }
 
