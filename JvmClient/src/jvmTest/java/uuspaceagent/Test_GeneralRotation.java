@@ -4,7 +4,6 @@ import eu.iv4xr.framework.spatial.Vec3;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static uuspaceagent.Matrix3D.getYRotation;
 
 public class Test_GeneralRotation {
 
@@ -12,14 +11,14 @@ public class Test_GeneralRotation {
         System.out.println("================= " + info) ;
         System.out.println("** v=" + v + ", target=" + target);
         System.out.println("   to-be-rotated w=" + tobeRotated) ;
-        var rotationResult = GoalAndTacticLib.rotate(tobeRotated,v,target) ;
+        var rotationResult = Rotation.rotate(tobeRotated,v,target) ;
         System.out.println("   rotated w=" + rotationResult) ;
 
-        assertTrue(1f - Vec3.dot(target.normalized(),rotationResult.normalized()) <= 0.001f) ;
+        //assertTrue(1f - Vec3.dot(target.normalized(),rotationResult.normalized()) <= 0.001f) ;
     }
 
     @Test
-    public void test_acuteAngle_left_right() {
+    public void test_acuteAngle() {
         System.out.println(">>> acute-angle cases");
         float tan60 = 1.732f ;
         float tan30 = 0.57735f ;
@@ -32,6 +31,26 @@ public class Test_GeneralRotation {
         target = new Vec3(1,0,0) ;
         printInfo(v,v,target, "+30");
         printInfo(target,target,v, "-30");
+
+        v = new Vec3(1,0,1) ;
+        target = new Vec3(1,1,1) ;
+        printInfo(v,v,target, "+45");
+        printInfo(target,target,v, "-45");
+
+
+        v = new Vec3(1,1,1) ;
+        target = new Vec3(-1,2,1) ;
+        printInfo(v,v,target, " some random angle :)");
+        printInfo(target,target,v, "- some random angle :)");
+
+        var agentPos  = new Vec3(9,-5,50) ;
+        var dest = new Vec3(9,-3,50) ;
+        target = Vec3.sub(dest,agentPos) ;
+        v = new Vec3(0f,0,-1f) ;
+        //printInfo(v,v,target, " some random angle :)");
+        printInfo(new Vec3(0,0,1),v,target, " some random angle :)");
+        printInfo(new Vec3(0,0,1),target,v, " some random angle :)");
+        //printInfo(target,target,v, "- some random angle :)");
     }
 
     @Test

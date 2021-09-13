@@ -4,7 +4,7 @@ import eu.iv4xr.framework.spatial.Vec3;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static uuspaceagent.Matrix3D.getYRotation;
+import static uuspaceagent.Rotation.getYRotation;
 
 public class Test_YRotation {
 

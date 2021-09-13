@@ -99,14 +99,22 @@ public class GoalAndTacticLib {
         // adjust the forward vector to make it angles towards the destination
         if(! agentState.jetpackRunning()) {
             // 2D movement on surface:
-            Matrix3D rotation = Matrix3D.getYRotation(destinationRelativeLocation, agentState.orientationForward()) ;
+            Matrix3D rotation = Rotation.getYRotation(agentState.orientationForward(),destinationRelativeLocation) ;
             forwardRun  = rotation.apply(forwardRun) ;
             forwardWalk = rotation.apply(forwardWalk) ;
             System.out.println(">>> no-fly forwardRun: " + forwardRun);
         }
         else {
-            forwardRun = rotate(forwardRun, destinationRelativeLocation, agentState.orientationForward()) ;
-            forwardWalk = rotate(forwardWalk, destinationRelativeLocation, agentState.orientationForward()) ;
+            forwardRun = Rotation.rotate(forwardRun, agentState.orientationForward(), destinationRelativeLocation) ;
+            forwardWalk = Rotation.rotate(forwardWalk, agentState.orientationForward(), destinationRelativeLocation) ;
+            // applly correction on the y-component, taking advantage that we know
+            // the agent's forward orientation has its y-component 0.
+            forwardRun.y = Math.abs(forwardRun.y) ;
+            forwardWalk.y = Math.abs(forwardWalk.y) ;
+            if (destinationRelativeLocation.y < 0) {
+                forwardRun.y = - forwardRun.y ;
+                forwardWalk.y = - forwardWalk.y ;
+            }
             System.out.println(">>> FLY forwardRun: " + forwardRun);
         }
 
@@ -128,79 +136,6 @@ public class GoalAndTacticLib {
             if (running && sqDistance <= 1f) running = false ;
         }
         return obs ;
-    }
-
-
-    /**
-     * Let t, v, and target be three vectors that same the same starting point, let's call it o.
-     * The method will rotate t, anchored at o, with the same angle as the angle between v and
-     * and target.
-     *
-     * More precisely, we turn the vector t around the axis w, with the angle alpha.
-     * The axis w is the normal vector between v and target, and alpha is the angle between
-     * v and target.
-     *
-     * The method is non-detructive (it does not change v), but rather returns a copy that would
-     * be the resulting rotated t.
-     *
-     * Sources:
-     *   (1) we use Rodrigues Formula for rotation: https://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula
-     *   (2) for deterning the sign of sinalpha using cross product (but this turns out need to be needed, but could
-     *   be useful for future): https://stackoverflow.com/questions/5188561/signed-angle-between-two-3d-vectors-with-same-origin-within-the-same-plane
-     *
-     */
-    public static Vec3 rotate(Vec3 t, Vec3 v, Vec3 target) {
-        v = v.normalized() ;
-        target = target.normalized() ;
-        float cosalpha = Vec3.dot(v,target) ;
-        Vec3 cross = Vec3.cross(v,target) ;
-        float sinalpha =cross.length() ;
-        // float sinalpha = (float) Math.sin(Math.acos(cosalpha)) ;
-        //System.out.println(">>> alpha via dot: " + Math.toDegrees(Math.acos(cosalpha))
-        //                + ", alpha via cross: " + Math.toDegrees(Math.asin(sinalpha))) ;
-
-        // this can throw an exception if v and target are on the same line (pointing
-        // the same or opposite directgion), because the cross product would then be
-        // (0,0,0).
-        // TODO
-        System.out.println(">>> cross:" + cross + ", len=" + sinalpha) ;
-        Vec3 k = cross.normalized() ;
-
-        // Ok, so this is a silly way to determine the sign of the sinalpha. Won't work
-        // as it will of course be always positive. But it appears not needed, as the rotation
-        // seems to work without it ;)
-        //if (Vec3.dot(k,cross) < 0 ) {
-        //    sinalpha = - sinalpha ;
-        //}
-
-        var w1 = Vec3.mul(t,cosalpha) ;
-        var w2 = Vec3.mul(Vec3.cross(k,t), sinalpha) ;
-        var w3 = Vec3.mul(k, Vec3.dot(k,t) * (1 - cosalpha)) ;
-        return Vec3.add(w1, Vec3.add(w2,w3)) ;
-    }
-
-    public static Vec3 rotateOLD(Vec3 t, Vec3 v, Vec3 target) {
-        v = v.normalized() ;
-        target = target.normalized() ;
-        float cosalpha = Vec3.dot(target,v) ;
-        Vec3 cross = Vec3.cross(target,v) ;
-        float sinalpha =cross.length() ;
-        // float sinalpha = (float) Math.sin(Math.acos(cosalpha)) ;
-        //System.out.println(">>> alpha via dot: " + Math.toDegrees(Math.acos(cosalpha))
-        //                + ", alpha via cross: " + Math.toDegrees(Math.asin(sinalpha))) ;
-        Vec3 k = cross.normalized() ;
-
-        // Ok, so this is a silly way to determine the sign of the sinalpha. Won't work
-        // as it will of course be always positive. But it appears not needed, as the rotation
-        // seems to work without it ;)
-        //if (Vec3.dot(k,cross) < 0 ) {
-        //    sinalpha = - sinalpha ;
-        //}
-
-        var w1 = Vec3.mul(t,cosalpha) ;
-        var w2 = Vec3.mul(Vec3.cross(k,t), sinalpha) ;
-        var w3 = Vec3.mul(k, Vec3.dot(k,t) * (1 - cosalpha)) ;
-        return Vec3.add(w1, Vec3.add(w2,w3)) ;
     }
 
 
@@ -230,13 +165,11 @@ public class GoalAndTacticLib {
         dirToGo.y = 0 ;
         agentHdir.y = 0 ;
 
-
         if(dirToGo.lengthSq() < 1) {
             // the destination is too close within the agent's y-cylinder;
             // don't bother to rotate then
             return  null ;
         }
-
 
         dirToGo = dirToGo.normalized() ;
         agentHdir = agentHdir.normalized() ;
@@ -261,7 +194,8 @@ public class GoalAndTacticLib {
         }
         // check if we have to turn clockwise or counter-clockwise
         if (normalVector.y > 0) {
-            // the dir-to-go is to the "left"/counter-clockwise direction
+            // The agent should then turn clock-wise; for SE this means giving
+            // a negative turning speed. Else positive turning speed.
             turningSpeed = - turningSpeed ;
         }
         if(!fastturning || duration == null) {
@@ -566,7 +500,7 @@ public class GoalAndTacticLib {
                     }
                     CharacterObservation obs = null ;
                     // disabling rotation for now
-                    obs = yTurnTo(state,nextNodePos, 0.75f,10) ;
+                    obs = yTurnTo(state,nextNodePos, 0.8f,10) ;
                     if (obs != null) {
                         // we did turning, we won't move.
                         return new Pair<>(SEBlockFunctions.fromSEVec3(obs.getPosition()), SEBlockFunctions.fromSEVec3(obs.getOrientationForward())) ;

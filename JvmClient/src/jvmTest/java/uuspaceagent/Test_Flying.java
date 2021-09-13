@@ -43,9 +43,9 @@ public class Test_Flying {
         // This is a position that is unreachable, so this goal should abort
         console("*** start test...") ;
         //Thread.sleep(5000);
-        Vec3 dest = new Vec3(10,-5,40) ;
+        //Vec3 dest = new Vec3(10,-5,40) ;
         //Vec3 dest = new Vec3(10,5,53.7f) ;
-        //Vec3 dest = new Vec3(25,-5,60) ;
+        Vec3 dest = new Vec3(25,-5,60) ;
         //Vec3 dest = new Vec3(10,3,56) ;
         var agentAndState = deployAgent();
         var agent = agentAndState.fst ;

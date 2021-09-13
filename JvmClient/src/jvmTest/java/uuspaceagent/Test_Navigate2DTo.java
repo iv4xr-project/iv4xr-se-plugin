@@ -40,10 +40,11 @@ public class Test_Navigate2DTo {
         //final float distance_to_sq_threshold = dth*dth ;
 
         GoalStructure G = goal("close to destination")
-                .toSolve((USeAgentState st) -> {
+                .toSolve((Pair<Vec3,Vec3> positionAndOrientation) -> {
                     //var currentAgentSq = st.grid2D.gridProjectedLocation(st.wom.position) ;
                     //return currentAgentSq.equals(sqDestination) ;
-                    return Vec3.sub(centerOfSqDestination,state.wom.position).lengthSq() <= GoalAndTacticLib.THRESHOLD_SQUARED_DISTANCE_TO_SQUARE ;
+                    var pos = positionAndOrientation.fst ;
+                    return Vec3.sub(centerOfSqDestination,pos).lengthSq() <= GoalAndTacticLib.THRESHOLD_SQUARED_DISTANCE_TO_SQUARE ;
                 })
                 .withTactic(GoalAndTacticLib.navigateToTAC(destination))
                 .lift() ;

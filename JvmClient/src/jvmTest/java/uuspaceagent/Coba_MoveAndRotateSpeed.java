@@ -19,7 +19,8 @@ public class Coba_MoveAndRotateSpeed {
         int k=0 ;
         while (k<200) {
             //state.env().moveForward(0.3f) ;
-            state.env().getController().getCharacter().moveAndRotate(new Vec3(-0.3,0,-0.3), new Vec2(0,0), 0) ;
+            //state.env().getController().getCharacter().moveAndRotate(new Vec3(-0.3,0,-0.3), new Vec2(0,0), 0) ;
+            state.env().getController().getCharacter().moveAndRotate(new Vec3(0,0,0), new Vec2(0,10), 0) ;
             /*
             for(int burst=0; burst<10; burst++) {
                 state.env().getController().getCharacter().moveAndRotate(new Vec3(0,0,-0.4), new Vec2(0,0), 0) ;
