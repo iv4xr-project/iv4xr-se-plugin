@@ -7,7 +7,10 @@ import org.junit.jupiter.api.Test;
 import static uuspaceagent.TestUtils.console;
 import static uuspaceagent.TestUtils.loadSE;
 
-public class Coba_MoveTo_and_YRotate {
+/**
+ * For trying the 2nd-tier primitives moveToward and yTurnToward provided by TacticLib.
+ */
+public class Coba_moveToward_and_yTurnToward {
 
     void moveTo(UUSeAgentState state, Vec3 destination) {
         state.updateState();

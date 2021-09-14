@@ -31,6 +31,25 @@ public class UUTacticLib {
     public static float RUN_SPEED = 0.4f ;
 
     /**
+     * If the angle between the agent's current direction and the direction-to-go is less
+     * than this threshold, we slow the agent's turning speed, to mitigate that it might
+     * overshoot the intended direction to go.
+     * Expressed in terms of cos(angle). Below is cos(10-degree):
+     */
+    public static float THRESHOLD_ANGLE_TO_SLOW_TURNING = (float) Math.cos(Math.toRadians(10f));
+    /**
+     * When the agent's distance to a square's center is less or equal to this threshold, the
+     * square is considered as visited. This distance is a about the square size, so the agent
+     * might actually in the neighboring square. This threshold is introduced to avoid the
+     * agent from getting stuck because it keeps overshooting the center of a target square.
+     *
+     * The threshold is not expressed literally as distance, but for efficiency it is expressed
+     * as the square of the distance (so that we don't have to keep calculating square-roots).
+     */
+    public static float THRESHOLD_SQUARED_DISTANCE_TO_SQUARE = NavGrid.CUBE_SIZE * NavGrid.CUBE_SIZE; //1.3f * Grid2DNav.SQUARE_SIZE * 1.3f * Grid2DNav.SQUARE_SIZE
+    public static float THRESHOLD_SQUARED_DISTANCE_TO_POINT= 1.7f ; // magic number ... :|
+
+    /**
      * The unit move-vector that will cause the agent to move in the same direction as its
      * forward-orientation. That is, this vector will move the agent in the direction that
      * it faces to. Note that as a unit-vector it does not take speed into account; you need
@@ -105,7 +124,7 @@ public class UUTacticLib {
         //}
         // now move... sustain it for the given duration:
         CharacterObservation obs = null ;
-        float threshold = UUGoalLib.THRESHOLD_SQUARED_DISTANCE_TO_POINT - 0.15f ;
+        float threshold = THRESHOLD_SQUARED_DISTANCE_TO_POINT - 0.15f ;
         for(int k=0; k<duration; k++) {
             obs = agentState.env().getController().getCharacter().moveAndRotate(
                     SEBlockFunctions.toSEVec3(running ? seFixPolarityMoveVector(forwardRun) : seFixPolarityMoveVector(forwardWalk))
@@ -167,7 +186,7 @@ public class UUTacticLib {
 
         Vec3 normalVector = Vec3.cross(agentHdir,dirToGo) ;
 
-        if(cos_alpha >= UUGoalLib.THRESHOLD_ANGLE_TO_SLOW_TURNING) {
+        if(cos_alpha >= THRESHOLD_ANGLE_TO_SLOW_TURNING) {
             // the angle between the agent's own direction and target direction is less than 10-degree
             // we reduce the turning-speed:
             turningSpeed = TURNING_SPEED*0.25f ;
@@ -352,7 +371,7 @@ public class UUTacticLib {
                     var nextNodePos = state.navgrid.getSquareCenterLocation(nextNode) ;
                     var agentSq = state.navgrid.gridProjectedLocation(state.wom.position) ;
                     //if(agentSq.equals(nextNode)) {
-                    if(Vec3.sub(nextNodePos,state.wom.position).lengthSq() <= UUGoalLib.THRESHOLD_SQUARED_DISTANCE_TO_SQUARE) {
+                    if(Vec3.sub(nextNodePos,state.wom.position).lengthSq() <= THRESHOLD_SQUARED_DISTANCE_TO_SQUARE) {
                         // agent is already in the same square as the next-node destination-square. Mark the node
                         // as reached (so, we remove it from the plan):
                         state.currentPathToFollow.remove(0) ;
@@ -376,7 +395,7 @@ public class UUTacticLib {
                     var destinationSqCenterPos = state.navgrid.getSquareCenterLocation(destinationSq) ;
                     //if (state.grid2D.squareDistanceToSquare(agentPos,destinationSq) <= SQEPSILON_TO_NODE_IN_2D_PATH_NAVIGATION) {
                     //if(agentSq.equals(destinationSq)) {
-                    if(Vec3.sub(destinationSqCenterPos,state.wom.position).lengthSq() <= UUGoalLib.THRESHOLD_SQUARED_DISTANCE_TO_SQUARE) {
+                    if(Vec3.sub(destinationSqCenterPos,state.wom.position).lengthSq() <= THRESHOLD_SQUARED_DISTANCE_TO_SQUARE) {
 
                             // the agent is already at the destination. Just return the path, and indicate that
                         // we have arrived at the destination:

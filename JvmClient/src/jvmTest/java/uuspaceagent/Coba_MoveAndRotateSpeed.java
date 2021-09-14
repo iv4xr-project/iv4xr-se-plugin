@@ -7,7 +7,7 @@ import spaceEngineers.model.Vec3;
 import static uuspaceagent.TestUtils.loadSE;
 
 /**
- * For experimenting with movement speed.
+ * For experimenting with movement speed; we use SE primitive.
  */
 public class Coba_MoveAndRotateSpeed {
 

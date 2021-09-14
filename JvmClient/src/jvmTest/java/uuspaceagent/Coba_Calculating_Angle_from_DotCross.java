@@ -3,7 +3,10 @@ package uuspaceagent;
 import eu.iv4xr.framework.spatial.Vec3;
 import org.junit.jupiter.api.Test;
 
-public class CobaDotCross {
+/**
+ * For trying out calculating cos,sin, and angle from dot and cross product.
+ */
+public class Coba_Calculating_Angle_from_DotCross {
 
 
     void test(Vec3 v1, Vec3 v2) {
@@ -30,8 +33,6 @@ public class CobaDotCross {
         test(new Vec3(-1,0,1), new Vec3(1,0,1)) ;
         test(new Vec3(-1,0,1), new Vec3(2,0,1)) ;
         test(new Vec3(2,0,1), new Vec3(-1,0,1)) ;
-
-
     }
 
 }

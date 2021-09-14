@@ -19,28 +19,6 @@ import java.util.function.Predicate;
 public class UUGoalLib {
 
     /**
-     * If the angle between the agent's current direction and the direction-to-go is less
-     * than this threshold, we slow the agent's turning speed, to mitigate that it might
-     * overshoot the intended direction to go.
-     * Expressed in terms of cos(angle). Below is cos(10-degree):
-     */
-    public static float THRESHOLD_ANGLE_TO_SLOW_TURNING = (float) Math.cos(Math.toRadians(10f));
-
-    /**
-     * When the agent's distance to a square's center is less or equal to this threshold, the
-     * square is considered as visited. This distance is a about the square size, so the agent
-     * might actually in the neighboring square. This threshold is introduced to avoid the
-     * agent from getting stuck because it keeps overshooting the center of a target square.
-     *
-     * The threshold is not expressed literally as distance, but for efficiency it is expressed
-     * as the square of the distance (so that we don't have to keep calculating square-roots).
-     */
-    public static float THRESHOLD_SQUARED_DISTANCE_TO_SQUARE = NavGrid.CUBE_SIZE * NavGrid.CUBE_SIZE; //1.3f * Grid2DNav.SQUARE_SIZE * 1.3f * Grid2DNav.SQUARE_SIZE
-
-    public static float THRESHOLD_SQUARED_DISTANCE_TO_POINT= 1.7f ; // magic number ... :|
-
-
-    /**
      * A goal that is solved when the agent manage to be in some distance close to a
      * given destination. The destination itself should be reachable from the agent
      * current position. The solver for this goal is the tactic navigateToTAC.
@@ -60,7 +38,7 @@ public class UUGoalLib {
             GoalStructure G = goal(goalname_)
                     .toSolve((Pair<Vec3,Vec3> posAndOrientation) -> {
                         var agentPosition = posAndOrientation.fst ;
-                        return Vec3.sub(targetSquareCenter,agentPosition).lengthSq() <= THRESHOLD_SQUARED_DISTANCE_TO_SQUARE ;
+                        return Vec3.sub(targetSquareCenter,agentPosition).lengthSq() <= UUTacticLib.THRESHOLD_SQUARED_DISTANCE_TO_SQUARE ;
                     })
                     .withTactic(
                        FIRSTof(UUTacticLib.navigateToTAC(targetLocation), ABORT()) )
@@ -252,7 +230,7 @@ public class UUGoalLib {
         return goal(goalname)
                 .toSolve((Float square_distance) -> {
                     //System.out.println(">> sq-dist " + square_distance) ;
-                    return square_distance <= THRESHOLD_SQUARED_DISTANCE_TO_POINT ;
+                    return square_distance <= UUTacticLib.THRESHOLD_SQUARED_DISTANCE_TO_POINT ;
                 })
                 .withTactic(FIRSTof(UUTacticLib.straightline2DMoveTowardsACT(p).lift() , ABORT()))
                 .lift() ;

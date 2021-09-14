@@ -4,8 +4,10 @@ import eu.iv4xr.framework.mainConcepts.TestAgent;
 import eu.iv4xr.framework.spatial.Vec3;
 import nl.uu.cs.aplib.mainConcepts.GoalStructure;
 import org.junit.jupiter.api.Test;
+import spaceEngineers.transport.SocketReaderWriterKt;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static spaceEngineers.transport.SocketReaderWriterKt.closeIfCloseable;
 import static uuspaceagent.PrintInfos.showWOMAgent;
 import static uuspaceagent.TestUtils.console;
 import static uuspaceagent.TestUtils.loadSE;
@@ -37,6 +39,7 @@ public class Test_BasicMoveAndTurnGoals {
             turn++ ;
             if (turn >= 1400) break ;
         }
+        closeIfCloseable(state.env());
         return state ;
     }
 
@@ -88,7 +91,7 @@ public class Test_BasicMoveAndTurnGoals {
     /**
      * Test strafing to left.
      */
-    //@Test
+    @Test
     public void test_StrafeLeft() throws InterruptedException {
         // agent start location should be around: <10.119276,-5.0025,55.681934>
         // orientationForward: <-0.043967947,-2.0614608E-4,0.9990329> ... so looking towards z-axis

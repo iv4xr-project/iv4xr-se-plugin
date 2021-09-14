@@ -7,6 +7,9 @@ import spaceEngineers.model.*;
 
 import static uuspaceagent.TestUtils.loadSE;
 
+/**
+ * For trying out grinding directly using primitives from SE.
+ */
 public class Coba_Grinding {
 
     @Test

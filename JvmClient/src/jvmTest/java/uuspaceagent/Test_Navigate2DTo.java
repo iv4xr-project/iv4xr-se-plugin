@@ -44,7 +44,7 @@ public class Test_Navigate2DTo {
                     //var currentAgentSq = st.grid2D.gridProjectedLocation(st.wom.position) ;
                     //return currentAgentSq.equals(sqDestination) ;
                     var pos = positionAndOrientation.fst ;
-                    return Vec3.sub(centerOfSqDestination,pos).lengthSq() <= UUGoalLib.THRESHOLD_SQUARED_DISTANCE_TO_SQUARE ;
+                    return Vec3.sub(centerOfSqDestination,pos).lengthSq() <= UUTacticLib.THRESHOLD_SQUARED_DISTANCE_TO_SQUARE ;
                 })
                 .withTactic(UUTacticLib.navigateToTAC(destination))
                 .lift() ;

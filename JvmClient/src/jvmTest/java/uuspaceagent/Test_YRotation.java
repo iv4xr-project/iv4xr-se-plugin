@@ -6,6 +6,10 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static uuspaceagent.Rotation.getYRotation;
 
+/**
+ * For testing the calculation of rotation around y-axis as provided by the
+ * method Rotation.getYRotation().
+ */
 public class Test_YRotation {
 
     void printInfo(Vec3 v, Vec3 target, String info) {

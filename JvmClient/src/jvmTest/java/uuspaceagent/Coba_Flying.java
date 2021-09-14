@@ -7,6 +7,10 @@ import org.junit.jupiter.api.Test;
 import static uuspaceagent.TestUtils.console;
 import static uuspaceagent.TestUtils.loadSE;
 
+/**
+ * For trying out flying. Primarily using second-tier actions provided by TacticLib
+ * (so, not by directly invoking primitive SE methods).
+ */
 public class Coba_Flying {
 
    // @Test
@@ -47,10 +51,7 @@ public class Coba_Flying {
             if(distance <= 0.5) {
                 break ;
             }
-
-
         }
-
     }
 
 

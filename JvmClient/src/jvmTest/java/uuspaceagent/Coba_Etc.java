@@ -2,7 +2,10 @@ package uuspaceagent;
 
 import org.junit.jupiter.api.Test;
 
-public class CobaEtc {
+/**
+ * Just for trying out random things....
+ */
+public class Coba_Etc {
 
     @Test
     public void test1() {
