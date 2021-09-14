@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 
 import static uuspaceagent.SEBlockFunctions.fromSEVec3;
 
-public class USeAgentState extends State {
+public class UUSeAgentState extends State {
 
     public String agentId ;
     public WorldModel wom ;
@@ -36,7 +36,7 @@ public class USeAgentState extends State {
      */
     long updateCount = 0 ;
 
-    public USeAgentState(String agentId) {
+    public UUSeAgentState(String agentId) {
         this.agentId = agentId ;
     }
 

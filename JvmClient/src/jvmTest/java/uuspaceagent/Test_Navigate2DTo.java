@@ -24,7 +24,7 @@ public class Test_Navigate2DTo {
         console("*** start test...") ;
         var agentAndState = loadSE("myworld-3 with open door") ; // loadSE("myworld-3")  ;
         TestAgent agent = agentAndState.fst ;
-        USeAgentState state = agentAndState.snd ;
+        UUSeAgentState state = agentAndState.snd ;
         Thread.sleep(1000);
         state.updateState();
 
@@ -44,9 +44,9 @@ public class Test_Navigate2DTo {
                     //var currentAgentSq = st.grid2D.gridProjectedLocation(st.wom.position) ;
                     //return currentAgentSq.equals(sqDestination) ;
                     var pos = positionAndOrientation.fst ;
-                    return Vec3.sub(centerOfSqDestination,pos).lengthSq() <= GoalAndTacticLib.THRESHOLD_SQUARED_DISTANCE_TO_SQUARE ;
+                    return Vec3.sub(centerOfSqDestination,pos).lengthSq() <= UUGoalLib.THRESHOLD_SQUARED_DISTANCE_TO_SQUARE ;
                 })
-                .withTactic(GoalAndTacticLib.navigateToTAC(destination))
+                .withTactic(UUTacticLib.navigateToTAC(destination))
                 .lift() ;
 
         agent.setGoal(G) ;

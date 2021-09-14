@@ -73,7 +73,7 @@ public class PrintInfos {
      * For printing the obstacles that block a given unit-cube on the nav-grid maintained by
      * the given agent-state.
      */
-    public static String showObstacle(USeAgentState state, DPos3 cube) {
+    public static String showObstacle(UUSeAgentState state, DPos3 cube) {
         StringBuffer z = new StringBuffer() ;
         z.append(">> Obstacles on " + cube + ", center:" + state.navgrid.getSquareCenterLocation(cube)) ;
         var obstacles = state.navgrid.knownObstacles.get(cube) ;
@@ -92,7 +92,7 @@ public class PrintInfos {
         return z.toString() ;
     }
 
-    public static String showPath(USeAgentState state, List<DPos3> path) {
+    public static String showPath(UUSeAgentState state, List<DPos3> path) {
         StringBuffer z = new StringBuffer() ;
         if (path == null) {
             z.append("the path is null") ;

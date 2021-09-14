@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import spaceEngineers.transport.SocketReaderWriterKt;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static uuspaceagent.PrintInfos.*;
@@ -38,7 +37,7 @@ public class Test_NavGrid_pathfinding {
         console("*** start test...") ;
         var agentAndState = loadSE("myworld-3")  ;
         TestAgent agent = agentAndState.fst ;
-        USeAgentState state = agentAndState.snd ;
+        UUSeAgentState state = agentAndState.snd ;
         Thread.sleep(1000);
         // do a single update, and check that we if we have the structures:
         state.updateState();
@@ -73,7 +72,7 @@ public class Test_NavGrid_pathfinding {
      * If the given state is null, a gameworld will be loaded and a single update is done to
      * produce a state.
      */
-    Pair<USeAgentState,List<DPos3>> test_pathfinder(USeAgentState state, Vec3 destination, boolean enable3D) throws InterruptedException {
+    Pair<UUSeAgentState,List<DPos3>> test_pathfinder(UUSeAgentState state, Vec3 destination, boolean enable3D) throws InterruptedException {
         if(state == null) {
             var agentAndState = loadSE("myworld-3")  ;
             TestAgent agent = agentAndState.fst ;
@@ -118,7 +117,7 @@ public class Test_NavGrid_pathfinding {
         console(PrintInfos.showObstacle(state,sqDesitnation));
 
         assertTrue(path.size() > 0) ;
-        path = GoalAndTacticLib.smoothenPath(path) ;
+        path = UUTacticLib.smoothenPath(path) ;
         assertTrue(path.size() > 0) ;
         int k = 0 ;
         for(var sq : path) {
@@ -206,7 +205,7 @@ public class Test_NavGrid_pathfinding {
         path = test_pathfinder(state,dest3,false).snd ;
         assertTrue(path.size() > 0 ) ;
 
-        path = GoalAndTacticLib.smoothenPath(path) ;
+        path = UUTacticLib.smoothenPath(path) ;
 
         console(">> path.to " + dest3);
         console(PrintInfos.indent(PrintInfos.showPath(state,path),5)) ;
@@ -220,7 +219,7 @@ public class Test_NavGrid_pathfinding {
         path = test_pathfinder(state,dest4,false).snd ;
         assertTrue(path.size() > 0 ) ;
 
-        path = GoalAndTacticLib.smoothenPath(path) ;
+        path = UUTacticLib.smoothenPath(path) ;
 
         console(">> path.to " + dest4);
         console(PrintInfos.indent(PrintInfos.showPath(state,path),5)) ;
@@ -246,7 +245,7 @@ public class Test_NavGrid_pathfinding {
         var sqDesitnation1 = state.navgrid.gridProjectedLocation(dest) ;
         assertTrue(path.size() > 0) ;
 
-        path = GoalAndTacticLib.smoothenPath(path) ;
+        path = UUTacticLib.smoothenPath(path) ;
         console(">> path.to " + dest);
         console(PrintInfos.indent(PrintInfos.showPath(state,path),5)) ;
 
@@ -255,7 +254,7 @@ public class Test_NavGrid_pathfinding {
         console("Checking path to " + dest + " (should be reachable)");
         path = test_pathfinder(state,dest,false).snd ;
         assertTrue(path.size() > 0) ;
-        path = GoalAndTacticLib.smoothenPath(path) ;
+        path = UUTacticLib.smoothenPath(path) ;
         console(">> path.to " + dest);
         console(PrintInfos.indent(PrintInfos.showPath(state,path),5)) ;
 
@@ -274,7 +273,7 @@ public class Test_NavGrid_pathfinding {
         var state = agent_and_path.fst ;
         var path = agent_and_path.snd ;
         assertTrue(path.size() > 0);
-        console("** path: " + PrintInfos.showPath(state, GoalAndTacticLib.smoothenPath(path))) ;
+        console("** path: " + PrintInfos.showPath(state, UUTacticLib.smoothenPath(path))) ;
     }
 
 

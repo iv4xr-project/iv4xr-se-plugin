@@ -3,7 +3,6 @@ package uuspaceagent;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.spatial.Vec3;
 import org.junit.jupiter.api.Test;
-import spaceEngineers.model.ToolbarLocation;
 
 import static uuspaceagent.TestUtils.console;
 import static uuspaceagent.TestUtils.loadSE;
@@ -38,10 +37,10 @@ public class Coba_Flying {
         }
     }
 
-    void moveTo(USeAgentState state, Vec3 destination) {
+    void moveTo(UUSeAgentState state, Vec3 destination) {
         state.updateState();
         for (int k = 0 ; k<20; k++) {
-            GoalAndTacticLib.moveTo(state, destination,10) ;
+            UUTacticLib.moveToward(state, destination,10) ;
             state.updateState();
             float distance = Vec3.sub(destination,state.wom.position).length() ;
             console(">>> dist to dest: " + distance);
@@ -148,7 +147,7 @@ public class Coba_Flying {
         state.updateState();
         console("** Agent @ " + state.wom.position);
         destination = new Vec3(9.54f,4f,50f) ;
-        GoalAndTacticLib.yTurnTo(state, destination, 0.98f, 400) ;
+        UUTacticLib.yTurnTowardACT(state, destination, 0.98f, 400) ;
 
         state.updateState();
         console("** Agent @ " + state.wom.position);

@@ -14,19 +14,19 @@ import static uuspaceagent.TestUtils.loadSE;
 
 public class Test_Flying {
 
-    public Pair<TestAgent,USeAgentState> deployAgent() throws InterruptedException {
+    public Pair<TestAgent, UUSeAgentState> deployAgent() throws InterruptedException {
         var agentAndState = loadSE("myworld-3 with open door") ; // loadSE("myworld-3")  ;
         TestAgent agent = agentAndState.fst ;
-        USeAgentState state = agentAndState.snd ;
+        UUSeAgentState state = agentAndState.snd ;
         Thread.sleep(1000);
         state.updateState();
         // agent start location
         // agent se0 @<10.22475,-5.0025,53.75382>, hdir:<-0.08024501,7.549446E-5,0.99677515>, vdir:<-4.629542E-5,1.0,-7.94657E-5>, health:1.0, jet:false
         console(showWOMAgent(state.wom));
-        return new Pair<TestAgent,USeAgentState>(agent,state) ;
+        return new Pair<TestAgent, UUSeAgentState>(agent,state) ;
     }
 
-    public void test_Goal(TestAgent agent, USeAgentState state, GoalStructure G) throws InterruptedException {
+    public void test_Goal(TestAgent agent, UUSeAgentState state, GoalStructure G) throws InterruptedException {
         agent.setGoal(G) ;
         int turn= 0 ;
         while(G.getStatus().inProgress()) {
@@ -43,15 +43,15 @@ public class Test_Flying {
         // This is a position that is unreachable, so this goal should abort
         console("*** start test...") ;
         //Thread.sleep(5000);
-        //Vec3 dest = new Vec3(10,-5,40) ;
+        Vec3 dest = new Vec3(10,-5,40) ;
         //Vec3 dest = new Vec3(10,5,53.7f) ;
-        Vec3 dest = new Vec3(25,-5,60) ;
+        //Vec3 dest = new Vec3(25,-5,60) ;
         //Vec3 dest = new Vec3(10,3,56) ;
         var agentAndState = deployAgent();
         var agent = agentAndState.fst ;
         var state = agentAndState.snd ;
         state.navgrid.enableFlying = true ;
-        GoalStructure G = DEPLOYonce(agent,GoalAndTacticLib.closeTo(dest)) ;
+        GoalStructure G = DEPLOYonce(agent, UUGoalLib.closeTo(dest)) ;
         test_Goal(agentAndState.fst, agentAndState.snd, G) ;
         G.printGoalStructureStatus();
         console(("#### Remaining PATH to follow: " + PrintInfos.showPath(state,state.currentPathToFollow)));

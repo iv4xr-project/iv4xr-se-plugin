@@ -15,11 +15,11 @@ import static uuspaceagent.TestUtils.loadSE;
  */
 public class Test_BasicMoveAndTurnGoals {
 
-    public USeAgentState test_Goal(GoalStructure G) throws InterruptedException {
+    public UUSeAgentState test_Goal(GoalStructure G) throws InterruptedException {
         console("*** start test...") ;
         var agentAndState = loadSE("myworld-3") ;
         TestAgent agent = agentAndState.fst ;
-        USeAgentState state = agentAndState.snd ;
+        UUSeAgentState state = agentAndState.snd ;
         Thread.sleep(1000);
         state.updateState();
 
@@ -49,7 +49,7 @@ public class Test_BasicMoveAndTurnGoals {
         // orientationForward: <-0.043967947,-2.0614608E-4,0.9990329> ... so looking towards z-axis
 
         Vec3 dest = new Vec3(9,-5,55.68f) ;
-        var G = GoalAndTacticLib.face2DToward(null,dest) ;
+        var G = UUGoalLib.face2DToward(null,dest) ;
         test_Goal(G) ;
         G.printGoalStructureStatus();
         assertTrue(G.getStatus().success());
@@ -64,7 +64,7 @@ public class Test_BasicMoveAndTurnGoals {
         // orientationForward: <-0.043967947,-2.0614608E-4,0.9990329> ... so looking towards z-axis
 
         Vec3 dest = new Vec3(11.5f,-5,55.68f) ;
-        var G = GoalAndTacticLib.face2DToward(null,dest) ;
+        var G = UUGoalLib.face2DToward(null,dest) ;
         test_Goal(G) ;
         G.printGoalStructureStatus();
         assertTrue(G.getStatus().success());
@@ -79,7 +79,7 @@ public class Test_BasicMoveAndTurnGoals {
         // orientationForward: <-0.043967947,-2.0614608E-4,0.9990329> ... so looking towards z-axis
 
         Vec3 dest = new Vec3(8,-5,55.68f) ;
-        var G = GoalAndTacticLib.veryclose2DTo(null,dest) ;
+        var G = UUGoalLib.veryclose2DTo(null,dest) ;
         test_Goal(G) ;
         G.printGoalStructureStatus();
         assertTrue(G.getStatus().success());
@@ -94,7 +94,7 @@ public class Test_BasicMoveAndTurnGoals {
         // orientationForward: <-0.043967947,-2.0614608E-4,0.9990329> ... so looking towards z-axis
 
         Vec3 dest = new Vec3(12,-5,55.68f) ;
-        var G = GoalAndTacticLib.veryclose2DTo(null,dest) ;
+        var G = UUGoalLib.veryclose2DTo(null,dest) ;
         test_Goal(G) ;
         G.printGoalStructureStatus();
         assertTrue(G.getStatus().success());
@@ -110,7 +110,7 @@ public class Test_BasicMoveAndTurnGoals {
         // orientationForward: <-0.043967947,-2.0614608E-4,0.9990329> ... so looking towards z-axis
 
         Vec3 dest = new Vec3(8,-5,60f) ;
-        var G = GoalAndTacticLib.veryclose2DTo(null,dest) ;
+        var G = UUGoalLib.veryclose2DTo(null,dest) ;
         test_Goal(G) ;
         G.printGoalStructureStatus();
         assertTrue(G.getStatus().success());

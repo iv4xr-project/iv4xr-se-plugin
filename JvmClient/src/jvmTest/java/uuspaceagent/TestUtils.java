@@ -18,7 +18,7 @@ public class TestUtils {
      * For creating an SE-env, loading a gameworld into SE, then creating a test-agent bound to
      * the gameworld through the SE-env.
      */
-    public static Pair<TestAgent,USeAgentState> loadSE(String worldName) {
+    public static Pair<TestAgent, UUSeAgentState> loadSE(String worldName) {
         var agentId = "se0" ; // ""agentId" ;
         var blockType = "LargeHeavyBlockArmorBlock" ;
         var context = new SpaceEngineersTestContext() ;
@@ -34,7 +34,7 @@ public class TestUtils {
         var theEnv = new SeEnvironment( worldName, controllerWrapper, context ) ;
         theEnv.loadWorld() ;
 
-        var myAgentState = new USeAgentState(agentId) ;
+        var myAgentState = new UUSeAgentState(agentId) ;
 
         console("** Creating a test-agent");
         var testAgent = new TestAgent(agentId, "some role name, else nothing")

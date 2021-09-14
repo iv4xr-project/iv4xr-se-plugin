@@ -9,10 +9,10 @@ import static uuspaceagent.TestUtils.loadSE;
 
 public class Coba_MoveTo_and_YRotate {
 
-    void moveTo(USeAgentState state, Vec3 destination) {
+    void moveTo(UUSeAgentState state, Vec3 destination) {
         state.updateState();
         for (int k = 0 ; k<40; k++) {
-            GoalAndTacticLib.moveTo(state, destination,10) ;
+            UUTacticLib.moveToward(state, destination,10) ;
             state.updateState();
             float distance = Vec3.sub(destination,state.wom.position).length() ;
             console(">>> dist to dest: " + distance);
@@ -96,12 +96,12 @@ public class Coba_MoveTo_and_YRotate {
         console("####  turning to left +x");
         state.updateState();
         Vec3 destination = new Vec3(12f,-5f,54.15f) ;
-        GoalAndTacticLib.yTurnTo(state,destination,0.99f,200) ;
+        UUTacticLib.yTurnTowardACT(state,destination,0.99f,200) ;
 
         console("####  turning to left -x");
         state.updateState();
         destination = new Vec3(0f,-5f,54.15f) ;
-        GoalAndTacticLib.yTurnTo(state,destination,0.99f,200) ;
+        UUTacticLib.yTurnTowardACT(state,destination,0.99f,200) ;
 
 
     }
