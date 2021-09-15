@@ -39,14 +39,14 @@ public class Test_BasicMoveAndTurnGoals {
             turn++ ;
             if (turn >= 1400) break ;
         }
-        closeIfCloseable(state.env());
+        closeIfCloseable(state.env().getController());
         return state ;
     }
 
     /**
      * Test a simple goal to turn the agent 90 degree to the right.
      */
-    //@Test
+    @Test
     public void test_turningRight() throws InterruptedException {
         // agent start location should be around: <10.119276,-5.0025,55.681934>
         // orientationForward: <-0.043967947,-2.0614608E-4,0.9990329> ... so looking towards z-axis
@@ -61,12 +61,12 @@ public class Test_BasicMoveAndTurnGoals {
     /**
      * Test a simple goal to turn the agent 90 degree to the left.
      */
-    //@Test
+    @Test
     public void test_turningLeft() throws InterruptedException {
-        // agent start location should be around: <10.119276,-5.0025,55.681934>
+        // agent start location should be around: <9.549925,-5.0025005,54.149185>
         // orientationForward: <-0.043967947,-2.0614608E-4,0.9990329> ... so looking towards z-axis
 
-        Vec3 dest = new Vec3(11.5f,-5,55.68f) ;
+        Vec3 dest = new Vec3(11.5f,-5,54.149f) ;
         var G = UUGoalLib.face2DToward(null,dest) ;
         test_Goal(G) ;
         G.printGoalStructureStatus();
@@ -76,7 +76,7 @@ public class Test_BasicMoveAndTurnGoals {
     /**
      * Test strafing to the right.
      */
-    //@Test
+    @Test
     public void test_StrafeRight() throws InterruptedException {
         // agent start location should be around: <10.119276,-5.0025,55.681934>
         // orientationForward: <-0.043967947,-2.0614608E-4,0.9990329> ... so looking towards z-axis

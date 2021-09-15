@@ -266,7 +266,7 @@ public class UUTacticLib {
      */
     public static Action yTurnTowardACT(Vec3 destination) {
 
-        float cosAlphaThreshold  = 0.99f ;
+        float cosAlphaThreshold  = 0.995f ;
         float cosAlphaThreshold_ = 0.995f ;
 
         return action("turning towards " + destination)
