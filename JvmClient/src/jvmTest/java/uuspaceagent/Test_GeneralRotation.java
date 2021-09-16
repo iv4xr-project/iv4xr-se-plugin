@@ -14,7 +14,15 @@ public class Test_GeneralRotation {
         var rotationResult = Rotation.rotate(tobeRotated,v,target) ;
         System.out.println("   rotated w=" + rotationResult) ;
 
-        //assertTrue(1f - Vec3.dot(target.normalized(),rotationResult.normalized()) <= 0.001f) ;
+        assertTrue(
+                Vec3.dot(v.normalized(),target.normalized())
+                - Vec3.dot(tobeRotated.normalized(), rotationResult.normalized())
+                <= 0.001f
+        ) ;
+
+        if (tobeRotated == v) {
+            assertTrue(1f - Vec3.dot(target.normalized(),rotationResult.normalized()) <= 0.001f) ;
+        }
     }
 
     @Test

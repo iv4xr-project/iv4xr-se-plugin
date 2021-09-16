@@ -21,18 +21,11 @@ import static uuspaceagent.TestUtils.loadSE;
  */
 public class Test_NavGrid_pathfinding {
 
-    //@Test
-    public void test_0() {
-        int x = 10 ;
-        assertTrue(x == 10) ;
-    }
-
-
     /**
      * Basic test to check that blocks that should be recognized as obstacles are indeed
      * recognized.
      */
-    //@Test
+    @Test
     public void test_obstacles_membership() throws InterruptedException {
         console("*** start test...") ;
         var agentAndState = loadSE("myworld-3")  ;
@@ -64,7 +57,7 @@ public class Test_NavGrid_pathfinding {
         assertTrue(state.navgrid.allObstacleIDs.stream()
                 .anyMatch(id -> findWorldEntity(state.wom,id).properties.get("blockType").equals("LargeBlockBatteryBlock")));
 
-        SocketReaderWriterKt.closeIfCloseable(state.env());
+        SocketReaderWriterKt.closeIfCloseable(state.env().getController());
     }
 
     /**
@@ -93,6 +86,7 @@ public class Test_NavGrid_pathfinding {
         var sqAgent = state.navgrid.gridProjectedLocation(state.wom.position) ;
         var sqDesitnation = state.navgrid.gridProjectedLocation(destination) ;
         List<DPos3> path = state.pathfinder2D.findPath(state.navgrid,sqAgent,sqDesitnation) ;
+        SocketReaderWriterKt.closeIfCloseable(state.env().getController());
         return new Pair<>(state,path) ;
     }
 
@@ -101,7 +95,7 @@ public class Test_NavGrid_pathfinding {
      * direction from the agent.
      * We will also check pathSmoothing (removing intermediate nodes in straight-line segments in the path).
      */
-    //@Test
+    @Test
     public void test_2Dpathfinder1() throws InterruptedException {
         console("*** start test...") ;
         // navigating to (10,-5,65) ... this is just before the buttons-panel
@@ -136,7 +130,7 @@ public class Test_NavGrid_pathfinding {
      * This tests 2D path-finding to several locations, some are reachable and some not.
      * @throws InterruptedException
      */
-    //@Test
+    @Test
     public void test_2Dpathfinder2() throws InterruptedException {
         console("*** start test...") ;
 
@@ -223,13 +217,12 @@ public class Test_NavGrid_pathfinding {
 
         console(">> path.to " + dest4);
         console(PrintInfos.indent(PrintInfos.showPath(state,path),5)) ;
-        SocketReaderWriterKt.closeIfCloseable(state.env());
     }
 
     /**
      * Just few simple location left and right of the agent to test turning.
      */
-    //@Test
+    @Test
     public void test_2Dpathfinder3() throws InterruptedException {
         console("*** start test...") ;
 
@@ -257,8 +250,6 @@ public class Test_NavGrid_pathfinding {
         path = UUTacticLib.smoothenPath(path) ;
         console(">> path.to " + dest);
         console(PrintInfos.indent(PrintInfos.showPath(state,path),5)) ;
-
-        SocketReaderWriterKt.closeIfCloseable(state.env());
     }
 
     @Test

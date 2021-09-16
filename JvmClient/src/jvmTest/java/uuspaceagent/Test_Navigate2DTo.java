@@ -5,6 +5,7 @@ import eu.iv4xr.framework.spatial.Vec3;
 import nl.uu.cs.aplib.mainConcepts.* ;
 import nl.uu.cs.aplib.utils.Pair;
 import org.junit.jupiter.api.Test;
+import spaceEngineers.transport.SocketReaderWriterKt;
 
 import static nl.uu.cs.aplib.AplibEDSL.* ;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -53,12 +54,15 @@ public class Test_Navigate2DTo {
 
         int turn= 0 ;
         while(G.getStatus().inProgress()) {
-            //console(">> [" + turn + "] " + showWOMAgent(state.wom));
+            console(">> [" + turn + "] " + showWOMAgent(state.wom));
             agent.update();
             //Thread.sleep(50);
             turn++ ;
             if (turn >= 1400) break ;
         }
+
+        SocketReaderWriterKt.closeIfCloseable(state.env().getController());
+
         return new Pair<>(agent,G) ;
     }
 
@@ -66,7 +70,7 @@ public class Test_Navigate2DTo {
      * Test navigating to a very close square. Mainly to see if the agent turning in the
      * right direction.
      */
-    //@Test
+    @Test
     public void test_nav_to_veryclose_square() throws InterruptedException {
         // agent start location should be around: <10.119276,-5.0025,55.681934>
         // orientationForward: <-0.043967947,-2.0614608E-4,0.9990329> ... so looking towards z-axis
@@ -82,7 +86,7 @@ public class Test_Navigate2DTo {
     /**
      * Destination lies in a straight and clear line from the agent.
      */
-    //@Test
+    @Test
     public void test1() throws InterruptedException {
         // navigating to (10,-5,65) ... this is just before the buttons-panel
         Vec3 dest = new Vec3(10,-5,65) ;
@@ -98,7 +102,7 @@ public class Test_Navigate2DTo {
     //@Test
     public void test2() throws InterruptedException {
         // navigating to (10,-5,65) ... this is just before the buttons-panel
-        Vec3 dest = new Vec3(10,-5,73) ;
+        Vec3 dest = new Vec3(10f,-5,75) ; // does not work... the calculation of buttons-panel have to be adjusted
         var agent_and_goal = test_navigate2DTo(dest) ;
         var G = agent_and_goal.snd ;
         G.printGoalStructureStatus();
@@ -109,7 +113,7 @@ public class Test_Navigate2DTo {
      * Navigate to a position some distance before a door. The agent has to make a U-turn to pass
      * over a sticking wall.
      */
-    //@Test
+    @Test
     public void test3() throws InterruptedException {
         // This is a position in front of a sliding-door. It is reachable from the
         // agent's start position.

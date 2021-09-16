@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import static nl.uu.cs.aplib.AplibEDSL.DEPLOYonce;
 import static nl.uu.cs.aplib.AplibEDSL.SEQ;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static spaceEngineers.transport.SocketReaderWriterKt.closeIfCloseable;
 import static uuspaceagent.PrintInfos.*;
 import static uuspaceagent.TestUtils.*;
 
@@ -37,9 +38,10 @@ public class Test_Goals {
             turn++ ;
             if (turn >= 1400) break ;
         }
+        closeIfCloseable(state.env().getController());
     }
 
-    //@Test
+    @Test
     public void test_close2Dto_GS1() throws InterruptedException {
         // This is a position in front of a sliding-door. It is reachable from the
         // agent's start position.
@@ -53,7 +55,7 @@ public class Test_Goals {
         assertTrue(G.getStatus().success());
     }
 
-    //@Test
+    @Test
     public void test_close2Dto_GS2() throws InterruptedException {
         // This is a position that is unreachable, so this goal should abort
         console("*** start test...") ;
@@ -66,7 +68,7 @@ public class Test_Goals {
         assertTrue(G.getStatus().failed());
     }
 
-    //@Test
+    @Test
     public void test_closeTo_Block_1() throws InterruptedException {
         // This is a position that is unreachable, so this goal should abort
         console("*** start test...") ;
@@ -82,7 +84,7 @@ public class Test_Goals {
         assertTrue(G.getStatus().success());
     }
 
-    //@Test
+    @Test
     public void test_closeTo_Block_2() throws InterruptedException {
         // This is a position that is unreachable, so this goal should abort
         console("*** start test...") ;
@@ -95,7 +97,7 @@ public class Test_Goals {
                 0.5f));
         test_Goal(agentAndState.fst, agentAndState.snd, G) ;
         G.printGoalStructureStatus();
-        assertTrue(G.getStatus().success());
+        assertTrue(G.getStatus().failed());
     }
 
     @Test

@@ -408,6 +408,7 @@ public class UUTacticLib {
                         List<DPos3> path = state.pathfinder2D.findPath(state.navgrid, agentSq, destinationSq)  ;
                         if (path == null) {
                             // the pathfinder cannot find a path. The tactic is then not enabled:
+                            System.out.println("### NO path to " + destination);
                             return null ;
                         }
                         path = smoothenPath(path) ;
