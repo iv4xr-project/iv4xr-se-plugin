@@ -122,8 +122,7 @@ namespace Iv4xr.SePlugin.Control
         public Block CreateGridBlock(MySlimBlock sourceBlock)
         {
             var grid = sourceBlock.CubeGrid;
-
-            return new Block
+            var block = new Block
             {
                 Id = sourceBlock.UniqueId.ToString(), // TODO(PP): Might not be unique in rare cases or across grids
                 Position = grid.GridIntegerToWorld(sourceBlock.Position).ToPlain(),
@@ -140,8 +139,40 @@ namespace Iv4xr.SePlugin.Control
                 OrientationForward = grid.WorldMatrix.GetDirectionVector(sourceBlock.Orientation.Forward).ToPlain(),
                 OrientationUp = grid.WorldMatrix.GetDirectionVector(sourceBlock.Orientation.Up).ToPlain(),
                 Functional = sourceBlock.FatBlock?.IsFunctional ?? false,
+                Working = sourceBlock.FatBlock?.IsWorking ?? false,
                 UseObjects = GetUseObjects(sourceBlock),
             };
+            AddCustomFields(sourceBlock, block);
+            return block;
+        }
+
+        //possibly extracted and generated method
+        private static void AddCustomFields(MySlimBlock sourceBlock, Block block)
+        {
+            if (sourceBlock.FatBlock is MyFunctionalBlock functionalBlock)
+            {
+                block.Enabled = functionalBlock.Enabled;
+            }
+
+            if (sourceBlock.FatBlock is MyTerminalBlock terminalBlock)
+            {
+                block.ShowInInventory = terminalBlock.ShowInInventory;
+                block.ShowInTerminal = terminalBlock.ShowInTerminal;
+                block.ShowOnHUD = terminalBlock.ShowOnHUD;
+            }
+
+            if (sourceBlock.FatBlock is MyDoorBase door)
+            {
+                block.Open = door.Open;
+                block.AnyoneCanUse = door.AnyoneCanUse;
+            }
+
+            if (sourceBlock.FatBlock is MyReactor reactor)
+            {
+                block.Capacity = reactor.Capacity;
+                block.MaxOutput = reactor.MaxOutput;
+                block.CurrentOutput = reactor.CurrentOutput;
+            }
         }
 
         public static BlockDefinition GetBuildSeBlockDefinition(MyCubeBlockDefinition blockDefinition)

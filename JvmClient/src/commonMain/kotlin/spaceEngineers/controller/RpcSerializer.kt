@@ -1,12 +1,17 @@
 package spaceEngineers.controller
 
-import kotlinx.serialization.*
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.InternalSerializationApi
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.*
+import kotlinx.serialization.modules.SerializersModule
+import kotlinx.serialization.modules.polymorphic
+import kotlinx.serialization.serializer
+import spaceEngineers.model.*
+import spaceEngineers.transport.StringLineReaderWriter
 import spaceEngineers.transport.jsonrpc.JsonRpcResponse
 import spaceEngineers.transport.jsonrpc.KotlinJsonRpcRequest
 import spaceEngineers.transport.jsonrpc.KotlinJsonRpcResponse
-import spaceEngineers.transport.StringLineReaderWriter
 import kotlin.random.Random
 import kotlin.reflect.KClass
 import kotlin.reflect.KFunction
@@ -16,6 +21,12 @@ import kotlin.reflect.typeOf
 
 val json = Json {
     encodeDefaults = true
+    ignoreUnknownKeys = true
+    serializersModule = SerializersModule {
+        polymorphic(Block::class) {
+            default { BlockSerializer }
+        }
+    }
 }
 
 data class TypedParameter<T : Any>(

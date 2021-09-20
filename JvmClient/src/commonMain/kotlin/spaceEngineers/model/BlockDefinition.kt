@@ -31,4 +31,6 @@ data class BlockDefinition(
     val availableInSurvival: Boolean,
     @SerialName("Enabled")
     val enabled: Boolean,
+    @SerialName("Parents")
+    val parents: List<String>,
 )

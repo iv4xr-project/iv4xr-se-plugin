@@ -15,6 +15,18 @@ namespace Iv4xr.PluginLib.WorldModel
         public PlainVec3D MaxPosition;
         public PlainVec3I Size;
         public bool Functional;
+        public bool Working;
         public List<UseObject> UseObjects;
+        
+        //possibly generated fields
+        public bool? Open;
+        public bool? AnyoneCanUse;
+        public bool? ShowInInventory;
+        public bool? ShowInTerminal;
+        public bool? ShowOnHUD;
+        public bool? Enabled;
+        public float? MaxOutput;
+        public float? CurrentOutput;
+        public float? Capacity;
     }
 }
