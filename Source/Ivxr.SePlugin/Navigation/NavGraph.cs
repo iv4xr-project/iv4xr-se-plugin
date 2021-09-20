@@ -41,6 +41,8 @@ namespace Iv4xr.SePlugin.Navigation
 
         public NavGraph GetGraph()
         {
+            CreateGraph();
+            
             return m_graph;
         }
         
@@ -57,10 +59,10 @@ namespace Iv4xr.SePlugin.Navigation
             
             // TODO: offset the start position to be below the character's feet
             // TODO: calculate which direction is actually up
-            CreateGraph(grid, m_lowLevelObserver.GetPlayerPosition(), Vector3I.Up);
+            m_graph = CreateGraph(grid, m_lowLevelObserver.GetPlayerPosition(), Vector3I.Up);
         }
 
-        private void CreateGraph(MyCubeGrid grid, Vector3D start, Vector3I up)
+        internal NavGraph CreateGraph(MyCubeGrid grid, Vector3D start, Vector3I up)
         {
             var map = new Dictionary<Vector3I, GridLocation>(capacity: 256);
 
@@ -80,7 +82,9 @@ namespace Iv4xr.SePlugin.Navigation
             }
 
             if (startBlock is null)
-                return;
+                return null;
+
+            var navGraph = new NavGraph();
 
             var steps = new StepVectors(up);
             var cubeQueue = new Queue<IMySlimBlock>();
@@ -100,7 +104,7 @@ namespace Iv4xr.SePlugin.Navigation
 
                 var fatNode = new FatNode();
                 map[currentPosition].Node = fatNode;
-                m_graph.Nodes.Add(fatNode);
+                navGraph.Nodes.Add(fatNode);
 
                 foreach (var step in steps.EnumerateSides())  // TODO enumerate side neighbors
                 {
@@ -120,8 +124,8 @@ namespace Iv4xr.SePlugin.Navigation
                     }
                 }
             }
-            
-            
+
+            return navGraph;
         }
     }
 }
