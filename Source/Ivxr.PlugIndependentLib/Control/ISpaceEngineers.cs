@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Iv4xr.PluginLib.WorldModel;
 
 namespace Iv4xr.PluginLib.Control
@@ -40,6 +41,7 @@ namespace Iv4xr.PluginLib.Control
     {
         List<BlockDefinition> BlockDefinitions();
         List<DefinitionBase> AllDefinitions();
+        Dictionary<string, string> BlockHierarchy();
     }
     
     public interface ICharacterController

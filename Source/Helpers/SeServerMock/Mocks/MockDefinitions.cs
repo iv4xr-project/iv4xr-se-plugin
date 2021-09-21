@@ -19,5 +19,10 @@ namespace SeServerMock.Mocks
         {
             return new List<DefinitionBase>();
         }
+
+        public Dictionary<string, string> BlockHierarchy()
+        {
+            return new Dictionary<string, string>();
+        }
     }
 }

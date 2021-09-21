@@ -56,6 +56,11 @@ namespace Iv4xr.SePlugin.Communication
         {
             return Enqueue(() => m_definitions.AllDefinitions());
         }
+
+        public Dictionary<string, string> BlockHierarchy()
+        {
+            return Enqueue(() => m_definitions.BlockHierarchy());
+        }
     }
 
     public class ObserverOnGameLoop : AbstractServiceOnGameLoop, IObserver
