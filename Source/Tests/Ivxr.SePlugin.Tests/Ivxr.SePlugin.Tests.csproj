@@ -56,6 +56,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DefinitionsFixture.cs" />
     <Compile Include="JsonerTests.cs" />
     <Compile Include="NavGraphTests.cs" />
     <Compile Include="StepVectorsTests.cs" />
@@ -74,9 +75,21 @@
       <Project>{f77d0a49-f0a1-4e8a-80c8-cbe1842bf2d4}</Project>
       <Name>Sandbox.Game</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\..\se\Sources\VRage.Game\VRage.Game.csproj">
+      <Project>{4539b5f0-3316-40e6-b032-9fbcafaac5be}</Project>
+      <Name>VRage.Game</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\se\Sources\VRage.Library\VRage.Library.csproj">
+      <Project>{26fe022e-42ab-40be-ba9d-97cbe34e7d99}</Project>
+      <Name>VRage.Library</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\se\Sources\VRage.Math\VRage.Math.csproj">
       <Project>{40CE67D5-C89F-4A56-AE52-85DB1BEA07FE}</Project>
       <Name>VRage.Math</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\se\Sources\VRage\VRage.csproj">
+      <Project>{1c814936-c9a7-4faf-b543-28f021d98b6c}</Project>
+      <Name>VRage</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Ivxr.PlugIndependentLib\Ivxr.PlugIndependentLib.csproj">
       <Project>{CE782082-F8E9-4FE5-A04D-89ED99084E95}</Project>
