@@ -62,14 +62,16 @@ namespace Iv4xr.SePlugin.Navigation
             m_graph = CreateGraph(grid, m_lowLevelObserver.GetPlayerPosition(), Vector3I.Up);
         }
 
-        internal NavGraph CreateGraph(MyCubeGrid grid, Vector3D start, Vector3I up)
+        internal NavGraph CreateGraph(IMyCubeGrid grid, Vector3D start, Vector3I up)
         {
             var map = new Dictionary<Vector3I, GridLocation>(capacity: 256);
 
             IMySlimBlock startBlock = null;
             var minDistance = double.MaxValue;
 
-            foreach (var block in grid.GetBlocks())
+            var blocks = new List<IMySlimBlock>();
+            grid.GetBlocks(blocks);
+            foreach (var block in blocks)
             {
                 map[block.Position] = new GridLocation(block);
 
