@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="DefinitionsFixture.cs" />
     <Compile Include="JsonerTests.cs" />
+    <Compile Include="MockCubeGrid.cs" />
     <Compile Include="NavGraphTests.cs" />
     <Compile Include="StepVectorsTests.cs" />
     <Compile Include="PlainVec3DTests.cs" />
@@ -71,6 +72,14 @@
     <Analyzer Include="..\..\..\Solutions\packages\xunit.analyzers.0.10.0\analyzers\dotnet\cs\xunit.analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\se\Sources\Havok\HavokWrapper\HavokWrapper.csproj">
+      <Project>{91fe7c0f-3304-4648-8aca-149fbf83f2d6}</Project>
+      <Name>HavokWrapper</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\se\Sources\Sandbox.Common\Sandbox.Common.csproj">
+      <Project>{2c96f0ab-7962-4b73-a075-b0e0b09f6195}</Project>
+      <Name>Sandbox.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\se\Sources\Sandbox.Game\Sandbox.Game.csproj">
       <Project>{f77d0a49-f0a1-4e8a-80c8-cbe1842bf2d4}</Project>
       <Name>Sandbox.Game</Name>
@@ -86,6 +95,10 @@
     <ProjectReference Include="..\..\..\..\se\Sources\VRage.Math\VRage.Math.csproj">
       <Project>{40CE67D5-C89F-4A56-AE52-85DB1BEA07FE}</Project>
       <Name>VRage.Math</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\se\Sources\VRage.Render\VRage.Render.csproj">
+      <Project>{1713e6cd-808a-4a44-9532-04771499bb01}</Project>
+      <Name>VRage.Render</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\se\Sources\VRage\VRage.csproj">
       <Project>{1c814936-c9a7-4faf-b543-28f021d98b6c}</Project>

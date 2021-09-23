@@ -31,13 +31,9 @@ namespace Ivxr.SeGameLib.Tests
             // We will not call methods that use LowLevelObserver
             var graphEditor = new NavGraphEditor(new LowLevelObserver(new GameSession()));
 
-            //MyDefinitionManager.RegisterTypesFromAssembly();
-            var blockPlacer = new BlockPlacer();
-            blockPlacer.PlaceBlock("LargeBlockArmorBlock", Vector3.Zero, Vector3.Forward, Vector3.Up);
-            // var grid = new MyCubeGrid();
+            var grid = new MyTestCubeGrid();
             
-            //grid.BuildGeneratedBlock()
-            //var graph = graphEditor.CreateGraph(null, Vector3D.Zero, Vector3I.Up);
+            var graph = graphEditor.CreateGraph(grid, Vector3D.Zero, Vector3I.Up);
         }
     }
 }
