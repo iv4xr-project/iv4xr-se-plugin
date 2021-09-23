@@ -6,8 +6,8 @@ using Iv4xr.PluginLib.WorldModel;
 using Sandbox.Definitions;
 using Sandbox.Game.Entities;
 using Sandbox.Game.Entities.Cube;
+using VRage.Game;
 using VRage.Game.Entity.UseObject;
-using VRage.Game.ModAPI;
 using VRageMath;
 
 namespace Iv4xr.SePlugin.Control
@@ -119,8 +119,7 @@ namespace Iv4xr.SePlugin.Control
         {
             return new BlockDefinition()
             {
-                Id = blockDefinition.Id.TypeId.ToString(),
-                BlockType = blockDefinition.Id.SubtypeId.String,
+                DefinitionId = GetDefinitionId(blockDefinition),
                 CubeSize = blockDefinition.CubeSize.ToString(),
                 BuildProgressModels = blockDefinition.BuildProgressModels.Select(GetBuildProgressModel).ToList(),
                 Size = blockDefinition.Size.ToPlain(),
@@ -147,6 +146,20 @@ namespace Iv4xr.SePlugin.Control
             {
                 BuildRatioUpperBound = bpm.BuildRatioUpperBound
             };
+        }
+        
+        public static DefinitionId GetDefinitionId(MyDefinitionBase myDefinitionBase)
+        {
+            return new DefinitionId()
+            {
+                Id = myDefinitionBase.Id.TypeId.ToString(),
+                Type = myDefinitionBase.Id.SubtypeId.String,
+            };
+        }
+        
+        public static MyDefinitionId GetMyDefinitionId(DefinitionId definitionId)
+        {
+            return MyDefinitionId.Parse(definitionId.ToString());
         }
     }
 }

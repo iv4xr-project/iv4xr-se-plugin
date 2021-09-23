@@ -18,8 +18,8 @@ val idToTypes = SocketReaderWriter.SPACE_ENG_GSON.fromJson<Map<String, List<Stri
 )
 
 fun getBlockIdsToTypes(defs: List<BlockDefinition>): Map<String, List<String>> {
-    return defs.groupBy { it.id }.mapNotNull { entry ->
-        val types = entry.value.map { it.blockType }.filter { it.isNotBlank() }
+    return defs.groupBy { it.definitionId.id }.mapNotNull { entry ->
+        val types = entry.value.map { it.definitionId.type }.filter { it.isNotBlank() }
         if (types.isNotEmpty()) {
             entry.key.removeBuilderPrefix() to types
         } else {

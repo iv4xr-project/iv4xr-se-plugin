@@ -111,9 +111,9 @@ namespace Iv4xr.SePlugin.Communication
         }
 
         [JsonRpcMethod("Admin.Blocks.PlaceAt")]
-        void PlaceAt(string blockType, PlainVec3D position, PlainVec3D orientationForward, PlainVec3D orientationUp)
+        string PlaceAt(DefinitionId blockDefinitionId, PlainVec3D position, PlainVec3D orientationForward, PlainVec3D orientationUp)
         {
-            m_se.Admin.Blocks.PlaceAt(blockType, position, orientationForward, orientationUp);
+            return m_se.Admin.Blocks.PlaceAt(blockDefinitionId, position, orientationForward, orientationUp);
         }
         
         [JsonRpcMethod("Admin.Blocks.Remove")]

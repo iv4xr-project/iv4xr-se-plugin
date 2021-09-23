@@ -4,8 +4,7 @@ namespace Iv4xr.PluginLib.WorldModel
 {
     public class BlockDefinition
     {
-        public string Id;
-        public string BlockType;
+        public DefinitionId DefinitionId;
         public List<BuildProgressModel> BuildProgressModels;
         //public string Model;
         public string CubeSize;

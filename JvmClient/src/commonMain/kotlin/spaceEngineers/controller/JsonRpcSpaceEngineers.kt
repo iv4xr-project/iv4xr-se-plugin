@@ -116,10 +116,10 @@ open class JsonRpcSpaceEngineers(
     }
     override val admin: SpaceEngineersAdmin = object : SpaceEngineersAdmin {
         override val blocks: BlocksAdmin = object : BlocksAdmin {
-            override fun placeAt(blockType: String, position: Vec3, orientationForward: Vec3, orientationUp: Vec3) {
-                processParameters<Unit>(
+            override fun placeAt(blockDefinitionId: DefinitionId, position: Vec3, orientationForward: Vec3, orientationUp: Vec3): String {
+                return processParameters<String>(
                     parameters = listOf(
-                        TypedParameter("blockType", blockType, String::class),
+                        TypedParameter("blockDefinitionId", blockDefinitionId, DefinitionId::class),
                         TypedParameter("position", position, Vec3::class),
                         TypedParameter("orientationForward", orientationForward, Vec3::class),
                         TypedParameter("orientationUp", orientationUp, Vec3::class),

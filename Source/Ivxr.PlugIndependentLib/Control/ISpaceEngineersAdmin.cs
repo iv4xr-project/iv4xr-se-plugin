@@ -15,7 +15,8 @@ namespace Iv4xr.PluginLib.Control
 
         void SetIntegrity(string blockId, float integrity);
 
-        void PlaceAt(string blockType, PlainVec3D position, PlainVec3D orientationForward, PlainVec3D orientationUp);
+        string PlaceAt(DefinitionId blockDefinitionId, PlainVec3D position, PlainVec3D orientationForward,
+            PlainVec3D orientationUp);
     }
 
     public interface ICharacterAdmin

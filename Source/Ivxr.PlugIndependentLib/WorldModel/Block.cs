@@ -9,7 +9,7 @@ namespace Iv4xr.PluginLib.WorldModel
         public float BuildIntegrity;
         public float Integrity;
 
-        public string BlockType;
+        public DefinitionId DefinitionId;
 
         public PlainVec3D MinPosition;
         public PlainVec3D MaxPosition;

@@ -4,6 +4,7 @@ using System.Linq;
 using Iv4xr.PluginLib.WorldModel;
 using Sandbox.Game.Entities;
 using Sandbox.Game.Entities.Cube;
+using VRage.Game;
 using VRage.Game.Entity.UseObject;
 using VRage.Game.ModAPI;
 
@@ -41,11 +42,11 @@ namespace Iv4xr.SePlugin.Control
             var grid = sourceBlock.CubeGrid;
 
             block.Id = sourceBlock.UniqueId.ToString();
+            block.DefinitionId = EntityBuilder.GetDefinitionId(sourceBlock.BlockDefinition);
             block.Position = grid.GridIntegerToWorld(sourceBlock.Position).ToPlain();
             block.MaxIntegrity = sourceBlock.MaxIntegrity;
             block.BuildIntegrity = sourceBlock.BuildIntegrity;
             block.Integrity = sourceBlock.Integrity;
-            block.BlockType = GetSeBlockType(sourceBlock);
             block.MinPosition = grid.GridIntegerToWorld(sourceBlock.Min).ToPlain();
             block.MaxPosition = grid.GridIntegerToWorld(sourceBlock.Max).ToPlain();
 
@@ -99,14 +100,6 @@ namespace Iv4xr.SePlugin.Control
             var objects = new List<IMyUseObject>();
             block.FatBlock.UseObjectsComponent.GetInteractiveObjects(objects);
             return objects.Select(EntityBuilder.CreateUseObject).ToList();
-        }
-
-        private string GetSeBlockType(IMySlimBlock sourceBlock)
-        {
-            // block.BlockDefinition.Id.TypeId not used, SubtypeName seems sufficiently unique for now.
-            return sourceBlock.BlockDefinition?.Id is null
-                    ? "null"
-                    : sourceBlock.BlockDefinition.Id.SubtypeName;
         }
     }
 }

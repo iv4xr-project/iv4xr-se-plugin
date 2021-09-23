@@ -2,7 +2,6 @@ package spaceEngineers.model
 
 
 interface Block : Entity {
-    val blockType: String
     val maxIntegrity: Float
     val buildIntegrity: Float
     val integrity: Float
@@ -12,5 +11,5 @@ interface Block : Entity {
     val useObjects: List<UseObject>
     val functional: Boolean
     val working: Boolean
-
+    val definitionId: DefinitionId
 }

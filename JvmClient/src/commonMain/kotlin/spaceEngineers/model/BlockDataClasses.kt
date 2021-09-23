@@ -8,15 +8,15 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class DataTerminalBlock(
     @SerialName("Id")
-    override val id: String,
+    override val id: BlockId,
     @SerialName("Position")
     override val position: Vec3,
     @SerialName("OrientationForward")
     override val orientationForward: Vec3,
     @SerialName("OrientationUp")
     override val orientationUp: Vec3,
-    @SerialName("BlockType")
-    override val blockType: String,
+    @SerialName("DefinitionId")
+    override val definitionId: DefinitionId,
     @SerialName("MaxIntegrity")
     override val maxIntegrity: Float = 0f,
     @SerialName("BuildIntegrity")
@@ -49,15 +49,15 @@ data class DataTerminalBlock(
 @Serializable
 data class DataFunctionalBlock(
     @SerialName("Id")
-    override val id: String,
+    override val id: BlockId,
     @SerialName("Position")
     override val position: Vec3,
     @SerialName("OrientationForward")
     override val orientationForward: Vec3,
     @SerialName("OrientationUp")
     override val orientationUp: Vec3,
-    @SerialName("BlockType")
-    override val blockType: String,
+    @SerialName("DefinitionId")
+    override val definitionId: DefinitionId,
     @SerialName("MaxIntegrity")
     override val maxIntegrity: Float = 0f,
     @SerialName("BuildIntegrity")
@@ -91,15 +91,15 @@ data class DataFunctionalBlock(
 @Serializable
 data class DataDoorBase(
     @SerialName("Id")
-    override val id: String,
+    override val id: BlockId,
     @SerialName("Position")
     override val position: Vec3,
     @SerialName("OrientationForward")
     override val orientationForward: Vec3,
     @SerialName("OrientationUp")
     override val orientationUp: Vec3,
-    @SerialName("BlockType")
-    override val blockType: String,
+    @SerialName("DefinitionId")
+    override val definitionId: DefinitionId,
     @SerialName("MaxIntegrity")
     override val maxIntegrity: Float = 0f,
     @SerialName("BuildIntegrity")
@@ -137,15 +137,15 @@ data class DataDoorBase(
 @Serializable
 data class DataFueledPowerProducer(
     @SerialName("Id")
-    override val id: String,
+    override val id: BlockId,
     @SerialName("Position")
     override val position: Vec3,
     @SerialName("OrientationForward")
     override val orientationForward: Vec3,
     @SerialName("OrientationUp")
     override val orientationUp: Vec3,
-    @SerialName("BlockType")
-    override val blockType: String,
+    @SerialName("DefinitionId")
+    override val definitionId: DefinitionId,
     @SerialName("MaxIntegrity")
     override val maxIntegrity: Float = 0f,
     @SerialName("BuildIntegrity")

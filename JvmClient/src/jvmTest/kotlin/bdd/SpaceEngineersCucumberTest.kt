@@ -193,7 +193,7 @@ class SpaceEngineersCucumberTest {
         val observation = environment.observer.observeBlocks()
         assertTrue(
             observation.allBlocks
-                .none { it.blockType == string }
+                .none { it.definitionId.type == string }
         )
     }
 
@@ -204,14 +204,14 @@ class SpaceEngineersCucumberTest {
         assertEquals(
             blockCount,
             allBlocks.size,
-            "Expected to see $blockCount blocks, not ${allBlocks.size} ${allBlocks.map { it.blockType }.toSet()}."
+            "Expected to see $blockCount blocks, not ${allBlocks.size} ${allBlocks.map { it.definitionId.type }.toSet()}."
         )
         assertEquals(allBlocks.size, data.size)
         data.forEachIndexed { index, row ->
             val block = allBlocks[index]
             context.lastNewBlock = block
             row["blockType"]?.let {
-                assertEquals(it, block.blockType)
+                assertEquals(it, block.definitionId.type)
             }
             row["integrity"]?.let {
                 assertEquals(it.toFloat(), block.integrity)
@@ -246,7 +246,7 @@ class SpaceEngineersCucumberTest {
         val maxIntegrity: Float,
         val screenshots: MutableList<SingleScreenshot> = mutableListOf()
     ) {
-        constructor(block: Block) : this(block.blockType, block.maxIntegrity)
+        constructor(block: Block) : this(block.definitionId.type, block.maxIntegrity)
     }
 
     data class SingleScreenshot(
@@ -255,7 +255,7 @@ class SpaceEngineersCucumberTest {
         val buildRatioUpperBound: Float
     ) {
         constructor(block: Block, buildRatioUpperBound: Float) : this(
-            filename = "${block.blockType}_${block.integrity}.png",
+            filename = "${block.definitionId.type}_${block.integrity}.png",
             integrity = block.integrity,
             buildRatioUpperBound = buildRatioUpperBound
         )
@@ -286,10 +286,10 @@ class SpaceEngineersCucumberTest {
     }
 
     fun screenshot(block: Block, singleScreenshot: SingleScreenshot) {
-        blockScreenshotInfoByType.getOrPut(block.blockType) {
+        blockScreenshotInfoByType.getOrPut(block.definitionId.type) {
             Screenshots(block)
         }.screenshots.add(singleScreenshot)
-        val blockDir = File(outputDirectory, "${block.blockType}").apply { mkdirs() }
+        val blockDir = File(outputDirectory, "${block.definitionId.type}").apply { mkdirs() }
         val screenshotFile = File(blockDir, singleScreenshot.filename)
         environment.observer.takeScreenshot(screenshotFile.absolutePath)
     }
@@ -302,7 +302,7 @@ class SpaceEngineersCucumberTest {
     fun character_grinds_down_to_below_each_threshold_and_takes_screenshot(percentage: Double, distance: Float) =
         runBlocking {
             val block = observeLatestNewBlock()
-            val meta = environment.definitions.blockDefinitions().first { it.blockType == block.blockType }
+            val meta = environment.definitions.blockDefinitions().first { it.definitionId.type == block.definitionId.type }
             meta.buildProgressModels.reversed().forEach { seBuildProgressModel ->
                 sleep(500)
                 grindDownToPercentage((seBuildProgressModel.buildRatioUpperBound).toDouble() * 100.0 - percentage)
@@ -322,7 +322,7 @@ class SpaceEngineersCucumberTest {
     fun character_welds_up_above_each_threshold_and_takes_screenshot(percentage: Double, distance: Float) =
         runBlocking {
             val block = observeLatestNewBlock()
-            val definition = environment.definitions.blockDefinitions().first { it.blockType == block.blockType }
+            val definition = environment.definitions.blockDefinitions().first { it.definitionId.type == block.definitionId.type }
             definition.buildProgressModels.forEach { seBuildProgressModel ->
                 sleep(500)
                 torchUpToPercentage((seBuildProgressModel.buildRatioUpperBound).toDouble() * 100.0 + percentage)
@@ -342,13 +342,13 @@ class SpaceEngineersCucumberTest {
     fun character_saves_metadata_about_each_threshold_and_file_names() {
         val block = observeLatestNewBlock()
         val cw = environment.spaceEngineers as JsonRpcSpaceEngineers
-        //val meta = cw.blockDefinitions().first { it.blockType == block.blockType }
-        val blockDir = File(outputDirectory, "${block.blockType}").apply { mkdirs() }
+        //val meta = cw.blockDefinitions().first { it.definitionId.type == block.definitionId.type }
+        val blockDir = File(outputDirectory, "${block.definitionId.type}").apply { mkdirs() }
         //File(blockDir, "blockDefinition.json").writeText(cw.gsonReaderWriter.gson.toJson(meta))
         File(
             blockDir,
             "screenshotInfo.json"
-        ).writeText(SocketReaderWriter.SPACE_ENG_GSON.toJson(blockScreenshotInfoByType[block.blockType]))
+        ).writeText(SocketReaderWriter.SPACE_ENG_GSON.toJson(blockScreenshotInfoByType[block.definitionId.type]))
     }
 
 }
