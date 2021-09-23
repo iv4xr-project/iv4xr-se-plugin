@@ -6,6 +6,7 @@ import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import spaceEngineers.model.*
+import spaceEngineers.util.generator.removeBuilderPrefix
 import kotlin.reflect.KClass
 
 val blockMappings = mapOf<String, Map<String, KClass<*>>>(
@@ -32,7 +33,7 @@ val serializerMapping = mutableMapOf<String, DeserializationStrategy<out Block>>
 
 object BlockSerializer : JsonContentPolymorphicSerializer<Block>(Block::class) {
     override fun selectDeserializer(element: JsonElement): DeserializationStrategy<out Block> {
-        val blockType = element.jsonObject["DefinitionId"]!!.jsonObject["Type"]!!.jsonPrimitive.content
-        return generatedSerializerMappings[blockType] ?: DataBlock.serializer()
+        val id = element.jsonObject["DefinitionId"]!!.jsonObject["Id"]!!.jsonPrimitive.content.removeBuilderPrefix()
+        return generatedSerializerMappings[id] ?: DataBlock.serializer()
     }
 }

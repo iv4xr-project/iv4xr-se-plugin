@@ -5,7 +5,7 @@ import kotlin.reflect.KClass
 
 const val commonFields = """
     @SerialName("Id")
-    override val id: String,
+    override val id: BlockId,
     @SerialName("Position")
     override val position: Vec3,
     @SerialName("OrientationForward")
@@ -202,15 +202,19 @@ fun generateMappingsForSingleClass(
     parentMappings: Map<String, String>,
     idToTypes: Map<String, List<String>>
 ): List<String> {
-    val parent = findImportantParent(blockId, parentMappings = parentMappings) ?: return emptyList()
-    val blockTypes = idToTypes[blockId] ?: return emptyList()
-    return blockTypes.map { """    "$it" to ${parent.dataclassName()}.serializer()""" }
+    val parents = listOf(blockId) + getBlockParentsById(blockId, parentMappings)
+
+    return parents.mapNotNull {
+        findImportantParent(it, parentMappings = parentMappings)?.let { importantParent ->
+            """    "$it" to ${importantParent.dataclassName()}.serializer()"""
+        }
+    }
 }
 
 fun generateMappings(parentMappings: Map<String, String>, idToTypes: Map<String, List<String>>): String {
     return parentMappings.keys.flatMap {
         generateMappingsForSingleClass(it, parentMappings = parentMappings, idToTypes = idToTypes)
-    }.joinToString(
+    }.distinct().joinToString(
         separator = ",\n", prefix = """
 val generatedSerializerMappings = mutableMapOf(
 """.trimStart(), postfix = """
@@ -225,8 +229,8 @@ fun generateMappingsForSingleCsClass(
     idToTypes: Map<String, List<String>>
 ): List<String> {
     val parent = findImportantParent(blockId, parentMappings = parentMappings) ?: return emptyList()
-    val blockTypes = idToTypes[blockId] ?: return emptyList()
-    return blockTypes.map { """    {"$it", "$parent"}""" }
+    if (parent == blockId) return emptyList()
+    return listOf("""    {"$blockId", "$parent"}""")
 }
 
 fun generateCsMappings(parentMappings: Map<String, String>, idToTypes: Map<String, List<String>>): String {
@@ -234,10 +238,13 @@ fun generateCsMappings(parentMappings: Map<String, String>, idToTypes: Map<Strin
         generateMappingsForSingleCsClass(it, parentMappings = parentMappings, idToTypes = idToTypes)
     }.joinToString(
         separator = ",\n", prefix = """
-public readonly Dictionary<string, string> mapping = new Dictionary<string, string>
-{
+    public static class BlockMapper
+    {
+        public static readonly Dictionary<string, string> Mapping = new Dictionary<string, string>
+        {
 """.trimStart(), postfix = """
-}
+        };
+    }
 """.trimIndent()
     )
 }

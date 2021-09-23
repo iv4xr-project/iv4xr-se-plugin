@@ -15,7 +15,8 @@ namespace Iv4xr.SePlugin.Control
 
         public Block CreateAndFill(MySlimBlock sourceBlock)
         {
-            var block = CreateBlock(sourceBlock.BlockDefinition.Id.SubtypeName);
+            var definitionId = EntityBuilder.GetDefinitionId(sourceBlock.BlockDefinition);
+            var block = CreateBlock(definitionId.Id);
             AddStandardFields(sourceBlock, block);
             AddCustomFields(sourceBlock, block);
             return block;

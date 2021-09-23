@@ -45,6 +45,17 @@ fun main() {
     val serializerMappings = File("./src/commonMain/kotlin/spaceEngineers/model/BlockSerializerMappings.kt")
     serializerMappings.writeText(filePrefix)
 
+    val csClassesAndMappings = File("../Source/Ivxr.PlugIndependentLib/WorldModel/GeneratedBlocks.cs")
+
+
+    csClassesAndMappings.writeText(
+        """
+using System.Collections.Generic;
+
+namespace Iv4xr.PluginLib.WorldModel
+{
+    """.trim()
+    )
 
     blockMappings.map { it ->
         val parents = getBlockParentsById(it.key, parentMappings)
@@ -61,11 +72,25 @@ fun main() {
                 interfaces.appendText("$it\n\n")
             }
 
+            generator.generateCsClass().let {
+                csClassesAndMappings.appendText("$it\n")
+            }
+
         }
     }
+
+
 
     generateMappings(parentMappings = parentMappings, idToTypes = idToTypes).let {
         serializerMappings.appendText("$it\n")
     }
+
+    generateCsMappings(parentMappings = parentMappings, idToTypes = idToTypes).let {
+        csClassesAndMappings.appendText("$it\n")
+    }
+
+    csClassesAndMappings.appendText("""
+}
+    """.trimIndent())
 
 }
