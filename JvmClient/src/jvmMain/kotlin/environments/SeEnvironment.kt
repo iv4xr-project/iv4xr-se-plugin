@@ -8,6 +8,7 @@ import spaceEngineers.controller.SpaceEngineersTestContext
 import spaceEngineers.controller.extensions.moveForward
 import spaceEngineers.model.*
 import spaceEngineers.model.extensions.centerPosition
+import spaceEngineers.transport.closeIfCloseable
 import java.io.File
 import java.lang.Thread.sleep
 
@@ -77,7 +78,7 @@ class SeEnvironment(
     val worldId: String,
     val controller: ContextControllerWrapper,
     val context: SpaceEngineersTestContext
-) : W3DEnvironment() {
+) : W3DEnvironment(), AutoCloseable {
     val SCENARIO_DIR = "src/jvmTest/resources/game-saves/"
 
 
@@ -124,5 +125,9 @@ class SeEnvironment(
 
     fun equipAndPlace(blockType: String) {
         return equipAndPlace(context.blockToolbarLocation(blockType))
+    }
+
+    override fun close() {
+        controller.closeIfCloseable()
     }
 }
