@@ -48,6 +48,16 @@ import kotlinx.serialization.Serializable
 
 val regex = "override val ([a-zA-Z]+):".toRegex()
 
+val typeMapping = mapOf(
+    "Float" to "float",
+    "Boolean" to "bool",
+    "Double" to "double",
+)
+
+fun mapToCsType(type: String): String {
+    return typeMapping[type] ?: error("No cs mapping found for $type")
+}
+
 val commonFieldNames = regex.findAll(commonFields).map {
     it.groupValues[1]
 }.toList()
@@ -109,6 +119,15 @@ ${fields()}
         """.trimIndent()
     }
 
+    fun generateCsClass(): String {
+        return """
+
+public class ${cls} : ${parentCall()} {
+${csFields()}
+}
+        """.trimIndent()
+    }
+
     private fun parentCall(): String {
         val ip = importantParents()
         return """
@@ -120,6 +139,12 @@ ${ip.firstOrNull() ?: "Block"}
         return overriddenFields.entries.joinToString("\n") { (field, type) ->
             """    @SerialName("$field")
     override val ${field.camelCase()}: ${type.simpleName},"""
+        }
+    }
+
+    private fun csFields(): String {
+        return (fields).entries.joinToString("\n") { (field, type) ->
+            """    public ${mapToCsType(type.simpleName!!)} $field;"""
         }
     }
 
@@ -190,6 +215,29 @@ fun generateMappings(parentMappings: Map<String, String>, idToTypes: Map<String,
 val generatedSerializerMappings = mutableMapOf(
 """.trimStart(), postfix = """
 )
+""".trimIndent()
+    )
+}
+
+fun generateMappingsForSingleCsClass(
+    blockId: String,
+    parentMappings: Map<String, String>,
+    idToTypes: Map<String, List<String>>
+): List<String> {
+    val parent = findImportantParent(blockId, parentMappings = parentMappings) ?: return emptyList()
+    val blockTypes = idToTypes[blockId] ?: return emptyList()
+    return blockTypes.map { """    {"$it", "$parent"}""" }
+}
+
+fun generateCsMappings(parentMappings: Map<String, String>, idToTypes: Map<String, List<String>>): String {
+    return parentMappings.keys.flatMap {
+        generateMappingsForSingleCsClass(it, parentMappings = parentMappings, idToTypes = idToTypes)
+    }.joinToString(
+        separator = ",\n", prefix = """
+public readonly Dictionary<string, string> mapping = new Dictionary<string, string>
+{
+""".trimStart(), postfix = """
+}
 """.trimIndent()
     )
 }

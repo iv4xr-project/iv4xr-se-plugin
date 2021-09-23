@@ -47,6 +47,8 @@ namespace Iv4xr.SePlugin.Control
         private readonly int m_blockCountTakeLimit;
 
         private readonly float m_blockCountWarningRatio;
+        
+        private readonly BlockEntityBuilder m_blockEntityBuilder = new BlockEntityBuilder();
 
         public EntityBuilder(int blockCountTakeLimit = 10_000, float blockCountWarningRatio = 0.9f)
         {
@@ -69,17 +71,6 @@ namespace Iv4xr.SePlugin.Control
                 OrientationForward = orientationForward.ToPlain(),
                 OrientationUp = orientationUp.ToPlain()
             };
-        }
-
-        public List<UseObject> GetUseObjects(MySlimBlock block)
-        {
-            if (block?.FatBlock?.UseObjectsComponent == null)
-            {
-                return new List<UseObject>();
-            }
-            var objects = new List<IMyUseObject>();
-            block.FatBlock.UseObjectsComponent.GetInteractiveObjects(objects);
-            return objects.Select(CreateUseObject).ToList();
         }
 
         private readonly PreviousBlocksFilter m_previousBlocksFilter = new PreviousBlocksFilter();
@@ -107,7 +98,7 @@ namespace Iv4xr.SePlugin.Control
             return foundBlocks;
         }
 
-        public UseObject CreateUseObject(IMyUseObject obj)
+        public static UseObject CreateUseObject(IMyUseObject obj)
         {
             return new UseObject()
             {
@@ -121,58 +112,7 @@ namespace Iv4xr.SePlugin.Control
 
         public Block CreateGridBlock(MySlimBlock sourceBlock)
         {
-            var grid = sourceBlock.CubeGrid;
-            var block = new Block
-            {
-                Id = sourceBlock.UniqueId.ToString(), // TODO(PP): Might not be unique in rare cases or across grids
-                Position = grid.GridIntegerToWorld(sourceBlock.Position).ToPlain(),
-                MaxIntegrity = sourceBlock.MaxIntegrity,
-                BuildIntegrity = sourceBlock.BuildIntegrity,
-                Integrity = sourceBlock.Integrity,
-                BlockType = GetSeBlockType(sourceBlock),
-                MinPosition = grid.GridIntegerToWorld(sourceBlock.Min).ToPlain(),
-                MaxPosition = grid.GridIntegerToWorld(sourceBlock.Max).ToPlain(),
-
-                // Note: it does not have to be the same as block.Min - block.Max (because of rotations)
-                Size = sourceBlock.BlockDefinition.Size.ToPlain(),
-
-                OrientationForward = grid.WorldMatrix.GetDirectionVector(sourceBlock.Orientation.Forward).ToPlain(),
-                OrientationUp = grid.WorldMatrix.GetDirectionVector(sourceBlock.Orientation.Up).ToPlain(),
-                Functional = sourceBlock.FatBlock?.IsFunctional ?? false,
-                Working = sourceBlock.FatBlock?.IsWorking ?? false,
-                UseObjects = GetUseObjects(sourceBlock),
-            };
-            AddCustomFields(sourceBlock, block);
-            return block;
-        }
-
-        //possibly extracted and generated method
-        private static void AddCustomFields(MySlimBlock sourceBlock, Block block)
-        {
-            if (sourceBlock.FatBlock is MyFunctionalBlock functionalBlock)
-            {
-                block.Enabled = functionalBlock.Enabled;
-            }
-
-            if (sourceBlock.FatBlock is MyTerminalBlock terminalBlock)
-            {
-                block.ShowInInventory = terminalBlock.ShowInInventory;
-                block.ShowInTerminal = terminalBlock.ShowInTerminal;
-                block.ShowOnHUD = terminalBlock.ShowOnHUD;
-            }
-
-            if (sourceBlock.FatBlock is MyDoorBase door)
-            {
-                block.Open = door.Open;
-                block.AnyoneCanUse = door.AnyoneCanUse;
-            }
-
-            if (sourceBlock.FatBlock is MyReactor reactor)
-            {
-                block.Capacity = reactor.Capacity;
-                block.MaxOutput = reactor.MaxOutput;
-                block.CurrentOutput = reactor.CurrentOutput;
-            }
+            return m_blockEntityBuilder.CreateAndFill(sourceBlock);
         }
 
         public static BlockDefinition GetBuildSeBlockDefinition(MyCubeBlockDefinition blockDefinition)
@@ -207,14 +147,6 @@ namespace Iv4xr.SePlugin.Control
             {
                 BuildRatioUpperBound = bpm.BuildRatioUpperBound
             };
-        }
-
-        private static string GetSeBlockType(IMySlimBlock sourceBlock)
-        {
-            // block.BlockDefinition.Id.TypeId not used, SubtypeName seems sufficiently unique for now.
-            return sourceBlock.BlockDefinition?.Id is null
-                    ? "null"
-                    : sourceBlock.BlockDefinition.Id.SubtypeName;
         }
     }
 }

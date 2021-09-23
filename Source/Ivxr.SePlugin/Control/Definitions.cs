@@ -44,7 +44,7 @@ namespace Iv4xr.SePlugin.Control
                     .ToDictionary(d => d.Key, d => d.First());
         }
         
-        private Type GetBlockType(string id)
+        public static Type GetBlockType(string id)
         {
             return typeof(MyObjectBuilder_CubeBlock).Assembly.GetTypes()
                     .FirstOrDefault(type => type.Name == id) ?? typeof(MyObjectBuilder_Thrust).Assembly.GetTypes()
@@ -69,16 +69,13 @@ namespace Iv4xr.SePlugin.Control
         {
             return GetParentsAsDict(GetBlockParents(id));
         }
-        
+
         private Dictionary<string, string> GetParentsAsDict(List<string> parents)
         {
             var result = new Dictionary<string, string>();
-            for (var i = 0; i < parents.Count; i++)
+            for (var i = 0; i < parents.Count - 1; i++)
             {
-                if (i < parents.Count - 1)
-                {
-                    result[parents[i]] = parents[i + 1];
-                }
+                result[parents[i]] = parents[i + 1];
             }
             return result;
         }
