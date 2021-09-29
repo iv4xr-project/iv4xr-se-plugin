@@ -32,6 +32,19 @@ kotlin {
             useJUnitPlatform()
         }
     }
+    js(IR) {
+        binaries.executable()
+        browser {
+            commonWebpackConfig {
+                cssSupport.enabled = true
+            }
+            testTask {
+                useKarma {
+                    useChromeHeadless()
+                }
+            }
+        }
+    }
     sourceSets {
         commonMain {
             dependencies {
@@ -50,6 +63,10 @@ kotlin {
             dependencies {
                 implementation kotlin('test-common')
                 implementation kotlin('test-annotations-common')
+            }
+        }
+        jsMain {
+            dependencies {
             }
         }
         jvmMain {
