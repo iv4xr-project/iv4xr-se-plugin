@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Havok;
 using Sandbox.Definitions;
@@ -419,7 +420,7 @@ public class MyTestPhysicsComponentBase : MyPhysicsComponentBase
 
         public void GetBlocks(List<IMySlimBlock> blocks, Func<IMySlimBlock, bool> collect = null)
         {
-            throw new NotImplementedException();
+            blocks.AddRange(m_blocks.Values.Where(x => (collect == null) || collect(x)));
         }
 
         public List<IMySlimBlock> GetBlocksInsideSphere(ref VRageMath.BoundingSphereD sphere)
