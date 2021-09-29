@@ -110,7 +110,7 @@ namespace Iv4xr.SePlugin.Control
         private UseObject UseObject()
         {
             var detector = Character.Components.Get<MyCharacterDetectorComponent>();
-            return detector?.UseObject != null ? m_entityBuilder.CreateUseObject(detector.UseObject) : null;
+            return detector?.UseObject != null ? EntityBuilder.CreateUseObject(detector.UseObject) : null;
         }
 
         public Observation GetNewBlocks()

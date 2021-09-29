@@ -33,7 +33,7 @@ fun SpaceEngineers.checkPlacement(
     sleep(10)
     blocks.place()
     sleep(10)
-    return observer.observeNewBlocks().allBlocks.let { it.isNotEmpty() && it.first().blockType == blockType }
+    return observer.observeNewBlocks().allBlocks.let { it.isNotEmpty() && it.first().definitionId.type == blockType }
 }
 
 
@@ -49,7 +49,7 @@ class GetToolbarTest : MockOrRealGameTest(forceRealGame = true) {
 
     @Test
     fun setToolbar() = testContext {
-        val blockTypes = definitions.blockDefinitions().filterForScreenshots().map { it.blockType }
+        val blockTypes = definitions.blockDefinitions().filterForScreenshots().map { it.definitionId.type }
 
         val location = ToolbarLocation(0, 2)
         val (success, fail) = blockTypes.partition { blockType ->
@@ -84,6 +84,6 @@ class GetToolbarTest : MockOrRealGameTest(forceRealGame = true) {
         val blocks = observer.observeNewBlocks().allBlocks
         assertEquals(1, blocks.size)
         val block = blocks.first()
-        assertEquals(blockType, block.blockType)
+        assertEquals(blockType, block.definitionId.type)
     }
 }

@@ -56,6 +56,11 @@ namespace Iv4xr.SePlugin.Communication
         {
             return Enqueue(() => m_definitions.AllDefinitions());
         }
+
+        public Dictionary<string, string> BlockHierarchy()
+        {
+            return Enqueue(() => m_definitions.BlockHierarchy());
+        }
     }
 
     public class ObserverOnGameLoop : AbstractServiceOnGameLoop, IObserver
@@ -124,10 +129,10 @@ namespace Iv4xr.SePlugin.Communication
             Enqueue(() => m_blocks.SetIntegrity(blockId, integrity));
         }
 
-        public void PlaceAt(string blockType, PlainVec3D position, PlainVec3D orientationForward,
+        public string PlaceAt(DefinitionId blockDefinitionId, PlainVec3D position, PlainVec3D orientationForward,
             PlainVec3D orientationUp)
         {
-            Enqueue(() => m_blocks.PlaceAt(blockType, position, orientationForward, orientationUp));
+            return Enqueue(() => m_blocks.PlaceAt(blockDefinitionId, position, orientationForward, orientationUp));
         }
     }
 

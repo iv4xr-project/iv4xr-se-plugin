@@ -6,10 +6,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class BlockDefinition(
-    @SerialName("Id")
-    val id: String,
-    @SerialName("BlockType")
-    val blockType: String,
+    @SerialName("DefinitionId")
+    val definitionId: DefinitionId,
     /**
      * List containing integrity thresholds that change block state (and visual model).
      */

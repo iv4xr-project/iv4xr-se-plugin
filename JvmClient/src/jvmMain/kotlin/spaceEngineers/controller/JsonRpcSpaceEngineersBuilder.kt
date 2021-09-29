@@ -18,7 +18,7 @@ interface JsonRpcSpaceEngineersBuilder {
 
     companion object : JsonRpcSpaceEngineersBuilder {
 
-        var builder: JsonRpcSpaceEngineersBuilder = GsonRpcSpaceEngineersBuilder()
+        var builder: JsonRpcSpaceEngineersBuilder = KotlinJsonRpcSpaceEngineersBuilder()
 
         override fun localhost(agentId: String): JsonRpcSpaceEngineers {
             return builder.localhost(agentId)

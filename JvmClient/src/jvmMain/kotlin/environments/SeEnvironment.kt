@@ -37,16 +37,16 @@ val WorldEntity.blockType: String
     }
 
 fun CubeGrid.toWorldEntity(): WorldEntity {
-    return WorldEntity(this.id, "grid", true).also { we ->
+    return WorldEntity(this.id.toString(), "grid", true).also { we ->
         we.position = position.toIv4xrVec3()
         we.elements = blocks.map { it.toWorldEntity() }.associateBy { it.id }
     }
 }
 
 fun Block.toWorldEntity(): WorldEntity {
-    return WorldEntity(id, "block", true).also { we ->
+    return WorldEntity(id.toString(), "block", true).also { we ->
         we.position = position.toIv4xrVec3()
-        we.properties["blockType"] = blockType
+        we.properties["blockType"] = definitionId.type
         we.properties["integrity"] = integrity
         we.properties["maxIntegrity"] = maxIntegrity
         we.properties["buildIntegrity"] = buildIntegrity
@@ -67,7 +67,7 @@ fun Observation.toWorldModel(): WorldModel {
 
 fun CharacterObservation.toWorldModel(): WorldModel {
     return WorldModel().also { worldModel ->
-        worldModel.agentId = id
+        worldModel.agentId = id.toString()
         worldModel.position = position.toIv4xrVec3()
         worldModel.velocity = velocity.toIv4xrVec3()
         worldModel.elements = emptyMap()

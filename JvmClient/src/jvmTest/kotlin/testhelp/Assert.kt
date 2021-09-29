@@ -21,7 +21,7 @@ fun checkMockObservation(obs: Observation?) {
                 assertEquals(10f, block.maxIntegrity)
                 assertEquals(1f, block.buildIntegrity)
                 assertEquals(5f, block.integrity)
-                assertEquals("MockBlock", block.blockType)
+                assertEquals("MockBlock", block.definitionId.type)
                 assertEquals(Vec3(5f, 5f, 5f), block.position)
             }
         }

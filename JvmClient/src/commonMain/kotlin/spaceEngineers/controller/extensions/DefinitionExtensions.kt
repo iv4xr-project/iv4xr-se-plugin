@@ -5,5 +5,5 @@ import spaceEngineers.model.BlockDefinition
 
 
 fun Definitions.blockDefinitionByType(blockType: String): BlockDefinition {
-    return blockDefinitions().first { it.blockType == blockType } ?: error("block type not found $blockType")
+    return blockDefinitions().first { it.definitionId.type == blockType } ?: error("block type not found $blockType")
 }

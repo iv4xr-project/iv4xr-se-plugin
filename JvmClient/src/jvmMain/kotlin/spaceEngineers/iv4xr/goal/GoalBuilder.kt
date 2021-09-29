@@ -38,7 +38,7 @@ class GoalBuilder(
         return Goal("Block of type $blockType exists")
             .toSolve { belief: SeAgentState ->
                 belief.seEnv.observeForNewBlocks()
-                belief.seEnv.context.allNewestBlocks.any { it.blockType == blockType }
+                belief.seEnv.context.allNewestBlocks.any { it.definitionId.type == blockType }
             }
             .withTactic(
                 tactic

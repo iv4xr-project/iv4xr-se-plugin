@@ -18,7 +18,7 @@ class MountPointsTest: MockOrRealGameTest(mockFile = inMockResourcesDirectory("M
     @Test
     fun empty() = testContext {
         definitions.blockDefinitions().filterForMountPoints().filter { it.mountPoints.isEmpty() }.map {
-            it.blockType
+            it.definitionId.type
         }.toSet().let { blockTypes ->
             assertEquals(
                 blockTypes,
@@ -30,7 +30,7 @@ class MountPointsTest: MockOrRealGameTest(mockFile = inMockResourcesDirectory("M
     @Test
     fun single() = testContext {
         definitions.blockDefinitions().filterForMountPoints().filter { it.mountPoints.size == 1 }.map {
-            it.blockType
+            it.definitionId.type
         }.toSet().let { blockTypes ->
             assertEquals(
                 blockTypes.size,

@@ -27,7 +27,11 @@ namespace SeServerMock.Mocks
                 MaxIntegrity = 10f,
                 BuildIntegrity = 1.0f,
                 Integrity = 5.0f,
-                BlockType = "MockBlock"
+                DefinitionId = new DefinitionId()
+                {
+                    Id = "MockId",
+                    Type = "MockBlock",    
+                },
             };
 
             var blocks = new List<Block>

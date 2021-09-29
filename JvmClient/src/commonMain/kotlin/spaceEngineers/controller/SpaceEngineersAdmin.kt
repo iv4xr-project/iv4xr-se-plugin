@@ -1,6 +1,8 @@
 package spaceEngineers.controller
 
+import spaceEngineers.model.BlockId
 import spaceEngineers.model.CharacterObservation
+import spaceEngineers.model.DefinitionId
 import spaceEngineers.model.Vec3
 
 interface SpaceEngineersAdmin {
@@ -10,9 +12,9 @@ interface SpaceEngineersAdmin {
 }
 
 interface BlocksAdmin {
-    fun placeAt(blockType: String, position: Vec3, orientationForward: Vec3, orientationUp: Vec3)
-    fun remove(blockId: String)
-    fun setIntegrity(blockId: String, integrity: Float)
+    fun placeAt(blockDefinitionId: DefinitionId, position: Vec3, orientationForward: Vec3, orientationUp: Vec3): String
+    fun remove(blockId: BlockId)
+    fun setIntegrity(blockId: BlockId, integrity: Float)
 }
 
 interface CharacterAdmin {
@@ -24,5 +26,5 @@ interface CharacterAdmin {
      * @param orientationUp Complementary vector to the forward vector.
      */
     fun teleport(position: Vec3, orientationForward: Vec3? = null, orientationUp: Vec3? = null): CharacterObservation
-    fun use(blockId: String, functionIndex: Int, action: Int)
+    fun use(blockId: BlockId, functionIndex: Int, action: Int)
 }

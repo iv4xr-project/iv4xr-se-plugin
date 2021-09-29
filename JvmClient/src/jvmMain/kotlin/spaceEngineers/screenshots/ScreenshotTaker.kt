@@ -60,7 +60,7 @@ class ScreenshotTaker(
     }
 
     private fun List<BlockDefinition>.filterForScreenshots(): List<BlockDefinition> {
-        return filter { it.cubeSize == CubeSize.Large && it.blockType.isNotBlank() && it.enabled && it.public && it.mountPoints.isNotEmpty() }
+        return filter { it.cubeSize == CubeSize.Large && it.definitionId.type.isNotBlank() && it.enabled && it.public && it.mountPoints.isNotEmpty() }
     }
 
     private fun screenshotDistance(blockDefinition: BlockDefinition, orientationForward: Vec3): Float {
@@ -81,13 +81,13 @@ class ScreenshotTaker(
         namedOrientation: NamedOrientations,
         buildProgressModel: BuildProgressModel
     ): String {
-        return "${blockDefinition.blockType}_${namedOrientation.name}_${integrity}.png"
+        return "${blockDefinition.definitionId.type}_${namedOrientation.name}_${integrity}.png"
     }
 
     private fun takeScreenshots(blockDefinition: BlockDefinition): Screenshots {
         se.admin.character.teleport(position = blockPosition + Vec3(x = 10))
         return Screenshots(
-            blockType = blockDefinition.blockType,
+            blockType = blockDefinition.definitionId.type,
             screenshots = orientations.flatMap { namedOrientation ->
                 takeScreenshotsOfSingleOrientation(blockDefinition, namedOrientation).apply {
                     sleep(50)
@@ -102,7 +102,7 @@ class ScreenshotTaker(
     ): List<SingleScreenshot> {
         se.observer.observeBlocks().allBlocks.forEach { se.admin.blocks.remove(it.id) }
         se.admin.blocks.placeAt(
-            blockDefinition.blockType,
+            blockDefinition.definitionId,
             blockPosition,
             namedOrientation.orientationForward,
             namedOrientation.orientationUp
@@ -136,7 +136,7 @@ class ScreenshotTaker(
             )
             se.observer.takeScreenshot(
                 File(
-                    blockOutputDirectory(blockDefinition.blockType),
+                    blockOutputDirectory(blockDefinition.definitionId.type),
                     singleScreenshot.filename
                 ).absolutePath
             )
