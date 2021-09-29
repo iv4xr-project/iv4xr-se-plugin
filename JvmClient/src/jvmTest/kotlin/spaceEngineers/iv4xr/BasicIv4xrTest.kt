@@ -7,6 +7,7 @@ import eu.iv4xr.framework.mainConcepts.TestDataCollector
 import eu.iv4xr.framework.spatial.Vec3
 import nl.uu.cs.aplib.AplibEDSL.SEQ
 import nl.uu.cs.aplib.mainConcepts.GoalStructure
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import spaceEngineers.controller.*
 import spaceEngineers.controller.SpaceEngineers.Companion.DEFAULT_AGENT_ID
@@ -17,6 +18,8 @@ import kotlin.test.assertTrue
 
 
 class BasicIv4xrTest {
+
+    @Disabled("Disabled for building whole project, enable manually by uncommenting.")
     @Test
     fun placeGrindDownTorchUp() {
         val agentId = DEFAULT_AGENT_ID
