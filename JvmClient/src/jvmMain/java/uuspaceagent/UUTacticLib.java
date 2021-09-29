@@ -1,5 +1,6 @@
 package uuspaceagent;
 
+import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.spatial.Vec3;
 import nl.uu.cs.aplib.mainConcepts.Action;
 import nl.uu.cs.aplib.mainConcepts.Tactic;
@@ -7,6 +8,8 @@ import nl.uu.cs.aplib.utils.Pair;
 import spaceEngineers.model.CharacterObservation;
 import spaceEngineers.model.Vec2;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static nl.uu.cs.aplib.AplibEDSL.action;
@@ -450,5 +453,163 @@ public class UUTacticLib {
             }
         }
         return path ;
+    }
+
+    /**
+     * This tactic becomes from navigateToTAC but instead of navigate to a specific/scripted Vec3 destination
+     * we want to try to navigate near the desired entity.
+     */
+    public static Tactic navigateToEntity(WorldEntity entity) {
+
+        return action("navigateTo").do2((UUSeAgentState state)
+                -> (Pair<List<DPos3>, Boolean> queryResult) -> {
+            var path = queryResult.fst;
+            var arrivedAtDestination = queryResult.snd;
+
+            // check first if we should turn on/off jetpack:
+            if (state.wom.position.y - state.navgrid.origin.y <= NavGrid.AGENT_HEIGHT
+                    && path.get(0).y == 0 && state.jetpackRunning()
+            ) {
+                state.env().getController().getCharacter().turnOffJetpack();
+            } else {
+                if (path.get(0).y > 0 && !state.jetpackRunning()) {
+                    state.env().getController().getCharacter().turnOnJetpack();
+                }
+            }
+
+            if (arrivedAtDestination) {
+                state.currentPathToFollow.clear();
+                return new Pair<>(state.wom.position, state.orientationForward());
+            }
+            // else we are not at the destination yet...
+
+            // set currentPathToFollow:
+            state.currentPathToFollow = path;
+
+            // follow the path, direct the agent to the next node in the path (actually, the first
+            // node in the path, since we remove a node if it is passed):
+            var nextNode = state.currentPathToFollow.get(0);
+            var nextNodePos = state.navgrid.getSquareCenterLocation(nextNode);
+            var agentSq = state.navgrid.gridProjectedLocation(state.wom.position);
+            //if(agentSq.equals(nextNode)) {
+            if (Vec3.sub(nextNodePos, state.wom.position).lengthSq() <= THRESHOLD_SQUARED_DISTANCE_TO_SQUARE) {
+                // agent is already in the same square as the next-node destination-square. Mark the node
+                // as reached (so, we remove it from the plan):
+                state.currentPathToFollow.remove(0);
+                return new Pair<>(state.wom.position, state.orientationForward());
+            }
+            CharacterObservation obs = null;
+            // disabling rotation for now
+            obs = yTurnTowardACT(state, nextNodePos, 0.8f, 10);
+            if (obs != null) {
+                // we did turning, we won't move.
+                return new Pair<>(SEBlockFunctions.fromSEVec3(obs.getPosition()), SEBlockFunctions.fromSEVec3(obs.getOrientationForward()));
+            }
+            obs = moveToward(state, nextNodePos, 20);
+            return new Pair<>(SEBlockFunctions.fromSEVec3(obs.getPosition()), SEBlockFunctions.fromSEVec3(obs.getOrientationForward()));
+        }).on((UUSeAgentState state) -> {
+            Vec3 destination = entity.position;
+
+            if (state.wom == null) return null;
+
+            var agentSq = state.navgrid.gridProjectedLocation(state.wom.position);
+            var destinationSq = state.navgrid.gridProjectedLocation(destination);
+            var destinationSqCenterPos = state.navgrid.getSquareCenterLocation(destinationSq);
+
+            System.out.println("Vec3.sub(destinationSqCenterPos, state.wom.position): " + Vec3.sub(destinationSqCenterPos, state.wom.position));
+            System.out.println("Vec3.sub(destinationSqCenterPos, state.wom.position).lengthSq() : " + Vec3.sub(destinationSqCenterPos, state.wom.position).lengthSq());
+
+            /**
+             * MODIFIED : 10f - THRESHOLD_SQUARED_DEVIATED_DISTANCE_TO_SQUARE
+             * Hardcoded temporally, we will need to use deviated square for calculation
+             */
+            float THRESHOLD_SQUARED_DEVIATED_DISTANCE_TO_SQUARE = 10f;
+            if (Vec3.sub(destinationSqCenterPos, state.wom.position).lengthSq() <= THRESHOLD_SQUARED_DEVIATED_DISTANCE_TO_SQUARE) {
+                // the agent is already at the destination. Just return the path, and indicate that
+                // we have arrived at the destination:
+                return new Pair<>(state.currentPathToFollow, true);
+            }
+
+            int currentPathLength = state.currentPathToFollow.size();
+
+            /**
+             * MODIFIED
+             * Because is not possible to move to the center position of an entity,
+             * we recalculate the destination to a reachable close square.
+             * That is why we need to check if the deviation is inside a neighbour square.
+             */
+            var deviationLength = 999f; // Hardcoded temporally
+            try {
+                var movingToSqCenterPos = state.navgrid.getSquareCenterLocation(state.currentPathToFollow.get(currentPathLength - 1));
+                deviationLength = Vec3.sub(destinationSqCenterPos, movingToSqCenterPos).length();
+                System.out.println("------ deviationLength: " + deviationLength);
+            } catch (Exception e) {
+                // Not following any path, calculate it in the next condition
+            }
+
+            /**
+             * MODIFIED :
+             * deviationLength > 9 is hardcoded we will need to calculate the deviation based on the
+             * recalculated destination
+             */
+            // there is no path planned or is an ongoing path, but it goes to a different target
+            if (currentPathLength == 0 || deviationLength > 9) {
+                List<DPos3> path = state.pathfinder2D.findPath(state.navgrid, agentSq, destinationSq);
+
+                if (path == null) {
+                    // the pathfinder cannot find a path
+                    System.out.println("### NO path to " + destination);
+
+                    /**
+                     * MODIFIED:
+                     * The idea is to check the 3D adjacent positions to find a reachable square,
+                     * because the original destination aims to the center of an entity.
+                     */
+                    //[{-3,-3,-3}{-3,-3,-2}..{0,-1,0}{0,0,-1}{0,0,0},{0,0,1},{0,1,0}..{3,3,2}{3,3,3}]
+                    List<Vec3> recalculate_adjacent = new ArrayList();
+                    for (int i = 0; i < 4; i++) {
+                        for (int j = 0; j < 4; j++) {
+                            for (int k = 0; k < 4; k++) {
+                                recalculate_adjacent.add(new Vec3(i, j, k));
+                                recalculate_adjacent.add(new Vec3(i * -1, j * -1, k * -1));
+                            }
+                        }
+                    }
+                    System.out.println("Try to recalculate destination with adjacent list: " + Arrays.toString(recalculate_adjacent.toArray()));
+
+                    /**
+                     * MODIFIED:
+                     * Iterate over all adjacent 3D destinations trying to recalculate the path
+                     */
+                    for (Vec3 adjacentDestination : recalculate_adjacent) {
+                        Vec3 recalculatedDestination = Vec3.add(destination, adjacentDestination);
+
+                        agentSq = state.navgrid.gridProjectedLocation(state.wom.position);
+                        destinationSq = state.navgrid.gridProjectedLocation(recalculatedDestination);
+                        path = state.pathfinder2D.findPath(state.navgrid, agentSq, destinationSq);
+
+                        if (path != null) {
+                            System.out.println("!!! Path recalculated to " + recalculatedDestination);
+                            path = smoothenPath(path);
+                            System.out.println("### PATH: " + PrintInfos.showPath(state, path));
+                            return new Pair<>(path, false);
+                        } else {
+                            // the pathfinder cannot find a path. The tactic is then not enabled:
+                            System.out.println("### NO path to " + destination);
+                        }
+                    }
+
+                    // We tried all adjacent possibilities but sadly no path found
+                    return null;
+                }
+                path = smoothenPath(path);
+                System.out.println("### PATH: " + PrintInfos.showPath(state, path));
+                return new Pair<>(path, false);
+            } else {
+                // the currently followed path leads to the specified destination, and  furthermore we are not
+                // at the destination yet:
+                return new Pair<>(state.currentPathToFollow, false);
+            }
+        }).lift();
     }
 }
