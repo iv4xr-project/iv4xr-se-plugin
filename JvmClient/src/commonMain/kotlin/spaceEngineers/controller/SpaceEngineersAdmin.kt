@@ -26,5 +26,11 @@ interface CharacterAdmin {
      * @param orientationUp Complementary vector to the forward vector.
      */
     fun teleport(position: Vec3, orientationForward: Vec3? = null, orientationUp: Vec3? = null): CharacterObservation
+
+    /**
+     * @param blockId Id of the block.
+     * @param functionIndex Index of useObject. First one is 0 and so on.
+     * @param action Action flag, to get possible actions of the block, check [spaceEngineers.model.UseObject.primaryAction] and [spaceEngineers.model.UseObject.secondaryAction] values.
+     */
     fun use(blockId: BlockId, functionIndex: Int, action: Int)
 }
