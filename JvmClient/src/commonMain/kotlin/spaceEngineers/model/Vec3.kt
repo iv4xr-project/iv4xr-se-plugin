@@ -14,7 +14,7 @@ data class Vec3(
     override val y: Float = 0f,
     @SerialName("Z")
     override val z: Float = 0f,
-) : NumberVec<Float> {
+) : NumberVec3<Float> {
 
     constructor(
         x: Double = 0.0, y: Double = 0.0, z: Double = 0.0
@@ -68,10 +68,6 @@ data class Vec3(
         if (s == 0f) throw ArithmeticException()
         return this / s
     }
-
-
-    val size: Float
-        get() = distanceTo(ZERO)
 
     companion object {
         val UNIT_X = Vec3(1, 0, 0)
