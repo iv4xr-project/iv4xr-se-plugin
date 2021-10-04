@@ -22,7 +22,7 @@ class MoveTest : MockOrRealGameTest(loadScenario = false) {
             character.moveAndRotate(Vec3.FORWARD.normalizeAsWalk())
         }
         val newPosition = observer.observe().position
-        assertEquals(4.9258146f, (newPosition - position).size, 0.025f)
+        assertEquals(4.9258146f, (newPosition - position).length(), 0.025f)
     }
 
     @Test
@@ -32,7 +32,7 @@ class MoveTest : MockOrRealGameTest(loadScenario = false) {
             character.moveAndRotate(Vec3.FORWARD.normalizeAsRun())
         }
         val newPosition = observer.observe().position
-        assertEquals(9.698216f, (newPosition - position).size, 0.025f)
+        assertEquals(9.698216f, (newPosition - position).length(), 0.025f)
     }
 
     @Test
@@ -42,7 +42,7 @@ class MoveTest : MockOrRealGameTest(loadScenario = false) {
             character.moveAndRotate(Vec3.FORWARD.normalizeAsSprint())
         }
         val newPosition = observer.observe().position
-        assertEquals(16.238842f, (newPosition - position).size, 0.025f)
+        assertEquals(16.238842f, (newPosition - position).length(), 0.025f)
     }
 
 
@@ -53,7 +53,7 @@ class MoveTest : MockOrRealGameTest(loadScenario = false) {
             character.moveBackward(CharacterMovementType.WALK)
         }
         val newPosition = observer.observe().position
-        assertEquals(0.08351894f, (newPosition - position).size, 0.001f)
+        assertEquals(0.08351894f, (newPosition - position).length(), 0.001f)
     }
 
     @Test
@@ -64,7 +64,7 @@ class MoveTest : MockOrRealGameTest(loadScenario = false) {
             startPosition = startPosition
         )
         val newPosition = observer.observe().position
-        assertEquals(5f, (startPosition - newPosition).size, 0.05f)
+        assertEquals(5f, (startPosition - newPosition).length(), 0.05f)
     }
 
     @Test
@@ -75,7 +75,7 @@ class MoveTest : MockOrRealGameTest(loadScenario = false) {
             startPosition = startPosition
         )
         val newPosition = observer.observe().position
-        assertEquals(5f, (startPosition - newPosition).size, 0.05f)
+        assertEquals(5f, (startPosition - newPosition).length(), 0.05f)
     }
 
 }

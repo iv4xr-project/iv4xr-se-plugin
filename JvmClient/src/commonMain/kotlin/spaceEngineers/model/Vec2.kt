@@ -44,9 +44,6 @@ data class Vec2(
         return this / s
     }
 
-    val size: Float
-        get() = distanceTo(ZERO)
-
     companion object {
         val ROTATE_LEFT = Vec2(0f, -1f)
         val ROTATE_RIGHT = Vec2(0f, 1f)

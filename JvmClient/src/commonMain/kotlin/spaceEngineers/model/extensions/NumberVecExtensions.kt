@@ -1,7 +1,7 @@
 package spaceEngineers.model.extensions
 
 import spaceEngineers.model.CharacterMovementType
-import spaceEngineers.model.NumberVec
+import spaceEngineers.model.NumberVec3
 import spaceEngineers.model.Vec3
 
 
@@ -21,7 +21,7 @@ fun Vec3.normalizeAsSprint(): Vec3 {
     return normalizeAsMovement(CharacterMovementType.SPRINT)
 }
 
-fun NumberVec<Float>.crossProduct(b: NumberVec<Float>): Vec3 {
+fun NumberVec3<Float>.crossProduct(b: NumberVec3<Float>): Vec3 {
     val a = this
     return Vec3(
         a.y * b.z - a.z * b.y,
@@ -30,6 +30,6 @@ fun NumberVec<Float>.crossProduct(b: NumberVec<Float>): Vec3 {
     )
 }
 
-fun NumberVec<Float>.toArray(): FloatArray {
+fun NumberVec3<Float>.toArray(): FloatArray {
     return floatArrayOf(x, y, z)
 }
