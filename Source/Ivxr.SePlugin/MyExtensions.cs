@@ -46,6 +46,8 @@ namespace Iv4xr.SePlugin
         {
             return new PlainVec3I(vector.X, vector.Y, vector.Z);
         }
+
+        public static Vector3I ToVector3I(this PlainVec3I vec) => new Vector3I(vec.X, vec.Y, vec.Z);
         
         public static bool IsAdminOrCreative(this MySession session)
         {
