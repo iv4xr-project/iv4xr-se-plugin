@@ -12,7 +12,7 @@ import spaceEngineers.transport.closeIfCloseable
 import java.io.File
 import java.lang.Thread.sleep
 
-fun Vec3.toIv4xrVec3(): eu.iv4xr.framework.spatial.Vec3 {
+fun Vec3F.toIv4xrVec3(): eu.iv4xr.framework.spatial.Vec3 {
     return eu.iv4xr.framework.spatial.Vec3(x, y, z)
 }
 

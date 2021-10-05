@@ -3,7 +3,7 @@ package spaceEngineers.controller
 import spaceEngineers.model.BlockId
 import spaceEngineers.model.CharacterObservation
 import spaceEngineers.model.DefinitionId
-import spaceEngineers.model.Vec3
+import spaceEngineers.model.Vec3F
 
 interface SpaceEngineersAdmin {
     val blocks: BlocksAdmin
@@ -12,7 +12,7 @@ interface SpaceEngineersAdmin {
 }
 
 interface BlocksAdmin {
-    fun placeAt(blockDefinitionId: DefinitionId, position: Vec3, orientationForward: Vec3, orientationUp: Vec3): String
+    fun placeAt(blockDefinitionId: DefinitionId, position: Vec3F, orientationForward: Vec3F, orientationUp: Vec3F): String
     fun remove(blockId: BlockId)
     fun setIntegrity(blockId: BlockId, integrity: Float)
 }
@@ -25,7 +25,7 @@ interface CharacterAdmin {
      *      They should be normalised vectors and perpendicular.
      * @param orientationUp Complementary vector to the forward vector.
      */
-    fun teleport(position: Vec3, orientationForward: Vec3? = null, orientationUp: Vec3? = null): CharacterObservation
+    fun teleport(position: Vec3F, orientationForward: Vec3F? = null, orientationUp: Vec3F? = null): CharacterObservation
 
     /**
      * @param blockId Id of the block.

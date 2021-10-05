@@ -37,11 +37,11 @@ open class JsonRpcSpaceEngineers(
             )
         }
 
-        override fun moveAndRotate(movement: Vec3, rotation3: Vec2, roll: Float): CharacterObservation {
+        override fun moveAndRotate(movement: Vec3F, rotation3: Vec2F, roll: Float): CharacterObservation {
             return processParameters<CharacterObservation>(
                 parameters = listOf(
-                    TypedParameter("movement", movement, Vec3::class),
-                    TypedParameter("rotation3", rotation3, Vec2::class),
+                    TypedParameter("movement", movement, Vec3F::class),
+                    TypedParameter("rotation3", rotation3, Vec2F::class),
                     TypedParameter("roll", roll, Float::class),
                 ),
                 method = ::moveAndRotate,
@@ -116,13 +116,13 @@ open class JsonRpcSpaceEngineers(
     }
     override val admin: SpaceEngineersAdmin = object : SpaceEngineersAdmin {
         override val blocks: BlocksAdmin = object : BlocksAdmin {
-            override fun placeAt(blockDefinitionId: DefinitionId, position: Vec3, orientationForward: Vec3, orientationUp: Vec3): String {
+            override fun placeAt(blockDefinitionId: DefinitionId, position: Vec3F, orientationForward: Vec3F, orientationUp: Vec3F): String {
                 return processParameters<String>(
                     parameters = listOf(
                         TypedParameter("blockDefinitionId", blockDefinitionId, DefinitionId::class),
-                        TypedParameter("position", position, Vec3::class),
-                        TypedParameter("orientationForward", orientationForward, Vec3::class),
-                        TypedParameter("orientationUp", orientationUp, Vec3::class),
+                        TypedParameter("position", position, Vec3F::class),
+                        TypedParameter("orientationForward", orientationForward, Vec3F::class),
+                        TypedParameter("orientationUp", orientationUp, Vec3F::class),
                     ),
                     method = ::placeAt,
                     methodName = "${adminPrefix}${blocksPrefix}PlaceAt"
@@ -153,15 +153,15 @@ open class JsonRpcSpaceEngineers(
 
         override val character: CharacterAdmin = object : CharacterAdmin {
             override fun teleport(
-                position: Vec3,
-                orientationForward: Vec3?,
-                orientationUp: Vec3?
+                position: Vec3F,
+                orientationForward: Vec3F?,
+                orientationUp: Vec3F?
             ): CharacterObservation {
                 return processParameters<CharacterObservation>(
                     parameters = listOf(
-                        TypedParameter("position", position, Vec3::class),
-                        TypedParameter("orientationForward", orientationForward, Vec3::class),
-                        TypedParameter("orientationUp", orientationUp, Vec3::class),
+                        TypedParameter("position", position, Vec3F::class),
+                        TypedParameter("orientationForward", orientationForward, Vec3F::class),
+                        TypedParameter("orientationUp", orientationUp, Vec3F::class),
                     ),
                     method = ::teleport,
                     methodName = "${adminPrefix}${characterPrefix}Teleport"

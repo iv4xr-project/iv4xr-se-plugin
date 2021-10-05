@@ -4,7 +4,7 @@ import spaceEngineers.controller.extensions.blockingMoveBackwardsByDistance
 import spaceEngineers.controller.extensions.blockingMoveForwardByDistance
 import spaceEngineers.controller.extensions.moveBackward
 import spaceEngineers.model.CharacterMovementType
-import spaceEngineers.model.Vec3
+import spaceEngineers.model.Vec3F
 import spaceEngineers.model.extensions.normalizeAsRun
 import spaceEngineers.model.extensions.normalizeAsSprint
 import spaceEngineers.model.extensions.normalizeAsWalk
@@ -19,7 +19,7 @@ class MoveTest : MockOrRealGameTest(loadScenario = false) {
     fun singleWalkForward100Times() = testContext {
         val position = observer.observe().position
         repeat(100) {
-            character.moveAndRotate(Vec3.FORWARD.normalizeAsWalk())
+            character.moveAndRotate(Vec3F.FORWARD.normalizeAsWalk())
         }
         val newPosition = observer.observe().position
         assertEquals(4.9258146f, (newPosition - position).length(), 0.025f)
@@ -29,7 +29,7 @@ class MoveTest : MockOrRealGameTest(loadScenario = false) {
     fun singleRunForward100Times() = testContext {
         val position = observer.observe().position
         repeat(100) {
-            character.moveAndRotate(Vec3.FORWARD.normalizeAsRun())
+            character.moveAndRotate(Vec3F.FORWARD.normalizeAsRun())
         }
         val newPosition = observer.observe().position
         assertEquals(9.698216f, (newPosition - position).length(), 0.025f)
@@ -39,7 +39,7 @@ class MoveTest : MockOrRealGameTest(loadScenario = false) {
     fun singleSprintForward100Times() = testContext {
         val position = observer.observe().position
         repeat(100) {
-            character.moveAndRotate(Vec3.FORWARD.normalizeAsSprint())
+            character.moveAndRotate(Vec3F.FORWARD.normalizeAsSprint())
         }
         val newPosition = observer.observe().position
         assertEquals(16.238842f, (newPosition - position).length(), 0.025f)

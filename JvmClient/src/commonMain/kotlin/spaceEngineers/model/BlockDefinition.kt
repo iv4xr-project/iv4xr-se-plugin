@@ -18,7 +18,7 @@ data class BlockDefinition(
      * @see cubeSize to determine small/large
      */
     @SerialName("Size")
-    val size: Vec3,
+    val size: Vec3F,
     @SerialName("CubeSize")
     val cubeSize: CubeSize,
     @SerialName("MountPoints")

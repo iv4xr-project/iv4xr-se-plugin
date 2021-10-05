@@ -2,7 +2,7 @@ package spaceEngineers.game.mockable
 
 import spaceEngineers.model.BlockDefinition
 import spaceEngineers.model.CubeSize
-import spaceEngineers.model.Vec3
+import spaceEngineers.model.Vec3F
 import spaceEngineers.model.extensions.isSidePoint
 import testhelp.MockOrRealGameTest
 import kotlin.test.Test
@@ -21,7 +21,7 @@ fun Iterable<BlockDefinition>.filterForBig(): List<BlockDefinition> {
 val stringFilters = setOf("Symbol", "Neon", "Window")
 fun BlockDefinition.isGoodForScreenshots(): Boolean {
     return enabled && cubeSize == CubeSize.Large &&
-            size == Vec3.ONE &&
+            size == Vec3F.ONE &&
             buildProgressModels.isNotEmpty() &&
             stringFilters.none { definitionId.type.contains(it) }
 }
@@ -170,26 +170,26 @@ class BlockDefinitionsTest : MockOrRealGameTest(inMockResourcesDirectory("BlockD
             .map { it.value.first() to it.value.size }.toMap()
         assertEquals(
             sizeToCount, mapOf(
-                Vec3.ONE to 272,
-                Vec3(2, 1, 2) to 4,
-                Vec3(1, 6, 2) to 1,
-                Vec3(1, 2, 1) to 40,
-                Vec3(1, 3, 1) to 6,
-                Vec3(2, 2, 3) to 5,
-                Vec3(3, 3, 3) to 7,
-                Vec3(4, 2, 1) to 1,
-                Vec3(1, 4, 1) to 2,
-                Vec3(5, 3, 5) to 5,
-                Vec3(5, 2, 1) to 1,
-                Vec3(2, 4, 2) to 1,
-                Vec3(3, 2, 3) to 5,
-                Vec3(3, 1, 3) to 5,
-                Vec3(5, 2, 5) to 2,
-                Vec3(5, 5, 1) to 1,
-                Vec3(5, 3, 1) to 1,
-                Vec3(3, 2, 4) to 2,
-                Vec3(3, 3, 5) to 2,
-                Vec3(1, 2, 3) to 3
+                Vec3F.ONE to 272,
+                Vec3F(2, 1, 2) to 4,
+                Vec3F(1, 6, 2) to 1,
+                Vec3F(1, 2, 1) to 40,
+                Vec3F(1, 3, 1) to 6,
+                Vec3F(2, 2, 3) to 5,
+                Vec3F(3, 3, 3) to 7,
+                Vec3F(4, 2, 1) to 1,
+                Vec3F(1, 4, 1) to 2,
+                Vec3F(5, 3, 5) to 5,
+                Vec3F(5, 2, 1) to 1,
+                Vec3F(2, 4, 2) to 1,
+                Vec3F(3, 2, 3) to 5,
+                Vec3F(3, 1, 3) to 5,
+                Vec3F(5, 2, 5) to 2,
+                Vec3F(5, 5, 1) to 1,
+                Vec3F(5, 3, 1) to 1,
+                Vec3F(3, 2, 4) to 2,
+                Vec3F(3, 3, 5) to 2,
+                Vec3F(1, 2, 3) to 3
             )
         )
     }

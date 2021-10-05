@@ -20,23 +20,23 @@ inline class RotationMatrix(
         return values[x + y * 3]
     }
 
-    val forward: Vec3
-        get() = -Vec3(get(2, 0), get(2, 1), get(2, 2))
+    val forward: Vec3F
+        get() = -Vec3F(get(2, 0), get(2, 1), get(2, 2))
 
-    val backward: Vec3
+    val backward: Vec3F
         get() = -forward
 
-    val up: Vec3
-        get() = Vec3(get(1, 0), get(1, 1), get(1, 2))
+    val up: Vec3F
+        get() = Vec3F(get(1, 0), get(1, 1), get(1, 2))
 
-    val down: Vec3
+    val down: Vec3F
         get() = -up
 
-    val left: Vec3
+    val left: Vec3F
         get() = -right
 
-    val right: Vec3
-        get() = Vec3(get(0, 0), get(0, 1), get(0, 2))
+    val right: Vec3F
+        get() = Vec3F(get(0, 0), get(0, 1), get(0, 2))
 
     override fun toString(): String {
         return values.toList().chunked(3).joinToString("\n") { row ->
@@ -49,7 +49,7 @@ inline class RotationMatrix(
             return fromForwardAndUp(pose.orientationForward, pose.orientationUp)
         }
 
-        fun fromForwardAndUp(forward: Vec3, up: Vec3): RotationMatrix {
+        fun fromForwardAndUp(forward: Vec3F, up: Vec3F): RotationMatrix {
             check(forward != up) {
                 "orientations cannot be same"
             }
@@ -59,7 +59,7 @@ inline class RotationMatrix(
             return fromColumns(x, y, -z)
         }
 
-        fun fromColumns(col1: Vec3, col2: Vec3, col3: Vec3): RotationMatrix {
+        fun fromColumns(col1: Vec3F, col2: Vec3F, col3: Vec3F): RotationMatrix {
             return RotationMatrix(
                 floatArrayOf(
                     col1.x, col2.x, col3.x,
@@ -69,7 +69,7 @@ inline class RotationMatrix(
             )
         }
 
-        fun fromRows(row1: Vec3, row2: Vec3, row3: Vec3): RotationMatrix {
+        fun fromRows(row1: Vec3F, row2: Vec3F, row3: Vec3F): RotationMatrix {
             return RotationMatrix(
                 row1.toArray() + row2.toArray() + row3.toArray()
             )
