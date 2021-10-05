@@ -6,11 +6,11 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class MountPoint(
     @SerialName("Normal")
-    val normal: Vec3,
+    val normal: Vec3F,
     @SerialName("Start")
-    val start: Vec3,
+    val start: Vec3F,
     @SerialName("End")
-    val end: Vec3,
+    val end: Vec3F,
     @SerialName("Enabled")
     val enabled: Boolean = true,
     @SerialName("Default")

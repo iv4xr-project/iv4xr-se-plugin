@@ -8,15 +8,15 @@ data class CharacterObservation(
     @SerialName("Id")
     override val id: String,
     @SerialName("Position")
-    override val position: Vec3,
+    override val position: Vec3F,
     @SerialName("OrientationForward")
-    override val orientationForward: Vec3,
+    override val orientationForward: Vec3F,
     @SerialName("OrientationUp")
-    override val orientationUp: Vec3,
+    override val orientationUp: Vec3F,
     @SerialName("Velocity")
-    val velocity: Vec3,
+    val velocity: Vec3F,
     @SerialName("Extent")
-    val extent: Vec3,
+    val extent: Vec3F,
     @SerialName("JetpackRunning")
     val jetpackRunning: Boolean,
     @SerialName("HelmetEnabled")

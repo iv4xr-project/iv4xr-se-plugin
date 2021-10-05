@@ -7,7 +7,7 @@ import spaceEngineers.controller.SpaceEngineers
 import spaceEngineers.model.BlockDefinition
 import spaceEngineers.model.BuildProgressModel
 import spaceEngineers.model.CubeSize
-import spaceEngineers.model.Vec3
+import spaceEngineers.model.Vec3F
 import spaceEngineers.model.extensions.allBlocks
 import spaceEngineers.model.extensions.centerPosition
 import spaceEngineers.screenshots.NamedOrientations.*
@@ -35,7 +35,7 @@ class ScreenshotTaker(
     val ratioBelowThreshold: Float = 0.01f,
     val outputDirectory: File,
     val gson: Gson = SocketReaderWriter.SPACE_ENG_GSON,
-    val blockPosition: Vec3 = Vec3(0, 1000, 0)
+    val blockPosition: Vec3F = Vec3F(0, 1000, 0)
 ) {
     fun run() {
         se.definitions.blockDefinitions()
@@ -63,8 +63,8 @@ class ScreenshotTaker(
         return filter { it.cubeSize == CubeSize.Large && it.definitionId.type.isNotBlank() && it.enabled && it.public && it.mountPoints.isNotEmpty() }
     }
 
-    private fun screenshotDistance(blockDefinition: BlockDefinition, orientationForward: Vec3): Float {
-        return if (blockDefinition.size == Vec3.ONE) {
+    private fun screenshotDistance(blockDefinition: BlockDefinition, orientationForward: Vec3F): Float {
+        return if (blockDefinition.size == Vec3F.ONE) {
             5f
         } else {
             10f
@@ -85,7 +85,7 @@ class ScreenshotTaker(
     }
 
     private fun takeScreenshots(blockDefinition: BlockDefinition): Screenshots {
-        se.admin.character.teleport(position = blockPosition + Vec3(x = 10))
+        se.admin.character.teleport(position = blockPosition + Vec3F(x = 10))
         return Screenshots(
             blockType = blockDefinition.definitionId.type,
             screenshots = orientations.flatMap { namedOrientation ->
@@ -109,14 +109,14 @@ class ScreenshotTaker(
         )
         val block = se.observer.observeNewBlocks().allBlocks.last()
         se.admin.character.teleport(
-            block.centerPosition + Vec3(
+            block.centerPosition + Vec3F(
                 y = -DISTANCE_CENTER_CAMERA,
                 z = screenshotDistance(
                     blockDefinition,
                     namedOrientation.orientationForward
                 )
             ),
-            Vec3.FORWARD, Vec3.UP
+            Vec3F.FORWARD, Vec3F.UP
         )
         return (listOf(BuildProgressModel(1f)) + blockDefinition.buildProgressModels.reversed()).map { seBuildProgressModel ->
             val integrity = block.maxIntegrity * (seBuildProgressModel.buildRatioUpperBound - ratioBelowThreshold)

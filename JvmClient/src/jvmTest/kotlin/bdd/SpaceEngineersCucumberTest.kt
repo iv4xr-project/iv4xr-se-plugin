@@ -12,9 +12,8 @@ import spaceEngineers.controller.*
 import spaceEngineers.controller.extensions.*
 import spaceEngineers.model.Block
 import spaceEngineers.model.ToolbarLocation
-import spaceEngineers.model.Vec3
+import spaceEngineers.model.Vec3F
 import spaceEngineers.model.extensions.allBlocks
-import spaceEngineers.transport.GsonReaderWriter
 import spaceEngineers.transport.SocketReaderWriter
 import spaceEngineers.transport.closeIfCloseable
 import testhelp.TEST_AGENT
@@ -102,7 +101,7 @@ class SpaceEngineersCucumberTest {
 
     @Then("Character is at \\({double}, ?{double}, ?{double}).")
     fun i_see_character_at_x_y_z(x: Double, y: Double, z: Double) {
-        val position = Vec3(x, y, z)
+        val position = Vec3F(x, y, z)
         context.observationHistory.last().let { observation ->
             assertVecEquals(position, observation.character.position, diff = 0.1f)
         }
@@ -110,7 +109,7 @@ class SpaceEngineersCucumberTest {
 
     @Then("Character forward orientation is \\({double}, {double}, {double}).")
     fun character_is_facing(x: Double, y: Double, z: Double) {
-        val position = Vec3(x, y, z)
+        val position = Vec3F(x, y, z)
         context.observationHistory.last().let { observation ->
             assertVecEquals(position, observation.character.orientationForward, diff = 0.1f)
         }

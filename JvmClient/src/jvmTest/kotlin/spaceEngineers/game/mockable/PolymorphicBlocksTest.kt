@@ -29,9 +29,9 @@ class PolymorphicBlocksTest : MockOrRealGameTest() {
     private inline fun <reified T> SpaceEngineers.buildAndCheckType(blockType: String) {
         val z = 1000
         val definitionId = DefinitionId.cubeBlock(blockType)
-        admin.character.teleport(Vec3(0, 0, z + 15), Vec3.FORWARD, Vec3.UP)
+        admin.character.teleport(Vec3F(0, 0, z + 15), Vec3F.FORWARD, Vec3F.UP)
         observer.observeNewBlocks()
-        admin.blocks.placeAt(definitionId, Vec3(0, 0, z + 0), Vec3.FORWARD, Vec3.UP)
+        admin.blocks.placeAt(definitionId, Vec3F(0, 0, z + 0), Vec3F.FORWARD, Vec3F.UP)
         val block = observer.observeNewBlocks().allBlocks.first()
         assertEquals(block.definitionId.type, blockType)
         assertTrue(block is T)

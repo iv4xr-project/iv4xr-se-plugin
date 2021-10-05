@@ -1,17 +1,17 @@
 package spaceEngineers.screenshots
 
-import spaceEngineers.model.Vec3
-import spaceEngineers.model.Vec3.Companion.FORWARD
-import spaceEngineers.model.Vec3.Companion.UP
-import spaceEngineers.model.Vec3.Companion.LEFT
-import spaceEngineers.model.Vec3.Companion.RIGHT
-import spaceEngineers.model.Vec3.Companion.BACKWARD
-import spaceEngineers.model.Vec3.Companion.DOWN
+import spaceEngineers.model.Vec3F
+import spaceEngineers.model.Vec3F.Companion.FORWARD
+import spaceEngineers.model.Vec3F.Companion.UP
+import spaceEngineers.model.Vec3F.Companion.LEFT
+import spaceEngineers.model.Vec3F.Companion.RIGHT
+import spaceEngineers.model.Vec3F.Companion.BACKWARD
+import spaceEngineers.model.Vec3F.Companion.DOWN
 
 
 enum class NamedOrientations(
-    val orientationForward: Vec3,
-    val orientationUp: Vec3,
+    val orientationForward: Vec3F,
+    val orientationUp: Vec3F,
 ) {
     FORWARD_UP(FORWARD, UP),
     BACKWARD_UP(BACKWARD, UP),

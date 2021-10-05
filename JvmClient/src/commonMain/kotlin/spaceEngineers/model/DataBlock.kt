@@ -8,11 +8,11 @@ data class DataBlock(
     @SerialName("Id")
     override val id: BlockId,
     @SerialName("Position")
-    override val position: Vec3,
+    override val position: Vec3F,
     @SerialName("OrientationForward")
-    override val orientationForward: Vec3,
+    override val orientationForward: Vec3F,
     @SerialName("OrientationUp")
-    override val orientationUp: Vec3,
+    override val orientationUp: Vec3F,
     @SerialName("DefinitionId")
     override val definitionId: DefinitionId,
     @SerialName("MaxIntegrity")
@@ -22,11 +22,11 @@ data class DataBlock(
     @SerialName("Integrity")
     override val integrity: Float = 0f,
     @SerialName("MinPosition")
-    override val minPosition: Vec3,
+    override val minPosition: Vec3F,
     @SerialName("MaxPosition")
-    override val maxPosition: Vec3,
+    override val maxPosition: Vec3F,
     @SerialName("Size")
-    override val size: Vec3,
+    override val size: Vec3F,
     @SerialName("UseObjects")
     override val useObjects: List<UseObject> = emptyList(),
     @SerialName("Functional")

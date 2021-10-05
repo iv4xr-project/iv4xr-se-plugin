@@ -25,13 +25,13 @@ interface Character {
     /**
      * @param movement Unit vector representing direction of a movement.
      *      The direction is relative to the character itself, not coordinates of the system.
-     * @see Vec3.FORWARD and other constants for examples.
+     * @see Vec3F.FORWARD and other constants for examples.
      * @param rotation3 Unit vector representing rotation of the camera. It's relative to the character itself.
      *      If the character stands on a platform, this moves the camera only.
      *      If the character uses jetpack, this moves the whole character orientation.
-     * @see Vec2.ROTATE_UP and other constants for examples.
+     * @see Vec2F.ROTATE_UP and other constants for examples.
      */
-    fun moveAndRotate(movement: Vec3 = Vec3.ZERO, rotation3: Vec2 = Vec2.ZERO, roll: Float = 0f): CharacterObservation
+    fun moveAndRotate(movement: Vec3F = Vec3F.ZERO, rotation3: Vec2F = Vec2F.ZERO, roll: Float = 0f): CharacterObservation
     fun turnOnJetpack(): CharacterObservation
     fun turnOffJetpack(): CharacterObservation
     fun switchHelmet(): CharacterObservation

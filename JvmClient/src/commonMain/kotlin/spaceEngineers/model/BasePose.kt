@@ -6,9 +6,9 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class BasePose(
     @SerialName("Position")
-    override val position: Vec3,
+    override val position: Vec3F,
     @SerialName("OrientationForward")
-    override val orientationForward: Vec3,
+    override val orientationForward: Vec3F,
     @SerialName("OrientationUp")
-    override val orientationUp: Vec3
+    override val orientationUp: Vec3F
 ) : Pose
