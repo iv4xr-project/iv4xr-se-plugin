@@ -11,17 +11,23 @@ namespace Ivxr.SeGameLib.Tests
 {
     public class NavGraphTests
     {
-        private CubeGrid CreateTestGrid()
+        private static IEnumerable<PlainVec3I> TrivialGridGenerator()
+        {
+            for (var x = 0; x < 3; x++)
+            {
+                yield return new PlainVec3I(x, 0, 0);
+            }
+        }
+        
+        private static CubeGrid CreateTestGrid(IEnumerable<PlainVec3I> gridGenerator)
         {
             var grid = new CubeGrid()
             {
                 Blocks = new List<Block>()
             };
 
-            for (var x = 0; x < 3; x++)
+            foreach (var gridPosition in gridGenerator)
             {
-                var gridPosition = new PlainVec3I(x, 0, 0);
-                
                 var block = new Block
                 {
                     GridPosition = gridPosition,
@@ -37,13 +43,19 @@ namespace Ivxr.SeGameLib.Tests
         [Fact]
         public void CreatesGraph()
         {
+            var graph = CreateGraph(TrivialGridGenerator());
+
+            Assert.Equal(3, graph.Nodes.Count);
+        }
+
+        private static NavGraph CreateGraph(IEnumerable<PlainVec3I> gridGenerator)
+        {
             // We will not call methods that use LowLevelObserver
             var graphEditor = new NavGraphEditor(new LowLevelObserver(new GameSession()));
 
-            var grid = CreateTestGrid();
-            var graph = graphEditor.CreateGraph(grid, Vector3D.Zero, Vector3I.Up);
+            var grid = CreateTestGrid(gridGenerator);
             
-            Assert.Equal(3, graph.Nodes.Count);
+            return graphEditor.CreateGraph(grid, Vector3D.Zero, Vector3I.Up);
         }
     }
 }
