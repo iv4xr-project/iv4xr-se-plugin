@@ -12,7 +12,62 @@ Current API documentation is [here](https://iv4xr-project.github.io/iv4xr-se-plu
 
 The project is written in [Kotlin](https://kotlinlang.org/), a JVM language by JetBrains which **is fully interoperable with Java**, i.e., it can be used seamlessly from Java while allowing us to write [less code](https://www.ideamotive.co/blog/a-complete-kotlin-guide-for-java-developers) with the same functionality.
 
-# Setup
+# Setup without sources
+
+When using maven or gradle build tool, you can simply add our library as a dependency from jitpack maven repository.
+
+The version `main-SNAPSHOT` always points to the newest main branch, which is our stable development branch.
+If you want to target stable release, change it to a specific version.
+Versions 0.3.1 and lower do not work as jitpack was not configured at the time.
+
+Check official releases here:
+https://github.com/iv4xr-project/iv4xr-se-plugin/releases/
+
+Check other possible version values (can target specific commit, branch, etc.) at jitpack here:
+https://jitpack.io/#iv4xr-project/iv4xr-se-plugin/
+
+## Maven
+
+Add jitpack repository to your pom.xml:
+
+```
+<repositories>
+    <repository>
+        <id>jitpack.io</id>
+        <url>https://jitpack.io</url>
+    </repository>
+</repositories>
+```
+
+Add the dependency:
+```
+<dependency>
+    <groupId>com.github.iv4xr-project</groupId>
+    <artifactId>iv4xr-se-plugin</artifactId>
+    <version>main-SNAPSHOT</version>
+</dependency>
+```
+
+## Gradle
+
+Add jitpack repository to build.gradle:
+```
+allprojects {
+    repositories {
+        ...
+        maven { url 'https://jitpack.io' }
+    }
+}
+```
+
+Add the dependency:
+```
+dependencies {
+  implementation 'com.github.iv4xr-project:iv4xr-se-plugin:main-SNAPSHOT'
+}
+```
+
+# Manual setup from sources
 
 ## How to build
 
