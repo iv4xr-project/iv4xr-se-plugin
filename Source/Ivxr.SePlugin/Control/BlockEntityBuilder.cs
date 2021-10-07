@@ -58,6 +58,8 @@ namespace Iv4xr.SePlugin.Control
             block.Functional = sourceBlock.FatBlock?.IsFunctional ?? false;
             block.Working = sourceBlock.FatBlock?.IsWorking ?? false;
             block.UseObjects = GetUseObjects(sourceBlock);
+
+            block.GridPosition = sourceBlock.Position.ToPlain();
         }
 
         private void AddCustomFields(MySlimBlock sourceBlock, Block block)

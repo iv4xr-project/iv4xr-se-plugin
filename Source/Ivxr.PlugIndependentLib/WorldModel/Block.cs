@@ -17,5 +17,7 @@ namespace Iv4xr.PluginLib.WorldModel
         public bool Functional;
         public bool Working;
         public List<UseObject> UseObjects;
+
+        public PlainVec3I GridPosition;
     }
 }
