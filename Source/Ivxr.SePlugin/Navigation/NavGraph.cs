@@ -106,21 +106,27 @@ namespace Iv4xr.SePlugin.Navigation
                 map[currentPosition].Node = fatNode;
                 navGraph.Nodes.Add(fatNode);
 
-                foreach (var step in steps.EnumerateSides())  // TODO enumerate side neighbors
+                foreach (var step in steps.EnumerateSides())
                 {
-                    if (!map.ContainsKey(currentPosition + step))
+                    var peakedGridPosition = currentPosition + step;
+                    if (!map.ContainsKey(peakedGridPosition))
                         continue;
                     
-                    var peakedLocation = map[currentPosition + step];
+                    var peakedLocation = map[peakedGridPosition];
                     if (peakedLocation.Visited)
                     {
                         if (peakedLocation.Node != null)
+                        {
+                            // Add both directions.
                             fatNode.Neighbours.Add(peakedLocation.Node);
+                            peakedLocation.Node.Neighbours.Add(fatNode);
+                        }
                     }
                     else
                     {
                         // TODO: check for obstacles even before enqueueing the block?
-                        cubeQueue.Enqueue(peakedLocation.Block);
+                        if (!cubeQueue.Contains(peakedLocation.Block))  // Note: this can be optimized
+                            cubeQueue.Enqueue(peakedLocation.Block);
                     }
                 }
             }

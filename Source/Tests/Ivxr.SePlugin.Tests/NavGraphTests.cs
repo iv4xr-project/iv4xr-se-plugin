@@ -1,5 +1,6 @@
 ﻿
 using System.Collections.Generic;
+using System.Linq;
 using Iv4xr.PluginLib.WorldModel;
 using Iv4xr.SePlugin;
 using Iv4xr.SePlugin.Control;
@@ -39,14 +40,6 @@ namespace Ivxr.SeGameLib.Tests
 
             return grid;
         }
-        
-        [Fact]
-        public void CreatesGraph()
-        {
-            var graph = CreateGraph(TrivialGridGenerator());
-
-            Assert.Equal(3, graph.Nodes.Count);
-        }
 
         private static NavGraph CreateGraph(IEnumerable<PlainVec3I> gridGenerator)
         {
@@ -56,6 +49,45 @@ namespace Ivxr.SeGameLib.Tests
             var grid = CreateTestGrid(gridGenerator);
             
             return graphEditor.CreateGraph(grid, Vector3D.Zero, Vector3I.Up);
+        }
+        
+        [Fact]
+        public void CreatesTrivialGraph()
+        {
+            var graph = CreateGraph(TrivialGridGenerator());
+
+            Assert.Equal(3, graph.Nodes.Count);
+        }
+
+        [Theory]
+        [InlineData(2, 2)]
+        [InlineData(1, 5)]
+        [InlineData(3, 4)]
+        [InlineData(10, 17)]
+        public void CreatesRectangularGraph(int width, int length)
+        {
+            var graph = CreateGraph(GenGridPositions());
+            
+            Assert.Equal(width * length, graph.Nodes.Count);
+
+            if (width >= 3 && length >= 3)
+            {
+                var maxEdges = graph.Nodes.Select(n => n.Neighbours.Count).Max();
+                Assert.Equal(4, maxEdges);
+            }
+
+            if (width >= 2 && length >= 2)
+            {
+                var minEdges = graph.Nodes.Select(n => n.Neighbours.Count).Min();
+                Assert.Equal(2, minEdges);
+            }
+
+            IEnumerable<PlainVec3I> GenGridPositions()
+            {
+                for (var x = 1; x <= width; x++)
+                    for (var z = 1; z <= length; z++)
+                        yield return new PlainVec3I(x, 0, z);
+            }
         }
     }
 }
