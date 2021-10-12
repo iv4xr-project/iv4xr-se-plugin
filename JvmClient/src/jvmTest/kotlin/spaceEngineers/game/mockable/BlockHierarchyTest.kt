@@ -5,7 +5,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 
-class BlockHierarchyTest : MockOrRealGameTest(inMockResourcesDirectory("BlockHierarchyTest.txt")) {
+class BlockHierarchyTest : MockOrRealGameTest(inMockResourcesDirectory("BlockHierarchyTest.txt"), forceRealGame = true) {
 
     @Test
     fun size() = testContext {

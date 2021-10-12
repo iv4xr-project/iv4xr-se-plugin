@@ -20,8 +20,7 @@ namespace Iv4xr.SePlugin.Control
                     .GetAllDefinitions()
                     .First(definition =>
                     {
-                        var d = EntityBuilder.GetDefinitionId(definition);
-                        return d.Type == blockDefinitionId.Type;
+                        return definition.ToDefinitionId().Type == blockDefinitionId.Type;
                     });
 
             var obj = (MyObjectBuilder_CubeBlock)MyObjectBuilderSerializer.CreateNewObject(definitionBase.Id);

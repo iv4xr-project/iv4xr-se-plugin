@@ -6,7 +6,7 @@ namespace Iv4xr.PluginLib.WorldModel
     {
         public DefinitionId DefinitionId;
         public List<BuildProgressModel> BuildProgressModels;
-        //public string Model;
+        public string Type;
         public string CubeSize;
         public PlainVec3I Size;
         public List<MountPoint> MountPoints;

@@ -115,51 +115,5 @@ namespace Iv4xr.SePlugin.Control
             return m_blockEntityBuilder.CreateAndFill(sourceBlock);
         }
 
-        public static BlockDefinition GetBuildSeBlockDefinition(MyCubeBlockDefinition blockDefinition)
-        {
-            return new BlockDefinition()
-            {
-                DefinitionId = GetDefinitionId(blockDefinition),
-                CubeSize = blockDefinition.CubeSize.ToString(),
-                BuildProgressModels = blockDefinition.BuildProgressModels.Select(GetBuildProgressModel).ToList(),
-                Size = blockDefinition.Size.ToPlain(),
-                Public = blockDefinition.Public,
-                AvailableInSurvival = blockDefinition.AvailableInSurvival,
-                Enabled = blockDefinition.Enabled,
-                MountPoints = blockDefinition.MountPoints.Select(mp => new MountPoint()
-                {
-                    End = mp.End.ToPlainF(),
-                    Start = mp.Start.ToPlainF(),
-                    Normal = mp.Normal.ToPlain(),
-                    Default = mp.Default,
-                    Enabled = mp.Enabled,
-                    ExclusionMask = mp.ExclusionMask,
-                    PropertiesMask = mp.PropertiesMask,
-                    PressurizedWhenOpen = mp.PressurizedWhenOpen
-                }).ToList()
-            };
-        }
-
-        private static BuildProgressModel GetBuildProgressModel(MyCubeBlockDefinition.BuildProgressModel bpm)
-        {
-            return new BuildProgressModel()
-            {
-                BuildRatioUpperBound = bpm.BuildRatioUpperBound
-            };
-        }
-        
-        public static DefinitionId GetDefinitionId(MyDefinitionBase myDefinitionBase)
-        {
-            return new DefinitionId()
-            {
-                Id = myDefinitionBase.Id.TypeId.ToString(),
-                Type = myDefinitionBase.Id.SubtypeId.String,
-            };
-        }
-        
-        public static MyDefinitionId GetMyDefinitionId(DefinitionId definitionId)
-        {
-            return MyDefinitionId.Parse(definitionId.ToString());
-        }
     }
 }

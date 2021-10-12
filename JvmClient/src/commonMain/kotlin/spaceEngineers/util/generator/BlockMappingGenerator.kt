@@ -48,35 +48,10 @@ import kotlinx.serialization.Serializable
 
 val regex = "override val ([a-zA-Z]+):".toRegex()
 
-val typeMapping = mapOf(
-    "Float" to "float",
-    "Boolean" to "bool",
-    "Double" to "double",
-)
-
-fun mapToCsType(type: String): String {
-    return typeMapping[type] ?: error("No cs mapping found for $type")
-}
-
 val commonFieldNames = regex.findAll(commonFields).map {
     it.groupValues[1]
 }.toList()
 
-fun String.interfaceName(): String {
-    return this
-}
-
-fun String.dataclassName(): String {
-    return "Data$this"
-}
-
-fun String.camelCase(): String {
-    return this[0].lowercase() + substring(1)
-}
-
-fun String.removeBuilderPrefix(): String {
-    return removePrefix("MyObjectBuilder_")
-}
 
 val filteredParents = setOf("MyObjectBuilder_CubeBlock", "MyObjectBuilder_Base", "Object")
 

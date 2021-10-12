@@ -4,9 +4,7 @@ using System.Linq;
 using Iv4xr.PluginLib.WorldModel;
 using Sandbox.Game.Entities;
 using Sandbox.Game.Entities.Cube;
-using VRage.Game;
 using VRage.Game.Entity.UseObject;
-using VRage.Game.ModAPI;
 
 namespace Iv4xr.SePlugin.Control
 {
@@ -15,7 +13,7 @@ namespace Iv4xr.SePlugin.Control
 
         public Block CreateAndFill(MySlimBlock sourceBlock)
         {
-            var definitionId = EntityBuilder.GetDefinitionId(sourceBlock.BlockDefinition);
+            var definitionId = sourceBlock.BlockDefinition.ToDefinitionId();
             var block = CreateBlock(definitionId.Id);
             AddStandardFields(sourceBlock, block);
             AddCustomFields(sourceBlock, block);
@@ -43,7 +41,7 @@ namespace Iv4xr.SePlugin.Control
             var grid = sourceBlock.CubeGrid;
 
             block.Id = sourceBlock.UniqueId.ToString();
-            block.DefinitionId = EntityBuilder.GetDefinitionId(sourceBlock.BlockDefinition);
+            block.DefinitionId = sourceBlock.BlockDefinition.ToDefinitionId();
             block.Position = grid.GridIntegerToWorld(sourceBlock.Position).ToPlain();
             block.MaxIntegrity = sourceBlock.MaxIntegrity;
             block.BuildIntegrity = sourceBlock.BuildIntegrity;

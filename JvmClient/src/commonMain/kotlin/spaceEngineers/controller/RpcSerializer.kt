@@ -26,6 +26,9 @@ val json = Json {
         polymorphic(Block::class) {
             default { BlockSerializer }
         }
+        polymorphic(BlockDefinition::class) {
+            default { BlockDefinitionSerializer }
+        }
     }
 }
 

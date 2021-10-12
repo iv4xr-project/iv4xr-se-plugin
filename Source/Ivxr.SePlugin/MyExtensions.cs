@@ -1,7 +1,11 @@
-﻿using Iv4xr.PluginLib.WorldModel;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Iv4xr.PluginLib.WorldModel;
 using Sandbox.Game.Multiplayer;
 using Sandbox.Game.Screens.Helpers;
 using Sandbox.Game.World;
+using VRage.Game;
 using VRageMath;
 
 namespace Iv4xr.SePlugin
@@ -59,5 +63,25 @@ namespace Iv4xr.SePlugin
  
             toolbar.SwitchToPage(page);
         }
+
+        public static Dictionary<string, string> FromTypeToString(this Dictionary<Type, Type> dictionary)
+        {
+            return dictionary.ToDictionary(item => item.Key.Name, item => item.Value.Name);
+        }
+        
+        public static DefinitionId ToDefinitionId(this MyDefinitionBase myDefinitionBase)
+        {
+            return new DefinitionId()
+            {
+                Id = myDefinitionBase.Id.TypeId.ToString(),
+                Type = myDefinitionBase.Id.SubtypeId.String,
+            };
+        }
+        
+        public static MyDefinitionId ToMyDefinitionId(DefinitionId definitionId)
+        {
+            return MyDefinitionId.Parse(definitionId.ToString());
+        }
+
     }
 }

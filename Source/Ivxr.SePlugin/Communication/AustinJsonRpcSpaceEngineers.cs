@@ -103,6 +103,12 @@ namespace Iv4xr.SePlugin.Communication
         {
             return m_se.Definitions.BlockHierarchy();
         }
+        
+        [JsonRpcMethod("Definitions.BlockDefinitionHierarchy")]
+        Dictionary<string, string> BlockDefinitionHierarchy()
+        {
+            return m_se.Definitions.BlockDefinitionHierarchy();
+        }
 
         [JsonRpcMethod("Blocks.Place")]
         void Place()
