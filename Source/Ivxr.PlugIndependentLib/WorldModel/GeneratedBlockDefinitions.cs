@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace Iv4xr.PluginLib.WorldModel
 {
@@ -19,7 +19,7 @@ namespace Iv4xr.PluginLib.WorldModel
         public float MaxPowerOutput;
     }
 
-    public class GravityGeneratorDefinition : BlockDefinition
+    public class GravityGeneratorDefinition : GravityGeneratorBaseDefinition
     {
         public float RequiredPowerInput;
     }
@@ -34,8 +34,16 @@ namespace Iv4xr.PluginLib.WorldModel
     {
         public static readonly Dictionary<string, string> Mapping = new Dictionary<string, string>
         {
-            { "LCDPanelsBlockDefinition", "LCDPanelsBlockDefinition" },
+            { "AirtightHangarDoorDefinition", "AirtightDoorGenericDefinition" },
             { "AirtightSlideDoorDefinition", "AirtightDoorGenericDefinition" },
+            { "BatteryBlockDefinition", "PowerProducerDefinition" },
+            { "ReactorDefinition", "PowerProducerDefinition" },
+            { "FueledPowerProducerDefinition", "PowerProducerDefinition" },
+            { "HydrogenEngineDefinition", "PowerProducerDefinition" },
+            { "GasFueledPowerProducerDefinition", "PowerProducerDefinition" },
+            { "WindTurbineDefinition", "PowerProducerDefinition" },
+            { "SolarPanelDefinition", "PowerProducerDefinition" },
+            { "GravityGeneratorSphereDefinition", "GravityGeneratorBaseDefinition" }
         };
     }
 }

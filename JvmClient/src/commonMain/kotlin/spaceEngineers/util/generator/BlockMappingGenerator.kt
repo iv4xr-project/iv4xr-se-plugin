@@ -204,12 +204,12 @@ fun generateMappingsForSingleCsClass(
     return listOf("""    {"$blockId", "$parent"}""")
 }
 
-fun generateCsMappings(parentMappings: Map<String, String>, idsWithSerializers: Set<String>): String {
+fun generateCsMappings(parentMappings: Map<String, String>, idsWithSerializers: Set<String>, className: String): String {
     return parentMappings.keys.flatMap {
         generateMappingsForSingleCsClass(it, parentMappings = parentMappings, idsWithSerializers = idsWithSerializers)
     }.joinToString(
         separator = ",\n", prefix = """
-    public static class BlockMapper
+    public static class $className
     {
         public static readonly Dictionary<string, string> Mapping = new Dictionary<string, string>
         {

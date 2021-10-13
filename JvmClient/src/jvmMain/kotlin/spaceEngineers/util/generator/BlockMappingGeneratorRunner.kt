@@ -93,7 +93,7 @@ namespace Iv4xr.PluginLib.WorldModel
         serializerMappings.appendText("$it\n")
     }
 
-    generateCsMappings(parentMappings = parentMappings, idsWithSerializers = blockMappings.keys).let {
+    generateCsMappings(parentMappings = parentMappings, idsWithSerializers = blockMappings.keys, className = "BlockMapper").let {
         csClassesAndMappings.appendText("$it\n")
     }
 
@@ -112,7 +112,16 @@ fun generateBlockDefinitionFiles() {
     val serializerMappings = File("./src/commonMain/kotlin/spaceEngineers/model/BlockDefinitionSerializerMappings.kt")
     serializerMappings.writeText(filePrefix)
 
+    val csClassesAndMappings = File("../Source/Ivxr.PlugIndependentLib/WorldModel/GeneratedBlockDefinitions.cs")
 
+    csClassesAndMappings.writeText(
+        """
+using System.Collections.Generic;
+
+namespace Iv4xr.PluginLib.WorldModel
+{
+    """.trim()
+    )
 
     blockDefinitionMappings.map { it ->
         val parents = getBlockParentsById(it.key, parentBlockDefinitionMappings)
@@ -130,6 +139,9 @@ fun generateBlockDefinitionFiles() {
                 interfaces.appendText("$it\n\n")
             }
 
+            generator.generateCsClass().let {
+                csClassesAndMappings.appendText("$it\n")
+            }
 
         }
     }
@@ -139,6 +151,14 @@ fun generateBlockDefinitionFiles() {
     generateMappings(parentMappings = parentBlockDefinitionMappings, idsWithSerializers = blockDefinitionMappings.keys, variableName = "generatedBlockDefinitionSerializerMappings").let {
         serializerMappings.appendText("$it\n")
     }
+
+    generateCsMappings(parentMappings = parentBlockDefinitionMappings, idsWithSerializers = blockDefinitionMappings.keys, className = "BlockDefinitionMapper").let {
+        csClassesAndMappings.appendText("$it\n")
+    }
+
+    csClassesAndMappings.appendText("""
+}
+    """.trimIndent())
 
 
 }
