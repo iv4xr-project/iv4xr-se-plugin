@@ -35,7 +35,7 @@ fun Iterable<BlockDefinition>.filterSidePoints(): List<BlockDefinition> {
 }
 
 
-class BlockDefinitionsTest : MockOrRealGameTest(inMockResourcesDirectory("BlockDefinitionsTest.txt"), forceRealGame = true, loadScenario = false) {
+class BlockDefinitionsTest : MockOrRealGameTest(inMockResourcesDirectory("BlockDefinitionsTest.txt")) {
 
     @Test
     fun printDefinitionsForBdd() = testContext {

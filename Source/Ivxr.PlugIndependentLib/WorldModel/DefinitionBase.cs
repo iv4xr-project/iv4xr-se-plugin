@@ -2,8 +2,7 @@
 {
     public class DefinitionBase
     {
-        public string Id;
-        public string BlockType;
+        public DefinitionId DefinitionId;
         public bool Public;
         public bool AvailableInSurvival;
         public bool Enabled;

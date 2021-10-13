@@ -27,8 +27,7 @@ namespace Iv4xr.SePlugin.Control
                     .GetAllDefinitions().Select(
                         blockDefinition => new DefinitionBase()
                         {
-                            Id = blockDefinition.Id.TypeId.ToString(),
-                            BlockType = blockDefinition.Id.SubtypeId.String,
+                            DefinitionId = blockDefinition.ToDefinitionId(),
                             Public = blockDefinition.Public,
                             AvailableInSurvival = blockDefinition.AvailableInSurvival,
                             Enabled = blockDefinition.Enabled,
