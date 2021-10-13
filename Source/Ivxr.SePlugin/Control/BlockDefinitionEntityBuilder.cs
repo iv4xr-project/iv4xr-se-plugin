@@ -22,9 +22,8 @@ namespace Iv4xr.SePlugin.Control
 
         private BlockDefinition CreateBlockDefinition(string id)
         {
-            var type = BlockDefinitionMapper.Mapping.TryGetValue(id.Replace("My", ""), out var cls)
-                    ? GetBlockType(cls)
-                    : typeof(BlockDefinition);
+            var fixedId = id.Replace("My", "");
+            var type = GetBlockType(BlockDefinitionMapper.Mapping.GetValueOrDefault(fixedId, fixedId));
             var instance = (BlockDefinition)Activator.CreateInstance(type);
             return instance;
         }
@@ -58,6 +57,7 @@ namespace Iv4xr.SePlugin.Control
                 PressurizedWhenOpen = mp.PressurizedWhenOpen
             }).ToList();
         }
+
         public static BuildProgressModel GetBuildProgressModel(MyCubeBlockDefinition.BuildProgressModel bpm)
         {
             return new BuildProgressModel()
