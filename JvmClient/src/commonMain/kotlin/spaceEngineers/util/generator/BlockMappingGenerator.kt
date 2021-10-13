@@ -135,11 +135,7 @@ fun getBlockParentsById(id: String, parentMappings: Map<String, String>): List<S
         id_ = parentMappings.get(id_)!!
         result.add(id_)
     }
-    return result.apply {
-        if (id == "GravityGeneratorDefinition") {
-            println(result)
-        }
-    }
+    return result
 }
 
 fun getOverriddenFields(parents: List<String>, mappings: Map<String, Map<String, KClass<*>>>): Map<String, KClass<*>> {
@@ -209,13 +205,14 @@ fun generateCsMappings(parentMappings: Map<String, String>, idsWithSerializers: 
         generateMappingsForSingleCsClass(it, parentMappings = parentMappings, idsWithSerializers = idsWithSerializers)
     }.joinToString(
         separator = ",\n", prefix = """
-    public static class $className
+public static class $className
+{
+    public static readonly Dictionary<string, string> Mapping = new Dictionary<string, string>
     {
-        public static readonly Dictionary<string, string> Mapping = new Dictionary<string, string>
-        {
-""".trimStart(), postfix = """
+""".trim().padTabs(1) + "\n", postfix = """,
         };
+    }"""
+    ) {
+        it.padTabs(2)
     }
-""".trimIndent()
-    )
 }

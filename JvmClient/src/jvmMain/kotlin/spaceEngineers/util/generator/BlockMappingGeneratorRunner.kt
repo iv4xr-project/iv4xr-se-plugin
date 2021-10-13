@@ -113,15 +113,27 @@ fun generateBlockDefinitionFiles() {
     serializerMappings.writeText(filePrefix)
 
     val csClassesAndMappings = File("../Source/Ivxr.PlugIndependentLib/WorldModel/GeneratedBlockDefinitions.cs")
-
     csClassesAndMappings.writeText(
         """
 using System.Collections.Generic;
 
 namespace Iv4xr.PluginLib.WorldModel
 {
-    """.trim()
+""".trimStart()
     )
+
+    val csFieldMappings = File("../Source/Ivxr.SePlugin/Control/BlockDefinitionCustomFieldsMapper.cs")
+    csFieldMappings.writeText("""
+using Iv4xr.PluginLib.WorldModel;
+using Sandbox.Definitions;
+
+namespace Iv4xr.SePlugin.Control
+{
+    public static class BlockDefinitionCustomFieldsMapper
+    {
+        public static void AddCustomFields(MyCubeBlockDefinition myBlockDefinition, BlockDefinition blockDefinition)
+        {
+""".trimStart())
 
     blockDefinitionMappings.map { it ->
         val parents = getBlockParentsById(it.key, parentBlockDefinitionMappings)
@@ -143,6 +155,9 @@ namespace Iv4xr.PluginLib.WorldModel
                 csClassesAndMappings.appendText("$it\n")
             }
 
+            generator.generateCsFieldMappings().let {
+                csFieldMappings.appendText("$it\n")
+            }
         }
     }
 
@@ -160,6 +175,11 @@ namespace Iv4xr.PluginLib.WorldModel
 }
     """.trimIndent())
 
+    csFieldMappings.appendText("""
+        }
+    }
+}
+    """)
 
 }
 

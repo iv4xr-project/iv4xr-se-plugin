@@ -41,3 +41,8 @@ fun String.removeBuilderPrefix(): String {
 fun String.removeDefinitionPrefix(): String {
     return removePrefix("My")
 }
+
+fun String.padTabs(tabCount: Int): String {
+    val tabs = "\t".repeat(tabCount)
+    return split("\n").joinToString("\n$tabs", prefix = "$tabs")
+}

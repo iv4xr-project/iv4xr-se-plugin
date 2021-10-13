@@ -1,7 +1,6 @@
 package spaceEngineers.util.generator
 
 import spaceEngineers.controller.blockDefinitionMappings
-import spaceEngineers.controller.blockMappings
 import kotlin.reflect.KClass
 
 
@@ -69,11 +68,11 @@ ${fields()}
 
     fun generateCsClass(): String {
         return """
-
-public class ${cls} : ${parentCall()} {
+public class ${cls} : ${parentCall()}
+{
 ${csFields()}
 }
-        """.trimIndent()
+""".trimIndent().padTabs(1)
     }
 
     private fun parentCall(): String {
@@ -105,6 +104,19 @@ ${ip.firstOrNull() ?: defaultParent}
 
     private fun importantParents(): List<String> {
         return parents.filter { it in blockDefinitionMappings }
+    }
+
+
+    fun generateCsFieldMappings(): String {
+        val fields = fields.entries.joinToString("\n") {
+            """    ${cls.camelCase()}.${it.key} = my$cls.${it.key};"""
+        }
+        return """
+if (myBlockDefinition is My${cls} my$cls && 
+    blockDefinition is $cls ${cls.camelCase()} )
+{
+$fields    
+}""".trimStart().padTabs(3)
     }
 
 }
