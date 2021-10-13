@@ -1,7 +1,6 @@
 package spaceEngineers.model
 
-interface BlockDefinition {
-    val definitionId: DefinitionId
+interface BlockDefinition: DefinitionBase {
 
     /**
      * List containing integrity thresholds that change block state (and visual model).
@@ -15,9 +14,7 @@ interface BlockDefinition {
     val size: Vec3F
     val cubeSize: CubeSize
     val mountPoints: List<MountPoint>
-    val public: Boolean
-    val availableInSurvival: Boolean
-    val enabled: Boolean
+
 }
 
 

@@ -1,5 +1,16 @@
 package spaceEngineers.util.generator
 
+val filePrefix = """
+package spaceEngineers.model
+
+// Generated file using BlockMappingGenerator.kt.
+""".trimStart()
+
+const val blockDataClassesImports = """
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
+"""
 
 val typeMapping = mapOf(
     "Float" to "float",

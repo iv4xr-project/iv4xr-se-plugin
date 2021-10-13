@@ -19,7 +19,7 @@ class AllDefinitionsTest : MockOrRealGameTest(mockFile = inMockResourcesDirector
     fun uniqueIdTypeCount() = testContext {
         assertEquals(
             1636,
-            definitions.allDefinitions().map { "${it.id}${it.blockType}" }.distinct().size
+            definitions.allDefinitions().map { "${it.definitionId}" }.distinct().size
         )
     }
 
@@ -27,7 +27,7 @@ class AllDefinitionsTest : MockOrRealGameTest(mockFile = inMockResourcesDirector
     fun uniqueTypeCount() = testContext {
         assertEquals(
             1589,
-            definitions.allDefinitions().map { it.blockType }.distinct().size
+            definitions.allDefinitions().map { it.definitionId.type }.distinct().size
         )
     }
 
@@ -59,7 +59,7 @@ class AllDefinitionsTest : MockOrRealGameTest(mockFile = inMockResourcesDirector
     fun typeDuplicities() = testContext {
         assertEquals(
             34,
-            definitions.allDefinitions().groupBy { it.blockType }.map { it.key to it.value.size }
+            definitions.allDefinitions().groupBy { it.definitionId.type }.map { it.key to it.value.size }
                 .filter { it.second > 1 }
                 .onEach(::println).size
         )
@@ -69,16 +69,16 @@ class AllDefinitionsTest : MockOrRealGameTest(mockFile = inMockResourcesDirector
     fun allIds() = testContext {
         assertEquals(
             123,
-            definitions.allDefinitions().map { it.id }.distinct().onEach(::println).size
+            definitions.allDefinitions().map { it.definitionId.id }.distinct().onEach(::println).size
         )
     }
 
     @Test
     fun welderId() = testContext {
-        val w = definitions.allDefinitions().find { it.blockType == "Welder2Item" } ?: error("no welder found")
+        val w = definitions.allDefinitions().find { it.definitionId.type == "Welder2Item" } ?: error("no welder found")
         assertEquals(
             "MyObjectBuilder_PhysicalGunObject",
-            w.id
+            w.definitionId.id
         )
     }
 }

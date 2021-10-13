@@ -10,6 +10,13 @@ val parentMappings = SocketReaderWriter.SPACE_ENG_GSON.fromJson<Map<String, Stri
     Map::class.java
 )
 
+val parentBlockDefinitionMappings = SocketReaderWriter.SPACE_ENG_GSON.fromJson<Map<String, String>>(
+    File("./src/jvmMain/resources/block-definition-hierarchy.json").readText(),
+    Map::class.java
+).map {
+    it.key.removeDefinitionPrefix() to it.value.removeDefinitionPrefix()
+}.toMap()
+
 val idToTypesFile = File("./src/jvmMain/resources/block-ids-types.json")
 
 val idToTypes = SocketReaderWriter.SPACE_ENG_GSON.fromJson<Map<String, List<String>>>(
@@ -36,7 +43,7 @@ fun generateBlockIdsToTypes() {
 }
 
 
-fun main() {
+fun generateBlockFiles() {
     val dataClasses = File("./src/commonMain/kotlin/spaceEngineers/model/BlockDataClasses.kt")
     dataClasses.writeText(filePrefix)
     dataClasses.appendText(blockDataClassesImports)
@@ -63,7 +70,8 @@ namespace Iv4xr.PluginLib.WorldModel
             fields = it.value,
             cls = it.key,
             parents = parents,
-            overriddenFields = getOverriddenFields(parents)
+            overriddenFields = getOverriddenFields(parents, blockMappings),
+            commonFields = commonBlockFields,
         ).also { generator ->
             generator.generateDataClass().let {
                 dataClasses.appendText("$it\n\n")
@@ -81,11 +89,11 @@ namespace Iv4xr.PluginLib.WorldModel
 
 
 
-    generateMappings(parentMappings = parentMappings, idToTypes = idToTypes).let {
+    generateMappings(parentMappings = parentMappings, idsWithSerializers = blockMappings.keys, variableName = "generatedSerializerMappings").let {
         serializerMappings.appendText("$it\n")
     }
 
-    generateCsMappings(parentMappings = parentMappings, idToTypes = idToTypes).let {
+    generateCsMappings(parentMappings = parentMappings, idsWithSerializers = blockMappings.keys).let {
         csClassesAndMappings.appendText("$it\n")
     }
 
@@ -93,4 +101,48 @@ namespace Iv4xr.PluginLib.WorldModel
 }
     """.trimIndent())
 
+}
+
+fun generateBlockDefinitionFiles() {
+    val dataClasses = File("./src/commonMain/kotlin/spaceEngineers/model/BlockDefinitionDataClasses.kt")
+    dataClasses.writeText(filePrefix)
+    dataClasses.appendText(blockDataClassesImports)
+    val interfaces = File("./src/commonMain/kotlin/spaceEngineers/model/BlockDefinitionInterfaces.kt")
+    interfaces.writeText(filePrefix)
+    val serializerMappings = File("./src/commonMain/kotlin/spaceEngineers/model/BlockDefinitionSerializerMappings.kt")
+    serializerMappings.writeText(filePrefix)
+
+
+
+    blockDefinitionMappings.map { it ->
+        val parents = getBlockParentsById(it.key, parentBlockDefinitionMappings)
+        it.key to BlockDefinitionMappingGenerator(
+            fields = it.value,
+            cls = it.key,
+            parents = parents,
+            overriddenFields = getOverriddenFields(parents, blockDefinitionMappings),
+            commonFields = commonBlockDefinitionFields,
+        ).also { generator ->
+            generator.generateDataClass().let {
+                dataClasses.appendText("$it\n\n")
+            }
+            generator.generateInterface().let {
+                interfaces.appendText("$it\n\n")
+            }
+
+
+        }
+    }
+
+
+
+    generateMappings(parentMappings = parentBlockDefinitionMappings, idsWithSerializers = blockDefinitionMappings.keys, variableName = "generatedBlockDefinitionSerializerMappings").let {
+        serializerMappings.appendText("$it\n")
+    }
+
+
+}
+
+fun main() {
+    generateBlockDefinitionFiles()
 }

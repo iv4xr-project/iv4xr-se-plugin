@@ -3,15 +3,15 @@ package spaceEngineers.util.generator
 import spaceEngineers.controller.blockMappings
 import kotlin.reflect.KClass
 
-const val commonFields = """
+const val commonBlockFields = """
     @SerialName("Id")
     override val id: BlockId,
     @SerialName("Position")
-    override val position: Vec3,
+    override val position: Vec3F,
     @SerialName("OrientationForward")
-    override val orientationForward: Vec3,
+    override val orientationForward: Vec3F,
     @SerialName("OrientationUp")
-    override val orientationUp: Vec3,
+    override val orientationUp: Vec3F,
     @SerialName("DefinitionId")
     override val definitionId: DefinitionId,
     @SerialName("MaxIntegrity")
@@ -21,11 +21,11 @@ const val commonFields = """
     @SerialName("Integrity")
     override val integrity: Float = 0f,
     @SerialName("MinPosition")
-    override val minPosition: Vec3,
+    override val minPosition: Vec3F,
     @SerialName("MaxPosition")
-    override val maxPosition: Vec3,
+    override val maxPosition: Vec3F,
     @SerialName("Size")
-    override val size: Vec3,
+    override val size: Vec3F,
     @SerialName("UseObjects")
     override val useObjects: List<UseObject> = emptyList(),
     @SerialName("Functional")
@@ -34,21 +34,11 @@ const val commonFields = """
     override val working: Boolean = false,
 """
 
-val filePrefix = """
-package spaceEngineers.model
 
-// Generated file using BlockMappingGenerator.kt.
-""".trimStart()
-
-const val blockDataClassesImports = """
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
-
-"""
 
 val regex = "override val ([a-zA-Z]+):".toRegex()
 
-val commonFieldNames = regex.findAll(commonFields).map {
+val commonFieldNames = regex.findAll(commonBlockFields).map {
     it.groupValues[1]
 }.toList()
 
@@ -60,6 +50,8 @@ class BlockMappingGenerator(
     val fields: Map<String, KClass<*>>,
     val overriddenFields: Map<String, KClass<*>> = emptyMap(),
     val parents: List<String>,
+    val defaultParent: String = "Block",
+    val commonFields: String,
 ) {
 
     fun generateInterface(): String {
@@ -106,7 +98,7 @@ ${csFields()}
     private fun parentCall(): String {
         val ip = importantParents()
         return """
-${ip.firstOrNull() ?: "Block"} 
+${ip.firstOrNull() ?: defaultParent} 
         """.trimIndent()
     }
 
@@ -143,12 +135,16 @@ fun getBlockParentsById(id: String, parentMappings: Map<String, String>): List<S
         id_ = parentMappings.get(id_)!!
         result.add(id_)
     }
-    return result
+    return result.apply {
+        if (id == "GravityGeneratorDefinition") {
+            println(result)
+        }
+    }
 }
 
-fun getOverriddenFields(parents: List<String>): Map<String, KClass<*>> {
+fun getOverriddenFields(parents: List<String>, mappings: Map<String, Map<String, KClass<*>>>): Map<String, KClass<*>> {
     return parents.flatMap {
-        blockMappings[it]?.entries ?: emptySet()
+        mappings[it]?.entries ?: emptySet()
     }.associate {
         it.key to it.value
     }
@@ -156,7 +152,7 @@ fun getOverriddenFields(parents: List<String>): Map<String, KClass<*>> {
 
 fun findImportantParent(
     blockId: String,
-    idsWithSerializers: Set<String> = blockMappings.keys,
+    idsWithSerializers: Set<String>,
     parentMappings: Map<String, String>,
 ): String? {
     var id: String? = blockId
@@ -175,23 +171,23 @@ fun findImportantParent(
 fun generateMappingsForSingleClass(
     blockId: String,
     parentMappings: Map<String, String>,
-    idToTypes: Map<String, List<String>>
+    idsWithSerializers: Set<String>,
 ): List<String> {
     val parents = listOf(blockId) + getBlockParentsById(blockId, parentMappings)
 
     return parents.mapNotNull {
-        findImportantParent(it, parentMappings = parentMappings)?.let { importantParent ->
+        findImportantParent(it, parentMappings = parentMappings, idsWithSerializers = idsWithSerializers)?.let { importantParent ->
             """    "$it" to ${importantParent.dataclassName()}.serializer()"""
         }
     }
 }
 
-fun generateMappings(parentMappings: Map<String, String>, idToTypes: Map<String, List<String>>): String {
+fun generateMappings(parentMappings: Map<String, String>, idsWithSerializers: Set<String>, variableName: String): String {
     return parentMappings.keys.flatMap {
-        generateMappingsForSingleClass(it, parentMappings = parentMappings, idToTypes = idToTypes)
+        generateMappingsForSingleClass(it, parentMappings = parentMappings, idsWithSerializers = idsWithSerializers)
     }.distinct().joinToString(
         separator = ",\n", prefix = """
-val generatedSerializerMappings = mutableMapOf(
+val $variableName = mutableMapOf(
 """.trimStart(), postfix = """
 )
 """.trimIndent()
@@ -201,16 +197,16 @@ val generatedSerializerMappings = mutableMapOf(
 fun generateMappingsForSingleCsClass(
     blockId: String,
     parentMappings: Map<String, String>,
-    idToTypes: Map<String, List<String>>
+    idsWithSerializers: Set<String>,
 ): List<String> {
-    val parent = findImportantParent(blockId, parentMappings = parentMappings) ?: return emptyList()
+    val parent = findImportantParent(blockId, parentMappings = parentMappings, idsWithSerializers = idsWithSerializers) ?: return emptyList()
     if (parent == blockId) return emptyList()
     return listOf("""    {"$blockId", "$parent"}""")
 }
 
-fun generateCsMappings(parentMappings: Map<String, String>, idToTypes: Map<String, List<String>>): String {
+fun generateCsMappings(parentMappings: Map<String, String>, idsWithSerializers: Set<String>): String {
     return parentMappings.keys.flatMap {
-        generateMappingsForSingleCsClass(it, parentMappings = parentMappings, idToTypes = idToTypes)
+        generateMappingsForSingleCsClass(it, parentMappings = parentMappings, idsWithSerializers = idsWithSerializers)
     }.joinToString(
         separator = ",\n", prefix = """
     public static class BlockMapper

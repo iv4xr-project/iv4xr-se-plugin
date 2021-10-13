@@ -29,6 +29,9 @@ val json = Json {
         polymorphic(BlockDefinition::class) {
             default { BlockDefinitionSerializer }
         }
+        polymorphic(DefinitionBase::class) {
+            default { DataDefinitionBase.serializer() }
+        }
     }
 }
 
