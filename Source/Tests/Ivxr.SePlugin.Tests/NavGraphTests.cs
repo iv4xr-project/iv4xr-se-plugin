@@ -158,17 +158,14 @@ namespace Ivxr.SeGameLib.Tests
                 foreach (var position in GenGridPositions(width, length))
                 {
                     // add a hole
-                    for (var x = 1; x <= 3; x++)
-                        if (position.ToVector3I().Equals(new Vector3I(x, 0, 3)))
-                            goto SKIP_TILE;
+                    if (Enumerable.Range(1, 3).Contains(position.X) && position.Y == 0 && position.Z == 3)
+                        continue;
                     
                     // add an obstacle
                     if (position.ToVector3I().Equals(new Vector3I(2, 0, 4)))
                         yield return new PlainVec3I(2, 1, 4);
                     
                     yield return position;
-                    
-                SKIP_TILE: ;
                 }
             } 
         }
