@@ -17,6 +17,8 @@ data class DataAirtightDoorGenericDefinition(
     override val size: Vec3F,
     @SerialName("CubeSize")
     override val cubeSize: CubeSize,
+    @SerialName("Mass")
+    override val mass: Float,
     @SerialName("MountPoints")
     override val mountPoints: List<MountPoint>,
     @SerialName("Public")
@@ -48,6 +50,8 @@ data class DataLCDPanelsBlockDefinition(
     override val size: Vec3F,
     @SerialName("CubeSize")
     override val cubeSize: CubeSize,
+    @SerialName("Mass")
+    override val mass: Float,
     @SerialName("MountPoints")
     override val mountPoints: List<MountPoint>,
     @SerialName("Public")
@@ -75,6 +79,8 @@ data class DataPowerProducerDefinition(
     override val size: Vec3F,
     @SerialName("CubeSize")
     override val cubeSize: CubeSize,
+    @SerialName("Mass")
+    override val mass: Float,
     @SerialName("MountPoints")
     override val mountPoints: List<MountPoint>,
     @SerialName("Public")
@@ -102,6 +108,8 @@ data class DataGravityGeneratorDefinition(
     override val size: Vec3F,
     @SerialName("CubeSize")
     override val cubeSize: CubeSize,
+    @SerialName("Mass")
+    override val mass: Float,
     @SerialName("MountPoints")
     override val mountPoints: List<MountPoint>,
     @SerialName("Public")
@@ -132,6 +140,8 @@ data class DataGravityGeneratorBaseDefinition(
     override val size: Vec3F,
     @SerialName("CubeSize")
     override val cubeSize: CubeSize,
+    @SerialName("Mass")
+    override val mass: Float,
     @SerialName("MountPoints")
     override val mountPoints: List<MountPoint>,
     @SerialName("Public")

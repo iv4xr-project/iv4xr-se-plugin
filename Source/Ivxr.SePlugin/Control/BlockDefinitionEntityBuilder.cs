@@ -45,6 +45,7 @@ namespace Iv4xr.SePlugin.Control
             blockDefinition.AvailableInSurvival = myBlockDefinition.AvailableInSurvival;
             blockDefinition.Enabled = myBlockDefinition.Enabled;
             blockDefinition.Type = myBlockDefinition.GetType().Name;
+            blockDefinition.Mass = myBlockDefinition.Mass;
             blockDefinition.MountPoints = myBlockDefinition.MountPoints.Select(mp => new MountPoint()
             {
                 End = mp.End.ToPlainF(),

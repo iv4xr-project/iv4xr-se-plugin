@@ -1,6 +1,6 @@
 package spaceEngineers.model
 
-interface BlockDefinition: DefinitionBase {
+interface BlockDefinition: PhysicalModelDefinition {
 
     /**
      * List containing integrity thresholds that change block state (and visual model).

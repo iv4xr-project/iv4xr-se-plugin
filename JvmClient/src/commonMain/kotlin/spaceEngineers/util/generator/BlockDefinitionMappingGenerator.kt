@@ -15,6 +15,8 @@ const val commonBlockDefinitionFields = """
     override val size: Vec3F,
     @SerialName("CubeSize")
     override val cubeSize: CubeSize,
+    @SerialName("Mass")
+    override val mass: Float,
     @SerialName("MountPoints")
     override val mountPoints: List<MountPoint>,
     @SerialName("Public")

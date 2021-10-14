@@ -2,7 +2,7 @@
 
 namespace Iv4xr.PluginLib.WorldModel
 {
-    public class BlockDefinition: DefinitionBase
+    public class BlockDefinition: PhysicalModelDefinition
     {
         public List<BuildProgressModel> BuildProgressModels;
         public string Type;
