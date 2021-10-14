@@ -1,6 +1,7 @@
 package spaceEngineers.model
 
-// Generated file using BlockMappingGenerator.kt.
+// Generated automatically by BlockMappingGeneratorRunner.kt, do not change.
+
 interface AirtightDoorGenericDefinition: BlockDefinition  {
     val powerConsumptionIdle: Float
     val powerConsumptionMoving: Float

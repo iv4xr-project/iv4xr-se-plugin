@@ -1,3 +1,5 @@
+// Generated automatically by BlockMappingGeneratorRunner.kt, do not change.
+
 using System.Collections.Generic;
 
 namespace Iv4xr.PluginLib.WorldModel
@@ -29,16 +31,16 @@ namespace Iv4xr.PluginLib.WorldModel
 	{
 	    public static readonly Dictionary<string, string> Mapping = new Dictionary<string, string>
 	    {
-		    {"AirtightHangarDoorDefinition", "AirtightDoorGenericDefinition"},
-		    {"AirtightSlideDoorDefinition", "AirtightDoorGenericDefinition"},
-		    {"BatteryBlockDefinition", "PowerProducerDefinition"},
-		    {"ReactorDefinition", "PowerProducerDefinition"},
-		    {"FueledPowerProducerDefinition", "PowerProducerDefinition"},
-		    {"HydrogenEngineDefinition", "PowerProducerDefinition"},
-		    {"GasFueledPowerProducerDefinition", "PowerProducerDefinition"},
-		    {"WindTurbineDefinition", "PowerProducerDefinition"},
-		    {"SolarPanelDefinition", "PowerProducerDefinition"},
-		    {"GravityGeneratorSphereDefinition", "GravityGeneratorBaseDefinition"},
+		    { "AirtightHangarDoorDefinition", "AirtightDoorGenericDefinition" },
+		    { "AirtightSlideDoorDefinition", "AirtightDoorGenericDefinition" },
+		    { "BatteryBlockDefinition", "PowerProducerDefinition" },
+		    { "ReactorDefinition", "PowerProducerDefinition" },
+		    { "FueledPowerProducerDefinition", "PowerProducerDefinition" },
+		    { "HydrogenEngineDefinition", "PowerProducerDefinition" },
+		    { "GasFueledPowerProducerDefinition", "PowerProducerDefinition" },
+		    { "WindTurbineDefinition", "PowerProducerDefinition" },
+		    { "SolarPanelDefinition", "PowerProducerDefinition" },
+		    { "GravityGeneratorSphereDefinition", "GravityGeneratorBaseDefinition" },
         };
     }
 }

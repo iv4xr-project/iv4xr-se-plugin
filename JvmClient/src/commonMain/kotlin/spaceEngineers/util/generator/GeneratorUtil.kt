@@ -1,9 +1,11 @@
 package spaceEngineers.util.generator
 
+const val generatedText = "// Generated automatically by BlockMappingGeneratorRunner.kt, do not change.\n"
+
 val filePrefix = """
 package spaceEngineers.model
 
-// Generated file using BlockMappingGenerator.kt.
+$generatedText
 """.trimStart()
 
 const val blockDataClassesImports = """

@@ -1,6 +1,7 @@
 package spaceEngineers.model
 
-// Generated file using BlockMappingGenerator.kt.
+// Generated automatically by BlockMappingGeneratorRunner.kt, do not change.
+
 val generatedBlockDefinitionSerializerMappings = mutableMapOf(
     "LCDPanelsBlockDefinition" to DataLCDPanelsBlockDefinition.serializer(),
     "AirtightHangarDoorDefinition" to DataAirtightDoorGenericDefinition.serializer(),

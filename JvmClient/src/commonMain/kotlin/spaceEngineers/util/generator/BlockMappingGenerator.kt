@@ -89,7 +89,8 @@ ${fields()}
     fun generateCsClass(): String {
         return """
 
-public class ${cls} : ${parentCall()} {
+public class ${cls} : ${parentCall()}
+{
 ${csFields()}
 }
         """.trimIndent()
@@ -197,7 +198,7 @@ fun generateMappingsForSingleCsClass(
 ): List<String> {
     val parent = findImportantParent(blockId, parentMappings = parentMappings, idsWithSerializers = idsWithSerializers) ?: return emptyList()
     if (parent == blockId) return emptyList()
-    return listOf("""    {"$blockId", "$parent"}""")
+    return listOf("""    { "$blockId", "$parent" }""")
 }
 
 fun generateCsMappings(parentMappings: Map<String, String>, idsWithSerializers: Set<String>, className: String): String {

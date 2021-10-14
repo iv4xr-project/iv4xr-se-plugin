@@ -1,3 +1,5 @@
+// Generated automatically by BlockMappingGeneratorRunner.kt, do not change.
+
 using Iv4xr.PluginLib.WorldModel;
 using Sandbox.Definitions;
 

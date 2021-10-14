@@ -1,6 +1,7 @@
 package spaceEngineers.model
 
-// Generated file using BlockMappingGenerator.kt.
+// Generated automatically by BlockMappingGeneratorRunner.kt, do not change.
+
 val generatedSerializerMappings = mutableMapOf(
     "DebugSphere1" to DataFunctionalBlock.serializer(),
     "FunctionalBlock" to DataFunctionalBlock.serializer(),

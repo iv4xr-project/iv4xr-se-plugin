@@ -57,6 +57,7 @@ fun generateBlockFiles() {
 
     csClassesAndMappings.writeText(
         """
+$generatedText
 using System.Collections.Generic;
 
 namespace Iv4xr.PluginLib.WorldModel
@@ -81,7 +82,7 @@ namespace Iv4xr.PluginLib.WorldModel
             }
 
             generator.generateCsClass().let {
-                csClassesAndMappings.appendText("$it\n")
+                csClassesAndMappings.appendText("${it.padTabs(1)}\n")
             }
 
         }
@@ -115,6 +116,7 @@ fun generateBlockDefinitionFiles() {
     val csClassesAndMappings = File("../Source/Ivxr.PlugIndependentLib/WorldModel/GeneratedBlockDefinitions.cs")
     csClassesAndMappings.writeText(
         """
+$generatedText
 using System.Collections.Generic;
 
 namespace Iv4xr.PluginLib.WorldModel
@@ -124,6 +126,7 @@ namespace Iv4xr.PluginLib.WorldModel
 
     val csFieldMappings = File("../Source/Ivxr.SePlugin/Control/BlockDefinitionCustomFieldsMapper.cs")
     csFieldMappings.writeText("""
+$generatedText
 using Iv4xr.PluginLib.WorldModel;
 using Sandbox.Definitions;
 
@@ -184,5 +187,6 @@ namespace Iv4xr.SePlugin.Control
 }
 
 fun main() {
+    generateBlockFiles()
     generateBlockDefinitionFiles()
 }
