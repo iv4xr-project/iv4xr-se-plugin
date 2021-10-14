@@ -41,7 +41,7 @@ namespace Ivxr.SeGameLib.Tests
             return grid;
         }
 
-        private static NavGraph CreateGraph(IEnumerable<PlainVec3I> gridGenerator)
+        private static FatNavGraph CreateGraph(IEnumerable<PlainVec3I> gridGenerator)
         {
             // We will not call methods that use LowLevelObserver
             var graphEditor = new NavGraphEditor(new LowLevelObserver(new GameSession()));
