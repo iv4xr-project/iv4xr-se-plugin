@@ -25,7 +25,12 @@ class BasicIv4xrTest {
         val agentId = DEFAULT_AGENT_ID
         val blockType = "LargeHeavyBlockArmorBlock"
         val context = SpaceEngineersTestContext()
-        context.blockTypeToToolbarLocation[blockType] = ToolbarLocation(1, 0)
+        val blockLocation = ToolbarLocation(1, 0)
+        val welder = "Welder2Item"
+        val welderLocation = ToolbarLocation(2, 0)
+        val grinder = "AngleGrinder2Item"
+        val grinderLocation = ToolbarLocation(3, 0)
+        context.blockTypeToToolbarLocation[blockType] = blockLocation
         val controllerWrapper =
             ContextControllerWrapper(
                 spaceEngineers = JsonRpcSpaceEngineersBuilder.localhost(agentId),
@@ -37,6 +42,11 @@ class BasicIv4xrTest {
             context = context
         )
         theEnv.loadWorld()
+        controllerWrapper.items.setToolbarItem(blockType, blockLocation)
+        controllerWrapper.items.setToolbarItem(welder, welderLocation)
+        controllerWrapper.items.setToolbarItem(grinder, grinderLocation)
+        Thread.sleep(500)
+
         theEnv.observeForNewBlocks()
 
         val dataCollector = TestDataCollector()
@@ -67,7 +77,7 @@ class BasicIv4xrTest {
             goals.lastBuiltBlockIntegrityIsBelow(
                 percentage = 0.1,
                 tactic = SEQ(
-                    tactics.equip(ToolbarLocation(5, 0)),
+                    tactics.equip(grinderLocation),
                     tactics.sleep(500),
                     tactics.startUsingTool(),
                 ),
@@ -81,7 +91,7 @@ class BasicIv4xrTest {
             goals.lastBuiltBlockIntegrityIsAbove(
                 percentage = 1.0,
                 tactic = SEQ(
-                    tactics.equip(ToolbarLocation(4, 0)),
+                    tactics.equip(welderLocation),
                     tactics.sleep(500),
                     tactics.startUsingTool(),
                 ),
