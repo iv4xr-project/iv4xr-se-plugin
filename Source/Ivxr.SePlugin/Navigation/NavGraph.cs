@@ -20,12 +20,12 @@ namespace Iv4xr.SePlugin.Navigation
     {
         private class GridLocation
         {
-            public GridLocation(IMySlimBlock block)
+            public GridLocation(Block block)
             {
                 Block = block;
             }
 
-            public IMySlimBlock Block;
+            public Block Block;
             public bool Visited = false;
             public FatNode Node;
         }
@@ -51,8 +51,8 @@ namespace Iv4xr.SePlugin.Navigation
             var sphere = m_lowLevelObserver.GetBoundingSphere(
                 m_lowLevelObserver.Radius * 2d);  // Get some look-ahead
 
-            var grid = m_lowLevelObserver.CollectSurroundingRawBlocks(sphere)
-                    .OrderByDescending(g => g.GetBlocks().Count).First();  // Get the biggest grid.
+            var grid = m_lowLevelObserver.CollectSurroundingBlocks(sphere, ObservationMode.BLOCKS)
+                    .OrderByDescending(g => g.Blocks.Count).First();  // Get the biggest grid.
             
             // TODO: guess which face of the blocks in the grid is "up" (which surface to walk on)
             // perhaps compare the angle of all vectors with the up vector of the character?
@@ -62,18 +62,18 @@ namespace Iv4xr.SePlugin.Navigation
             m_graph = CreateGraph(grid, m_lowLevelObserver.GetPlayerPosition(), Vector3I.Up);
         }
 
-        internal NavGraph CreateGraph(MyCubeGrid grid, Vector3D start, Vector3I up)
+        internal NavGraph CreateGraph(CubeGrid grid, Vector3D start, Vector3I up)
         {
             var map = new Dictionary<Vector3I, GridLocation>(capacity: 256);
 
-            IMySlimBlock startBlock = null;
+            Block startBlock = null;
             var minDistance = double.MaxValue;
 
-            foreach (var block in grid.GetBlocks())
+            foreach (var block in grid.Blocks)
             {
-                map[block.Position] = new GridLocation(block);
+                map[block.GridPosition.ToVector3I()] = new GridLocation(block);
 
-                var distanceSquared = (grid.GridIntegerToWorld(block.Position) - start).LengthSquared();
+                var distanceSquared = (block.Position.ToVector3D() - start).LengthSquared();
                 if (distanceSquared < minDistance)
                 {
                     minDistance = distanceSquared;
@@ -87,14 +87,14 @@ namespace Iv4xr.SePlugin.Navigation
             var navGraph = new NavGraph();
 
             var steps = new StepVectors(up);
-            var cubeQueue = new Queue<IMySlimBlock>();
+            var cubeQueue = new Queue<Block>();
             
             cubeQueue.Enqueue(startBlock);
 
             while (cubeQueue.Count > 0)
             {
                 var currentCube = cubeQueue.Dequeue();
-                var currentPosition = currentCube.Position;
+                var currentPosition = currentCube.GridPosition.ToVector3I();
                 
                 map[currentPosition].Visited = true;
                 
@@ -106,21 +106,27 @@ namespace Iv4xr.SePlugin.Navigation
                 map[currentPosition].Node = fatNode;
                 navGraph.Nodes.Add(fatNode);
 
-                foreach (var step in steps.EnumerateSides())  // TODO enumerate side neighbors
+                foreach (var step in steps.EnumerateSides())
                 {
-                    if (!map.ContainsKey(currentPosition + step))
+                    var peakedGridPosition = currentPosition + step;
+                    if (!map.ContainsKey(peakedGridPosition))
                         continue;
                     
-                    var peakedLocation = map[currentPosition + step];
+                    var peakedLocation = map[peakedGridPosition];
                     if (peakedLocation.Visited)
                     {
                         if (peakedLocation.Node != null)
+                        {
+                            // Add both directions.
                             fatNode.Neighbours.Add(peakedLocation.Node);
+                            peakedLocation.Node.Neighbours.Add(fatNode);
+                        }
                     }
                     else
                     {
                         // TODO: check for obstacles even before enqueueing the block?
-                        cubeQueue.Enqueue(peakedLocation.Block);
+                        if (!cubeQueue.Contains(peakedLocation.Block))  // Note: this can be optimized
+                            cubeQueue.Enqueue(peakedLocation.Block);
                     }
                 }
             }
