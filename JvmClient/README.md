@@ -14,21 +14,21 @@ The project is written in [Kotlin](https://kotlinlang.org/), a JVM language by J
 
 # Setup without sources
 
-When using maven or gradle build tool, you can simply add our library as a dependency from jitpack maven repository.
+When using [Maven](https://maven.apache.org/) or [Gradle](https://gradle.org/) build tool, you can simply add our library as a dependency from [JitPack](https://jitpack.io/) repository.
 
-The version `main-SNAPSHOT` always points to the newest main branch, which is our stable development branch.
-If you want to target stable release, change it to a specific version.
-Versions 0.3.1 and lower do not work as jitpack was not configured at the time.
+The version `main-SNAPSHOT` always points to the newest main branch, which is our development branch.
+If you want to target a stable release, change it to a specific version.
+Versions 0.3.1 and lower do not work as JitPack was not configured at the time.
 
-Check official releases here:
+Check the official releases here:
 https://github.com/iv4xr-project/iv4xr-se-plugin/releases/
 
-Check other possible version values (can target specific commit, branch, etc.) at jitpack here:
+Check other possible version values (can target specific commit, branch, etc.) at JitPack here:
 https://jitpack.io/#iv4xr-project/iv4xr-se-plugin/
 
 ## Maven
 
-Add jitpack repository to your pom.xml:
+Add jitpack repository to your `pom.xml`:
 
 ```
 <repositories>
@@ -50,7 +50,7 @@ Add the dependency:
 
 ## Gradle
 
-Add jitpack repository to build.gradle:
+Add jitpack repository to `build.gradle`:
 ```
 allprojects {
     repositories {
