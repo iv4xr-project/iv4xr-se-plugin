@@ -10,8 +10,7 @@ using VRageMath;
 
 namespace Iv4xr.SePlugin.Navigation
 {
-
-    public class NavGraph
+    public class FatNavGraph
     {
         public readonly List<FatNode> Nodes = new List<FatNode>();
     }
@@ -32,14 +31,14 @@ namespace Iv4xr.SePlugin.Navigation
         
         private readonly LowLevelObserver m_lowLevelObserver;
 
-        private NavGraph m_graph = new NavGraph();
+        private FatNavGraph m_graph = new FatNavGraph();
         
         public NavGraphEditor(LowLevelObserver lowLevelObserver)
         {
             m_lowLevelObserver = lowLevelObserver;
         }
 
-        public NavGraph GetGraph()
+        public FatNavGraph GetGraph()
         {
             CreateGraph();
             
@@ -62,7 +61,7 @@ namespace Iv4xr.SePlugin.Navigation
             m_graph = CreateGraph(grid, m_lowLevelObserver.GetPlayerPosition(), Vector3I.Up);
         }
 
-        internal NavGraph CreateGraph(CubeGrid grid, Vector3D start, Vector3I up)
+        internal FatNavGraph CreateGraph(CubeGrid grid, Vector3D start, Vector3I up)
         {
             var map = new Dictionary<Vector3I, GridLocation>(capacity: 256);
 
@@ -84,7 +83,7 @@ namespace Iv4xr.SePlugin.Navigation
             if (startBlock is null)
                 return null;
 
-            var navGraph = new NavGraph();
+            var navGraph = new FatNavGraph();
 
             var steps = new StepVectors(up);
             var cubeQueue = new Queue<Block>();
