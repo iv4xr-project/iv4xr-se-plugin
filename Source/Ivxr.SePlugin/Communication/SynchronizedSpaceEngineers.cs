@@ -93,6 +93,11 @@ namespace Iv4xr.SePlugin.Communication
             return Enqueue(() => m_observer.ObserveNewBlocks());
         }
 
+        public NavGraph GetNavigationGraph()
+        {
+            return Enqueue(() => m_observer.GetNavigationGraph());
+        }
+
         public void TakeScreenshot(string absolutePath)
         {
             Enqueue(() => m_observer.TakeScreenshot(absolutePath));

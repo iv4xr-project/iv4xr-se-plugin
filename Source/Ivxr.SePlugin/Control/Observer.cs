@@ -42,6 +42,11 @@ namespace Iv4xr.SePlugin.Control
             return m_lowLevelObserver.GetNewBlocks();
         }
 
+        public NavGraph GetNavigationGraph()
+        {
+            throw new NotImplementedException();
+        }
+
         public void TakeScreenshot(string absolutePath)
         {
             // Stolen from se/Sources/TestingToolPlugin/MyTestingToolPlugin.cs
