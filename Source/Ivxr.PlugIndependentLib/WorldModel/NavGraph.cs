@@ -5,8 +5,20 @@ namespace Iv4xr.PluginLib.WorldModel
     public class NavGraph
     {
         // Vertices indexed from zero.
-        public List<PlainVec3D> VertexPositions;
+        public readonly List<PlainVec3D> VertexPositions;
 
-        public List<Edge> Edges;
+        public readonly List<Edge> Edges;
+
+        public NavGraph(int vertexCapacity = 0)
+        {
+            VertexPositions = new List<PlainVec3D>(vertexCapacity);
+            Edges = new List<Edge>(2 * vertexCapacity);  // Roughly estimated average edges per node.
+        }
+
+        public NavGraph(List<PlainVec3D> vertexPositions, List<Edge> edges)
+        {
+            VertexPositions = vertexPositions;
+            Edges = edges;
+        }
     }
 }

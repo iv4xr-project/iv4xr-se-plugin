@@ -10,11 +10,6 @@ using VRageMath;
 
 namespace Iv4xr.SePlugin.Navigation
 {
-    public class FatNavGraph
-    {
-        public readonly List<FatNode> Nodes = new List<FatNode>();
-    }
-    
     public class NavGraphEditor
     {
         private class GridLocation
