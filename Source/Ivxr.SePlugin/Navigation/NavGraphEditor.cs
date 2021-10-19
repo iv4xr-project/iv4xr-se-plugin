@@ -101,7 +101,7 @@ namespace Iv4xr.SePlugin.Navigation
                 if (map.ContainsKey(currentPosition + up) || map.ContainsKey(currentPosition + 2*up))
                     continue;
 
-                var fatNode = new FatNode();
+                var fatNode = new FatNode(currentCube.Position);  // TODO(P): Add some position offset.
                 map[currentPosition].Node = fatNode;
                 navGraph.Nodes.Add(fatNode);
 

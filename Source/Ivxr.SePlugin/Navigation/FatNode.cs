@@ -12,5 +12,9 @@ namespace Iv4xr.SePlugin.Navigation
 
         public readonly List<FatNode> Neighbours = new List<FatNode>(capacity: 8);
 
+        public FatNode(PlainVec3D position)
+        {
+            Position = position;
+        }
     }
 }
