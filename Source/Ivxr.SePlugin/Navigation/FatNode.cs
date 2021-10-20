@@ -19,9 +19,12 @@ namespace Iv4xr.SePlugin.Navigation
         {
             Position = position;
         }
-
-        // The method is here, so that it has access to the TemporaryIndex.
-        // TODO: Add a test!
+        
+        /// <summary>
+        /// Use the FatNavGraph extension method ToNavGraph to call this method from outside.
+        /// </summary>
+        ///
+        /// The method is here, so that it has access to the TemporaryIndex.
         internal static NavGraph ConvertFatNavGraphToSlim(FatNavGraph fatNavGraph)
         {
             var i = 0;
