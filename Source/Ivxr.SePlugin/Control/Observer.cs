@@ -3,6 +3,7 @@ using System.IO;
 using Iv4xr.PluginLib;
 using Iv4xr.PluginLib.Control;
 using Iv4xr.PluginLib.WorldModel;
+using Iv4xr.SePlugin.Navigation;
 using Sandbox;
 using Sandbox.Game.Screens.Helpers;
 using Sandbox.Graphics.GUI;
@@ -44,7 +45,9 @@ namespace Iv4xr.SePlugin.Control
 
         public NavGraph GetNavigationGraph()
         {
-            throw new NotImplementedException();
+            var navGraphEditor = new NavGraphEditor(m_lowLevelObserver);
+
+            return navGraphEditor.GetGraph().ToNavGraph();
         }
 
         public void TakeScreenshot(string absolutePath)
