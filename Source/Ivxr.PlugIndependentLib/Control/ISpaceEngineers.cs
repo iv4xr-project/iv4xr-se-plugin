@@ -42,6 +42,7 @@ namespace Iv4xr.PluginLib.Control
         List<BlockDefinition> BlockDefinitions();
         List<DefinitionBase> AllDefinitions();
         Dictionary<string, string> BlockHierarchy();
+        Dictionary<string, string> BlockDefinitionHierarchy();
     }
     
     public interface ICharacterController

@@ -1,6 +1,7 @@
 package spaceEngineers.model
 
-// Generated file using BlockMappingGenerator.kt.
+// Generated automatically by BlockMappingGeneratorRunner.kt, do not change.
+
 interface TerminalBlock: Block  {
     val showInInventory: Boolean
     val showInTerminal: Boolean

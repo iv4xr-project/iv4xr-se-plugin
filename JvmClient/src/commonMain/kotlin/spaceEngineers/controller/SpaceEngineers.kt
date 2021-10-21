@@ -75,4 +75,5 @@ interface Definitions {
     fun blockDefinitions(): List<BlockDefinition>
     fun allDefinitions(): List<DefinitionBase>
     fun blockHierarchy(): Map<String, String>
+    fun blockDefinitionHierarchy(): Map<String, String>
 }

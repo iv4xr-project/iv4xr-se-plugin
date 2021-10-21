@@ -58,21 +58,10 @@ class GetToolbarTest : MockOrRealGameTest() {
         val location = ToolbarLocation(0, 2)
         val (success, fail) = blockTypes.partition { blockType ->
             sleep(10)
-            (checkBlockType(blockType, location) && checkPlacement(blockType, location)).apply {
-                if (this) {
-                    println("${blockType}")
-                }
-            }
+            (checkBlockType(blockType, location) && checkPlacement(blockType, location))
         }
-        println("success: ${success.size}")
-        println(success.joinToString("\n") { blockType ->
-            "| ${blockType} |"
-        })
-        println("fail: ${fail.size}")
-        println(fail.joinToString("\n") { blockType ->
-            "| ${blockType} |"
-        })
-
+        assertEquals(184, success.size)
+        assertEquals(18, fail.size)
     }
 
     @Disabled("Doesn't work, result block will be Large, not Small.")

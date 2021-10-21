@@ -239,5 +239,13 @@ open class JsonRpcSpaceEngineers(
                 methodName = "${definitionsPrefix}BlockHierarchy",
             )
         }
+
+        override fun blockDefinitionHierarchy(): Map<String, String> {
+            return processNoParameterMethod(
+                method = ::blockDefinitionHierarchy,
+                methodName = "${definitionsPrefix}BlockDefinitionHierarchy",
+            )
+
+        }
     }
 }
