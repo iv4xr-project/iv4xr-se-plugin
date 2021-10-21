@@ -13,7 +13,7 @@ namespace Iv4xr.SePlugin.Navigation
 
         public readonly List<FatNode> Neighbours = new List<FatNode>(capacity: 8);
 
-        private int TemporaryIndex;
+        private int m_temporaryIndex;
 
         public FatNode(PlainVec3D position)
         {
@@ -32,7 +32,7 @@ namespace Iv4xr.SePlugin.Navigation
             
             foreach (var fatNode in fatNavGraph.Nodes)
             {
-                fatNode.TemporaryIndex = i;
+                fatNode.m_temporaryIndex = i;
                 i++;
                 
                 vertexPositions.Add(fatNode.Position);
@@ -43,7 +43,7 @@ namespace Iv4xr.SePlugin.Navigation
             {
                 foreach (var neighbour in fatNode.Neighbours)
                 {
-                    setOfEdges.Add(new Edge(fatNode.TemporaryIndex, neighbour.TemporaryIndex));
+                    setOfEdges.Add(new Edge(fatNode.m_temporaryIndex, neighbour.m_temporaryIndex));
                 }
             }
 
