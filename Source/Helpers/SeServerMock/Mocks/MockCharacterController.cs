@@ -9,7 +9,7 @@ namespace SeServerMock.Mocks
     {
         public ILog Log { get; set; }
         
-        public CharacterObservation MoveAndRotate(PlainVec3D movement, PlainVec2F rotation3, float roll)
+        public CharacterObservation MoveAndRotate(PlainVec3D movement, PlainVec2F rotation3, float roll, int ticks)
         {
             throw new NotImplementedException();
         }

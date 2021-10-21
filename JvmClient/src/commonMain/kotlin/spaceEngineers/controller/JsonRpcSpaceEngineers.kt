@@ -37,12 +37,13 @@ open class JsonRpcSpaceEngineers(
             )
         }
 
-        override fun moveAndRotate(movement: Vec3F, rotation3: Vec2F, roll: Float): CharacterObservation {
+        override fun moveAndRotate(movement: Vec3F, rotation3: Vec2F, roll: Float, ticks: Int): CharacterObservation {
             return processParameters<CharacterObservation>(
                 parameters = listOf(
                     TypedParameter("movement", movement, Vec3F::class),
                     TypedParameter("rotation3", rotation3, Vec2F::class),
                     TypedParameter("roll", roll, Float::class),
+                    TypedParameter("ticks", ticks, Int::class)
                 ),
                 method = ::moveAndRotate,
                 methodName = "${characterPrefix}MoveAndRotate",

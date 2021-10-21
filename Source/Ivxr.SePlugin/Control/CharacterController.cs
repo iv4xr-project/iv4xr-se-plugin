@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Iv4xr.PluginLib;
 using Iv4xr.PluginLib.Control;
 using Iv4xr.PluginLib.WorldModel;
 using Sandbox.Game.Entities;
@@ -17,11 +18,15 @@ namespace Iv4xr.SePlugin.Control
         private readonly IObserver m_observer;
         private readonly LowLevelObserver m_lowLevelObserver;
 
-        public CharacterController(IGameSession session, IObserver observer, LowLevelObserver lowLevelObserver)
+        private readonly ILog Log;
+
+        public CharacterController(IGameSession session, IObserver observer, LowLevelObserver lowLevelObserver,
+            ILog log)
         {
             m_session = session;
             m_observer = observer;
             m_lowLevelObserver = lowLevelObserver;
+            Log = log;
         }
 
         public CharacterObservation TurnOnJetpack()
@@ -35,7 +40,7 @@ namespace Iv4xr.SePlugin.Control
             Character.JetpackComp.TurnOnJetpack(false);
             return m_observer.Observe();
         }
-        
+
         public CharacterObservation SwitchHelmet()
         {
             Character.OxygenComponent.SwitchHelmet();
@@ -53,7 +58,7 @@ namespace Iv4xr.SePlugin.Control
             var entityController = GetEntityController();
             entityController.ControlledEntity.EndShoot(MyShootActionEnum.PrimaryAction);
         }
-        
+
         public void Use()
         {
             MySession.Static.ControlledEntity.Use();
@@ -65,7 +70,7 @@ namespace Iv4xr.SePlugin.Control
             var objects = new List<IMyUseObject>();
             block.FatBlock.UseObjectsComponent.GetInteractiveObjects(objects);
             var obj = objects[functionIndex];
-            obj.Use((UseActionEnum) action, Character);
+            obj.Use((UseActionEnum)action, Character);
         }
 
         public CharacterObservation Teleport(PlainVec3D position, PlainVec3D? orientationForward,
@@ -92,9 +97,12 @@ namespace Iv4xr.SePlugin.Control
             return m_observer.Observe();
         }
 
-        public CharacterObservation MoveAndRotate(PlainVec3D movement, PlainVec2F rotation3, float roll)
+        public CharacterObservation MoveAndRotate(PlainVec3D movement, PlainVec2F rotation3, float roll, int ticks)
         {
-            GetEntityController().ControlledEntity.MoveAndRotate(movement.ToVector3(), rotation3.ToVector2(), roll);
+            IvxrPlugin.Context.ContinuousMovementController.ChangeMovement(
+                new ContinuousMovementContext()
+                        { MoveVector = movement, RotationVector = rotation3, Roll = roll, TicksLeft = ticks }
+            );
             return m_observer.Observe();
         }
 
