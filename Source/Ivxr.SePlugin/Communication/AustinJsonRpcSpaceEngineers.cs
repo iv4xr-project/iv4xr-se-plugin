@@ -85,6 +85,12 @@ namespace Iv4xr.SePlugin.Communication
             return m_se.Observer.ObserveNewBlocks();
         }
 
+        [JsonRpcMethod("Observer.GetNavigationGraph")]
+        NavGraph GetNavigationGraph()
+        {
+            return m_se.Observer.GetNavigationGraph();
+        }
+
         [JsonRpcMethod("Observer.TakeScreenshot")]
         void TakeScreenshot(string absolutePath)
         {
