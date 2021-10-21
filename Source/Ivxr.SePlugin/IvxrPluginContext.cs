@@ -19,6 +19,7 @@ namespace Iv4xr.SePlugin
         private const string CONFIG_FILE = "ivxr-plugin.config";
 
         private readonly GameSession m_gameSession = new GameSession();
+        public readonly ContinuousMovementController ContinuousMovementController;
 
         public IvxrPluginContext()
         {
@@ -32,6 +33,7 @@ namespace Iv4xr.SePlugin
             var configPath = Path.Combine(MyFileSystem.UserDataPath, CONFIG_FILE);
             var configLoader = new ConfigLoader(Log, new Jsoner(), configPath);
             var config = configLoader.LoadOrSaveDefault();
+            ContinuousMovementController = new ContinuousMovementController(seLog);
 
             var se = new RealSpaceEngineers(m_gameSession, Log, config);
 

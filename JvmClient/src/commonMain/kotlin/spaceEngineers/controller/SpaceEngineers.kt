@@ -31,7 +31,12 @@ interface Character {
      *      If the character uses jetpack, this moves the whole character orientation.
      * @see Vec2F.ROTATE_UP and other constants for examples.
      */
-    fun moveAndRotate(movement: Vec3F = Vec3F.ZERO, rotation3: Vec2F = Vec2F.ZERO, roll: Float = 0f): CharacterObservation
+    fun moveAndRotate(
+        movement: Vec3F = Vec3F.ZERO,
+        rotation3: Vec2F = Vec2F.ZERO,
+        roll: Float = 0f,
+        ticks: Int = 1,
+    ): CharacterObservation
     fun turnOnJetpack(): CharacterObservation
     fun turnOffJetpack(): CharacterObservation
     fun switchHelmet(): CharacterObservation

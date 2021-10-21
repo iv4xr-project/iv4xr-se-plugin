@@ -47,7 +47,7 @@ namespace Iv4xr.PluginLib.Control
     
     public interface ICharacterController
     {
-        CharacterObservation MoveAndRotate(PlainVec3D movement, PlainVec2F rotation3, float roll = 0);
+        CharacterObservation MoveAndRotate(PlainVec3D movement, PlainVec2F rotation3, float roll = 0, int ticks = 1);
         CharacterObservation TurnOnJetpack();
         CharacterObservation TurnOffJetpack();
         CharacterObservation SwitchHelmet();

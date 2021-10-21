@@ -1,4 +1,6 @@
 ﻿
+using System;
+
 namespace Iv4xr.PluginLib.WorldModel
 {
     public struct PlainVec2F
@@ -11,5 +13,12 @@ namespace Iv4xr.PluginLib.WorldModel
             X = x;
             Y = y;
         }
+        
+        public double Length()
+        {
+            return Math.Sqrt(X * X + Y * Y);
+        }
+        
+        public static PlainVec2F Zero = new PlainVec2F(0, 0);
     }
 }

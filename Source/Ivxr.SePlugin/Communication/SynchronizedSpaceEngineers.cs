@@ -208,11 +208,11 @@ namespace Iv4xr.SePlugin.Communication
             m_observer = observer;
         }
 
-        public CharacterObservation MoveAndRotate(PlainVec3D movement, PlainVec2F rotation3, float roll = 0)
+        public CharacterObservation MoveAndRotate(PlainVec3D movement, PlainVec2F rotation3, float roll = 0, int ticks = 1)
         {
             return Enqueue(() =>
             {
-                m_character.MoveAndRotate(movement, rotation3, roll);
+                m_character.MoveAndRotate(movement, rotation3, roll, ticks);
                 return m_observer.Observe();
             });
         }

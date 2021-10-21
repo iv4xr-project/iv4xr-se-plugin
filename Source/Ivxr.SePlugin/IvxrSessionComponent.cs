@@ -5,25 +5,27 @@ namespace Iv4xr.SePlugin
     [MySessionComponentDescriptor(MyUpdateOrder.BeforeSimulation | MyUpdateOrder.AfterSimulation)]
     class IvxrSessionComponent : MySessionComponentBase
     {
+        private IvxrPluginContext Context => IvxrPlugin.Context;
+
         public override void BeforeStart()
         {
             base.BeforeStart();
 
-            IvxrPlugin.Context.InitSession();
+            Context.InitSession();
         }
 
         public override void UpdateBeforeSimulation()
         {
             base.UpdateBeforeSimulation();
-            
-            IvxrPlugin.Context.FuncActionDispatcher.CallEverything();
+            Context.FuncActionDispatcher.CallEverything();
+            Context.ContinuousMovementController.Tick();
         }
 
         protected override void UnloadData()
         {
             base.UnloadData();
 
-            IvxrPlugin.Context.EndSession();
+            Context.EndSession();
         }
     }
 }

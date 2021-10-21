@@ -1,4 +1,5 @@
-﻿
+﻿using System;
+
 namespace Iv4xr.PluginLib.WorldModel
 {
     /// <summary>
@@ -16,5 +17,12 @@ namespace Iv4xr.PluginLib.WorldModel
             Y = y;
             Z = z;
         }
+
+        public double Length()
+        {
+            return Math.Sqrt(X * X + Y * Y + Z * Z);
+        }
+
+        public static PlainVec3D Zero = new PlainVec3D(0, 0, 0);
     }
 }

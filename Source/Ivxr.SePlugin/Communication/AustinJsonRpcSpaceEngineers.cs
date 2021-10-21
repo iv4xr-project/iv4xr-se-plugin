@@ -20,9 +20,9 @@ namespace Iv4xr.SePlugin.Communication
         }
 
         [JsonRpcMethod("Character.MoveAndRotate")]
-        CharacterObservation MoveAndRotate(PlainVec3D movement, PlainVec2F rotation3, float roll = 0)
+        CharacterObservation MoveAndRotate(PlainVec3D movement, PlainVec2F rotation3, float roll = 0, int ticks = 1)
         {
-            return m_se.Character.MoveAndRotate(movement, rotation3, roll);
+            return m_se.Character.MoveAndRotate(movement, rotation3, roll, ticks);
         }
 
         [JsonRpcMethod("Admin.Character.Teleport")]
