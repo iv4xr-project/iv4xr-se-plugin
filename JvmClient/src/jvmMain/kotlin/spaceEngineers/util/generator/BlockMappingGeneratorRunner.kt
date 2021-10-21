@@ -155,7 +155,7 @@ namespace Iv4xr.SePlugin.Control
             }
 
             generator.generateCsClass().let {
-                csClassesAndMappings.appendText("$it\n")
+                csClassesAndMappings.appendText("$it\n\n")
             }
 
             generator.generateCsFieldMappings().let {
