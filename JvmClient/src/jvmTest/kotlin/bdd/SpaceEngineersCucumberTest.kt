@@ -2,14 +2,18 @@ package bdd
 
 import io.cucumber.java.After
 import io.cucumber.java.Before
+import io.cucumber.java.PendingException
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import io.cucumber.junit.Cucumber
 import kotlinx.coroutines.runBlocking
 import org.junit.runner.RunWith
-import spaceEngineers.controller.*
+import spaceEngineers.controller.ContextControllerWrapper
+import spaceEngineers.controller.JsonRpcSpaceEngineers
+import spaceEngineers.controller.JsonRpcSpaceEngineersBuilder
 import spaceEngineers.controller.extensions.*
+import spaceEngineers.controller.loadFromTestResources
 import spaceEngineers.model.Block
 import spaceEngineers.model.ToolbarLocation
 import spaceEngineers.model.Vec3F
@@ -22,6 +26,7 @@ import testhelp.assertVecEquals
 import java.io.File
 import java.lang.Thread.sleep
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 
@@ -348,6 +353,31 @@ class SpaceEngineersCucumberTest {
             blockDir,
             "screenshotInfo.json"
         ).writeText(SocketReaderWriter.SPACE_ENG_GSON.toJson(blockScreenshotInfoByType[block.definitionId.type]))
+    }
+
+    @When("Character turns on jetpack.")
+    fun character_turns_on_jetpack() {
+        environment.character.turnOnJetpack()
+    }
+
+    @Then("jetpack is on.")
+    fun jetpack_is_on() {
+        assertTrue(environment.observer.observe().jetpackRunning)
+    }
+
+    @Then("Character uses.")
+    fun character_uses() {
+        environment.character.use()
+    }
+
+    @Then("jetpack is off.")
+    fun jetpack_is_off() {
+        assertFalse(environment.observer.observe().jetpackRunning)
+    }
+
+    @Then("Character waits {int} seconds.")
+    fun character_waits_seconds(seconds: Int) {
+        sleep(seconds * 1000L)
     }
 
 }
