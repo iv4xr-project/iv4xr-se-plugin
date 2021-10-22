@@ -21,8 +21,14 @@ data class CharacterObservation(
     val jetpackRunning: Boolean,
     @SerialName("HelmetEnabled")
     val helmetEnabled: Boolean = true,
-    @SerialName("HealthRatio")
-    val healthRatio: Float = 1f,
+    @SerialName("Health")
+    val health: Float,
+    @SerialName("Oxygen")
+    val oxygen: Float,
+    @SerialName("Hydrogen")
+    val hydrogen: Float,
+    @SerialName("SuitEnergy")
+    val suitEnergy: Float = 1f,
     @SerialName("Camera")
     val camera: BasePose,
     @SerialName("HeadLocalXAngle")
@@ -36,4 +42,4 @@ data class CharacterObservation(
     @SerialName("Movement")
     val movement: CharacterMovement,
 
-) : Entity
+    ) : Entity
