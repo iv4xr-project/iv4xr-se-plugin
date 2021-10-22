@@ -19,6 +19,7 @@ import spaceEngineers.model.DefinitionId
 import spaceEngineers.model.ToolbarLocation
 import spaceEngineers.model.Vec3F
 import spaceEngineers.model.extensions.allBlocks
+import spaceEngineers.model.extensions.normalizeAsRun
 import spaceEngineers.transport.SocketReaderWriter
 import spaceEngineers.transport.closeIfCloseable
 import testhelp.TEST_AGENT
@@ -397,6 +398,12 @@ class SpaceEngineersCucumberTest {
     fun character_moves_forward_for_ticks(ticks: Int) {
         environment.character.moveAndRotate(Vec3F.FORWARD, ticks = ticks)
     }
+
+    @When("Character runs forward for {int} ticks.")
+    fun character_runs_forward_for_ticks(ticks: Int) {
+        environment.character.moveAndRotate(Vec3F.FORWARD.normalizeAsRun(), ticks = ticks)
+    }
+
 
     @Then("Character speed is {int} m\\/s.")
     fun character_speed_is_100m_s(speed: Int) {
