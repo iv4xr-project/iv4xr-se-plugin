@@ -15,6 +15,7 @@ import spaceEngineers.controller.JsonRpcSpaceEngineersBuilder
 import spaceEngineers.controller.extensions.*
 import spaceEngineers.controller.loadFromTestResources
 import spaceEngineers.model.Block
+import spaceEngineers.model.DefinitionId
 import spaceEngineers.model.ToolbarLocation
 import spaceEngineers.model.Vec3F
 import spaceEngineers.model.extensions.allBlocks
@@ -402,4 +403,16 @@ class SpaceEngineersCucumberTest {
         assertEquals(speed.toFloat(), environment.observer.observe().velocity.length(), 0.0001f)
     }
 
+    @Then("Observed grid mass is {double}.")
+    fun observed_grid_mass_is(mass: Double) {
+        assertEquals(mass.toFloat(), environment.observer.observeBlocks().grids.first().mass)
+    }
+
+    @When("Block type {string} has mass {double}.")
+    fun block_type_has_mass(type: String, mass: Double) {
+        val blockDefinition = environment.definitions.blockDefinitions().first {
+            it.definitionId.type == type
+        }
+        assertEquals(mass.toFloat(), blockDefinition.mass)
+    }
 }
