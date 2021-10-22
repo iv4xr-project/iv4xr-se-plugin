@@ -14,10 +14,7 @@ import spaceEngineers.controller.JsonRpcSpaceEngineers
 import spaceEngineers.controller.JsonRpcSpaceEngineersBuilder
 import spaceEngineers.controller.extensions.*
 import spaceEngineers.controller.loadFromTestResources
-import spaceEngineers.model.Block
-import spaceEngineers.model.DefinitionId
-import spaceEngineers.model.ToolbarLocation
-import spaceEngineers.model.Vec3F
+import spaceEngineers.model.*
 import spaceEngineers.model.extensions.allBlocks
 import spaceEngineers.model.extensions.normalizeAsRun
 import spaceEngineers.transport.SocketReaderWriter
@@ -421,5 +418,20 @@ class SpaceEngineersCucumberTest {
             it.definitionId.type == type
         }
         assertEquals(mass.toFloat(), blockDefinition.mass)
+    }
+
+    @When("Character crouches.")
+    fun character_crouches() {
+        environment.character.moveAndRotate(Vec3F.DOWN, ticks = 0)
+    }
+
+    @Then("Character is crouching.")
+    fun character_is_crouching() {
+        assertEquals(CharacterMovement.crouching, environment.observer.observe().movement.value.toInt())
+    }
+
+    @Then("Character is standing.")
+    fun character_is_standing() {
+        assertEquals(CharacterMovement.standing, environment.observer.observe().movement.value.toInt())
     }
 }
