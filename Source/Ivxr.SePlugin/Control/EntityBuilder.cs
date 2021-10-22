@@ -62,14 +62,14 @@ namespace Iv4xr.SePlugin.Control
             var position = sourceGrid.PositionComp.GetPosition();
             var orientationUp = sourceGrid.PositionComp.GetOrientation().Up;
             var orientationForward = sourceGrid.PositionComp.GetOrientation().Forward;
-
             return new CubeGrid
             {
                 Id = sourceGrid.DisplayName,
                 Position = position.ToPlain(),
-                Blocks = seBlocks,
                 OrientationForward = orientationForward.ToPlain(),
-                OrientationUp = orientationUp.ToPlain()
+                OrientationUp = orientationUp.ToPlain(),
+                Blocks = seBlocks,
+                Mass = sourceGrid.Mass,
             };
         }
 
