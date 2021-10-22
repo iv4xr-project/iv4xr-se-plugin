@@ -55,8 +55,7 @@ namespace Iv4xr.SePlugin.Control
 
         private Vector3D GetPlayerVelocity()
         {
-            Character.GetNetState(out var client);
-            return client.MovementDirection * client.MovementSpeed;
+            return MySession.Static.ControlledEntity.Entity.Physics.LinearVelocity;
         }
 
         private InventoryItem GetInventoryItem(MyPhysicalInventoryItem myItem)

@@ -208,7 +208,9 @@ class SpaceEngineersCucumberTest {
         assertEquals(
             blockCount,
             allBlocks.size,
-            "Expected to see $blockCount blocks, not ${allBlocks.size} ${allBlocks.map { it.definitionId.type }.toSet()}."
+            "Expected to see $blockCount blocks, not ${allBlocks.size} ${
+                allBlocks.map { it.definitionId.type }.toSet()
+            }."
         )
         assertEquals(allBlocks.size, data.size)
         data.forEachIndexed { index, row ->
@@ -278,16 +280,17 @@ class SpaceEngineersCucumberTest {
         }
     }
 
-    fun moveBackScreenshotAndForward(block: Block, singleScreenshot: SingleScreenshot, distance: Float = 2f) = runBlocking {
-        sleep(500)
-        val startPosition = environment.observer.observe().position
-        environment.blockingMoveBackwardsByDistance(distance, startPosition = startPosition)
-        screenshot(block, singleScreenshot)
-        sleep(500)
-        val endPosition = environment.observer.observe().position
-        environment.blockingMoveForwardByDistance(distance, startPosition = endPosition)
-        sleep(500)
-    }
+    fun moveBackScreenshotAndForward(block: Block, singleScreenshot: SingleScreenshot, distance: Float = 2f) =
+        runBlocking {
+            sleep(500)
+            val startPosition = environment.observer.observe().position
+            environment.blockingMoveBackwardsByDistance(distance, startPosition = startPosition)
+            screenshot(block, singleScreenshot)
+            sleep(500)
+            val endPosition = environment.observer.observe().position
+            environment.blockingMoveForwardByDistance(distance, startPosition = endPosition)
+            sleep(500)
+        }
 
     fun screenshot(block: Block, singleScreenshot: SingleScreenshot) {
         blockScreenshotInfoByType.getOrPut(block.definitionId.type) {
@@ -299,14 +302,16 @@ class SpaceEngineersCucumberTest {
     }
 
     fun observeLatestNewBlock(): Block {
-        return environment.observer.observeBlocks().allBlocks.firstOrNull { it.id == context.lastNewBlockId } ?: error("block with id ${context.lastNewBlockId} not found")
+        return environment.observer.observeBlocks().allBlocks.firstOrNull { it.id == context.lastNewBlockId }
+            ?: error("block with id ${context.lastNewBlockId} not found")
     }
 
     @Then("Character grinds down to {double}% below each threshold, steps {float} units back and takes screenshot.")
     fun character_grinds_down_to_below_each_threshold_and_takes_screenshot(percentage: Double, distance: Float) =
         runBlocking {
             val block = observeLatestNewBlock()
-            val meta = environment.definitions.blockDefinitions().first { it.definitionId.type == block.definitionId.type }
+            val meta =
+                environment.definitions.blockDefinitions().first { it.definitionId.type == block.definitionId.type }
             meta.buildProgressModels.reversed().forEach { seBuildProgressModel ->
                 sleep(500)
                 grindDownToPercentage((seBuildProgressModel.buildRatioUpperBound).toDouble() * 100.0 - percentage)
@@ -326,7 +331,8 @@ class SpaceEngineersCucumberTest {
     fun character_welds_up_above_each_threshold_and_takes_screenshot(percentage: Double, distance: Float) =
         runBlocking {
             val block = observeLatestNewBlock()
-            val definition = environment.definitions.blockDefinitions().first { it.definitionId.type == block.definitionId.type }
+            val definition =
+                environment.definitions.blockDefinitions().first { it.definitionId.type == block.definitionId.type }
             definition.buildProgressModels.forEach { seBuildProgressModel ->
                 sleep(500)
                 torchUpToPercentage((seBuildProgressModel.buildRatioUpperBound).toDouble() * 100.0 + percentage)
@@ -378,6 +384,22 @@ class SpaceEngineersCucumberTest {
     @Then("Character waits {int} seconds.")
     fun character_waits_seconds(seconds: Int) {
         sleep(seconds * 1000L)
+    }
+
+
+    @When("Character moves up for {int} ticks.")
+    fun character_moves_up_for_ticks(ticks: Int) {
+        environment.character.moveAndRotate(Vec3F.UP, ticks = ticks)
+    }
+
+    @When("Character moves forward for {int} ticks.")
+    fun character_moves_forward_for_ticks(ticks: Int) {
+        environment.character.moveAndRotate(Vec3F.FORWARD, ticks = ticks)
+    }
+
+    @Then("Character speed is {int} m\\/s.")
+    fun character_speed_is_100m_s(speed: Int) {
+        assertEquals(speed.toFloat(), environment.observer.observe().velocity.length(), 0.0001f)
     }
 
 }
