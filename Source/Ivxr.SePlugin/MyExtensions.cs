@@ -71,10 +71,15 @@ namespace Iv4xr.SePlugin
         
         public static DefinitionId ToDefinitionId(this MyDefinitionBase myDefinitionBase)
         {
+            return ToDefinitionId(myDefinitionBase.Id);
+        }
+        
+        public static DefinitionId ToDefinitionId(this MyDefinitionId myDefinitionId)
+        {
             return new DefinitionId()
             {
-                Id = myDefinitionBase.Id.TypeId.ToString(),
-                Type = myDefinitionBase.Id.SubtypeId.String,
+                Id = myDefinitionId.TypeId.ToString(),
+                Type = myDefinitionId.SubtypeId.String,
             };
         }
         

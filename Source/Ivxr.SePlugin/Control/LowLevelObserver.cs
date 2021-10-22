@@ -4,12 +4,14 @@ using System.Linq;
 using Iv4xr.PluginLib;
 using Iv4xr.PluginLib.WorldModel;
 using Iv4xr.SePlugin.Config;
+using Sandbox.Game;
 using Sandbox.Game.Entities;
 using Sandbox.Game.Entities.Character;
 using Sandbox.Game.Entities.Character.Components;
 using Sandbox.Game.Entities.Cube;
 using Sandbox.Game.Weapons;
 using Sandbox.Game.World;
+using VRage.Game;
 using VRage.Game.Entity;
 using VRageMath;
 
@@ -57,6 +59,29 @@ namespace Iv4xr.SePlugin.Control
             return client.MovementDirection * client.MovementSpeed;
         }
 
+        private InventoryItem GetInventoryItem(MyPhysicalInventoryItem myItem)
+        {
+            
+            return new InventoryItem()
+            {
+                Amount = (int) myItem.Amount,
+                Id = myItem.Content.GetId().ToDefinitionId(),
+            };
+        }
+
+        private Inventory GetInventory(MyInventory myInventory)
+        {
+            return new Inventory()
+            {
+                CurrentMass = (float) myInventory.CurrentMass,
+                CurrentVolume = (float) myInventory.CurrentVolume,
+                MaxMass = (float) myInventory.MaxMass,
+                MaxVolume = (float) myInventory.MaxVolume,
+                CargoPercentage = myInventory.CargoPercentage,
+                Items = myInventory.GetItems().Select(GetInventoryItem).ToList(),
+            };
+        }
+
         public CharacterObservation GetCharacterObservation()
         {
             var orientation = Character.PositionComp.GetOrientation();
@@ -85,6 +110,7 @@ namespace Iv4xr.SePlugin.Control
                 TargetBlock = TargetBlock(),
                 TargetUseObject = UseObject(),
                 Movement = (CharacterMovementEnum) Character.CurrentMovementState,
+                Inventory = GetInventory(Character.GetInventory()),
             };
         }
 

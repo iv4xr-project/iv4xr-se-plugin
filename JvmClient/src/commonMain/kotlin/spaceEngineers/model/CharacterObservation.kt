@@ -41,5 +41,6 @@ data class CharacterObservation(
     val targetUseObject: UseObject? = null,
     @SerialName("Movement")
     val movement: CharacterMovement,
-
-    ) : Entity
+    @SerialName("Inventory")
+    val inventory: Inventory,
+) : Entity
