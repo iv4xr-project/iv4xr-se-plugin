@@ -121,11 +121,11 @@ The project contains plugin in C# and JVM client in Kotlin. Those 2 languages ha
 
 ## Units and position
 
-- One big block size is 2.5 game distance units. Some vectors are sent in game distance units, some are sent in "cubes".
-- [Block size](https://iv4xr-project.github.io/iv4xr-se-plugin/space-engineers-api/spaceEngineers.model/-block/size.html) is in large cubes so for example 1x1x1 large block is 2.5x2.5x2.5 in game distance units.
+- One big block size is 2.5 game meters. Some vectors are sent in meters, some are sent in "cubes".
+- [Block size](https://iv4xr-project.github.io/iv4xr-se-plugin/space-engineers-api/spaceEngineers.model/-block/size.html) is in large cubes so for example 1x1x1 large block is 2.5x2.5x2.5 in meters.
 - Use enum [CubeSize](https://iv4xr-project.github.io/iv4xr-se-plugin/space-engineers-api/spaceEngineers.model/-cube-size/index.html) and/or [LARGE_BLOCK_CUBE_SIDE_SIZE](https://iv4xr-project.github.io/iv4xr-se-plugin/space-engineers-api/spaceEngineers.model/-l-a-r-g-e_-b-l-o-c-k_-c-u-b-e_-s-i-d-e_-s-i-z-e.html), [SMALL_BLOCK_CUBE_SIDE_SIZE](https://iv4xr-project.github.io/iv4xr-se-plugin/space-engineers-api/spaceEngineers.model/-s-m-a-l-l_-b-l-o-c-k_-c-u-b-e_-s-i-d-e_-s-i-z-e.html) constants for converting.
-- 5 small blocks to one big block. (So small block cube is 0.5x0.5x0.5 distance units.)
-- Engineer character can fit into space of 2x3x2 in small blocks (1x1.5x1 game units), however the size in the code is 1x1.8x1.
+- 5 small blocks to one big block. (So small block cube is 0.5x0.5x0.5 meters.)
+- Engineer character can fit into space of 2x3x2 in small blocks (1x1.5x1 meters), however the size in the code is 1x1.8x1.
 - The position of character is at its bottom, the camera is not. The offset vector between the bottom of character and the camera is:
   (x=0, y=1.6369286, z=0). Use [Character.DISTANCE_CENTER_CAMERA](https://iv4xr-project.github.io/iv4xr-se-plugin/space-engineers-api/spaceEngineers.controller/-character/-companion/-d-i-s-t-a-n-c-e_-c-e-n-t-e-r_-c-a-m-e-r-a.html) constant (or you can use the difference between position and camera position).
 - Block `position` is always between `minPosition` and `maxPosition`, 
@@ -196,7 +196,7 @@ To list all available definitions, call [Definitions.BlockDefinitions](https://i
 ### Small vs large cube blocks
 
 Most of the blocks are cube blocks, which have cube size 1x1x1. Cube blocks can be small or big.
-Small blocks have 0.5 in game unit size. Big blocks have 2.5 in game unit size, so 5 times bigger, 125 small blocks fit into one big block.
+Small blocks have 0.5 meters. Big blocks have 2.5 meters, so 5 times bigger, 125 small blocks fit into one big block.
 
 Large blocks usually have "Large" prefix, their small counterpart has "Small" prefix.
 
