@@ -81,6 +81,7 @@ namespace Iv4xr.SePlugin.Control
                 HeadLocalYAngle = Character.HeadLocalYAngle,
                 TargetBlock = TargetBlock(),
                 TargetUseObject = UseObject(),
+                Movement = (CharacterMovementEnum) Character.CurrentMovementState,
             };
         }
 

@@ -33,4 +33,7 @@ data class CharacterObservation(
     val targetBlock: Block?,
     @SerialName("TargetUseObject")
     val targetUseObject: UseObject? = null,
+    @SerialName("Movement")
+    val movement: CharacterMovement,
+
 ) : Entity
