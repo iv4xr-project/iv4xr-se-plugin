@@ -6,8 +6,8 @@ using Iv4xr.PluginLib.WorldModel;
 using Sandbox.Game.Entities;
 using Sandbox.Game.Entities.Character;
 using Sandbox.Game.World;
+using VRage.Game;
 using VRage.Game.Entity.UseObject;
-using VRage.ModAPI;
 using VRageMath;
 
 namespace Iv4xr.SePlugin.Control
@@ -99,10 +99,21 @@ namespace Iv4xr.SePlugin.Control
 
         public CharacterObservation MoveAndRotate(PlainVec3D movement, PlainVec2F rotation3, float roll, int ticks)
         {
+            var vector3d = movement.ToVector3D();
+            if (vector3d == Vector3D.Down && Character.CurrentMovementState == MyCharacterMovementEnum.Standing && !Character.JetpackRunning)
+            {
+                Character.Crouch();
+            }
+            else if (vector3d == Vector3D.Up && Character.CurrentMovementState == MyCharacterMovementEnum.Crouching && !Character.JetpackRunning)
+            {
+                Character.Stand();
+            }
+
             IvxrPlugin.Context.ContinuousMovementController.ChangeMovement(
                 new ContinuousMovementContext()
                         { MoveVector = movement, RotationVector = rotation3, Roll = roll, TicksLeft = ticks }
             );
+
             return m_observer.Observe();
         }
 
