@@ -41,6 +41,7 @@ namespace Iv4xr.SePlugin
 
             JsonRpcStarter = new JsonRpcStarter(
                 new SynchronizedSpaceEngineers(se, FuncActionDispatcher),
+                hostname: config.Hostname,
                 port: config.JsonRpcPort
             ) { Log = Log };
         }
