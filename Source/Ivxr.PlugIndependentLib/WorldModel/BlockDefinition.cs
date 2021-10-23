@@ -9,5 +9,6 @@ namespace Iv4xr.PluginLib.WorldModel
         public string CubeSize;
         public PlainVec3I Size;
         public List<MountPoint> MountPoints;
+        public List<Component> Components;
     }
 }

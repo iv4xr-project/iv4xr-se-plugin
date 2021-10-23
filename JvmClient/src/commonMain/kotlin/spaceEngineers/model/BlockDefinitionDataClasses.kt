@@ -28,6 +28,8 @@ data class DataAirtightDoorGenericDefinition(
     override val availableInSurvival: Boolean,
     @SerialName("Enabled")
     override val enabled: Boolean,
+    @SerialName("Components")
+    override val components: List<Component>,
 
 
 
@@ -61,6 +63,8 @@ data class DataLCDPanelsBlockDefinition(
     override val availableInSurvival: Boolean,
     @SerialName("Enabled")
     override val enabled: Boolean,
+    @SerialName("Components")
+    override val components: List<Component>,
 
 
 
@@ -90,6 +94,8 @@ data class DataPowerProducerDefinition(
     override val availableInSurvival: Boolean,
     @SerialName("Enabled")
     override val enabled: Boolean,
+    @SerialName("Components")
+    override val components: List<Component>,
 
 
 
@@ -119,6 +125,8 @@ data class DataAdvancedDoorDefinition(
     override val availableInSurvival: Boolean,
     @SerialName("Enabled")
     override val enabled: Boolean,
+    @SerialName("Components")
+    override val components: List<Component>,
 
 
 
@@ -150,6 +158,8 @@ data class DataAirVentDefinition(
     override val availableInSurvival: Boolean,
     @SerialName("Enabled")
     override val enabled: Boolean,
+    @SerialName("Components")
+    override val components: List<Component>,
 
 
 
@@ -183,6 +193,8 @@ data class DataProductionBlockDefinition(
     override val availableInSurvival: Boolean,
     @SerialName("Enabled")
     override val enabled: Boolean,
+    @SerialName("Components")
+    override val components: List<Component>,
 
 
 
@@ -216,6 +228,8 @@ data class DataAssemblerDefinition(
     override val availableInSurvival: Boolean,
     @SerialName("Enabled")
     override val enabled: Boolean,
+    @SerialName("Components")
+    override val components: List<Component>,
 
     @SerialName("InventoryMaxVolume")
     override val inventoryMaxVolume: Float,
@@ -250,6 +264,8 @@ data class DataBatteryBlockDefinition(
     override val availableInSurvival: Boolean,
     @SerialName("Enabled")
     override val enabled: Boolean,
+    @SerialName("Components")
+    override val components: List<Component>,
 
     @SerialName("MaxPowerOutput")
     override val maxPowerOutput: Float,
@@ -286,6 +302,8 @@ data class DataBeaconDefinition(
     override val availableInSurvival: Boolean,
     @SerialName("Enabled")
     override val enabled: Boolean,
+    @SerialName("Components")
+    override val components: List<Component>,
 
 
 
@@ -317,6 +335,8 @@ data class DataButtonPanelDefinition(
     override val availableInSurvival: Boolean,
     @SerialName("Enabled")
     override val enabled: Boolean,
+    @SerialName("Components")
+    override val components: List<Component>,
 
 
 
@@ -346,6 +366,8 @@ data class DataCameraBlockDefinition(
     override val availableInSurvival: Boolean,
     @SerialName("Enabled")
     override val enabled: Boolean,
+    @SerialName("Components")
+    override val components: List<Component>,
 
 
 
@@ -387,6 +409,8 @@ data class DataShipControllerDefinition(
     override val availableInSurvival: Boolean,
     @SerialName("Enabled")
     override val enabled: Boolean,
+    @SerialName("Components")
+    override val components: List<Component>,
 
 
 
@@ -422,6 +446,8 @@ data class DataCockpitDefinition(
     override val availableInSurvival: Boolean,
     @SerialName("Enabled")
     override val enabled: Boolean,
+    @SerialName("Components")
+    override val components: List<Component>,
 
     @SerialName("EnableFirstPerson")
     override val enableFirstPerson: Boolean,
@@ -462,6 +488,8 @@ data class DataConveyorSorterDefinition(
     override val availableInSurvival: Boolean,
     @SerialName("Enabled")
     override val enabled: Boolean,
+    @SerialName("Components")
+    override val components: List<Component>,
 
 
 
@@ -491,6 +519,8 @@ data class DataCryoChamberDefinition(
     override val availableInSurvival: Boolean,
     @SerialName("Enabled")
     override val enabled: Boolean,
+    @SerialName("Components")
+    override val components: List<Component>,
 
     @SerialName("OxygenCapacity")
     override val oxygenCapacity: Float,
@@ -533,6 +563,8 @@ data class DataDecoyDefinition(
     override val availableInSurvival: Boolean,
     @SerialName("Enabled")
     override val enabled: Boolean,
+    @SerialName("Components")
+    override val components: List<Component>,
 
 
 
@@ -564,6 +596,8 @@ data class DataDoorDefinition(
     override val availableInSurvival: Boolean,
     @SerialName("Enabled")
     override val enabled: Boolean,
+    @SerialName("Components")
+    override val components: List<Component>,
 
 
 
@@ -595,6 +629,8 @@ data class DataExhaustBlockDefinition(
     override val availableInSurvival: Boolean,
     @SerialName("Enabled")
     override val enabled: Boolean,
+    @SerialName("Components")
+    override val components: List<Component>,
 
 
 
@@ -624,6 +660,8 @@ data class DataFueledPowerProducerDefinition(
     override val availableInSurvival: Boolean,
     @SerialName("Enabled")
     override val enabled: Boolean,
+    @SerialName("Components")
+    override val components: List<Component>,
 
     @SerialName("MaxPowerOutput")
     override val maxPowerOutput: Float,
@@ -654,6 +692,8 @@ data class DataGasFueledPowerProducerDefinition(
     override val availableInSurvival: Boolean,
     @SerialName("Enabled")
     override val enabled: Boolean,
+    @SerialName("Components")
+    override val components: List<Component>,
 
     @SerialName("FuelProductionToCapacityMultiplier")
     override val fuelProductionToCapacityMultiplier: Float,
@@ -686,6 +726,8 @@ data class DataGasTankDefinition(
     override val availableInSurvival: Boolean,
     @SerialName("Enabled")
     override val enabled: Boolean,
+    @SerialName("Components")
+    override val components: List<Component>,
 
     @SerialName("InventoryMaxVolume")
     override val inventoryMaxVolume: Float,
@@ -720,6 +762,8 @@ data class DataGravityGeneratorBaseDefinition(
     override val availableInSurvival: Boolean,
     @SerialName("Enabled")
     override val enabled: Boolean,
+    @SerialName("Components")
+    override val components: List<Component>,
 
 
 
@@ -751,6 +795,8 @@ data class DataGravityGeneratorDefinition(
     override val availableInSurvival: Boolean,
     @SerialName("Enabled")
     override val enabled: Boolean,
+    @SerialName("Components")
+    override val components: List<Component>,
 
     @SerialName("MinGravityAcceleration")
     override val minGravityAcceleration: Float,
@@ -783,6 +829,8 @@ data class DataGravityGeneratorSphereDefinition(
     override val availableInSurvival: Boolean,
     @SerialName("Enabled")
     override val enabled: Boolean,
+    @SerialName("Components")
+    override val components: List<Component>,
 
     @SerialName("MinGravityAcceleration")
     override val minGravityAcceleration: Float,
@@ -821,6 +869,8 @@ data class DataGyroDefinition(
     override val availableInSurvival: Boolean,
     @SerialName("Enabled")
     override val enabled: Boolean,
+    @SerialName("Components")
+    override val components: List<Component>,
 
 
 
@@ -852,6 +902,8 @@ data class DataSoundBlockDefinition(
     override val availableInSurvival: Boolean,
     @SerialName("Enabled")
     override val enabled: Boolean,
+    @SerialName("Components")
+    override val components: List<Component>,
 
 
 
@@ -889,6 +941,8 @@ data class DataJumpDriveDefinition(
     override val availableInSurvival: Boolean,
     @SerialName("Enabled")
     override val enabled: Boolean,
+    @SerialName("Components")
+    override val components: List<Component>,
 
 
 
@@ -926,6 +980,8 @@ data class DataLandingGearDefinition(
     override val availableInSurvival: Boolean,
     @SerialName("Enabled")
     override val enabled: Boolean,
+    @SerialName("Components")
+    override val components: List<Component>,
 
 
 
@@ -955,6 +1011,8 @@ data class DataWeaponBlockDefinition(
     override val availableInSurvival: Boolean,
     @SerialName("Enabled")
     override val enabled: Boolean,
+    @SerialName("Components")
+    override val components: List<Component>,
 
 
 
@@ -986,6 +1044,8 @@ data class DataLightingBlockDefinition(
     override val availableInSurvival: Boolean,
     @SerialName("Enabled")
     override val enabled: Boolean,
+    @SerialName("Components")
+    override val components: List<Component>,
 
 
 
@@ -1017,6 +1077,8 @@ data class DataMechanicalConnectionBlockBaseDefinition(
     override val availableInSurvival: Boolean,
     @SerialName("Enabled")
     override val enabled: Boolean,
+    @SerialName("Components")
+    override val components: List<Component>,
 
 
 
@@ -1050,6 +1112,8 @@ data class DataMedicalRoomDefinition(
     override val availableInSurvival: Boolean,
     @SerialName("Enabled")
     override val enabled: Boolean,
+    @SerialName("Components")
+    override val components: List<Component>,
 
 
 
@@ -1093,6 +1157,8 @@ data class DataMergeBlockDefinition(
     override val availableInSurvival: Boolean,
     @SerialName("Enabled")
     override val enabled: Boolean,
+    @SerialName("Components")
+    override val components: List<Component>,
 
 
 
@@ -1122,6 +1188,8 @@ data class DataOreDetectorDefinition(
     override val availableInSurvival: Boolean,
     @SerialName("Enabled")
     override val enabled: Boolean,
+    @SerialName("Components")
+    override val components: List<Component>,
 
 
 
@@ -1151,6 +1219,8 @@ data class DataOxygenFarmDefinition(
     override val availableInSurvival: Boolean,
     @SerialName("Enabled")
     override val enabled: Boolean,
+    @SerialName("Components")
+    override val components: List<Component>,
 
 
 
@@ -1186,6 +1256,8 @@ data class DataOxygenGeneratorDefinition(
     override val availableInSurvival: Boolean,
     @SerialName("Enabled")
     override val enabled: Boolean,
+    @SerialName("Components")
+    override val components: List<Component>,
 
     @SerialName("InventoryMaxVolume")
     override val inventoryMaxVolume: Float,
@@ -1228,6 +1300,8 @@ data class DataParachuteDefinition(
     override val availableInSurvival: Boolean,
     @SerialName("Enabled")
     override val enabled: Boolean,
+    @SerialName("Components")
+    override val components: List<Component>,
 
 
 
@@ -1267,6 +1341,8 @@ data class DataPistonBaseDefinition(
     override val availableInSurvival: Boolean,
     @SerialName("Enabled")
     override val enabled: Boolean,
+    @SerialName("Components")
+    override val components: List<Component>,
 
     @SerialName("SafetyDetach")
     override val safetyDetach: Float,
@@ -1315,6 +1391,8 @@ data class DataProjectorDefinition(
     override val availableInSurvival: Boolean,
     @SerialName("Enabled")
     override val enabled: Boolean,
+    @SerialName("Components")
+    override val components: List<Component>,
 
 
 
@@ -1352,6 +1430,8 @@ data class DataRadioAntennaDefinition(
     override val availableInSurvival: Boolean,
     @SerialName("Enabled")
     override val enabled: Boolean,
+    @SerialName("Components")
+    override val components: List<Component>,
 
 
 
