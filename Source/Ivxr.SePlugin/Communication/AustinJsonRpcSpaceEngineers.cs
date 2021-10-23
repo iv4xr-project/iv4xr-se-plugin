@@ -5,13 +5,18 @@ using Iv4xr.PluginLib.WorldModel;
 
 namespace Iv4xr.SePlugin.Communication
 {
-    public class AustinJsonRpcSpaceEngineers : JsonRpcService
+    public class AustinJsonRpcSpaceEngineers
     {
         private ISpaceEngineers m_se;
 
         public AustinJsonRpcSpaceEngineers(ISpaceEngineers se)
         {
             m_se = se;
+        }
+
+        public void Bind()
+        {
+            ServiceBinder.BindService(Handler.DefaultSessionId(), this);
         }
 
         [JsonRpcMethod("Character.MoveAndRotate")]
