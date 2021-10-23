@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Reflection;
 using Iv4xr.PluginLib;
 using Iv4xr.SePlugin.Communication;
 using Iv4xr.SePlugin.Config;
@@ -21,7 +22,7 @@ namespace Iv4xr.SePlugin
 
         public IvxrPluginContext()
         {
-            var seLog = new SeLog(alwaysFlush: true);
+            var seLog = new SeLog(Assembly.GetExecutingAssembly().GetName().Version.ToString(), alwaysFlush: true);
             seLog.Init("ivxr-plugin.log");
             Log = seLog;
 
