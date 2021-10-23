@@ -1,8 +1,7 @@
 Feature: C197588 Jetpack persists through entering/exiting cockpit blocks
 
   Background:
-    Given I am connected to real game using json-rpc.
-    And Toolbar has mapping:
+    Given Toolbar has mapping:
       | slot | page | blockType                 |
       | 2    | 0    | LargeBlockCockpitSeat     |
 

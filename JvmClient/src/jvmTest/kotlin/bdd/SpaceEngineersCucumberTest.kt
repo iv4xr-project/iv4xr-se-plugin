@@ -1,60 +1,31 @@
 package bdd
 
-import io.cucumber.java.After
-import io.cucumber.java.Before
-import io.cucumber.java.PendingException
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import io.cucumber.junit.Cucumber
 import kotlinx.coroutines.runBlocking
 import org.junit.runner.RunWith
-import spaceEngineers.controller.ContextControllerWrapper
 import spaceEngineers.controller.JsonRpcSpaceEngineers
-import spaceEngineers.controller.JsonRpcSpaceEngineersBuilder
 import spaceEngineers.controller.extensions.*
 import spaceEngineers.controller.loadFromTestResources
-import spaceEngineers.model.*
+import spaceEngineers.model.Block
+import spaceEngineers.model.CharacterMovement
+import spaceEngineers.model.ToolbarLocation
+import spaceEngineers.model.Vec3F
 import spaceEngineers.model.extensions.allBlocks
 import spaceEngineers.model.extensions.normalizeAsRun
 import spaceEngineers.transport.SocketReaderWriter
-import spaceEngineers.transport.closeIfCloseable
-import testhelp.TEST_AGENT
 import testhelp.assertFloatEquals
 import testhelp.assertVecEquals
 import java.io.File
 import java.lang.Thread.sleep
 import kotlin.test.assertEquals
-import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 
 @RunWith(Cucumber::class)
-class SpaceEngineersCucumberTest {
-    lateinit var environment: ContextControllerWrapper
-
-    val context by lazy { environment.context }
-
-    @Before
-    fun setup() {
-    }
-
-    @After
-    fun cleanup() {
-        if (this::environment.isInitialized) {
-            environment.spaceEngineers.closeIfCloseable()
-            environment.closeIfCloseable()
-        }
-    }
-
-    @Given("I am connected to real game using json-rpc.")
-    fun i_am_connected_to_real_game_using_json_rpc() = runBlocking {
-
-        environment =
-            ContextControllerWrapper(
-                spaceEngineers = JsonRpcSpaceEngineersBuilder.localhost(agentId = TEST_AGENT)
-            )
-    }
+class SpaceEngineersCucumberTest : AbstractSpaceEngineersSteps() {
 
     @Given("Toolbar has mapping:")
     fun toolbar_has_mapping(dataTable: List<Map<String, String>>) {
@@ -111,19 +82,12 @@ class SpaceEngineersCucumberTest {
         }
     }
 
-    @Then("Character forward orientation is \\({double}, {double}, {double}).")
-    fun character_is_facing(x: Double, y: Double, z: Double) {
-        val position = Vec3F(x, y, z)
-        context.observationHistory.last().let { observation ->
-            assertVecEquals(position, observation.character.orientationForward, diff = 0.1f)
-        }
-    }
-
     @When("Character moves forward for {float} units.")
     fun character_moves_forward_for_units(units: Float) = runBlocking {
         environment.blockingMoveForwardByDistance(
             distance = units,
-            startPosition = environment.observer.observe().position
+            startPosition = environment.observer.observe().position,
+            timeoutMs = 40000,
         )
         environment.observer.observe()
     }
@@ -246,26 +210,6 @@ class SpaceEngineersCucumberTest {
 
     private val blockScreenshotInfoByType = mutableMapOf<String, Screenshots>()
 
-    data class Screenshots(
-        val blockType: String,
-        val maxIntegrity: Float,
-        val screenshots: MutableList<SingleScreenshot> = mutableListOf()
-    ) {
-        constructor(block: Block) : this(block.definitionId.type, block.maxIntegrity)
-    }
-
-    data class SingleScreenshot(
-        val filename: String,
-        val integrity: Float,
-        val buildRatioUpperBound: Float
-    ) {
-        constructor(block: Block, buildRatioUpperBound: Float) : this(
-            filename = "${block.definitionId.type}_${block.integrity}.png",
-            integrity = block.integrity,
-            buildRatioUpperBound = buildRatioUpperBound
-        )
-    }
-
     @Given("Output directory is {string}.")
     fun outputDirectoryIs(outputDir: String) {
         outputDirectory = File(outputDir.replace("~", System.getProperty("user.home")))
@@ -365,19 +309,9 @@ class SpaceEngineersCucumberTest {
         environment.character.turnOnJetpack()
     }
 
-    @Then("jetpack is on.")
-    fun jetpack_is_on() {
-        assertTrue(environment.observer.observe().jetpackRunning)
-    }
-
     @Then("Character uses.")
     fun character_uses() {
         environment.character.use()
-    }
-
-    @Then("jetpack is off.")
-    fun jetpack_is_off() {
-        assertFalse(environment.observer.observe().jetpackRunning)
     }
 
     @Then("Character waits {int} seconds.")
@@ -401,15 +335,11 @@ class SpaceEngineersCucumberTest {
         environment.character.moveAndRotate(Vec3F.FORWARD.normalizeAsRun(), ticks = ticks)
     }
 
-
-    @Then("Character speed is {int} m\\/s.")
-    fun character_speed_is_100m_s(speed: Int) {
-        assertEquals(speed.toFloat(), environment.observer.observe().velocity.length(), 0.0001f)
-    }
-
     @Then("Observed grid mass is {double}.")
     fun observed_grid_mass_is(mass: Double) {
-        assertEquals(mass.toFloat(), environment.observer.observeBlocks().grids.first().mass)
+        assertTrue(
+            environment.observer.observeBlocks().grids.any { it.mass == mass.toFloat() }
+        )
     }
 
     @When("Block type {string} has mass {double}.")
@@ -430,8 +360,5 @@ class SpaceEngineersCucumberTest {
         assertEquals(CharacterMovement.crouching, environment.observer.observe().movement.value.toInt())
     }
 
-    @Then("Character is standing.")
-    fun character_is_standing() {
-        assertEquals(CharacterMovement.standing, environment.observer.observe().movement.value.toInt())
-    }
+
 }

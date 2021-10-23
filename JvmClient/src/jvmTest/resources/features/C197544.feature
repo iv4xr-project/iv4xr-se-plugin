@@ -1,8 +1,5 @@
 Feature: C197544 Mass of the object is added to the overall grid mass (an update of the grid has to happen to see this)
 
-  Background:
-    Given I am connected to real game using json-rpc.
-
   Scenario Outline: Mass of the object is added to the overall grid mass (an update of the grid has to happen to see this)
     Given I load scenario "simple-place-grind-torch-with-tools".
     And Block type "<blockType>" has mass <mass>.

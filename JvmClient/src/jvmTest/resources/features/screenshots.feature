@@ -2,9 +2,7 @@ Feature: Example how to describe block observations using cucumber.
   To demonstrate how can we define features using scenarios and automatically test them.
 
   Background:
-    Given I am connected to real game using json-rpc.
-    # Given I am connected to real game.
-    And Output directory is "~/screenshots".
+    Given Output directory is "~/screenshots".
 
   Scenario Outline: Checking scenario character is at correct starting location and can move.
     Given I load scenario "simple-place-grind-torch-with-tools".
