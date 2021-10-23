@@ -20,8 +20,12 @@ namespace Iv4xr.SePlugin.Communication
         private readonly int m_port;
 
         private readonly AustinJsonRpcSpaceEngineers m_service;
-        
-        public JsonRpcStarter(ISpaceEngineers se, string hostname = "127.0.0.1", int port = PluginConfig.DEFAULT_PORT)
+
+        public JsonRpcStarter(
+            ISpaceEngineers se,
+            string hostname = PluginConfig.DEFAULT_HOSTNAME,
+            int port = PluginConfig.DEFAULT_PORT
+        )
         {
             m_hostname = hostname;
             m_port = port;
