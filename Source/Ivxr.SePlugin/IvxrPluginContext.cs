@@ -22,8 +22,11 @@ namespace Iv4xr.SePlugin
 
         public IvxrPluginContext()
         {
-            var seLog = new SeLog(Assembly.GetExecutingAssembly().GetName().Version.ToString(), alwaysFlush: true);
-            seLog.Init("ivxr-plugin.log");
+            var seLog = new SeLog(
+                Assembly.GetExecutingAssembly().GetName().Version.ToString(),
+                "ivxr-plugin",
+                alwaysFlush: true
+            );
             Log = seLog;
 
             var configPath = Path.Combine(MyFileSystem.UserDataPath, CONFIG_FILE);
@@ -31,13 +34,13 @@ namespace Iv4xr.SePlugin
             var config = configLoader.LoadOrSaveDefault();
 
             var se = new RealSpaceEngineers(m_gameSession, Log, config);
-            
+
             FuncActionDispatcher = new FuncActionDispatcher(seLog);
-            
+
             JsonRpcStarter = new JsonRpcStarter(
                 new SynchronizedSpaceEngineers(se, FuncActionDispatcher),
                 port: config.JsonRpcPort
-                ) {Log = Log};
+            ) { Log = Log };
         }
 
 
