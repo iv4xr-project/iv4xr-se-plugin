@@ -76,7 +76,7 @@ $dokka.location:spaceEngineers.controller/Character.Companion/DISTANCE_CENTER_CA
 $dokka.location:spaceEngineers.controller/Character///PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-character/index.html
 $dokka.location:spaceEngineers.controller/Character/beginUsingTool/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-character/begin-using-tool.html
 $dokka.location:spaceEngineers.controller/Character/endUsingTool/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-character/end-using-tool.html
-$dokka.location:spaceEngineers.controller/Character/moveAndRotate/#spaceEngineers.model.Vec3F#spaceEngineers.model.Vec2F#kotlin.Float/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-character/move-and-rotate.html
+$dokka.location:spaceEngineers.controller/Character/moveAndRotate/#spaceEngineers.model.Vec3F#spaceEngineers.model.Vec2F#kotlin.Float#kotlin.Int/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-character/move-and-rotate.html
 $dokka.location:spaceEngineers.controller/Character/switchHelmet/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-character/switch-helmet.html
 $dokka.location:spaceEngineers.controller/Character/turnOffJetpack/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-character/turn-off-jetpack.html
 $dokka.location:spaceEngineers.controller/Character/turnOnJetpack/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-character/turn-on-jetpack.html
