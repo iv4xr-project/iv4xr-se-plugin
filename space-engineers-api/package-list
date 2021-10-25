@@ -62,7 +62,6 @@ $dokka.location:spaceEngineers.controller//blockMappings/#/PointingToDeclaration
 $dokka.location:spaceEngineers.controller//json/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/json.html
 $dokka.location:spaceEngineers.controller//loadFromTestResources/spaceEngineers.controller.Session#kotlin.String#kotlin.String/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/load-from-test-resources.html
 $dokka.location:spaceEngineers.controller//serializerMapping/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/serializer-mapping.html
-$dokka.location:spaceEngineers.controller//unixToWindowsPath/kotlin.String#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/unix-to-windows-path.html
 $dokka.location:spaceEngineers.controller/BlockDefinitionSerializer///PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-block-definition-serializer/index.html
 $dokka.location:spaceEngineers.controller/BlockSerializer///PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-block-serializer/index.html
 $dokka.location:spaceEngineers.controller/Blocks///PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-blocks/index.html
