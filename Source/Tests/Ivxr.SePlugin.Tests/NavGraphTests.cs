@@ -169,5 +169,19 @@ namespace Ivxr.SeGameLib.Tests
                 }
             } 
         }
+
+        [Theory]
+        [InlineData(1, 5)]
+        [InlineData(4, 7)]
+        public void ConvertsRectangularGraph(int width, int length)
+        {
+            var fatGraph = CreateGraph(GenGridPositions(width, length));
+            var slimGraph = fatGraph.ToNavGraph();
+            
+            Assert.Equal(fatGraph.Nodes.Count, slimGraph.Nodes.Count);
+            
+            var edges = fatGraph.Nodes.Select(n => n.Neighbours.Count).Sum() / 2;
+            Assert.Equal(edges, slimGraph.Edges.Count);
+        }
     }
 }
