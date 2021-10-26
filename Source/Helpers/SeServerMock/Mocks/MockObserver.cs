@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Iv4xr.PluginLib;
 using Iv4xr.PluginLib.Control;
+using Iv4xr.PluginLib.Navigation;
 using Iv4xr.PluginLib.WorldModel;
 
 namespace SeServerMock.Mocks
@@ -69,9 +71,14 @@ namespace SeServerMock.Mocks
             return GetObservation();
         }
 
+        public NavGraph NavigationGraph()
+        {
+            throw new NotImplementedException();
+        }
+
         public void TakeScreenshot(string absolutePath)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }

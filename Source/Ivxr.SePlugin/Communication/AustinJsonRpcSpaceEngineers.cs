@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using AustinHarris.JsonRpc;
 using Iv4xr.PluginLib.Control;
+using Iv4xr.PluginLib.Navigation;
 using Iv4xr.PluginLib.WorldModel;
 
 namespace Iv4xr.SePlugin.Communication
@@ -83,6 +84,12 @@ namespace Iv4xr.SePlugin.Communication
         Observation ObserveNewBlocks()
         {
             return m_se.Observer.ObserveNewBlocks();
+        }
+
+        [JsonRpcMethod("Observer.NavigationGraph")]
+        NavGraph GetNavigationGraph()
+        {
+            return m_se.Observer.NavigationGraph();
         }
 
         [JsonRpcMethod("Observer.TakeScreenshot")]
