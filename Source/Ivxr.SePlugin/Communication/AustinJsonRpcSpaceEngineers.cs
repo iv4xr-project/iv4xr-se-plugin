@@ -85,10 +85,10 @@ namespace Iv4xr.SePlugin.Communication
             return m_se.Observer.ObserveNewBlocks();
         }
 
-        [JsonRpcMethod("Observer.GetNavigationGraph")]
+        [JsonRpcMethod("Observer.NavigationGraph")]
         NavGraph GetNavigationGraph()
         {
-            return m_se.Observer.GetNavigationGraph();
+            return m_se.Observer.NavigationGraph();
         }
 
         [JsonRpcMethod("Observer.TakeScreenshot")]

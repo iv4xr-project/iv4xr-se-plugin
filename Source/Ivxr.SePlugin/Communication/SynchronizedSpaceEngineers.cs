@@ -93,9 +93,9 @@ namespace Iv4xr.SePlugin.Communication
             return Enqueue(() => m_observer.ObserveNewBlocks());
         }
 
-        public NavGraph GetNavigationGraph()
+        public NavGraph NavigationGraph()
         {
-            return Enqueue(() => m_observer.GetNavigationGraph());
+            return Enqueue(() => m_observer.NavigationGraph());
         }
 
         public void TakeScreenshot(string absolutePath)

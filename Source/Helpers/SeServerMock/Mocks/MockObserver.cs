@@ -70,7 +70,7 @@ namespace SeServerMock.Mocks
             return GetObservation();
         }
 
-        public NavGraph GetNavigationGraph()
+        public NavGraph NavigationGraph()
         {
             throw new NotImplementedException();
         }

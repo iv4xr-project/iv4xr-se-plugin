@@ -43,7 +43,7 @@ namespace Iv4xr.SePlugin.Control
             return m_lowLevelObserver.GetNewBlocks();
         }
 
-        public NavGraph GetNavigationGraph()
+        public NavGraph NavigationGraph()
         {
             var navGraphEditor = new NavGraphEditor(m_lowLevelObserver);
 

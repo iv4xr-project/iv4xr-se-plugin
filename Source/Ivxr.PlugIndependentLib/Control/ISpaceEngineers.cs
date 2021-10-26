@@ -25,7 +25,7 @@ namespace Iv4xr.PluginLib.Control
         CharacterObservation Observe();
         Observation ObserveBlocks();
         Observation ObserveNewBlocks();
-        NavGraph GetNavigationGraph();
+        NavGraph NavigationGraph();
         void TakeScreenshot(string absolutePath);
     }
 
