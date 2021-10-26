@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Iv4xr.PluginLib.WorldModel;
 
 namespace Iv4xr.SePlugin.Navigation
@@ -9,45 +10,28 @@ namespace Iv4xr.SePlugin.Navigation
     /// </summary>
     public class FatNode
     {
+        public readonly int Id;
+        
         public readonly PlainVec3D Position;
 
         public readonly List<FatNode> Neighbours = new List<FatNode>(capacity: 8);
 
-        private int m_temporaryIndex;
+        private static int m_nextId;
+
+        private static int GenerateId()
+        {
+            return Interlocked.Increment(ref m_nextId);
+        }
 
         public FatNode(PlainVec3D position)
         {
+            Id = GenerateId();
             Position = position;
         }
-        
-        /// <summary>
-        /// Use the FatNavGraph extension method ToNavGraph to call this method from outside.
-        /// </summary>
-        ///
-        /// The method is here, so that it has access to the TemporaryIndex.
-        internal static NavGraph ConvertFatNavGraphToSlim(FatNavGraph fatNavGraph)
-        {
-            var i = 0;
-            var vertexPositions = new List<PlainVec3D>(fatNavGraph.Nodes.Count);
-            
-            foreach (var fatNode in fatNavGraph.Nodes)
-            {
-                fatNode.m_temporaryIndex = i;
-                i++;
-                
-                vertexPositions.Add(fatNode.Position);
-            }
-            
-            var setOfEdges = new HashSet<Edge>();
-            foreach (var fatNode in fatNavGraph.Nodes)
-            {
-                foreach (var neighbour in fatNode.Neighbours)
-                {
-                    setOfEdges.Add(new Edge(fatNode.m_temporaryIndex, neighbour.m_temporaryIndex));
-                }
-            }
 
-            return new NavGraph(vertexPositions, setOfEdges.ToList());
+        internal Node ToSlimNode()
+        {
+            return new Node(Id, Position);
         }
     }
 }
