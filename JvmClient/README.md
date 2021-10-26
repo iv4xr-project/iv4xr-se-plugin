@@ -145,9 +145,22 @@ To locate the center of the block, use midway between `minPosition` and `maxPosi
 
 
 - Method [moveAndRotate](https://iv4xr-project.github.io/iv4xr-se-plugin/space-engineers-api/spaceEngineers.controller/-character/move-and-rotate.html) accepts movement vector. Vector represents direction. 
-- It's value defines type (speed) of movement. If it's less than 0.4, it is slow movement. If less than or equal to 1.6, it is walk. If over 1.6, it is sprint.
+- It's value defines type (speed) of movement. If it's less than 0.4, it is slow movement. If less than or equal to 1.6, it is walk. If over 1.6, it is sprint. This is relevant when actually walking (ex. not using jetpack).
 - Use convenience extension methods `normalizeAsWalk`, `normalizeAsRun`, `normalizeAsSprint` to adjust vector size to your needs.
 - Check [CharacterMovementType](https://iv4xr-project.github.io/iv4xr-se-plugin/space-engineers-api/spaceEngineers.model/-character-movement-type/index.html) for more information and to check constants.
+- There is also movement while in crouch.
+
+There are other movement types on Space Engineers, so this is not full list of possibilities.
+Following table describes differences between movements and their speeds.
+
+| Movement type | Max speed (m/s) | Movement vector threshold |
+| --- | --- | --- |
+| Crouch walk |   2  | ? |
+| Walk        |   3  | 0.4 <  |
+| Run         |   6  | 1.6 <= |
+| Sprint      |  10  | 1.6 > |
+| Jetpack     | 110  | ? |
+
 
 ## Rotating character
 
