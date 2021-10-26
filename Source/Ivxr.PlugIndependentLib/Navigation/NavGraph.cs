@@ -4,7 +4,6 @@ namespace Iv4xr.PluginLib.Navigation
 {
     public class NavGraph
     {
-        // Vertices indexed from zero.
         public readonly List<Node> Nodes;
 
         public readonly List<Edge> Edges;
