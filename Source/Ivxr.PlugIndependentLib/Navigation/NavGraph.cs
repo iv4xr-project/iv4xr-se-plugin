@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Iv4xr.PluginLib.WorldModel
+namespace Iv4xr.PluginLib.Navigation
 {
     public class NavGraph
     {

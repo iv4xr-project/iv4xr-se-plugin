@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Iv4xr.PluginLib;
 using Iv4xr.PluginLib.Control;
+using Iv4xr.PluginLib.Navigation;
 using Iv4xr.PluginLib.WorldModel;
 
 namespace SeServerMock.Mocks

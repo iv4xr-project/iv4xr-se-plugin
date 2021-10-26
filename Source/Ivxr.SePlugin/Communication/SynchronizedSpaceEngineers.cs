@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Iv4xr.PluginLib.Control;
+using Iv4xr.PluginLib.Navigation;
 using Iv4xr.SePlugin.Control;
 using Iv4xr.PluginLib.WorldModel;
 

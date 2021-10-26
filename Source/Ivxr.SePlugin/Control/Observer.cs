@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using Iv4xr.PluginLib;
 using Iv4xr.PluginLib.Control;
+using Iv4xr.PluginLib.Navigation;
 using Iv4xr.PluginLib.WorldModel;
 using Iv4xr.SePlugin.Navigation;
 using Sandbox;

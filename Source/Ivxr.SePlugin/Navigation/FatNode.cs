@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Iv4xr.PluginLib.Navigation;
 using Iv4xr.PluginLib.WorldModel;
 
 namespace Iv4xr.SePlugin.Navigation
