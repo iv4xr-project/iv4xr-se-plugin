@@ -16,4 +16,6 @@ data class CubeGrid(
     override val orientationUp: Vec3F,
     @SerialName("Blocks")
     val blocks: List<Block> = emptyList(),
+    @SerialName("Mass")
+    val mass: Float,
 ) : Entity

@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Iv4xr.PluginLib.WorldModel;
 using Sandbox.Definitions;
-using Sandbox.Game.Entities;
-using Sandbox.Game.Entities.Cube;
-using VRage.Game.Entity.UseObject;
+using VRage.Game;
 
 namespace Iv4xr.SePlugin.Control
 {
@@ -34,9 +32,10 @@ namespace Iv4xr.SePlugin.Control
                     .FirstOrDefault(type => type.Name == id) ?? typeof(BlockDefinition);
         }
 
-        private void AddStandardFields(MyCubeBlockDefinition myBlockDefinition, BlockDefinition blockDefinition)
+        private BlockDefinition AddStandardFields(MyCubeBlockDefinition myBlockDefinition,
+            BlockDefinition blockDefinition)
         {
-            blockDefinition.DefinitionId = myBlockDefinition.ToDefinitionId();
+            AddBaseFields(myBlockDefinition, blockDefinition);
             blockDefinition.CubeSize = myBlockDefinition.CubeSize.ToString();
             blockDefinition.BuildProgressModels =
                     myBlockDefinition.BuildProgressModels.Select(GetBuildProgressModel).ToList();
@@ -57,6 +56,38 @@ namespace Iv4xr.SePlugin.Control
                 PropertiesMask = mp.PropertiesMask,
                 PressurizedWhenOpen = mp.PressurizedWhenOpen
             }).ToList();
+            blockDefinition.Components = myBlockDefinition.Components.Select(GetComponent).ToList();
+            return blockDefinition;
+        }
+
+        private static T AddBaseFields<T>(MyDefinitionBase myDefinitionBase, T definitionBase) where T : DefinitionBase
+        {
+            definitionBase.DefinitionId = myDefinitionBase.ToDefinitionId();
+            definitionBase.Public = myDefinitionBase.Public;
+            definitionBase.AvailableInSurvival = myDefinitionBase.AvailableInSurvival;
+            definitionBase.Enabled = myDefinitionBase.Enabled;
+            return definitionBase;
+        }
+
+        private static Component GetComponent(MyCubeBlockDefinition.Component myComponent)
+        {
+            return new Component()
+            {
+                Count = myComponent.Count,
+                DeconstructItem = GetPhysicalItemDefinition(myComponent.DeconstructItem),
+                Definition = GetPhysicalItemDefinition(myComponent.Definition),
+            };
+        }
+
+        private static PhysicalItemDefinition GetPhysicalItemDefinition(MyPhysicalItemDefinition myDefinitionBase)
+        {
+            var result = new PhysicalItemDefinition();
+            AddBaseFields(myDefinitionBase, result);
+            result.Health = myDefinitionBase.Health;
+            result.Mass = myDefinitionBase.Mass;
+            result.Volume = myDefinitionBase.Volume;
+            result.Size = myDefinitionBase.Size.ToPlain();
+            return result;
         }
 
         public static BuildProgressModel GetBuildProgressModel(MyCubeBlockDefinition.BuildProgressModel bpm)

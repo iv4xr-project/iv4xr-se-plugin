@@ -8,6 +8,7 @@ import testhelp.MockOrRealGameTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
+import kotlin.test.assertTrue
 
 fun BlockDefinition.isGoodForBig(): Boolean {
     return enabled && cubeSize == CubeSize.Large &&
@@ -47,6 +48,16 @@ class BlockDefinitionsTest : MockOrRealGameTest(inMockResourcesDirectory("BlockD
     @Test
     fun allCount() = testContext {
         assertEquals(626, definitions.blockDefinitions().size)
+    }
+
+    @Test
+    fun eachBlockHasAtLeastOneComponent() = testContext {
+        definitions.blockDefinitions().let { blockDefinitions ->
+            blockDefinitions.forEach { blockDefinition ->
+                assertTrue(blockDefinition.components.isNotEmpty())
+                assertTrue(blockDefinition.components.all { component -> component.count > 0 })
+            }
+        }
     }
 
     @Test

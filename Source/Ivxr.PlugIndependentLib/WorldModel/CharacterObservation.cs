@@ -11,10 +11,15 @@ namespace Iv4xr.PluginLib.WorldModel
         public Pose Camera;
         public bool JetpackRunning;
         public bool HelmetEnabled;
-        public float HealthRatio;
+        public float Health;
+        public float Oxygen;
+        public float Hydrogen;
+        public float SuitEnergy;
         public float HeadLocalXAngle;
         public float HeadLocalYAngle;
         public Block TargetBlock;
         public UseObject TargetUseObject;
+        public CharacterMovementEnum Movement;
+        public Inventory Inventory;
     }
 }

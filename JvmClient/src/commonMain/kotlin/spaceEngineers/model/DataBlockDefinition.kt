@@ -25,4 +25,6 @@ data class DataBlockDefinition(
     override val availableInSurvival: Boolean,
     @SerialName("Enabled")
     override val enabled: Boolean,
+    @SerialName("Components")
+    override val components: List<Component>,
 ): BlockDefinition

@@ -14,6 +14,7 @@ interface BlockDefinition: PhysicalModelDefinition {
     val size: Vec3F
     val cubeSize: CubeSize
     val mountPoints: List<MountPoint>
+    val components: List<Component>
 
 }
 
