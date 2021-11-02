@@ -3,6 +3,7 @@ package spaceEngineers.controller
 import spaceEngineers.model.CharacterObservation
 import spaceEngineers.model.Observation
 import spaceEngineers.model.extensions.allBlocks
+import spaceEngineers.navigation.NavGraph
 
 class ContextControllerWrapper(
     val spaceEngineers: SpaceEngineers,
@@ -39,6 +40,10 @@ class ContextControllerWrapper(
             return spaceEngineers.observer.observeNewBlocks().apply {
                 context.updateNewBlocks(allBlocks)
             }.apply(::addToHistory)
+        }
+
+        override fun navigationGraph(): NavGraph {
+            return spaceEngineers.observer.navigationGraph()
         }
 
         override fun takeScreenshot(absolutePath: String) {
