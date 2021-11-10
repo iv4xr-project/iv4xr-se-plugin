@@ -60,11 +60,17 @@ kotlin {
 
 task cucumber() {
     dependsOn assemble, testClasses
+    if (!project.hasProperty("features")) {
+        ext.features = "src/jvmTest/resources/features/"
+    }
+    if (!project.hasProperty("bddName")) {
+        ext.bddName = ".*"
+    }
     doLast {
         javaexec {
             main = "io.cucumber.core.cli.Main"
             classpath = configurations.testRuntimeClasspath + sourceSets.main.output + sourceSets.test.output
-            args = ['--plugin', 'pretty', '--glue', 'bdd', 'src/jvmTest/resources/features/']
+            args = ['--plugin', 'pretty', '--glue', 'bdd', features, '-n', bddName]
         }
     }
 }

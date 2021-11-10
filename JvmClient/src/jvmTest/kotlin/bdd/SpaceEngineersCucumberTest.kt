@@ -1,5 +1,6 @@
 package bdd
 
+import io.cucumber.java.After
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
@@ -19,6 +20,7 @@ import spaceEngineers.transport.SocketReaderWriter
 import testhelp.assertFloatEquals
 import testhelp.assertVecEquals
 import java.io.File
+import java.lang.Exception
 import java.lang.Thread.sleep
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -26,6 +28,16 @@ import kotlin.test.assertTrue
 
 @RunWith(Cucumber::class)
 class SpaceEngineersCucumberTest : AbstractSpaceEngineersSteps() {
+
+    @After
+    fun clearContinuousMovement() {
+        try {
+            character.moveAndRotate(ticks = 0)
+        } catch(e: Exception) {
+            // probably better idea to catch here, since we don't know how scenario went
+            e.printStackTrace()
+        }
+    }
 
     @Given("Toolbar has mapping:")
     fun toolbar_has_mapping(dataTable: List<Map<String, String>>) {

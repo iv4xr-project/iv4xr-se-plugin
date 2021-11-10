@@ -9,7 +9,7 @@ Feature: Example how to describe block observations using cucumber.
       | 3    | 0    | LargeBlockSmallGenerator  |
       | 6    | 0    | LargeBlockGyro            |
 
-  Scenario Outline: Checking scenario character is at correct starting location and can move.
+  Scenario Outline: Build, grind and weld.
     Given I load scenario "simple-place-grind-torch-with-tools".
     When I observe.
     Then Character is at (532.7066, -45.193184, -24.395466).
