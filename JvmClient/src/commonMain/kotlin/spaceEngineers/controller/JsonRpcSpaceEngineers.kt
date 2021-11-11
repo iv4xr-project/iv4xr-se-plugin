@@ -1,6 +1,7 @@
 package spaceEngineers.controller
 
 import spaceEngineers.model.*
+import spaceEngineers.navigation.NavGraph
 import spaceEngineers.transport.StringLineReaderWriter
 
 
@@ -207,6 +208,10 @@ open class JsonRpcSpaceEngineers(
                 method = ::observeNewBlocks,
                 methodName = "${observerPrefix}ObserveNewBlocks"
             )
+        }
+
+        override fun navigationGraph(): NavGraph {
+            return processNoParameterMethod(::navigationGraph, "${observerPrefix}NavigationGraph")
         }
 
         override fun takeScreenshot(absolutePath: String) {

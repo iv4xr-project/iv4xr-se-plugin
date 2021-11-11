@@ -1,6 +1,7 @@
 package spaceEngineers.controller
 
 import spaceEngineers.model.*
+import spaceEngineers.navigation.NavGraph
 
 interface SpaceEngineers {
     val session: Session
@@ -56,6 +57,7 @@ interface Observer {
     fun observe(): CharacterObservation
     fun observeBlocks(): Observation
     fun observeNewBlocks(): Observation
+    fun navigationGraph(): NavGraph
 
     /**
      * Creates screenshot in the game. If there's an error, no exception is thrown (swallowed by the game itself).

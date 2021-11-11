@@ -24,6 +24,7 @@ class ObservationTest : MockOrRealGameTest(mockFile = inMockResourcesDirectory("
             assertNotNull(it.orientationUp)
             assertNotNull(it.minPosition)
             assertNotNull(it.maxPosition)
+            assertNotNull(it.gridPosition)
             assertNotNull(it.size)
         }
         assertEquals(

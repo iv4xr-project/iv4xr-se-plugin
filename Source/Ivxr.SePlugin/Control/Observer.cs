@@ -2,7 +2,9 @@ using System;
 using System.IO;
 using Iv4xr.PluginLib;
 using Iv4xr.PluginLib.Control;
+using Iv4xr.PluginLib.Navigation;
 using Iv4xr.PluginLib.WorldModel;
+using Iv4xr.SePlugin.Navigation;
 using Sandbox;
 using Sandbox.Game.Screens.Helpers;
 using Sandbox.Graphics.GUI;
@@ -40,6 +42,13 @@ namespace Iv4xr.SePlugin.Control
         public Observation ObserveNewBlocks()
         {
             return m_lowLevelObserver.GetNewBlocks();
+        }
+
+        public NavGraph NavigationGraph()
+        {
+            var navGraphEditor = new NavGraphEditor(m_lowLevelObserver);
+
+            return navGraphEditor.GetGraph().ToNavGraph();
         }
 
         public void TakeScreenshot(string absolutePath)

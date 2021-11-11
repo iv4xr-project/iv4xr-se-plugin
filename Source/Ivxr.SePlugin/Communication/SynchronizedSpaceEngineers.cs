@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Iv4xr.PluginLib.Control;
+using Iv4xr.PluginLib.Navigation;
 using Iv4xr.SePlugin.Control;
 using Iv4xr.PluginLib.WorldModel;
 
@@ -91,6 +92,11 @@ namespace Iv4xr.SePlugin.Communication
         public Observation ObserveNewBlocks()
         {
             return Enqueue(() => m_observer.ObserveNewBlocks());
+        }
+
+        public NavGraph NavigationGraph()
+        {
+            return Enqueue(() => m_observer.NavigationGraph());
         }
 
         public void TakeScreenshot(string absolutePath)

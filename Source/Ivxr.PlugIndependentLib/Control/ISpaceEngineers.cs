@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Iv4xr.PluginLib.Navigation;
 using Iv4xr.PluginLib.WorldModel;
 
 namespace Iv4xr.PluginLib.Control
@@ -25,6 +26,7 @@ namespace Iv4xr.PluginLib.Control
         CharacterObservation Observe();
         Observation ObserveBlocks();
         Observation ObserveNewBlocks();
+        NavGraph NavigationGraph();
         void TakeScreenshot(string absolutePath);
     }
 

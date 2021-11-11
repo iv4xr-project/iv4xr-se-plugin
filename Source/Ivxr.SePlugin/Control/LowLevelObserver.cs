@@ -48,7 +48,7 @@ namespace Iv4xr.SePlugin.Control
 
         private MyCharacter Character => m_gameSession.Character;
 
-        private Vector3D GetPlayerPosition()
+        internal Vector3D GetPlayerPosition()
         {
             return Character.PositionComp.GetPosition();
         }

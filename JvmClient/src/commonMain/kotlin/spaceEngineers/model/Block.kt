@@ -7,6 +7,7 @@ interface Block : Entity {
     val integrity: Float
     val minPosition: Vec3F
     val maxPosition: Vec3F
+    val gridPosition: Vec3I
     val size: Vec3F
     val useObjects: List<UseObject>
     val functional: Boolean

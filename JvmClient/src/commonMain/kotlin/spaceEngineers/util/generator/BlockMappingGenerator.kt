@@ -24,6 +24,8 @@ const val commonBlockFields = """
     override val minPosition: Vec3F,
     @SerialName("MaxPosition")
     override val maxPosition: Vec3F,
+    @SerialName("GridPosition")
+    override val gridPosition: Vec3I,
     @SerialName("Size")
     override val size: Vec3F,
     @SerialName("UseObjects")
