@@ -4,8 +4,8 @@ namespace Iv4xr.PluginLib.Control
 {
     public class ContinuousMovementContext
     {
-        public PlainVec3D MoveVector = PlainVec3D.Zero;
-        public PlainVec2F RotationVector = PlainVec2F.Zero;
+        public PlainVec3D MoveVector = PlainVec3DConst.Zero;
+        public PlainVec2F RotationVector = PlainVec2FConst.Zero;
         public float Roll = 0;
         public int TicksLeft = 0;
 

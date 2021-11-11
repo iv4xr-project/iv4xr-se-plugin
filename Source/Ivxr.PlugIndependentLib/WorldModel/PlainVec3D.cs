@@ -22,7 +22,11 @@ namespace Iv4xr.PluginLib.WorldModel
         {
             return Math.Sqrt(X * X + Y * Y + Z * Z);
         }
+    }
 
-        public static PlainVec3D Zero = new PlainVec3D(0, 0, 0);
+    // Put this into a separate class to allow serialization by LitJson (it can't handle recursive types)
+    public static class PlainVec3DConst
+    {
+        public static readonly PlainVec3D Zero = new PlainVec3D(0, 0, 0);
     }
 }

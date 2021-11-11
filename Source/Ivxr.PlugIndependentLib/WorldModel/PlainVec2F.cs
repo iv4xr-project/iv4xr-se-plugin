@@ -13,12 +13,16 @@ namespace Iv4xr.PluginLib.WorldModel
             X = x;
             Y = y;
         }
-        
+
         public double Length()
         {
             return Math.Sqrt(X * X + Y * Y);
         }
-        
+    }
+    
+    // Put this into a separate class to allow serialization by LitJson (it can't handle recursive types)
+    public static class PlainVec2FConst
+    {
         public static PlainVec2F Zero = new PlainVec2F(0, 0);
     }
 }
