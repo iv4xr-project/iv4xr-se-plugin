@@ -171,6 +171,7 @@ $dokka.location:spaceEngineers.controller/KotlinJsonRpcSpaceEngineersBuilder/moc
 $dokka.location:spaceEngineers.controller/KotlinJsonRpcSpaceEngineersBuilder/mock/#kotlin.String#kotlin.String/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-kotlin-json-rpc-space-engineers-builder/mock.html
 $dokka.location:spaceEngineers.controller/KotlinJsonRpcSpaceEngineersBuilder/mock/#kotlin.String#kotlin.collections.List[kotlin.String]/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-kotlin-json-rpc-space-engineers-builder/mock.html
 $dokka.location:spaceEngineers.controller/Observer///PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-observer/index.html
+$dokka.location:spaceEngineers.controller/Observer/navigationGraph/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-observer/navigation-graph.html
 $dokka.location:spaceEngineers.controller/Observer/observe/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-observer/observe.html
 $dokka.location:spaceEngineers.controller/Observer/observeBlocks/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-observer/observe-blocks.html
 $dokka.location:spaceEngineers.controller/Observer/observeNewBlocks/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-observer/observe-new-blocks.html
@@ -302,6 +303,7 @@ $dokka.location:spaceEngineers.model/Block///PointingToDeclaration/space-engine
 $dokka.location:spaceEngineers.model/Block/buildIntegrity/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-block/build-integrity.html
 $dokka.location:spaceEngineers.model/Block/definitionId/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-block/definition-id.html
 $dokka.location:spaceEngineers.model/Block/functional/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-block/functional.html
+$dokka.location:spaceEngineers.model/Block/gridPosition/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-block/grid-position.html
 $dokka.location:spaceEngineers.model/Block/integrity/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-block/integrity.html
 $dokka.location:spaceEngineers.model/Block/maxIntegrity/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-block/max-integrity.html
 $dokka.location:spaceEngineers.model/Block/maxPosition/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-block/max-position.html
@@ -518,10 +520,11 @@ $dokka.location:spaceEngineers.model/DataBeaconDefinition/public/#/PointingToDec
 $dokka.location:spaceEngineers.model/DataBeaconDefinition/size/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-beacon-definition/size.html
 $dokka.location:spaceEngineers.model/DataBeaconDefinition/type/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-beacon-definition/type.html
 $dokka.location:spaceEngineers.model/DataBlock///PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-block/index.html
-$dokka.location:spaceEngineers.model/DataBlock/DataBlock/#kotlin.String#spaceEngineers.model.Vec3F#spaceEngineers.model.Vec3F#spaceEngineers.model.Vec3F#spaceEngineers.model.DefinitionId#kotlin.Float#kotlin.Float#kotlin.Float#spaceEngineers.model.Vec3F#spaceEngineers.model.Vec3F#spaceEngineers.model.Vec3F#kotlin.collections.List[spaceEngineers.model.UseObject]#kotlin.Boolean#kotlin.Boolean/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-block/-data-block.html
+$dokka.location:spaceEngineers.model/DataBlock/DataBlock/#kotlin.String#spaceEngineers.model.Vec3F#spaceEngineers.model.Vec3F#spaceEngineers.model.Vec3F#spaceEngineers.model.DefinitionId#kotlin.Float#kotlin.Float#kotlin.Float#spaceEngineers.model.Vec3F#spaceEngineers.model.Vec3F#spaceEngineers.model.Vec3I#spaceEngineers.model.Vec3F#kotlin.collections.List[spaceEngineers.model.UseObject]#kotlin.Boolean#kotlin.Boolean/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-block/-data-block.html
 $dokka.location:spaceEngineers.model/DataBlock/buildIntegrity/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-block/build-integrity.html
 $dokka.location:spaceEngineers.model/DataBlock/definitionId/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-block/definition-id.html
 $dokka.location:spaceEngineers.model/DataBlock/functional/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-block/functional.html
+$dokka.location:spaceEngineers.model/DataBlock/gridPosition/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-block/grid-position.html
 $dokka.location:spaceEngineers.model/DataBlock/id/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-block/id.html
 $dokka.location:spaceEngineers.model/DataBlock/integrity/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-block/integrity.html
 $dokka.location:spaceEngineers.model/DataBlock/maxIntegrity/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-block/max-integrity.html
@@ -657,12 +660,13 @@ $dokka.location:spaceEngineers.model/DataDefinitionBase/definitionId/#/PointingT
 $dokka.location:spaceEngineers.model/DataDefinitionBase/enabled/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-definition-base/enabled.html
 $dokka.location:spaceEngineers.model/DataDefinitionBase/public/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-definition-base/public.html
 $dokka.location:spaceEngineers.model/DataDoorBase///PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-door-base/index.html
-$dokka.location:spaceEngineers.model/DataDoorBase/DataDoorBase/#kotlin.String#spaceEngineers.model.Vec3F#spaceEngineers.model.Vec3F#spaceEngineers.model.Vec3F#spaceEngineers.model.DefinitionId#kotlin.Float#kotlin.Float#kotlin.Float#spaceEngineers.model.Vec3F#spaceEngineers.model.Vec3F#spaceEngineers.model.Vec3F#kotlin.collections.List[spaceEngineers.model.UseObject]#kotlin.Boolean#kotlin.Boolean#kotlin.Boolean#kotlin.Boolean#kotlin.Boolean#kotlin.Boolean#kotlin.Boolean#kotlin.Boolean/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-door-base/-data-door-base.html
+$dokka.location:spaceEngineers.model/DataDoorBase/DataDoorBase/#kotlin.String#spaceEngineers.model.Vec3F#spaceEngineers.model.Vec3F#spaceEngineers.model.Vec3F#spaceEngineers.model.DefinitionId#kotlin.Float#kotlin.Float#kotlin.Float#spaceEngineers.model.Vec3F#spaceEngineers.model.Vec3F#spaceEngineers.model.Vec3I#spaceEngineers.model.Vec3F#kotlin.collections.List[spaceEngineers.model.UseObject]#kotlin.Boolean#kotlin.Boolean#kotlin.Boolean#kotlin.Boolean#kotlin.Boolean#kotlin.Boolean#kotlin.Boolean#kotlin.Boolean/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-door-base/-data-door-base.html
 $dokka.location:spaceEngineers.model/DataDoorBase/anyoneCanUse/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-door-base/anyone-can-use.html
 $dokka.location:spaceEngineers.model/DataDoorBase/buildIntegrity/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-door-base/build-integrity.html
 $dokka.location:spaceEngineers.model/DataDoorBase/definitionId/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-door-base/definition-id.html
 $dokka.location:spaceEngineers.model/DataDoorBase/enabled/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-door-base/enabled.html
 $dokka.location:spaceEngineers.model/DataDoorBase/functional/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-door-base/functional.html
+$dokka.location:spaceEngineers.model/DataDoorBase/gridPosition/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-door-base/grid-position.html
 $dokka.location:spaceEngineers.model/DataDoorBase/id/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-door-base/id.html
 $dokka.location:spaceEngineers.model/DataDoorBase/integrity/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-door-base/integrity.html
 $dokka.location:spaceEngineers.model/DataDoorBase/maxIntegrity/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-door-base/max-integrity.html
@@ -708,13 +712,14 @@ $dokka.location:spaceEngineers.model/DataExhaustBlockDefinition/requiredPowerInp
 $dokka.location:spaceEngineers.model/DataExhaustBlockDefinition/size/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-exhaust-block-definition/size.html
 $dokka.location:spaceEngineers.model/DataExhaustBlockDefinition/type/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-exhaust-block-definition/type.html
 $dokka.location:spaceEngineers.model/DataFueledPowerProducer///PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-fueled-power-producer/index.html
-$dokka.location:spaceEngineers.model/DataFueledPowerProducer/DataFueledPowerProducer/#kotlin.String#spaceEngineers.model.Vec3F#spaceEngineers.model.Vec3F#spaceEngineers.model.Vec3F#spaceEngineers.model.DefinitionId#kotlin.Float#kotlin.Float#kotlin.Float#spaceEngineers.model.Vec3F#spaceEngineers.model.Vec3F#spaceEngineers.model.Vec3F#kotlin.collections.List[spaceEngineers.model.UseObject]#kotlin.Boolean#kotlin.Boolean#kotlin.Boolean#kotlin.Boolean#kotlin.Boolean#kotlin.Boolean#kotlin.Float#kotlin.Float#kotlin.Float/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-fueled-power-producer/-data-fueled-power-producer.html
+$dokka.location:spaceEngineers.model/DataFueledPowerProducer/DataFueledPowerProducer/#kotlin.String#spaceEngineers.model.Vec3F#spaceEngineers.model.Vec3F#spaceEngineers.model.Vec3F#spaceEngineers.model.DefinitionId#kotlin.Float#kotlin.Float#kotlin.Float#spaceEngineers.model.Vec3F#spaceEngineers.model.Vec3F#spaceEngineers.model.Vec3I#spaceEngineers.model.Vec3F#kotlin.collections.List[spaceEngineers.model.UseObject]#kotlin.Boolean#kotlin.Boolean#kotlin.Boolean#kotlin.Boolean#kotlin.Boolean#kotlin.Boolean#kotlin.Float#kotlin.Float#kotlin.Float/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-fueled-power-producer/-data-fueled-power-producer.html
 $dokka.location:spaceEngineers.model/DataFueledPowerProducer/buildIntegrity/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-fueled-power-producer/build-integrity.html
 $dokka.location:spaceEngineers.model/DataFueledPowerProducer/capacity/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-fueled-power-producer/capacity.html
 $dokka.location:spaceEngineers.model/DataFueledPowerProducer/currentOutput/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-fueled-power-producer/current-output.html
 $dokka.location:spaceEngineers.model/DataFueledPowerProducer/definitionId/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-fueled-power-producer/definition-id.html
 $dokka.location:spaceEngineers.model/DataFueledPowerProducer/enabled/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-fueled-power-producer/enabled.html
 $dokka.location:spaceEngineers.model/DataFueledPowerProducer/functional/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-fueled-power-producer/functional.html
+$dokka.location:spaceEngineers.model/DataFueledPowerProducer/gridPosition/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-fueled-power-producer/grid-position.html
 $dokka.location:spaceEngineers.model/DataFueledPowerProducer/id/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-fueled-power-producer/id.html
 $dokka.location:spaceEngineers.model/DataFueledPowerProducer/integrity/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-fueled-power-producer/integrity.html
 $dokka.location:spaceEngineers.model/DataFueledPowerProducer/maxIntegrity/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-fueled-power-producer/max-integrity.html
@@ -746,11 +751,12 @@ $dokka.location:spaceEngineers.model/DataFueledPowerProducerDefinition/public/#/
 $dokka.location:spaceEngineers.model/DataFueledPowerProducerDefinition/size/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-fueled-power-producer-definition/size.html
 $dokka.location:spaceEngineers.model/DataFueledPowerProducerDefinition/type/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-fueled-power-producer-definition/type.html
 $dokka.location:spaceEngineers.model/DataFunctionalBlock///PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-functional-block/index.html
-$dokka.location:spaceEngineers.model/DataFunctionalBlock/DataFunctionalBlock/#kotlin.String#spaceEngineers.model.Vec3F#spaceEngineers.model.Vec3F#spaceEngineers.model.Vec3F#spaceEngineers.model.DefinitionId#kotlin.Float#kotlin.Float#kotlin.Float#spaceEngineers.model.Vec3F#spaceEngineers.model.Vec3F#spaceEngineers.model.Vec3F#kotlin.collections.List[spaceEngineers.model.UseObject]#kotlin.Boolean#kotlin.Boolean#kotlin.Boolean#kotlin.Boolean#kotlin.Boolean#kotlin.Boolean/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-functional-block/-data-functional-block.html
+$dokka.location:spaceEngineers.model/DataFunctionalBlock/DataFunctionalBlock/#kotlin.String#spaceEngineers.model.Vec3F#spaceEngineers.model.Vec3F#spaceEngineers.model.Vec3F#spaceEngineers.model.DefinitionId#kotlin.Float#kotlin.Float#kotlin.Float#spaceEngineers.model.Vec3F#spaceEngineers.model.Vec3F#spaceEngineers.model.Vec3I#spaceEngineers.model.Vec3F#kotlin.collections.List[spaceEngineers.model.UseObject]#kotlin.Boolean#kotlin.Boolean#kotlin.Boolean#kotlin.Boolean#kotlin.Boolean#kotlin.Boolean/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-functional-block/-data-functional-block.html
 $dokka.location:spaceEngineers.model/DataFunctionalBlock/buildIntegrity/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-functional-block/build-integrity.html
 $dokka.location:spaceEngineers.model/DataFunctionalBlock/definitionId/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-functional-block/definition-id.html
 $dokka.location:spaceEngineers.model/DataFunctionalBlock/enabled/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-functional-block/enabled.html
 $dokka.location:spaceEngineers.model/DataFunctionalBlock/functional/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-functional-block/functional.html
+$dokka.location:spaceEngineers.model/DataFunctionalBlock/gridPosition/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-functional-block/grid-position.html
 $dokka.location:spaceEngineers.model/DataFunctionalBlock/id/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-functional-block/id.html
 $dokka.location:spaceEngineers.model/DataFunctionalBlock/integrity/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-functional-block/integrity.html
 $dokka.location:spaceEngineers.model/DataFunctionalBlock/maxIntegrity/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-functional-block/max-integrity.html
@@ -1180,10 +1186,11 @@ $dokka.location:spaceEngineers.model/DataSoundBlockDefinition/public/#/PointingT
 $dokka.location:spaceEngineers.model/DataSoundBlockDefinition/size/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-sound-block-definition/size.html
 $dokka.location:spaceEngineers.model/DataSoundBlockDefinition/type/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-sound-block-definition/type.html
 $dokka.location:spaceEngineers.model/DataTerminalBlock///PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-terminal-block/index.html
-$dokka.location:spaceEngineers.model/DataTerminalBlock/DataTerminalBlock/#kotlin.String#spaceEngineers.model.Vec3F#spaceEngineers.model.Vec3F#spaceEngineers.model.Vec3F#spaceEngineers.model.DefinitionId#kotlin.Float#kotlin.Float#kotlin.Float#spaceEngineers.model.Vec3F#spaceEngineers.model.Vec3F#spaceEngineers.model.Vec3F#kotlin.collections.List[spaceEngineers.model.UseObject]#kotlin.Boolean#kotlin.Boolean#kotlin.Boolean#kotlin.Boolean#kotlin.Boolean/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-terminal-block/-data-terminal-block.html
+$dokka.location:spaceEngineers.model/DataTerminalBlock/DataTerminalBlock/#kotlin.String#spaceEngineers.model.Vec3F#spaceEngineers.model.Vec3F#spaceEngineers.model.Vec3F#spaceEngineers.model.DefinitionId#kotlin.Float#kotlin.Float#kotlin.Float#spaceEngineers.model.Vec3F#spaceEngineers.model.Vec3F#spaceEngineers.model.Vec3I#spaceEngineers.model.Vec3F#kotlin.collections.List[spaceEngineers.model.UseObject]#kotlin.Boolean#kotlin.Boolean#kotlin.Boolean#kotlin.Boolean#kotlin.Boolean/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-terminal-block/-data-terminal-block.html
 $dokka.location:spaceEngineers.model/DataTerminalBlock/buildIntegrity/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-terminal-block/build-integrity.html
 $dokka.location:spaceEngineers.model/DataTerminalBlock/definitionId/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-terminal-block/definition-id.html
 $dokka.location:spaceEngineers.model/DataTerminalBlock/functional/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-terminal-block/functional.html
+$dokka.location:spaceEngineers.model/DataTerminalBlock/gridPosition/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-terminal-block/grid-position.html
 $dokka.location:spaceEngineers.model/DataTerminalBlock/id/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-terminal-block/id.html
 $dokka.location:spaceEngineers.model/DataTerminalBlock/integrity/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-terminal-block/integrity.html
 $dokka.location:spaceEngineers.model/DataTerminalBlock/maxIntegrity/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-terminal-block/max-integrity.html
@@ -1537,6 +1544,19 @@ $dokka.location:spaceEngineers.model/Vector/get/#kotlin.Int/PointingToDeclaratio
 $dokka.location:spaceEngineers.model/WeaponBlockDefinition///PointingToDeclaration/space-engineers-api/spaceEngineers.model/-weapon-block-definition/index.html
 $dokka.location:spaceEngineers.model/WeaponBlockDefinition/inventoryFillFactorMin/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-weapon-block-definition/inventory-fill-factor-min.html
 $dokka.location:spaceEngineers.model/WeaponBlockDefinition/inventoryMaxVolume/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-weapon-block-definition/inventory-max-volume.html
+$dokka.location:spaceEngineers.navigation////PointingToDeclaration/space-engineers-api/spaceEngineers.navigation/index.html
+$dokka.location:spaceEngineers.navigation/Edge///PointingToDeclaration/space-engineers-api/spaceEngineers.navigation/-edge/index.html
+$dokka.location:spaceEngineers.navigation/Edge/Edge/#kotlin.Int#kotlin.Int/PointingToDeclaration/space-engineers-api/spaceEngineers.navigation/-edge/-edge.html
+$dokka.location:spaceEngineers.navigation/Edge/i/#/PointingToDeclaration/space-engineers-api/spaceEngineers.navigation/-edge/i.html
+$dokka.location:spaceEngineers.navigation/Edge/j/#/PointingToDeclaration/space-engineers-api/spaceEngineers.navigation/-edge/j.html
+$dokka.location:spaceEngineers.navigation/NavGraph///PointingToDeclaration/space-engineers-api/spaceEngineers.navigation/-nav-graph/index.html
+$dokka.location:spaceEngineers.navigation/NavGraph/NavGraph/#kotlin.collections.List[spaceEngineers.navigation.Node]#kotlin.collections.List[spaceEngineers.navigation.Edge]/PointingToDeclaration/space-engineers-api/spaceEngineers.navigation/-nav-graph/-nav-graph.html
+$dokka.location:spaceEngineers.navigation/NavGraph/edges/#/PointingToDeclaration/space-engineers-api/spaceEngineers.navigation/-nav-graph/edges.html
+$dokka.location:spaceEngineers.navigation/NavGraph/nodes/#/PointingToDeclaration/space-engineers-api/spaceEngineers.navigation/-nav-graph/nodes.html
+$dokka.location:spaceEngineers.navigation/Node///PointingToDeclaration/space-engineers-api/spaceEngineers.navigation/-node/index.html
+$dokka.location:spaceEngineers.navigation/Node/Node/#kotlin.Int#spaceEngineers.model.Vec3F/PointingToDeclaration/space-engineers-api/spaceEngineers.navigation/-node/-node.html
+$dokka.location:spaceEngineers.navigation/Node/id/#/PointingToDeclaration/space-engineers-api/spaceEngineers.navigation/-node/id.html
+$dokka.location:spaceEngineers.navigation/Node/position/#/PointingToDeclaration/space-engineers-api/spaceEngineers.navigation/-node/position.html
 $dokka.location:spaceEngineers.screenshots////PointingToDeclaration/space-engineers-api/spaceEngineers.screenshots/index.html
 $dokka.location:spaceEngineers.screenshots//main/#/PointingToDeclaration/space-engineers-api/spaceEngineers.screenshots/main.html
 $dokka.location:spaceEngineers.screenshots/NamedOrientations.BACKWARD_UP///PointingToDeclaration/space-engineers-api/spaceEngineers.screenshots/-named-orientations/-b-a-c-k-w-a-r-d_-u-p/index.html
@@ -1702,6 +1722,7 @@ spaceEngineers.controller.extensions
 spaceEngineers.iv4xr.goal
 spaceEngineers.model
 spaceEngineers.model.extensions
+spaceEngineers.navigation
 spaceEngineers.screenshots
 spaceEngineers.transport
 spaceEngineers.transport.jsonrpc
