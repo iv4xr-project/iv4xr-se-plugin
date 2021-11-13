@@ -321,6 +321,11 @@ class SpaceEngineersCucumberTest : AbstractSpaceEngineersSteps() {
         environment.character.turnOnJetpack()
     }
 
+    @When("Character turns off jetpack.")
+    fun character_turns_off_jetpack() {
+        environment.character.turnOffJetpack()
+    }
+
     @Then("Character uses.")
     fun character_uses() {
         environment.character.use()
