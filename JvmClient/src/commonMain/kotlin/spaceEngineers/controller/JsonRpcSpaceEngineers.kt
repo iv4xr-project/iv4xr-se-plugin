@@ -118,7 +118,12 @@ open class JsonRpcSpaceEngineers(
     }
     override val admin: SpaceEngineersAdmin = object : SpaceEngineersAdmin {
         override val blocks: BlocksAdmin = object : BlocksAdmin {
-            override fun placeAt(blockDefinitionId: DefinitionId, position: Vec3F, orientationForward: Vec3F, orientationUp: Vec3F): String {
+            override fun placeAt(
+                blockDefinitionId: DefinitionId,
+                position: Vec3F,
+                orientationForward: Vec3F,
+                orientationUp: Vec3F
+            ): String {
                 return processParameters<String>(
                     parameters = listOf(
                         TypedParameter("blockDefinitionId", blockDefinitionId, DefinitionId::class),
@@ -221,6 +226,13 @@ open class JsonRpcSpaceEngineers(
                 method = ::takeScreenshot,
                 methodName = "${observerPrefix}TakeScreenshot",
                 parameterType = String::class,
+            )
+        }
+
+        override fun switchCamera() {
+            return processNoParameterMethod<Unit>(
+                method = ::switchCamera,
+                methodName = "${observerPrefix}SwitchCamera"
             )
         }
     }

@@ -85,6 +85,12 @@ namespace Iv4xr.SePlugin.Communication
         {
             return m_se.Observer.ObserveNewBlocks();
         }
+        
+        [JsonRpcMethod("Observer.SwitchCamera")]
+        void SwitchCamera()
+        {
+            m_se.Observer.SwitchCamera();
+        }
 
         [JsonRpcMethod("Observer.NavigationGraph")]
         NavGraph GetNavigationGraph()
