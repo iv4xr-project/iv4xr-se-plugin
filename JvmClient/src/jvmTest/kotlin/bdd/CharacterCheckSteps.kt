@@ -1,6 +1,8 @@
 package bdd
 
 import io.cucumber.java.en.Then
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 import spaceEngineers.model.CharacterMovement
 import spaceEngineers.model.Vec3F
 import testhelp.assertVecEquals
@@ -15,6 +17,29 @@ class CharacterCheckSteps : AbstractSpaceEngineersSteps() {
     fun character_is_standing() {
         assertEquals(CharacterMovement.standing, observer.observe().movement.value.toInt())
     }
+
+    @Then("Character boots are green.")
+    fun character_boots_are_green() {
+        assertTrue(observer.observe().bootsState.isGreen())
+    }
+
+    @Then("Character boots are green after {int}ms.")
+    fun character_boots_are_green_after_ms(ms: Int) = runBlocking {
+        delay(ms.toLong())
+        assertTrue(observer.observe().bootsState.isGreen())
+    }
+
+    @Then("Character boots are yellow.")
+    fun character_boots_are_yellow() {
+        assertTrue(observer.observe().bootsState.isYellow())
+    }
+
+    @Then("Character boots are yellow after {int}ms.")
+    fun character_boots_are_yellow_after_ms(ms: Int) = runBlocking {
+        delay(ms.toLong())
+        assertTrue(observer.observe().bootsState.isYellow())
+    }
+
 
     @Then("Character speed is {int} m\\/s.")
     fun character_speed_is_100m_s(speed: Int) {
