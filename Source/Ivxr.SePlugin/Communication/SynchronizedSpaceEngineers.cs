@@ -99,6 +99,11 @@ namespace Iv4xr.SePlugin.Communication
             return Enqueue(() => m_observer.NavigationGraph());
         }
 
+        public void SwitchCamera()
+        {
+            Enqueue(() => m_observer.SwitchCamera());
+        }
+
         public void TakeScreenshot(string absolutePath)
         {
             Enqueue(() => m_observer.TakeScreenshot(absolutePath));

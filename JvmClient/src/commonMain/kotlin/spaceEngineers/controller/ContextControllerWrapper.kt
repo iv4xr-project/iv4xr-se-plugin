@@ -49,6 +49,10 @@ class ContextControllerWrapper(
         override fun takeScreenshot(absolutePath: String) {
             spaceEngineers.observer.takeScreenshot(absolutePath)
         }
+
+        override fun switchCamera() {
+            spaceEngineers.observer.switchCamera()
+        }
     }
     override val definitions: Definitions = spaceEngineers.definitions
     override val blocks: Blocks = spaceEngineers.blocks

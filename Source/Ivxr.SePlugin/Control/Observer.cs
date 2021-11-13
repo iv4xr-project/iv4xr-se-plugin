@@ -6,6 +6,7 @@ using Iv4xr.PluginLib.Navigation;
 using Iv4xr.PluginLib.WorldModel;
 using Iv4xr.SePlugin.Navigation;
 using Sandbox;
+using Sandbox.Game.Gui;
 using Sandbox.Game.Screens.Helpers;
 using Sandbox.Graphics.GUI;
 using VRage.FileSystem;
@@ -49,6 +50,11 @@ namespace Iv4xr.SePlugin.Control
             var navGraphEditor = new NavGraphEditor(m_lowLevelObserver);
 
             return navGraphEditor.GetGraph().ToNavGraph();
+        }
+
+        public void SwitchCamera()
+        {
+            MyGuiScreenGamePlay.Static.SwitchCamera();
         }
 
         public void TakeScreenshot(string absolutePath)
