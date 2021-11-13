@@ -27,6 +27,7 @@ namespace Iv4xr.PluginLib.Control
         Observation ObserveBlocks();
         Observation ObserveNewBlocks();
         NavGraph NavigationGraph();
+        void SwitchCamera();
         void TakeScreenshot(string absolutePath);
     }
 
