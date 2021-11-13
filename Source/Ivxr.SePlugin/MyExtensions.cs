@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Iv4xr.PluginLib.WorldModel;
 using Sandbox.Game.Multiplayer;
 using Sandbox.Game.Screens.Helpers;
@@ -90,5 +91,13 @@ namespace Iv4xr.SePlugin
             return MyDefinitionId.Parse(definitionId.ToString());
         }
 
+        public static object GetInstanceField(this object instance, string fieldName)
+        {
+            BindingFlags bindFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic
+                                     | BindingFlags.Static;
+            var t = instance.GetType();
+            FieldInfo field = t.GetField(fieldName, bindFlags);
+            return field.GetValue(instance);
+        }
     }
 }

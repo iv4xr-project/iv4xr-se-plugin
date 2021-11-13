@@ -13,6 +13,7 @@ using Sandbox.Game.Weapons;
 using Sandbox.Game.World;
 using VRage.Game;
 using VRage.Game.Entity;
+using VRage.Sync;
 using VRageMath;
 
 namespace Iv4xr.SePlugin.Control
@@ -60,7 +61,6 @@ namespace Iv4xr.SePlugin.Control
 
         private InventoryItem GetInventoryItem(MyPhysicalInventoryItem myItem)
         {
-            
             return new InventoryItem()
             {
                 Amount = (int) myItem.Amount,
@@ -110,7 +110,14 @@ namespace Iv4xr.SePlugin.Control
                 TargetUseObject = UseObject(),
                 Movement = (CharacterMovementEnum) Character.CurrentMovementState,
                 Inventory = GetInventory(Character.GetInventory()),
+                BootsState = GetBootState(Character),
             };
+        }
+
+        private static BootsState GetBootState(MyCharacter character)
+        {
+            return (BootsState)character
+                    .GetInstanceField("m_bootsState").GetInstanceField("m_value");
         }
 
         private PlainVec3D PlayerExtent()

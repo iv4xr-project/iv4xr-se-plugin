@@ -15,6 +15,12 @@ class CharacterObservationTest : MockOrRealGameTest(inMockResourcesDirectory("Ch
         assertFalse(characterObservation.jetpackRunning)
     }
 
+
+    @Test
+    fun bootState() = testContext {
+        assertEquals(0, observer.observe().bootsState)
+    }
+
     @Test
     fun characterBottomLeftStatsCreativeMode() = testContext {
         val characterObservation = observer.observe()
