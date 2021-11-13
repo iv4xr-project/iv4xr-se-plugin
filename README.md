@@ -8,9 +8,11 @@ Status: Prototype / early development
 
 ## Introduction
 
-Space Engineers is a sandbox game by Keen Software House. This project is a plugin for the game which enables its integration with the iv4XR testing framework. The plugin runs a TCP/IP server with JSON-based API. It allows to access surrounding of the player's character in a structured form (a World Object Model, WOM) and to control the character. Those are the two defining features, more will be added during the development.
+Space Engineers is a sandbox game by Keen Software House. This project is a plugin for the game which enables its integration with the iv4XR testing framework. The plugin runs a TCP/IP server with JSON-RPC API. It allows to access surrounding of the player's character in a structured form (a World Object Model, WOM) and to control the character. Those are the two defining features, more will be added during the development.
 
 <img src="./JvmClient/docs/SE-sotf1.png" width="100%">
+
+The project includes a full-featured [client in Kotlin](https://github.com/iv4xr-project/iv4xr-se-plugin/tree/main/JvmClient).
 
 ## How to run the game with this plugin
 
@@ -27,7 +29,7 @@ It's not necessary to build anything to try out this plugin. This section descri
 6. Right-click on the game title in the Steam library list and open its properties window. Click on the **Set launch options...** button. Add the option `-plugin` followed by the location of the main plugin library. Library dependencies will be loaded automatically – just make sure they are in the same folder or some other searched location. The resulting options line should look something like this: `-plugin Ivxr.SePlugin.dll`.
 7. Run the game. (If the game crashes, make sure you've seen step 3.)
 8. Start a scenario. (It's necessary to do it manually for now. Should be done automatically by the testing framework in the future.)
-9. If the plugin works correctly, a TCP/IP server is listening for JSON-based commands on a fixed port number. (The current development version uses the port number 9678.) 
+9. If the plugin works correctly, a TCP/IP server is listening for JSON-RPC calls on a fixed port number. (The current development version uses the port number 3333.) 
    Another sign of life is a log file present in user's app data folder such as: `C:\Users\<username>\AppData\Roaming\SpaceEngineers\ivxr-plugin.log`
 
 #### *3rd Party Dependencies*
@@ -79,7 +81,7 @@ Before starting the build of the solution, make sure a correct build configurati
 
 ## API
 
-The network protocol is based on [JSON-RPC 2.0](https://www.jsonrpc.org/specification). The protocol (individual API) is now more stable than in the beginning of the development, but it's still possible it will change as we learn new things.
+The network protocol is based on [JSON-RPC 2.0](https://www.jsonrpc.org/specification). JSON-RPC messages are separated by newlines, TCP is used as the transport layer. The protocol (individual API) is now more stable than in the beginning of the development, but it's still possible it will change as we learn new things.
 
 For an up to date list of provided API calls see the interface `ISpaceEngineers` in the project **`Ivxr.PlugIndependentLib`** (it currently resides [here](https://github.com/iv4xr-project/iv4xr-se-plugin/blob/main/Source/Ivxr.PlugIndependentLib/Control/ISpaceEngineers.cs)). 
 
