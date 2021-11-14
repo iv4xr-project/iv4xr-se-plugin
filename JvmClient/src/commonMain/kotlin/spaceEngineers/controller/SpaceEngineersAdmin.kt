@@ -1,9 +1,6 @@
 package spaceEngineers.controller
 
-import spaceEngineers.model.BlockId
-import spaceEngineers.model.CharacterObservation
-import spaceEngineers.model.DefinitionId
-import spaceEngineers.model.Vec3F
+import spaceEngineers.model.*
 
 interface SpaceEngineersAdmin {
     val blocks: BlocksAdmin
@@ -12,7 +9,21 @@ interface SpaceEngineersAdmin {
 }
 
 interface BlocksAdmin {
-    fun placeAt(blockDefinitionId: DefinitionId, position: Vec3F, orientationForward: Vec3F, orientationUp: Vec3F): String
+    fun placeAt(
+        blockDefinitionId: DefinitionId,
+        position: Vec3F,
+        orientationForward: Vec3F,
+        orientationUp: Vec3F
+    ): String
+
+    fun placeInGrid(
+        blockDefinitionId: DefinitionId,
+        gridId: String,
+        minPosition: Vec3I,
+        orientationForward: Vec3I,
+        orientationUp: Vec3I
+    ): String
+
     fun remove(blockId: BlockId)
     fun setIntegrity(blockId: BlockId, integrity: Float)
 }

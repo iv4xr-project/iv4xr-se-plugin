@@ -136,6 +136,26 @@ open class JsonRpcSpaceEngineers(
                 )
             }
 
+            override fun placeInGrid(
+                blockDefinitionId: DefinitionId,
+                gridId: String,
+                minPosition: Vec3I,
+                orientationForward: Vec3I,
+                orientationUp: Vec3I
+            ): String {
+                return processParameters<String>(
+                    parameters = listOf(
+                        TypedParameter("blockDefinitionId", blockDefinitionId, DefinitionId::class),
+                        TypedParameter("minPosition", minPosition, Vec3I::class),
+                        TypedParameter("gridId", gridId, String::class),
+                        TypedParameter("orientationForward", orientationForward, Vec3I::class),
+                        TypedParameter("orientationUp", orientationUp, Vec3I::class),
+                    ),
+                    method = ::placeInGrid,
+                    methodName = "${adminPrefix}${blocksPrefix}PlaceInGrid"
+                )
+            }
+
             override fun remove(blockId: String) {
                 processSingleParameterMethod<String, Unit>(
                     method = ::remove,

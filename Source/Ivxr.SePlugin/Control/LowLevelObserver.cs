@@ -130,6 +130,15 @@ namespace Iv4xr.SePlugin.Control
                     .Select(grid => m_entityBuilder.CreateSeGrid(grid, sphere, mode)).ToList();
         }
 
+        public MyCubeGrid GetGridById(string gridId)
+        {
+            BoundingSphereD sphere = GetBoundingSphere();
+            return EnumerateSurroundingEntities(sphere)
+                    .OfType<MyCubeGrid>().First(grid =>
+                            grid.EntityId.ToString() == gridId
+                    );
+        }
+
         public MyCubeGrid GetGridContainingBlock(string blockId)
         {
             BoundingSphereD sphere = GetBoundingSphere();

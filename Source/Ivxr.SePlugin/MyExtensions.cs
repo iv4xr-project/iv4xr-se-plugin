@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Iv4xr.SpaceEngineers.WorldModel;
+using Sandbox.Definitions;
 using Sandbox.Game.Entities.Cube;
 using Sandbox.Game.Multiplayer;
 using Sandbox.Game.Screens.Helpers;
@@ -86,12 +87,22 @@ namespace Iv4xr.SePlugin
                 Type = myDefinitionId.SubtypeId.String,
             };
         }
-        
-        public static MyDefinitionId ToMyDefinitionId(DefinitionId definitionId)
+
+        public static MyDefinitionId ToMyDefinitionId(this DefinitionId definitionId)
         {
             return MyDefinitionId.Parse(definitionId.ToString());
         }
 
+        public static MyCubeBlockDefinition ToMyCubeBlockDefinition(this DefinitionId definitionId)
+        {
+            var id = definitionId.ToString();
+            return MyDefinitionManager.Static
+                    .GetDefinitionsOfType<MyCubeBlockDefinition>()
+                    .First(
+                        cbd => cbd.Id.TypeId.ToString() == definitionId.Id &&
+                               cbd.Id.SubtypeId.String == definitionId.Type
+                    );
+        }
         public static object GetInstanceField(this object instance, string fieldName)
         {
             BindingFlags bindFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic
