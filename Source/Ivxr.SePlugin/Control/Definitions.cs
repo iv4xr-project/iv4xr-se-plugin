@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Iv4xr.PluginLib.Control;
-using Iv4xr.PluginLib.WorldModel;
+using Iv4xr.SpaceEngineers;
+using Iv4xr.SpaceEngineers.WorldModel;
 using Sandbox.Common.ObjectBuilders;
 using Sandbox.Definitions;
 using VRage.Game;

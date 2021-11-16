@@ -1,6 +1,6 @@
 // Generated automatically by BlockMappingGeneratorRunner.kt, do not change.
 
-using Iv4xr.PluginLib.WorldModel;
+using Iv4xr.SpaceEngineers.WorldModel;
 using Sandbox.Definitions;
 
 namespace Iv4xr.SePlugin.Control

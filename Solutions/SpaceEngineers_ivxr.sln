@@ -104,6 +104,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeServerMock", "..\Source\H
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ivxr.PlugIndependentLib.Tests", "..\Source\Tests\Ivxr.PlugIndependentLib.Tests\Ivxr.PlugIndependentLib.Tests.csproj", "{7BD51A2E-E698-4D26-AE85-2FC01B955950}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ivxr.SpaceEngineers", "..\Source\Ivxr.SpaceEngineers\Ivxr.SpaceEngineers.csproj", "{269845E6-A68B-4C85-AAA3-71E180B1292B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		AllocationProfilingRelease|Any CPU = AllocationProfilingRelease|Any CPU
@@ -1098,6 +1100,36 @@ Global
 		{7BD51A2E-E698-4D26-AE85-2FC01B955950}.Testing|x64.Build.0 = Debug|Any CPU
 		{7BD51A2E-E698-4D26-AE85-2FC01B955950}.Testing|x86.ActiveCfg = Debug|Any CPU
 		{7BD51A2E-E698-4D26-AE85-2FC01B955950}.Testing|x86.Build.0 = Debug|Any CPU
+		{269845E6-A68B-4C85-AAA3-71E180B1292B}.AllocationProfilingRelease|Any CPU.ActiveCfg = Debug|Any CPU
+		{269845E6-A68B-4C85-AAA3-71E180B1292B}.AllocationProfilingRelease|Any CPU.Build.0 = Debug|Any CPU
+		{269845E6-A68B-4C85-AAA3-71E180B1292B}.AllocationProfilingRelease|x64.ActiveCfg = Debug|Any CPU
+		{269845E6-A68B-4C85-AAA3-71E180B1292B}.AllocationProfilingRelease|x64.Build.0 = Debug|Any CPU
+		{269845E6-A68B-4C85-AAA3-71E180B1292B}.AllocationProfilingRelease|x86.ActiveCfg = Debug|Any CPU
+		{269845E6-A68B-4C85-AAA3-71E180B1292B}.AllocationProfilingRelease|x86.Build.0 = Debug|Any CPU
+		{269845E6-A68B-4C85-AAA3-71E180B1292B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{269845E6-A68B-4C85-AAA3-71E180B1292B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{269845E6-A68B-4C85-AAA3-71E180B1292B}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{269845E6-A68B-4C85-AAA3-71E180B1292B}.Debug|x64.Build.0 = Debug|Any CPU
+		{269845E6-A68B-4C85-AAA3-71E180B1292B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{269845E6-A68B-4C85-AAA3-71E180B1292B}.Debug|x86.Build.0 = Debug|Any CPU
+		{269845E6-A68B-4C85-AAA3-71E180B1292B}.Release Official|Any CPU.ActiveCfg = Debug|Any CPU
+		{269845E6-A68B-4C85-AAA3-71E180B1292B}.Release Official|Any CPU.Build.0 = Debug|Any CPU
+		{269845E6-A68B-4C85-AAA3-71E180B1292B}.Release Official|x64.ActiveCfg = Debug|Any CPU
+		{269845E6-A68B-4C85-AAA3-71E180B1292B}.Release Official|x64.Build.0 = Debug|Any CPU
+		{269845E6-A68B-4C85-AAA3-71E180B1292B}.Release Official|x86.ActiveCfg = Debug|Any CPU
+		{269845E6-A68B-4C85-AAA3-71E180B1292B}.Release Official|x86.Build.0 = Debug|Any CPU
+		{269845E6-A68B-4C85-AAA3-71E180B1292B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{269845E6-A68B-4C85-AAA3-71E180B1292B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{269845E6-A68B-4C85-AAA3-71E180B1292B}.Release|x64.ActiveCfg = Release|Any CPU
+		{269845E6-A68B-4C85-AAA3-71E180B1292B}.Release|x64.Build.0 = Release|Any CPU
+		{269845E6-A68B-4C85-AAA3-71E180B1292B}.Release|x86.ActiveCfg = Release|Any CPU
+		{269845E6-A68B-4C85-AAA3-71E180B1292B}.Release|x86.Build.0 = Release|Any CPU
+		{269845E6-A68B-4C85-AAA3-71E180B1292B}.Testing|Any CPU.ActiveCfg = Debug|Any CPU
+		{269845E6-A68B-4C85-AAA3-71E180B1292B}.Testing|Any CPU.Build.0 = Debug|Any CPU
+		{269845E6-A68B-4C85-AAA3-71E180B1292B}.Testing|x64.ActiveCfg = Debug|Any CPU
+		{269845E6-A68B-4C85-AAA3-71E180B1292B}.Testing|x64.Build.0 = Debug|Any CPU
+		{269845E6-A68B-4C85-AAA3-71E180B1292B}.Testing|x86.ActiveCfg = Debug|Any CPU
+		{269845E6-A68B-4C85-AAA3-71E180B1292B}.Testing|x86.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1137,6 +1169,7 @@ Global
 		{77BE56CF-4F42-4268-9D9A-8F73C51287B6} = {6E0E75F1-620F-4777-927B-23039B0151AD}
 		{77C3FD79-4E28-4B70-A977-901C43535C2A} = {6E0E75F1-620F-4777-927B-23039B0151AD}
 		{7BD51A2E-E698-4D26-AE85-2FC01B955950} = {6E0E75F1-620F-4777-927B-23039B0151AD}
+		{269845E6-A68B-4C85-AAA3-71E180B1292B} = {6E0E75F1-620F-4777-927B-23039B0151AD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		VisualSVNWorkingCopyRoot = ..\..

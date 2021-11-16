@@ -9,6 +9,7 @@ using AustinHarris.JsonRpc;
 using Iv4xr.PluginLib;
 using Iv4xr.PluginLib.Control;
 using Iv4xr.SePlugin.Config;
+using Iv4xr.SpaceEngineers;
 
 namespace Iv4xr.SePlugin.Communication
 {

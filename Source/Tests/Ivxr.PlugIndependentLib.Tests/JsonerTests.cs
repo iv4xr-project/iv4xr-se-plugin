@@ -1,5 +1,5 @@
 ﻿using Iv4xr.PluginLib.Json;
-using Iv4xr.PluginLib.WorldModel;
+using Iv4xr.SpaceEngineers.WorldModel;
 using Iv4xr.SePlugin.Config;
 using Xunit;
 

@@ -1,5 +1,5 @@
 ﻿using Iv4xr.PluginLib;
-using Iv4xr.PluginLib.Control;
+using Iv4xr.SpaceEngineers;
 using Sandbox.Game.World;
 
 namespace Iv4xr.SePlugin.Control

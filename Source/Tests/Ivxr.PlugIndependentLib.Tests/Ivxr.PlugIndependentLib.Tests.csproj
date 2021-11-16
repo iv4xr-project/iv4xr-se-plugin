@@ -21,6 +21,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\Ivxr.SpaceEngineers\Ivxr.SpaceEngineers.csproj" />
       <ProjectReference Include="..\..\Ivxr.PlugIndependentLib\Ivxr.PlugIndependentLib.csproj" />
     </ItemGroup>
 

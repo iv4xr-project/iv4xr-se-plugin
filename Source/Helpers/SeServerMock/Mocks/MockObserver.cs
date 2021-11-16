@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Iv4xr.PluginLib;
-using Iv4xr.PluginLib.Control;
-using Iv4xr.PluginLib.Navigation;
-using Iv4xr.PluginLib.WorldModel;
+using Iv4xr.SpaceEngineers;
+using Iv4xr.SpaceEngineers.Navigation;
+using Iv4xr.SpaceEngineers.WorldModel;
 
 namespace SeServerMock.Mocks
 {

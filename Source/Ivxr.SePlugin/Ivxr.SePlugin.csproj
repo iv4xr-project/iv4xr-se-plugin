@@ -12,6 +12,7 @@
     <ProjectReference Include="..\..\..\se\Sources\Sandbox.Game\Sandbox.Game.csproj" />
     <ProjectReference Include="..\..\..\se\Sources\VRage.Game\VRage.Game.csproj" />
     <ProjectReference Include="..\..\..\se\Sources\VRage\VRage.csproj" />
+    <ProjectReference Include="..\Ivxr.SpaceEngineers\Ivxr.SpaceEngineers.csproj" />
     <ProjectReference Include="..\Ivxr.PlugIndependentLib\Ivxr.PlugIndependentLib.csproj" />
   </ItemGroup>
 

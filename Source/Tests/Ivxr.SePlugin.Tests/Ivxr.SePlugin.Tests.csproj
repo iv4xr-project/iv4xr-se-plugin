@@ -78,6 +78,10 @@
       <Project>{40CE67D5-C89F-4A56-AE52-85DB1BEA07FE}</Project>
       <Name>VRage.Math</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Ivxr.SpaceEngineers\Ivxr.SpaceEngineers.csproj">
+      <Project>{269845e6-a68b-4c85-aaa3-71e180b1292b}</Project>
+      <Name>Ivxr.SpaceEngineers</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Ivxr.PlugIndependentLib\Ivxr.PlugIndependentLib.csproj">
       <Project>{CE782082-F8E9-4FE5-A04D-89ED99084E95}</Project>
       <Name>Ivxr.PlugIndependentLib</Name>
