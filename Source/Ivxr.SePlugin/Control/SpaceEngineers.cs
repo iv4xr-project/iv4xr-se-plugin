@@ -1,6 +1,7 @@
 ﻿using Iv4xr.PluginLib;
 using Iv4xr.PluginLib.Control;
 using Iv4xr.SePlugin.Config;
+using Iv4xr.SpaceEngineers;
 using Sandbox;
 
 namespace Iv4xr.SePlugin.Control

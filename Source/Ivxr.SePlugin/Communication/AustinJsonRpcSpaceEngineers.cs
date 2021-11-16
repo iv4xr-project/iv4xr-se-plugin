@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using AustinHarris.JsonRpc;
 using Iv4xr.PluginLib.Control;
-using Iv4xr.PluginLib.Navigation;
-using Iv4xr.PluginLib.WorldModel;
+using Iv4xr.SpaceEngineers;
+using Iv4xr.SpaceEngineers.Navigation;
+using Iv4xr.SpaceEngineers.WorldModel;
 
 namespace Iv4xr.SePlugin.Communication
 {

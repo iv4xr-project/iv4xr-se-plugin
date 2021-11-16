@@ -1,6 +1,6 @@
 ﻿using Iv4xr.PluginLib.Json;
 using Iv4xr.SePlugin.Json;
-using Iv4xr.PluginLib.WorldModel;
+using Iv4xr.SpaceEngineers.WorldModel;
 using VRageMath;
 using Xunit;
 using Iv4xr.SePlugin.Config;
