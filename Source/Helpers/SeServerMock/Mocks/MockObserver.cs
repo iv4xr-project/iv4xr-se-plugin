@@ -76,6 +76,11 @@ namespace SeServerMock.Mocks
             throw new NotImplementedException();
         }
 
+        public void SwitchCamera()
+        {
+            throw new NotImplementedException();
+        }
+
         public void TakeScreenshot(string absolutePath)
         {
             throw new NotImplementedException();
