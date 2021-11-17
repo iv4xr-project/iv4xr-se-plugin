@@ -1,5 +1,6 @@
 package spaceEngineers.game.mockable
 
+import spaceEngineers.model.BootsState
 import testhelp.MockOrRealGameTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -13,6 +14,12 @@ class CharacterObservationTest : MockOrRealGameTest(inMockResourcesDirectory("Ch
         val characterObservation = observer.observe()
         assertTrue(characterObservation.helmetEnabled)
         assertFalse(characterObservation.jetpackRunning)
+    }
+
+
+    @Test
+    fun bootState() = testContext {
+        assertEquals(BootsState.INIT, observer.observe().bootsState)
     }
 
     @Test

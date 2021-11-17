@@ -43,4 +43,6 @@ data class CharacterObservation(
     val movement: CharacterMovement,
     @SerialName("Inventory")
     val inventory: Inventory,
+    @SerialName("BootsState")
+    val bootsState: BootsState,
 ) : Entity

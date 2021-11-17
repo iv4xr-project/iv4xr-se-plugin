@@ -44,7 +44,7 @@ namespace Ivxr.PlugIndependentLib.Tests
                          "\"Camera\":null,\"JetpackRunning\":false,\"HelmetEnabled\":true,\"Health\":0.5,\"Oxygen\":0.0," +
                          "\"Hydrogen\":0.0,\"SuitEnergy\":0.0," +
                          "\"HeadLocalXAngle\":0.0,\"HeadLocalYAngle\":0.0,\"TargetBlock\":null,\"TargetUseObject\":null," +
-                         "\"Movement\":0,\"Inventory\":null,\"Id\":\"Foo\"," +
+                         "\"Movement\":0,\"Inventory\":null,\"BootsState\":0,\"Id\":\"Foo\"," +
                          "\"Position\":{\"X\":1.0,\"Y\":2.0,\"Z\":3.0}," +
                          "\"OrientationForward\":{\"X\":0.0,\"Y\":0.0,\"Z\":0.0}," +
                          "\"OrientationUp\":{\"X\":0.0,\"Y\":0.0,\"Z\":0.0}}",

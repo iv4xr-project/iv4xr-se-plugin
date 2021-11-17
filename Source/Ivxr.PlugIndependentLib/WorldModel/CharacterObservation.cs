@@ -21,5 +21,6 @@ namespace Iv4xr.PluginLib.WorldModel
         public UseObject TargetUseObject;
         public CharacterMovementEnum Movement;
         public Inventory Inventory;
+        public BootsState BootsState;
     }
 }
