@@ -1,8 +1,8 @@
-﻿using Iv4xr.PluginLib;
+﻿using System.Collections.Generic;
+using Iv4xr.PluginLib;
 using Iv4xr.PluginLib.Control;
 using Iv4xr.SpaceEngineers.WorldModel;
 using Sandbox.Game.Entities;
-using Sandbox.Game.World;
 
 namespace Iv4xr.SePlugin.Control
 {
@@ -10,9 +10,10 @@ namespace Iv4xr.SePlugin.Control
     {
         private readonly ILog m_log;
 
-        private ContinuousMovementContext m_continuousMovementContext = new ContinuousMovementContext();
+        private readonly Dictionary<string, ContinuousMovementContext> m_continuousMovementContextDictionary =
+                new Dictionary<string, ContinuousMovementContext>();
 
-        private GameSession m_session;
+        private readonly GameSession m_session;
 
         public ContinuousMovementController(ILog log, GameSession session)
         {
@@ -22,19 +23,27 @@ namespace Iv4xr.SePlugin.Control
 
         public void ChangeMovement(ContinuousMovementContext context)
         {
-            m_continuousMovementContext = context;
+            m_continuousMovementContextDictionary[m_session.CurrentCharacterId] = context;
+        }
+
+        private ContinuousMovementContext CurrentMovementContext()
+        {
+            return m_continuousMovementContextDictionary.ContainsKey(m_session.CurrentCharacterId)
+                    ? m_continuousMovementContextDictionary[m_session.CurrentCharacterId]
+                    : null;
         }
 
         public void Tick()
         {
-            if (!m_continuousMovementContext.IsValid())
+            var continuousMovementContext = CurrentMovementContext();
+            if (continuousMovementContext == null || !continuousMovementContext.IsValid())
                 return;
-            
-            m_continuousMovementContext.UseTick();
-            var moveVector = m_continuousMovementContext.MoveVector.ToVector3();
-            var rotateVector = m_continuousMovementContext.RotationVector.ToVector2();
+
+            continuousMovementContext.UseTick();
+            var moveVector = continuousMovementContext.MoveVector.ToVector3();
+            var rotateVector = continuousMovementContext.RotationVector.ToVector2();
             var entity = Entity();
-            entity.MoveAndRotate(moveVector, rotateVector, m_continuousMovementContext.Roll);
+            entity.MoveAndRotate(moveVector, rotateVector, continuousMovementContext.Roll);
         }
 
         private IMyControllableEntity Entity()

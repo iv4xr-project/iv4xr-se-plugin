@@ -7,7 +7,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 
-class ContinuousMoveTest : MockOrRealGameTest() {
+class ContinuousMoveTest : MockOrRealGameTest(forceRealGame = true) {
 
     @Test
     fun moveByTicks() = testContext {
@@ -23,8 +23,24 @@ class ContinuousMoveTest : MockOrRealGameTest() {
     }
 
     @Test
+    fun moveByTicksAnotherCharacter() = testContext {
+        delay(5_000)
+        val obs = observer.observe()
+        admin.character.create("id", position = obs.position + obs.orientationForward * 2.5f, obs.orientationForward, obs.orientationUp).id
+        admin.character.teleport(obs.position + obs.orientationForward * 2.5f)
+        val position = observer.observe().position
+        character.moveAndRotate(
+            movement = Vec3F.FORWARD.normalizeAsWalk(),
+            ticks = 60,
+        )
+        delay(2000)
+        val position2 = observer.observe().position
+        assertEquals(3.0498333f, (position2 - position).length(), 0.001f)
+    }
+
+    @Test
     fun moveByTicksJetpack() = testContext {
-        delay(10000)
+        delay(10_000)
         val position = observer.observe().position
         character.turnOnJetpack()
         character.moveAndRotate(
