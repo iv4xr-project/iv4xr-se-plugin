@@ -59,7 +59,7 @@ namespace Iv4xr.SePlugin.Control
         private static Type GetBlockType(string id)
         {
             return typeof(MyObjectBuilder_CubeBlock).Assembly.GetTypes()
-                    .FirstOrDefault(type => type.Name == id) ?? typeof(MyObjectBuilder_Thrust).Assembly.GetTypes()
+                    .FirstOrDefault(type => type.Name == id) ?? typeof(MyObjectBuilder_ThrustDefinition).Assembly.GetTypes()
                     .FirstOrDefault(type => type.Name == id);
         }
 

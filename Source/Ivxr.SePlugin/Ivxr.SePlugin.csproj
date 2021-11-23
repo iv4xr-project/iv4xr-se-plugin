@@ -25,6 +25,9 @@
     <Reference Include="Sandbox.Game">
       <HintPath>..\..\BinaryDependencies\Sandbox.Game.dll</HintPath>
     </Reference>
+	<Reference Include="Sandbox.Graphics">
+	  <HintPath>..\..\BinaryDependencies\Sandbox.Graphics.dll</HintPath>
+	</Reference>
     <Reference Include="VRage">
       <HintPath>..\..\BinaryDependencies\VRage.dll</HintPath>
     </Reference>
