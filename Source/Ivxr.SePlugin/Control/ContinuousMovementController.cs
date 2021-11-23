@@ -12,9 +12,12 @@ namespace Iv4xr.SePlugin.Control
 
         private ContinuousMovementContext m_continuousMovementContext = new ContinuousMovementContext();
 
-        public ContinuousMovementController(ILog log)
+        private GameSession m_session;
+
+        public ContinuousMovementController(ILog log, GameSession session)
         {
             m_log = log;
+            m_session = session;
         }
 
         public void ChangeMovement(ContinuousMovementContext context)
@@ -30,12 +33,13 @@ namespace Iv4xr.SePlugin.Control
             m_continuousMovementContext.UseTick();
             var moveVector = m_continuousMovementContext.MoveVector.ToVector3();
             var rotateVector = m_continuousMovementContext.RotationVector.ToVector2();
-            Entity().MoveAndRotate(moveVector, rotateVector, m_continuousMovementContext.Roll);
+            var entity = Entity();
+            entity.MoveAndRotate(moveVector, rotateVector, m_continuousMovementContext.Roll);
         }
 
         private IMyControllableEntity Entity()
         {
-            return MySession.Static.ControlledEntity;
+            return m_session.Character.ControllerInfo.Controller.ControlledEntity;
         }
     }
 }

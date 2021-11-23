@@ -56,7 +56,7 @@ namespace Iv4xr.SePlugin.Control
 
         private Vector3D GetPlayerVelocity()
         {
-            return MySession.Static.ControlledEntity.Entity.Physics.LinearVelocity;
+            return Character.ControllerInfo.Controller.ControlledEntity.Entity.Physics.LinearVelocity;
         }
 
         private InventoryItem GetInventoryItem(MyPhysicalInventoryItem myItem)
@@ -86,7 +86,7 @@ namespace Iv4xr.SePlugin.Control
             var orientation = Character.PositionComp.GetOrientation();
             return new CharacterObservation
             {
-                Id = "se0",
+                Id = m_gameSession.CurrentCharacterId,
                 Position = GetPlayerPosition().ToPlain(), // Consider reducing allocations.
                 OrientationForward = orientation.Forward.ToPlain(),
                 OrientationUp = orientation.Up.ToPlain(),

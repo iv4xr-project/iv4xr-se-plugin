@@ -38,6 +38,18 @@ namespace Iv4xr.SePlugin.Communication
         {
             m_se.Admin.Character.Use(blockId, functionIndex, action);
         }
+        
+        [JsonRpcMethod("Admin.Character.Create")]
+        CharacterObservation Create(string id, PlainVec3D position, PlainVec3D orientationForward, PlainVec3D orientationUp)
+        {
+            return m_se.Admin.Character.Create(id, position, orientationForward, orientationUp);
+        }
+        
+        [JsonRpcMethod("Admin.Character.Switch")]
+        void Switch(string id)
+        {
+            m_se.Admin.Character.Switch(id);
+        }
 
         [JsonRpcMethod("Character.TurnOnJetpack")]
         CharacterObservation TurnOnJetpack()

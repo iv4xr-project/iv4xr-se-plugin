@@ -205,6 +205,16 @@ namespace Iv4xr.SePlugin.Communication
         {
             Enqueue(() => m_character.Use(blockId, functionIndex, action));
         }
+
+        public CharacterObservation Create(string id, PlainVec3D position, PlainVec3D orientationForward, PlainVec3D orientationUp)
+        {
+            return Enqueue(() => m_character.Create(id, position, orientationForward, orientationUp));
+        }
+
+        public void Switch(string id)
+        {
+            Enqueue(() => m_character.Switch(id));
+        }
     }
 
     public class CharacterOnGameLoop : AbstractServiceOnGameLoop, ICharacterController

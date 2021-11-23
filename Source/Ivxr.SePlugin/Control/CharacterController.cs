@@ -74,6 +74,17 @@ namespace Iv4xr.SePlugin.Control
             obj.Use((UseActionEnum)action, Character);
         }
 
+        public CharacterObservation Create(string id, PlainVec3D position, PlainVec3D orientationForward, PlainVec3D orientationUp)
+        {
+            m_session.CreateCharacter(id, position.ToVector3D(), orientationForward.ToVector3D(), orientationUp.ToVector3D());
+            return m_observer.Observe();
+        }
+
+        public void Switch(string id)
+        {
+            m_session.SetCharacter(id);
+        }
+
         public CharacterObservation Teleport(PlainVec3D position, PlainVec3D? orientationForward,
             PlainVec3D? orientationUp)
         {

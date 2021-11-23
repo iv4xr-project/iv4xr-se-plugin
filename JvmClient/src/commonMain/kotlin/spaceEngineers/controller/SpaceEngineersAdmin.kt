@@ -33,4 +33,8 @@ interface CharacterAdmin {
      * @param action Action flag, to get possible actions of the block, check [spaceEngineers.model.UseObject.primaryAction] and [spaceEngineers.model.UseObject.secondaryAction] values.
      */
     fun use(blockId: BlockId, functionIndex: Int, action: Int)
+
+    fun create(id: String, position: Vec3F, orientationForward: Vec3F, orientationUp: Vec3F): CharacterObservation
+
+    fun switch(id: String)
 }

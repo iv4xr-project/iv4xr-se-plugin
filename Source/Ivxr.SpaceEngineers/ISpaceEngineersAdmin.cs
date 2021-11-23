@@ -23,5 +23,8 @@ namespace Iv4xr.SpaceEngineers
     {
         CharacterObservation Teleport(PlainVec3D position, PlainVec3D? orientationForward = null, PlainVec3D? orientationUp = null);
         void Use(string blockId, int functionIndex, int action);
+
+        CharacterObservation Create(string id, PlainVec3D position, PlainVec3D orientationForward, PlainVec3D orientationUp);
+        void Switch(string id);
     }
 }
