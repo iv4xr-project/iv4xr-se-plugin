@@ -2,8 +2,12 @@ using System;
 using System.IO;
 using Iv4xr.PluginLib;
 using Iv4xr.PluginLib.Control;
-using Iv4xr.PluginLib.WorldModel;
+using Iv4xr.SpaceEngineers.Navigation;
+using Iv4xr.SpaceEngineers.WorldModel;
+using Iv4xr.SePlugin.Navigation;
+using Iv4xr.SpaceEngineers;
 using Sandbox;
+using Sandbox.Game.Gui;
 using Sandbox.Game.Screens.Helpers;
 using Sandbox.Graphics.GUI;
 using VRage.FileSystem;
@@ -19,14 +23,6 @@ namespace Iv4xr.SePlugin.Control
             get => m_lowLevelObserver.Radius;
             set => m_lowLevelObserver.Radius = value;
         }
-
-        public static void ValidateRadius(double radius)
-        {
-            if (radius <= 0.0d)
-                throw new Exception("Radius must be positive and non-zero.");
-        }
-        
-        public const double DefaultRadius = 25.0d;
 
         private readonly LowLevelObserver m_lowLevelObserver;
 
@@ -48,6 +44,18 @@ namespace Iv4xr.SePlugin.Control
         public Observation ObserveNewBlocks()
         {
             return m_lowLevelObserver.GetNewBlocks();
+        }
+
+        public NavGraph NavigationGraph()
+        {
+            var navGraphEditor = new NavGraphEditor(m_lowLevelObserver);
+
+            return navGraphEditor.GetGraph().ToNavGraph();
+        }
+
+        public void SwitchCamera()
+        {
+            MyGuiScreenGamePlay.Static.SwitchCamera();
         }
 
         public void TakeScreenshot(string absolutePath)

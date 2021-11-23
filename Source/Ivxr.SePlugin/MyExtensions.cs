@@ -1,7 +1,12 @@
-﻿using Iv4xr.PluginLib.WorldModel;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using Iv4xr.SpaceEngineers.WorldModel;
 using Sandbox.Game.Multiplayer;
 using Sandbox.Game.Screens.Helpers;
 using Sandbox.Game.World;
+using VRage.Game;
 using VRageMath;
 
 namespace Iv4xr.SePlugin
@@ -42,6 +47,8 @@ namespace Iv4xr.SePlugin
         {
             return new PlainVec3I(vector.X, vector.Y, vector.Z);
         }
+
+        public static Vector3I ToVector3I(this PlainVec3I vec) => new Vector3I(vec.X, vec.Y, vec.Z);
         
         public static bool IsAdminOrCreative(this MySession session)
         {
@@ -58,6 +65,39 @@ namespace Iv4xr.SePlugin
                 return;
  
             toolbar.SwitchToPage(page);
+        }
+
+        public static Dictionary<string, string> FromTypeToString(this Dictionary<Type, Type> dictionary)
+        {
+            return dictionary.ToDictionary(item => item.Key.Name, item => item.Value.Name);
+        }
+        
+        public static DefinitionId ToDefinitionId(this MyDefinitionBase myDefinitionBase)
+        {
+            return ToDefinitionId(myDefinitionBase.Id);
+        }
+        
+        public static DefinitionId ToDefinitionId(this MyDefinitionId myDefinitionId)
+        {
+            return new DefinitionId()
+            {
+                Id = myDefinitionId.TypeId.ToString(),
+                Type = myDefinitionId.SubtypeId.String,
+            };
+        }
+        
+        public static MyDefinitionId ToMyDefinitionId(DefinitionId definitionId)
+        {
+            return MyDefinitionId.Parse(definitionId.ToString());
+        }
+
+        public static object GetInstanceField(this object instance, string fieldName)
+        {
+            BindingFlags bindFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic
+                                     | BindingFlags.Static;
+            var t = instance.GetType();
+            FieldInfo field = t.GetField(fieldName, bindFlags);
+            return field.GetValue(instance);
         }
     }
 }

@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: CI
+name: CI Tests
 
 # Controls when the action will run. 
 on: 
@@ -34,3 +34,12 @@ jobs:
           echo Running JVM unit tests
           cd JvmClient/
           ./gradlew :cleanJvmTest :jvmTest --tests "spaceEngineers.game.mockable.*"  --tests "spaceEngineers.model.*"
+  csTest:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Unit tests
+        run: |
+          echo Running Cs unit tests
+          cd Source/Tests/Ivxr.PlugIndependentLib.Tests
+          dotnet test

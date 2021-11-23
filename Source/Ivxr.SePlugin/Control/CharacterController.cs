@@ -1,8 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
+using Iv4xr.PluginLib;
 using Iv4xr.PluginLib.Control;
-using Iv4xr.PluginLib.WorldModel;
+using Iv4xr.SpaceEngineers;
+using Iv4xr.SpaceEngineers.WorldModel;
+using Sandbox.Game.Entities;
 using Sandbox.Game.Entities.Character;
 using Sandbox.Game.World;
+using VRage.Game;
+using VRage.Game.Entity.UseObject;
 using VRageMath;
 
 namespace Iv4xr.SePlugin.Control
@@ -11,26 +17,65 @@ namespace Iv4xr.SePlugin.Control
     {
         private readonly IGameSession m_session;
         private readonly IObserver m_observer;
+        private readonly LowLevelObserver m_lowLevelObserver;
 
-        public CharacterController(IGameSession session, IObserver observer)
+        private readonly ILog Log;
+
+        public CharacterController(IGameSession session, IObserver observer, LowLevelObserver lowLevelObserver,
+            ILog log)
         {
             m_session = session;
             m_observer = observer;
+            m_lowLevelObserver = lowLevelObserver;
+            Log = log;
         }
-        
+
         public CharacterObservation TurnOnJetpack()
         {
             Character.JetpackComp.TurnOnJetpack(true);
             return m_observer.Observe();
         }
-        
+
         public CharacterObservation TurnOffJetpack()
         {
             Character.JetpackComp.TurnOnJetpack(false);
             return m_observer.Observe();
         }
 
-        public CharacterObservation Teleport(PlainVec3D position, PlainVec3D? orientationForward, PlainVec3D? orientationUp)
+        public CharacterObservation SwitchHelmet()
+        {
+            Character.OxygenComponent.SwitchHelmet();
+            return m_observer.Observe();
+        }
+
+        public void BeginUsingTool()
+        {
+            var entityController = GetEntityController();
+            entityController.ControlledEntity.BeginShoot(MyShootActionEnum.PrimaryAction);
+        }
+
+        public void EndUsingTool()
+        {
+            var entityController = GetEntityController();
+            entityController.ControlledEntity.EndShoot(MyShootActionEnum.PrimaryAction);
+        }
+
+        public void Use()
+        {
+            MySession.Static.ControlledEntity.Use();
+        }
+
+        public void Use(string blockId, int functionIndex, int action)
+        {
+            var block = m_lowLevelObserver.GetBlockById(blockId);
+            var objects = new List<IMyUseObject>();
+            block.FatBlock.UseObjectsComponent.GetInteractiveObjects(objects);
+            var obj = objects[functionIndex];
+            obj.Use((UseActionEnum)action, Character);
+        }
+
+        public CharacterObservation Teleport(PlainVec3D position, PlainVec3D? orientationForward,
+            PlainVec3D? orientationUp)
         {
             var vecPosition = new Vector3D(position.ToVector3());
             if (orientationForward == null && orientationUp == null)
@@ -52,10 +97,24 @@ namespace Iv4xr.SePlugin.Control
             GetEntityController().Player.Character.PositionComp.SetWorldMatrix(ref matrix);
             return m_observer.Observe();
         }
-        
-        public CharacterObservation MoveAndRotate(PlainVec3D movement, PlainVec2F rotation3, float roll)
+
+        public CharacterObservation MoveAndRotate(PlainVec3D movement, PlainVec2F rotation3, float roll, int ticks)
         {
-            GetEntityController().ControlledEntity.MoveAndRotate(movement.ToVector3(), rotation3.ToVector2(), roll);
+            var vector3d = movement.ToVector3D();
+            if (vector3d == Vector3D.Down && Character.CurrentMovementState == MyCharacterMovementEnum.Standing && !Character.JetpackRunning)
+            {
+                Character.Crouch();
+            }
+            else if (vector3d == Vector3D.Up && Character.CurrentMovementState == MyCharacterMovementEnum.Crouching && !Character.JetpackRunning)
+            {
+                Character.Stand();
+            }
+
+            IvxrPlugin.Context.ContinuousMovementController.ChangeMovement(
+                new ContinuousMovementContext()
+                        { MoveVector = movement, RotationVector = rotation3, Roll = roll, TicksLeft = ticks }
+            );
+
             return m_observer.Observe();
         }
 
@@ -72,7 +131,7 @@ namespace Iv4xr.SePlugin.Control
 
             return entityController;
         }
-        
+
         private MyCharacter Character => m_session.Character;
     }
 }

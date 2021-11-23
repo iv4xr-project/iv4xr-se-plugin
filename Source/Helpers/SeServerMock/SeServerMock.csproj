@@ -8,6 +8,7 @@
     <ItemGroup>
       <ProjectReference Include="..\..\Ivxr.PlugIndependentLib\Ivxr.PlugIndependentLib.csproj" />
       <ProjectReference Include="..\..\Ivxr.SePlugin\Ivxr.SePlugin.csproj" />
+      <ProjectReference Include="..\..\Ivxr.SpaceEngineers\Ivxr.SpaceEngineers.csproj" />
     </ItemGroup>
 
     <ItemGroup>

@@ -11,10 +11,10 @@ data class SpaceEngineersTestContext(
     var allNewestBlocks: MutableList<Block> = mutableListOf(),
     val observationHistory: MutableList<Observation> = mutableListOf(),
     val characterObservationHistory: MutableList<CharacterObservation> = mutableListOf(),
-    var platformOrientationUp: Vec3? = null,
+    var platformOrientationUp: Vec3F? = null,
 ) {
 
-    val lastNewBlockId: String?
+    val lastNewBlockId: BlockId?
         get() = lastNewBlock?.id
 
     fun updatePlatformOrientationUpIfNotSet(observation: Observation) {

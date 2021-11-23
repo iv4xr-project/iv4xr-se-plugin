@@ -1,9 +1,9 @@
 package testhelp
 
 import spaceEngineers.controller.JsonRpcSpaceEngineers
+import spaceEngineers.controller.JsonRpcSpaceEngineersBuilder
 import spaceEngineers.controller.SpaceEngineers
 import spaceEngineers.controller.loadFromTestResources
-import spaceEngineers.transport.GsonReaderWriter
 import spaceEngineers.transport.GsonResponseAppendToFileReaderWriter
 import spaceEngineers.transport.SocketReaderWriter
 import spaceEngineers.transport.StringLineReaderWriter
@@ -16,6 +16,7 @@ abstract class MockOrRealGameTest(
     private val forceRealGame: Boolean = false,
     private val forceWrite: Boolean = false,
     private val scenarioId: String = SIMPLE_PLACE_GRIND_TORCH,
+    private val loadScenario: Boolean = true,
 ) {
 
     var useRealGame: Boolean = forceRealGame
@@ -42,7 +43,9 @@ abstract class MockOrRealGameTest(
     ) {
         val spaceEngineers = getSpaceEngineers(forceRealGame, file)
         useRealGame = useRealGame(forceRealGame, file)
-        spaceEngineers.session.loadFromTestResources(scenarioId)
+        if (loadScenario) {
+            spaceEngineers.session.loadFromTestResources(scenarioId)
+        }
         spaceEngineersSuspend(agentId = agentId, spaceEngineers = spaceEngineers, block = block)
     }
 
@@ -58,14 +61,9 @@ abstract class MockOrRealGameTest(
 
     private fun getSpaceEngineers(forceRealGame: Boolean, file: File): JsonRpcSpaceEngineers {
         return if (useRealGame(forceRealGame, file)) {
-            JsonRpcSpaceEngineers(
-                agentId = agentId,
-                gsonReaderWriter = GsonReaderWriter(
-                    stringLineReaderWriter = readerWriter(file)
-                )
-            )
+            JsonRpcSpaceEngineersBuilder.fromStringLineReaderWriter(agentId, readerWriter(file))
         } else {
-            JsonRpcSpaceEngineers.mock(agentId, file)
+            JsonRpcSpaceEngineersBuilder.mock(agentId, file)
         }
     }
 

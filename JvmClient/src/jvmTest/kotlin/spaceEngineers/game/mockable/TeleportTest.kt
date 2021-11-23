@@ -1,6 +1,6 @@
 package spaceEngineers.game.mockable
 
-import spaceEngineers.model.Vec3
+import spaceEngineers.model.Vec3F
 import testhelp.MockOrRealGameTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -20,10 +20,10 @@ class TeleportTest : MockOrRealGameTest() {
 
     @Test
     fun rotate() = testContext {
-        val x = Vec3(1, 0, 0)
+        val x = Vec3F(1, 0, 0)
         var observation = observer.observe()
         assertNotEquals(x, observation.orientationForward)
-        admin.character.teleport(observation.position, orientationForward = x, orientationUp = Vec3(0, 1, 0))
+        admin.character.teleport(observation.position, orientationForward = x, orientationUp = Vec3F(0, 1, 0))
         observation = observer.observe()
         assertEquals(x, observation.orientationForward)
     }

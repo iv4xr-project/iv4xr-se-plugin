@@ -4,45 +4,56 @@ import kotlinx.coroutines.withTimeout
 import kotlinx.coroutines.yield
 import spaceEngineers.controller.Character
 import spaceEngineers.controller.SpaceEngineers
+import spaceEngineers.model.CharacterMovementType
 import spaceEngineers.model.CharacterObservation
-import spaceEngineers.model.Observation
-import spaceEngineers.model.Vec2
-import spaceEngineers.model.Vec3
+import spaceEngineers.model.Vec2F
+import spaceEngineers.model.Vec3F
+import spaceEngineers.model.extensions.normalizeAsMovement
 
-fun Character.moveForward(velocity: Float = 1f): CharacterObservation {
-    return moveAndRotate(movement = Vec3.FORWARD * velocity)
+fun Character.moveForward(characterMovementType: CharacterMovementType): CharacterObservation {
+    return moveAndRotate(movement = Vec3F.FORWARD.normalizeAsMovement(characterMovementType))
 }
 
-fun Character.moveBackward(velocity: Float = 1f): CharacterObservation {
-    return moveAndRotate(movement = Vec3.BACKWARD * velocity)
+fun Character.moveBackward(characterMovementType: CharacterMovementType): CharacterObservation {
+    return moveAndRotate(movement = Vec3F.BACKWARD.normalizeAsMovement(characterMovementType))
 }
 
-suspend fun SpaceEngineers.blockingMoveForwardByDistance(
+suspend fun SpaceEngineers.blockingMoveByDistance(
     distance: Float,
-    velocity: Float = 1f,
-    startPosition: Vec3,
+    startPosition: Vec3F,
     timeoutMs: Long = 20000,
+    orientation: Vec3F,
+    characterMovementType: CharacterMovementType = CharacterMovementType.RUN,
 ) {
     withTimeout(timeoutMs) {
         while (observer.observe().position.distanceTo(startPosition) < distance) {
-            character.moveForward(velocity = velocity)
+            character.moveAndRotate(movement = orientation.normalizeAsMovement(characterMovementType))
             yield()
         }
     }
 }
 
+suspend fun SpaceEngineers.blockingMoveForwardByDistance(
+    distance: Float,
+    startPosition: Vec3F,
+    timeoutMs: Long = 20000,
+    characterMovementType: CharacterMovementType = CharacterMovementType.RUN,
+) {
+    blockingMoveByDistance(distance = distance, startPosition = startPosition, timeoutMs = timeoutMs, characterMovementType = characterMovementType, orientation = Vec3F.FORWARD)
+}
+
 suspend fun SpaceEngineers.blockingMoveBackwardsByDistance(
     distance: Float,
-    velocity: Float = 1f,
-    startPosition: Vec3,
+    startPosition: Vec3F,
     timeoutMs: Long = 20000,
+    characterMovementType: CharacterMovementType = CharacterMovementType.RUN,
 ) {
-    blockingMoveForwardByDistance(distance, -velocity, startPosition, timeoutMs)
+    blockingMoveByDistance(distance = distance, startPosition = startPosition, timeoutMs = timeoutMs, characterMovementType = characterMovementType, orientation = Vec3F.BACKWARD)
 }
 
 suspend fun SpaceEngineers.blockingRotateUntilOrientationForward(
-    finalOrientation: Vec3,
-    rotation: Vec2,
+    finalOrientation: Vec3F,
+    rotation: Vec2F,
     delta: Float = 0.01f,
     timeoutMs: Long = 30000,
 ) {
@@ -57,8 +68,8 @@ suspend fun SpaceEngineers.blockingRotateUntilOrientationForward(
 }
 
 suspend fun SpaceEngineers.blockingRotateUntilOrientationUp(
-    finalOrientation: Vec3,
-    rotation: Vec2,
+    finalOrientation: Vec3F,
+    rotation: Vec2F,
     delta: Float = 0.01f,
     timeoutMs: Long = 30000,
 ) {

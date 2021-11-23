@@ -1,7 +1,8 @@
 ﻿using System;
 using Iv4xr.PluginLib;
 using Iv4xr.PluginLib.Control;
-using Iv4xr.PluginLib.WorldModel;
+using Iv4xr.SpaceEngineers;
+using Iv4xr.SpaceEngineers.WorldModel;
 
 namespace SeServerMock.Mocks
 {
@@ -9,7 +10,7 @@ namespace SeServerMock.Mocks
     {
         public ILog Log { get; set; }
         
-        public CharacterObservation MoveAndRotate(PlainVec3D movement, PlainVec2F rotation3, float roll)
+        public CharacterObservation MoveAndRotate(PlainVec3D movement, PlainVec2F rotation3, float roll, int ticks)
         {
             throw new NotImplementedException();
         }
@@ -25,6 +26,26 @@ namespace SeServerMock.Mocks
         }
 
         public CharacterObservation TurnOffJetpack()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CharacterObservation SwitchHelmet()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void BeginUsingTool()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void EndUsingTool()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Use()
         {
             throw new NotImplementedException();
         }

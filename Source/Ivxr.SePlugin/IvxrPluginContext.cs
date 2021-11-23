@@ -1,9 +1,13 @@
 ﻿using System;
+using System.IO;
+using System.Reflection;
 using Iv4xr.PluginLib;
 using Iv4xr.SePlugin.Communication;
 using Iv4xr.SePlugin.Config;
 using Iv4xr.SePlugin.Control;
+using Iv4xr.SePlugin.Json;
 using Iv4xr.SePlugin.SeLib;
+using VRage.FileSystem;
 
 namespace Iv4xr.SePlugin
 {
@@ -12,26 +16,34 @@ namespace Iv4xr.SePlugin
         public ILog Log { get; private set; }
         public readonly JsonRpcStarter JsonRpcStarter;
         public readonly FuncActionDispatcher FuncActionDispatcher;
+        private const string CONFIG_FILE = "ivxr-plugin.config";
 
         private readonly GameSession m_gameSession = new GameSession();
+        public readonly ContinuousMovementController ContinuousMovementController;
 
         public IvxrPluginContext()
         {
-            var seLog = new SeLog(alwaysFlush: true);
-            seLog.Init("ivxr-plugin.log");
+            var seLog = new SeLog(
+                Assembly.GetExecutingAssembly().GetName().Version.ToString(),
+                "ivxr-plugin",
+                alwaysFlush: true
+            );
             Log = seLog;
 
-            var configLoader = new ConfigLoader(Log);
+            var configPath = Path.Combine(MyFileSystem.UserDataPath, CONFIG_FILE);
+            var configLoader = new ConfigLoader(Log, new Jsoner(), configPath);
             var config = configLoader.LoadOrSaveDefault();
+            ContinuousMovementController = new ContinuousMovementController(seLog);
 
             var se = new RealSpaceEngineers(m_gameSession, Log, config);
-            
-            FuncActionDispatcher = new FuncActionDispatcher();
-            
+
+            FuncActionDispatcher = new FuncActionDispatcher(seLog);
+
             JsonRpcStarter = new JsonRpcStarter(
                 new SynchronizedSpaceEngineers(se, FuncActionDispatcher),
+                hostname: config.Hostname,
                 port: config.JsonRpcPort
-                ) {Log = Log};
+            ) { Log = Log };
         }
 
 

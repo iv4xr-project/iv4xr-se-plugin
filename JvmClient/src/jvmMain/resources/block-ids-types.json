@@ -1,0 +1,781 @@
+{
+  "CubeBlock": [
+    "LargeRailStraight",
+    "LargeBlockArmorBlock",
+    "LargeBlockArmorSlope",
+    "LargeBlockArmorCorner",
+    "LargeBlockArmorCornerInv",
+    "LargeRoundArmor_Slope",
+    "LargeRoundArmor_Corner",
+    "LargeRoundArmor_CornerInv",
+    "LargeHeavyBlockArmorBlock",
+    "LargeHeavyBlockArmorSlope",
+    "LargeHeavyBlockArmorCorner",
+    "LargeHeavyBlockArmorCornerInv",
+    "SmallBlockArmorBlock",
+    "SmallBlockArmorSlope",
+    "SmallBlockArmorCorner",
+    "SmallBlockArmorCornerInv",
+    "SmallHeavyBlockArmorBlock",
+    "SmallHeavyBlockArmorSlope",
+    "SmallHeavyBlockArmorCorner",
+    "SmallHeavyBlockArmorCornerInv",
+    "LargeHalfArmorBlock",
+    "LargeHeavyHalfArmorBlock",
+    "LargeHalfSlopeArmorBlock",
+    "LargeHeavyHalfSlopeArmorBlock",
+    "HalfArmorBlock",
+    "HeavyHalfArmorBlock",
+    "HalfSlopeArmorBlock",
+    "HeavyHalfSlopeArmorBlock",
+    "LargeBlockArmorRoundSlope",
+    "LargeBlockArmorRoundCorner",
+    "LargeBlockArmorRoundCornerInv",
+    "LargeHeavyBlockArmorRoundSlope",
+    "LargeHeavyBlockArmorRoundCorner",
+    "LargeHeavyBlockArmorRoundCornerInv",
+    "SmallBlockArmorRoundSlope",
+    "SmallBlockArmorRoundCorner",
+    "SmallBlockArmorRoundCornerInv",
+    "SmallHeavyBlockArmorRoundSlope",
+    "SmallHeavyBlockArmorRoundCorner",
+    "SmallHeavyBlockArmorRoundCornerInv",
+    "LargeBlockArmorSlope2Base",
+    "LargeBlockArmorSlope2Tip",
+    "LargeBlockArmorCorner2Base",
+    "LargeBlockArmorCorner2Tip",
+    "LargeBlockArmorInvCorner2Base",
+    "LargeBlockArmorInvCorner2Tip",
+    "LargeHeavyBlockArmorSlope2Base",
+    "LargeHeavyBlockArmorSlope2Tip",
+    "LargeHeavyBlockArmorCorner2Base",
+    "LargeHeavyBlockArmorCorner2Tip",
+    "LargeHeavyBlockArmorInvCorner2Base",
+    "LargeHeavyBlockArmorInvCorner2Tip",
+    "SmallBlockArmorSlope2Base",
+    "SmallBlockArmorSlope2Tip",
+    "SmallBlockArmorCorner2Base",
+    "SmallBlockArmorCorner2Tip",
+    "SmallBlockArmorInvCorner2Base",
+    "SmallBlockArmorInvCorner2Tip",
+    "SmallHeavyBlockArmorSlope2Base",
+    "SmallHeavyBlockArmorSlope2Tip",
+    "SmallHeavyBlockArmorCorner2Base",
+    "SmallHeavyBlockArmorCorner2Tip",
+    "SmallHeavyBlockArmorInvCorner2Base",
+    "SmallHeavyBlockArmorInvCorner2Tip",
+    "LargeBlockArmorCornerSquare",
+    "SmallBlockArmorCornerSquare",
+    "LargeBlockHeavyArmorCornerSquare",
+    "SmallBlockHeavyArmorCornerSquare",
+    "LargeBlockArmorCornerSquareInverted",
+    "SmallBlockArmorCornerSquareInverted",
+    "LargeBlockHeavyArmorCornerSquareInverted",
+    "SmallBlockHeavyArmorCornerSquareInverted",
+    "LargeBlockArmorHalfCorner",
+    "SmallBlockArmorHalfCorner",
+    "LargeBlockHeavyArmorHalfCorner",
+    "SmallBlockHeavyArmorHalfCorner",
+    "LargeBlockArmorHalfSlopeCorner",
+    "SmallBlockArmorHalfSlopeCorner",
+    "LargeBlockHeavyArmorHalfSlopeCorner",
+    "SmallBlockHeavyArmorHalfSlopeCorner",
+    "LargeBlockArmorHalfSlopeCornerInverted",
+    "SmallBlockArmorHalfSlopeCornerInverted",
+    "LargeBlockHeavyArmorHalfSlopeCornerInverted",
+    "SmallBlockHeavyArmorHalfSlopeCornerInverted",
+    "LargeBlockArmorHalfSlopedCorner",
+    "SmallBlockArmorHalfSlopedCorner",
+    "LargeBlockHeavyArmorHalfSlopedCorner",
+    "SmallBlockHeavyArmorHalfSlopedCorner",
+    "LargeBlockArmorHalfSlopedCornerBase",
+    "SmallBlockArmorHalfSlopedCornerBase",
+    "LargeBlockHeavyArmorHalfSlopedCornerBase",
+    "SmallBlockHeavyArmorHalfSlopedCornerBase",
+    "LargeBlockArmorHalfSlopeInverted",
+    "SmallBlockArmorHalfSlopeInverted",
+    "LargeBlockHeavyArmorHalfSlopeInverted",
+    "SmallBlockHeavyArmorHalfSlopeInverted",
+    "LargeBlockArmorSlopedCorner",
+    "SmallBlockArmorSlopedCorner",
+    "LargeBlockHeavyArmorSlopedCorner",
+    "SmallBlockHeavyArmorSlopedCorner",
+    "LargeBlockArmorSlopedCornerBase",
+    "SmallBlockArmorSlopedCornerBase",
+    "LargeBlockHeavyArmorSlopedCornerBase",
+    "SmallBlockHeavyArmorSlopedCornerBase",
+    "LargeBlockArmorSlopedCornerTip",
+    "SmallBlockArmorSlopedCornerTip",
+    "LargeBlockHeavyArmorSlopedCornerTip",
+    "SmallBlockHeavyArmorSlopedCornerTip",
+    "LargeBlockDeskChairless",
+    "LargeBlockDeskChairlessCorner",
+    "Shower",
+    "WindowWall",
+    "WindowWallLeft",
+    "WindowWallRight",
+    "Catwalk",
+    "CatwalkCorner",
+    "CatwalkStraight",
+    "CatwalkWall",
+    "CatwalkRailingEnd",
+    "CatwalkRailingHalfRight",
+    "CatwalkRailingHalfLeft",
+    "GratedStairs",
+    "GratedHalfStairs",
+    "GratedHalfStairsMirrored",
+    "RailingStraight",
+    "RailingDouble",
+    "RailingCorner",
+    "RailingDiagonal",
+    "RailingHalfRight",
+    "RailingHalfLeft",
+    "Freight1",
+    "Freight2",
+    "Freight3",
+    "ArmorCenter",
+    "ArmorCorner",
+    "ArmorInvCorner",
+    "ArmorSide",
+    "SmallArmorCenter",
+    "SmallArmorCorner",
+    "SmallArmorInvCorner",
+    "SmallArmorSide",
+    "Monolith",
+    "Stereolith",
+    "DeadAstronaut",
+    "LargeDeadAstronaut",
+    "DeadBody01",
+    "DeadBody02",
+    "DeadBody03",
+    "DeadBody04",
+    "DeadBody05",
+    "DeadBody06",
+    "LargeStairs",
+    "LargeRamp",
+    "LargeSteelCatwalk",
+    "LargeSteelCatwalk2Sides",
+    "LargeSteelCatwalkCorner",
+    "LargeSteelCatwalkPlate",
+    "LargeCoverWall",
+    "LargeCoverWallHalf",
+    "LargeBlockInteriorWall",
+    "LargeInteriorPillar",
+    "Viewport1",
+    "Viewport2",
+    "BarredWindow",
+    "BarredWindowSlope",
+    "BarredWindowSide",
+    "BarredWindowFace",
+    "StorageShelf1",
+    "StorageShelf2",
+    "StorageShelf3",
+    "LargeBlockSciFiWall",
+    "LargeBlockBarCounter",
+    "LargeBlockBarCounterCorner",
+    "LargeSymbolA",
+    "LargeSymbolB",
+    "LargeSymbolC",
+    "LargeSymbolD",
+    "LargeSymbolE",
+    "LargeSymbolF",
+    "LargeSymbolG",
+    "LargeSymbolH",
+    "LargeSymbolI",
+    "LargeSymbolJ",
+    "LargeSymbolK",
+    "LargeSymbolL",
+    "LargeSymbolM",
+    "LargeSymbolN",
+    "LargeSymbolO",
+    "LargeSymbolP",
+    "LargeSymbolQ",
+    "LargeSymbolR",
+    "LargeSymbolS",
+    "LargeSymbolT",
+    "LargeSymbolU",
+    "LargeSymbolV",
+    "LargeSymbolW",
+    "LargeSymbolX",
+    "LargeSymbolY",
+    "LargeSymbolZ",
+    "SmallSymbolA",
+    "SmallSymbolB",
+    "SmallSymbolC",
+    "SmallSymbolD",
+    "SmallSymbolE",
+    "SmallSymbolF",
+    "SmallSymbolG",
+    "SmallSymbolH",
+    "SmallSymbolI",
+    "SmallSymbolJ",
+    "SmallSymbolK",
+    "SmallSymbolL",
+    "SmallSymbolM",
+    "SmallSymbolN",
+    "SmallSymbolO",
+    "SmallSymbolP",
+    "SmallSymbolQ",
+    "SmallSymbolR",
+    "SmallSymbolS",
+    "SmallSymbolT",
+    "SmallSymbolU",
+    "SmallSymbolV",
+    "SmallSymbolW",
+    "SmallSymbolX",
+    "SmallSymbolY",
+    "SmallSymbolZ",
+    "LargeSymbol0",
+    "LargeSymbol1",
+    "LargeSymbol2",
+    "LargeSymbol3",
+    "LargeSymbol4",
+    "LargeSymbol5",
+    "LargeSymbol6",
+    "LargeSymbol7",
+    "LargeSymbol8",
+    "LargeSymbol9",
+    "SmallSymbol0",
+    "SmallSymbol1",
+    "SmallSymbol2",
+    "SmallSymbol3",
+    "SmallSymbol4",
+    "SmallSymbol5",
+    "SmallSymbol6",
+    "SmallSymbol7",
+    "SmallSymbol8",
+    "SmallSymbol9",
+    "LargeSymbolHyphen",
+    "LargeSymbolUnderscore",
+    "LargeSymbolDot",
+    "LargeSymbolApostrophe",
+    "LargeSymbolAnd",
+    "LargeSymbolColon",
+    "LargeSymbolExclamationMark",
+    "LargeSymbolQuestionMark",
+    "SmallSymbolHyphen",
+    "SmallSymbolUnderscore",
+    "SmallSymbolDot",
+    "SmallSymbolApostrophe",
+    "SmallSymbolAnd",
+    "SmallSymbolColon",
+    "SmallSymbolExclamationMark",
+    "SmallSymbolQuestionMark",
+    "FireCover",
+    "FireCoverCorner",
+    "HalfWindow",
+    "HalfWindowInv",
+    "HalfWindowCorner",
+    "HalfWindowCornerInv",
+    "Embrasure",
+    "LargeWindowSquare",
+    "LargeWindowEdge",
+    "Window1x2Slope",
+    "Window1x2Inv",
+    "Window1x2Face",
+    "Window1x2SideLeft",
+    "Window1x2SideLeftInv",
+    "Window1x2SideRight",
+    "Window1x2SideRightInv",
+    "Window1x1Slope",
+    "Window1x1Face",
+    "Window1x1Side",
+    "Window1x1SideInv",
+    "Window1x1Inv",
+    "Window1x2Flat",
+    "Window1x2FlatInv",
+    "Window1x1Flat",
+    "Window1x1FlatInv",
+    "Window3x3Flat",
+    "Window3x3FlatInv",
+    "Window2x3Flat",
+    "Window2x3FlatInv",
+    "SmallWindow1x2Slope",
+    "SmallWindow1x2Inv",
+    "SmallWindow1x2Face",
+    "SmallWindow1x2SideLeft",
+    "SmallWindow1x2SideLeftInv",
+    "SmallWindow1x2SideRight",
+    "SmallWindow1x2SideRightInv",
+    "SmallWindow1x1Slope",
+    "SmallWindow1x1Face",
+    "SmallWindow1x1Side",
+    "SmallWindow1x1SideInv",
+    "SmallWindow1x1Inv",
+    "SmallWindow1x2Flat",
+    "SmallWindow1x2FlatInv",
+    "SmallWindow1x1Flat",
+    "SmallWindow1x1FlatInv",
+    "SmallWindow3x3Flat",
+    "SmallWindow3x3FlatInv",
+    "SmallWindow2x3Flat",
+    "SmallWindow2x3FlatInv"
+  ],
+  "DebugSphere1": [
+    "DebugSphereLarge"
+  ],
+  "DebugSphere2": [
+    "DebugSphereLarge"
+  ],
+  "DebugSphere3": [
+    "DebugSphereLarge"
+  ],
+  "MyProgrammableBlock": [
+    "SmallProgrammableBlock",
+    "LargeProgrammableBlock"
+  ],
+  "Projector": [
+    "LargeProjector",
+    "SmallProjector",
+    "LargeBlockConsole"
+  ],
+  "SensorBlock": [
+    "SmallBlockSensor",
+    "LargeBlockSensor"
+  ],
+  "SoundBlock": [
+    "SmallBlockSoundBlock",
+    "LargeBlockSoundBlock"
+  ],
+  "ButtonPanel": [
+    "ButtonPanelLarge",
+    "ButtonPanelSmall",
+    "LargeSciFiButtonTerminal",
+    "LargeSciFiButtonPanel"
+  ],
+  "TimerBlock": [
+    "TimerBlockLarge",
+    "TimerBlockSmall"
+  ],
+  "RadioAntenna": [
+    "LargeBlockRadioAntenna",
+    "SmallBlockRadioAntenna",
+    "LargeBlockRadioAntennaDish"
+  ],
+  "Beacon": [
+    "LargeBlockBeacon",
+    "SmallBlockBeacon"
+  ],
+  "RemoteControl": [
+    "LargeBlockRemoteControl",
+    "SmallBlockRemoteControl"
+  ],
+  "LaserAntenna": [
+    "LargeBlockLaserAntenna",
+    "SmallBlockLaserAntenna"
+  ],
+  "TerminalBlock": [
+    "ControlPanel",
+    "SmallControlPanel",
+    "LargeBlockSciFiTerminal"
+  ],
+  "Cockpit": [
+    "LargeBlockCockpit",
+    "LargeBlockCockpitSeat",
+    "SmallBlockCockpit",
+    "DBSmallBlockFighterCockpit",
+    "CockpitOpen",
+    "RoverCockpit",
+    "OpenCockpitSmall",
+    "OpenCockpitLarge",
+    "LargeBlockDesk",
+    "LargeBlockDeskCorner",
+    "LargeBlockCouch",
+    "LargeBlockCouchCorner",
+    "LargeBlockBathroomOpen",
+    "LargeBlockBathroom",
+    "LargeBlockToilet",
+    "SmallBlockCockpitIndustrial",
+    "LargeBlockCockpitIndustrial",
+    "PassengerSeatLarge",
+    "PassengerSeatSmall",
+    "BuggyCockpit"
+  ],
+  "Gyro": [
+    "LargeBlockGyro",
+    "SmallBlockGyro"
+  ],
+  "Kitchen": [
+    "LargeBlockKitchen"
+  ],
+  "CryoChamber": [
+    "LargeBlockBed",
+    "LargeBlockCryoChamber",
+    "SmallBlockCryoChamber"
+  ],
+  "CargoContainer": [
+    "LargeBlockLockerRoom",
+    "LargeBlockLockerRoomCorner",
+    "LargeBlockLockers",
+    "SmallBlockSmallContainer",
+    "SmallBlockMediumContainer",
+    "SmallBlockLargeContainer",
+    "LargeBlockSmallContainer",
+    "LargeBlockLargeContainer",
+    "LargeBlockWeaponRack",
+    "SmallBlockWeaponRack"
+  ],
+  "Planter": [
+    "LargeBlockPlanters"
+  ],
+  "VendingMachine": [
+    "FoodDispenser",
+    "VendingMachine"
+  ],
+  "Jukebox": [
+    "Jukebox"
+  ],
+  "LCDPanelsBlock": [
+    "LabEquipment",
+    "MedicalStation"
+  ],
+  "TextPanel": [
+    "TransparentLCDLarge",
+    "TransparentLCDSmall",
+    "SmallTextPanel",
+    "SmallLCDPanelWide",
+    "SmallLCDPanel",
+    "LargeBlockCorner_LCD_1",
+    "LargeBlockCorner_LCD_2",
+    "LargeBlockCorner_LCD_Flat_1",
+    "LargeBlockCorner_LCD_Flat_2",
+    "SmallBlockCorner_LCD_1",
+    "SmallBlockCorner_LCD_2",
+    "SmallBlockCorner_LCD_Flat_1",
+    "SmallBlockCorner_LCD_Flat_2",
+    "LargeTextPanel",
+    "LargeLCDPanel",
+    "LargeLCDPanelWide",
+    "LargeLCDPanel5x5",
+    "LargeLCDPanel5x3",
+    "LargeLCDPanel3x3"
+  ],
+  "ReflectorLight": [
+    "RotatingLightLarge",
+    "RotatingLightSmall",
+    "LargeBlockFrontLight",
+    "SmallBlockFrontLight",
+    "OffsetSpotlight"
+  ],
+  "Door": [
+    "SmallDoor",
+    "LargeBlockGate",
+    "LargeBlockOffsetDoor",
+    "SmallSideDoor"
+  ],
+  "AirtightSlideDoor": [
+    "LargeBlockSlideDoor"
+  ],
+  "StoreBlock": [
+    "StoreBlock",
+    "AtmBlock"
+  ],
+  "SafeZoneBlock": [
+    "SafeZoneBlock"
+  ],
+  "ContractBlock": [
+    "ContractBlock"
+  ],
+  "BatteryBlock": [
+    "LargeBlockBatteryBlock",
+    "SmallBlockBatteryBlock",
+    "SmallBlockSmallBatteryBlock"
+  ],
+  "Reactor": [
+    "SmallBlockSmallGenerator",
+    "SmallBlockLargeGenerator",
+    "LargeBlockSmallGenerator",
+    "LargeBlockLargeGenerator"
+  ],
+  "HydrogenEngine": [
+    "LargeHydrogenEngine",
+    "SmallHydrogenEngine"
+  ],
+  "WindTurbine": [
+    "LargeBlockWindTurbine"
+  ],
+  "SolarPanel": [
+    "LargeBlockSolarPanel",
+    "SmallBlockSolarPanel"
+  ],
+  "VirtualMass": [
+    "VirtualMassLarge",
+    "VirtualMassSmall"
+  ],
+  "SpaceBall": [
+    "SpaceBallLarge",
+    "SpaceBallSmall"
+  ],
+  "Ladder2": [
+    "LadderSmall"
+  ],
+  "InteriorLight": [
+    "SmallLight",
+    "SmallBlockSmallLight",
+    "LargeBlockLight_1corner",
+    "LargeBlockLight_2corner",
+    "SmallBlockLight_1corner",
+    "SmallBlockLight_2corner",
+    "OffsetLight"
+  ],
+  "OxygenTank": [
+    "OxygenTankSmall",
+    "LargeHydrogenTank",
+    "LargeHydrogenTankSmall",
+    "SmallHydrogenTank",
+    "SmallHydrogenTankSmall"
+  ],
+  "AirVent": [
+    "SmallAirVent"
+  ],
+  "Conveyor": [
+    "SmallBlockConveyor",
+    "LargeBlockConveyor",
+    "SmallShipConveyorHub"
+  ],
+  "Collector": [
+    "Collector",
+    "CollectorSmall"
+  ],
+  "ShipConnector": [
+    "Connector",
+    "ConnectorSmall",
+    "ConnectorMedium"
+  ],
+  "ConveyorConnector": [
+    "ConveyorTube",
+    "ConveyorTubeSmall",
+    "ConveyorTubeMedium",
+    "ConveyorFrameMedium",
+    "ConveyorTubeCurved",
+    "ConveyorTubeSmallCurved",
+    "ConveyorTubeCurvedMedium"
+  ],
+  "ConveyorSorter": [
+    "LargeBlockConveyorSorter",
+    "MediumBlockConveyorSorter",
+    "SmallBlockConveyorSorter"
+  ],
+  "PistonBase": [
+    "LargePistonBase",
+    "SmallPistonBase"
+  ],
+  "ExtendedPistonBase": [
+    "LargePistonBase",
+    "SmallPistonBase"
+  ],
+  "PistonTop": [
+    "LargePistonTop",
+    "SmallPistonTop"
+  ],
+  "MotorStator": [
+    "LargeStator",
+    "SmallStator"
+  ],
+  "MotorRotor": [
+    "LargeRotor",
+    "SmallRotor"
+  ],
+  "MotorAdvancedStator": [
+    "LargeAdvancedStator",
+    "SmallAdvancedStator",
+    "LargeHinge",
+    "MediumHinge",
+    "SmallHinge"
+  ],
+  "MotorAdvancedRotor": [
+    "LargeAdvancedRotor",
+    "SmallAdvancedRotor",
+    "LargeHingeHead",
+    "MediumHingeHead",
+    "SmallHingeHead"
+  ],
+  "MedicalRoom": [
+    "LargeMedicalRoom"
+  ],
+  "Refinery": [
+    "LargeRefinery",
+    "Blast Furnace"
+  ],
+  "OxygenGenerator": [
+    "OxygenGeneratorSmall"
+  ],
+  "Assembler": [
+    "LargeAssembler",
+    "BasicAssembler"
+  ],
+  "SurvivalKit": [
+    "SurvivalKitLarge",
+    "SurvivalKit"
+  ],
+  "OxygenFarm": [
+    "LargeBlockOxygenFarm"
+  ],
+  "UpgradeModule": [
+    "LargeProductivityModule",
+    "LargeEffectivenessModule",
+    "LargeEnergyModule"
+  ],
+  "ExhaustBlock": [
+    "SmallExhaustPipe",
+    "LargeExhaustPipe"
+  ],
+  "MotorSuspension": [
+    "OffroadSuspension3x3",
+    "OffroadSuspension5x5",
+    "OffroadSuspension1x1",
+    "OffroadSmallSuspension3x3",
+    "OffroadSmallSuspension5x5",
+    "OffroadSmallSuspension1x1",
+    "OffroadSuspension3x3mirrored",
+    "OffroadSuspension5x5mirrored",
+    "OffroadSuspension1x1mirrored",
+    "OffroadSmallSuspension3x3mirrored",
+    "OffroadSmallSuspension5x5mirrored",
+    "OffroadSmallSuspension1x1mirrored",
+    "Suspension3x3",
+    "Suspension5x5",
+    "Suspension1x1",
+    "SmallSuspension3x3",
+    "SmallSuspension5x5",
+    "SmallSuspension1x1",
+    "Suspension3x3mirrored",
+    "Suspension5x5mirrored",
+    "Suspension1x1mirrored",
+    "SmallSuspension3x3mirrored",
+    "SmallSuspension5x5mirrored",
+    "SmallSuspension1x1mirrored"
+  ],
+  "Wheel": [
+    "OffroadSmallRealWheel1x1",
+    "OffroadSmallRealWheel",
+    "OffroadSmallRealWheel5x5",
+    "OffroadRealWheel1x1",
+    "OffroadRealWheel",
+    "OffroadRealWheel5x5",
+    "OffroadSmallRealWheel1x1mirrored",
+    "OffroadSmallRealWheelmirrored",
+    "OffroadSmallRealWheel5x5mirrored",
+    "OffroadRealWheel1x1mirrored",
+    "OffroadRealWheelmirrored",
+    "OffroadRealWheel5x5mirrored",
+    "OffroadWheel1x1",
+    "OffroadSmallWheel1x1",
+    "OffroadWheel3x3",
+    "OffroadSmallWheel3x3",
+    "OffroadWheel5x5",
+    "OffroadSmallWheel5x5",
+    "SmallRealWheel1x1",
+    "SmallRealWheel",
+    "SmallRealWheel5x5",
+    "RealWheel1x1",
+    "RealWheel",
+    "RealWheel5x5",
+    "SmallRealWheel1x1mirrored",
+    "SmallRealWheelmirrored",
+    "SmallRealWheel5x5mirrored",
+    "RealWheel1x1mirrored",
+    "RealWheelmirrored",
+    "RealWheel5x5mirrored",
+    "Wheel1x1",
+    "SmallWheel1x1",
+    "Wheel3x3",
+    "SmallWheel3x3",
+    "Wheel5x5",
+    "SmallWheel5x5"
+  ],
+  "EmissiveBlock": [
+    "LargeNeonTubesStraight1",
+    "LargeNeonTubesStraight2",
+    "LargeNeonTubesCorner",
+    "LargeNeonTubesBendUp",
+    "LargeNeonTubesBendDown",
+    "LargeNeonTubesStraightEnd1",
+    "LargeNeonTubesStraightEnd2",
+    "LargeNeonTubesStraightDown",
+    "LargeNeonTubesU"
+  ],
+  "Thrust": [
+    "SmallBlockSmallThrustSciFi",
+    "SmallBlockLargeThrustSciFi",
+    "LargeBlockSmallThrustSciFi",
+    "LargeBlockLargeThrustSciFi",
+    "LargeBlockLargeAtmosphericThrustSciFi",
+    "LargeBlockSmallAtmosphericThrustSciFi",
+    "SmallBlockLargeAtmosphericThrustSciFi",
+    "SmallBlockSmallAtmosphericThrustSciFi",
+    "SmallBlockSmallThrust",
+    "SmallBlockLargeThrust",
+    "LargeBlockSmallThrust",
+    "LargeBlockLargeThrust",
+    "LargeBlockLargeHydrogenThrust",
+    "LargeBlockSmallHydrogenThrust",
+    "SmallBlockLargeHydrogenThrust",
+    "SmallBlockSmallHydrogenThrust",
+    "LargeBlockLargeAtmosphericThrust",
+    "LargeBlockSmallAtmosphericThrust",
+    "SmallBlockLargeAtmosphericThrust",
+    "SmallBlockSmallAtmosphericThrust"
+  ],
+  "Drill": [
+    "SmallBlockDrill",
+    "LargeBlockDrill"
+  ],
+  "ShipGrinder": [
+    "LargeShipGrinder",
+    "SmallShipGrinder"
+  ],
+  "ShipWelder": [
+    "LargeShipWelder",
+    "SmallShipWelder"
+  ],
+  "OreDetector": [
+    "LargeOreDetector",
+    "SmallBlockOreDetector"
+  ],
+  "LandingGear": [
+    "LargeBlockLandingGear",
+    "SmallBlockLandingGear"
+  ],
+  "JumpDrive": [
+    "LargeJumpDrive"
+  ],
+  "CameraBlock": [
+    "SmallCameraBlock",
+    "LargeCameraBlock"
+  ],
+  "MergeBlock": [
+    "LargeShipMergeBlock",
+    "SmallShipMergeBlock"
+  ],
+  "Parachute": [
+    "LgParachute",
+    "SmParachute"
+  ],
+  "TargetDummyBlock": [
+    "TargetDummy"
+  ],
+  "Warhead": [
+    "LargeWarhead",
+    "SmallWarhead"
+  ],
+  "Decoy": [
+    "LargeDecoy",
+    "SmallDecoy"
+  ],
+  "LargeGatlingTurret": [
+    "SmallGatlingTurret"
+  ],
+  "LargeMissileTurret": [
+    "SmallMissileTurret"
+  ],
+  "InteriorTurret": [
+    "LargeInteriorTurret"
+  ],
+  "SmallMissileLauncher": [
+    "LargeMissileLauncher"
+  ],
+  "SmallMissileLauncherReload": [
+    "SmallRocketLauncherReload"
+  ]
+}

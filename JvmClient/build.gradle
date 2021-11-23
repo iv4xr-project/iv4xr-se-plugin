@@ -1,9 +1,12 @@
 plugins {
-    id 'org.jetbrains.kotlin.multiplatform' version '1.5.21'
+    id 'org.jetbrains.kotlin.multiplatform' version '1.5.31'
+    id 'org.jetbrains.kotlin.plugin.serialization' version '1.5.31'
+    id("org.jetbrains.dokka") version "1.5.30"
+    id 'maven-publish'
 }
 
 group = 'com.github.iv4xr-project'
-version = '2.2'
+version = '0.4.0'
 
 repositories {
     mavenLocal()
@@ -26,7 +29,8 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0")
             }
         }
         commonTest {
@@ -37,9 +41,9 @@ kotlin {
         }
         jvmMain {
             dependencies {
-                implementation 'com.github.iv4xr-project:aplib:v1.2.1'
+                implementation 'com.github.iv4xr-project:aplib:1.2.4'
                 implementation group: 'com.google.code.gson', name: 'gson', version: '2.8.6'
-                implementation "org.jetbrains.kotlin:kotlin-reflect:1.5.21"
+                implementation "org.jetbrains.kotlin:kotlin-reflect:1.5.31"
             }
         }
         jvmTest {
@@ -49,6 +53,24 @@ kotlin {
                 implementation group: 'io.cucumber', name: 'cucumber-java', version: '6.10.0'
                 implementation group: 'io.cucumber', name: 'cucumber-junit', version: '6.10.0'
             }
+        }
+    }
+}
+
+
+task cucumber() {
+    dependsOn assemble, testClasses
+    if (!project.hasProperty("features")) {
+        ext.features = "src/jvmTest/resources/features/"
+    }
+    if (!project.hasProperty("bddName")) {
+        ext.bddName = ".*"
+    }
+    doLast {
+        javaexec {
+            main = "io.cucumber.core.cli.Main"
+            classpath = configurations.testRuntimeClasspath + sourceSets.main.output + sourceSets.test.output
+            args = ['--plugin', 'pretty', '--glue', 'bdd', features, '-n', bddName]
         }
     }
 }

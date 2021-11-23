@@ -1,6 +1,6 @@
 package spaceEngineers.model
 
-import spaceEngineers.model.Vec3.Companion.ZERO
+import spaceEngineers.model.Vec3F.Companion.ZERO
 import testhelp.assertVecEquals
 import kotlin.math.sqrt
 import kotlin.test.Test
@@ -8,13 +8,13 @@ import kotlin.test.assertEquals
 
 class Vec3Test {
 
-    private val x1 = Vec3(x = 1)
-    private val x2 = Vec3(x = 2)
-    private val xn1 = Vec3(x = -1)
-    private val xy1 = Vec3(x = 1, y = 1)
-    private val xyz1 = Vec3(x = 1, y = 1, z = 1)
+    private val x1 = Vec3F(x = 1)
+    private val x2 = Vec3F(x = 2)
+    private val xn1 = Vec3F(x = -1)
+    private val xy1 = Vec3F(x = 1, y = 1)
+    private val xyz1 = Vec3F(x = 1, y = 1, z = 1)
 
-    private fun assertEquals(v1: Vec3, v2: Vec3, diff: Float = 0f) {
+    private fun assertEquals(v1: Vec3F, v2: Vec3F, diff: Float = 0f) {
         assertVecEquals(v1, v2, diff = diff)
     }
 
@@ -27,7 +27,7 @@ class Vec3Test {
 
     @Test
     fun between() {
-        assertEquals(Vec3(3, 3, 3), (Vec3(1, 1, 1) + Vec3(5, 5, 5)) / 2f)
+        assertEquals(Vec3F(3, 3, 3), (Vec3F(1, 1, 1) + Vec3F(5, 5, 5)) / 2f)
     }
 
     @Test

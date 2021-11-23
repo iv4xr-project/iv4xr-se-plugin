@@ -2,7 +2,8 @@
 using System.Linq;
 using System.Reflection;
 using Iv4xr.PluginLib.Control;
-using Iv4xr.PluginLib.WorldModel;
+using Iv4xr.SpaceEngineers;
+using Iv4xr.SpaceEngineers.WorldModel;
 using Sandbox.Game.Entities;
 using Sandbox.Game.World;
 
@@ -37,11 +38,11 @@ namespace Iv4xr.SePlugin.Control
             block.UpdateVisual();
         }
 
-        public void PlaceAt(string blockType, PlainVec3D position, PlainVec3D orientationForward,
+        public string PlaceAt(DefinitionId blockDefinitionId, PlainVec3D position, PlainVec3D orientationForward,
             PlainVec3D orientationUp)
         {
-            m_blockPlacer.PlaceBlock(blockType, position.ToVector3(), orientationForward.ToVector3(),
-                orientationUp.ToVector3());
+            return m_blockPlacer.PlaceBlock(blockDefinitionId, position.ToVector3(), orientationForward.ToVector3(),
+                orientationUp.ToVector3()).UniqueId.ToString();
         }
 
         public void Remove(string blockId)

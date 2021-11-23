@@ -18,14 +18,14 @@ suspend fun SpaceEngineers.grindUntilIntegrityValue(
 ) {
     items.equip(toolLocation)
     delay(500)
-    items.beginUsingTool()
+    character.beginUsingTool()
 
     withTimeout(timeoutMs) {
         while (checkBlockIntegrity(observer.blockById(block.id), integrity)) {
             yield()
         }
     }
-    items.endUsingTool()
+    character.endUsingTool()
 }
 
 

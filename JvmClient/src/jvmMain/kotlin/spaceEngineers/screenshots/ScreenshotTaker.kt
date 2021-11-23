@@ -2,19 +2,22 @@ package spaceEngineers.screenshots
 
 import com.google.gson.Gson
 import spaceEngineers.controller.Character.Companion.DISTANCE_CENTER_CAMERA
-import spaceEngineers.controller.JsonRpcSpaceEngineers
+import spaceEngineers.controller.JsonRpcSpaceEngineersBuilder
 import spaceEngineers.controller.SpaceEngineers
-import spaceEngineers.model.*
-import spaceEngineers.screenshots.NamedOrientations.*
+import spaceEngineers.model.BlockDefinition
+import spaceEngineers.model.BuildProgressModel
+import spaceEngineers.model.CubeSize
+import spaceEngineers.model.Vec3F
 import spaceEngineers.model.extensions.allBlocks
 import spaceEngineers.model.extensions.centerPosition
+import spaceEngineers.screenshots.NamedOrientations.*
 import spaceEngineers.transport.SocketReaderWriter
 import java.io.File
 import java.lang.Thread.sleep
 
 fun main() {
     ScreenshotTaker(
-        se = JsonRpcSpaceEngineers.localhost("agentId"),
+        se = JsonRpcSpaceEngineersBuilder.localhost("agentId"),
         outputDirectory = File(System.getProperty("user.home"), "screenshots_v2")
     ).run()
 }
@@ -32,7 +35,7 @@ class ScreenshotTaker(
     val ratioBelowThreshold: Float = 0.01f,
     val outputDirectory: File,
     val gson: Gson = SocketReaderWriter.SPACE_ENG_GSON,
-    val blockPosition: Vec3 = Vec3(0, 1000, 0)
+    val blockPosition: Vec3F = Vec3F(0, 1000, 0)
 ) {
     fun run() {
         se.definitions.blockDefinitions()
@@ -57,11 +60,11 @@ class ScreenshotTaker(
     }
 
     private fun List<BlockDefinition>.filterForScreenshots(): List<BlockDefinition> {
-        return filter { it.cubeSize == CubeSize.Large && it.blockType.isNotBlank() && it.enabled && it.public && it.mountPoints.isNotEmpty() }
+        return filter { it.cubeSize == CubeSize.Large && it.definitionId.type.isNotBlank() && it.enabled && it.public && it.mountPoints.isNotEmpty() }
     }
 
-    private fun screenshotDistance(blockDefinition: BlockDefinition, orientationForward: Vec3): Float {
-        return if (blockDefinition.size == Vec3.ONE) {
+    private fun screenshotDistance(blockDefinition: BlockDefinition, orientationForward: Vec3F): Float {
+        return if (blockDefinition.size == Vec3F.ONE) {
             5f
         } else {
             10f
@@ -78,13 +81,13 @@ class ScreenshotTaker(
         namedOrientation: NamedOrientations,
         buildProgressModel: BuildProgressModel
     ): String {
-        return "${blockDefinition.blockType}_${namedOrientation.name}_${integrity}.png"
+        return "${blockDefinition.definitionId.type}_${namedOrientation.name}_${integrity}.png"
     }
 
     private fun takeScreenshots(blockDefinition: BlockDefinition): Screenshots {
-        se.admin.character.teleport(position = blockPosition + Vec3(x = 10))
+        se.admin.character.teleport(position = blockPosition + Vec3F(x = 10))
         return Screenshots(
-            blockType = blockDefinition.blockType,
+            blockType = blockDefinition.definitionId.type,
             screenshots = orientations.flatMap { namedOrientation ->
                 takeScreenshotsOfSingleOrientation(blockDefinition, namedOrientation).apply {
                     sleep(50)
@@ -99,21 +102,21 @@ class ScreenshotTaker(
     ): List<SingleScreenshot> {
         se.observer.observeBlocks().allBlocks.forEach { se.admin.blocks.remove(it.id) }
         se.admin.blocks.placeAt(
-            blockDefinition.blockType,
+            blockDefinition.definitionId,
             blockPosition,
             namedOrientation.orientationForward,
             namedOrientation.orientationUp
         )
         val block = se.observer.observeNewBlocks().allBlocks.last()
         se.admin.character.teleport(
-            block.centerPosition + Vec3(
+            block.centerPosition + Vec3F(
                 y = -DISTANCE_CENTER_CAMERA,
                 z = screenshotDistance(
                     blockDefinition,
                     namedOrientation.orientationForward
                 )
             ),
-            Vec3.FORWARD, Vec3.UP
+            Vec3F.FORWARD, Vec3F.UP
         )
         return (listOf(BuildProgressModel(1f)) + blockDefinition.buildProgressModels.reversed()).map { seBuildProgressModel ->
             val integrity = block.maxIntegrity * (seBuildProgressModel.buildRatioUpperBound - ratioBelowThreshold)
@@ -133,7 +136,7 @@ class ScreenshotTaker(
             )
             se.observer.takeScreenshot(
                 File(
-                    blockOutputDirectory(blockDefinition.blockType),
+                    blockOutputDirectory(blockDefinition.definitionId.type),
                     singleScreenshot.filename
                 ).absolutePath
             )

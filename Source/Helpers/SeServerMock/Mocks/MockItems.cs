@@ -1,6 +1,7 @@
 ﻿using Iv4xr.PluginLib;
 using Iv4xr.PluginLib.Control;
-using Iv4xr.PluginLib.WorldModel;
+using Iv4xr.SpaceEngineers;
+using Iv4xr.SpaceEngineers.WorldModel;
 
 namespace SeServerMock.Mocks
 {
@@ -25,14 +26,6 @@ namespace SeServerMock.Mocks
         public void PlaceAt(string blockType, PlainVec3D position, PlainVec3D orientationForward, PlainVec3D orientationUp)
         {
             throw new System.NotImplementedException();
-        }
-
-        public void BeginUsingTool()
-        {
-        }
-
-        public void EndUsingTool()
-        {
         }
 
         public void Equip(ToolbarLocation toolbarLocation)

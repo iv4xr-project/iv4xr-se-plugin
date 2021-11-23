@@ -1,11 +1,10 @@
 package testhelp
 
 import kotlinx.coroutines.runBlocking
-import spaceEngineers.transport.closeIfCloseable
 import spaceEngineers.controller.*
-import java.io.File
+import spaceEngineers.transport.closeIfCloseable
 
-const val TEST_AGENT = "you"
+const val TEST_AGENT = SpaceEngineers.DEFAULT_AGENT_ID
 
 val RESOURCES_DIR = "src/jvmTest/resources/"
 val MOCK_RESOURCES_DIR = "${RESOURCES_DIR}mock/"
@@ -19,7 +18,7 @@ val SIMPLE_PLACE_GRIND_TORCH = "simple-place-grind-torch"
 fun spaceEngineersSimplePlaceGrindTorchSuspend(
     scenarioId: String = SIMPLE_PLACE_GRIND_TORCH,
     agentId: String = TEST_AGENT,
-    spaceEngineers: JsonRpcSpaceEngineers = JsonRpcSpaceEngineers.localhost(agentId),
+    spaceEngineers: JsonRpcSpaceEngineers = JsonRpcSpaceEngineersBuilder.localhost(agentId),
     block: suspend JsonRpcSpaceEngineers.() -> Unit
 ) {
     try {
@@ -35,7 +34,7 @@ fun spaceEngineersSimplePlaceGrindTorchSuspend(
 fun spaceEngineersSuspend(
     agentId: String = TEST_AGENT,
     spaceEngineers: SpaceEngineers = ContextControllerWrapper(
-        spaceEngineers = JsonRpcSpaceEngineers.localhost(agentId)
+        spaceEngineers = JsonRpcSpaceEngineersBuilder.localhost(agentId)
     ),
     block: suspend SpaceEngineers.() -> Unit
 ) {
@@ -51,7 +50,7 @@ fun spaceEngineersSuspend(
 fun spaceEngineers(
     agentId: String = TEST_AGENT,
     spaceEngineers: SpaceEngineers = ContextControllerWrapper(
-        spaceEngineers = JsonRpcSpaceEngineers.localhost(agentId)
+        spaceEngineers = JsonRpcSpaceEngineersBuilder.localhost(agentId)
     ),
     block: SpaceEngineers.() -> Unit
 ) {

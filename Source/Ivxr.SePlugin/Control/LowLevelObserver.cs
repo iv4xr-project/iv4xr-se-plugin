@@ -1,13 +1,19 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Iv4xr.PluginLib;
-using Iv4xr.PluginLib.WorldModel;
+using Iv4xr.SpaceEngineers.WorldModel;
+using Iv4xr.SePlugin.Config;
+using Sandbox.Game;
 using Sandbox.Game.Entities;
 using Sandbox.Game.Entities.Character;
+using Sandbox.Game.Entities.Character.Components;
 using Sandbox.Game.Entities.Cube;
 using Sandbox.Game.Weapons;
 using Sandbox.Game.World;
+using VRage.Game;
 using VRage.Game.Entity;
+using VRage.Sync;
 using VRageMath;
 
 namespace Iv4xr.SePlugin.Control
@@ -21,37 +27,58 @@ namespace Iv4xr.SePlugin.Control
             get => m_radius;
             set
             {
-                Observer.ValidateRadius(value);
+                ConfigValidator.ValidateRadius(value);
                 m_radius = value;
             }
         }
 
-        private double m_radius = Observer.DefaultRadius;
+        private double m_radius = PluginConfig.DEFAULT_RADIUS;
 
         private readonly IGameSession m_gameSession;
 
         private readonly PlainVec3D
                 m_agentExtent = new PlainVec3D(0.5, 1, 0.5); // TODO(PP): It's just a quick guess, check the reality.
 
-        private readonly SeEntityBuilder m_seEntityBuilder;
+        private readonly EntityBuilder m_entityBuilder;
 
         public LowLevelObserver(IGameSession gameSession)
         {
             m_gameSession = gameSession;
-            m_seEntityBuilder = new SeEntityBuilder() {Log = Log};
+            m_entityBuilder = new EntityBuilder() {Log = Log};
         }
 
         private MyCharacter Character => m_gameSession.Character;
 
-        private Vector3D GetPlayerPosition()
+        internal Vector3D GetPlayerPosition()
         {
             return Character.PositionComp.GetPosition();
         }
 
         private Vector3D GetPlayerVelocity()
         {
-            Character.GetNetState(out var client);
-            return client.MovementDirection * client.MovementSpeed;
+            return MySession.Static.ControlledEntity.Entity.Physics.LinearVelocity;
+        }
+
+        private InventoryItem GetInventoryItem(MyPhysicalInventoryItem myItem)
+        {
+            return new InventoryItem()
+            {
+                Amount = (int) myItem.Amount,
+                Id = myItem.Content.GetId().ToDefinitionId(),
+            };
+        }
+
+        private Inventory GetInventory(MyInventory myInventory)
+        {
+            return new Inventory()
+            {
+                CurrentMass = (float) myInventory.CurrentMass,
+                CurrentVolume = (float) myInventory.CurrentVolume,
+                MaxMass = (float) myInventory.MaxMass,
+                MaxVolume = (float) myInventory.MaxVolume,
+                CargoPercentage = myInventory.CargoPercentage,
+                Items = myInventory.GetItems().Select(GetInventoryItem).ToList(),
+            };
         }
 
         public CharacterObservation GetCharacterObservation()
@@ -72,10 +99,25 @@ namespace Iv4xr.SePlugin.Control
                     OrientationUp = MySector.MainCamera.UpVector.ToPlain(),
                 },
                 JetpackRunning = Character.JetpackComp.TurnedOn,
+                HelmetEnabled = Character.OxygenComponent.HelmetEnabled,
+                Health = Character.StatComp.HealthRatio,
+                Oxygen = Character.GetSuitGasFillLevel(MyCharacterOxygenComponent.OxygenId),
+                Hydrogen = Character.GetSuitGasFillLevel(MyCharacterOxygenComponent.HydrogenId),
+                SuitEnergy = Character.SuitEnergyLevel,
                 HeadLocalXAngle = Character.HeadLocalXAngle,
                 HeadLocalYAngle = Character.HeadLocalYAngle,
                 TargetBlock = TargetBlock(),
+                TargetUseObject = UseObject(),
+                Movement = (CharacterMovementEnum) Character.CurrentMovementState,
+                Inventory = GetInventory(Character.GetInventory()),
+                BootsState = GetBootState(Character),
             };
+        }
+
+        private static BootsState GetBootState(MyCharacter character)
+        {
+            return (BootsState)character
+                    .GetInstanceField("m_bootsState").GetInstanceField("m_value");
         }
 
         private PlainVec3D PlayerExtent()
@@ -85,9 +127,26 @@ namespace Iv4xr.SePlugin.Control
 
         private Block TargetBlock()
         {
+            return TargetWeaponBlock() ?? TargetDetectorBlock();
+        }
+
+        private Block TargetWeaponBlock()
+        {
             if (!(Character.CurrentWeapon is MyEngineerToolBase wp)) return null;
             var slimBlock = wp.GetTargetBlock();
-            return slimBlock == null ? null : m_seEntityBuilder.CreateGridBlock(slimBlock);
+            return slimBlock == null ? null : m_entityBuilder.CreateGridBlock(slimBlock);
+        }
+        
+        private Block TargetDetectorBlock()
+        {
+            var detector = Character.Components.Get<MyCharacterDetectorComponent>();
+            return detector?.UseObject?.Owner is MyCubeBlock block ? m_entityBuilder.CreateGridBlock(block.SlimBlock) : null;
+        }
+
+        private UseObject UseObject()
+        {
+            var detector = Character.Components.Get<MyCharacterDetectorComponent>();
+            return detector?.UseObject != null ? EntityBuilder.CreateUseObject(detector.UseObject) : null;
         }
 
         public Observation GetNewBlocks()
@@ -95,7 +154,7 @@ namespace Iv4xr.SePlugin.Control
             return new Observation()
             {
                 Character = GetCharacterObservation(),
-                Grids = CollectSurroundingBlocks(GetBoundingSphereD(), ObservationMode.NEW_BLOCKS)
+                Grids = CollectSurroundingBlocks(GetBoundingSphere(), ObservationMode.NEW_BLOCKS)
             };
         }
 
@@ -104,19 +163,24 @@ namespace Iv4xr.SePlugin.Control
             return new Observation()
             {
                 Character = GetCharacterObservation(),
-                Grids = CollectSurroundingBlocks(GetBoundingSphereD(), ObservationMode.BLOCKS)
+                Grids = CollectSurroundingBlocks(GetBoundingSphere(), ObservationMode.BLOCKS)
             };
         }
 
-        public BoundingSphereD GetBoundingSphereD()
+        internal BoundingSphereD GetBoundingSphere()
         {
-            return new BoundingSphereD(GetPlayerPosition(), m_radius);
+            return GetBoundingSphere(m_radius);
+        }
+
+        internal BoundingSphereD GetBoundingSphere(double radius)
+        {
+            return new BoundingSphereD(GetPlayerPosition(), radius);
         }
 
         public HashSet<MySlimBlock> GetBlocksOf(MyCubeGrid grid)
         {
             var foundBlocks = new HashSet<MySlimBlock>();
-            var sphere = GetBoundingSphereD();
+            var sphere = GetBoundingSphere();
             grid.GetBlocksInsideSphere(ref sphere, foundBlocks);
             return foundBlocks;
         }
@@ -136,21 +200,39 @@ namespace Iv4xr.SePlugin.Control
             }
         }
 
-        private List<CubeGrid> CollectSurroundingBlocks(BoundingSphereD sphere, ObservationMode mode)
+        internal List<CubeGrid> CollectSurroundingBlocks(BoundingSphereD sphere, ObservationMode mode)
         {
             return EnumerateSurroundingEntities(sphere)
                     .OfType<MyCubeGrid>()
-                    .Select(grid => m_seEntityBuilder.CreateSeGrid(grid, sphere, mode)).ToList();
+                    .Select(grid => m_entityBuilder.CreateSeGrid(grid, sphere, mode)).ToList();
         }
 
         public MyCubeGrid GetGridContainingBlock(string blockId)
         {
-            BoundingSphereD sphere = GetBoundingSphereD();
+            BoundingSphereD sphere = GetBoundingSphere();
             return EnumerateSurroundingEntities(sphere)
                     .OfType<MyCubeGrid>().ToList().FirstOrDefault(grid =>
                     {
-                        return GetBlocksOf(grid).FirstOrDefault(block => block.UniqueId.ToString() == blockId) != null;
+                        return GetBlocksOf(grid).FirstOrDefault(block => block.UniqueId.ToString() == blockId) !=
+                               null;
                     });
+        }
+
+        public MySlimBlock GetBlockByIdOrNull(string blockId)
+        {
+            var grid = GetGridContainingBlock(blockId);
+            return grid == null ? null : GetBlocksOf(grid).FirstOrDefault(b => b.UniqueId.ToString() == blockId);
+        }
+        
+        public MySlimBlock GetBlockById(string blockId)
+        {
+            var block = GetBlockByIdOrNull(blockId);
+            if (block == null)
+            {
+                throw new ArgumentException("block not found");
+            }
+
+            return block;
         }
     }
 }

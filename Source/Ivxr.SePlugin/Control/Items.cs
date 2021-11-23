@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Linq;
 using Iv4xr.PluginLib.Control;
-using Iv4xr.PluginLib.WorldModel;
+using Iv4xr.SpaceEngineers;
+using Iv4xr.SpaceEngineers.WorldModel;
 using Sandbox.Definitions;
 using Sandbox.Game.Entities;
 using Sandbox.Game.Screens.Helpers;
@@ -22,25 +23,12 @@ namespace Iv4xr.SePlugin.Control
             m_observer = observer;
         }
 
-        public void BeginUsingTool()
-        {
-            var entityController = GetEntityController();
-            entityController.ControlledEntity.BeginShoot(MyShootActionEnum.PrimaryAction);
-        }
-
-        public void EndUsingTool()
-        {
-            var entityController = GetEntityController();
-            entityController.ControlledEntity.EndShoot(MyShootActionEnum.PrimaryAction);
-        }
-
         public void Equip(ToolbarLocation toolbarLocation)
         {
             EquipToolbarItem(toolbarLocation, false);
         }
 
-
-        [Obsolete("Deprecated, will create new api for allowSizeChange. Can use Equip.")]
+        [Obsolete("Deprecated, will create new api for allowSizeChange. You should use Equip.")]
         public void EquipToolbarItem(ToolbarLocation toolbarLocation, bool allowSizeChange)
         {
             var toolbar = MyToolbarComponent.CurrentToolbar;

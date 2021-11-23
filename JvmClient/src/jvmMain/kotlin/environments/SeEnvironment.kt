@@ -7,10 +7,12 @@ import spaceEngineers.controller.ContextControllerWrapper
 import spaceEngineers.controller.SpaceEngineersTestContext
 import spaceEngineers.controller.extensions.moveForward
 import spaceEngineers.model.*
+import spaceEngineers.model.extensions.centerPosition
+import spaceEngineers.transport.closeIfCloseable
 import java.io.File
 import java.lang.Thread.sleep
 
-fun Vec3.toIv4xrVec3(): eu.iv4xr.framework.spatial.Vec3 {
+fun Vec3F.toIv4xrVec3(): eu.iv4xr.framework.spatial.Vec3 {
     return eu.iv4xr.framework.spatial.Vec3(x, y, z)
 }
 
@@ -35,22 +37,25 @@ val WorldEntity.blockType: String
     }
 
 fun CubeGrid.toWorldEntity(): WorldEntity {
-    return WorldEntity(this.id, "grid", false).also { we ->
+    return WorldEntity(this.id.toString(), "grid", true).also { we ->
         we.position = position.toIv4xrVec3()
         we.elements = blocks.map { it.toWorldEntity() }.associateBy { it.id }
     }
 }
 
 fun Block.toWorldEntity(): WorldEntity {
-    return WorldEntity(id, "block", false).also { we ->
+    return WorldEntity(id.toString(), "block", true).also { we ->
         we.position = position.toIv4xrVec3()
-        we.properties["blockType"] = blockType
+        we.properties["blockType"] = definitionId.type
         we.properties["integrity"] = integrity
         we.properties["maxIntegrity"] = maxIntegrity
         we.properties["buildIntegrity"] = buildIntegrity
-        size?.let {
-            we.extent = it.toIv4xrVec3()
-        }
+        we.extent = size.toIv4xrVec3()
+        we.properties["centerPosition"] = centerPosition.toIv4xrVec3()
+        we.properties["maxPosition"] = maxPosition.toIv4xrVec3()
+        we.properties["minPosition"] = minPosition.toIv4xrVec3()
+        we.properties["orientationForward"] = orientationForward.toIv4xrVec3()
+        we.properties["orientationUp"] = orientationUp.toIv4xrVec3()
     }
 }
 
@@ -62,7 +67,7 @@ fun Observation.toWorldModel(): WorldModel {
 
 fun CharacterObservation.toWorldModel(): WorldModel {
     return WorldModel().also { worldModel ->
-        worldModel.agentId = id
+        worldModel.agentId = id.toString()
         worldModel.position = position.toIv4xrVec3()
         worldModel.velocity = velocity.toIv4xrVec3()
         worldModel.elements = emptyMap()
@@ -73,7 +78,7 @@ class SeEnvironment(
     val worldId: String,
     val controller: ContextControllerWrapper,
     val context: SpaceEngineersTestContext
-) : W3DEnvironment() {
+) : W3DEnvironment(), AutoCloseable {
     val SCENARIO_DIR = "src/jvmTest/resources/game-saves/"
 
 
@@ -105,20 +110,24 @@ class SeEnvironment(
     }
 
     fun beginUsingTool() {
-        return controller.items.beginUsingTool()
+        return controller.character.beginUsingTool()
     }
 
     fun endUsingTool() {
-        return controller.items.endUsingTool()
+        return controller.character.endUsingTool()
     }
 
 
-    fun moveForward(velocity: Float = 1f): WorldModel {
-        return controller.character.moveForward(velocity).toWorldModel()
+    fun moveForward(): WorldModel {
+        return controller.character.moveForward(CharacterMovementType.RUN).toWorldModel()
     }
 
 
     fun equipAndPlace(blockType: String) {
         return equipAndPlace(context.blockToolbarLocation(blockType))
+    }
+
+    override fun close() {
+        controller.closeIfCloseable()
     }
 }

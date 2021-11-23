@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
+using Iv4xr.PluginLib;
 
 namespace Iv4xr.SePlugin.Communication
 {
@@ -14,7 +16,7 @@ namespace Iv4xr.SePlugin.Communication
         {
             if (IsException)
             {
-                throw Exception;
+                ExceptionDispatchInfo.Capture(Exception).Throw();
             }
 
             return ReturnValue;
@@ -43,11 +45,13 @@ namespace Iv4xr.SePlugin.Communication
     {
         private readonly Func<dynamic> m_function;
         private readonly BlockingCollection<CallResult> m_result;
+        private readonly ILog m_log;
 
-        public FuncToRunOnGameLoop(Func<dynamic> function)
+        public FuncToRunOnGameLoop(Func<dynamic> function, ILog log)
         {
             m_function = function;
             m_result = new BlockingCollection<CallResult>();
+            m_log = log;
         }
 
         public void Execute()
@@ -58,6 +62,7 @@ namespace Iv4xr.SePlugin.Communication
             }
             catch (Exception exception)
             {
+                m_log.Exception(exception);
                 m_result.Add(CallResult.FromException(exception));
             }
         }
@@ -70,12 +75,19 @@ namespace Iv4xr.SePlugin.Communication
 
     public class FuncActionDispatcher
     {
+        private ILog m_log;
+
+        public FuncActionDispatcher(ILog log)
+        {
+            m_log = log;
+        }
+        
         private readonly ConcurrentQueue<FuncToRunOnGameLoop> m_functions =
                 new ConcurrentQueue<FuncToRunOnGameLoop>();
 
         public async Task<dynamic> EnqueueAsync(Func<dynamic> func)
         {
-            var functionToRun = new FuncToRunOnGameLoop(func);
+            var functionToRun = new FuncToRunOnGameLoop(func, m_log);
             m_functions.Enqueue(functionToRun);
             await Task.Yield();
             return functionToRun.Take().ReturnOrThrow();
@@ -88,7 +100,7 @@ namespace Iv4xr.SePlugin.Communication
 
         public dynamic Enqueue(Func<dynamic> func)
         {
-            var taskToRun = new FuncToRunOnGameLoop(func);
+            var taskToRun = new FuncToRunOnGameLoop(func, m_log);
             m_functions.Enqueue(taskToRun);
             Task.Yield();
             return taskToRun.Take().ReturnOrThrow();
