@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Iv4xr.PluginLib;
 using Iv4xr.SpaceEngineers.WorldModel;
-using Sandbox.Definitions;
 using Sandbox.Game.Entities;
 using Sandbox.Game.Entities.Cube;
-using VRage.Game;
 using VRage.Game.Entity.UseObject;
 using VRageMath;
 
@@ -14,13 +12,13 @@ namespace Iv4xr.SePlugin.Control
 {
     internal class PreviousBlocksFilter
     {
-        private readonly HashSet<int> m_previousBlockIds = new HashSet<int>();
-        private readonly HashSet<int> m_newBlockIds = new HashSet<int>();
+        private readonly HashSet<long> m_previousBlockIds = new HashSet<long>();
+        private readonly HashSet<long> m_newBlockIds = new HashSet<long>();
 
         private bool FilterOnlyNew(MySlimBlock block)
         {
-            m_newBlockIds.Add(block.UniqueId);
-            return !m_previousBlockIds.Contains(block.UniqueId);
+            m_newBlockIds.Add(block.FatBlock.EntityId);
+            return !m_previousBlockIds.Contains(block.FatBlock.EntityId);
         }
 
         public Func<MySlimBlock, bool> FilterByMode(ObservationMode mode)
@@ -47,7 +45,7 @@ namespace Iv4xr.SePlugin.Control
         private readonly int m_blockCountTakeLimit;
 
         private readonly float m_blockCountWarningRatio;
-        
+
         private readonly BlockEntityBuilder m_blockEntityBuilder = new BlockEntityBuilder();
 
         public EntityBuilder(int blockCountTakeLimit = 10_000, float blockCountWarningRatio = 0.9f)
@@ -64,7 +62,7 @@ namespace Iv4xr.SePlugin.Control
             var orientationForward = sourceGrid.PositionComp.GetOrientation().Forward;
             return new CubeGrid
             {
-                Id = sourceGrid.DisplayName,
+                Id = sourceGrid.EntityId.ToString(),
                 Position = position.ToPlain(),
                 OrientationForward = orientationForward.ToPlain(),
                 OrientationUp = orientationUp.ToPlain(),
@@ -103,9 +101,9 @@ namespace Iv4xr.SePlugin.Control
             return new UseObject()
             {
                 Name = obj.GetType().Name,
-                SupportedActions = (int) obj.SupportedActions,
-                PrimaryAction = (int) obj.PrimaryAction,
-                SecondaryAction = (int) obj.SecondaryAction,
+                SupportedActions = (int)obj.SupportedActions,
+                PrimaryAction = (int)obj.PrimaryAction,
+                SecondaryAction = (int)obj.SecondaryAction,
                 ContinuousUsage = obj.ContinuousUsage,
             };
         }
