@@ -11,4 +11,10 @@
       <ProjectReference Include="..\..\Ivxr.SpaceEngineers\Ivxr.SpaceEngineers.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Reference Include="VRage.Math">
+        <HintPath>..\..\..\BinaryDependencies\VRage.Math.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
 </Project>

@@ -9,9 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\se\Sources\Sandbox.Game\Sandbox.Game.csproj" />
-    <ProjectReference Include="..\..\..\se\Sources\VRage.Game\VRage.Game.csproj" />
-    <ProjectReference Include="..\..\..\se\Sources\VRage\VRage.csproj" />
     <ProjectReference Include="..\Ivxr.SpaceEngineers\Ivxr.SpaceEngineers.csproj" />
     <ProjectReference Include="..\Ivxr.PlugIndependentLib\Ivxr.PlugIndependentLib.csproj" />
   </ItemGroup>
@@ -25,5 +22,32 @@
   <PropertyGroup>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="Sandbox.Common">
+      <HintPath>..\..\BinaryDependencies\Sandbox.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Sandbox.Game">
+      <HintPath>..\..\BinaryDependencies\Sandbox.Game.dll</HintPath>
+    </Reference>
+    <Reference Include="Sandbox.Graphics">
+      <HintPath>..\..\BinaryDependencies\Sandbox.Graphics.dll</HintPath>
+    </Reference>
+    <Reference Include="SpaceEngineers.ObjectBuilders">
+      <HintPath>..\..\BinaryDependencies\SpaceEngineers.ObjectBuilders.dll</HintPath>
+    </Reference>
+    <Reference Include="VRage">
+      <HintPath>..\..\BinaryDependencies\VRage.dll</HintPath>
+    </Reference>
+    <Reference Include="VRage.Game">
+      <HintPath>..\..\BinaryDependencies\VRage.Game.dll</HintPath>
+    </Reference>
+    <Reference Include="VRage.Library">
+      <HintPath>..\..\BinaryDependencies\VRage.Library.dll</HintPath>
+    </Reference>
+    <Reference Include="VRage.Math">
+      <HintPath>..\..\BinaryDependencies\VRage.Math.dll</HintPath>
+    </Reference>
+  </ItemGroup>
 
 </Project>
