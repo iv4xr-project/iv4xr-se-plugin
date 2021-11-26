@@ -58,9 +58,14 @@ namespace Iv4xr.SePlugin.Control
 
         private static Type GetBlockType(string id)
         {
+            // Searching through all assemblies was slow, this is some pretty random selection
+            // that likely contains the block type we are looking for.
             return typeof(MyObjectBuilder_CubeBlock).Assembly.GetTypes()
-                    .FirstOrDefault(type => type.Name == id) ?? typeof(MyObjectBuilder_Thrust).Assembly.GetTypes()
-                    .FirstOrDefault(type => type.Name == id);
+                           .FirstOrDefault(type => type.Name == id) ??
+                   typeof(MyObjectBuilder_Thrust).Assembly.GetTypes()
+                           .FirstOrDefault(type => type.Name == id) ??
+                   typeof(MyObjectBuilder_ThrustDefinition).Assembly.GetTypes()
+                           .FirstOrDefault(type => type.Name == id);
         }
 
         private List<Type> GetParentsByType(Type builderType)

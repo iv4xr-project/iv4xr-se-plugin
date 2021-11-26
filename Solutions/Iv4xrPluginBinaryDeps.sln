@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ivxr.SePlugin.Tests", "..\S
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeServerMock", "..\Source\Helpers\SeServerMock\SeServerMock.csproj", "{C796D2DB-8859-4D73-8543-40CD80CE964E}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ivxr.SpaceEngineers", "..\Source\Ivxr.SpaceEngineers\Ivxr.SpaceEngineers.csproj", "{C9F1C75B-2254-4F1D-9835-9931781FB439}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,10 @@ Global
 		{C796D2DB-8859-4D73-8543-40CD80CE964E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C796D2DB-8859-4D73-8543-40CD80CE964E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C796D2DB-8859-4D73-8543-40CD80CE964E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9F1C75B-2254-4F1D-9835-9931781FB439}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9F1C75B-2254-4F1D-9835-9931781FB439}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9F1C75B-2254-4F1D-9835-9931781FB439}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9F1C75B-2254-4F1D-9835-9931781FB439}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -44,6 +50,7 @@ Global
 		{AF70CF37-622F-46D9-BDB3-60F57C1ABE10} = {CFDC65DD-CA09-494E-8D63-179EF381CFA9}
 		{77BE56CF-4F42-4268-9D9A-8F73C51287B6} = {CFDC65DD-CA09-494E-8D63-179EF381CFA9}
 		{C796D2DB-8859-4D73-8543-40CD80CE964E} = {CFDC65DD-CA09-494E-8D63-179EF381CFA9}
+		{C9F1C75B-2254-4F1D-9835-9931781FB439} = {CFDC65DD-CA09-494E-8D63-179EF381CFA9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A59363F9-2DF2-49CD-90A7-22E3D0A6985E}

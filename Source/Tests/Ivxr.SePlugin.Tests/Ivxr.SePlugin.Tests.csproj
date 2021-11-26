@@ -90,6 +90,10 @@
       <Project>{0f85d931-646a-4618-9db4-88228dd8a8cd}</Project>
       <Name>Ivxr.SePlugin</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Ivxr.SpaceEngineers\Ivxr.SpaceEngineers.csproj">
+      <Project>{c9f1c75b-2254-4f1d-9835-9931781fb439}</Project>
+      <Name>Ivxr.SpaceEngineers</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
