@@ -131,7 +131,7 @@ namespace Iv4xr.SePlugin.Control
             return EnumerateSurroundingEntities(sphere)
                     .OfType<MyCubeGrid>().ToList().FirstOrDefault(grid =>
                     {
-                        return GetBlocksOf(grid).FirstOrDefault(block => block.FatBlock.EntityId.ToString() == blockId) !=
+                        return GetBlocksOf(grid).FirstOrDefault(block => block.BlockId().ToString() == blockId) !=
                                null;
                     });
         }
@@ -139,7 +139,7 @@ namespace Iv4xr.SePlugin.Control
         public MySlimBlock GetBlockByIdOrNull(string blockId)
         {
             var grid = GetGridContainingBlock(blockId);
-            return grid == null ? null : GetBlocksOf(grid).FirstOrDefault(b => b.FatBlock.EntityId.ToString() == blockId);
+            return grid == null ? null : GetBlocksOf(grid).FirstOrDefault(b => b.BlockId().ToString() == blockId);
         }
 
         public MySlimBlock GetBlockById(string blockId)

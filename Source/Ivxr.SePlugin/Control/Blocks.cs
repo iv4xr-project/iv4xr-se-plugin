@@ -27,7 +27,7 @@ namespace Iv4xr.SePlugin.Control
             var grid = m_observer.GetGridContainingBlock(blockId);
             if (grid == null) throw new ArgumentException("Block with id not found");
             
-            var block = m_observer.GetBlocksOf(grid).FirstOrDefault(b => b.FatBlock.EntityId.ToString() == blockId);
+            var block = m_observer.GetBlocksOf(grid).FirstOrDefault(b => b.BlockId().ToString() == blockId);
             if (block == null) throw new ArgumentException("Block with id not found");
             
             var method = block.ComponentStack.GetType().GetMethod("SetIntegrity",
@@ -42,7 +42,7 @@ namespace Iv4xr.SePlugin.Control
             PlainVec3D orientationUp)
         {
             return m_blockPlacer.PlaceBlock(blockDefinitionId, position.ToVector3(), orientationForward.ToVector3(),
-                orientationUp.ToVector3()).FatBlock.EntityId.ToString();
+                orientationUp.ToVector3()).BlockId().ToString();
         }
 
         public void Remove(string blockId)
@@ -53,7 +53,7 @@ namespace Iv4xr.SePlugin.Control
                 throw new ArgumentException("Block with id not found");
             }
 
-            var block = m_observer.GetBlocksOf(grid).FirstOrDefault(b => b.FatBlock.EntityId.ToString() == blockId);
+            var block = m_observer.GetBlocksOf(grid).FirstOrDefault(b => b.BlockId().ToString() == blockId);
             grid.RemoveBlock(block);
         }
 

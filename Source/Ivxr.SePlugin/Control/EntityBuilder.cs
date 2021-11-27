@@ -17,8 +17,8 @@ namespace Iv4xr.SePlugin.Control
 
         private bool FilterOnlyNew(MySlimBlock block)
         {
-            m_newBlockIds.Add(block.FatBlock.EntityId);
-            return !m_previousBlockIds.Contains(block.FatBlock.EntityId);
+            m_newBlockIds.Add(block.BlockId());
+            return !m_previousBlockIds.Contains(block.BlockId());
         }
 
         public Func<MySlimBlock, bool> FilterByMode(ObservationMode mode)
