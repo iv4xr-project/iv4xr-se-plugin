@@ -14,18 +14,17 @@ namespace Iv4xr.SePlugin.Control
         MyCharacter Character { get; }
         void SetCharacter(string characterId);
 
-        MyCharacter CreateCharacter(string characterId, Vector3D position, Vector3D orientationForward,
+        MyCharacter CreateCharacter(string name, Vector3D position, Vector3D orientationForward,
             Vector3D orientationUp);
-        string CurrentCharacterId { get; }
 
+        string CurrentCharacterId { get; }
     }
 
     public class GameSession : IGameSession
     {
-        private static readonly string DEFAULT_CHARACTER_ID = "se0";
         private readonly Dictionary<string, MyCharacter> m_characters = new Dictionary<string, MyCharacter>();
 
-        public string CurrentCharacterId { get; private set; } = DEFAULT_CHARACTER_ID;
+        public string CurrentCharacterId { get; private set; } = null;
 
         public void SetCharacter(string characterId)
         {
@@ -33,16 +32,18 @@ namespace Iv4xr.SePlugin.Control
             {
                 throw new InvalidOperationException("character with id not found: " + characterId);
             }
+
             CurrentCharacterId = characterId;
         }
 
-        public MyCharacter CreateCharacter(string characterId, Vector3D position, Vector3D orientationForward,
+        public MyCharacter CreateCharacter(string name, Vector3D position, Vector3D orientationForward,
             Vector3D orientationUp)
         {
             var matrix = MatrixD.CreateWorld(position: position, forward: orientationForward, up: orientationUp);
             //TODO: steamId, color
             var character = AgentSpawner.SpawnAgent(
-                12345, name: characterId, color: Color.White, startPosition: matrix);
+                12345, name: name, color: Color.White, startPosition: matrix);
+            var characterId = character.EntityId.ToString();
             m_characters[characterId] = character;
             CurrentCharacterId = characterId;
             return character;
@@ -74,12 +75,15 @@ namespace Iv4xr.SePlugin.Control
 
         public void InitSession()
         {
-            m_characters[DEFAULT_CHARACTER_ID] = MySession.Static.LocalCharacter;
+            var character = MySession.Static.LocalCharacter;
+            var characterId = character.EntityId.ToString();
+            CurrentCharacterId = characterId;
+            m_characters[characterId] = character;
         }
 
         public void EndSession()
         {
-            CurrentCharacterId = DEFAULT_CHARACTER_ID;
+            CurrentCharacterId = null;
             m_characters.Clear();
         }
     }

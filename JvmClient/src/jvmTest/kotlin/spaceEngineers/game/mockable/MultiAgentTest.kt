@@ -1,26 +1,21 @@
 package spaceEngineers.game.mockable
 
 import testhelp.MockOrRealGameTest
-import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-@Ignore
-class MultiAgentTest : MockOrRealGameTest(forceRealGame = true, loadScenario = true) {
 
+class MultiAgentTest : MockOrRealGameTest() {
 
-    val DEFAULT_ID = "se0"
 
     @Test
     fun createAndSetJetpack() = testContext {
-        admin.character.switch(DEFAULT_ID)
         val observation = observer.observe()
 
-        val newIds = listOf("se1", "se2")
-        val ids = listOf(DEFAULT_ID) + newIds
+        val newCharacterNames = listOf("se1", "se2")
 
-        newIds.forEach { id ->
+        newCharacterNames.forEach { id ->
             admin.character.create(
                 id,
                 observation.position,
@@ -29,12 +24,13 @@ class MultiAgentTest : MockOrRealGameTest(forceRealGame = true, loadScenario = t
             )
         }
 
-        ids.forEach { id->
-            admin.character.switch(id)
-            assertFalse(observer.observe().jetpackRunning)
+        observer.observeCharacters().forEach { characterObservation ->
+            assertFalse(characterObservation.jetpackRunning)
+            admin.character.switch(characterObservation.id)
             character.turnOnJetpack()
             assertTrue(observer.observe().jetpackRunning)
         }
+
     }
 
 }
