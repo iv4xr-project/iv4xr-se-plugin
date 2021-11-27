@@ -95,6 +95,11 @@ namespace Iv4xr.SePlugin.Communication
             return Enqueue(() => m_observer.ObserveNewBlocks());
         }
 
+        public List<CharacterObservation> ObserveCharacters()
+        {
+            return Enqueue(() => m_observer.ObserveCharacters());
+        }
+
         public NavGraph NavigationGraph()
         {
             return Enqueue(() => m_observer.NavigationGraph());

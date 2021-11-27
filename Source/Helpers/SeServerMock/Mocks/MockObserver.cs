@@ -71,6 +71,11 @@ namespace SeServerMock.Mocks
             return GetObservation();
         }
 
+        public List<CharacterObservation> ObserveCharacters()
+        {
+            throw new NotImplementedException();
+        }
+
         public NavGraph NavigationGraph()
         {
             throw new NotImplementedException();

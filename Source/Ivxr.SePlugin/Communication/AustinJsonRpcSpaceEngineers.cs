@@ -99,6 +99,13 @@ namespace Iv4xr.SePlugin.Communication
             return m_se.Observer.ObserveNewBlocks();
         }
         
+        [JsonRpcMethod("Observer.ObserveCharacters")]
+        List<CharacterObservation> ObserveCharacters()
+        {
+            return m_se.Observer.ObserveCharacters();
+        }
+
+        
         [JsonRpcMethod("Observer.SwitchCamera")]
         void SwitchCamera()
         {

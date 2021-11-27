@@ -42,6 +42,10 @@ class ContextControllerWrapper(
             }.apply(::addToHistory)
         }
 
+        override fun observeCharacters(): List<CharacterObservation> {
+            return spaceEngineers.observer.observeCharacters()
+        }
+
         override fun navigationGraph(): NavGraph {
             return spaceEngineers.observer.navigationGraph()
         }

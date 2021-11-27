@@ -243,6 +243,13 @@ open class JsonRpcSpaceEngineers(
             )
         }
 
+        override fun observeCharacters(): List<CharacterObservation> {
+            return processNoParameterMethod<List<CharacterObservation>>(
+                method = ::observeCharacters,
+                methodName = "${observerPrefix}ObserveCharacters"
+            )
+        }
+
         override fun navigationGraph(): NavGraph {
             return processNoParameterMethod(::navigationGraph, "${observerPrefix}NavigationGraph")
         }

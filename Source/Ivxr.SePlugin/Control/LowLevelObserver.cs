@@ -118,6 +118,11 @@ namespace Iv4xr.SePlugin.Control
                 c => m_characterBuilder.CreateCharacterObservation(c));
         }
 
+        public List<CharacterObservation> ObserverCharacters()
+        {
+            return CollectSurroundingCharacters(GetBoundingSphere()).ToList();
+        }
+
         internal List<CubeGrid> CollectSurroundingBlocks(BoundingSphereD sphere, ObservationMode mode)
         {
             return EnumerateSurroundingEntities(sphere)
