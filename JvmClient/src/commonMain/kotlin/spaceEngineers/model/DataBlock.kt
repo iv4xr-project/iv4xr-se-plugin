@@ -35,4 +35,6 @@ data class DataBlock(
     override val functional: Boolean = false,
     @SerialName("Working")
     override val working: Boolean = false,
+    @SerialName("OwnerId")
+    override val ownerId: CharacterId,
 ) : Block

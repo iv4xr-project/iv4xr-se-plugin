@@ -38,6 +38,8 @@ data class DataTerminalBlock(
     override val functional: Boolean = false,
     @SerialName("Working")
     override val working: Boolean = false,
+    @SerialName("OwnerId")
+    override val ownerId: CharacterId,
 
 
 
@@ -81,6 +83,8 @@ data class DataFunctionalBlock(
     override val functional: Boolean = false,
     @SerialName("Working")
     override val working: Boolean = false,
+    @SerialName("OwnerId")
+    override val ownerId: CharacterId,
 
     @SerialName("ShowInInventory")
     override val showInInventory: Boolean,
@@ -125,6 +129,8 @@ data class DataDoorBase(
     override val functional: Boolean = false,
     @SerialName("Working")
     override val working: Boolean = false,
+    @SerialName("OwnerId")
+    override val ownerId: CharacterId,
 
     @SerialName("Enabled")
     override val enabled: Boolean,
@@ -173,6 +179,8 @@ data class DataFueledPowerProducer(
     override val functional: Boolean = false,
     @SerialName("Working")
     override val working: Boolean = false,
+    @SerialName("OwnerId")
+    override val ownerId: CharacterId,
 
     @SerialName("Enabled")
     override val enabled: Boolean,
