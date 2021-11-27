@@ -49,7 +49,7 @@ class ContinuousMoveTest : MockOrRealGameTest() {
         )
         delay(6000)
         val position2 = observer.observe().position
-        assertEquals(2.9500756f, (position2 - position).length())
+        assertEquals(3.8190913f, (position2 - position).length())
     }
 
 }
