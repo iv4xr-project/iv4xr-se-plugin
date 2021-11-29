@@ -84,6 +84,11 @@ namespace Iv4xr.SePlugin.Control
         public CharacterObservation GetCharacterObservation()
         {
             var orientation = Character.PositionComp.GetOrientation();
+            var playerId = new MyPlayer.PlayerId();
+            Character.GetPlayerId(out playerId);
+            var entityId = Character.EntityId;
+            var playerEntityId = Character.GetPlayerIdentityId();
+            var identityId = Character.GetIdentity().IdentityId;
             return new CharacterObservation
             {
                 Id = m_gameSession.CurrentCharacterId,

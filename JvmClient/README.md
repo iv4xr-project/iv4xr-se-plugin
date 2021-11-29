@@ -350,10 +350,9 @@ It is possible to add more characters into the game by using Admin.Character.Cre
 To switch between characters, use Admin.Character.Switch, passing character ID. Main character ID is always se0.
 
 A few points:
-- This feature is a bit experimental, they may be glitches and unexpected behaviour, please send reports if you run into anything.
+- This feature is a bit experimental, there may be glitches and unexpected behaviour, please file [issue](https://github.com/iv4xr-project/iv4xr-se-plugin/issues/new) if you run into anything.
 - Toolbar is shared between characters.
-- Only main character can place blocks normally (but can place blocks through admin commands).
-- Created characters do not sustain scenario saves (do blocks?).
+- Only the main character can place blocks normally (but any character can place blocks through admin commands).
 
 ### Commands unaffected by character switch
 
@@ -363,7 +362,5 @@ A few points:
 
 
 ### TODO
+
 - Remove character
-- Continuous movement
-- Explore what happens when saved (to blocks? to character)
-- Character, player id mappings.

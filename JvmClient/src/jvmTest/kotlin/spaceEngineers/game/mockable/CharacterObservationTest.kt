@@ -10,12 +10,11 @@ import kotlin.test.assertTrue
 class CharacterObservationTest : MockOrRealGameTest(inMockResourcesDirectory("CharacterObservationTest.txt")) {
 
     @Test
-    fun characterFlagStats() = testContext {
+    fun characterFlagStats() = testContext() {
         val characterObservation = observer.observe()
         assertTrue(characterObservation.helmetEnabled)
         assertFalse(characterObservation.jetpackRunning)
     }
-
 
     @Test
     fun bootState() = testContext {

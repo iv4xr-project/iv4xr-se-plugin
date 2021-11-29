@@ -7,7 +7,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 
-class ContinuousMoveTest : MockOrRealGameTest(forceRealGame = true) {
+class ContinuousMoveTest : MockOrRealGameTest() {
 
     @Test
     fun moveByTicks() = testContext {
@@ -49,7 +49,7 @@ class ContinuousMoveTest : MockOrRealGameTest(forceRealGame = true) {
         )
         delay(6000)
         val position2 = observer.observe().position
-        assertEquals(3.8190913f, (position2 - position).length())
+        assertEquals(2.9500756f, (position2 - position).length())
     }
 
 }

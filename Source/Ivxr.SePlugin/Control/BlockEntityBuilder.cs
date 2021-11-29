@@ -39,7 +39,8 @@ namespace Iv4xr.SePlugin.Control
         private void AddStandardFields(MySlimBlock sourceBlock, Block block)
         {
             var grid = sourceBlock.CubeGrid;
-
+            var ownerId = sourceBlock.FatBlock.OwnerId;
+            var ownerId2 = sourceBlock.OwnerId;
             block.Id = sourceBlock.UniqueId.ToString();
             block.DefinitionId = sourceBlock.BlockDefinition.ToDefinitionId();
             block.Position = grid.GridIntegerToWorld(sourceBlock.Position).ToPlain();
