@@ -171,9 +171,9 @@ namespace Iv4xr.SpaceEngineers.WorldModel
 	{
 	    public float RequiredPowerInput;
 	    public float PowerNeededForJump;
+	    public double MinJumpDistance;
 	    public double MaxJumpDistance;
 	    public double MaxJumpMass;
-	    public float JumpDelay;
 	}
 
 	public class LandingGearDefinition : BlockDefinition 

@@ -127,9 +127,9 @@ val blockDefinitionMappings = mapOf<String, Map<String, KClass<*>>>(
     "JumpDriveDefinition" to mapOf(
         "RequiredPowerInput" to Float::class,
         "PowerNeededForJump" to Float::class,
+        "MinJumpDistance" to Double::class,
         "MaxJumpDistance" to Double::class,
         "MaxJumpMass" to Double::class,
-        "JumpDelay" to Float::class,
     ),
     "LandingGearDefinition" to mapOf(
         "MaxLockSeparatingVelocity" to Float::class,

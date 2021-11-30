@@ -142,9 +142,9 @@ interface SoundBlockDefinition: BlockDefinition  {
 interface JumpDriveDefinition: BlockDefinition  {
     val requiredPowerInput: Float
     val powerNeededForJump: Float
+    val minJumpDistance: Double
     val maxJumpDistance: Double
     val maxJumpMass: Double
-    val jumpDelay: Float
 }
 
 interface LandingGearDefinition: BlockDefinition  {
