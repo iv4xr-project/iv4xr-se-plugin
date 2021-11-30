@@ -950,12 +950,12 @@ data class DataJumpDriveDefinition(
     override val requiredPowerInput: Float,
     @SerialName("PowerNeededForJump")
     override val powerNeededForJump: Float,
+    @SerialName("MinJumpDistance")
+    override val minJumpDistance: Double,
     @SerialName("MaxJumpDistance")
     override val maxJumpDistance: Double,
     @SerialName("MaxJumpMass")
     override val maxJumpMass: Double,
-    @SerialName("JumpDelay")
-    override val jumpDelay: Float,
 ) : JumpDriveDefinition
 
 @Serializable
