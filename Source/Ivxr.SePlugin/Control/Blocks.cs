@@ -6,6 +6,7 @@ using Iv4xr.SpaceEngineers;
 using Iv4xr.SpaceEngineers.WorldModel;
 using Sandbox.Game.Entities;
 using Sandbox.Game.World;
+using VRage.Game.ModAPI;
 
 namespace Iv4xr.SePlugin.Control
 {
