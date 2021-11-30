@@ -52,7 +52,7 @@ fun generateBlockFiles() {
     val serializerMappings = File("./src/commonMain/kotlin/spaceEngineers/model/BlockSerializerMappings.kt")
     serializerMappings.writeText(filePrefix)
 
-    val csClassesAndMappings = File("../Source/Ivxr.PlugIndependentLib/WorldModel/GeneratedBlocks.cs")
+    val csClassesAndMappings = File("../Source/Ivxr.SpaceEngineers/WorldModel/GeneratedBlocks.cs")
 
 
     csClassesAndMappings.writeText(
@@ -60,7 +60,7 @@ fun generateBlockFiles() {
 $generatedText
 using System.Collections.Generic;
 
-namespace Iv4xr.PluginLib.WorldModel
+namespace Iv4xr.SpaceEngineers.WorldModel
 {
     """.trim()
     )
@@ -113,13 +113,13 @@ fun generateBlockDefinitionFiles() {
     val serializerMappings = File("./src/commonMain/kotlin/spaceEngineers/model/BlockDefinitionSerializerMappings.kt")
     serializerMappings.writeText(filePrefix)
 
-    val csClassesAndMappings = File("../Source/Ivxr.PlugIndependentLib/WorldModel/GeneratedBlockDefinitions.cs")
+    val csClassesAndMappings = File("../Source/Ivxr.SpaceEngineers/WorldModel/GeneratedBlockDefinitions.cs")
     csClassesAndMappings.writeText(
         """
 $generatedText
 using System.Collections.Generic;
 
-namespace Iv4xr.PluginLib.WorldModel
+namespace Iv4xr.SpaceEngineers.WorldModel
 {
 """.trimStart()
     )
@@ -127,7 +127,7 @@ namespace Iv4xr.PluginLib.WorldModel
     val csFieldMappings = File("../Source/Ivxr.SePlugin/Control/BlockDefinitionCustomFieldsMapper.cs")
     csFieldMappings.writeText("""
 $generatedText
-using Iv4xr.PluginLib.WorldModel;
+using Iv4xr.SpaceEngineers.WorldModel;
 using Sandbox.Definitions;
 
 namespace Iv4xr.SePlugin.Control

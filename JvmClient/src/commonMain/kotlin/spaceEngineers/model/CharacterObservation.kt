@@ -45,4 +45,6 @@ data class CharacterObservation(
     val inventory: Inventory,
     @SerialName("BootsState")
     val bootsState: BootsState,
+    @SerialName("DisplayName")
+    val displayName: String,
 ) : Entity

@@ -13,4 +13,5 @@ interface Block : Entity {
     val functional: Boolean
     val working: Boolean
     val definitionId: DefinitionId
+    val ownerId: CharacterId
 }

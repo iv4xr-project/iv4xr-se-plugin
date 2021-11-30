@@ -186,6 +186,34 @@ open class JsonRpcSpaceEngineers(
                     methodName = "${adminPrefix}${characterPrefix}Use"
                 )
             }
+
+            override fun create(
+                id: String,
+                position: Vec3F,
+                orientationForward: Vec3F,
+                orientationUp: Vec3F
+            ): CharacterObservation {
+                return processParameters<CharacterObservation>(
+                    parameters = listOf(
+                        TypedParameter("id", id, String::class),
+                        TypedParameter("position", position, Vec3F::class),
+                        TypedParameter("orientationForward", orientationForward, Vec3F::class),
+                        TypedParameter("orientationUp", orientationUp, Vec3F::class),
+                    ),
+                    method = ::create,
+                    methodName = "${adminPrefix}${characterPrefix}Create"
+                )
+            }
+
+            override fun switch(id: String) {
+                return processSingleParameterMethod<String, Unit>(
+                    method = ::switch,
+                    methodName = "${adminPrefix}${characterPrefix}Switch",
+                    parameter = id,
+                    parameterName = "id",
+                    parameterType = String::class,
+                )
+            }
         }
 
         override fun setFrameLimitEnabled(enabled: Boolean) {
@@ -212,6 +240,13 @@ open class JsonRpcSpaceEngineers(
             return processNoParameterMethod<Observation>(
                 method = ::observeNewBlocks,
                 methodName = "${observerPrefix}ObserveNewBlocks"
+            )
+        }
+
+        override fun observeCharacters(): List<CharacterObservation> {
+            return processNoParameterMethod<List<CharacterObservation>>(
+                method = ::observeCharacters,
+                methodName = "${observerPrefix}ObserveCharacters"
             )
         }
 

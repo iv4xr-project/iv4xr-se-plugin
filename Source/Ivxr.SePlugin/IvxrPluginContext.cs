@@ -33,7 +33,7 @@ namespace Iv4xr.SePlugin
             var configPath = Path.Combine(MyFileSystem.UserDataPath, CONFIG_FILE);
             var configLoader = new ConfigLoader(Log, new Jsoner(), configPath);
             var config = configLoader.LoadOrSaveDefault();
-            ContinuousMovementController = new ContinuousMovementController(seLog);
+            ContinuousMovementController = new ContinuousMovementController(seLog, m_gameSession);
 
             var se = new RealSpaceEngineers(m_gameSession, Log, config);
 

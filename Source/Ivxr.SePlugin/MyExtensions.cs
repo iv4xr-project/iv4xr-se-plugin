@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Iv4xr.SpaceEngineers.WorldModel;
+using Sandbox.Game.Entities.Cube;
 using Sandbox.Game.Multiplayer;
 using Sandbox.Game.Screens.Helpers;
 using Sandbox.Game.World;
@@ -99,5 +100,13 @@ namespace Iv4xr.SePlugin
             FieldInfo field = t.GetField(fieldName, bindFlags);
             return field.GetValue(instance);
         }
+        
+        /// <summary>
+        /// Get field used to identify block (ideal would be FatBlock.EntityId, but FatBlock is sometimes null.
+        /// </summary>
+        public static long BlockId(this MySlimBlock block)
+        {
+            return block.UniqueId;
+        } 
     }
 }

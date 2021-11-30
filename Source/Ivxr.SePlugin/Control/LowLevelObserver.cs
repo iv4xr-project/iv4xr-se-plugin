@@ -40,113 +40,25 @@ namespace Iv4xr.SePlugin.Control
                 m_agentExtent = new PlainVec3D(0.5, 1, 0.5); // TODO(PP): It's just a quick guess, check the reality.
 
         private readonly EntityBuilder m_entityBuilder;
+        private readonly CharacterObservationBuilder m_characterBuilder;
 
         public LowLevelObserver(IGameSession gameSession)
         {
             m_gameSession = gameSession;
-            m_entityBuilder = new EntityBuilder() {Log = Log};
+            m_entityBuilder = new EntityBuilder() { Log = Log };
+            m_characterBuilder = new CharacterObservationBuilder(m_entityBuilder);
         }
 
         private MyCharacter Character => m_gameSession.Character;
 
-        internal Vector3D GetPlayerPosition()
+        internal Vector3D CurrentPlayerPosition()
         {
             return Character.PositionComp.GetPosition();
         }
 
-        private Vector3D GetPlayerVelocity()
-        {
-            return MySession.Static.ControlledEntity.Entity.Physics.LinearVelocity;
-        }
-
-        private InventoryItem GetInventoryItem(MyPhysicalInventoryItem myItem)
-        {
-            return new InventoryItem()
-            {
-                Amount = (int) myItem.Amount,
-                Id = myItem.Content.GetId().ToDefinitionId(),
-            };
-        }
-
-        private Inventory GetInventory(MyInventory myInventory)
-        {
-            return new Inventory()
-            {
-                CurrentMass = (float) myInventory.CurrentMass,
-                CurrentVolume = (float) myInventory.CurrentVolume,
-                MaxMass = (float) myInventory.MaxMass,
-                MaxVolume = (float) myInventory.MaxVolume,
-                CargoPercentage = myInventory.CargoPercentage,
-                Items = myInventory.GetItems().Select(GetInventoryItem).ToList(),
-            };
-        }
-
         public CharacterObservation GetCharacterObservation()
         {
-            var orientation = Character.PositionComp.GetOrientation();
-            return new CharacterObservation
-            {
-                Id = "se0",
-                Position = GetPlayerPosition().ToPlain(), // Consider reducing allocations.
-                OrientationForward = orientation.Forward.ToPlain(),
-                OrientationUp = orientation.Up.ToPlain(),
-                Velocity = GetPlayerVelocity().ToPlain(),
-                Extent = PlayerExtent(),
-                Camera = new Pose()
-                {
-                    Position = MySector.MainCamera.Position.ToPlain(),
-                    OrientationForward = MySector.MainCamera.ForwardVector.ToPlain(),
-                    OrientationUp = MySector.MainCamera.UpVector.ToPlain(),
-                },
-                JetpackRunning = Character.JetpackComp.TurnedOn,
-                HelmetEnabled = Character.OxygenComponent.HelmetEnabled,
-                Health = Character.StatComp.HealthRatio,
-                Oxygen = Character.GetSuitGasFillLevel(MyCharacterOxygenComponent.OxygenId),
-                Hydrogen = Character.GetSuitGasFillLevel(MyCharacterOxygenComponent.HydrogenId),
-                SuitEnergy = Character.SuitEnergyLevel,
-                HeadLocalXAngle = Character.HeadLocalXAngle,
-                HeadLocalYAngle = Character.HeadLocalYAngle,
-                TargetBlock = TargetBlock(),
-                TargetUseObject = UseObject(),
-                Movement = (CharacterMovementEnum) Character.CurrentMovementState,
-                Inventory = GetInventory(Character.GetInventory()),
-                BootsState = GetBootState(Character),
-            };
-        }
-
-        private static BootsState GetBootState(MyCharacter character)
-        {
-            return (BootsState)character
-                    .GetInstanceField("m_bootsState").GetInstanceField("m_value");
-        }
-
-        private PlainVec3D PlayerExtent()
-        {
-            return Character.PositionComp.LocalAABB.Size.ToPlain();
-        }
-
-        private Block TargetBlock()
-        {
-            return TargetWeaponBlock() ?? TargetDetectorBlock();
-        }
-
-        private Block TargetWeaponBlock()
-        {
-            if (!(Character.CurrentWeapon is MyEngineerToolBase wp)) return null;
-            var slimBlock = wp.GetTargetBlock();
-            return slimBlock == null ? null : m_entityBuilder.CreateGridBlock(slimBlock);
-        }
-        
-        private Block TargetDetectorBlock()
-        {
-            var detector = Character.Components.Get<MyCharacterDetectorComponent>();
-            return detector?.UseObject?.Owner is MyCubeBlock block ? m_entityBuilder.CreateGridBlock(block.SlimBlock) : null;
-        }
-
-        private UseObject UseObject()
-        {
-            var detector = Character.Components.Get<MyCharacterDetectorComponent>();
-            return detector?.UseObject != null ? EntityBuilder.CreateUseObject(detector.UseObject) : null;
+            return m_characterBuilder.CreateCharacterObservation(Character);
         }
 
         public Observation GetNewBlocks()
@@ -174,7 +86,7 @@ namespace Iv4xr.SePlugin.Control
 
         internal BoundingSphereD GetBoundingSphere(double radius)
         {
-            return new BoundingSphereD(GetPlayerPosition(), radius);
+            return new BoundingSphereD(CurrentPlayerPosition(), radius);
         }
 
         public HashSet<MySlimBlock> GetBlocksOf(MyCubeGrid grid)
@@ -200,6 +112,17 @@ namespace Iv4xr.SePlugin.Control
             }
         }
 
+        internal IEnumerable<CharacterObservation> CollectSurroundingCharacters(BoundingSphereD sphere)
+        {
+            return EnumerateSurroundingEntities(sphere).OfType<MyCharacter>().Select(
+                c => m_characterBuilder.CreateCharacterObservation(c));
+        }
+
+        public List<CharacterObservation> ObserverCharacters()
+        {
+            return CollectSurroundingCharacters(GetBoundingSphere()).ToList();
+        }
+
         internal List<CubeGrid> CollectSurroundingBlocks(BoundingSphereD sphere, ObservationMode mode)
         {
             return EnumerateSurroundingEntities(sphere)
@@ -213,7 +136,7 @@ namespace Iv4xr.SePlugin.Control
             return EnumerateSurroundingEntities(sphere)
                     .OfType<MyCubeGrid>().ToList().FirstOrDefault(grid =>
                     {
-                        return GetBlocksOf(grid).FirstOrDefault(block => block.UniqueId.ToString() == blockId) !=
+                        return GetBlocksOf(grid).FirstOrDefault(block => block.BlockId().ToString() == blockId) !=
                                null;
                     });
         }
@@ -221,9 +144,9 @@ namespace Iv4xr.SePlugin.Control
         public MySlimBlock GetBlockByIdOrNull(string blockId)
         {
             var grid = GetGridContainingBlock(blockId);
-            return grid == null ? null : GetBlocksOf(grid).FirstOrDefault(b => b.UniqueId.ToString() == blockId);
+            return grid == null ? null : GetBlocksOf(grid).FirstOrDefault(b => b.BlockId().ToString() == blockId);
         }
-        
+
         public MySlimBlock GetBlockById(string blockId)
         {
             var block = GetBlockByIdOrNull(blockId);

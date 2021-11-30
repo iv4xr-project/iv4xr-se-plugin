@@ -26,6 +26,7 @@ namespace Iv4xr.SpaceEngineers
         CharacterObservation Observe();
         Observation ObserveBlocks();
         Observation ObserveNewBlocks();
+        List<CharacterObservation> ObserveCharacters();
         NavGraph NavigationGraph();
         void SwitchCamera();
         void TakeScreenshot(string absolutePath);

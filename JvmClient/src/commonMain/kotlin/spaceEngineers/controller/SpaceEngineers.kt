@@ -57,6 +57,7 @@ interface Observer {
     fun observe(): CharacterObservation
     fun observeBlocks(): Observation
     fun observeNewBlocks(): Observation
+    fun observeCharacters(): List<CharacterObservation>
     fun navigationGraph(): NavGraph
 
     /**

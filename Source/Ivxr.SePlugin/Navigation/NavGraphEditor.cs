@@ -51,7 +51,7 @@ namespace Iv4xr.SePlugin.Navigation
             
             // TODO: offset the start position to be below the character's feet
             // TODO: calculate which direction is actually up
-            return CreateGraph(grid, m_lowLevelObserver.GetPlayerPosition(), Vector3I.Up);
+            return CreateGraph(grid, m_lowLevelObserver.CurrentPlayerPosition(), Vector3I.Up);
         }
 
         internal FatNavGraph CreateGraph(CubeGrid grid, Vector3D start, Vector3I up)

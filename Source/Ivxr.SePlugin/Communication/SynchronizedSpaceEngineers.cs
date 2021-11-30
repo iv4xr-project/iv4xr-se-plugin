@@ -95,6 +95,11 @@ namespace Iv4xr.SePlugin.Communication
             return Enqueue(() => m_observer.ObserveNewBlocks());
         }
 
+        public List<CharacterObservation> ObserveCharacters()
+        {
+            return Enqueue(() => m_observer.ObserveCharacters());
+        }
+
         public NavGraph NavigationGraph()
         {
             return Enqueue(() => m_observer.NavigationGraph());
@@ -204,6 +209,16 @@ namespace Iv4xr.SePlugin.Communication
         public void Use(string blockId, int functionIndex, int action)
         {
             Enqueue(() => m_character.Use(blockId, functionIndex, action));
+        }
+
+        public CharacterObservation Create(string id, PlainVec3D position, PlainVec3D orientationForward, PlainVec3D orientationUp)
+        {
+            return Enqueue(() => m_character.Create(id, position, orientationForward, orientationUp));
+        }
+
+        public void Switch(string id)
+        {
+            Enqueue(() => m_character.Switch(id));
         }
     }
 
