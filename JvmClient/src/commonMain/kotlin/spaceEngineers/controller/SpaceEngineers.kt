@@ -73,7 +73,7 @@ interface Observer {
 interface Items {
     fun equip(toolbarLocation: ToolbarLocation)
     fun setToolbarItem(name: String, toolbarLocation: ToolbarLocation)
-    fun getToolbar(): Toolbar
+    fun toolbar(): Toolbar
 }
 
 interface Blocks {
