@@ -18,7 +18,7 @@ fun SpaceEngineers.checkBlockType(
 ): Boolean {
     items.setToolbarItem(blockType, location)
     sleep(10)
-    val toolbar = items.getToolbar()
+    val toolbar = items.toolbar()
     sleep(10)
     val toolbarItem = toolbar[location]
     return toolbarItem != null && toolbarItem.subType == blockType
@@ -46,8 +46,8 @@ class GetToolbarTest : MockOrRealGameTest() {
 
 
     @Test
-    fun getToolbar() = testContext {
-        val toolbar = items.getToolbar()
+    fun toolbar() = testContext {
+        val toolbar = items.toolbar()
         assertEquals(toolbar[ToolbarLocation(0, 0)]?.subType, "LargeBlockArmorBlock")
         assertEquals(toolbar.items.size, toolbar.pageCount * toolbar.slotCount)
     }

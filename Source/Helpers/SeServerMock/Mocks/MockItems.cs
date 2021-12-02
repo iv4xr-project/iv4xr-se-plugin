@@ -36,7 +36,7 @@ namespace SeServerMock.Mocks
         {
         }
 
-        public Toolbar GetToolbar()
+        public Toolbar Toolbar()
         {
             throw new System.NotImplementedException();
         }

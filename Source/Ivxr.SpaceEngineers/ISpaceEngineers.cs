@@ -38,7 +38,7 @@ namespace Iv4xr.SpaceEngineers
 
         void SetToolbarItem(string name, ToolbarLocation toolbarLocation);
 
-        Toolbar GetToolbar();
+        Toolbar Toolbar();
     }
     
     public interface IDefinitions

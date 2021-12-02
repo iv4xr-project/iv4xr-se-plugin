@@ -50,7 +50,7 @@ namespace Iv4xr.SePlugin.Control
             }
         }
 
-        public Toolbar GetToolbar()
+        public Toolbar Toolbar()
         {
             var toolbar = MyToolbarComponent.CurrentToolbar;
             return new Toolbar()

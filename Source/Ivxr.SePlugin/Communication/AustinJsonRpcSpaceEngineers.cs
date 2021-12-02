@@ -202,10 +202,10 @@ namespace Iv4xr.SePlugin.Communication
             m_se.Items.SetToolbarItem(name, toolbarLocation);
         }
 
-        [JsonRpcMethod("Items.GetToolbar")]
-        Toolbar GetToolbar()
+        [JsonRpcMethod("Items.Toolbar")]
+        Toolbar Toolbar()
         {
-            return m_se.Items.GetToolbar();
+            return m_se.Items.Toolbar();
         }
     }
 }

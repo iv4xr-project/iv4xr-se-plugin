@@ -103,10 +103,10 @@ open class JsonRpcSpaceEngineers(
             )
         }
 
-        override fun getToolbar(): Toolbar {
+        override fun toolbar(): Toolbar {
             return processNoParameterMethod<Toolbar>(
-                method = ::getToolbar,
-                methodName = "${itemsPrefix}GetToolbar"
+                method = ::toolbar,
+                methodName = "${itemsPrefix}Toolbar"
             )
         }
     }

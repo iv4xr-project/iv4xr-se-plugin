@@ -177,9 +177,9 @@ namespace Iv4xr.SePlugin.Communication
             Enqueue(() => m_items.SetToolbarItem(name, toolbarLocation));
         }
 
-        public Toolbar GetToolbar()
+        public Toolbar Toolbar()
         {
-            return Enqueue(() => m_items.GetToolbar());
+            return Enqueue(() => m_items.Toolbar());
         }
     }
 
