@@ -12,7 +12,7 @@ class BlockDefinitionHierarchyTest : MockOrRealGameTest(inMockResourcesDirectory
     @Test
     fun size() = testContext {
         definitions.blockDefinitionHierarchy().let { map ->
-            assertEquals(85, map.size)
+            assertEquals(89, map.size)
         }
     }
 
