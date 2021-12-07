@@ -133,8 +133,8 @@ $dokka.location:spaceEngineers.controller/GsonRpcSpaceEngineersBuilder/mock/#kot
 $dokka.location:spaceEngineers.controller/GsonRpcSpaceEngineersBuilder/mock/#kotlin.String#kotlin.collections.List[kotlin.String]/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-gson-rpc-space-engineers-builder/mock.html
 $dokka.location:spaceEngineers.controller/Items///PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-items/index.html
 $dokka.location:spaceEngineers.controller/Items/equip/#spaceEngineers.model.ToolbarLocation/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-items/equip.html
-$dokka.location:spaceEngineers.controller/Items/getToolbar/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-items/get-toolbar.html
 $dokka.location:spaceEngineers.controller/Items/setToolbarItem/#kotlin.String#spaceEngineers.model.ToolbarLocation/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-items/set-toolbar-item.html
+$dokka.location:spaceEngineers.controller/Items/toolbar/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-items/toolbar.html
 $dokka.location:spaceEngineers.controller/JsonRpcSpaceEngineers///PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-json-rpc-space-engineers/index.html
 $dokka.location:spaceEngineers.controller/JsonRpcSpaceEngineers/JsonRpcSpaceEngineers/#kotlin.String#spaceEngineers.transport.StringLineReaderWriter#kotlin.String#kotlin.String#kotlin.String#kotlin.String#kotlin.String#kotlin.String#kotlin.String/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-json-rpc-space-engineers/-json-rpc-space-engineers.html
 $dokka.location:spaceEngineers.controller/JsonRpcSpaceEngineers/admin/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-json-rpc-space-engineers/admin.html
