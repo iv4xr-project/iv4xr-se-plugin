@@ -32,8 +32,8 @@ namespace Iv4xr.SePlugin.Control
             return obj;
         }
 
-        private MyCubeGrid PlaceBlock(MyObjectBuilder_CubeBlock block, Vector3D position, Vector3D forward,
-            Vector3D up)
+        private MyCubeGrid PlaceBlock(MyObjectBuilder_CubeBlock block, Vector3D position, Vector3 forward,
+            Vector3 up)
         {
             // The block definition is useful for getting the size of the block
             var blockDefinition = MyDefinitionManager.Static.GetCubeBlockDefinition(block);

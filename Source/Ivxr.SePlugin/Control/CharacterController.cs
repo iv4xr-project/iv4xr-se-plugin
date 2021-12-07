@@ -9,6 +9,7 @@ using Sandbox.Game.Entities.Character;
 using Sandbox.Game.World;
 using VRage.Game;
 using VRage.Game.Entity.UseObject;
+using VRage.Game.ModAPI;
 using VRageMath;
 
 namespace Iv4xr.SePlugin.Control

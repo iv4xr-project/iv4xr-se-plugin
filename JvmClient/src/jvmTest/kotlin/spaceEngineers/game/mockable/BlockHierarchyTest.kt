@@ -9,7 +9,7 @@ class BlockHierarchyTest : MockOrRealGameTest(inMockResourcesDirectory("BlockHie
 
     @Test
     fun size() = testContext {
-        assertEquals(106, definitions.blockHierarchy().size)
+        assertEquals(109, definitions.blockHierarchy().size)
     }
 
     @Test
