@@ -61,7 +61,7 @@ public class Test_SimpleInteractionsWithSE {
         int i = 0 ;
         while(i<200) {
             testAgent.update();
-            console("*** " + i + " " + myAgentState.wom.agentId +  " @" + myAgentState.wom.position) ;
+            console("*** " + i + " " + myAgentState.worldmodel.agentId +  " @" + myAgentState.worldmodel.position) ;
             if(i==2) {
                 // debug here...
             }

@@ -53,7 +53,7 @@ public class Test_pathfinding_entity {
         UUSeAgentState state = agentAndState.snd;
         Thread.sleep(1000);
         state.navgrid.enableFlying = false ;
-        state.updateState();
+        state.updateState(state.agentId);
 
         //console(showWOMAgent(state.wom));
         //console(showWOMElements(state.wom));
@@ -161,7 +161,7 @@ public class Test_pathfinding_entity {
         UUSeAgentState state = agentAndState.snd;
         Thread.sleep(1000);
         state.navgrid.enableFlying = false ;
-        state.updateState();
+        state.updateState(state.agentId);
 
         // Custom destination in the platform (it is reachable but the pathfinder calculation fails)
         Vec3 destination = new Vec3(-8.7f,938.2f,15.33f);

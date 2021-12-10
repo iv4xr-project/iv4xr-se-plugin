@@ -33,7 +33,7 @@ public class Test_NavGrid_pathfinding {
         UUSeAgentState state = agentAndState.snd ;
         Thread.sleep(1000);
         // do a single update, and check that we if we have the structures:
-        state.updateState();
+        state.updateState(state.agentId);
 
         assertTrue(state.navgrid.allObstacleIDs.size() > 0 ) ;
         console(showWOMElements(state.wom)) ;
@@ -72,8 +72,8 @@ public class Test_NavGrid_pathfinding {
             state = agentAndState.snd ;
             Thread.sleep(1000);
             state.navgrid.enableFlying = enable3D ;
-            state.updateState();
-            state.updateState();
+            state.updateState(state.agentId);
+            state.updateState(state.agentId);
 
         }
 

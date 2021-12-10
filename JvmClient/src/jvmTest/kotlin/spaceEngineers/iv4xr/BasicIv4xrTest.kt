@@ -108,7 +108,7 @@ class BasicIv4xrTest {
         var i = 0
         while (testingTask.status.inProgress() && i <= 1500) {
             testAgent.update()
-            println("*** $i, ${myAgentState.wom.agentId} @${myAgentState.wom.position}")
+            println("*** $i, ${myAgentState.worldmodel.agentId} @${myAgentState.worldmodel.position}")
             i++
         }
 

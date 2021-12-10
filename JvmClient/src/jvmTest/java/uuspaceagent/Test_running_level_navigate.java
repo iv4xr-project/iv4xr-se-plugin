@@ -45,7 +45,7 @@ public class Test_running_level_navigate {
         TestAgent agent = new TestAgent(agentId, "declarative").attachState(state).attachEnvironment(theEnv);
 
         Thread.sleep(1000);
-        state.updateState();
+        state.updateState(state.agentId);
 
         WorldEntity entity = getEntityByType(state.wom.elements.values(), entityType);
 

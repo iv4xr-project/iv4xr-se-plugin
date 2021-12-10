@@ -58,9 +58,9 @@ public class UUSeAgentState extends State {
     }
 
     @Override
-    public void updateState() {
+    public void updateState(String agentId) {
 
-        super.updateState();
+        super.updateState(agentId);
 
         // get the new WOM. Currently it does not include agent's extended properties, so we add them
         // explicitly here:

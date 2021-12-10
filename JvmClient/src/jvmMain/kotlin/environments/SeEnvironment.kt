@@ -1,6 +1,6 @@
 package environments
 
-import eu.iv4xr.framework.mainConcepts.W3DEnvironment
+import eu.iv4xr.framework.environments.W3DEnvironment
 import eu.iv4xr.framework.mainConcepts.WorldEntity
 import eu.iv4xr.framework.mainConcepts.WorldModel
 import spaceEngineers.controller.ContextControllerWrapper

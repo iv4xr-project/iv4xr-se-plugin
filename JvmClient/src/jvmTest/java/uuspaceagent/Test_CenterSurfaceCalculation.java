@@ -17,7 +17,7 @@ public class Test_CenterSurfaceCalculation {
         var agent = agentAndState.fst ;
         var state = agentAndState.snd ;
         Thread.sleep(1000);
-        state.updateState();
+        state.updateState(state.agentId);
 
         WorldEntity survivalKit = SEBlockFunctions.findClosestBlock(state.wom,"SurvivalKitLarge", 10) ;
 

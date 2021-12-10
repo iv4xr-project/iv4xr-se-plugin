@@ -17,12 +17,12 @@ public class Coba_Grinding {
 
         var state = loadSE("myworld-3 in front of battery").snd;
 
-        state.updateState();
+        state.updateState(state.agentId);
 
         System.out.println("** Equiping grinder");
         state.env().equip(new ToolbarLocation(0,0));
 
-        state.updateState();
+        state.updateState(state.agentId);
 
         WorldEntity agentInfo = state.wom.elements.get(state.agentId) ;
         System.out.println("** Agent's info: " + PrintInfos.showWorldEntity(agentInfo));
@@ -43,7 +43,7 @@ public class Coba_Grinding {
         for(int k=0; k<1000; k++) {
             state.env().beginUsingTool();
             if(k % 200 == 0) {
-                state.updateState();
+                state.updateState(state.agentId);
                 System.out.println(" >>> k=" + k) ;
                 target = SEBlockFunctions.findWorldEntity(state.wom,batteryId) ;
                 if (target == null) {

@@ -21,7 +21,7 @@ public class Test_Goals {
         TestAgent agent = agentAndState.fst ;
         UUSeAgentState state = agentAndState.snd ;
         Thread.sleep(1000);
-        state.updateState();
+        state.updateState(state.agentId);
         // agent start location should be around:<10.22475,-5.0025,53.75382>,
         //  orientationForward: <-0.08024501,7.549446E-5,0.99677515> ... so looking towards z-axis
         console(showWOMAgent(state.wom));

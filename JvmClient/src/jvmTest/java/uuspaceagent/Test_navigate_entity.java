@@ -30,7 +30,7 @@ public class Test_navigate_entity {
         TestAgent agent = agentAndState.fst;
         UUSeAgentState state = agentAndState.snd;
         Thread.sleep(1000);
-        state.updateState();
+        state.updateState(state.agentId);
 
         WorldEntity entity = getEntityByType(state.wom.elements.values(), entityType);
 

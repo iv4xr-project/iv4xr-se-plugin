@@ -27,7 +27,7 @@ public class Test_Navigate2DTo {
         TestAgent agent = agentAndState.fst ;
         UUSeAgentState state = agentAndState.snd ;
         Thread.sleep(1000);
-        state.updateState();
+        state.updateState(state.agentId);
 
         // agent start location should be around: <10.119276,-5.0025,55.681934>
         //  orientationForward: <-0.043967947,-2.0614608E-4,0.9990329> ... so looking towards z-axis

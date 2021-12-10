@@ -19,7 +19,7 @@ public class Test_Flying {
         TestAgent agent = agentAndState.fst ;
         UUSeAgentState state = agentAndState.snd ;
         Thread.sleep(1000);
-        state.updateState();
+        state.updateState(state.agentId);
         // agent start location
         // agent se0 @<10.22475,-5.0025,53.75382>, hdir:<-0.08024501,7.549446E-5,0.99677515>, vdir:<-4.629542E-5,1.0,-7.94657E-5>, health:1.0, jet:false
         console(showWOMAgent(state.wom));
