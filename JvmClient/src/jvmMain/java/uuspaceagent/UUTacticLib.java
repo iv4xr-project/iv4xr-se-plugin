@@ -515,14 +515,17 @@ public class UUTacticLib {
             if (state.wom == null) return null;
 
             var agentSq = state.navgrid.gridProjectedLocation(state.wom.position);
+            System.out.println("agent original state.wom.position: " + state.wom.position);
+            System.out.println("agent grid position: " + agentSq);
             var destinationSq = state.navgrid.gridProjectedLocation(destination);
+            System.out.println("destination grid position: " + destinationSq);
             var destinationSqCenterPos = state.navgrid.getSquareCenterLocation(destinationSq);
+            System.out.println("destination grid SqCenterPos: " + destinationSqCenterPos);
 
             System.out.println("Vec3.sub(destinationSqCenterPos, state.wom.position): " + Vec3.sub(destinationSqCenterPos, state.wom.position));
             System.out.println("Vec3.sub(destinationSqCenterPos, state.wom.position).lengthSq() : " + Vec3.sub(destinationSqCenterPos, state.wom.position).lengthSq());
 
             /**
-             * MODIFIED : 10f - THRESHOLD_SQUARED_DEVIATED_DISTANCE_TO_SQUARE
              * Hardcoded temporally, we will need to use deviated square for calculation
              */
             float THRESHOLD_SQUARED_DEVIATED_DISTANCE_TO_SQUARE = 10f;
@@ -535,12 +538,11 @@ public class UUTacticLib {
             int currentPathLength = state.currentPathToFollow.size();
 
             /**
-             * MODIFIED
              * Because is not possible to move to the center position of an entity,
              * we recalculate the destination to a reachable close square.
              * That is why we need to check if the deviation is inside a neighbour square.
              */
-            var deviationLength = 999f; // Hardcoded temporally
+            var deviationLength = 999f;
             try {
                 var movingToSqCenterPos = state.navgrid.getSquareCenterLocation(state.currentPathToFollow.get(currentPathLength - 1));
                 deviationLength = Vec3.sub(destinationSqCenterPos, movingToSqCenterPos).length();
@@ -550,12 +552,13 @@ public class UUTacticLib {
             }
 
             /**
-             * MODIFIED :
              * deviationLength > 9 is hardcoded we will need to calculate the deviation based on the
              * recalculated destination
              */
             // there is no path planned or is an ongoing path, but it goes to a different target
             if (currentPathLength == 0 || deviationLength > 9) {
+                // Use CustomAStart with max time to avoid loop issue
+                System.out.println("Trying to calculate the path to reach the destination : " + destination);
                 List<DPos3> path = state.pathfinder2D.findPath(state.navgrid, agentSq, destinationSq);
 
                 if (path == null) {
@@ -563,15 +566,15 @@ public class UUTacticLib {
                     System.out.println("### NO path to " + destination);
 
                     /**
-                     * MODIFIED:
                      * The idea is to check the 3D adjacent positions to find a reachable square,
                      * because the original destination aims to the center of an entity.
                      */
+                    // 3D adjacent positions
                     //[{-3,-3,-3}{-3,-3,-2}..{0,-1,0}{0,0,-1}{0,0,0},{0,0,1},{0,1,0}..{3,3,2}{3,3,3}]
                     List<Vec3> recalculate_adjacent = new ArrayList();
-                    for (int i = 0; i < 4; i++) {
-                        for (int j = 0; j < 4; j++) {
-                            for (int k = 0; k < 4; k++) {
+                    for (int i = 0; i <= 3; i++) {
+                        for (int j = 0; j <= 3; j++) {
+                            for (int k = 0; k <= 3; k++) {
                                 recalculate_adjacent.add(new Vec3(i, j, k));
                                 recalculate_adjacent.add(new Vec3(i * -1, j * -1, k * -1));
                             }
@@ -580,7 +583,6 @@ public class UUTacticLib {
                     System.out.println("Try to recalculate destination with adjacent list: " + Arrays.toString(recalculate_adjacent.toArray()));
 
                     /**
-                     * MODIFIED:
                      * Iterate over all adjacent 3D destinations trying to recalculate the path
                      */
                     for (Vec3 adjacentDestination : recalculate_adjacent) {
@@ -588,6 +590,11 @@ public class UUTacticLib {
 
                         agentSq = state.navgrid.gridProjectedLocation(state.wom.position);
                         destinationSq = state.navgrid.gridProjectedLocation(recalculatedDestination);
+
+                        /**
+                         * Use CustomAStart with max time to avoid loop issue
+                         */
+                        System.out.println("Trying to recalculate the path to reach the recalculatedDestination : " + recalculatedDestination);
                         path = state.pathfinder2D.findPath(state.navgrid, agentSq, destinationSq);
 
                         if (path != null) {
@@ -597,7 +604,7 @@ public class UUTacticLib {
                             return new Pair<>(path, false);
                         } else {
                             // the pathfinder cannot find a path. The tactic is then not enabled:
-                            System.out.println("### NO path to " + destination);
+                            System.out.println("### NO path to " + recalculatedDestination);
                         }
                     }
 
