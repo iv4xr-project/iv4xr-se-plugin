@@ -27,7 +27,7 @@ public class UUSeAgentState extends State {
     public String agentId ;
     public WorldModel wom ;
     public NavGrid navgrid = new NavGrid() ;
-    public Pathfinder<DPos3> pathfinder2D = new AStar<>() ;
+    public Pathfinder<DPos3> pathfinder2D = new CustomAStar<>() ;
     public List<DPos3> currentPathToFollow = new LinkedList<>();
 
     /**
@@ -174,7 +174,4 @@ public class UUSeAgentState extends State {
             e.assignTimeStamp(time);
         }
     }
-
-
-
 }

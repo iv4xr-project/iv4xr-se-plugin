@@ -169,50 +169,12 @@ public class Test_pathfinding_entity {
         var sqAgent = state.navgrid.gridProjectedLocation(state.wom.position);
         var sqDestination = state.navgrid.gridProjectedLocation(destination);
 
-        // With this default invocation we can find a loop trying to calculate the path
-        //List<DPos3> path = state.pathfinder2D.findPath(state.navgrid, sqAgent, sqDestination);
+        List<DPos3> path = state.pathfinder2D.findPath(state.navgrid, sqAgent, sqDestination);
 
-        PathfinderClass pathFinder = new PathfinderClass(state, sqAgent, sqDestination);
-
-        System.out.println("Trying to calculate the path to reach the destination : " + destination);
-        boolean loopCaught = false;
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        Future future = executor.submit(pathFinder);
-        try {
-            future.get(10, TimeUnit.SECONDS);
-        } catch (TimeoutException | ExecutionException e) {
-            future.cancel(true);
-            System.out.println("Pathfinder canceled, probably internal loop");
-            loopCaught = true;
-        } finally {
-            executor.shutdownNow();
-        }
-
-        // Path is null because the pathfinder was interrupted
-        List<DPos3> path = pathFinder.getPathResult();
-        assertTrue(loopCaught);
+        // Path is null because the pathfinder did not work
         assertTrue(path == null);
+        console("CustomAStart finished without loop issue");
 
         SocketReaderWriterKt.closeIfCloseable(state.env().getController());
-    }
-}
-class PathfinderClass implements Runnable {
-    UUSeAgentState state;
-    DPos3 sqAgent;
-    DPos3 sqDestination;
-    List<DPos3> pathResult;
-
-    public PathfinderClass(UUSeAgentState state, DPos3 sqAgent, DPos3 sqDestination){
-        this.state = state;
-        this.sqAgent = sqAgent;
-        this.sqDestination = sqDestination;
-    }
-
-    public List<DPos3> getPathResult(){return pathResult;}
-
-    @Override
-    public void run() {
-        pathResult = state.pathfinder2D.findPath(state.navgrid, sqAgent, sqDestination);
-        System.out.println("*** Pathfinder Thread finished the calculation");
     }
 }
