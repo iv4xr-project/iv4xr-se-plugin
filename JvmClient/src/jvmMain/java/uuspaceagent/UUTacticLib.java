@@ -6,7 +6,7 @@ import nl.uu.cs.aplib.mainConcepts.Action;
 import nl.uu.cs.aplib.mainConcepts.Tactic;
 import nl.uu.cs.aplib.utils.Pair;
 import spaceEngineers.model.CharacterObservation;
-import spaceEngineers.model.Vec2;
+import spaceEngineers.model.Vec2F;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -68,7 +68,7 @@ public class UUTacticLib {
     /**
      * Just the vector (0,0).
      */
-    static Vec2 ZEROV2 = new Vec2(0,0) ;
+    static Vec2F ZEROV2 = new Vec2F(0,0) ;
 
     /**
      * A more intelligent and performant primitive "move" (than the primitive "moveAndRotate"). This
@@ -132,7 +132,8 @@ public class UUTacticLib {
             obs = agentState.env().getController().getCharacter().moveAndRotate(
                     SEBlockFunctions.toSEVec3(running ? seFixPolarityMoveVector(forwardRun) : seFixPolarityMoveVector(forwardWalk))
                     , ZEROV2,
-                    0) ; // the last is "roll" ;
+                    0,
+                    1);
             sqDistance = Vec3.sub(SEBlockFunctions.fromSEVec3(obs.getPosition()),destination).lengthSq() ;
             if(sqDistance <= threshold) {
                 break ;
@@ -204,7 +205,7 @@ public class UUTacticLib {
         if(!fastturning || duration == null) {
             duration = 1 ;
         }
-        Vec2 turningVector = new Vec2(0, turningSpeed) ;
+        Vec2F turningVector = new Vec2F(0, turningSpeed) ;
 
         // now send the turning commands:
         CharacterObservation obs = null ;
@@ -212,7 +213,8 @@ public class UUTacticLib {
             obs = agentState.env().getController().getCharacter().moveAndRotate(
                     SEBlockFunctions.toSEVec3(ZEROV3),
                     turningVector,
-                    0) ; // the last is "roll"
+                    0,
+                    1);
             dirToGo = Vec3.sub(destination,SEBlockFunctions.fromSEVec3(obs.getPosition())) ;
             agentHdir = SEBlockFunctions.fromSEVec3(obs.getOrientationForward()) ;
             // for calculating 2D rotation we ignore the y-value:

@@ -15,12 +15,12 @@ import java.util.stream.Collectors;
  */
 public class SEBlockFunctions {
 
-    public static Vec3 fromSEVec3(spaceEngineers.model.Vec3 p) {
+    public static Vec3 fromSEVec3(spaceEngineers.model.Vec3F p) {
         return new Vec3(p.getX(), p.getY(), p.getZ()) ;
     }
 
-    public static spaceEngineers.model.Vec3 toSEVec3(Vec3 p) {
-        return new spaceEngineers.model.Vec3(p.x, p.y, p.z) ;
+    public static spaceEngineers.model.Vec3F toSEVec3(Vec3 p) {
+        return new spaceEngineers.model.Vec3F(p.x, p.y, p.z) ;
     }
 
     /*

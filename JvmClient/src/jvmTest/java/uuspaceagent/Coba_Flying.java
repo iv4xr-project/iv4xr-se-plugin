@@ -34,9 +34,10 @@ public class Coba_Flying {
             state.updateState();
             console("** k=" + k + ", agent: " + PrintInfos.showWOMAgent(state.wom)) ;
             state.env().getController().getCharacter().moveAndRotate(
-                    new spaceEngineers.model.Vec3(0,0.3,0),
-                    new spaceEngineers.model.Vec2(0,0),
-                    0) ;
+                    new spaceEngineers.model.Vec3F(0,0.3,0),
+                    new spaceEngineers.model.Vec2F(0,0),
+                    0,
+                    1) ;
             k++ ;
         }
     }

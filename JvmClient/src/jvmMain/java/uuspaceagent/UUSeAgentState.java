@@ -52,7 +52,7 @@ public class UUSeAgentState extends State {
         agentWE.properties.put("orientationForward", fromSEVec3(obs.getOrientationForward())) ;
         agentWE.properties.put("orientationUp", fromSEVec3(obs.getOrientationUp())) ;
         agentWE.properties.put("jetpackRunning", obs.getJetpackRunning()) ;
-        agentWE.properties.put("healthRatio", obs.getHealthRatio()) ;
+        agentWE.properties.put("health", obs.getHealth()) ;
         agentWE.properties.put("targetBlock", targetBlock == null ? null : targetBlock.getId()) ;
         return agentWE ;
     }

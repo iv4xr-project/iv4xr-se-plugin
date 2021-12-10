@@ -31,7 +31,7 @@ public class Test_pathfinding_entity {
     public void test_agent_pos() throws InterruptedException {
         // This is not loading a level, but connecting to an existing one
         JsonRpcSpaceEngineers rpc = JsonRpcSpaceEngineersBuilder.Companion.localhost("you");
-        spaceEngineers.model.Vec3 agentPos = rpc.getObserver().observe().getPosition();
+        spaceEngineers.model.Vec3F agentPos = rpc.getObserver().observe().getPosition();
 
         assertTrue(agentPos != null);
         console("agent position: " + agentPos);

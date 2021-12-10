@@ -54,9 +54,8 @@ public class Test_SimpleInteractionsWithSE {
 
         // set a goal ... does not matter what. This one cannot be solved.
         GoalStructure G = goal("dummy").toSolve((SeAgentState S) -> false)
-                .withTactic(tactics.moveForward(1f))
-                .lift()
-                ;
+                .withTactic(tactics.moveForward())
+                .lift();
         testAgent.setGoal(G) ;
 
         int i = 0 ;
@@ -114,12 +113,12 @@ public class Test_SimpleInteractionsWithSE {
 
         int i = 0 ;
         while(i<20) {
-            obs = theEnv.moveForward(5f) ;
+            obs = theEnv.moveForward() ;
             if (i<20) {
-                theEnv.getController().getCharacter().moveAndRotate(new Vec3(0,0,0), new Vec2(0,20),0) ;
+                theEnv.getController().getCharacter().moveAndRotate(new Vec3F(0,0,0), new Vec2F(0,20),0, 1) ;
             }
             else {
-                theEnv.getController().getCharacter().moveAndRotate(new Vec3(0,0,-36), new Vec2(0,0),0) ;
+                theEnv.getController().getCharacter().moveAndRotate(new Vec3F(0,0,-36), new Vec2F(0,0),0, 1) ;
             }
             obs = theEnv.observe() ;
             primObs = theEnv.getController().getObserver().observe() ;
