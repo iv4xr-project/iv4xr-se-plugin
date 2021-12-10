@@ -1,6 +1,7 @@
 package spaceEngineers.controller
 
 import spaceEngineers.model.*
+import spaceEngineers.navigation.NavGraph
 import spaceEngineers.transport.StringLineReaderWriter
 
 
@@ -37,12 +38,13 @@ open class JsonRpcSpaceEngineers(
             )
         }
 
-        override fun moveAndRotate(movement: Vec3, rotation3: Vec2, roll: Float): CharacterObservation {
+        override fun moveAndRotate(movement: Vec3F, rotation3: Vec2F, roll: Float, ticks: Int): CharacterObservation {
             return processParameters<CharacterObservation>(
                 parameters = listOf(
-                    TypedParameter("movement", movement, Vec3::class),
-                    TypedParameter("rotation3", rotation3, Vec2::class),
+                    TypedParameter("movement", movement, Vec3F::class),
+                    TypedParameter("rotation3", rotation3, Vec2F::class),
                     TypedParameter("roll", roll, Float::class),
+                    TypedParameter("ticks", ticks, Int::class)
                 ),
                 method = ::moveAndRotate,
                 methodName = "${characterPrefix}MoveAndRotate",
@@ -101,10 +103,10 @@ open class JsonRpcSpaceEngineers(
             )
         }
 
-        override fun getToolbar(): Toolbar {
+        override fun toolbar(): Toolbar {
             return processNoParameterMethod<Toolbar>(
-                method = ::getToolbar,
-                methodName = "${itemsPrefix}GetToolbar"
+                method = ::toolbar,
+                methodName = "${itemsPrefix}Toolbar"
             )
         }
     }
@@ -116,13 +118,18 @@ open class JsonRpcSpaceEngineers(
     }
     override val admin: SpaceEngineersAdmin = object : SpaceEngineersAdmin {
         override val blocks: BlocksAdmin = object : BlocksAdmin {
-            override fun placeAt(blockType: String, position: Vec3, orientationForward: Vec3, orientationUp: Vec3) {
-                processParameters<Unit>(
+            override fun placeAt(
+                blockDefinitionId: DefinitionId,
+                position: Vec3F,
+                orientationForward: Vec3F,
+                orientationUp: Vec3F
+            ): String {
+                return processParameters<String>(
                     parameters = listOf(
-                        TypedParameter("blockType", blockType, String::class),
-                        TypedParameter("position", position, Vec3::class),
-                        TypedParameter("orientationForward", orientationForward, Vec3::class),
-                        TypedParameter("orientationUp", orientationUp, Vec3::class),
+                        TypedParameter("blockDefinitionId", blockDefinitionId, DefinitionId::class),
+                        TypedParameter("position", position, Vec3F::class),
+                        TypedParameter("orientationForward", orientationForward, Vec3F::class),
+                        TypedParameter("orientationUp", orientationUp, Vec3F::class),
                     ),
                     method = ::placeAt,
                     methodName = "${adminPrefix}${blocksPrefix}PlaceAt"
@@ -153,15 +160,15 @@ open class JsonRpcSpaceEngineers(
 
         override val character: CharacterAdmin = object : CharacterAdmin {
             override fun teleport(
-                position: Vec3,
-                orientationForward: Vec3?,
-                orientationUp: Vec3?
+                position: Vec3F,
+                orientationForward: Vec3F?,
+                orientationUp: Vec3F?
             ): CharacterObservation {
                 return processParameters<CharacterObservation>(
                     parameters = listOf(
-                        TypedParameter("position", position, Vec3::class),
-                        TypedParameter("orientationForward", orientationForward, Vec3::class),
-                        TypedParameter("orientationUp", orientationUp, Vec3::class),
+                        TypedParameter("position", position, Vec3F::class),
+                        TypedParameter("orientationForward", orientationForward, Vec3F::class),
+                        TypedParameter("orientationUp", orientationUp, Vec3F::class),
                     ),
                     method = ::teleport,
                     methodName = "${adminPrefix}${characterPrefix}Teleport"
@@ -177,6 +184,34 @@ open class JsonRpcSpaceEngineers(
                     ),
                     method = ::use,
                     methodName = "${adminPrefix}${characterPrefix}Use"
+                )
+            }
+
+            override fun create(
+                id: String,
+                position: Vec3F,
+                orientationForward: Vec3F,
+                orientationUp: Vec3F
+            ): CharacterObservation {
+                return processParameters<CharacterObservation>(
+                    parameters = listOf(
+                        TypedParameter("id", id, String::class),
+                        TypedParameter("position", position, Vec3F::class),
+                        TypedParameter("orientationForward", orientationForward, Vec3F::class),
+                        TypedParameter("orientationUp", orientationUp, Vec3F::class),
+                    ),
+                    method = ::create,
+                    methodName = "${adminPrefix}${characterPrefix}Create"
+                )
+            }
+
+            override fun switch(id: String) {
+                return processSingleParameterMethod<String, Unit>(
+                    method = ::switch,
+                    methodName = "${adminPrefix}${characterPrefix}Switch",
+                    parameter = id,
+                    parameterName = "id",
+                    parameterType = String::class,
                 )
             }
         }
@@ -208,6 +243,17 @@ open class JsonRpcSpaceEngineers(
             )
         }
 
+        override fun observeCharacters(): List<CharacterObservation> {
+            return processNoParameterMethod<List<CharacterObservation>>(
+                method = ::observeCharacters,
+                methodName = "${observerPrefix}ObserveCharacters"
+            )
+        }
+
+        override fun navigationGraph(): NavGraph {
+            return processNoParameterMethod(::navigationGraph, "${observerPrefix}NavigationGraph")
+        }
+
         override fun takeScreenshot(absolutePath: String) {
             return processSingleParameterMethod<String, Unit>(
                 parameter = absolutePath,
@@ -215,6 +261,13 @@ open class JsonRpcSpaceEngineers(
                 method = ::takeScreenshot,
                 methodName = "${observerPrefix}TakeScreenshot",
                 parameterType = String::class,
+            )
+        }
+
+        override fun switchCamera() {
+            return processNoParameterMethod<Unit>(
+                method = ::switchCamera,
+                methodName = "${observerPrefix}SwitchCamera"
             )
         }
     }
@@ -231,6 +284,21 @@ open class JsonRpcSpaceEngineers(
                 method = ::allDefinitions,
                 methodName = "${definitionsPrefix}AllDefinitions",
             )
+        }
+
+        override fun blockHierarchy(): Map<String, String> {
+            return processNoParameterMethod(
+                method = ::blockHierarchy,
+                methodName = "${definitionsPrefix}BlockHierarchy",
+            )
+        }
+
+        override fun blockDefinitionHierarchy(): Map<String, String> {
+            return processNoParameterMethod(
+                method = ::blockDefinitionHierarchy,
+                methodName = "${definitionsPrefix}BlockDefinitionHierarchy",
+            )
+
         }
     }
 }

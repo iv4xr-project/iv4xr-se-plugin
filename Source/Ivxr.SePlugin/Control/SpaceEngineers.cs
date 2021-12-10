@@ -1,6 +1,7 @@
 ﻿using Iv4xr.PluginLib;
 using Iv4xr.PluginLib.Control;
 using Iv4xr.SePlugin.Config;
+using Iv4xr.SpaceEngineers;
 using Sandbox;
 
 namespace Iv4xr.SePlugin.Control
@@ -18,18 +19,18 @@ namespace Iv4xr.SePlugin.Control
 
         internal RealSpaceEngineers(GameSession gameSession, ILog log, PluginConfig config)
         {
-            var lowLevelObserveer = new LowLevelObserver(gameSession) {Log = log};
-            Observer = new Observer(lowLevelObserveer)
+            var lowLevelObserver = new LowLevelObserver(gameSession) {Log = log};
+            Observer = new Observer(lowLevelObserver)
             {
                 Log = log,
                 Radius = config.ObservationRadius
             };
             Session = new SessionController() {Log = log};
-            Items = new Items(gameSession, lowLevelObserveer);
+            Items = new Items(gameSession, lowLevelObserver);
             Definitions = new Definitions();
-            var characterController = new CharacterController(gameSession, Observer, lowLevelObserveer);
+            var characterController = new CharacterController(gameSession, Observer, lowLevelObserver, log);
             Character = characterController;
-            var blocks = new Blocks(gameSession, lowLevelObserveer);
+            var blocks = new Blocks(gameSession, lowLevelObserver);
             Blocks = blocks;
             Admin = new SpaceEngineersAdmin(characterController, blocks);
         }

@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Iv4xr.PluginLib;
-using Iv4xr.PluginLib.Control;
-using Iv4xr.PluginLib.WorldModel;
+using Iv4xr.SpaceEngineers;
+using Iv4xr.SpaceEngineers.Navigation;
+using Iv4xr.SpaceEngineers.WorldModel;
 
 namespace SeServerMock.Mocks
 {
@@ -27,7 +29,11 @@ namespace SeServerMock.Mocks
                 MaxIntegrity = 10f,
                 BuildIntegrity = 1.0f,
                 Integrity = 5.0f,
-                BlockType = "MockBlock"
+                DefinitionId = new DefinitionId()
+                {
+                    Id = "MockId",
+                    Type = "MockBlock",    
+                },
             };
 
             var blocks = new List<Block>
@@ -65,9 +71,24 @@ namespace SeServerMock.Mocks
             return GetObservation();
         }
 
+        public List<CharacterObservation> ObserveCharacters()
+        {
+            throw new NotImplementedException();
+        }
+
+        public NavGraph NavigationGraph()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SwitchCamera()
+        {
+            throw new NotImplementedException();
+        }
+
         public void TakeScreenshot(string absolutePath)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }

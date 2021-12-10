@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Sandbox.Common.ObjectBuilders;
+using Iv4xr.SpaceEngineers.WorldModel;
 using Sandbox.Definitions;
 using Sandbox.Game.Entities;
+using Sandbox.Game.Entities.Cube;
 using Sandbox.ModAPI;
 using VRage;
 using VRage.Game;
@@ -13,23 +14,26 @@ namespace Iv4xr.SePlugin.Control
 {
     public class BlockPlacer
     {
-        private MyObjectBuilder_CubeBlock CubeBlockBuilderByBlockType(string blockType)
+        private MyObjectBuilder_CubeBlock CubeBlockBuilderByBlockType(DefinitionId blockDefinitionId)
         {
             var definitionBase = MyDefinitionManager.Static
                     .GetAllDefinitions()
-                    .First(definition => definition.Id.SubtypeName == blockType);
+                    .First(definition =>
+                    {
+                        return definition.ToDefinitionId().Type == blockDefinitionId.Type;
+                    });
 
-            var obj = (MyObjectBuilder_CubeBlock) MyObjectBuilderSerializer.CreateNewObject(definitionBase.Id);
+            var obj = (MyObjectBuilder_CubeBlock)MyObjectBuilderSerializer.CreateNewObject(definitionBase.Id);
             obj.Min = new SerializableVector3I(0, 0, 0);
-            obj.SubtypeName = blockType;
+            obj.SubtypeName = blockDefinitionId.Type;
             obj.BlockOrientation = new SerializableBlockOrientation(Base6Directions.Direction.Forward,
                 Base6Directions.Direction.Up);
 
             return obj;
         }
 
-        private MyCubeGrid PlaceBlock(MyObjectBuilder_CubeBlock block, Vector3D position, Vector3D forward,
-            Vector3D up)
+        private MyCubeGrid PlaceBlock(MyObjectBuilder_CubeBlock block, Vector3D position, Vector3 forward,
+            Vector3 up)
         {
             // The block definition is useful for getting the size of the block
             var blockDefinition = MyDefinitionManager.Static.GetCubeBlockDefinition(block);
@@ -50,15 +54,17 @@ namespace Iv4xr.SePlugin.Control
             // Create the grid (not sure if all the lines below are required)
             MyAPIGateway.Entities.RemapObjectBuilder(gridBuilder);
             var entity = MyAPIGateway.Entities.CreateFromObjectBuilderAndAdd(gridBuilder);
-            MyAPIGateway.Multiplayer.SendEntitiesCreated(new List<MyObjectBuilder_EntityBase> {gridBuilder});
+            MyAPIGateway.Multiplayer.SendEntitiesCreated(new List<MyObjectBuilder_EntityBase> { gridBuilder });
 
             // Return the created entity
-            return (MyCubeGrid) entity;
+            return (MyCubeGrid)entity;
         }
 
-        public void PlaceBlock(string blockType, Vector3 position, Vector3 orientationForward, Vector3 orientationUp)
+        public MySlimBlock PlaceBlock(DefinitionId blockDefinitionId, Vector3 position, Vector3 orientationForward,
+            Vector3 orientationUp)
         {
-            PlaceBlock(CubeBlockBuilderByBlockType(blockType), position, orientationForward, orientationUp);
+            var grid = PlaceBlock(CubeBlockBuilderByBlockType(blockDefinitionId), position, orientationForward, orientationUp);
+            return grid.CubeBlocks.First();
         }
     }
 }

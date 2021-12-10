@@ -1,17 +1,35 @@
 package spaceEngineers.model.extensions
 
-import spaceEngineers.model.NumberVec
-import spaceEngineers.model.Vec3
+import spaceEngineers.model.CharacterMovementType
+import spaceEngineers.model.NumberVec3
+import spaceEngineers.model.Vec3F
 
-fun NumberVec<Float>.crossProduct(b: NumberVec<Float>): Vec3 {
+
+fun Vec3F.normalizeAsMovement(characterMovementType: CharacterMovementType): Vec3F {
+    return normalized() * characterMovementType.speed
+}
+
+fun Vec3F.normalizeAsWalk(): Vec3F {
+    return normalizeAsMovement(CharacterMovementType.WALK)
+}
+
+fun Vec3F.normalizeAsRun(): Vec3F {
+    return normalizeAsMovement(CharacterMovementType.RUN)
+}
+
+fun Vec3F.normalizeAsSprint(): Vec3F {
+    return normalizeAsMovement(CharacterMovementType.SPRINT)
+}
+
+fun NumberVec3<Float>.crossProduct(b: NumberVec3<Float>): Vec3F {
     val a = this
-    return Vec3(
+    return Vec3F(
         a.y * b.z - a.z * b.y,
         a.z * b.x - a.x * b.z,
         a.x * b.y - a.y * b.x
     )
 }
 
-fun NumberVec<Float>.toArray(): FloatArray {
+fun NumberVec3<Float>.toArray(): FloatArray {
     return floatArrayOf(x, y, z)
 }

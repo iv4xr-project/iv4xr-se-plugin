@@ -7,8 +7,10 @@ import eu.iv4xr.framework.mainConcepts.TestDataCollector
 import eu.iv4xr.framework.spatial.Vec3
 import nl.uu.cs.aplib.AplibEDSL.SEQ
 import nl.uu.cs.aplib.mainConcepts.GoalStructure
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import spaceEngineers.controller.*
+import spaceEngineers.controller.SpaceEngineers.Companion.DEFAULT_AGENT_ID
 import spaceEngineers.iv4xr.goal.GoalBuilder
 import spaceEngineers.iv4xr.goal.TacticLib
 import spaceEngineers.model.ToolbarLocation
@@ -16,12 +18,19 @@ import kotlin.test.assertTrue
 
 
 class BasicIv4xrTest {
+
+    @Disabled("Disabled for building whole project, enable manually by uncommenting.")
     @Test
     fun placeGrindDownTorchUp() {
-        val agentId = "agentId"
+        val agentId = DEFAULT_AGENT_ID
         val blockType = "LargeHeavyBlockArmorBlock"
         val context = SpaceEngineersTestContext()
-        context.blockTypeToToolbarLocation[blockType] = ToolbarLocation(1, 0)
+        val blockLocation = ToolbarLocation(1, 0)
+        val welder = "Welder2Item"
+        val welderLocation = ToolbarLocation(2, 0)
+        val grinder = "AngleGrinder2Item"
+        val grinderLocation = ToolbarLocation(3, 0)
+        context.blockTypeToToolbarLocation[blockType] = blockLocation
         val controllerWrapper =
             ContextControllerWrapper(
                 spaceEngineers = JsonRpcSpaceEngineersBuilder.localhost(agentId),
@@ -33,6 +42,11 @@ class BasicIv4xrTest {
             context = context
         )
         theEnv.loadWorld()
+        controllerWrapper.items.setToolbarItem(blockType, blockLocation)
+        controllerWrapper.items.setToolbarItem(welder, welderLocation)
+        controllerWrapper.items.setToolbarItem(grinder, grinderLocation)
+        Thread.sleep(500)
+
         theEnv.observeForNewBlocks()
 
         val dataCollector = TestDataCollector()
@@ -54,7 +68,7 @@ class BasicIv4xrTest {
                 Vec3(532.7066f, -45.193184f, -23.946253f),
                 distance = 16f,
                 epsilon = 0.1f,
-                tactic = tactics.moveForward(1f),
+                tactic = tactics.moveForward(),
             ),
             goals.blockOfTypeExists(
                 blockType,
@@ -63,7 +77,7 @@ class BasicIv4xrTest {
             goals.lastBuiltBlockIntegrityIsBelow(
                 percentage = 0.1,
                 tactic = SEQ(
-                    tactics.equip(ToolbarLocation(5, 0)),
+                    tactics.equip(grinderLocation),
                     tactics.sleep(500),
                     tactics.startUsingTool(),
                 ),
@@ -77,7 +91,7 @@ class BasicIv4xrTest {
             goals.lastBuiltBlockIntegrityIsAbove(
                 percentage = 1.0,
                 tactic = SEQ(
-                    tactics.equip(ToolbarLocation(4, 0)),
+                    tactics.equip(welderLocation),
                     tactics.sleep(500),
                     tactics.startUsingTool(),
                 ),

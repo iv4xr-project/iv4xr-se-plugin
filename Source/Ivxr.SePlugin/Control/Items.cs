@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Linq;
 using Iv4xr.PluginLib.Control;
-using Iv4xr.PluginLib.WorldModel;
+using Iv4xr.SpaceEngineers;
+using Iv4xr.SpaceEngineers.WorldModel;
 using Sandbox.Definitions;
 using Sandbox.Game.Entities;
 using Sandbox.Game.Screens.Helpers;
@@ -30,17 +31,26 @@ namespace Iv4xr.SePlugin.Control
         [Obsolete("Deprecated, will create new api for allowSizeChange. You should use Equip.")]
         public void EquipToolbarItem(ToolbarLocation toolbarLocation, bool allowSizeChange)
         {
-            var toolbar = MyToolbarComponent.CurrentToolbar;
+            var toolbar = m_session.Character.Toolbar;
             toolbar.SwitchToPageOrNot(toolbarLocation.Page);
 
             if (!allowSizeChange && toolbar.SelectedSlot.HasValue &&
                 (toolbar.SelectedSlot.Value == toolbarLocation.Slot))
                 return; // Already set (setting it again would change grid size).
 
-            toolbar.ActivateItemAtSlot(toolbarLocation.Slot);
+            var toolbarItem =  toolbar[toolbarLocation.Slot];
+            if (toolbarItem is MyToolbarItemWeapon weapon)
+            {
+                // Very dirty and fast hack, but works for tools, needs more sophistication.
+                m_session.Character.SwitchToWeapon(weapon);    
+            }
+            else
+            {
+                toolbar.ActivateItemAtSlot(toolbarLocation.Slot);    
+            }
         }
 
-        public Toolbar GetToolbar()
+        public Toolbar Toolbar()
         {
             var toolbar = MyToolbarComponent.CurrentToolbar;
             return new Toolbar()
@@ -107,22 +117,12 @@ namespace Iv4xr.SePlugin.Control
             var toolbarItemBuilder = MyObjectBuilderSerializer.CreateNewObject<T>();
             toolbarItemBuilder.DefinitionId = id;
 
-            var toolbar = MyToolbarComponent.CurrentToolbar;
+            var toolbar = m_session.Character.Toolbar;
+            var owner = toolbar.Owner;
+            //toolbar.Owner = m_session.Character;
             toolbar.SwitchToPage(page);
-            toolbar.SetItemAtSlot(slot, MyToolbarItemFactory.CreateToolbarItem(toolbarItemBuilder));
-        }
-
-        private MyEntityController GetEntityController()
-        {
-            if (m_session.Character is null)
-                throw new NullReferenceException("I'm out of character!"); // Should not happen.
-
-            var entityController = m_session.Character.ControllerInfo.Controller;
-
-            if (entityController is null) // Happens when the character enters a vehicle, for example.
-                throw new NotSupportedException("Entity control not possible now.");
-
-            return entityController;
+            var item = MyToolbarItemFactory.CreateToolbarItem(toolbarItemBuilder);
+            toolbar.SetItemAtSlot(slot, item);
         }
     }
 }

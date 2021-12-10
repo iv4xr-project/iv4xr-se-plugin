@@ -2,16 +2,14 @@ Feature: Example how to describe block observations using cucumber.
   To demonstrate how can we define features using scenarios and automatically test them.
 
   Background:
-    Given I am connected to real game using json-rpc.
-    # Given I am connected to real game.
-    And Toolbar has mapping:
+    Given Toolbar has mapping:
       | slot | page | blockType                 |
       | 1    | 0    | LargeHeavyBlockArmorBlock |
       | 2    | 0    | LargeBlockCockpitSeat     |
       | 3    | 0    | LargeBlockSmallGenerator  |
       | 6    | 0    | LargeBlockGyro            |
 
-  Scenario Outline: Checking scenario character is at correct starting location and can move.
+  Scenario Outline: Build, grind and weld.
     Given I load scenario "simple-place-grind-torch-with-tools".
     When I observe.
     Then Character is at (532.7066, -45.193184, -24.395466).

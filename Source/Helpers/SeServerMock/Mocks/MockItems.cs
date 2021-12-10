@@ -1,6 +1,7 @@
 ﻿using Iv4xr.PluginLib;
 using Iv4xr.PluginLib.Control;
-using Iv4xr.PluginLib.WorldModel;
+using Iv4xr.SpaceEngineers;
+using Iv4xr.SpaceEngineers.WorldModel;
 
 namespace SeServerMock.Mocks
 {
@@ -35,7 +36,7 @@ namespace SeServerMock.Mocks
         {
         }
 
-        public Toolbar GetToolbar()
+        public Toolbar Toolbar()
         {
             throw new System.NotImplementedException();
         }

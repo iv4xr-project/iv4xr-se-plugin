@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Iv4xr.PluginLib.Control;
+using Iv4xr.SpaceEngineers.Navigation;
 using Iv4xr.SePlugin.Control;
-using Iv4xr.PluginLib.WorldModel;
+using Iv4xr.SpaceEngineers;
+using Iv4xr.SpaceEngineers.WorldModel;
 
 namespace Iv4xr.SePlugin.Communication
 {
@@ -56,6 +58,16 @@ namespace Iv4xr.SePlugin.Communication
         {
             return Enqueue(() => m_definitions.AllDefinitions());
         }
+
+        public Dictionary<string, string> BlockHierarchy()
+        {
+            return Enqueue(() => m_definitions.BlockHierarchy());
+        }
+
+        public Dictionary<string, string> BlockDefinitionHierarchy()
+        {
+            return Enqueue(() => m_definitions.BlockDefinitionHierarchy());
+        }
     }
 
     public class ObserverOnGameLoop : AbstractServiceOnGameLoop, IObserver
@@ -81,6 +93,21 @@ namespace Iv4xr.SePlugin.Communication
         public Observation ObserveNewBlocks()
         {
             return Enqueue(() => m_observer.ObserveNewBlocks());
+        }
+
+        public List<CharacterObservation> ObserveCharacters()
+        {
+            return Enqueue(() => m_observer.ObserveCharacters());
+        }
+
+        public NavGraph NavigationGraph()
+        {
+            return Enqueue(() => m_observer.NavigationGraph());
+        }
+
+        public void SwitchCamera()
+        {
+            Enqueue(() => m_observer.SwitchCamera());
         }
 
         public void TakeScreenshot(string absolutePath)
@@ -124,10 +151,10 @@ namespace Iv4xr.SePlugin.Communication
             Enqueue(() => m_blocks.SetIntegrity(blockId, integrity));
         }
 
-        public void PlaceAt(string blockType, PlainVec3D position, PlainVec3D orientationForward,
+        public string PlaceAt(DefinitionId blockDefinitionId, PlainVec3D position, PlainVec3D orientationForward,
             PlainVec3D orientationUp)
         {
-            Enqueue(() => m_blocks.PlaceAt(blockType, position, orientationForward, orientationUp));
+            return Enqueue(() => m_blocks.PlaceAt(blockDefinitionId, position, orientationForward, orientationUp));
         }
     }
 
@@ -150,9 +177,9 @@ namespace Iv4xr.SePlugin.Communication
             Enqueue(() => m_items.SetToolbarItem(name, toolbarLocation));
         }
 
-        public Toolbar GetToolbar()
+        public Toolbar Toolbar()
         {
-            return Enqueue(() => m_items.GetToolbar());
+            return Enqueue(() => m_items.Toolbar());
         }
     }
 
@@ -183,6 +210,16 @@ namespace Iv4xr.SePlugin.Communication
         {
             Enqueue(() => m_character.Use(blockId, functionIndex, action));
         }
+
+        public CharacterObservation Create(string id, PlainVec3D position, PlainVec3D orientationForward, PlainVec3D orientationUp)
+        {
+            return Enqueue(() => m_character.Create(id, position, orientationForward, orientationUp));
+        }
+
+        public void Switch(string id)
+        {
+            Enqueue(() => m_character.Switch(id));
+        }
     }
 
     public class CharacterOnGameLoop : AbstractServiceOnGameLoop, ICharacterController
@@ -198,11 +235,11 @@ namespace Iv4xr.SePlugin.Communication
             m_observer = observer;
         }
 
-        public CharacterObservation MoveAndRotate(PlainVec3D movement, PlainVec2F rotation3, float roll = 0)
+        public CharacterObservation MoveAndRotate(PlainVec3D movement, PlainVec2F rotation3, float roll = 0, int ticks = 1)
         {
             return Enqueue(() =>
             {
-                m_character.MoveAndRotate(movement, rotation3, roll);
+                m_character.MoveAndRotate(movement, rotation3, roll, ticks);
                 return m_observer.Observe();
             });
         }

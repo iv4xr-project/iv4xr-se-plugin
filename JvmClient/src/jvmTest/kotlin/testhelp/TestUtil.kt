@@ -1,11 +1,10 @@
 package testhelp
 
 import kotlinx.coroutines.runBlocking
-import spaceEngineers.transport.closeIfCloseable
 import spaceEngineers.controller.*
-import java.io.File
+import spaceEngineers.transport.closeIfCloseable
 
-const val TEST_AGENT = "you"
+const val TEST_AGENT = SpaceEngineers.DEFAULT_AGENT_ID
 
 val RESOURCES_DIR = "src/jvmTest/resources/"
 val MOCK_RESOURCES_DIR = "${RESOURCES_DIR}mock/"

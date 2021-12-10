@@ -9,7 +9,7 @@ import kotlin.test.assertEquals
 class RotationMatrixTest {
 
 
-    private fun assertEquals(v1: Vec3, v2: Vec3, diff: Float = 0f) {
+    private fun assertEquals(v1: Vec3F, v2: Vec3F, diff: Float = 0f) {
         assertVecEquals(v1, v2, diff = diff)
     }
 
@@ -33,8 +33,8 @@ class RotationMatrixTest {
                 0f, 0f, 1f
             )
         )
-        assertEquals(Vec3(0f, 0f, -1f), matrix.forward)
-        assertEquals(Vec3(0f, 1f, 0f), matrix.up)
+        assertEquals(Vec3F(0f, 0f, -1f), matrix.forward)
+        assertEquals(Vec3F(0f, 1f, 0f), matrix.up)
     }
 
     @Test
@@ -46,9 +46,9 @@ class RotationMatrixTest {
                 0f, -1f, 0f
             )
         )
-        assertEquals(-Vec3(0f, 1f, 0f), matrix.forward)
-        assertEquals(Vec3(0f, 0f, -1f), matrix.up)
-        assertEquals(Vec3(1f, 0f, 0f), matrix.right)
+        assertEquals(-Vec3F(0f, 1f, 0f), matrix.forward)
+        assertEquals(Vec3F(0f, 0f, -1f), matrix.up)
+        assertEquals(Vec3F(1f, 0f, 0f), matrix.right)
     }
 
     @Test
@@ -62,9 +62,9 @@ class RotationMatrixTest {
         )
         assertEquals(0.95163226f, matrix[0, 0])
         assertEquals(-0.30723935f, matrix[0, 2])
-        assertEquals(-Vec3(x = 0.30723935f, y = -6.2047493E-6f, z = 0.95163226f), matrix.forward)
-        assertEquals(Vec3(x = 7.147936E-6f, y = 1.0f, z = 4.212364E-6f), matrix.up)
-        assertEquals(Vec3(0.95163226f, -5.5080022E-6f, -0.30723935f), matrix.right)
+        assertEquals(-Vec3F(x = 0.30723935f, y = -6.2047493E-6f, z = 0.95163226f), matrix.forward)
+        assertEquals(Vec3F(x = 7.147936E-6f, y = 1.0f, z = 4.212364E-6f), matrix.up)
+        assertEquals(Vec3F(0.95163226f, -5.5080022E-6f, -0.30723935f), matrix.right)
 
 
         assertEquals(
@@ -75,17 +75,17 @@ class RotationMatrixTest {
     @Test
     fun vectors() {
         val matrix = RotationMatrix.IDENTITY
-        assertEquals(matrix.forward, Vec3.FORWARD)
-        assertEquals(matrix.up, Vec3.UP)
-        assertEquals(matrix.right, Vec3.RIGHT)
+        assertEquals(matrix.forward, Vec3F.FORWARD)
+        assertEquals(matrix.up, Vec3F.UP)
+        assertEquals(matrix.right, Vec3F.RIGHT)
 
-        assertEquals(matrix.forward, Vec3(0, 0, -1))
-        assertEquals(matrix.up, Vec3(0, 1, 0))
+        assertEquals(matrix.forward, Vec3F(0, 0, -1))
+        assertEquals(matrix.up, Vec3F(0, 1, 0))
 
-        assertEquals(matrix.backward, Vec3(0, 0, 1))
-        assertEquals(matrix.down, Vec3(0, -1, 0))
-        assertEquals(matrix.left, Vec3(-1, 0, 0))
-        assertEquals(matrix.right, Vec3(1, 0, 0))
+        assertEquals(matrix.backward, Vec3F(0, 0, 1))
+        assertEquals(matrix.down, Vec3F(0, -1, 0))
+        assertEquals(matrix.left, Vec3F(-1, 0, 0))
+        assertEquals(matrix.right, Vec3F(1, 0, 0))
     }
 
     @Test
@@ -95,7 +95,7 @@ class RotationMatrixTest {
             4, 5, 6,
             7, 8, 9
         )
-        val v = Vec3(2, 1, 3)
-        assertEquals(Vec3(13, 31, 49), matrix * v)
+        val v = Vec3F(2, 1, 3)
+        assertEquals(Vec3F(13, 31, 49), matrix * v)
     }
 }

@@ -2,9 +2,11 @@
 using System.Linq;
 using System.Reflection;
 using Iv4xr.PluginLib.Control;
-using Iv4xr.PluginLib.WorldModel;
+using Iv4xr.SpaceEngineers;
+using Iv4xr.SpaceEngineers.WorldModel;
 using Sandbox.Game.Entities;
 using Sandbox.Game.World;
+using VRage.Game.ModAPI;
 
 namespace Iv4xr.SePlugin.Control
 {
@@ -26,7 +28,7 @@ namespace Iv4xr.SePlugin.Control
             var grid = m_observer.GetGridContainingBlock(blockId);
             if (grid == null) throw new ArgumentException("Block with id not found");
             
-            var block = m_observer.GetBlocksOf(grid).FirstOrDefault(b => b.UniqueId.ToString() == blockId);
+            var block = m_observer.GetBlocksOf(grid).FirstOrDefault(b => b.BlockId().ToString() == blockId);
             if (block == null) throw new ArgumentException("Block with id not found");
             
             var method = block.ComponentStack.GetType().GetMethod("SetIntegrity",
@@ -37,11 +39,11 @@ namespace Iv4xr.SePlugin.Control
             block.UpdateVisual();
         }
 
-        public void PlaceAt(string blockType, PlainVec3D position, PlainVec3D orientationForward,
+        public string PlaceAt(DefinitionId blockDefinitionId, PlainVec3D position, PlainVec3D orientationForward,
             PlainVec3D orientationUp)
         {
-            m_blockPlacer.PlaceBlock(blockType, position.ToVector3(), orientationForward.ToVector3(),
-                orientationUp.ToVector3());
+            return m_blockPlacer.PlaceBlock(blockDefinitionId, position.ToVector3(), orientationForward.ToVector3(),
+                orientationUp.ToVector3()).BlockId().ToString();
         }
 
         public void Remove(string blockId)
@@ -52,7 +54,7 @@ namespace Iv4xr.SePlugin.Control
                 throw new ArgumentException("Block with id not found");
             }
 
-            var block = m_observer.GetBlocksOf(grid).FirstOrDefault(b => b.UniqueId.ToString() == blockId);
+            var block = m_observer.GetBlocksOf(grid).FirstOrDefault(b => b.BlockId().ToString() == blockId);
             grid.RemoveBlock(block);
         }
 

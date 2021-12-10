@@ -1,56 +1,42 @@
 package bdd
 
 import io.cucumber.java.After
-import io.cucumber.java.Before
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import io.cucumber.junit.Cucumber
 import kotlinx.coroutines.runBlocking
 import org.junit.runner.RunWith
-import spaceEngineers.controller.*
+import spaceEngineers.controller.JsonRpcSpaceEngineers
 import spaceEngineers.controller.extensions.*
+import spaceEngineers.controller.loadFromTestResources
 import spaceEngineers.model.Block
+import spaceEngineers.model.CharacterMovement
 import spaceEngineers.model.ToolbarLocation
-import spaceEngineers.model.Vec3
+import spaceEngineers.model.Vec3F
 import spaceEngineers.model.extensions.allBlocks
-import spaceEngineers.transport.GsonReaderWriter
+import spaceEngineers.model.extensions.normalizeAsRun
 import spaceEngineers.transport.SocketReaderWriter
-import spaceEngineers.transport.closeIfCloseable
-import testhelp.TEST_AGENT
 import testhelp.assertFloatEquals
 import testhelp.assertVecEquals
 import java.io.File
+import java.lang.Exception
 import java.lang.Thread.sleep
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 
 @RunWith(Cucumber::class)
-class SpaceEngineersCucumberTest {
-    lateinit var environment: ContextControllerWrapper
-
-    val context by lazy { environment.context }
-
-    @Before
-    fun setup() {
-    }
+class SpaceEngineersCucumberTest : AbstractSpaceEngineersSteps() {
 
     @After
-    fun cleanup() {
-        if (this::environment.isInitialized) {
-            environment.spaceEngineers.closeIfCloseable()
-            environment.closeIfCloseable()
+    fun clearContinuousMovement() {
+        try {
+            character.moveAndRotate(ticks = 0)
+        } catch(e: Exception) {
+            // probably better idea to catch here, since we don't know how scenario went
+            e.printStackTrace()
         }
-    }
-
-    @Given("I am connected to real game using json-rpc.")
-    fun i_am_connected_to_real_game_using_json_rpc() = runBlocking {
-
-        environment =
-            ContextControllerWrapper(
-                spaceEngineers = JsonRpcSpaceEngineersBuilder.localhost(agentId = TEST_AGENT)
-            )
     }
 
     @Given("Toolbar has mapping:")
@@ -102,17 +88,9 @@ class SpaceEngineersCucumberTest {
 
     @Then("Character is at \\({double}, ?{double}, ?{double}).")
     fun i_see_character_at_x_y_z(x: Double, y: Double, z: Double) {
-        val position = Vec3(x, y, z)
+        val position = Vec3F(x, y, z)
         context.observationHistory.last().let { observation ->
             assertVecEquals(position, observation.character.position, diff = 0.1f)
-        }
-    }
-
-    @Then("Character forward orientation is \\({double}, {double}, {double}).")
-    fun character_is_facing(x: Double, y: Double, z: Double) {
-        val position = Vec3(x, y, z)
-        context.observationHistory.last().let { observation ->
-            assertVecEquals(position, observation.character.orientationForward, diff = 0.1f)
         }
     }
 
@@ -120,7 +98,8 @@ class SpaceEngineersCucumberTest {
     fun character_moves_forward_for_units(units: Float) = runBlocking {
         environment.blockingMoveForwardByDistance(
             distance = units,
-            startPosition = environment.observer.observe().position
+            startPosition = environment.observer.observe().position,
+            timeoutMs = 40000,
         )
         environment.observer.observe()
     }
@@ -180,7 +159,7 @@ class SpaceEngineersCucumberTest {
     @When("Character selects block {string} and places it.")
     fun character_places_selects_block_and_places_it(blockType: String) {
         val toolbarLocation =
-            environment.items.getToolbar().findLocation(blockType) ?: error("cannot find $blockType in toolbar")
+            environment.items.toolbar().findLocation(blockType) ?: error("cannot find $blockType in toolbar")
         environment.items.setToolbarItem(blockType, toolbarLocation);
         environment.items.equip(toolbarLocation)
         sleep(150)
@@ -193,7 +172,7 @@ class SpaceEngineersCucumberTest {
         val observation = environment.observer.observeBlocks()
         assertTrue(
             observation.allBlocks
-                .none { it.blockType == string }
+                .none { it.definitionId.type == string }
         )
     }
 
@@ -204,14 +183,16 @@ class SpaceEngineersCucumberTest {
         assertEquals(
             blockCount,
             allBlocks.size,
-            "Expected to see $blockCount blocks, not ${allBlocks.size} ${allBlocks.map { it.blockType }.toSet()}."
+            "Expected to see $blockCount blocks, not ${allBlocks.size} ${
+                allBlocks.map { it.definitionId.type }.toSet()
+            }."
         )
         assertEquals(allBlocks.size, data.size)
         data.forEachIndexed { index, row ->
             val block = allBlocks[index]
             context.lastNewBlock = block
             row["blockType"]?.let {
-                assertEquals(it, block.blockType)
+                assertEquals(it, block.definitionId.type)
             }
             row["integrity"]?.let {
                 assertEquals(it.toFloat(), block.integrity)
@@ -241,26 +222,6 @@ class SpaceEngineersCucumberTest {
 
     private val blockScreenshotInfoByType = mutableMapOf<String, Screenshots>()
 
-    data class Screenshots(
-        val blockType: String,
-        val maxIntegrity: Float,
-        val screenshots: MutableList<SingleScreenshot> = mutableListOf()
-    ) {
-        constructor(block: Block) : this(block.blockType, block.maxIntegrity)
-    }
-
-    data class SingleScreenshot(
-        val filename: String,
-        val integrity: Float,
-        val buildRatioUpperBound: Float
-    ) {
-        constructor(block: Block, buildRatioUpperBound: Float) : this(
-            filename = "${block.blockType}_${block.integrity}.png",
-            integrity = block.integrity,
-            buildRatioUpperBound = buildRatioUpperBound
-        )
-    }
-
     @Given("Output directory is {string}.")
     fun outputDirectoryIs(outputDir: String) {
         outputDirectory = File(outputDir.replace("~", System.getProperty("user.home")))
@@ -274,35 +235,38 @@ class SpaceEngineersCucumberTest {
         }
     }
 
-    fun moveBackScreenshotAndForward(block: Block, singleScreenshot: SingleScreenshot, distance: Float = 2f) = runBlocking {
-        sleep(500)
-        val startPosition = environment.observer.observe().position
-        environment.blockingMoveBackwardsByDistance(distance, startPosition = startPosition)
-        screenshot(block, singleScreenshot)
-        sleep(500)
-        val endPosition = environment.observer.observe().position
-        environment.blockingMoveForwardByDistance(distance, startPosition = endPosition)
-        sleep(500)
-    }
+    fun moveBackScreenshotAndForward(block: Block, singleScreenshot: SingleScreenshot, distance: Float = 2f) =
+        runBlocking {
+            sleep(500)
+            val startPosition = environment.observer.observe().position
+            environment.blockingMoveBackwardsByDistance(distance, startPosition = startPosition)
+            screenshot(block, singleScreenshot)
+            sleep(500)
+            val endPosition = environment.observer.observe().position
+            environment.blockingMoveForwardByDistance(distance, startPosition = endPosition)
+            sleep(500)
+        }
 
     fun screenshot(block: Block, singleScreenshot: SingleScreenshot) {
-        blockScreenshotInfoByType.getOrPut(block.blockType) {
+        blockScreenshotInfoByType.getOrPut(block.definitionId.type) {
             Screenshots(block)
         }.screenshots.add(singleScreenshot)
-        val blockDir = File(outputDirectory, "${block.blockType}").apply { mkdirs() }
+        val blockDir = File(outputDirectory, "${block.definitionId.type}").apply { mkdirs() }
         val screenshotFile = File(blockDir, singleScreenshot.filename)
         environment.observer.takeScreenshot(screenshotFile.absolutePath)
     }
 
     fun observeLatestNewBlock(): Block {
-        return environment.observer.observeBlocks().allBlocks.firstOrNull { it.id == context.lastNewBlockId } ?: error("block with id ${context.lastNewBlockId} not found")
+        return environment.observer.observeBlocks().allBlocks.firstOrNull { it.id == context.lastNewBlockId }
+            ?: error("block with id ${context.lastNewBlockId} not found")
     }
 
     @Then("Character grinds down to {double}% below each threshold, steps {float} units back and takes screenshot.")
     fun character_grinds_down_to_below_each_threshold_and_takes_screenshot(percentage: Double, distance: Float) =
         runBlocking {
             val block = observeLatestNewBlock()
-            val meta = environment.definitions.blockDefinitions().first { it.blockType == block.blockType }
+            val meta =
+                environment.definitions.blockDefinitions().first { it.definitionId.type == block.definitionId.type }
             meta.buildProgressModels.reversed().forEach { seBuildProgressModel ->
                 sleep(500)
                 grindDownToPercentage((seBuildProgressModel.buildRatioUpperBound).toDouble() * 100.0 - percentage)
@@ -322,7 +286,8 @@ class SpaceEngineersCucumberTest {
     fun character_welds_up_above_each_threshold_and_takes_screenshot(percentage: Double, distance: Float) =
         runBlocking {
             val block = observeLatestNewBlock()
-            val definition = environment.definitions.blockDefinitions().first { it.blockType == block.blockType }
+            val definition =
+                environment.definitions.blockDefinitions().first { it.definitionId.type == block.definitionId.type }
             definition.buildProgressModels.forEach { seBuildProgressModel ->
                 sleep(500)
                 torchUpToPercentage((seBuildProgressModel.buildRatioUpperBound).toDouble() * 100.0 + percentage)
@@ -342,13 +307,75 @@ class SpaceEngineersCucumberTest {
     fun character_saves_metadata_about_each_threshold_and_file_names() {
         val block = observeLatestNewBlock()
         val cw = environment.spaceEngineers as JsonRpcSpaceEngineers
-        //val meta = cw.blockDefinitions().first { it.blockType == block.blockType }
-        val blockDir = File(outputDirectory, "${block.blockType}").apply { mkdirs() }
+        //val meta = cw.blockDefinitions().first { it.definitionId.type == block.definitionId.type }
+        val blockDir = File(outputDirectory, "${block.definitionId.type}").apply { mkdirs() }
         //File(blockDir, "blockDefinition.json").writeText(cw.gsonReaderWriter.gson.toJson(meta))
         File(
             blockDir,
             "screenshotInfo.json"
-        ).writeText(SocketReaderWriter.SPACE_ENG_GSON.toJson(blockScreenshotInfoByType[block.blockType]))
+        ).writeText(SocketReaderWriter.SPACE_ENG_GSON.toJson(blockScreenshotInfoByType[block.definitionId.type]))
     }
+
+    @When("Character turns on jetpack.")
+    fun character_turns_on_jetpack() {
+        environment.character.turnOnJetpack()
+    }
+
+    @When("Character turns off jetpack.")
+    fun character_turns_off_jetpack() {
+        environment.character.turnOffJetpack()
+    }
+
+    @Then("Character uses.")
+    fun character_uses() {
+        environment.character.use()
+    }
+
+    @Then("Character waits {int} seconds.")
+    fun character_waits_seconds(seconds: Int) {
+        sleep(seconds * 1000L)
+    }
+
+
+    @When("Character moves up for {int} ticks.")
+    fun character_moves_up_for_ticks(ticks: Int) {
+        environment.character.moveAndRotate(Vec3F.UP, ticks = ticks)
+    }
+
+    @When("Character moves forward for {int} ticks.")
+    fun character_moves_forward_for_ticks(ticks: Int) {
+        environment.character.moveAndRotate(Vec3F.FORWARD, ticks = ticks)
+    }
+
+    @When("Character runs forward for {int} ticks.")
+    fun character_runs_forward_for_ticks(ticks: Int) {
+        environment.character.moveAndRotate(Vec3F.FORWARD.normalizeAsRun(), ticks = ticks)
+    }
+
+    @Then("Observed grid mass is {double}.")
+    fun observed_grid_mass_is(mass: Double) {
+        assertTrue(
+            environment.observer.observeBlocks().grids.any { it.mass == mass.toFloat() }
+        )
+    }
+
+    @When("Block type {string} has mass {double}.")
+    fun block_type_has_mass(type: String, mass: Double) {
+        val blockDefinition = environment.definitions.blockDefinitions().first {
+            it.definitionId.type == type
+        }
+        assertEquals(mass.toFloat(), blockDefinition.mass)
+    }
+
+    @When("Character crouches.")
+    fun character_crouches() {
+        environment.character.moveAndRotate(Vec3F.DOWN, ticks = 0)
+    }
+
+    @Then("Character is crouching.")
+    fun character_is_crouching() {
+        assertEquals(CharacterMovement.crouching, environment.observer.observe().movement.value.toInt())
+    }
+
 
 }

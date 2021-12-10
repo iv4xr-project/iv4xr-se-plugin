@@ -3,7 +3,7 @@ package spaceEngineers.model.extensions
 import spaceEngineers.model.*
 
 //also watch out for MyCubeDefinition.ModelOffset (not exposed in API) - 4 models have this value non-zero and it could be another obscure issue
-val Block.centerPosition: Vec3
+val Block.centerPosition: Vec3F
     get() = maxPosition / 2f + minPosition / 2f
 
 val Block.rotationMatrix: RotationMatrix
@@ -13,7 +13,7 @@ fun Block.mountPointToRealWorldPosition(
     mountPoint: MountPoint,
     blockDefinition: BlockDefinition,
     offset: Float = 0f
-): Vec3 {
+): Vec3F {
     val positionRelativeToBlockCenter = (mountPoint.start + mountPoint.end) * 0.5f * blockDefinition.cubeSize.value
     return pointFromCenter(
         blockDefinition,
@@ -21,7 +21,7 @@ fun Block.mountPointToRealWorldPosition(
     )
 }
 
-fun Block.pointFromCenter(blockDefinition: BlockDefinition, positionRelativeToBlockCenter: Vec3): Vec3 {
+fun Block.pointFromCenter(blockDefinition: BlockDefinition, positionRelativeToBlockCenter: Vec3F): Vec3F {
     val centerOfBlock = (blockDefinition.size * 0.5f * blockDefinition.cubeSize.value)
     val mountPointPositionWithinBlock = rotationMatrix * -(positionRelativeToBlockCenter - centerOfBlock)
     return (centerPosition - mountPointPositionWithinBlock)
@@ -29,12 +29,12 @@ fun Block.pointFromCenter(blockDefinition: BlockDefinition, positionRelativeToBl
 
 fun Block.orientationTowardsMountPoint(
     mountPoint: MountPoint,
-): Vec3 {
+): Vec3F {
     return (-rotationMatrix * (mountPoint.normal)).normalized()
 }
 
 fun Block.orientationUpTowardsMountPoint(
     mountPoint: MountPoint,
-): Vec3 {
+): Vec3F {
     return (-rotationMatrix * ((mountPoint.start - mountPoint.end))).normalized()
 }

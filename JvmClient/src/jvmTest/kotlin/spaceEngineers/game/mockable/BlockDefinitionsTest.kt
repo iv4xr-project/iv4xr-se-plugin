@@ -2,12 +2,13 @@ package spaceEngineers.game.mockable
 
 import spaceEngineers.model.BlockDefinition
 import spaceEngineers.model.CubeSize
-import spaceEngineers.model.Vec3
+import spaceEngineers.model.Vec3F
 import spaceEngineers.model.extensions.isSidePoint
 import testhelp.MockOrRealGameTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
+import kotlin.test.assertTrue
 
 fun BlockDefinition.isGoodForBig(): Boolean {
     return enabled && cubeSize == CubeSize.Large &&
@@ -21,9 +22,9 @@ fun Iterable<BlockDefinition>.filterForBig(): List<BlockDefinition> {
 val stringFilters = setOf("Symbol", "Neon", "Window")
 fun BlockDefinition.isGoodForScreenshots(): Boolean {
     return enabled && cubeSize == CubeSize.Large &&
-            size == Vec3.ONE &&
+            size == Vec3F.ONE &&
             buildProgressModels.isNotEmpty() &&
-            stringFilters.none { blockType.contains(it) }
+            stringFilters.none { definitionId.type.contains(it) }
 }
 
 fun Iterable<BlockDefinition>.filterForScreenshots(): List<BlockDefinition> {
@@ -39,7 +40,7 @@ class BlockDefinitionsTest : MockOrRealGameTest(inMockResourcesDirectory("BlockD
 
     @Test
     fun printDefinitionsForBdd() = testContext {
-        definitions.blockDefinitions().filterForScreenshots().map { it.blockType }.toSet().forEach {
+        definitions.blockDefinitions().filterForScreenshots().map { it.definitionId.type }.toSet().forEach {
             println("| $it |")
         }
     }
@@ -50,8 +51,18 @@ class BlockDefinitionsTest : MockOrRealGameTest(inMockResourcesDirectory("BlockD
     }
 
     @Test
+    fun eachBlockHasAtLeastOneComponent() = testContext {
+        definitions.blockDefinitions().let { blockDefinitions ->
+            blockDefinitions.forEach { blockDefinition ->
+                assertTrue(blockDefinition.components.isNotEmpty())
+                assertTrue(blockDefinition.components.all { component -> component.count > 0 })
+            }
+        }
+    }
+
+    @Test
     fun allByIdCount() = testContext {
-        assertEquals(626, definitions.blockDefinitions().map { "${it.id}${it.blockType}" }.distinct().size)
+        assertEquals(626, definitions.blockDefinitions().map { "${it.definitionId.id}${it.definitionId.type}" }.distinct().size)
     }
 
     @Test
@@ -59,10 +70,10 @@ class BlockDefinitionsTest : MockOrRealGameTest(inMockResourcesDirectory("BlockD
         definitions.blockDefinitions().let { blockDefinitions ->
             assertEquals(
                 13,
-                blockDefinitions.filter { it.blockType.isEmpty() }.map { "${it.id}${it.blockType}" }
+                blockDefinitions.filter { it.definitionId.type.isEmpty() }.map { "${it.definitionId.id}${it.definitionId.type}" }
                     .size
             )
-            blockDefinitions.filter { it.blockType.isEmpty() }.map { "${it.id}-${it.blockType}" }
+            blockDefinitions.filter { it.definitionId.type.isEmpty() }.map { "${it.definitionId.id}-${it.definitionId.type}" }
                 .forEach(::println)
         }
     }
@@ -86,7 +97,7 @@ class BlockDefinitionsTest : MockOrRealGameTest(inMockResourcesDirectory("BlockD
     fun notPublic() = testContext {
         definitions.blockDefinitions().let {
             blockDefinitions ->
-            blockDefinitions.filterNot { it.public }.map { it.blockType }.forEach(::println)
+            blockDefinitions.filterNot { it.public }.map { it.definitionId.type }.forEach(::println)
             assertEquals(37, blockDefinitions.count { !it.public })
 
         }
@@ -96,7 +107,7 @@ class BlockDefinitionsTest : MockOrRealGameTest(inMockResourcesDirectory("BlockD
     @Test
     fun duplicates() = testContext {
         assertEquals(
-            definitions.blockDefinitions().groupBy { it.blockType }.filter { it.value.size > 1 }.keys,
+            definitions.blockDefinitions().groupBy { it.definitionId.type }.filter { it.value.size > 1 }.keys,
             setOf("DebugSphereLarge", "", "LargePistonBase", "SmallPistonBase")
         )
     }
@@ -113,10 +124,10 @@ class BlockDefinitionsTest : MockOrRealGameTest(inMockResourcesDirectory("BlockD
             blockDefinitions
                 .filterForBig()
                 .filterSidePoints()
-                .filter { it.id == "MyObjectBuilder_CubeBlock" }
+                .filter { it.definitionId.id == "MyObjectBuilder_CubeBlock" }
                 //.filter { it.mountPoints.any { it.default } }
                 .forEach { blockDefinition ->
-                    println("${blockDefinition.id} ${blockDefinition.blockType}")
+                    println("${blockDefinition.definitionId.id} ${blockDefinition.definitionId.type}")
                     println(blockDefinition.mountPoints)
                 }
 
@@ -142,7 +153,7 @@ class BlockDefinitionsTest : MockOrRealGameTest(inMockResourcesDirectory("BlockD
     @Test
     fun blockTypesWithNoProgressModels() = testContext {
         assertEquals(
-            definitions.blockDefinitions().filter { it.buildProgressModels.isEmpty() }.map { it.blockType }.toSet(),
+            definitions.blockDefinitions().filter { it.buildProgressModels.isEmpty() }.map { it.definitionId.type }.toSet(),
             setOf("Monolith", "Stereolith", "DeadAstronaut", "LargeDeadAstronaut")
         )
     }
@@ -158,7 +169,7 @@ class BlockDefinitionsTest : MockOrRealGameTest(inMockResourcesDirectory("BlockD
     @Test
     fun allSmallBlocks() = testContext {
         assertEquals(
-            definitions.blockDefinitions().filter { it.cubeSize == CubeSize.Small }.map { it.blockType }.size,
+            definitions.blockDefinitions().filter { it.cubeSize == CubeSize.Small }.map { it.definitionId.type }.size,
             260
         )
     }
@@ -170,26 +181,26 @@ class BlockDefinitionsTest : MockOrRealGameTest(inMockResourcesDirectory("BlockD
             .map { it.value.first() to it.value.size }.toMap()
         assertEquals(
             sizeToCount, mapOf(
-                Vec3.ONE to 272,
-                Vec3(2, 1, 2) to 4,
-                Vec3(1, 6, 2) to 1,
-                Vec3(1, 2, 1) to 40,
-                Vec3(1, 3, 1) to 6,
-                Vec3(2, 2, 3) to 5,
-                Vec3(3, 3, 3) to 7,
-                Vec3(4, 2, 1) to 1,
-                Vec3(1, 4, 1) to 2,
-                Vec3(5, 3, 5) to 5,
-                Vec3(5, 2, 1) to 1,
-                Vec3(2, 4, 2) to 1,
-                Vec3(3, 2, 3) to 5,
-                Vec3(3, 1, 3) to 5,
-                Vec3(5, 2, 5) to 2,
-                Vec3(5, 5, 1) to 1,
-                Vec3(5, 3, 1) to 1,
-                Vec3(3, 2, 4) to 2,
-                Vec3(3, 3, 5) to 2,
-                Vec3(1, 2, 3) to 3
+                Vec3F.ONE to 272,
+                Vec3F(2, 1, 2) to 4,
+                Vec3F(1, 6, 2) to 1,
+                Vec3F(1, 2, 1) to 40,
+                Vec3F(1, 3, 1) to 6,
+                Vec3F(2, 2, 3) to 5,
+                Vec3F(3, 3, 3) to 7,
+                Vec3F(4, 2, 1) to 1,
+                Vec3F(1, 4, 1) to 2,
+                Vec3F(5, 3, 5) to 5,
+                Vec3F(5, 2, 1) to 1,
+                Vec3F(2, 4, 2) to 1,
+                Vec3F(3, 2, 3) to 5,
+                Vec3F(3, 1, 3) to 5,
+                Vec3F(5, 2, 5) to 2,
+                Vec3F(5, 5, 1) to 1,
+                Vec3F(5, 3, 1) to 1,
+                Vec3F(3, 2, 4) to 2,
+                Vec3F(3, 3, 5) to 2,
+                Vec3F(1, 2, 3) to 3
             )
         )
     }
@@ -198,28 +209,28 @@ class BlockDefinitionsTest : MockOrRealGameTest(inMockResourcesDirectory("BlockD
     fun sameIdForSmallLarge() = testContext {
         val blockDefinitions = definitions.blockDefinitions()
         assertEquals(
-            blockDefinitions.first { it.blockType == "LargeHeavyBlockArmorBlock" }.id,
-            blockDefinitions.first { it.blockType == "SmallHeavyBlockArmorBlock" }.id
+            blockDefinitions.first { it.definitionId.type == "LargeHeavyBlockArmorBlock" }.definitionId.id,
+            blockDefinitions.first { it.definitionId.type == "SmallHeavyBlockArmorBlock" }.definitionId.id
         )
 
     }
 
     @Test
     fun groupedById() = testContext {
-        definitions.blockDefinitions().filterForScreenshots().groupBy { it.id }
-            .map { it.key to it.value.map { it.blockType } }.forEach(::println)
+        definitions.blockDefinitions().filterForScreenshots().groupBy { it.definitionId.id }
+            .map { it.key to it.value.map { it.definitionId.type } }.forEach(::println)
     }
 
     @Test
     fun differentIdForDifferentBlocks() = testContext {
         val blockDefinitions = definitions.blockDefinitions()
         assertNotEquals(
-            blockDefinitions.first { it.blockType == "LargeHeavyBlockArmorBlock" }.id,
-            blockDefinitions.first { it.blockType == "LargeBlockCockpitSeat" }.id
+            blockDefinitions.first { it.definitionId.type == "LargeHeavyBlockArmorBlock" }.definitionId.id,
+            blockDefinitions.first { it.definitionId.type == "LargeBlockCockpitSeat" }.definitionId.id
         )
         assertEquals(
-            blockDefinitions.first { it.blockType == "LargeHeavyBlockArmorBlock" }.id,
-            blockDefinitions.first { it.blockType == "LargeBlockArmorBlock" }.id
+            blockDefinitions.first { it.definitionId.type == "LargeHeavyBlockArmorBlock" }.definitionId.id,
+            blockDefinitions.first { it.definitionId.type == "LargeBlockArmorBlock" }.definitionId.id
         )
     }
 

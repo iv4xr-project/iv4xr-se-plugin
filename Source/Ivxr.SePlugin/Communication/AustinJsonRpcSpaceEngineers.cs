@@ -1,11 +1,13 @@
 ﻿using System.Collections.Generic;
 using AustinHarris.JsonRpc;
 using Iv4xr.PluginLib.Control;
-using Iv4xr.PluginLib.WorldModel;
+using Iv4xr.SpaceEngineers;
+using Iv4xr.SpaceEngineers.Navigation;
+using Iv4xr.SpaceEngineers.WorldModel;
 
 namespace Iv4xr.SePlugin.Communication
 {
-    public class AustinJsonRpcSpaceEngineers : JsonRpcService
+    public class AustinJsonRpcSpaceEngineers
     {
         private ISpaceEngineers m_se;
 
@@ -14,10 +16,15 @@ namespace Iv4xr.SePlugin.Communication
             m_se = se;
         }
 
-        [JsonRpcMethod("Character.MoveAndRotate")]
-        CharacterObservation MoveAndRotate(PlainVec3D movement, PlainVec2F rotation3, float roll = 0)
+        public void Bind()
         {
-            return m_se.Character.MoveAndRotate(movement, rotation3, roll);
+            ServiceBinder.BindService(Handler.DefaultSessionId(), this);
+        }
+
+        [JsonRpcMethod("Character.MoveAndRotate")]
+        CharacterObservation MoveAndRotate(PlainVec3D movement, PlainVec2F rotation3, float roll = 0, int ticks = 1)
+        {
+            return m_se.Character.MoveAndRotate(movement, rotation3, roll, ticks);
         }
 
         [JsonRpcMethod("Admin.Character.Teleport")]
@@ -30,6 +37,18 @@ namespace Iv4xr.SePlugin.Communication
         void Use(string blockId, int functionIndex, int action)
         {
             m_se.Admin.Character.Use(blockId, functionIndex, action);
+        }
+        
+        [JsonRpcMethod("Admin.Character.Create")]
+        CharacterObservation Create(string id, PlainVec3D position, PlainVec3D orientationForward, PlainVec3D orientationUp)
+        {
+            return m_se.Admin.Character.Create(id, position, orientationForward, orientationUp);
+        }
+        
+        [JsonRpcMethod("Admin.Character.Switch")]
+        void Switch(string id)
+        {
+            m_se.Admin.Character.Switch(id);
         }
 
         [JsonRpcMethod("Character.TurnOnJetpack")]
@@ -79,6 +98,25 @@ namespace Iv4xr.SePlugin.Communication
         {
             return m_se.Observer.ObserveNewBlocks();
         }
+        
+        [JsonRpcMethod("Observer.ObserveCharacters")]
+        List<CharacterObservation> ObserveCharacters()
+        {
+            return m_se.Observer.ObserveCharacters();
+        }
+
+        
+        [JsonRpcMethod("Observer.SwitchCamera")]
+        void SwitchCamera()
+        {
+            m_se.Observer.SwitchCamera();
+        }
+
+        [JsonRpcMethod("Observer.NavigationGraph")]
+        NavGraph GetNavigationGraph()
+        {
+            return m_se.Observer.NavigationGraph();
+        }
 
         [JsonRpcMethod("Observer.TakeScreenshot")]
         void TakeScreenshot(string absolutePath)
@@ -97,6 +135,18 @@ namespace Iv4xr.SePlugin.Communication
         {
             return m_se.Definitions.AllDefinitions();
         }
+        
+        [JsonRpcMethod("Definitions.BlockHierarchy")]
+        Dictionary<string, string> BlockHierarchy()
+        {
+            return m_se.Definitions.BlockHierarchy();
+        }
+        
+        [JsonRpcMethod("Definitions.BlockDefinitionHierarchy")]
+        Dictionary<string, string> BlockDefinitionHierarchy()
+        {
+            return m_se.Definitions.BlockDefinitionHierarchy();
+        }
 
         [JsonRpcMethod("Blocks.Place")]
         void Place()
@@ -105,9 +155,9 @@ namespace Iv4xr.SePlugin.Communication
         }
 
         [JsonRpcMethod("Admin.Blocks.PlaceAt")]
-        void PlaceAt(string blockType, PlainVec3D position, PlainVec3D orientationForward, PlainVec3D orientationUp)
+        string PlaceAt(DefinitionId blockDefinitionId, PlainVec3D position, PlainVec3D orientationForward, PlainVec3D orientationUp)
         {
-            m_se.Admin.Blocks.PlaceAt(blockType, position, orientationForward, orientationUp);
+            return m_se.Admin.Blocks.PlaceAt(blockDefinitionId, position, orientationForward, orientationUp);
         }
         
         [JsonRpcMethod("Admin.Blocks.Remove")]
@@ -152,10 +202,10 @@ namespace Iv4xr.SePlugin.Communication
             m_se.Items.SetToolbarItem(name, toolbarLocation);
         }
 
-        [JsonRpcMethod("Items.GetToolbar")]
-        Toolbar GetToolbar()
+        [JsonRpcMethod("Items.Toolbar")]
+        Toolbar Toolbar()
         {
-            return m_se.Items.GetToolbar();
+            return m_se.Items.Toolbar();
         }
     }
 }

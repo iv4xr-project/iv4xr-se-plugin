@@ -1,7 +1,9 @@
 package spaceEngineers.controller
 
+import spaceEngineers.model.BlockId
 import spaceEngineers.model.CharacterObservation
-import spaceEngineers.model.Vec3
+import spaceEngineers.model.DefinitionId
+import spaceEngineers.model.Vec3F
 
 interface SpaceEngineersAdmin {
     val blocks: BlocksAdmin
@@ -10,9 +12,9 @@ interface SpaceEngineersAdmin {
 }
 
 interface BlocksAdmin {
-    fun placeAt(blockType: String, position: Vec3, orientationForward: Vec3, orientationUp: Vec3)
-    fun remove(blockId: String)
-    fun setIntegrity(blockId: String, integrity: Float)
+    fun placeAt(blockDefinitionId: DefinitionId, position: Vec3F, orientationForward: Vec3F, orientationUp: Vec3F): String
+    fun remove(blockId: BlockId)
+    fun setIntegrity(blockId: BlockId, integrity: Float)
 }
 
 interface CharacterAdmin {
@@ -23,6 +25,16 @@ interface CharacterAdmin {
      *      They should be normalised vectors and perpendicular.
      * @param orientationUp Complementary vector to the forward vector.
      */
-    fun teleport(position: Vec3, orientationForward: Vec3? = null, orientationUp: Vec3? = null): CharacterObservation
-    fun use(blockId: String, functionIndex: Int, action: Int)
+    fun teleport(position: Vec3F, orientationForward: Vec3F? = null, orientationUp: Vec3F? = null): CharacterObservation
+
+    /**
+     * @param blockId Id of the block.
+     * @param functionIndex Index of useObject. First one is 0 and so on.
+     * @param action Action flag, to get possible actions of the block, check [spaceEngineers.model.UseObject.primaryAction] and [spaceEngineers.model.UseObject.secondaryAction] values.
+     */
+    fun use(blockId: BlockId, functionIndex: Int, action: Int)
+
+    fun create(id: String, position: Vec3F, orientationForward: Vec3F, orientationUp: Vec3F): CharacterObservation
+
+    fun switch(id: String)
 }

@@ -1,9 +1,12 @@
-using System;
+using System.Collections.Generic;
 using System.IO;
 using Iv4xr.PluginLib;
-using Iv4xr.PluginLib.Control;
-using Iv4xr.PluginLib.WorldModel;
+using Iv4xr.SePlugin.Navigation;
+using Iv4xr.SpaceEngineers;
+using Iv4xr.SpaceEngineers.Navigation;
+using Iv4xr.SpaceEngineers.WorldModel;
 using Sandbox;
+using Sandbox.Game.Gui;
 using Sandbox.Game.Screens.Helpers;
 using Sandbox.Graphics.GUI;
 using VRage.FileSystem;
@@ -40,6 +43,23 @@ namespace Iv4xr.SePlugin.Control
         public Observation ObserveNewBlocks()
         {
             return m_lowLevelObserver.GetNewBlocks();
+        }
+
+        public List<CharacterObservation> ObserveCharacters()
+        {
+            return m_lowLevelObserver.ObserverCharacters();
+        }
+
+        public NavGraph NavigationGraph()
+        {
+            var navGraphEditor = new NavGraphEditor(m_lowLevelObserver);
+
+            return navGraphEditor.GetGraph().ToNavGraph();
+        }
+
+        public void SwitchCamera()
+        {
+            MyGuiScreenGamePlay.Static.SwitchCamera();
         }
 
         public void TakeScreenshot(string absolutePath)
