@@ -22,38 +22,37 @@ class BasicIv4xrTest {
     @Disabled("Disabled for building whole project, enable manually by uncommenting.")
     @Test
     fun placeGrindDownTorchUp() {
-        val agentId = DEFAULT_AGENT_ID
-        val blockType = "LargeHeavyBlockArmorBlock"
-        val context = SpaceEngineersTestContext()
-        val blockLocation = ToolbarLocation(1, 0)
-        val welder = "Welder2Item"
-        val welderLocation = ToolbarLocation(2, 0)
-        val grinder = "AngleGrinder2Item"
-        val grinderLocation = ToolbarLocation(3, 0)
+        // Setup constants to use later.
+        val agentId = DEFAULT_AGENT_ID //agent id
+        val blockType = "LargeHeavyBlockArmorBlock" // Block type that we will operate with (it's a cube block).
+        val context = SpaceEngineersTestContext() // This context saves recent information about operations (for example last built blocks and all the observations).
+        val blockLocation = ToolbarLocation(1, 0) // We will put block here in the toolbar.
+        val welder = "Welder2Item" // We will use this welder.
+        val welderLocation = ToolbarLocation(2, 0) // We will put welder here in the toolbar.
+        val grinder = "AngleGrinder2Item" // We will use this grinder.
+        val grinderLocation = ToolbarLocation(3, 0) // We will put grinder here in the toolbar.
+        // We map position of the block in the toolbar.
         context.blockTypeToToolbarLocation[blockType] = blockLocation
+        // We create instance of SpaceEngineers interface. ContextControllerWrapper is "smarter" implementation, that saves recent information into context created above.
+        // Otherwise, JsonRpcSpaceEngineersBuilder.localhost(agentId) can be used directly (also SpaceEngineers interface implementation).
         val controllerWrapper =
             ContextControllerWrapper(
                 spaceEngineers = JsonRpcSpaceEngineersBuilder.localhost(agentId),
                 context = context
             )
+        // We create iv4xr environment and pass ID of the world (scenario to load).
         val theEnv = SeEnvironment(
             controller = controllerWrapper,
             worldId = "simple-place-grind-torch-with-tools",
-            context = context
         )
-        theEnv.loadWorld()
-        controllerWrapper.items.setToolbarItem(blockType, blockLocation)
-        controllerWrapper.items.setToolbarItem(welder, welderLocation)
-        controllerWrapper.items.setToolbarItem(grinder, grinderLocation)
-        Thread.sleep(500)
 
-        theEnv.observeForNewBlocks()
 
+        // Creating IV4XR related classes.
         val dataCollector = TestDataCollector()
 
         val myAgentState = SeAgentState(agentId = agentId)
 
-
+        // Assemble agent.
         val testAgent = TestAgent(agentId, "some role name, else nothing")
             .attachState(myAgentState)
             .attachEnvironment(theEnv)
@@ -62,6 +61,7 @@ class BasicIv4xrTest {
 
         val goals = GoalBuilder()
         val tactics = TacticLib()
+        // Create goals and tactics.
         val testingTask: GoalStructure = SEQ(
             goals.agentAtPosition(Vec3(532.7066f, -45.193184f, -24.395466f), epsilon = 0.05f),
             goals.agentDistanceFromPosition(
@@ -105,6 +105,20 @@ class BasicIv4xrTest {
 
         testAgent.setGoal(testingTask)
 
+        // We load the scenario.
+        theEnv.loadWorld()
+        // Setup block in the toolbar.
+        controllerWrapper.items.setToolbarItem(blockType, blockLocation)
+        // Setup welder in the toolbar.
+        controllerWrapper.items.setToolbarItem(welder, welderLocation)
+        // Setup grinder in the toolbar.
+        controllerWrapper.items.setToolbarItem(grinder, grinderLocation)
+        Thread.sleep(500)
+
+        // We observe for new blocks once, so that current blocks are not going to be considered "new".
+        theEnv.observeForNewBlocks()
+
+        // Run the agent and update in the loop.
         var i = 0
         while (testingTask.status.inProgress() && i <= 1500) {
             testAgent.update()
@@ -112,6 +126,7 @@ class BasicIv4xrTest {
             i++
         }
 
+        // Print results.
         testingTask.printGoalStructureStatus()
         testingTask.subgoals.forEach { assertTrue(it.status.success()) }
     }
