@@ -111,5 +111,6 @@ class PlaceRemoveTest : MockOrRealGameTest() {
             // Non-functional block has 0 ownerId.
             assertEquals(block.ownerId, "0")
         }
+        assertEquals(block.builtBy, character.id)
     }
 }
