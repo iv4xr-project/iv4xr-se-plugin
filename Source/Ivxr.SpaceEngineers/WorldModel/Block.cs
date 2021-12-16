@@ -20,5 +20,6 @@ namespace Iv4xr.SpaceEngineers.WorldModel
 
         public PlainVec3I GridPosition;
         public string OwnerId;
+        public string BuiltBy;
     }
 }

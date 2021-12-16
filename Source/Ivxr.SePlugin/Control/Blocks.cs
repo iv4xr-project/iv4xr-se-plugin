@@ -42,7 +42,7 @@ namespace Iv4xr.SePlugin.Control
         public string PlaceAt(DefinitionId blockDefinitionId, PlainVec3D position, PlainVec3D orientationForward,
             PlainVec3D orientationUp)
         {
-            return m_blockPlacer.PlaceSingleBlock(blockDefinitionId, position.ToVector3(), orientationForward.ToVector3(),
+            return m_blockPlacer.PlaceSingleBlock(m_session.CurrentCharacterId, blockDefinitionId, position.ToVector3(), orientationForward.ToVector3(),
                 orientationUp.ToVector3()).BlockId().ToString();
         }
 

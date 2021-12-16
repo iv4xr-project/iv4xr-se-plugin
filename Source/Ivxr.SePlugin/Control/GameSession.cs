@@ -1,9 +1,6 @@
-﻿using Sandbox.Game.Entities.Character;
-using Sandbox.Game.Multiplayer;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using Sandbox.Game.Entities.Character;
 using Sandbox.Game.World;
 using VRageMath;
 
@@ -12,21 +9,22 @@ namespace Iv4xr.SePlugin.Control
     public interface IGameSession
     {
         MyCharacter Character { get; }
-        void SetCharacter(string characterId);
+        void SetCharacter(long characterId);
 
         MyCharacter CreateCharacter(string name, Vector3D position, Vector3D orientationForward,
             Vector3D orientationUp);
 
-        string CurrentCharacterId { get; }
+        long CurrentCharacterId { get; }
     }
 
     public class GameSession : IGameSession
     {
-        private readonly Dictionary<string, MyCharacter> m_characters = new Dictionary<string, MyCharacter>();
+        private const long NoCharacter = -1;
+        private readonly Dictionary<long, MyCharacter> m_characters = new Dictionary<long, MyCharacter>();
 
-        public string CurrentCharacterId { get; private set; } = null;
+        public long CurrentCharacterId { get; private set; } = NoCharacter;
 
-        public void SetCharacter(string characterId)
+        public void SetCharacter(long characterId)
         {
             if (!m_characters.ContainsKey(characterId))
             {
@@ -43,13 +41,13 @@ namespace Iv4xr.SePlugin.Control
             //TODO: steamId, color
             var character = AgentSpawner.SpawnAgent(
                 12345, name: name, color: Color.White, startPosition: matrix);
-            var characterId = character.EntityId.ToString();
+            var characterId = character.CharacterId();
             m_characters[characterId] = character;
             CurrentCharacterId = characterId;
             return character;
         }
 
-        public void RemoveCharacter(string characterId)
+        public void RemoveCharacter(long characterId)
         {
             if (!m_characters.ContainsKey(characterId))
             {
@@ -76,14 +74,14 @@ namespace Iv4xr.SePlugin.Control
         public void InitSession()
         {
             var character = MySession.Static.LocalCharacter;
-            var characterId = character.EntityId.ToString();
+            var characterId = character.CharacterId();
             CurrentCharacterId = characterId;
             m_characters[characterId] = character;
         }
 
         public void EndSession()
         {
-            CurrentCharacterId = null;
+            CurrentCharacterId = NoCharacter;
             m_characters.Clear();
         }
     }

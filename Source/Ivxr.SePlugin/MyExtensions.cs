@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using Iv4xr.SpaceEngineers.WorldModel;
 using Sandbox.Definitions;
+using Sandbox.Game.Entities.Character;
 using Sandbox.Game.Entities.Cube;
 using Sandbox.Game.Multiplayer;
 using Sandbox.Game.Screens.Helpers;
@@ -118,6 +119,11 @@ namespace Iv4xr.SePlugin
         public static long BlockId(this MySlimBlock block)
         {
             return block.UniqueId;
+        } 
+        
+        public static long CharacterId(this MyCharacter character)
+        {
+            return character.GetIdentity().IdentityId;
         } 
     }
 }

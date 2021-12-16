@@ -83,7 +83,7 @@ namespace Iv4xr.SePlugin.Control
 
         public void Switch(string id)
         {
-            m_session.SetCharacter(id);
+            m_session.SetCharacter(long.Parse(id));
         }
 
         public CharacterObservation Teleport(PlainVec3D position, PlainVec3D? orientationForward,
