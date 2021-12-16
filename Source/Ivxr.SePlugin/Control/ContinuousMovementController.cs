@@ -10,8 +10,8 @@ namespace Iv4xr.SePlugin.Control
     {
         private readonly ILog m_log;
 
-        private readonly Dictionary<string, ContinuousMovementContext> m_continuousMovementContextDictionary =
-                new Dictionary<string, ContinuousMovementContext>();
+        private readonly Dictionary<long, ContinuousMovementContext> m_continuousMovementContextDictionary =
+                new Dictionary<long, ContinuousMovementContext>();
 
         private readonly GameSession m_session;
 

@@ -26,7 +26,7 @@ namespace Iv4xr.SePlugin.Control
             var orientation = character.PositionComp.GetOrientation();
             return new CharacterObservation
             { 
-                Id = character.EntityId.ToString(),
+                Id = character.CharacterId().ToString(),
                 DisplayName = character.DisplayName,
                 Position = character.PositionComp.GetPosition().ToPlain(), // Consider reducing allocations.
                 OrientationForward = orientation.Forward.ToPlain(),

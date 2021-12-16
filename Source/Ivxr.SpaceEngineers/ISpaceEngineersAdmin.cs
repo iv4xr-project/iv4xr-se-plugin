@@ -17,6 +17,9 @@ namespace Iv4xr.SpaceEngineers
 
         string PlaceAt(DefinitionId blockDefinitionId, PlainVec3D position, PlainVec3D orientationForward,
             PlainVec3D orientationUp);
+
+        string PlaceInGrid(DefinitionId blockDefinitionId, string gridId, PlainVec3I minPosition, PlainVec3I orientationForward,
+            PlainVec3I orientationUp);
     }
 
     public interface ICharacterAdmin

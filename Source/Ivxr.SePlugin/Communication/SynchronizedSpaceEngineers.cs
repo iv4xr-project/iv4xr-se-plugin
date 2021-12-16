@@ -156,6 +156,12 @@ namespace Iv4xr.SePlugin.Communication
         {
             return Enqueue(() => m_blocks.PlaceAt(blockDefinitionId, position, orientationForward, orientationUp));
         }
+
+        public string PlaceInGrid(DefinitionId blockDefinitionId, string gridId, PlainVec3I minPosition, PlainVec3I orientationForward,
+            PlainVec3I orientationUp)
+        {
+            return Enqueue(() => m_blocks.PlaceInGrid(blockDefinitionId, gridId, minPosition, orientationForward, orientationUp));
+        }
     }
 
     public class ItemsOnGameLoop : AbstractServiceOnGameLoop, IItems

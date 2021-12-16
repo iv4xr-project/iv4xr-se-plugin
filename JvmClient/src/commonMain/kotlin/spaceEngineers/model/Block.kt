@@ -14,4 +14,5 @@ interface Block : Entity {
     val working: Boolean
     val definitionId: DefinitionId
     val ownerId: CharacterId
+    val builtBy: CharacterId
 }

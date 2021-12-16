@@ -159,6 +159,13 @@ namespace Iv4xr.SePlugin.Communication
         {
             return m_se.Admin.Blocks.PlaceAt(blockDefinitionId, position, orientationForward, orientationUp);
         }
+
+        [JsonRpcMethod("Admin.Blocks.PlaceInGrid")]
+        string PlaceInGrid(DefinitionId blockDefinitionId, string gridId, PlainVec3I minPosition, PlainVec3I orientationForward,
+            PlainVec3I orientationUp)
+        {
+            return m_se.Admin.Blocks.PlaceInGrid(blockDefinitionId, gridId, minPosition, orientationForward, orientationUp);
+        }
         
         [JsonRpcMethod("Admin.Blocks.Remove")]
         void Remove(string blockId)
