@@ -24,7 +24,7 @@ $dokka.location:environments/SeAgentState/seEnv/#/PointingToDeclaration/space-e
 $dokka.location:environments/SeAgentState/updateState/#/PointingToDeclaration/space-engineers-api/environments/-se-agent-state/update-state.html
 $dokka.location:environments/SeEnvironment///PointingToDeclaration/space-engineers-api/environments/-se-environment/index.html
 $dokka.location:environments/SeEnvironment/SCENARIO_DIR/#/PointingToDeclaration/space-engineers-api/environments/-se-environment/-s-c-e-n-a-r-i-o_-d-i-r.html
-$dokka.location:environments/SeEnvironment/SeEnvironment/#kotlin.String#spaceEngineers.controller.ContextControllerWrapper#spaceEngineers.controller.SpaceEngineersTestContext/PointingToDeclaration/space-engineers-api/environments/-se-environment/-se-environment.html
+$dokka.location:environments/SeEnvironment/SeEnvironment/#kotlin.String#spaceEngineers.controller.ContextControllerWrapper/PointingToDeclaration/space-engineers-api/environments/-se-environment/-se-environment.html
 $dokka.location:environments/SeEnvironment/beginUsingTool/#/PointingToDeclaration/space-engineers-api/environments/-se-environment/begin-using-tool.html
 $dokka.location:environments/SeEnvironment/close/#/PointingToDeclaration/space-engineers-api/environments/-se-environment/close.html
 $dokka.location:environments/SeEnvironment/context/#/PointingToDeclaration/space-engineers-api/environments/-se-environment/context.html
