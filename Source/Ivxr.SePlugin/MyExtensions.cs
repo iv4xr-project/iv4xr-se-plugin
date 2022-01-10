@@ -113,6 +113,24 @@ namespace Iv4xr.SePlugin
             return field.GetValue(instance);
         }
         
+        public static void SetInstanceField(this object instance, string fieldName, object value)
+        {
+            BindingFlags bindFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic
+                                     | BindingFlags.Static;
+            var t = instance.GetType();
+            FieldInfo field = t.GetField(fieldName, bindFlags);
+            field.SetValue(instance, value);
+        }
+        
+        public static void SetInstanceProperty(this object instance, string fieldName, object value)
+        {
+            BindingFlags bindFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic
+                                     | BindingFlags.Static;
+            var t = instance.GetType();
+            PropertyInfo field = t.GetProperty(fieldName, bindFlags);
+            field.SetValue(instance, value);
+        }
+        
         /// <summary>
         /// Get field used to identify block (ideal would be FatBlock.EntityId, but FatBlock is sometimes null.
         /// </summary>
@@ -123,6 +141,15 @@ namespace Iv4xr.SePlugin
         
         public static long CharacterId(this MyCharacter character)
         {
+            if (character == null)
+            {
+                throw new NullReferenceException("character");
+            }
+            if (character.GetIdentity() == null)
+            {
+                throw new NullReferenceException("character.identity");
+            }
+
             return character.GetIdentity().IdentityId;
         } 
     }

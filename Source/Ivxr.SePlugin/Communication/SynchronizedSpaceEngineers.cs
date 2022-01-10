@@ -226,6 +226,11 @@ namespace Iv4xr.SePlugin.Communication
         {
             Enqueue(() => m_character.Switch(id));
         }
+
+        public void Remove(string id)
+        {
+            Enqueue(() => m_character.Remove(id));
+        }
     }
 
     public class CharacterOnGameLoop : AbstractServiceOnGameLoop, ICharacterController

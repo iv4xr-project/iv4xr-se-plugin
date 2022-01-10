@@ -29,5 +29,6 @@ namespace Iv4xr.SpaceEngineers
 
         CharacterObservation Create(string name, PlainVec3D position, PlainVec3D orientationForward, PlainVec3D orientationUp);
         void Switch(string id);
+        void Remove(string id);
     }
 }

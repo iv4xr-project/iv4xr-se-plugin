@@ -40,9 +40,9 @@ namespace Iv4xr.SePlugin.Communication
         }
         
         [JsonRpcMethod("Admin.Character.Create")]
-        CharacterObservation Create(string id, PlainVec3D position, PlainVec3D orientationForward, PlainVec3D orientationUp)
+        CharacterObservation Create(string name, PlainVec3D position, PlainVec3D orientationForward, PlainVec3D orientationUp)
         {
-            return m_se.Admin.Character.Create(id, position, orientationForward, orientationUp);
+            return m_se.Admin.Character.Create(name, position, orientationForward, orientationUp);
         }
         
         [JsonRpcMethod("Admin.Character.Switch")]
@@ -50,6 +50,13 @@ namespace Iv4xr.SePlugin.Communication
         {
             m_se.Admin.Character.Switch(id);
         }
+        
+        [JsonRpcMethod("Admin.Character.Remove")]
+        void RemoveCharacter(string id)
+        {
+            m_se.Admin.Character.Remove(id);
+        }
+
 
         [JsonRpcMethod("Character.TurnOnJetpack")]
         CharacterObservation TurnOnJetpack()

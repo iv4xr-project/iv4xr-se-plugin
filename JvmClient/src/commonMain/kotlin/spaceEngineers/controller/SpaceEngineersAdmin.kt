@@ -45,7 +45,9 @@ interface CharacterAdmin {
      */
     fun use(blockId: BlockId, functionIndex: Int, action: Int)
 
-    fun create(id: String, position: Vec3F, orientationForward: Vec3F, orientationUp: Vec3F): CharacterObservation
+    fun create(name: String, position: Vec3F, orientationForward: Vec3F, orientationUp: Vec3F): CharacterObservation
 
     fun switch(id: String)
+
+    fun remove(id: String)
 }

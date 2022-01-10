@@ -208,14 +208,14 @@ open class JsonRpcSpaceEngineers(
             }
 
             override fun create(
-                id: String,
+                name: String,
                 position: Vec3F,
                 orientationForward: Vec3F,
                 orientationUp: Vec3F
             ): CharacterObservation {
                 return processParameters<CharacterObservation>(
                     parameters = listOf(
-                        TypedParameter("id", id, String::class),
+                        TypedParameter("name", name, String::class),
                         TypedParameter("position", position, Vec3F::class),
                         TypedParameter("orientationForward", orientationForward, Vec3F::class),
                         TypedParameter("orientationUp", orientationUp, Vec3F::class),
@@ -229,6 +229,16 @@ open class JsonRpcSpaceEngineers(
                 return processSingleParameterMethod<String, Unit>(
                     method = ::switch,
                     methodName = "${adminPrefix}${characterPrefix}Switch",
+                    parameter = id,
+                    parameterName = "id",
+                    parameterType = String::class,
+                )
+            }
+
+            override fun remove(id: String) {
+                return processSingleParameterMethod<String, Unit>(
+                    method = ::remove,
+                    methodName = "${adminPrefix}${characterPrefix}Remove",
                     parameter = id,
                     parameterName = "id",
                     parameterType = String::class,

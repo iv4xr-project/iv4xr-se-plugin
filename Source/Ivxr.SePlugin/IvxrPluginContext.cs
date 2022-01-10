@@ -54,7 +54,15 @@ namespace Iv4xr.SePlugin
 
         public void InitSession()
         {
-            m_gameSession.InitSession();
+        }
+
+        public void Tick()
+        {
+            FuncActionDispatcher.CallEverything();
+            if (m_gameSession.Initialized())
+            {
+                ContinuousMovementController.Tick();
+            }
         }
 
         public void EndSession()
