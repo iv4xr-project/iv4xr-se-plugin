@@ -86,6 +86,11 @@ namespace Iv4xr.SePlugin.Control
             m_session.SetCharacter(long.Parse(id));
         }
 
+        public void Remove(string id)
+        {
+            m_session.RemoveCharacter(long.Parse(id));
+        }
+
         public CharacterObservation Teleport(PlainVec3D position, PlainVec3D? orientationForward,
             PlainVec3D? orientationUp)
         {

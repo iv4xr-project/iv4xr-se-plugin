@@ -17,8 +17,7 @@ namespace Iv4xr.SePlugin
         public override void UpdateBeforeSimulation()
         {
             base.UpdateBeforeSimulation();
-            Context.FuncActionDispatcher.CallEverything();
-            Context.ContinuousMovementController.Tick();
+            Context.Tick();
         }
 
         protected override void UnloadData()
