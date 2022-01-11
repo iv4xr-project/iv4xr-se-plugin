@@ -17,6 +17,7 @@ abstract class MockOrRealGameTest(
     private val forceWrite: Boolean = false,
     private val scenarioId: String = SIMPLE_PLACE_GRIND_TORCH,
     private val loadScenario: Boolean = true,
+    private val port: Int = 3333,
 ) {
 
     var useRealGame: Boolean = forceRealGame
@@ -74,7 +75,7 @@ abstract class MockOrRealGameTest(
 
     private fun readerWriter(
         file: File, rw: SocketReaderWriter = SocketReaderWriter(
-            port = 3333
+            port = port
         )
     ): StringLineReaderWriter {
         if (!file.exists() || forceWrite) {
