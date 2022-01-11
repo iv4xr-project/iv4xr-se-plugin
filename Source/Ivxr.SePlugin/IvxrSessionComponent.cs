@@ -11,20 +11,25 @@ namespace Iv4xr.SePlugin
         {
             base.BeforeStart();
 
-            Context.InitSession();
+            //Context.InitSession();
         }
 
         public override void UpdateBeforeSimulation()
         {
             base.UpdateBeforeSimulation();
-            Context.Tick();
+            if (Context != null)
+            {
+                Context.Tick();
+            }
         }
 
         protected override void UnloadData()
         {
             base.UnloadData();
-
-            Context.EndSession();
+            if (Context != null)
+            {
+                Context.EndSession();
+            }
         }
     }
 }
