@@ -43,7 +43,7 @@ namespace Iv4xr.SePlugin.Communication
 
     internal class FuncToRunOnGameLoop
     {
-        private readonly Func<dynamic> m_function;
+        private readonly Func<object> m_function;
         private readonly BlockingCollection<CallResult> m_result;
         private readonly ILog m_log;
 
@@ -98,7 +98,7 @@ namespace Iv4xr.SePlugin.Communication
             return await EnqueueAsync(ActionToNullReturningFunc(func));
         }
 
-        public dynamic Enqueue(Func<dynamic> func)
+        public dynamic Enqueue(Func<object> func)
         {
             var taskToRun = new FuncToRunOnGameLoop(func, m_log);
             m_functions.Enqueue(taskToRun);
@@ -106,9 +106,9 @@ namespace Iv4xr.SePlugin.Communication
             return taskToRun.Take().ReturnOrThrow();
         }
 
-        public object Enqueue(Action func)
+        public void Enqueue(Action func)
         {
-            return Enqueue(ActionToNullReturningFunc(func));
+            Enqueue(ActionToNullReturningFunc(func));
         }
 
         public void CallEverything()
