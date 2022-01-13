@@ -28,14 +28,14 @@ namespace Iv4xr.SePlugin.Communication
             return await m_funcActionDispatcher.EnqueueAsync(func);
         }
 
-        protected dynamic Enqueue(Func<dynamic> func)
+        protected T Enqueue<T>(Func<T> func) where T: class 
         {
             return m_funcActionDispatcher.Enqueue(func);
         }
 
-        protected object Enqueue(Action func)
+        protected void Enqueue(Action func)
         {
-            return m_funcActionDispatcher.Enqueue(func);
+            m_funcActionDispatcher.Enqueue(func);
         }
     }
 
