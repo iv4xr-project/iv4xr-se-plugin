@@ -15,6 +15,7 @@ open class JsonRpcSpaceEngineers(
     val definitionsPrefix: String = "Definitions.",
     val blocksPrefix: String = "Blocks.",
     val adminPrefix: String = "Admin.",
+    val screensPrefix: String = "Screens.",
 ) :
     SpaceEngineers, RpcSerializer(stringLineReaderWriter) {
 
@@ -272,7 +273,6 @@ open class JsonRpcSpaceEngineers(
 
         }
 
-
         override fun setFrameLimitEnabled(enabled: Boolean) {
             return processSingleParameterMethod(
                 method = ::setFrameLimitEnabled,
@@ -282,6 +282,49 @@ open class JsonRpcSpaceEngineers(
                 parameterType = Boolean::class,
             )
         }
+    }
+
+    override val screens: Screens = object: Screens {
+        override fun focusedScreen(): String {
+            return processNoParameterMethod(::focusedScreen, "${screensPrefix}FocusedScreen")
+        }
+
+        override fun waitUntilTheGameLoaded() {
+            return processNoParameterMethod(::waitUntilTheGameLoaded, "${screensPrefix}WaitUntilTheGameLoaded")
+        }
+
+        val medicalScreenPrefix = "${screensPrefix}Medicals."
+
+        override val medicals: Medicals = object: Medicals {
+            override fun medicalRooms(): List<MedicalRoom> {
+                return processNoParameterMethod<List<MedicalRoom>>(::medicalRooms, "${medicalScreenPrefix}MedicalRooms")
+            }
+
+            override fun respawn(roomIndex: Int) {
+                processSingleParameterMethod<Int, Unit>(
+                    method = ::respawn,
+                    parameter = roomIndex,
+                    parameterName = "roomIndex",
+                    parameterType = Int::class,
+                    methodName = "${medicalScreenPrefix}Respawn"
+                )
+            }
+
+            override fun factions(): List<Faction> {
+                return processNoParameterMethod<List<Faction>>(::factions, "${medicalScreenPrefix}Factions")
+            }
+
+            override fun chooseFaction(factionIndex: Int) {
+                processSingleParameterMethod<Int, Unit>(
+                    method = ::chooseFaction,
+                    parameter = factionIndex,
+                    parameterName = "factionIndex",
+                    parameterType = Int::class,
+                    methodName = "${medicalScreenPrefix}ChooseFaction"
+                )
+            }
+        }
+
     }
 
     override val observer: Observer = object : Observer {
@@ -355,7 +398,6 @@ open class JsonRpcSpaceEngineers(
                 method = ::blockDefinitionHierarchy,
                 methodName = "${definitionsPrefix}BlockDefinitionHierarchy",
             )
-
         }
     }
 }

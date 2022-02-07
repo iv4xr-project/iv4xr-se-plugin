@@ -131,6 +131,50 @@ namespace Iv4xr.SePlugin.Communication
         }
     }
 
+    public class ScreensOnGameLoop : AbstractServiceOnGameLoop, IScreens, IMedicals
+    {
+        private readonly IScreens m_screens;
+
+        public ScreensOnGameLoop(IScreens screens, FuncActionDispatcher funcActionDispatcher) : base(
+            funcActionDispatcher)
+        {
+            m_screens = screens;
+        }
+
+
+        public string FocusedScreen()
+        {
+            return m_screens.FocusedScreen();
+        }
+
+        public void WaitUntilTheGameLoaded()
+        {
+            m_screens.WaitUntilTheGameLoaded();
+        }
+
+        public IMedicals Medicals => this;
+
+        public List<MedicalRoom> MedicalRooms()
+        {
+            return Enqueue(() => m_screens.Medicals.MedicalRooms());
+        }
+
+        public void Respawn(int roomIndex)
+        {
+            Enqueue(() => m_screens.Medicals.Respawn(roomIndex));
+        }
+
+        public List<Faction> Factions()
+        {
+            return Enqueue(() => m_screens.Medicals.Factions());
+        }
+
+        public void ChooseFaction(int factionIndex)
+        {
+            Enqueue(() => m_screens.Medicals.ChooseFaction(factionIndex));
+        }
+    }
+
     public class BlocksAdminOnGameLoop : AbstractServiceOnGameLoop, IBlocksAdmin
     {
         private readonly IBlocksAdmin m_blocks;
@@ -157,13 +201,15 @@ namespace Iv4xr.SePlugin.Communication
             return Enqueue(() => m_blocks.PlaceAt(blockDefinitionId, position, orientationForward, orientationUp));
         }
 
-        public string PlaceInGrid(DefinitionId blockDefinitionId, string gridId, PlainVec3I minPosition, PlainVec3I orientationForward,
+        public string PlaceInGrid(DefinitionId blockDefinitionId, string gridId, PlainVec3I minPosition,
+            PlainVec3I orientationForward,
             PlainVec3I orientationUp)
         {
-            return Enqueue(() => m_blocks.PlaceInGrid(blockDefinitionId, gridId, minPosition, orientationForward, orientationUp));
+            return Enqueue(() =>
+                    m_blocks.PlaceInGrid(blockDefinitionId, gridId, minPosition, orientationForward, orientationUp));
         }
     }
-    
+
     public class ObserverAdminOnGameLoop : AbstractServiceOnGameLoop, IObserverAdmin
     {
         private readonly IObserverAdmin m_observer;
@@ -233,7 +279,8 @@ namespace Iv4xr.SePlugin.Communication
             Enqueue(() => m_character.Use(blockId, functionIndex, action));
         }
 
-        public CharacterObservation Create(string id, PlainVec3D position, PlainVec3D orientationForward, PlainVec3D orientationUp)
+        public CharacterObservation Create(string id, PlainVec3D position, PlainVec3D orientationForward,
+            PlainVec3D orientationUp)
         {
             return Enqueue(() => m_character.Create(id, position, orientationForward, orientationUp));
         }
@@ -262,7 +309,8 @@ namespace Iv4xr.SePlugin.Communication
             m_observer = observer;
         }
 
-        public CharacterObservation MoveAndRotate(PlainVec3D movement, PlainVec2F rotation3, float roll = 0, int ticks = 1)
+        public CharacterObservation MoveAndRotate(PlainVec3D movement, PlainVec2F rotation3, float roll = 0,
+            int ticks = 1)
         {
             return Enqueue(() =>
             {
@@ -306,17 +354,14 @@ namespace Iv4xr.SePlugin.Communication
 
         public void Use()
         {
-            Enqueue(() =>
-            {
-                m_character.Use();
-            });
+            Enqueue(() => { m_character.Use(); });
         }
     }
 
     public class SynchronizedSpaceEngineersAdmin : AbstractServiceOnGameLoop, ISpaceEngineersAdmin
     {
         public ISpaceEngineersAdmin Admin { get; }
-        
+
         public void SetFrameLimitEnabled(bool enabled)
         {
             Enqueue(() => { Admin.SetFrameLimitEnabled(enabled); });
@@ -353,6 +398,7 @@ namespace Iv4xr.SePlugin.Communication
         public IDefinitions Definitions { get; }
         public IBlocks Blocks { get; }
         public ISpaceEngineersAdmin Admin { get; }
+        public IScreens Screens { get; }
 
 
         public SynchronizedSpaceEngineers(ISpaceEngineers se, FuncActionDispatcher funcActionDispatcher)
@@ -368,6 +414,7 @@ namespace Iv4xr.SePlugin.Communication
                 new BlocksAdminOnGameLoop(se.Admin.Blocks, funcActionDispatcher),
                 new ObserverAdminOnGameLoop(se.Admin.Observer, funcActionDispatcher)
             ), funcActionDispatcher);
+            Screens = new ScreensOnGameLoop(se.Screens, funcActionDispatcher);
         }
     }
 }

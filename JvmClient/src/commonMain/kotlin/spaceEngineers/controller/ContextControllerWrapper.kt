@@ -61,5 +61,6 @@ class ContextControllerWrapper(
     override val definitions: Definitions = spaceEngineers.definitions
     override val blocks: Blocks = spaceEngineers.blocks
     override val admin: SpaceEngineersAdmin = spaceEngineers.admin
+    override val screens: Screens = spaceEngineers.screens
 
 }

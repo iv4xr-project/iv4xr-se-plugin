@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\se\Sources\Sandbox.Game\Sandbox.Game.csproj" />
+    <ProjectReference Include="..\..\..\se\Sources\SpaceEngineers.Game\SpaceEngineers.Game.csproj" />
     <ProjectReference Include="..\..\..\se\Sources\VRage.Game\VRage.Game.csproj" />
     <ProjectReference Include="..\..\..\se\Sources\VRage\VRage.csproj" />
     <ProjectReference Include="..\Ivxr.SpaceEngineers\Ivxr.SpaceEngineers.csproj" />

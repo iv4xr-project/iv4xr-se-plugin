@@ -11,6 +11,7 @@ interface SpaceEngineers {
     val definitions: Definitions
     val blocks: Blocks
     val admin: SpaceEngineersAdmin
+    val screens: Screens
 
     companion object {
         const val DEFAULT_AGENT_ID = "se0"
