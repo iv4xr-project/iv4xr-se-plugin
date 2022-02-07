@@ -14,6 +14,7 @@ namespace Iv4xr.SePlugin.Control
         public IObserver Observer { get; }
         public IDefinitions Definitions { get; }
         public ISpaceEngineersAdmin Admin { get; }
+        public IScreens Screens { get; }
 
         public IBlocks Blocks { get; }
 
@@ -33,6 +34,7 @@ namespace Iv4xr.SePlugin.Control
             var blocks = new Blocks(gameSession, lowLevelObserver);
             Blocks = blocks;
             Admin = new SpaceEngineersAdmin(characterController, blocks, new ObserverAdmin(lowLevelObserver));
+            Screens = new Screens();
         }
 
         public RealSpaceEngineers(

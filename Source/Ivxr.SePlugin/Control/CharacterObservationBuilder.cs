@@ -58,8 +58,8 @@ namespace Iv4xr.SePlugin.Control
         private static BootsState GetBootState(MyCharacter character)
         {
             return character
-                    .GetInstanceField<object>("m_bootsState")
-                    .GetInstanceField<BootsState>("m_value");
+                    .GetInstanceFieldOrThrow<object>("m_bootsState")
+                    .GetInstanceFieldOrThrow<BootsState>("m_value");
         }
         
         private Block TargetBlock(MyCharacter character)

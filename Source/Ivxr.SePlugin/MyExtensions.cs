@@ -114,6 +114,27 @@ namespace Iv4xr.SePlugin
             return (T)field.GetValue(instance);
         }
 
+        public static T GetInstanceFieldOrThrow<T>(this object instance, string fieldName)
+        {
+            instance.ThrowNREIfNull($"Instance of type {instance.GetType()} to get the field from is null.");
+            var field = instance.GetInstanceField<T>(fieldName);
+            field.ThrowNREIfNull($"Field {fieldName} of type {typeof(T)} is null!");
+            if (field == null)
+            {
+                throw new NullReferenceException($"Field {fieldName} of type {typeof(T)} is null!");
+            }
+            return field;
+
+        }
+
+        public static void ThrowNREIfNull(this object instance, string message)
+        {
+            if (instance == null)
+            {
+                throw new NullReferenceException(message);
+            }
+        }
+
         public static void SetInstanceField(this object instance, string fieldName, object value)
         {
             BindingFlags bindFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic

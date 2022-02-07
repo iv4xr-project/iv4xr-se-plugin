@@ -86,6 +86,30 @@ namespace Iv4xr.SePlugin.Communication
         {
             m_se.Character.Use();
         }
+        
+        [JsonRpcMethod("Screens.Medicals.MedicalRooms")]
+        List<MedicalRoom> MedicalRooms()
+        {
+            return m_se.Screens.Medicals.MedicalRooms();
+        }
+        
+        [JsonRpcMethod("Screens.Medicals.Respawn")]
+        void Respawn(int roomIndex)
+        {
+            m_se.Screens.Medicals.Respawn(roomIndex);
+        }
+        
+        [JsonRpcMethod("Screens.Medicals.Factions")]
+        List<Faction> Factions()
+        {
+            return m_se.Screens.Medicals.Factions();
+        }
+        
+        [JsonRpcMethod("Screens.Medicals.ChooseFaction")]
+        void ChooseFaction(int factionIndex)
+        {
+            m_se.Screens.Medicals.ChooseFaction(factionIndex);
+        }
 
         [JsonRpcMethod("Session.LoadScenario")]
         void LoadScenario(string scenarioPath)
@@ -103,6 +127,18 @@ namespace Iv4xr.SePlugin.Communication
         void Disconnect()
         {
             m_se.Session.Disconnect();
+        }
+        
+        [JsonRpcMethod("Screens.FocusedScreen")]
+        string FocusedScreen()
+        {
+            return m_se.Screens.FocusedScreen();
+        }
+        
+        [JsonRpcMethod("Screens.WaitUntilTheGameLoaded")]
+        void WaitUntilTheGameLoaded()
+        {
+            m_se.Screens.WaitUntilTheGameLoaded();
         }
 
         [JsonRpcMethod("Observer.Observe")]

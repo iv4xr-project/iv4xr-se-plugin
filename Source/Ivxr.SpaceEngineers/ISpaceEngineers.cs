@@ -14,6 +14,7 @@ namespace Iv4xr.SpaceEngineers
         IDefinitions Definitions { get; }
         IBlocks Blocks { get; }
         ISpaceEngineersAdmin Admin { get; }
+        IScreens Screens { get; }
     }
 
     public interface ISessionController
