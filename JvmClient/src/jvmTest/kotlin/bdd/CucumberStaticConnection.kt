@@ -3,19 +3,16 @@ package bdd
 import spaceEngineers.controller.ContextControllerWrapper
 import spaceEngineers.controller.JsonRpcSpaceEngineersBuilder
 import spaceEngineers.transport.AlwaysReturnSameLineReaderWriter
-import spaceEngineers.transport.SocketReaderWriter
-import spaceEngineers.transport.StringLineReaderWriter
 import spaceEngineers.transport.closeIfCloseable
 import testhelp.TEST_AGENT
-import java.net.Socket
 
-object CucumberStaticConnection {
+object CucumberStaticConnection: AutoCloseable {
     private const val LOCK = "LOCK"
 
     var environment: ContextControllerWrapper? = null
 
     fun connect() {
-        disconnect()
+        close()
         environment = ContextControllerWrapper(
             spaceEngineers = JsonRpcSpaceEngineersBuilder.fromStringLineReaderWriter(
                 agentId = TEST_AGENT,
@@ -31,7 +28,7 @@ object CucumberStaticConnection {
         return environment!!
     }
 
-    fun disconnect() {
+    override fun close() {
         environment?.spaceEngineers.closeIfCloseable()
         environment.closeIfCloseable()
         environment = null

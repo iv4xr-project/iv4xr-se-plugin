@@ -32,7 +32,7 @@ class SpaceEngineersCucumberTest : AbstractSpaceEngineersSteps() {
     @After
     fun clearContinuousMovement() {
         try {
-            //character.moveAndRotate(ticks = 0)
+            character.moveAndRotate(ticks = 0)
         } catch(e: Exception) {
             // probably better idea to catch here, since we don't know how scenario went
             e.printStackTrace()
