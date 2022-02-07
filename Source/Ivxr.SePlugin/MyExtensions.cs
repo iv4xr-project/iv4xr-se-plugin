@@ -25,22 +25,22 @@ namespace Iv4xr.SePlugin
         {
             return new PlainVec3D(vector.X, vector.Y, vector.Z);
         }
-        
+
         public static Vector3 ToVector3(this PlainVec3D vector)
         {
             return new Vector3(vector.X, vector.Y, vector.Z);
         }
-        
+
         public static Vector2 ToVector2(this PlainVec2F vector)
         {
             return new Vector2(vector.X, vector.Y);
         }
-        
+
         public static Vector3D ToVector3D(this PlainVec3D vector)
         {
             return new Vector3D(vector.X, vector.Y, vector.Z);
         }
-        
+
         public static PlainVec3F ToPlainF(this Vector3 vector)
         {
             return new PlainVec3F(vector.X, vector.Y, vector.Z);
@@ -52,7 +52,7 @@ namespace Iv4xr.SePlugin
         }
 
         public static Vector3I ToVector3I(this PlainVec3I vec) => new Vector3I(vec.X, vec.Y, vec.Z);
-        
+
         public static bool IsAdminOrCreative(this MySession session)
         {
             // copied from MyCubePlacer.Shoot
@@ -66,7 +66,7 @@ namespace Iv4xr.SePlugin
         {
             if (page < 0)
                 return;
- 
+
             toolbar.SwitchToPage(page);
         }
 
@@ -74,12 +74,12 @@ namespace Iv4xr.SePlugin
         {
             return dictionary.ToDictionary(item => item.Key.Name, item => item.Value.Name);
         }
-        
+
         public static DefinitionId ToDefinitionId(this MyDefinitionBase myDefinitionBase)
         {
             return ToDefinitionId(myDefinitionBase.Id);
         }
-        
+
         public static DefinitionId ToDefinitionId(this MyDefinitionId myDefinitionId)
         {
             return new DefinitionId()
@@ -104,15 +104,16 @@ namespace Iv4xr.SePlugin
                                cbd.Id.SubtypeId.String == definitionId.Type
                     );
         }
-        public static object GetInstanceField(this object instance, string fieldName)
+
+        public static T GetInstanceField<T>(this object instance, string fieldName)
         {
             BindingFlags bindFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic
                                      | BindingFlags.Static;
             var t = instance.GetType();
             FieldInfo field = t.GetField(fieldName, bindFlags);
-            return field.GetValue(instance);
+            return (T)field.GetValue(instance);
         }
-        
+
         public static void SetInstanceField(this object instance, string fieldName, object value)
         {
             BindingFlags bindFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic
@@ -121,7 +122,7 @@ namespace Iv4xr.SePlugin
             FieldInfo field = t.GetField(fieldName, bindFlags);
             field.SetValue(instance, value);
         }
-        
+
         public static void SetInstanceProperty(this object instance, string fieldName, object value)
         {
             BindingFlags bindFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic
@@ -130,15 +131,15 @@ namespace Iv4xr.SePlugin
             PropertyInfo field = t.GetProperty(fieldName, bindFlags);
             field.SetValue(instance, value);
         }
-        
+
         /// <summary>
         /// Get field used to identify block (ideal would be FatBlock.EntityId, but FatBlock is sometimes null.
         /// </summary>
         public static long BlockId(this MySlimBlock block)
         {
             return block.UniqueId;
-        } 
-        
+        }
+
         public static long CharacterId(this MyCharacter character)
         {
             if (character == null)
@@ -151,6 +152,6 @@ namespace Iv4xr.SePlugin
             }
 
             return character.GetIdentity().IdentityId;
-        } 
+        }
     }
 }
