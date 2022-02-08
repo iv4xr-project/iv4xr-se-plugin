@@ -41,6 +41,7 @@ namespace Iv4xr.SePlugin.Navigation
         public FatNavGraph GetGraph()
         {
             var sphere = m_lowLevelObserver.GetBoundingSphere(
+                null,
                 m_lowLevelObserver.Radius * 2d);  // Get some look-ahead
 
             var grid = m_lowLevelObserver.CollectSurroundingBlocks(sphere, ObservationMode.BLOCKS)

@@ -38,7 +38,7 @@ namespace Iv4xr.SePlugin.Communication
         {
             m_se.Admin.Character.Use(blockId, functionIndex, action);
         }
-        
+
         [JsonRpcMethod("Admin.Character.Create")]
         CharacterObservation Create(string name, PlainVec3D position, PlainVec3D orientationForward, PlainVec3D orientationUp)
         {
@@ -57,6 +57,11 @@ namespace Iv4xr.SePlugin.Communication
             m_se.Admin.Character.Remove(id);
         }
 
+        [JsonRpcMethod("Admin.Observer.ObserveCharacters")]
+        List<CharacterObservation> AdminObserveCharacters()
+        {
+            return m_se.Admin.Observer.ObserveCharacters();
+        }
 
         [JsonRpcMethod("Character.TurnOnJetpack")]
         CharacterObservation TurnOnJetpack()

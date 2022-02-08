@@ -5,6 +5,7 @@ import spaceEngineers.model.*
 interface SpaceEngineersAdmin {
     val blocks: BlocksAdmin
     val character: CharacterAdmin
+    val observer: ObserverAdmin
     fun setFrameLimitEnabled(enabled: Boolean)
 }
 
@@ -50,4 +51,8 @@ interface CharacterAdmin {
     fun switch(id: String)
 
     fun remove(id: String)
+}
+
+interface ObserverAdmin {
+    fun observeCharacters(): List<CharacterObservation>
 }

@@ -245,6 +245,16 @@ open class JsonRpcSpaceEngineers(
                 )
             }
         }
+        override val observer: ObserverAdmin = object: ObserverAdmin {
+            override fun observeCharacters(): List<CharacterObservation> {
+                return processNoParameterMethod<List<CharacterObservation>>(
+                    method = ::observeCharacters,
+                    methodName = "${adminPrefix}${observerPrefix}ObserveCharacters"
+                )
+            }
+
+        }
+
 
         override fun setFrameLimitEnabled(enabled: Boolean) {
             return processSingleParameterMethod(

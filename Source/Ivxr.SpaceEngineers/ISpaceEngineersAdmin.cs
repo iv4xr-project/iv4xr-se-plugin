@@ -1,4 +1,5 @@
-﻿using Iv4xr.SpaceEngineers.WorldModel;
+﻿using System.Collections.Generic;
+using Iv4xr.SpaceEngineers.WorldModel;
 
 namespace Iv4xr.SpaceEngineers
 {
@@ -7,6 +8,12 @@ namespace Iv4xr.SpaceEngineers
         void SetFrameLimitEnabled(bool enabled);
         ICharacterAdmin Character { get; }
         IBlocksAdmin Blocks { get; }
+        IObserverAdmin Observer { get;  }
+    }
+
+    public interface IObserverAdmin
+    {
+        List<CharacterObservation> ObserveCharacters();
     }
 
     public interface IBlocksAdmin
