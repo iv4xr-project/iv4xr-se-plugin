@@ -2,8 +2,12 @@ package bdd
 
 import spaceEngineers.controller.ContextControllerWrapper
 import spaceEngineers.controller.JsonRpcSpaceEngineersBuilder
+import spaceEngineers.transport.AlwaysReturnSameLineReaderWriter
+import spaceEngineers.transport.SocketReaderWriter
+import spaceEngineers.transport.StringLineReaderWriter
 import spaceEngineers.transport.closeIfCloseable
 import testhelp.TEST_AGENT
+import java.net.Socket
 
 object CucumberStaticConnection {
     private const val LOCK = "LOCK"
@@ -13,7 +17,10 @@ object CucumberStaticConnection {
     fun connect() {
         disconnect()
         environment = ContextControllerWrapper(
-            spaceEngineers = JsonRpcSpaceEngineersBuilder.localhost(agentId = TEST_AGENT)
+            spaceEngineers = JsonRpcSpaceEngineersBuilder.fromStringLineReaderWriter(
+                agentId = TEST_AGENT,
+                stringLineReaderWriter = AlwaysReturnSameLineReaderWriter("")
+            )
         )
     }
 
