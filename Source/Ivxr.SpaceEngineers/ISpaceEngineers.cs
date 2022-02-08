@@ -22,6 +22,7 @@ namespace Iv4xr.SpaceEngineers
         void LoadScenario(string scenarioPath);
         void Connect(string address);
         void Disconnect();
+        void ExitGame();
     }
 
     public interface IObserver

@@ -19,6 +19,11 @@ namespace Iv4xr.SePlugin.Control
             MySessionLoader.LoadSingleplayerSession(scenarioPath);
         }
 
+        public void ExitGame()
+        {
+            MySessionLoader.ExitGame();
+        }
+
         public void Connect(string address)
         {
             MySessionLoader.UnloadAndExitToMenu();

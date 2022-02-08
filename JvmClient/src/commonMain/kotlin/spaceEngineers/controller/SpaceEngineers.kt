@@ -22,6 +22,7 @@ interface Session {
     fun loadScenario(scenarioPath: String)
     fun connect(address: String)
     fun disconnect()
+    fun exitGame()
 }
 
 interface Character {

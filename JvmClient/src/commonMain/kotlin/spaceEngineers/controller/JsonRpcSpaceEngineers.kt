@@ -46,6 +46,13 @@ open class JsonRpcSpaceEngineers(
                 methodName = "${sessionPrefix}Disconnect",
             )
         }
+
+        override fun exitGame() {
+            processNoParameterMethod(
+                method = ::exitGame,
+                methodName = "${sessionPrefix}ExitGame",
+            )
+        }
     }
 
     override val character: Character = object : Character {
