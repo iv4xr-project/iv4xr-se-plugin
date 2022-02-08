@@ -1,5 +1,5 @@
-﻿using Iv4xr.PluginLib;
-using Iv4xr.PluginLib.Control;
+﻿using System;
+using Iv4xr.PluginLib;
 using Iv4xr.SpaceEngineers;
 
 namespace SeServerMock.Mocks
@@ -11,6 +11,16 @@ namespace SeServerMock.Mocks
         public void LoadScenario(string scenarioPath)
         {
             Log.WriteLine($"{nameof(MockSessionController)}: *Not* loading scenario: {scenarioPath}");
+        }
+
+        public void Connect(string address)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Disconnect()
+        {
+            throw new NotImplementedException();
         }
     }
 }

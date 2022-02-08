@@ -28,6 +28,23 @@ open class JsonRpcSpaceEngineers(
                 parameterType = String::class,
             )
         }
+
+        override fun connect(address: String) {
+            processSingleParameterMethod(
+                method = ::connect,
+                parameter = address,
+                parameterName = "address",
+                methodName = "${sessionPrefix}Connect",
+                parameterType = String::class,
+            )
+        }
+
+        override fun disconnect() {
+            processNoParameterMethod(
+                method = ::disconnect,
+                methodName = "${sessionPrefix}Disconnect",
+            )
+        }
     }
 
     override val character: Character = object : Character {
@@ -245,7 +262,7 @@ open class JsonRpcSpaceEngineers(
                 )
             }
         }
-        override val observer: ObserverAdmin = object: ObserverAdmin {
+        override val observer: ObserverAdmin = object : ObserverAdmin {
             override fun observeCharacters(): List<CharacterObservation> {
                 return processNoParameterMethod<List<CharacterObservation>>(
                     method = ::observeCharacters,

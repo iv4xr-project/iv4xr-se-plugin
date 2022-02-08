@@ -19,6 +19,8 @@ namespace Iv4xr.SpaceEngineers
     public interface ISessionController
     {
         void LoadScenario(string scenarioPath);
+        void Connect(string address);
+        void Disconnect();
     }
 
     public interface IObserver
