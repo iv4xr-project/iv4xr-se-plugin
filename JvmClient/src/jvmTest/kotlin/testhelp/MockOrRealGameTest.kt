@@ -6,6 +6,7 @@ import spaceEngineers.controller.SpaceEngineers
 import spaceEngineers.controller.loadFromTestResources
 import spaceEngineers.transport.GsonResponseAppendToFileReaderWriter
 import spaceEngineers.transport.SocketReaderWriter
+import spaceEngineers.transport.SocketReaderWriter.Companion.DEFAULT_PORT
 import spaceEngineers.transport.StringLineReaderWriter
 import java.io.File
 
@@ -17,7 +18,7 @@ abstract class MockOrRealGameTest(
     private val forceWrite: Boolean = false,
     private val scenarioId: String = SIMPLE_PLACE_GRIND_TORCH,
     private val loadScenario: Boolean = true,
-    private val port: Int = 3333,
+    private val port: Int = DEFAULT_PORT,
 ) {
 
     var useRealGame: Boolean = forceRealGame
