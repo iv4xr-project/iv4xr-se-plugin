@@ -129,6 +129,12 @@ namespace Iv4xr.SePlugin.Communication
             m_se.Session.Disconnect();
         }
         
+        [JsonRpcMethod("Session.ExitGame")]
+        void ExitGame()
+        {
+            m_se.Session.ExitGame();
+        }
+        
         [JsonRpcMethod("Screens.FocusedScreen")]
         string FocusedScreen()
         {
