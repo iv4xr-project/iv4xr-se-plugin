@@ -19,10 +19,13 @@ interface SpaceEngineers {
 
 interface Session {
     fun loadScenario(scenarioPath: String)
+    fun connect(address: String)
+    fun disconnect()
 }
 
 interface Character {
     fun use()
+
     /**
      * @param movement Unit vector representing direction of a movement.
      *      The direction is relative to the character itself, not coordinates of the system.
@@ -38,6 +41,7 @@ interface Character {
         roll: Float = 0f,
         ticks: Int = 1,
     ): CharacterObservation
+
     fun turnOnJetpack(): CharacterObservation
     fun turnOffJetpack(): CharacterObservation
     fun switchHelmet(): CharacterObservation

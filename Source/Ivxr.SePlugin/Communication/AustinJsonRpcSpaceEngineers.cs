@@ -92,6 +92,18 @@ namespace Iv4xr.SePlugin.Communication
         {
             m_se.Session.LoadScenario(scenarioPath);
         }
+        
+        [JsonRpcMethod("Session.Connect")]
+        void Connect(string address)
+        {
+            m_se.Session.Connect(address);
+        }
+        
+        [JsonRpcMethod("Session.Disconnect")]
+        void Disconnect()
+        {
+            m_se.Session.Disconnect();
+        }
 
         [JsonRpcMethod("Observer.Observe")]
         CharacterObservation Observe()
