@@ -64,6 +64,7 @@ class SocketReaderWriter @JvmOverloads constructor(
         }
         exception?.let {
             if (!connected) {
+                close()
                 throw it
             }
         }
@@ -75,9 +76,15 @@ class SocketReaderWriter @JvmOverloads constructor(
     }
 
     override fun close() {
-        closeSafely(reader)
-        closeSafely(writer)
-        closeSafely(socket)
+        if (this::reader.isInitialized) {
+            closeSafely(reader)
+        }
+        if (this::writer.isInitialized) {
+            closeSafely(writer)
+        }
+        if (this::socket.isInitialized) {
+            closeSafely(socket)
+        }
     }
 
     companion object {
