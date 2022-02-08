@@ -163,6 +163,22 @@ namespace Iv4xr.SePlugin.Communication
             return Enqueue(() => m_blocks.PlaceInGrid(blockDefinitionId, gridId, minPosition, orientationForward, orientationUp));
         }
     }
+    
+    public class ObserverAdminOnGameLoop : AbstractServiceOnGameLoop, IObserverAdmin
+    {
+        private readonly IObserverAdmin m_observer;
+
+        public ObserverAdminOnGameLoop(IObserverAdmin observer, FuncActionDispatcher funcActionDispatcher) : base(
+            funcActionDispatcher)
+        {
+            m_observer = observer;
+        }
+
+        public List<CharacterObservation> ObserveCharacters()
+        {
+            return Enqueue(() => m_observer.ObserveCharacters());
+        }
+    }
 
     public class ItemsOnGameLoop : AbstractServiceOnGameLoop, IItems
     {
@@ -316,6 +332,11 @@ namespace Iv4xr.SePlugin.Communication
             get { return Admin.Blocks; }
         }
 
+        public IObserverAdmin Observer
+        {
+            get { return Admin.Observer; }
+        }
+
         public SynchronizedSpaceEngineersAdmin(ISpaceEngineersAdmin admin, FuncActionDispatcher funcActionDispatcher) :
                 base(funcActionDispatcher)
         {
@@ -344,7 +365,8 @@ namespace Iv4xr.SePlugin.Communication
             Blocks = new BlocksOnGameLoop(se.Blocks, funcActionDispatcher);
             Admin = new SynchronizedSpaceEngineersAdmin(new SpaceEngineersAdmin(
                 new CharacterAdminOnGameLoop(se.Admin.Character, se.Observer, funcActionDispatcher),
-                new BlocksAdminOnGameLoop(se.Admin.Blocks, funcActionDispatcher)
+                new BlocksAdminOnGameLoop(se.Admin.Blocks, funcActionDispatcher),
+                new ObserverAdminOnGameLoop(se.Admin.Observer, funcActionDispatcher)
             ), funcActionDispatcher);
         }
     }

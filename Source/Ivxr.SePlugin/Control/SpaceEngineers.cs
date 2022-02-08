@@ -32,7 +32,7 @@ namespace Iv4xr.SePlugin.Control
             Character = characterController;
             var blocks = new Blocks(gameSession, lowLevelObserver);
             Blocks = blocks;
-            Admin = new SpaceEngineersAdmin(characterController, blocks);
+            Admin = new SpaceEngineersAdmin(characterController, blocks, new ObserverAdmin(lowLevelObserver));
         }
 
         public RealSpaceEngineers(
@@ -60,11 +60,13 @@ namespace Iv4xr.SePlugin.Control
 
         public ICharacterAdmin Character { get; }
         public IBlocksAdmin Blocks { get; }
+        public IObserverAdmin Observer { get; }
 
-        public SpaceEngineersAdmin(ICharacterAdmin character, IBlocksAdmin blocks)
+        public SpaceEngineersAdmin(ICharacterAdmin character, IBlocksAdmin blocks, IObserverAdmin observer)
         {
             Character = character;
             Blocks = blocks;
+            Observer = observer;
         }
     }
 }
