@@ -195,6 +195,8 @@ $dokka.location:spaceEngineers.controller/RpcSerializer/processParameters/#kotli
 $dokka.location:spaceEngineers.controller/RpcSerializer/processSingleParameterMethod/#kotlin.reflect.KFunction[TypeParam(bounds=[kotlin.Any])]#TypeParam(bounds=[kotlin.Any])#kotlin.String#kotlin.reflect.KClass[TypeParam(bounds=[kotlin.Any])]#kotlin.String/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-rpc-serializer/process-single-parameter-method.html
 $dokka.location:spaceEngineers.controller/RpcSerializer/stringLineReaderWriter/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-rpc-serializer/string-line-reader-writer.html
 $dokka.location:spaceEngineers.controller/Session///PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-session/index.html
+$dokka.location:spaceEngineers.controller/Session/connect/#kotlin.String/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-session/connect.html
+$dokka.location:spaceEngineers.controller/Session/disconnect/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-session/disconnect.html
 $dokka.location:spaceEngineers.controller/Session/loadScenario/#kotlin.String/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-session/load-scenario.html
 $dokka.location:spaceEngineers.controller/SpaceEngineers.Companion///PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-space-engineers/-companion/index.html
 $dokka.location:spaceEngineers.controller/SpaceEngineers.Companion/DEFAULT_AGENT_ID/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-space-engineers/-companion/-d-e-f-a-u-l-t_-a-g-e-n-t_-i-d.html
