@@ -38,4 +38,5 @@
 ### Post Release
 
 * Merge release-candidate to main, if there was a release branch.
-* Bump version of the plugin binaries in the main branch to the next minor release.
+* Bump version of the plugin binaries in the main branch to the next minor release (prepare the branch for the **next** release).
+  * *Note: I think it’s a good habit to do version bump for the next release just after release rather than just before it. That way, if you encounter a binary with a version which has not yet been released, you know it’s a development version*
