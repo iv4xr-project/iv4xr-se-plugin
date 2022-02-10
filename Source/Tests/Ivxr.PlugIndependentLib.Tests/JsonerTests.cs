@@ -60,7 +60,7 @@ namespace Ivxr.PlugIndependentLib.Tests
 
             var config = m_jsoner.ToObject<PluginConfig>(configJson);
             
-            Assert.Equal(PluginConfig.DEFAULT_RADIUS, config.ObservationRadius);
+            Assert.Equal(PluginConfigDefaults.RADIUS, config.ObservationRadius);
         }
     }
 }

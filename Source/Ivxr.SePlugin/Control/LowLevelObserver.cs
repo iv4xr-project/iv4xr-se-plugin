@@ -33,7 +33,7 @@ namespace Iv4xr.SePlugin.Control
             }
         }
 
-        private double m_radius = PluginConfig.DEFAULT_RADIUS;
+        private double m_radius = PluginConfigDefaults.RADIUS;
 
         private readonly IGameSession m_gameSession;
 
