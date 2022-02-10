@@ -9,12 +9,31 @@ namespace Iv4xr.SePlugin.Communication
 {
     public static class AustinUtil
     {
+        public static void BindRecursively<TType>(string sessionId, TType instance, string basePrefix, Type type)
+        {
+            foreach (MethodInfo method1 in ((IEnumerable<MethodInfo>) type
+                        .GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly))
+            )
+            {
+                if (!method1.Name.StartsWith("get_"))
+                {
+                    continue;
+                }
+
+                var returnType = method1.ReturnType;
+                var propertyValue = method1.Invoke(instance, new object[] { });
+                var prefix = basePrefix + method1.Name.Substring(4) + ".";
+                BindService(sessionId, propertyValue, prefix, returnType);
+                BindRecursively(sessionId, propertyValue, prefix, returnType);
+            }
+        }
+        
         
         //Based on Austin ServiceBinder.BindService
-        public static void BindService<TType>(string sessionID, TType instance, string methodPrefix)
+        public static void BindService<TType>(string sessionID, TType instance, string methodPrefix, Type type)
         {
             var smd = Handler.GetSessionHandler(sessionID).MetaData;
-            foreach (MethodInfo method1 in ((IEnumerable<MethodInfo>)typeof(TType)
+            foreach (MethodInfo method1 in ((IEnumerable<MethodInfo>) type
                         .GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly))
             )
             {
