@@ -29,5 +29,8 @@ namespace Iv4xr.SpaceEngineers
         void ToggleProductionCooperativeMode();
         void AddToProductionQueue(int index);
         void RemoveFromProductionQueue(int index);
+        void SelectBlueprint(int index);
+        void EnterBlueprintSearchBox(string text);
+        void SelectAssembler(int index);
     }
 }

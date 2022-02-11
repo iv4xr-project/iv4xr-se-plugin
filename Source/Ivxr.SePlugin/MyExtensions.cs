@@ -149,6 +149,7 @@ namespace Iv4xr.SePlugin
         {
             return new ProductionQueueItem()
             {
+                DisplayName = bp.DisplayNameText,
                 Prerequisites = bp.Prerequisites.Select(i => i.ToAmountedDefinition()).ToList(),
                 Results = bp.Results.Select(i => i.ToAmountedDefinition()).ToList(),
             };

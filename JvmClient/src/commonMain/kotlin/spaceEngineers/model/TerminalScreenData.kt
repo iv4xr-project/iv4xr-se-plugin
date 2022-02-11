@@ -5,6 +5,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ProductionQueueItem(
+    @SerialName("DisplayName")
+    val displayName: String,
     @SerialName("Prerequisites")
     val prerequisites: List<AmountedDefinitionId>,
     @SerialName("Results")

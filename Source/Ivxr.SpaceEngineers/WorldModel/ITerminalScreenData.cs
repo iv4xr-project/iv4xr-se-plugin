@@ -15,6 +15,7 @@ namespace Iv4xr.SpaceEngineers.WorldModel
 
     public class ProductionQueueItem
     {
+        public string DisplayName;
         public List<AmountedDefinitionId> Prerequisites;
         public List<AmountedDefinitionId> Results;
         
@@ -30,6 +31,7 @@ namespace Iv4xr.SpaceEngineers.WorldModel
         public List<ProductionQueueItem> ProductionQueue;
         public List<AmountedDefinitionId> Inventory;
         public List<ProductionQueueItem> Blueprints;
+        public List<string> Assemblers;
         public bool ProductionCooperativeMode;
         public bool ProductionRepeatMode;
         public string SelectedTab;

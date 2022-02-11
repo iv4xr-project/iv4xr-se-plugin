@@ -369,6 +369,36 @@ open class JsonRpcSpaceEngineers(
                 )
             }
 
+            override fun selectBlueprint(index: Int) {
+                processSingleParameterMethod(
+                    ::selectBlueprint,
+                    methodName = "${terminalScreenPrefix}SelectBlueprint",
+                    parameter = index,
+                    parameterName = "index",
+                    parameterType = Int::class
+                )
+            }
+
+            override fun selectAssembler(index: Int) {
+                processSingleParameterMethod(
+                    ::selectAssembler,
+                    methodName = "${terminalScreenPrefix}SelectAssembler",
+                    parameter = index,
+                    parameterName = "index",
+                    parameterType = Int::class
+                )
+            }
+
+            override fun enterBlueprintSearchBox(text: String) {
+                processSingleParameterMethod(
+                    ::enterBlueprintSearchBox,
+                    methodName = "${terminalScreenPrefix}EnterBlueprintSearchBox",
+                    parameter = text,
+                    parameterName = "text",
+                    parameterType = String::class
+                )
+            }
+
             override fun toggleProductionRepeatMode() {
                 return processNoParameterMethod(
                     ::toggleProductionRepeatMode,

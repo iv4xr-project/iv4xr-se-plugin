@@ -74,5 +74,16 @@ namespace Iv4xr.SePlugin
         {
             return (TType)scrollablePanel.Controls[0];
         }
+
+        public static List<MyGuiControlCombobox.Item> ItemsAsList(this MyGuiControlCombobox combo)
+        {
+            var list = new List<MyGuiControlCombobox.Item>();
+            for (var i = 0; i < combo.GetItemsCount(); i++)
+            {
+                list.Add(combo.GetItemByIndex(i));
+            }
+
+            return list;
+        }
     }
 }

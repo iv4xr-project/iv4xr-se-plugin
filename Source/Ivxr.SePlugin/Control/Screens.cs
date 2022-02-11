@@ -8,6 +8,7 @@ using Sandbox.Definitions;
 using Sandbox.Game;
 using Sandbox.Game.Entities.Cube;
 using Sandbox.Game.Gui;
+using Sandbox.Game.Screens.Helpers;
 using Sandbox.Graphics.GUI;
 using SpaceEngineers.Game.GUI;
 using VRage;
@@ -42,8 +43,12 @@ namespace Iv4xr.SePlugin.Control
             var blueprintItems = blueprintsGrid.GridItemUserDataOfType<MyBlueprintDefinition>()
                     .Select(bp => bp.ToProductionQueueItem()).ToList();
 
+            var assemblers = screen.ProductionTab().TabControlByName<MyGuiControlCombobox>("AssemblersCombobox").ItemsAsList().Select(
+                i => i.Value.ToString()).ToList();
+
             return new TerminalScreenData()
             {
+                Assemblers = assemblers,
                 ProductionQueue = productionQueueItems,
                 Inventory = inventoryItems,
                 Blueprints = blueprintItems,
@@ -78,6 +83,28 @@ namespace Iv4xr.SePlugin.Control
             var controller = screen.GetInstanceFieldOrThrow<object>("m_controllerProduction");
             var assembler = controller.GetInstanceFieldOrThrow<MyAssembler>("m_selectedAssembler");
             assembler.RemoveQueueItemRequest(index, minusOne);
+        }
+
+        public void SelectBlueprint(int index)
+        {
+            var screen = MyGuiScreenExtensions.EnsureFocusedScreen<MyGuiScreenTerminal>();
+            var controller = screen.GetInstanceFieldOrThrow<object>("m_controllerProduction");
+            var bpg = controller.GetInstanceFieldOrThrow<MyGuiControlRadioButtonGroup>("m_blueprintButtonGroup");
+            bpg.SelectByIndex(index);
+        }
+        
+        public void SelectAssembler(int index)
+        {
+            var screen = MyGuiScreenExtensions.EnsureFocusedScreen<MyGuiScreenTerminal>();
+            screen.ProductionTab().TabControlByName<MyGuiControlCombobox>("AssemblersCombobox").SelectItemByIndex(index);
+        }
+
+        public void EnterBlueprintSearchBox(string text)
+        {
+            var screen = MyGuiScreenExtensions.EnsureFocusedScreen<MyGuiScreenTerminal>();
+            var searchBox = screen.ProductionTab().TabControlByName<MyGuiControlSearchBox>(
+                "BlueprintsSearchBox");
+            searchBox.SearchText = text;
         }
 
         public void SelectTab(int index)

@@ -24,6 +24,9 @@ interface Terminal {
     fun selectTab(index: Int)
     fun addToProductionQueue(index: Int)
     fun removeFromProductionQueue(index: Int)
+    fun selectBlueprint(index: Int)
+    fun enterBlueprintSearchBox(text: String)
     fun toggleProductionRepeatMode()
     fun toggleProductionCooperativeMode()
+    fun selectAssembler(index: Int)
 }
