@@ -1,14 +1,52 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Threading.Tasks;
-using Iv4xr.PluginLib.Control;
-using Iv4xr.SpaceEngineers.Navigation;
+using ImpromptuInterface;
 using Iv4xr.SePlugin.Control;
 using Iv4xr.SpaceEngineers;
 using Iv4xr.SpaceEngineers.WorldModel;
 
 namespace Iv4xr.SePlugin.Communication
 {
+    public class GameLoopDynamicProxy<TType> : DynamicObject
+    {
+        private readonly TType m_instance;
+
+        private readonly FuncActionDispatcher m_funcActionDispatcher;
+
+        private readonly string[] m_directCallExceptions;
+
+        public GameLoopDynamicProxy(TType instance, FuncActionDispatcher funcActionDispatcher,
+            string[] directCallExceptions = null)
+        {
+            m_instance = instance;
+            m_funcActionDispatcher = funcActionDispatcher;
+            m_directCallExceptions = directCallExceptions;
+        }
+
+        private bool NeedsDirectCall(string methodName)
+        {
+            return m_directCallExceptions != null && m_directCallExceptions.Contains(methodName);
+        }
+
+        public override bool TryInvokeMember(InvokeMemberBinder binder, object[] args, out object result)
+        {
+            var methodInfo = m_instance.GetType().GetMethod(binder.Name);
+            methodInfo.ThrowNREIfNull($"methodInfo {binder.Name}");
+            if (NeedsDirectCall(methodInfo.Name))
+            {
+                result = methodInfo.Invoke(m_instance, args);
+                return true;
+            }
+
+            object r = null;
+            m_funcActionDispatcher.Enqueue(() => { return r = methodInfo.Invoke(m_instance, args); });
+            result = r;
+            return true;
+        }
+    }
+
     public abstract class AbstractServiceOnGameLoop
     {
         private readonly FuncActionDispatcher m_funcActionDispatcher;
@@ -28,7 +66,7 @@ namespace Iv4xr.SePlugin.Communication
             return await m_funcActionDispatcher.EnqueueAsync(func);
         }
 
-        protected T Enqueue<T>(Func<T> func) where T: class 
+        protected T Enqueue<T>(Func<T> func) where T : class
         {
             return m_funcActionDispatcher.Enqueue(func);
         }
@@ -39,99 +77,7 @@ namespace Iv4xr.SePlugin.Communication
         }
     }
 
-    public class DefinitionsOnGameLoop : AbstractServiceOnGameLoop, IDefinitions
-    {
-        private readonly IDefinitions m_definitions;
-
-        public DefinitionsOnGameLoop(IDefinitions definitions, FuncActionDispatcher funcActionDispatcher) : base(
-            funcActionDispatcher)
-        {
-            m_definitions = definitions;
-        }
-
-        public List<BlockDefinition> BlockDefinitions()
-        {
-            return Enqueue(() => m_definitions.BlockDefinitions());
-        }
-
-        public List<DefinitionBase> AllDefinitions()
-        {
-            return Enqueue(() => m_definitions.AllDefinitions());
-        }
-
-        public Dictionary<string, string> BlockHierarchy()
-        {
-            return Enqueue(() => m_definitions.BlockHierarchy());
-        }
-
-        public Dictionary<string, string> BlockDefinitionHierarchy()
-        {
-            return Enqueue(() => m_definitions.BlockDefinitionHierarchy());
-        }
-    }
-
-    public class ObserverOnGameLoop : AbstractServiceOnGameLoop, IObserver
-    {
-        private readonly IObserver m_observer;
-
-        public ObserverOnGameLoop(IObserver observer, FuncActionDispatcher funcActionDispatcher) : base(
-            funcActionDispatcher)
-        {
-            m_observer = observer;
-        }
-
-        public CharacterObservation Observe()
-        {
-            return Enqueue(() => m_observer.Observe());
-        }
-
-        public Observation ObserveBlocks()
-        {
-            return Enqueue(() => m_observer.ObserveBlocks());
-        }
-
-        public Observation ObserveNewBlocks()
-        {
-            return Enqueue(() => m_observer.ObserveNewBlocks());
-        }
-
-        public List<CharacterObservation> ObserveCharacters()
-        {
-            return Enqueue(() => m_observer.ObserveCharacters());
-        }
-
-        public NavGraph NavigationGraph()
-        {
-            return Enqueue(() => m_observer.NavigationGraph());
-        }
-
-        public void SwitchCamera()
-        {
-            Enqueue(() => m_observer.SwitchCamera());
-        }
-
-        public void TakeScreenshot(string absolutePath)
-        {
-            Enqueue(() => m_observer.TakeScreenshot(absolutePath));
-        }
-    }
-
-    public class BlocksOnGameLoop : AbstractServiceOnGameLoop, IBlocks
-    {
-        private readonly IBlocks m_blocks;
-
-        public BlocksOnGameLoop(IBlocks blocks, FuncActionDispatcher funcActionDispatcher) : base(funcActionDispatcher)
-        {
-            m_blocks = blocks;
-        }
-
-        public void Place()
-        {
-            Enqueue(() => m_blocks.Place());
-        }
-    }
-
-    public class ScreensOnGameLoop : AbstractServiceOnGameLoop, IScreens, IMedicals
+    public class ScreensOnGameLoop : AbstractServiceOnGameLoop, IScreens
     {
         private readonly IScreens m_screens;
 
@@ -140,7 +86,6 @@ namespace Iv4xr.SePlugin.Communication
         {
             m_screens = screens;
         }
-
 
         public string FocusedScreen()
         {
@@ -152,241 +97,31 @@ namespace Iv4xr.SePlugin.Communication
             m_screens.WaitUntilTheGameLoaded();
         }
 
-        public IMedicals Medicals => this;
-
-        public List<MedicalRoom> MedicalRooms()
-        {
-            return Enqueue(() => m_screens.Medicals.MedicalRooms());
-        }
-
-        public void Respawn(int roomIndex)
-        {
-            Enqueue(() => m_screens.Medicals.Respawn(roomIndex));
-        }
-
-        public List<Faction> Factions()
-        {
-            return Enqueue(() => m_screens.Medicals.Factions());
-        }
-
-        public void ChooseFaction(int factionIndex)
-        {
-            Enqueue(() => m_screens.Medicals.ChooseFaction(factionIndex));
-        }
-    }
-
-    public class BlocksAdminOnGameLoop : AbstractServiceOnGameLoop, IBlocksAdmin
-    {
-        private readonly IBlocksAdmin m_blocks;
-
-        public BlocksAdminOnGameLoop(IBlocksAdmin blocks, FuncActionDispatcher funcActionDispatcher) : base(
-            funcActionDispatcher)
-        {
-            m_blocks = blocks;
-        }
-
-        public void Remove(string blockId)
-        {
-            Enqueue(() => m_blocks.Remove(blockId));
-        }
-
-        public void SetIntegrity(string blockId, float integrity)
-        {
-            Enqueue(() => m_blocks.SetIntegrity(blockId, integrity));
-        }
-
-        public string PlaceAt(DefinitionId blockDefinitionId, PlainVec3D position, PlainVec3D orientationForward,
-            PlainVec3D orientationUp)
-        {
-            return Enqueue(() => m_blocks.PlaceAt(blockDefinitionId, position, orientationForward, orientationUp));
-        }
-
-        public string PlaceInGrid(DefinitionId blockDefinitionId, string gridId, PlainVec3I minPosition,
-            PlainVec3I orientationForward,
-            PlainVec3I orientationUp)
-        {
-            return Enqueue(() =>
-                    m_blocks.PlaceInGrid(blockDefinitionId, gridId, minPosition, orientationForward, orientationUp));
-        }
-    }
-
-    public class ObserverAdminOnGameLoop : AbstractServiceOnGameLoop, IObserverAdmin
-    {
-        private readonly IObserverAdmin m_observer;
-
-        public ObserverAdminOnGameLoop(IObserverAdmin observer, FuncActionDispatcher funcActionDispatcher) : base(
-            funcActionDispatcher)
-        {
-            m_observer = observer;
-        }
-
-        public List<CharacterObservation> ObserveCharacters()
-        {
-            return Enqueue(() => m_observer.ObserveCharacters());
-        }
-    }
-
-    public class ItemsOnGameLoop : AbstractServiceOnGameLoop, IItems
-    {
-        private readonly IItems m_items;
-
-        public ItemsOnGameLoop(IItems items, FuncActionDispatcher funcActionDispatcher) : base(funcActionDispatcher)
-        {
-            m_items = items;
-        }
-
-        public void Equip(ToolbarLocation toolbarLocation)
-        {
-            Enqueue(() => m_items.Equip(toolbarLocation));
-        }
-
-        public void SetToolbarItem(string name, ToolbarLocation toolbarLocation)
-        {
-            Enqueue(() => m_items.SetToolbarItem(name, toolbarLocation));
-        }
-
-        public Toolbar Toolbar()
-        {
-            return Enqueue(() => m_items.Toolbar());
-        }
-    }
-
-    public class CharacterAdminOnGameLoop : AbstractServiceOnGameLoop, ICharacterAdmin
-    {
-        private readonly ICharacterAdmin m_character;
-        private readonly IObserver m_observer;
-
-        public CharacterAdminOnGameLoop(ICharacterAdmin character, IObserver observer,
-            FuncActionDispatcher funcActionDispatcher) :
-                base(funcActionDispatcher)
-        {
-            m_character = character;
-            m_observer = observer;
-        }
-
-        public CharacterObservation Teleport(PlainVec3D position, PlainVec3D? orientationForward,
-            PlainVec3D? orientationUp)
-        {
-            return Enqueue(() =>
-            {
-                m_character.Teleport(position, orientationForward, orientationUp);
-                return m_observer.Observe();
-            });
-        }
-
-        public void Use(string blockId, int functionIndex, int action)
-        {
-            Enqueue(() => m_character.Use(blockId, functionIndex, action));
-        }
-
-        public CharacterObservation Create(string id, PlainVec3D position, PlainVec3D orientationForward,
-            PlainVec3D orientationUp)
-        {
-            return Enqueue(() => m_character.Create(id, position, orientationForward, orientationUp));
-        }
-
-        public void Switch(string id)
-        {
-            Enqueue(() => m_character.Switch(id));
-        }
-
-        public void Remove(string id)
-        {
-            Enqueue(() => m_character.Remove(id));
-        }
-    }
-
-    public class CharacterOnGameLoop : AbstractServiceOnGameLoop, ICharacterController
-    {
-        private readonly ICharacterController m_character;
-        private readonly IObserver m_observer;
-
-        public CharacterOnGameLoop(ICharacterController character, IObserver observer,
-            FuncActionDispatcher funcActionDispatcher) :
-                base(funcActionDispatcher)
-        {
-            m_character = character;
-            m_observer = observer;
-        }
-
-        public CharacterObservation MoveAndRotate(PlainVec3D movement, PlainVec2F rotation3, float roll = 0,
-            int ticks = 1)
-        {
-            return Enqueue(() =>
-            {
-                m_character.MoveAndRotate(movement, rotation3, roll, ticks);
-                return m_observer.Observe();
-            });
-        }
-
-        public CharacterObservation TurnOnJetpack()
-        {
-            return Enqueue(() =>
-            {
-                m_character.TurnOnJetpack();
-                return m_observer.Observe();
-            });
-        }
-
-        public CharacterObservation TurnOffJetpack()
-        {
-            return Enqueue(() =>
-            {
-                m_character.TurnOffJetpack();
-                return m_observer.Observe();
-            });
-        }
-
-        public CharacterObservation SwitchHelmet()
-        {
-            return Enqueue(() => m_character.SwitchHelmet());
-        }
-
-        public void BeginUsingTool()
-        {
-            Enqueue(() => m_character.BeginUsingTool());
-        }
-
-        public void EndUsingTool()
-        {
-            Enqueue(() => m_character.EndUsingTool());
-        }
-
-        public void Use()
-        {
-            Enqueue(() => { m_character.Use(); });
-        }
+        public IMedicals Medicals => m_screens.Medicals;
+        public ITerminal Terminal => m_screens.Terminal;
     }
 
     public class SynchronizedSpaceEngineersAdmin : AbstractServiceOnGameLoop, ISpaceEngineersAdmin
     {
-        public ISpaceEngineersAdmin Admin { get; }
+        private ISpaceEngineersAdmin Admin { get; }
+        
+        public SynchronizedSpaceEngineersAdmin(ISpaceEngineersAdmin admin, FuncActionDispatcher funcActionDispatcher) :
+                base(funcActionDispatcher)
+        {
+            Admin = admin;
+        }
 
         public void SetFrameLimitEnabled(bool enabled)
         {
             Enqueue(() => { Admin.SetFrameLimitEnabled(enabled); });
         }
 
-        public ICharacterAdmin Character
-        {
-            get { return Admin.Character; }
-        }
+        public ICharacterAdmin Character => Admin.Character;
 
-        public IBlocksAdmin Blocks
-        {
-            get { return Admin.Blocks; }
-        }
+        public IBlocksAdmin Blocks => Admin.Blocks;
 
-        public IObserverAdmin Observer
-        {
-            get { return Admin.Observer; }
-        }
+        public IObserverAdmin Observer => Admin.Observer;
 
-        public SynchronizedSpaceEngineersAdmin(ISpaceEngineersAdmin admin, FuncActionDispatcher funcActionDispatcher) :
-                base(funcActionDispatcher)
-        {
-            Admin = admin;
-        }
     }
 
     public class SynchronizedSpaceEngineers : ISpaceEngineers
@@ -403,16 +138,21 @@ namespace Iv4xr.SePlugin.Communication
 
         public SynchronizedSpaceEngineers(ISpaceEngineers se, FuncActionDispatcher funcActionDispatcher)
         {
-            Character = new CharacterOnGameLoop(se.Character, se.Observer, funcActionDispatcher);
+            Character = new GameLoopDynamicProxy<ICharacterController>(se.Character, funcActionDispatcher)
+                    .ActLike<ICharacterController>();
             Session = se.Session;
-            Items = new ItemsOnGameLoop(se.Items, funcActionDispatcher);
-            Observer = new ObserverOnGameLoop(se.Observer, funcActionDispatcher);
-            Definitions = new DefinitionsOnGameLoop(se.Definitions, funcActionDispatcher);
-            Blocks = new BlocksOnGameLoop(se.Blocks, funcActionDispatcher);
+            Items = new GameLoopDynamicProxy<IItems>(se.Items, funcActionDispatcher).ActLike<IItems>();
+            Observer = new GameLoopDynamicProxy<IObserver>(se.Observer, funcActionDispatcher).ActLike<IObserver>();
+            Definitions = new GameLoopDynamicProxy<IDefinitions>(se.Definitions, funcActionDispatcher)
+                    .ActLike<IDefinitions>();
+            Blocks = new GameLoopDynamicProxy<IBlocks>(se.Blocks, funcActionDispatcher).ActLike<IBlocks>();
             Admin = new SynchronizedSpaceEngineersAdmin(new SpaceEngineersAdmin(
-                new CharacterAdminOnGameLoop(se.Admin.Character, se.Observer, funcActionDispatcher),
-                new BlocksAdminOnGameLoop(se.Admin.Blocks, funcActionDispatcher),
-                new ObserverAdminOnGameLoop(se.Admin.Observer, funcActionDispatcher)
+                new GameLoopDynamicProxy<ICharacterAdmin>(se.Admin.Character, funcActionDispatcher)
+                        .ActLike<ICharacterAdmin>(),
+                new GameLoopDynamicProxy<IBlocksAdmin>(se.Admin.Blocks, funcActionDispatcher)
+                        .ActLike<IBlocksAdmin>(),
+                new GameLoopDynamicProxy<IObserverAdmin>(se.Admin.Observer, funcActionDispatcher)
+                        .ActLike<IObserverAdmin>()
             ), funcActionDispatcher);
             Screens = new ScreensOnGameLoop(se.Screens, funcActionDispatcher);
         }
