@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Sandbox.Game;
+using Sandbox.Game.Gui;
 using Sandbox.Graphics.GUI;
+using VRage.Game.ModAPI;
 
 namespace Iv4xr.SePlugin
 {
@@ -20,7 +24,7 @@ namespace Iv4xr.SePlugin
         {
             return screen.GetInstanceFieldOrThrow<MyGuiControlTable>(fieldName);
         }
-        
+
         public static List<MyGuiControlTable.Row> RowsAsList(this MyGuiControlTable table)
         {
             var list = new List<MyGuiControlTable.Row>();
@@ -40,12 +44,35 @@ namespace Iv4xr.SePlugin
                     .Replace("My", "");
         }
 
-        public static T EnsureFocusedScreen<T>() where T: MyGuiScreenBase
+        public static T EnsureFocusedScreen<T>() where T : MyGuiScreenBase
         {
             MyGuiScreenBase baseScreen = MyScreenManager.GetScreenWithFocus();
             if (!(baseScreen is T screen))
-                throw new InvalidOperationException($"Screen of type {typeof(T)} does not have focus, {baseScreen} has.");
+                throw new InvalidOperationException(
+                    $"Screen of type {typeof(T)} does not have focus, {baseScreen} has.");
             return screen;
+        }
+
+        public static IEnumerable<TResult> GridItemUserDataOfType<TResult>(this MyGuiControlGrid source)
+        {
+            return source.Items.OfType<MyGuiGridItem>().Select(i => i.UserData).OfType<TResult>();
+        }
+
+        public static MyGuiControlTabPage ProductionTab(this MyGuiScreenTerminal terminal)
+        {
+            return terminal.GetTabs().Pages[(int)MyTerminalPageEnum.Production];
+        }
+
+        public static TType TabControlByName<TType>(this MyGuiControlTabPage tab, string name)
+                where TType : MyGuiControlBase
+        {
+            return (TType)tab.Controls.GetControlByName(name);
+        }
+
+        public static TType ScrollableChild<TType>(this MyGuiControlScrollablePanel scrollablePanel)
+                where TType : MyGuiControlBase
+        {
+            return (TType)scrollablePanel.Controls[0];
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using Iv4xr.SpaceEngineers.WorldModel;
 using Sandbox.Definitions;
 using Sandbox.Game.Entities.Character;
@@ -10,6 +9,8 @@ using Sandbox.Game.Multiplayer;
 using Sandbox.Game.Screens.Helpers;
 using Sandbox.Game.World;
 using VRage.Game;
+using VRage.Game.Entity;
+using VRage.Game.ModAPI.Ingame;
 using VRageMath;
 
 namespace Iv4xr.SePlugin
@@ -105,52 +106,12 @@ namespace Iv4xr.SePlugin
                     );
         }
 
-        public static T GetInstanceField<T>(this object instance, string fieldName)
-        {
-            BindingFlags bindFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic
-                                     | BindingFlags.Static;
-            var t = instance.GetType();
-            FieldInfo field = t.GetField(fieldName, bindFlags);
-            return (T)field.GetValue(instance);
-        }
-
-        public static T GetInstanceFieldOrThrow<T>(this object instance, string fieldName)
-        {
-            instance.ThrowNREIfNull($"Instance of type {instance.GetType()} to get the field from is null.");
-            var field = instance.GetInstanceField<T>(fieldName);
-            field.ThrowNREIfNull($"Field {fieldName} of type {typeof(T)} is null!");
-            if (field == null)
-            {
-                throw new NullReferenceException($"Field {fieldName} of type {typeof(T)} is null!");
-            }
-            return field;
-
-        }
-
         public static void ThrowNREIfNull(this object instance, string message)
         {
             if (instance == null)
             {
                 throw new NullReferenceException(message);
             }
-        }
-
-        public static void SetInstanceField(this object instance, string fieldName, object value)
-        {
-            BindingFlags bindFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic
-                                     | BindingFlags.Static;
-            var t = instance.GetType();
-            FieldInfo field = t.GetField(fieldName, bindFlags);
-            field.SetValue(instance, value);
-        }
-
-        public static void SetInstanceProperty(this object instance, string fieldName, object value)
-        {
-            BindingFlags bindFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic
-                                     | BindingFlags.Static;
-            var t = instance.GetType();
-            PropertyInfo field = t.GetProperty(fieldName, bindFlags);
-            field.SetValue(instance, value);
         }
 
         /// <summary>
@@ -174,5 +135,33 @@ namespace Iv4xr.SePlugin
 
             return character.GetIdentity().IdentityId;
         }
+        
+        public static AmountedDefinitionId ToAmountedDefinition(this MyBlueprintDefinitionBase.Item item)
+        {
+            return new AmountedDefinitionId()
+            {
+                Id = item.Id.ToDefinitionId(),
+                Amount = item.Amount.ToIntSafe()
+            };
+        }
+        
+        public static ProductionQueueItem ToProductionQueueItem(this MyBlueprintDefinitionBase bp)
+        {
+            return new ProductionQueueItem()
+            {
+                Prerequisites = bp.Prerequisites.Select(i => i.ToAmountedDefinition()).ToList(),
+                Results = bp.Results.Select(i => i.ToAmountedDefinition()).ToList(),
+            };
+        }
+        
+        public static AmountedDefinitionId ToAmountedDefinition(this MyPhysicalInventoryItem i)
+        {
+            return new AmountedDefinitionId()
+            {
+                Amount = i.Amount.ToIntSafe(),
+                Id = i.GetDefinitionId().ToDefinitionId(),
+            };
+        }
+        
     }
 }

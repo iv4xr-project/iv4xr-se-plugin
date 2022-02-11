@@ -291,7 +291,7 @@ open class JsonRpcSpaceEngineers(
         }
     }
 
-    override val screens: Screens = object: Screens {
+    override val screens: Screens = object : Screens {
         override fun focusedScreen(): String {
             return processNoParameterMethod(::focusedScreen, "${screensPrefix}FocusedScreen")
         }
@@ -302,7 +302,7 @@ open class JsonRpcSpaceEngineers(
 
         val medicalScreenPrefix = "${screensPrefix}Medicals."
 
-        override val medicals: Medicals = object: Medicals {
+        override val medicals: Medicals = object : Medicals {
             override fun medicalRooms(): List<MedicalRoom> {
                 return processNoParameterMethod<List<MedicalRoom>>(::medicalRooms, "${medicalScreenPrefix}MedicalRooms")
             }
@@ -328,6 +328,58 @@ open class JsonRpcSpaceEngineers(
                     parameterName = "factionIndex",
                     parameterType = Int::class,
                     methodName = "${medicalScreenPrefix}ChooseFaction"
+                )
+            }
+        }
+        override val terminal: Terminal = object : Terminal {
+
+            val terminalScreenPrefix = "${screensPrefix}Terminal."
+
+            override fun data(): TerminalScreenData {
+                return processNoParameterMethod<TerminalScreenData>(::data, "${terminalScreenPrefix}Data")
+            }
+
+            override fun selectTab(index: Int) {
+                processSingleParameterMethod(
+                    ::selectTab,
+                    methodName = "${terminalScreenPrefix}SelectTab",
+                    parameter = index,
+                    parameterName = "index",
+                    parameterType = Int::class
+                )
+            }
+
+            override fun addToProductionQueue(index: Int) {
+                processSingleParameterMethod(
+                    ::addToProductionQueue,
+                    methodName = "${terminalScreenPrefix}AddToProductionQueue",
+                    parameter = index,
+                    parameterName = "index",
+                    parameterType = Int::class
+                )
+            }
+
+            override fun removeFromProductionQueue(index: Int) {
+                processSingleParameterMethod(
+                    ::removeFromProductionQueue,
+                    methodName = "${terminalScreenPrefix}RemoveFromProductionQueue",
+                    parameter = index,
+                    parameterName = "index",
+                    parameterType = Int::class
+                )
+            }
+
+            override fun toggleProductionRepeatMode() {
+                return processNoParameterMethod(
+                    ::toggleProductionRepeatMode,
+                    "${terminalScreenPrefix}ToggleProductionRepeatMode"
+                )
+            }
+
+            override fun toggleProductionCooperativeMode() {
+                return processNoParameterMethod(
+                    ::toggleProductionCooperativeMode,
+                    "${terminalScreenPrefix}ToggleProductionCooperativeMode"
                 )
             }
         }

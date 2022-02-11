@@ -10,6 +10,7 @@ namespace Iv4xr.SpaceEngineers
         string FocusedScreen();
         void WaitUntilTheGameLoaded();
         IMedicals Medicals { get; }
+        ITerminal Terminal { get; }
     }
 
     public interface IMedicals
@@ -18,5 +19,15 @@ namespace Iv4xr.SpaceEngineers
         void Respawn(int roomIndex);
         List<Faction> Factions();
         void ChooseFaction(int factionIndex);
+    }
+
+    public interface ITerminal
+    {
+        TerminalScreenData Data();
+        void SelectTab(int index);
+        void ToggleProductionRepeatMode();
+        void ToggleProductionCooperativeMode();
+        void AddToProductionQueue(int index);
+        void RemoveFromProductionQueue(int index);
     }
 }

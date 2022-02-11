@@ -98,6 +98,7 @@ namespace Iv4xr.SePlugin.Communication
         }
 
         public IMedicals Medicals => m_screens.Medicals;
+        public ITerminal Terminal => m_screens.Terminal;                
     }
 
     public class SynchronizedSpaceEngineersAdmin : AbstractServiceOnGameLoop, ISpaceEngineersAdmin

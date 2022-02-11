@@ -15,7 +15,7 @@ namespace Iv4xr.SePlugin.Control
         public void LoadScenario(string scenarioPath)
         {
             Log.WriteLine($"Loading scenario: '{scenarioPath}'");
-            MySessionLoader.UnloadAndExitToMenu();
+            //MySessionLoader.UnloadAndExitToMenu();
             MySessionLoader.LoadSingleplayerSession(scenarioPath);
         }
 

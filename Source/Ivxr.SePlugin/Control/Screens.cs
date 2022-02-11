@@ -4,19 +4,106 @@ using System.Linq;
 using System.Threading;
 using Iv4xr.SpaceEngineers;
 using Iv4xr.SpaceEngineers.WorldModel;
+using Sandbox.Definitions;
+using Sandbox.Game;
+using Sandbox.Game.Entities.Cube;
 using Sandbox.Game.Gui;
 using Sandbox.Graphics.GUI;
 using SpaceEngineers.Game.GUI;
+using VRage;
+using VRage.Game.Entity;
+using VRage.Game.ModAPI;
+using VRage.Game.ModAPI.Ingame;
 
 namespace Iv4xr.SePlugin.Control
 {
-    public class Screens : IScreens, IMedicals
+    public class TerminalScreen : ITerminal
     {
-        private MyGuiScreenBase ScreenWithFocus()
+        public TerminalScreenData Data()
         {
-            return MyScreenManager.GetScreenWithFocus();
+            var screen = MyGuiScreenExtensions.EnsureFocusedScreen<MyGuiScreenTerminal>();
+            var productionTab = screen.ProductionTab();
+
+            var productionQueueGrid = productionTab.TabControlByName<MyGuiControlScrollablePanel>("QueueScrollableArea")
+                    .ScrollableChild<MyGuiControlGrid>();
+            var productionQueueItems = productionQueueGrid.GridItemUserDataOfType<MyProductionBlock.QueueItem>()
+                    .Select(item => item.Blueprint).Select(bp => bp.ToProductionQueueItem()).ToList();
+
+
+            var inventoryGrid = productionTab.TabControlByName<MyGuiControlScrollablePanel>("InventoryScrollableArea")
+                    .ScrollableChild<MyGuiControlGrid>();
+            var inventoryItems = inventoryGrid.GridItemUserDataOfType<MyPhysicalInventoryItem>()
+                    .Select(piItem => piItem.ToAmountedDefinition())
+                    .ToList();
+
+            var blueprintsGrid =
+                    productionTab.TabControlByName<MyGuiControlScrollablePanel>("BlueprintsScrollableArea")
+                            .ScrollableChild<MyGuiControlGrid>();
+            var blueprintItems = blueprintsGrid.GridItemUserDataOfType<MyBlueprintDefinition>()
+                    .Select(bp => bp.ToProductionQueueItem()).ToList();
+
+            return new TerminalScreenData()
+            {
+                ProductionQueue = productionQueueItems,
+                Inventory = inventoryItems,
+                Blueprints = blueprintItems,
+                ProductionRepeatMode = productionTab.TabControlByName<MyGuiControlCheckbox>("RepeatCheckbox")
+                        .IsChecked,
+                ProductionCooperativeMode =
+                        productionTab.TabControlByName<MyGuiControlCheckbox>("SlaveCheckbox").IsChecked,
+                SelectedTab = screen.GetTabs().Pages[screen.GetTabs().SelectedPage].Name.Replace("Page", ""),
+            };
         }
 
+        public void AddToProductionQueue(int index)
+        {
+            var screen = MyGuiScreenExtensions.EnsureFocusedScreen<MyGuiScreenTerminal>();
+            var blueprintsGrid = screen.ProductionTab().TabControlByName<MyGuiControlScrollablePanel>(
+                "BlueprintsScrollableArea").ScrollableChild<MyGuiControlGrid>();
+            blueprintsGrid.SelectedIndex = index;
+            var item = blueprintsGrid.SelectedItem;
+            var blueprint = (MyBlueprintDefinitionBase)item.UserData;
+            var controller = screen.GetInstanceFieldOrThrow<object>("m_controllerProduction");
+            MyFixedPoint one = 1;
+            controller.CallMethod("EnqueueBlueprint", new object[] { blueprint, one });
+        }
+        
+        public void RemoveFromProductionQueue(int index)
+        {
+            var screen = MyGuiScreenExtensions.EnsureFocusedScreen<MyGuiScreenTerminal>();
+            var blueprintsGrid = screen.ProductionTab().TabControlByName<MyGuiControlScrollablePanel>(
+                "QueueScrollableArea").ScrollableChild<MyGuiControlGrid>();
+            blueprintsGrid.SelectedIndex = index;
+            MyFixedPoint minusOne = -1;
+            var controller = screen.GetInstanceFieldOrThrow<object>("m_controllerProduction");
+            var assembler = controller.GetInstanceFieldOrThrow<MyAssembler>("m_selectedAssembler");
+            assembler.RemoveQueueItemRequest(index, minusOne);
+        }
+
+        public void SelectTab(int index)
+        {
+            var screen = MyGuiScreenExtensions.EnsureFocusedScreen<MyGuiScreenTerminal>();
+            screen.GetTabs().SelectedPage = index;
+        }
+
+        public void ToggleProductionRepeatMode()
+        {
+            var screen = MyGuiScreenExtensions.EnsureFocusedScreen<MyGuiScreenTerminal>();
+            var cb = screen.ProductionTab().TabControlByName<MyGuiControlCheckbox>("RepeatCheckbox");
+            cb.IsChecked = !cb.IsChecked;
+        }
+
+        public void ToggleProductionCooperativeMode()
+        {
+            var screen = MyGuiScreenExtensions.EnsureFocusedScreen<MyGuiScreenTerminal>();
+            var productionTab = screen.GetTabs().Pages[(int)MyTerminalPageEnum.Production];
+            var cb = (MyGuiControlCheckbox)productionTab.Controls.GetControlByName("SlaveCheckbox");
+            cb.IsChecked = !cb.IsChecked;
+        }
+    }
+
+    public class MedicalsScreen : IMedicals
+    {
         public void Respawn(int roomIndex)
         {
             var screen = EnsureMedicalScreen();
@@ -51,9 +138,15 @@ namespace Iv4xr.SePlugin.Control
             ).ToList();
         }
 
+        public T EnsureFocusedScreen<T>() where T : MyGuiScreenBase
+        {
+            return MyGuiScreenExtensions.EnsureFocusedScreen<T>();
+        }
+
+
         private MyGuiScreenMedicals EnsureMedicalScreen()
         {
-            return MyGuiScreenExtensions.EnsureFocusedScreen<MyGuiScreenMedicals>();
+            return EnsureFocusedScreen<MyGuiScreenMedicals>();
         }
 
         private List<MyGuiControlTable.Row> MedicalRoomRows()
@@ -64,6 +157,21 @@ namespace Iv4xr.SePlugin.Control
         private List<MyGuiControlTable.Row> FactionRows()
         {
             return EnsureMedicalScreen().Table("m_factionsTable").RowsAsList();
+        }
+    }
+
+    public class Screens : IScreens
+    {
+        private TerminalScreen m_terminalScreen = new TerminalScreen();
+
+        private MedicalsScreen m_medicalsScreen = new MedicalsScreen();
+
+        public IMedicals Medicals => m_medicalsScreen;
+        public ITerminal Terminal => m_terminalScreen;
+
+        private MyGuiScreenBase ScreenWithFocus()
+        {
+            return MyScreenManager.GetScreenWithFocus();
         }
 
         public string FocusedScreen()
@@ -88,7 +196,5 @@ namespace Iv4xr.SePlugin.Control
 
             throw new TimeoutException();
         }
-
-        public IMedicals Medicals => this;
     }
 }
