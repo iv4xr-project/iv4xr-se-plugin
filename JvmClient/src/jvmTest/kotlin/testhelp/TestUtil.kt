@@ -53,8 +53,8 @@ data class RemoteException(
 fun spaceEngineersSimplePlaceGrindTorchSuspend(
     scenarioId: String = SIMPLE_PLACE_GRIND_TORCH,
     agentId: String = TEST_AGENT,
-    spaceEngineers: JsonRpcSpaceEngineers = JsonRpcSpaceEngineersBuilder.localhost(agentId),
-    block: suspend JsonRpcSpaceEngineers.() -> Unit
+    spaceEngineers: SpaceEngineers = JsonRpcSpaceEngineersBuilder.localhost(agentId),
+    block: suspend SpaceEngineers.() -> Unit
 ) {
     try {
         spaceEngineers.session.loadFromTestResources(scenarioId)

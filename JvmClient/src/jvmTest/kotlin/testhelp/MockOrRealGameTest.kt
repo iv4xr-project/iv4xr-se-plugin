@@ -61,7 +61,7 @@ abstract class MockOrRealGameTest(
         }
     }
 
-    private fun getSpaceEngineers(forceRealGame: Boolean, file: File): JsonRpcSpaceEngineers {
+    private fun getSpaceEngineers(forceRealGame: Boolean, file: File): SpaceEngineers {
         return if (useRealGame(forceRealGame, file)) {
             JsonRpcSpaceEngineersBuilder.fromStringLineReaderWriter(agentId, readerWriter(file))
         } else {

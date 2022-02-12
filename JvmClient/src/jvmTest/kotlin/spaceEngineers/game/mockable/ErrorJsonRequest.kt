@@ -22,7 +22,6 @@ class ErrorJsonRequest : MockOrRealGameTest() {
         this as JsonRpcSpaceEngineers
         assertFailsWith<Exception> {
             this.processSingleParameterMethod(
-                method = ::ThisMethodDoesNotExist,
                 methodName = "Character.TurnOnJetpack",
                 parameterName = "firstParam",
                 parameter = "123",
@@ -40,7 +39,6 @@ class ErrorJsonRequest : MockOrRealGameTest() {
         this as JsonRpcSpaceEngineers
         assertFailsWith<Exception> {
             this.processSingleParameterMethod(
-                method = ::ThisMethodDoesNotExist,
                 methodName = "ThisMethodDoesNotExist",
                 parameterName = "firstParam",
                 parameter = "123",

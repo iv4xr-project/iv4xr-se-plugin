@@ -66,8 +66,7 @@ class GsonRpcSpaceEngineers(
     adminPrefix = adminPrefix,
 ) {
 
-    override fun <O : Any> encodeRequest(
-        method: KFunction<O?>,
+    override fun encodeRequest(
         parameters: List<TypedParameter<*>>,
         methodName: String
     ): String {

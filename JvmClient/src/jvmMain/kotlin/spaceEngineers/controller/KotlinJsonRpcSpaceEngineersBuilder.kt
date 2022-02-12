@@ -8,14 +8,14 @@ import java.io.File
 
 class KotlinJsonRpcSpaceEngineersBuilder: JsonRpcSpaceEngineersBuilder {
 
-    override fun localhost(agentId: String): JsonRpcSpaceEngineers {
-        return JsonRpcSpaceEngineers(
+    override fun localhost(agentId: String): SpaceEngineers {
+        return fromStringLineReaderWriter(
             agentId = agentId,
             stringLineReaderWriter = SocketReaderWriter()
         )
     }
 
-    override fun mock(agentId: String, file: File): JsonRpcSpaceEngineers {
+    override fun mock(agentId: String, file: File): SpaceEngineers {
         val text = file.readText().trimEnd()
         val lines = text.lines()
         return if (lines.size > 1) {
@@ -25,15 +25,15 @@ class KotlinJsonRpcSpaceEngineersBuilder: JsonRpcSpaceEngineersBuilder {
         }
     }
 
-    override fun mock(agentId: String, lineToReturn: String): JsonRpcSpaceEngineers {
-        return JsonRpcSpaceEngineers(
+    override fun mock(agentId: String, lineToReturn: String): SpaceEngineers {
+        return fromStringLineReaderWriter(
             agentId = agentId,
             stringLineReaderWriter = AlwaysReturnSameLineReaderWriter(lineToReturn)
         )
     }
 
-    override fun mock(agentId: String, lines: List<String>): JsonRpcSpaceEngineers {
-        return JsonRpcSpaceEngineers(
+    override fun mock(agentId: String, lines: List<String>): SpaceEngineers {
+        return fromStringLineReaderWriter(
             agentId = agentId,
             stringLineReaderWriter = PresetLinesReaderWriter(lines)
         )

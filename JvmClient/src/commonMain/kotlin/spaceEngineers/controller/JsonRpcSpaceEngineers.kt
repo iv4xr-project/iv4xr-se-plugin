@@ -1,10 +1,12 @@
 package spaceEngineers.controller
 
+import kotlinx.serialization.InternalSerializationApi
 import spaceEngineers.model.*
 import spaceEngineers.navigation.NavGraph
 import spaceEngineers.transport.StringLineReaderWriter
 
 
+@OptIn(InternalSerializationApi::class, kotlin.ExperimentalStdlibApi::class)
 open class JsonRpcSpaceEngineers(
     val agentId: String,
     stringLineReaderWriter: StringLineReaderWriter,
@@ -21,8 +23,7 @@ open class JsonRpcSpaceEngineers(
 
     override val session: Session = object : Session {
         override fun loadScenario(scenarioPath: String) {
-            processSingleParameterMethod(
-                method = ::loadScenario,
+            processSingleParameterMethod<String, Unit>(
                 parameter = scenarioPath,
                 parameterName = "scenarioPath",
                 methodName = "${sessionPrefix}LoadScenario",
@@ -31,8 +32,7 @@ open class JsonRpcSpaceEngineers(
         }
 
         override fun connect(address: String) {
-            processSingleParameterMethod(
-                method = ::connect,
+            processSingleParameterMethod<String, Unit>(
                 parameter = address,
                 parameterName = "address",
                 methodName = "${sessionPrefix}Connect",
@@ -41,15 +41,13 @@ open class JsonRpcSpaceEngineers(
         }
 
         override fun disconnect() {
-            processNoParameterMethod(
-                method = ::disconnect,
+            processNoParameterMethod<Unit>(
                 methodName = "${sessionPrefix}Disconnect",
             )
         }
 
         override fun exitGame() {
-            processNoParameterMethod(
-                method = ::exitGame,
+            processNoParameterMethod<Unit>(
                 methodName = "${sessionPrefix}ExitGame",
             )
         }
@@ -58,7 +56,6 @@ open class JsonRpcSpaceEngineers(
     override val character: Character = object : Character {
         override fun use() {
             return processNoParameterMethod<Unit>(
-                method = ::use,
                 methodName = "${characterPrefix}Use"
             )
         }
@@ -71,36 +68,32 @@ open class JsonRpcSpaceEngineers(
                     TypedParameter("roll", roll, Float::class),
                     TypedParameter("ticks", ticks, Int::class)
                 ),
-                method = ::moveAndRotate,
                 methodName = "${characterPrefix}MoveAndRotate",
             )
         }
 
         override fun turnOnJetpack(): CharacterObservation {
             return processNoParameterMethod<CharacterObservation>(
-                method = ::turnOnJetpack,
                 methodName = "${characterPrefix}TurnOnJetpack"
             )
         }
 
         override fun turnOffJetpack(): CharacterObservation {
             return processNoParameterMethod<CharacterObservation>(
-                method = ::turnOffJetpack,
                 methodName = "${characterPrefix}TurnOffJetpack"
             )
         }
 
         override fun beginUsingTool() {
-            processNoParameterMethod<Unit>(::beginUsingTool, "${characterPrefix}BeginUsingTool")
+            processNoParameterMethod<Unit>("${characterPrefix}BeginUsingTool")
         }
 
         override fun endUsingTool() {
-            processNoParameterMethod<Unit>(::endUsingTool, "${characterPrefix}EndUsingTool")
+            processNoParameterMethod<Unit>("${characterPrefix}EndUsingTool")
         }
 
         override fun switchHelmet(): CharacterObservation {
             return processNoParameterMethod<CharacterObservation>(
-                method = ::switchHelmet,
                 methodName = "${characterPrefix}SwitchHelmet"
             )
         }
@@ -109,7 +102,6 @@ open class JsonRpcSpaceEngineers(
     override val items: Items = object : Items {
         override fun equip(toolbarLocation: ToolbarLocation) {
             processSingleParameterMethod<ToolbarLocation, Unit>(
-                method = ::equip,
                 parameter = toolbarLocation,
                 parameterName = "toolbarLocation",
                 parameterType = ToolbarLocation::class,
@@ -123,14 +115,12 @@ open class JsonRpcSpaceEngineers(
                     TypedParameter("name", name, String::class),
                     TypedParameter("toolbarLocation", toolbarLocation, ToolbarLocation::class),
                 ),
-                method = ::setToolbarItem,
                 methodName = "${itemsPrefix}SetToolbarItem"
             )
         }
 
         override fun toolbar(): Toolbar {
             return processNoParameterMethod<Toolbar>(
-                method = ::toolbar,
                 methodName = "${itemsPrefix}Toolbar"
             )
         }
@@ -138,7 +128,7 @@ open class JsonRpcSpaceEngineers(
 
     override val blocks: Blocks = object : Blocks {
         override fun place() {
-            processNoParameterMethod<Unit>(::place, "${blocksPrefix}Place")
+            processNoParameterMethod<Unit>("${blocksPrefix}Place")
         }
     }
     override val admin: SpaceEngineersAdmin = object : SpaceEngineersAdmin {
@@ -156,7 +146,6 @@ open class JsonRpcSpaceEngineers(
                         TypedParameter("orientationForward", orientationForward, Vec3F::class),
                         TypedParameter("orientationUp", orientationUp, Vec3F::class),
                     ),
-                    method = ::placeAt,
                     methodName = "${adminPrefix}${blocksPrefix}PlaceAt"
                 )
             }
@@ -176,14 +165,12 @@ open class JsonRpcSpaceEngineers(
                         TypedParameter("orientationForward", orientationForward, Vec3I::class),
                         TypedParameter("orientationUp", orientationUp, Vec3I::class),
                     ),
-                    method = ::placeInGrid,
                     methodName = "${adminPrefix}${blocksPrefix}PlaceInGrid"
                 )
             }
 
             override fun remove(blockId: String) {
                 processSingleParameterMethod<String, Unit>(
-                    method = ::remove,
                     methodName = "${adminPrefix}${blocksPrefix}Remove",
                     parameterName = "blockId",
                     parameter = blockId,
@@ -197,7 +184,6 @@ open class JsonRpcSpaceEngineers(
                         TypedParameter("blockId", blockId, String::class),
                         TypedParameter("integrity", integrity, Float::class),
                     ),
-                    method = ::setIntegrity,
                     methodName = "${adminPrefix}${blocksPrefix}SetIntegrity"
                 )
             }
@@ -215,7 +201,6 @@ open class JsonRpcSpaceEngineers(
                         TypedParameter("orientationForward", orientationForward, Vec3F::class),
                         TypedParameter("orientationUp", orientationUp, Vec3F::class),
                     ),
-                    method = ::teleport,
                     methodName = "${adminPrefix}${characterPrefix}Teleport"
                 )
             }
@@ -227,7 +212,6 @@ open class JsonRpcSpaceEngineers(
                         TypedParameter("functionIndex", functionIndex, Int::class),
                         TypedParameter("action", action, Int::class),
                     ),
-                    method = ::use,
                     methodName = "${adminPrefix}${characterPrefix}Use"
                 )
             }
@@ -245,14 +229,12 @@ open class JsonRpcSpaceEngineers(
                         TypedParameter("orientationForward", orientationForward, Vec3F::class),
                         TypedParameter("orientationUp", orientationUp, Vec3F::class),
                     ),
-                    method = ::create,
                     methodName = "${adminPrefix}${characterPrefix}Create"
                 )
             }
 
             override fun switch(id: String) {
                 return processSingleParameterMethod<String, Unit>(
-                    method = ::switch,
                     methodName = "${adminPrefix}${characterPrefix}Switch",
                     parameter = id,
                     parameterName = "id",
@@ -262,7 +244,6 @@ open class JsonRpcSpaceEngineers(
 
             override fun remove(id: String) {
                 return processSingleParameterMethod<String, Unit>(
-                    method = ::remove,
                     methodName = "${adminPrefix}${characterPrefix}Remove",
                     parameter = id,
                     parameterName = "id",
@@ -273,7 +254,6 @@ open class JsonRpcSpaceEngineers(
         override val observer: ObserverAdmin = object : ObserverAdmin {
             override fun observeCharacters(): List<CharacterObservation> {
                 return processNoParameterMethod<List<CharacterObservation>>(
-                    method = ::observeCharacters,
                     methodName = "${adminPrefix}${observerPrefix}ObserveCharacters"
                 )
             }
@@ -282,7 +262,6 @@ open class JsonRpcSpaceEngineers(
 
         override fun setFrameLimitEnabled(enabled: Boolean) {
             return processSingleParameterMethod(
-                method = ::setFrameLimitEnabled,
                 methodName = "${adminPrefix}SetFrameLimitEnabled",
                 parameter = enabled,
                 parameterName = "enabled",
@@ -293,23 +272,22 @@ open class JsonRpcSpaceEngineers(
 
     override val screens: Screens = object : Screens {
         override fun focusedScreen(): String {
-            return processNoParameterMethod(::focusedScreen, "${screensPrefix}FocusedScreen")
+            return processNoParameterMethod("${screensPrefix}FocusedScreen")
         }
 
         override fun waitUntilTheGameLoaded() {
-            return processNoParameterMethod(::waitUntilTheGameLoaded, "${screensPrefix}WaitUntilTheGameLoaded")
+            return processNoParameterMethod("${screensPrefix}WaitUntilTheGameLoaded")
         }
 
         val medicalScreenPrefix = "${screensPrefix}Medicals."
 
         override val medicals: Medicals = object : Medicals {
             override fun medicalRooms(): List<MedicalRoom> {
-                return processNoParameterMethod<List<MedicalRoom>>(::medicalRooms, "${medicalScreenPrefix}MedicalRooms")
+                return processNoParameterMethod<List<MedicalRoom>>("${medicalScreenPrefix}MedicalRooms")
             }
 
             override fun respawn(roomIndex: Int) {
                 processSingleParameterMethod<Int, Unit>(
-                    method = ::respawn,
                     parameter = roomIndex,
                     parameterName = "roomIndex",
                     parameterType = Int::class,
@@ -318,12 +296,11 @@ open class JsonRpcSpaceEngineers(
             }
 
             override fun factions(): List<Faction> {
-                return processNoParameterMethod<List<Faction>>(::factions, "${medicalScreenPrefix}Factions")
+                return processNoParameterMethod<List<Faction>>("${medicalScreenPrefix}Factions")
             }
 
             override fun chooseFaction(factionIndex: Int) {
                 processSingleParameterMethod<Int, Unit>(
-                    method = ::chooseFaction,
                     parameter = factionIndex,
                     parameterName = "factionIndex",
                     parameterType = Int::class,
@@ -336,12 +313,11 @@ open class JsonRpcSpaceEngineers(
             val terminalScreenPrefix = "${screensPrefix}Terminal."
 
             override fun data(): TerminalScreenData {
-                return processNoParameterMethod<TerminalScreenData>(::data, "${terminalScreenPrefix}Data")
+                return processNoParameterMethod<TerminalScreenData>("${terminalScreenPrefix}Data")
             }
 
             override fun selectTab(index: Int) {
-                processSingleParameterMethod(
-                    ::selectTab,
+                processSingleParameterMethod<Int, Unit>(
                     methodName = "${terminalScreenPrefix}SelectTab",
                     parameter = index,
                     parameterName = "index",
@@ -350,8 +326,7 @@ open class JsonRpcSpaceEngineers(
             }
 
             override fun addToProductionQueue(index: Int) {
-                processSingleParameterMethod(
-                    ::addToProductionQueue,
+                processSingleParameterMethod<Int, Unit>(
                     methodName = "${terminalScreenPrefix}AddToProductionQueue",
                     parameter = index,
                     parameterName = "index",
@@ -360,8 +335,7 @@ open class JsonRpcSpaceEngineers(
             }
 
             override fun removeFromProductionQueue(index: Int) {
-                processSingleParameterMethod(
-                    ::removeFromProductionQueue,
+                processSingleParameterMethod<Int, Unit>(
                     methodName = "${terminalScreenPrefix}RemoveFromProductionQueue",
                     parameter = index,
                     parameterName = "index",
@@ -370,8 +344,7 @@ open class JsonRpcSpaceEngineers(
             }
 
             override fun selectBlueprint(index: Int) {
-                processSingleParameterMethod(
-                    ::selectBlueprint,
+                processSingleParameterMethod<Int, Unit>(
                     methodName = "${terminalScreenPrefix}SelectBlueprint",
                     parameter = index,
                     parameterName = "index",
@@ -380,8 +353,7 @@ open class JsonRpcSpaceEngineers(
             }
 
             override fun selectAssembler(index: Int) {
-                processSingleParameterMethod(
-                    ::selectAssembler,
+                processSingleParameterMethod<Int, Unit>(
                     methodName = "${terminalScreenPrefix}SelectAssembler",
                     parameter = index,
                     parameterName = "index",
@@ -390,8 +362,7 @@ open class JsonRpcSpaceEngineers(
             }
 
             override fun enterBlueprintSearchBox(text: String) {
-                processSingleParameterMethod(
-                    ::enterBlueprintSearchBox,
+                processSingleParameterMethod<String, Unit>(
                     methodName = "${terminalScreenPrefix}EnterBlueprintSearchBox",
                     parameter = text,
                     parameterName = "text",
@@ -401,14 +372,12 @@ open class JsonRpcSpaceEngineers(
 
             override fun toggleProductionRepeatMode() {
                 return processNoParameterMethod(
-                    ::toggleProductionRepeatMode,
                     "${terminalScreenPrefix}ToggleProductionRepeatMode"
                 )
             }
 
             override fun toggleProductionCooperativeMode() {
                 return processNoParameterMethod(
-                    ::toggleProductionCooperativeMode,
                     "${terminalScreenPrefix}ToggleProductionCooperativeMode"
                 )
             }
@@ -418,36 +387,33 @@ open class JsonRpcSpaceEngineers(
 
     override val observer: Observer = object : Observer {
         override fun observe(): CharacterObservation {
-            return processNoParameterMethod<CharacterObservation>(::observe, "${observerPrefix}Observe")
+            return processNoParameterMethod<CharacterObservation>("${observerPrefix}Observe")
         }
 
         override fun observeBlocks(): Observation {
-            return processNoParameterMethod<Observation>(::observeBlocks, "${observerPrefix}ObserveBlocks")
+            return processNoParameterMethod<Observation>("${observerPrefix}ObserveBlocks")
         }
 
         override fun observeNewBlocks(): Observation {
             return processNoParameterMethod<Observation>(
-                method = ::observeNewBlocks,
                 methodName = "${observerPrefix}ObserveNewBlocks"
             )
         }
 
         override fun observeCharacters(): List<CharacterObservation> {
             return processNoParameterMethod<List<CharacterObservation>>(
-                method = ::observeCharacters,
                 methodName = "${observerPrefix}ObserveCharacters"
             )
         }
 
         override fun navigationGraph(): NavGraph {
-            return processNoParameterMethod(::navigationGraph, "${observerPrefix}NavigationGraph")
+            return processNoParameterMethod("${observerPrefix}NavigationGraph")
         }
 
         override fun takeScreenshot(absolutePath: String) {
             return processSingleParameterMethod<String, Unit>(
                 parameter = absolutePath,
                 parameterName = "absolutePath",
-                method = ::takeScreenshot,
                 methodName = "${observerPrefix}TakeScreenshot",
                 parameterType = String::class,
             )
@@ -455,7 +421,6 @@ open class JsonRpcSpaceEngineers(
 
         override fun switchCamera() {
             return processNoParameterMethod<Unit>(
-                method = ::switchCamera,
                 methodName = "${observerPrefix}SwitchCamera"
             )
         }
@@ -463,28 +428,24 @@ open class JsonRpcSpaceEngineers(
     override val definitions: Definitions = object : Definitions {
         override fun blockDefinitions(): List<BlockDefinition> {
             return processNoParameterMethod<List<BlockDefinition>>(
-                method = ::blockDefinitions,
                 methodName = "${definitionsPrefix}BlockDefinitions",
             )
         }
 
         override fun allDefinitions(): List<DefinitionBase> {
             return processNoParameterMethod<List<DefinitionBase>>(
-                method = ::allDefinitions,
                 methodName = "${definitionsPrefix}AllDefinitions",
             )
         }
 
         override fun blockHierarchy(): Map<String, String> {
             return processNoParameterMethod(
-                method = ::blockHierarchy,
                 methodName = "${definitionsPrefix}BlockHierarchy",
             )
         }
 
         override fun blockDefinitionHierarchy(): Map<String, String> {
             return processNoParameterMethod(
-                method = ::blockDefinitionHierarchy,
                 methodName = "${definitionsPrefix}BlockDefinitionHierarchy",
             )
         }
