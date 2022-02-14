@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Reflection;
 using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
 using Iv4xr.PluginLib;
@@ -16,7 +17,15 @@ namespace Iv4xr.SePlugin.Communication
         {
             if (IsException)
             {
-                ExceptionDispatchInfo.Capture(Exception).Throw();
+                if (Exception is TargetInvocationException && Exception.InnerException != null)
+                {
+                    ExceptionDispatchInfo.Capture(Exception.InnerException).Throw();
+                }
+                else
+                {
+                    ExceptionDispatchInfo.Capture(Exception).Throw();
+                }
+                
             }
 
             return ReturnValue;
