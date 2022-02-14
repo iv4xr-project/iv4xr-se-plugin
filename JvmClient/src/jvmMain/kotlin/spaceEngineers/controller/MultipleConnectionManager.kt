@@ -6,6 +6,7 @@ import spaceEngineers.transport.closeIfCloseable
 class MultipleConnectionManager(
     val connections: MutableMap<String, SpaceEngineers> = mutableMapOf(),
     val characterIdByName: MutableMap<String, String> = mutableMapOf(),
+    val spaceEngineersBuilder: JsonRpcSpaceEngineersBuilder = JVMSpaceEngineersBuilder.default(),
 ): AutoCloseable {
 
     val server: SpaceEngineers
@@ -37,7 +38,7 @@ class MultipleConnectionManager(
             "$name already in connections!"
         }
         val se = ContextControllerWrapper(
-            spaceEngineers = JsonRpcSpaceEngineersBuilder.fromStringLineReaderWriter(
+            spaceEngineers = spaceEngineersBuilder.fromStringLineReaderWriter(
                 agentId = name,
                 stringLineReaderWriter = SocketReaderWriter(host = address, port = port)
             )

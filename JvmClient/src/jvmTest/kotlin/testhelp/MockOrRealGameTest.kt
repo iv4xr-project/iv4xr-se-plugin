@@ -1,6 +1,6 @@
 package testhelp
 
-import spaceEngineers.controller.JsonRpcSpaceEngineers
+import spaceEngineers.controller.JVMSpaceEngineersBuilder
 import spaceEngineers.controller.JsonRpcSpaceEngineersBuilder
 import spaceEngineers.controller.SpaceEngineers
 import spaceEngineers.controller.loadFromTestResources
@@ -20,6 +20,7 @@ abstract class MockOrRealGameTest(
     private val scenarioId: String = SIMPLE_PLACE_GRIND_TORCH,
     private val loadScenario: Boolean = true,
     private val port: Int = DEFAULT_PORT,
+    private val spaceEngineersBuilder: JsonRpcSpaceEngineersBuilder = JVMSpaceEngineersBuilder.default()
 ) {
 
     var useRealGame: Boolean = forceRealGame
@@ -42,9 +43,10 @@ abstract class MockOrRealGameTest(
         forceRealGame: Boolean = this.forceRealGame,
         scenarioId: String = this.scenarioId,
         file: File = mockFile ?: inMockResourcesDirectory("${this::class.simpleName}-${getTestMethodName()}.txt"),
+        spaceEngineersBuilder: JsonRpcSpaceEngineersBuilder = this.spaceEngineersBuilder,
         block: suspend SpaceEngineers.() -> Unit
     ) {
-        val spaceEngineers = getSpaceEngineers(forceRealGame, file)
+        val spaceEngineers = getSpaceEngineers(forceRealGame, file, spaceEngineersBuilder)
         useRealGame = useRealGame(forceRealGame, file)
         if (loadScenario) {
             try {
@@ -67,11 +69,11 @@ abstract class MockOrRealGameTest(
         }
     }
 
-    private fun getSpaceEngineers(forceRealGame: Boolean, file: File): SpaceEngineers {
+    private fun getSpaceEngineers(forceRealGame: Boolean, file: File, builder: JsonRpcSpaceEngineersBuilder): SpaceEngineers {
         return if (useRealGame(forceRealGame, file)) {
-            JsonRpcSpaceEngineersBuilder.fromStringLineReaderWriter(agentId, readerWriter(file))
+            builder.fromStringLineReaderWriter(agentId, readerWriter(file))
         } else {
-            JsonRpcSpaceEngineersBuilder.mock(agentId, file)
+            builder.mock(agentId, file)
         }
     }
 

@@ -1,8 +1,7 @@
 package bdd
 
 import spaceEngineers.controller.ContextControllerWrapper
-import spaceEngineers.controller.JsonRpcSpaceEngineersBuilder
-import spaceEngineers.transport.AlwaysReturnSameLineReaderWriter
+import spaceEngineers.controller.JVMSpaceEngineersBuilder
 import spaceEngineers.transport.closeIfCloseable
 import testhelp.TEST_AGENT
 
@@ -11,12 +10,13 @@ object CucumberStaticConnection: AutoCloseable {
 
     var environment: ContextControllerWrapper? = null
 
+    val spaceEngineersBuilder = JVMSpaceEngineersBuilder.default()
+
     fun connect() {
         close()
         environment = ContextControllerWrapper(
-            spaceEngineers = JsonRpcSpaceEngineersBuilder.fromStringLineReaderWriter(
+            spaceEngineers = spaceEngineersBuilder.localhost(
                 agentId = TEST_AGENT,
-                stringLineReaderWriter = AlwaysReturnSameLineReaderWriter("")
             )
         )
     }

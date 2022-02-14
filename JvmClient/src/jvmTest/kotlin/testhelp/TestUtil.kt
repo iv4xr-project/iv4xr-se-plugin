@@ -53,7 +53,7 @@ data class RemoteException(
 fun spaceEngineersSimplePlaceGrindTorchSuspend(
     scenarioId: String = SIMPLE_PLACE_GRIND_TORCH,
     agentId: String = TEST_AGENT,
-    spaceEngineers: SpaceEngineers = JsonRpcSpaceEngineersBuilder.localhost(agentId),
+    spaceEngineers: SpaceEngineers = JVMSpaceEngineersBuilder.default().localhost(agentId),
     block: suspend SpaceEngineers.() -> Unit
 ) {
     try {
@@ -69,7 +69,7 @@ fun spaceEngineersSimplePlaceGrindTorchSuspend(
 fun spaceEngineersSuspend(
     agentId: String = TEST_AGENT,
     spaceEngineers: SpaceEngineers = ContextControllerWrapper(
-        spaceEngineers = JsonRpcSpaceEngineersBuilder.localhost(agentId)
+        spaceEngineers = JVMSpaceEngineersBuilder.default().localhost(agentId)
     ),
     block: suspend SpaceEngineers.() -> Unit
 ) {
@@ -88,7 +88,7 @@ fun spaceEngineersSuspend(
 fun spaceEngineers(
     agentId: String = TEST_AGENT,
     spaceEngineers: SpaceEngineers = ContextControllerWrapper(
-        spaceEngineers = JsonRpcSpaceEngineersBuilder.localhost(agentId)
+        spaceEngineers = JVMSpaceEngineersBuilder.default().localhost(agentId)
     ),
     block: SpaceEngineers.() -> Unit
 ) {
