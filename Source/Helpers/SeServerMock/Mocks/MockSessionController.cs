@@ -22,5 +22,10 @@ namespace SeServerMock.Mocks
         {
             throw new NotImplementedException();
         }
+
+        public void ExitGame()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
