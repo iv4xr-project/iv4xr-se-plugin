@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.Threading.Tasks;
 using ImpromptuInterface;
+using Iv4xr.PluginLib;
 using Iv4xr.SePlugin.Control;
 using Iv4xr.SpaceEngineers;
 using Iv4xr.SpaceEngineers.WorldModel;
@@ -33,7 +34,7 @@ namespace Iv4xr.SePlugin.Communication
         public override bool TryInvokeMember(InvokeMemberBinder binder, object[] args, out object result)
         {
             var methodInfo = m_instance.GetType().GetMethod(binder.Name);
-            methodInfo.ThrowNREIfNull($"methodInfo {binder.Name}");
+            methodInfo.ThrowIfNull($"methodInfo {binder.Name}");
             if (NeedsDirectCall(methodInfo.Name))
             {
                 result = methodInfo.Invoke(m_instance, args);

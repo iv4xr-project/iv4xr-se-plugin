@@ -106,14 +106,6 @@ namespace Iv4xr.SePlugin
                     );
         }
 
-        public static void ThrowNREIfNull(this object instance, string message)
-        {
-            if (instance == null)
-            {
-                throw new NullReferenceException(message);
-            }
-        }
-
         /// <summary>
         /// Get field used to identify block (ideal would be FatBlock.EntityId, but FatBlock is sometimes null.
         /// </summary>

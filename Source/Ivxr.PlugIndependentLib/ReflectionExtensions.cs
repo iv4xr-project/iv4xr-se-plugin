@@ -1,16 +1,14 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 
-namespace Iv4xr.SePlugin
+namespace Iv4xr.PluginLib
 {
     public static class ReflectionExtensions
     {
-
         public static object CallMethod(this object instance, string methodName, object[] args)
         {
-            instance.ThrowNREIfNull("Instance to call method on is null.");
+            instance.ThrowIfNull("Instance to call method on is null.");
             var method = instance.GetType().GetMethod(methodName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
-            method.ThrowNREIfNull($"Method {methodName} is not found on object {instance.GetType().Name}");
+            method.ThrowIfNull($"Method {methodName} is not found on object {instance.GetType().Name}");
             return method.Invoke(instance, args);
         }
         
@@ -39,15 +37,15 @@ namespace Iv4xr.SePlugin
                                      | BindingFlags.Static;
             var t = instance.GetType();
             var field = t.GetField(fieldName, bindFlags);
-            field.ThrowNREIfNull($"Field {fieldName} not found for type {t.Name}");
+            field.ThrowIfNull($"Field {fieldName} not found for type {t.Name}");
             return (T)field.GetValue(instance);
         }
 
         public static T GetInstanceFieldOrThrow<T>(this object instance, string fieldName)
         {
-            instance.ThrowNREIfNull($"Instance of type {instance.GetType()} to get the field from is null.");
+            instance.ThrowIfNull($"Instance of type {instance.GetType()} to get the field from is null.");
             var field = instance.GetInstanceField<T>(fieldName);
-            field.ThrowNREIfNull($"Field {fieldName} of type {typeof(T)} is null!");
+            field.ThrowIfNull($"Field {fieldName} of type {typeof(T)} is null!");
             return field;
 
         }
