@@ -8,6 +8,7 @@ import spaceEngineers.transport.GsonResponseAppendToFileReaderWriter
 import spaceEngineers.transport.SocketReaderWriter
 import spaceEngineers.transport.SocketReaderWriter.Companion.DEFAULT_PORT
 import spaceEngineers.transport.StringLineReaderWriter
+import spaceEngineers.transport.closeIfCloseable
 import java.io.File
 
 
@@ -46,7 +47,12 @@ abstract class MockOrRealGameTest(
         val spaceEngineers = getSpaceEngineers(forceRealGame, file)
         useRealGame = useRealGame(forceRealGame, file)
         if (loadScenario) {
-            spaceEngineers.session.loadFromTestResources(scenarioId)
+            try {
+                spaceEngineers.session.loadFromTestResources(scenarioId)
+            } catch (e: Throwable) {
+                spaceEngineers.closeIfCloseable()
+                throw e
+            }
         }
         spaceEngineersSuspend(agentId = agentId, spaceEngineers = spaceEngineers, block = block)
     }

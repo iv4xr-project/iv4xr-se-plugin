@@ -14,4 +14,4 @@ data class KotlinJsonRpcError(
     @SerialName("data")
     @Contextual
     override val data: JsonElement? = null
-) : Exception(message), JsonRpcError<JsonElement>
+) : RuntimeException(message), JsonRpcError<JsonElement>

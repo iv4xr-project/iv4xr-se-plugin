@@ -19,7 +19,11 @@ kotlin {
     jvm {
         withJava()
         compilations.all {
-            kotlinOptions.jvmTarget = '1.8'
+            kotlinOptions {
+                jvmTarget = '1.8'
+                javaParameters = true
+            }
+
         }
         testRuns["test"].executionTask.configure {
             useJUnit()

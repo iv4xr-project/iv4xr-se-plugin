@@ -31,6 +31,9 @@ fun SpaceEngineers?.closeIfCloseable() {
                 it.stringLineReaderWriter.close()
             }
         }
+        if (it is AutoCloseable) {
+            it.close()
+        }
     }
 }
 
