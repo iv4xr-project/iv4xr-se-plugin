@@ -24,66 +24,35 @@ class SpaceEngineersJavaProxy(
     val subInterfacesByName: MutableMap<String, Any>,
 ) : InvocationHandler {
 
-
-    val prefix = if (prefixName.isEmpty()) {
+    val dottedPrefix = if (prefixName.isEmpty()) {
         ""
     } else {
         "$prefixName."
     }
 
     override fun invoke(proxy: Any, method: Method, args: Array<out Any?>?): Any? {
-        return try {
-            return tryInvoke(proxy, method, args)
-        } catch (e: java.lang.Exception) {
-            println("rethrow")
-            throw e
-        }
-    }
-
-    fun tryInvoke(proxy: Any, method: Method, args: Array<out Any?>?): Any? {
-        if (method.name.startsWith("get")) {
+        if (method.isGetter()) {
             val name = method.name.substring(3)
             val lowercaseName = name.replaceFirstChar { it.lowercase() }
-            val memberDefinition = implementedInterface.members.first { it.name == lowercaseName }
-                ?: error("Member ${name} not found, choices are ${implementedInterface.members.map { it.name }}")
-            println("creating proxy for $prefix$name")
-            return subInterfacesByName.getOrPut(prefix + name) {
-                val kls = memberDefinition.returnType.classifier as KClass<*>
-                val cls = kls.javaObjectType
-                println(memberDefinition.returnType.classifier)
-                val px = SpaceEngineersJavaProxy(
-                    agentId,
-                    stringLineReaderWriter,
-                    implementedInterface = kls,
-                    prefixName = prefix + name,
-                    subInterfacesByName = subInterfacesByName,
-                )
-
-
-
-                cls.cast(
-                    Proxy.newProxyInstance(
-                        cls.classLoader,
-                        arrayOf<Class<*>>(cls, AutoCloseable::class.java),
-                        px,
-                    )
-                )
+            val memberDefinition = implementedInterface.members.firstOrNull { it.name == lowercaseName }
+                ?: error("Member $name not found, choices are: ${implementedInterface.members.map { it.name }}")
+            return subInterfacesByName.getOrPut(dottedPrefix + name) {
+                createSubProxy(memberDefinition.returnType.classifier as KClass<*>, dottedPrefix + name)
             }
         } else if (method.name == "close") {
-            println("closing!")
             stringLineReaderWriter.closeIfCloseable()
             return null
         }
 
-        val kotlinMethodDefinition = memberFunctions.find { it.name == method.name }
-            ?: error("couldn't find original kotlin method ${method.name}, choices: ${memberFunctions.map { it.name }}")
+        val kotlinMethodDefinition = memberFunctions.firstOrNull { it.name == method.name }
+            ?: error("Original kotlin method ${method.name} not found, choices are: ${memberFunctions.map { it.name }}")
 
         val kotlinReturnType = kotlinMethodDefinition.returnType
         val returnTypeProjection = KTypeProjection(KVariance.INVARIANT, kotlinReturnType)
         val responseReturnType = KotlinJsonRpcResponse::class.createType(arguments = listOf(returnTypeProjection))
 
         return processParameters(
-            methodName = "$prefix${
+            methodName = "$dottedPrefix${
                 method.name.replaceFirstChar
                 { it.uppercase() }
             }",
@@ -98,12 +67,21 @@ class SpaceEngineersJavaProxy(
         )
     }
 
+    private fun <T: Any> createSubProxy(kls: KClass<T>, prefixName: String): T {
+        return createSubProxy(
+            agentId = agentId,
+            stringLineReaderWriter = stringLineReaderWriter,
+            implementedInterface = kls,
+            prefixName = prefixName,
+            subInterfacesByName = subInterfacesByName,
+        )
+    }
+
     private fun processParameters(
         parameters: List<TypedParameter<*>>,
         methodName: String,
         returnType: KType
     ): Any {
-        println("Method $methodName")
         return callRpc(
             stringLineReaderWriter,
             encodeRequest(parameters, methodName),
@@ -154,22 +132,48 @@ class SpaceEngineersJavaProxy(
         return response.result ?: Unit as O
     }
 
+    private fun Method.isGetter(): Boolean {
+        return name.startsWith("get")
+    }
+
     companion object {
+
+        fun <T: Any> createSubProxy(
+            agentId: String,
+            stringLineReaderWriter: StringLineReaderWriter,
+            implementedInterface: KClass<T>,
+            prefixName: String,
+            subInterfacesByName: MutableMap<String, Any>,
+        ): T {
+            val cls = implementedInterface.javaObjectType
+            val proxyHandler = SpaceEngineersJavaProxy(
+                agentId,
+                stringLineReaderWriter,
+                implementedInterface = implementedInterface,
+                prefixName = prefixName,
+                subInterfacesByName = subInterfacesByName,
+            )
+
+            return cls.cast(
+                Proxy.newProxyInstance(
+                    cls.classLoader,
+                    arrayOf<Class<*>>(cls, AutoCloseable::class.java),
+                    proxyHandler,
+                )
+            )
+        }
 
         fun fromStringLineReaderWriter(
             agentId: String,
             stringLineReaderWriter: StringLineReaderWriter
         ): SpaceEngineers {
-            return Proxy.newProxyInstance(
-                SpaceEngineers::class.java.classLoader, arrayOf(SpaceEngineers::class.java, AutoCloseable::class.java),
-                SpaceEngineersJavaProxy(
-                    agentId,
-                    stringLineReaderWriter,
-                    implementedInterface = SpaceEngineers::class,
-                    prefixName = "",
-                    subInterfacesByName = mutableMapOf(),
-                )
-            ) as SpaceEngineers
+            return createSubProxy(
+                agentId = agentId,
+                stringLineReaderWriter = stringLineReaderWriter,
+                implementedInterface = SpaceEngineers::class,
+                prefixName = "",
+                subInterfacesByName = mutableMapOf(),
+            )
         }
     }
 }
