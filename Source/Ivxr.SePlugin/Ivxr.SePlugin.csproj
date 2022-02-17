@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>Iv4xr.SePlugin</RootNamespace>
-    <PackageVersion>0.4.0</PackageVersion>
+    <PackageVersion></PackageVersion>
     <AssemblyVersion>0.6.0</AssemblyVersion>
     <FileVersion></FileVersion>
   </PropertyGroup>
