@@ -25,6 +25,11 @@ namespace Iv4xr.SpaceEngineers
     {
         TerminalScreenData Data();
         void SelectTab(int index);
+        IInventoryTab Inventory { get; }
+        IProductionTab Production { get; }
+    }
+    
+    public interface IProductionTab {
         void ToggleProductionRepeatMode();
         void ToggleProductionCooperativeMode();
         void AddToProductionQueue(int index);
@@ -32,5 +37,19 @@ namespace Iv4xr.SpaceEngineers
         void SelectBlueprint(int index);
         void EnterBlueprintSearchBox(string text);
         void SelectAssembler(int index);
+    }
+
+    public interface IInventoryTab
+    {
+        void TransferInventoryItem(int sourceInventoryId, int destinationInventoryId, int itemId);
+        IInventorySide Left { get; }
+        IInventorySide Right { get; }
+    }
+    
+    public interface IInventorySide
+    {
+        void Filter(string text);
+        void SwapToGrid();
+        void SwapToCharacterOrItem();
     }
 }

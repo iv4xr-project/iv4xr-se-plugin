@@ -325,64 +325,111 @@ open class JsonRpcSpaceEngineers(
                 )
             }
 
-            override fun addToProductionQueue(index: Int) {
-                processSingleParameterMethod<Int, Unit>(
-                    methodName = "${terminalScreenPrefix}AddToProductionQueue",
-                    parameter = index,
-                    parameterName = "index",
-                    parameterType = Int::class
-                )
+            override val production: ProductionTab = object : ProductionTab {
+                val productionTabPrefix = "${terminalScreenPrefix}Production."
+
+                override fun addToProductionQueue(index: Int) {
+                    processSingleParameterMethod<Int, Unit>(
+                        methodName = "${productionTabPrefix}AddToProductionQueue",
+                        parameter = index,
+                        parameterName = "index",
+                        parameterType = Int::class
+                    )
+                }
+
+                override fun removeFromProductionQueue(index: Int) {
+                    processSingleParameterMethod<Int, Unit>(
+                        methodName = "${productionTabPrefix}RemoveFromProductionQueue",
+                        parameter = index,
+                        parameterName = "index",
+                        parameterType = Int::class
+                    )
+                }
+
+                override fun selectBlueprint(index: Int) {
+                    processSingleParameterMethod<Int, Unit>(
+                        methodName = "${productionTabPrefix}SelectBlueprint",
+                        parameter = index,
+                        parameterName = "index",
+                        parameterType = Int::class
+                    )
+                }
+
+                override fun selectAssembler(index: Int) {
+                    processSingleParameterMethod<Int, Unit>(
+                        methodName = "${productionTabPrefix}SelectAssembler",
+                        parameter = index,
+                        parameterName = "index",
+                        parameterType = Int::class
+                    )
+                }
+
+                override fun enterBlueprintSearchBox(text: String) {
+                    processSingleParameterMethod<String, Unit>(
+                        methodName = "${productionTabPrefix}EnterBlueprintSearchBox",
+                        parameter = text,
+                        parameterName = "text",
+                        parameterType = String::class
+                    )
+                }
+
+                override fun toggleProductionRepeatMode() {
+                    return processNoParameterMethod(
+                        "${productionTabPrefix}ToggleProductionRepeatMode"
+                    )
+                }
+
+                override fun toggleProductionCooperativeMode() {
+                    return processNoParameterMethod(
+                        "${productionTabPrefix}ToggleProductionCooperativeMode"
+                    )
+                }
             }
 
-            override fun removeFromProductionQueue(index: Int) {
-                processSingleParameterMethod<Int, Unit>(
-                    methodName = "${terminalScreenPrefix}RemoveFromProductionQueue",
-                    parameter = index,
-                    parameterName = "index",
-                    parameterType = Int::class
-                )
-            }
+            override val inventory: InventoryTab = object : InventoryTab {
+                val inventoryTabPrefix = "${terminalScreenPrefix}Inventory."
 
-            override fun selectBlueprint(index: Int) {
-                processSingleParameterMethod<Int, Unit>(
-                    methodName = "${terminalScreenPrefix}SelectBlueprint",
-                    parameter = index,
-                    parameterName = "index",
-                    parameterType = Int::class
-                )
-            }
+                override fun transferInventoryItem(sourceInventoryId: Int, destinationInventoryId: Int, itemId: Int) {
+                    processParameters<Unit>(
+                        parameters = listOf(
+                            TypedParameter("sourceInventoryId", value = sourceInventoryId, type = Int::class),
+                            TypedParameter("destinationInventoryId", value = destinationInventoryId, type = Int::class),
+                            TypedParameter("itemId", value = itemId, type = Int::class),
+                        ),
+                        methodName = "${inventoryTabPrefix}TransferInventoryItem"
+                    )
+                }
 
-            override fun selectAssembler(index: Int) {
-                processSingleParameterMethod<Int, Unit>(
-                    methodName = "${terminalScreenPrefix}SelectAssembler",
-                    parameter = index,
-                    parameterName = "index",
-                    parameterType = Int::class
-                )
-            }
+                inner class InnerInventorySide(val prefix: String) : InventorySide {
+                    override fun filter(text: String) {
+                        processSingleParameterMethod<String, Unit>(
+                            methodName = "${prefix}Filter",
+                            parameter = text,
+                            parameterName = "text",
+                            parameterType = String::class
+                        )
+                    }
 
-            override fun enterBlueprintSearchBox(text: String) {
-                processSingleParameterMethod<String, Unit>(
-                    methodName = "${terminalScreenPrefix}EnterBlueprintSearchBox",
-                    parameter = text,
-                    parameterName = "text",
-                    parameterType = String::class
-                )
-            }
+                    override fun swapToGrid() {
+                        processNoParameterMethod<Unit>(
+                            methodName = "${prefix}SwapToGrid",
+                        )
+                    }
 
-            override fun toggleProductionRepeatMode() {
-                return processNoParameterMethod(
-                    "${terminalScreenPrefix}ToggleProductionRepeatMode"
-                )
-            }
+                    override fun swapToCharacterOrItem() {
+                        processNoParameterMethod<Unit>(
+                            methodName = "${prefix}SwapToCharacterOrItem",
+                        )
+                    }
 
-            override fun toggleProductionCooperativeMode() {
-                return processNoParameterMethod(
-                    "${terminalScreenPrefix}ToggleProductionCooperativeMode"
-                )
+                }
+
+                override val left: InventorySide = InnerInventorySide("${inventoryTabPrefix}Left.")
+
+                override val right: InventorySide = InnerInventorySide("${inventoryTabPrefix}Right.")
+
             }
         }
-
     }
 
     override val observer: Observer = object : Observer {

@@ -4,6 +4,7 @@ using System.Linq;
 using Iv4xr.PluginLib;
 using Sandbox.Game;
 using Sandbox.Game.Gui;
+using Sandbox.Game.Screens.Helpers;
 using Sandbox.Graphics.GUI;
 using VRage.Game.ModAPI;
 
@@ -11,14 +12,34 @@ namespace Iv4xr.SePlugin
 {
     public static class MyGuiScreenExtensions
     {
-        public static MyGuiControlButton Button(this MyGuiScreenBase screen, string fieldName)
+        public static MyGuiControlButton Button(this object screen, string fieldName)
         {
             return screen.GetInstanceFieldOrThrow<MyGuiControlButton>(fieldName);
         }
+        
+        public static MyGuiControlSearchBox SearchBox(this object screen, string fieldName)
+        {
+            return screen.GetInstanceFieldOrThrow<MyGuiControlSearchBox>(fieldName);
+        }
+        
+        public static MyGuiControlRadioButton RadioButton(this object screen, string fieldName)
+        {
+            return screen.GetInstanceFieldOrThrow<MyGuiControlRadioButton>(fieldName);
+        }
 
-        public static void Click(this MyGuiScreenBase screen, string fieldName)
+        public static void ClickButton(this object screen, string fieldName)
         {
             screen.Button(fieldName).PressButton();
+        }
+        
+        public static void ClickRadio(this object screen, string fieldName)
+        {
+            screen.RadioButton(fieldName).Selected = true;
+        }
+        
+        public static void EnterSearchText(this object screen, string fieldName, string text)
+        {
+            screen.SearchBox(fieldName).SearchText = text;
         }
 
         public static MyGuiControlTable Table(this MyGuiScreenBase screen, string fieldName)

@@ -51,7 +51,7 @@ namespace Iv4xr.SePlugin.Control
                 TargetBlock = TargetBlock(character),
                 TargetUseObject = UseObject(character),
                 Movement = (CharacterMovementEnum)character.CurrentMovementState,
-                Inventory = GetInventory(character.GetInventory()),
+                Inventory = character.GetInventory().ToInventory(),
                 BootsState = GetBootState(character),
             };
         }
@@ -88,28 +88,6 @@ namespace Iv4xr.SePlugin.Control
             var detector = character.Components.Get<MyCharacterDetectorComponent>();
             return detector?.UseObject != null ? EntityBuilder.CreateUseObject(detector.UseObject) : null;
         }
-        
-        
-        private InventoryItem GetInventoryItem(MyPhysicalInventoryItem myItem)
-        {
-            return new InventoryItem()
-            {
-                Amount = (int)myItem.Amount,
-                Id = myItem.Content.GetId().ToDefinitionId(),
-            };
-        }
 
-        private Inventory GetInventory(MyInventory myInventory)
-        {
-            return new Inventory()
-            {
-                CurrentMass = (float)myInventory.CurrentMass,
-                CurrentVolume = (float)myInventory.CurrentVolume,
-                MaxMass = (float)myInventory.MaxMass,
-                MaxVolume = (float)myInventory.MaxVolume,
-                CargoPercentage = myInventory.CargoPercentage,
-                Items = myInventory.GetItems().Select(GetInventoryItem).ToList(),
-            };
-        }
     }
 }

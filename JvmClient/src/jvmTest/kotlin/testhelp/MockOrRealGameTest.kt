@@ -1,9 +1,6 @@
 package testhelp
 
-import spaceEngineers.controller.JVMSpaceEngineersBuilder
-import spaceEngineers.controller.JsonRpcSpaceEngineersBuilder
-import spaceEngineers.controller.SpaceEngineers
-import spaceEngineers.controller.loadFromTestResources
+import spaceEngineers.controller.*
 import spaceEngineers.transport.GsonResponseAppendToFileReaderWriter
 import spaceEngineers.transport.SocketReaderWriter
 import spaceEngineers.transport.SocketReaderWriter.Companion.DEFAULT_PORT
@@ -20,7 +17,7 @@ abstract class MockOrRealGameTest(
     private val scenarioId: String = SIMPLE_PLACE_GRIND_TORCH,
     private val loadScenario: Boolean = true,
     private val port: Int = DEFAULT_PORT,
-    private val spaceEngineersBuilder: JsonRpcSpaceEngineersBuilder = JVMSpaceEngineersBuilder.default()
+    private val spaceEngineersBuilder: JsonRpcSpaceEngineersBuilder = SpaceEngineersJavaProxyBuilder()
 ) {
 
     var useRealGame: Boolean = forceRealGame

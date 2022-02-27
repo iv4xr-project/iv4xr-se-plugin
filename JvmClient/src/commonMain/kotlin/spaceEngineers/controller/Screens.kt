@@ -22,6 +22,18 @@ interface Medicals {
 interface Terminal {
     fun data(): TerminalScreenData
     fun selectTab(index: Int)
+
+    val production: ProductionTab
+    val inventory: InventoryTab
+}
+
+interface InventoryTab {
+    fun transferInventoryItem(sourceInventoryId: Int, destinationInventoryId: Int, itemId: Int)
+    val left: InventorySide
+    val right: InventorySide
+}
+
+interface ProductionTab {
     fun addToProductionQueue(index: Int)
     fun removeFromProductionQueue(index: Int)
     fun selectBlueprint(index: Int)
@@ -29,4 +41,10 @@ interface Terminal {
     fun toggleProductionRepeatMode()
     fun toggleProductionCooperativeMode()
     fun selectAssembler(index: Int)
+}
+
+interface InventorySide {
+    fun filter(text: String)
+    fun swapToGrid()
+    fun swapToCharacterOrItem()
 }
