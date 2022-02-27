@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Iv4xr.PluginLib;
+using Iv4xr.SePlugin.Communication;
 using Iv4xr.SpaceEngineers;
 using Iv4xr.SpaceEngineers.WorldModel;
 using Sandbox.Definitions;
@@ -15,7 +16,6 @@ using SpaceEngineers.Game.GUI;
 using VRage;
 using VRage.Game.Entity;
 using VRage.Game.ModAPI;
-using VRage.Game.ModAPI.Ingame;
 
 namespace Iv4xr.SePlugin.Control
 {
@@ -202,11 +202,13 @@ namespace Iv4xr.SePlugin.Control
             return MyScreenManager.GetScreenWithFocus();
         }
 
+        [RunOutsideGameLoop]
         public string FocusedScreen()
         {
             return MyScreenManager.GetScreenWithFocus().DisplayName();
         }
 
+        [RunOutsideGameLoop]
         public void WaitUntilTheGameLoaded()
         {
             var timeoutMs = 60_000;

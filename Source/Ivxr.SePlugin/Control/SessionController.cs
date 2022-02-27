@@ -1,4 +1,5 @@
 ﻿using Iv4xr.PluginLib;
+using Iv4xr.SePlugin.Communication;
 using Iv4xr.SpaceEngineers;
 using Sandbox.Engine.Networking;
 using Sandbox.Game.Gui;
@@ -12,6 +13,7 @@ namespace Iv4xr.SePlugin.Control
     {
         public ILog Log { get; set; }
 
+        [RunOutsideGameLoop]
         public void LoadScenario(string scenarioPath)
         {
             Log.WriteLine($"Loading scenario: '{scenarioPath}'");
@@ -19,11 +21,13 @@ namespace Iv4xr.SePlugin.Control
             MySessionLoader.LoadSingleplayerSession(scenarioPath);
         }
 
+        [RunOutsideGameLoop]
         public void ExitGame()
         {
             MySessionLoader.ExitGame();
         }
 
+        [RunOutsideGameLoop]
         public void Connect(string address)
         {
             MySessionLoader.UnloadAndExitToMenu();
@@ -34,6 +38,7 @@ namespace Iv4xr.SePlugin.Control
             MyGameService.PingServer(address);
         }
 
+        [RunOutsideGameLoop]
         public void Disconnect()
         {
             MySessionLoader.UnloadAndExitToMenu();

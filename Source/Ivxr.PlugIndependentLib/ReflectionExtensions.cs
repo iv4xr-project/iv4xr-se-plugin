@@ -30,6 +30,16 @@ namespace Iv4xr.PluginLib
             field.SetValue(instance, value);
         }
         
+        public static T GetInstanceProperty<T>(this object instance, string fieldName)
+        {
+            BindingFlags bindFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic
+                                     | BindingFlags.Static;
+            var t = instance.GetType();
+            var field = t.GetProperty(fieldName, bindFlags);
+            field.ThrowIfNull($"Field {fieldName} not found for type {t.Name}");
+            return (T)field.GetValue(instance);
+        }
+        
         
         public static T GetInstanceField<T>(this object instance, string fieldName)
         {

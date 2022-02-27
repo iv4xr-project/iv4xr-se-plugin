@@ -1,41 +1,42 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Dynamic;
+using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using ImpromptuInterface;
 using Iv4xr.PluginLib;
 using Iv4xr.SePlugin.Control;
 using Iv4xr.SpaceEngineers;
-using Iv4xr.SpaceEngineers.WorldModel;
 
 namespace Iv4xr.SePlugin.Communication
 {
+    [AttributeUsage(AttributeTargets.Method, Inherited = false)]
+    public class RunOutsideGameLoop : Attribute
+    {
+    }
+
     public class GameLoopDynamicProxy<TType> : DynamicObject
     {
         private readonly TType m_instance;
 
         private readonly FuncActionDispatcher m_funcActionDispatcher;
 
-        private readonly string[] m_directCallExceptions;
-
-        public GameLoopDynamicProxy(TType instance, FuncActionDispatcher funcActionDispatcher,
-            string[] directCallExceptions = null)
+        public GameLoopDynamicProxy(TType instance, FuncActionDispatcher funcActionDispatcher)
         {
             m_instance = instance;
             m_funcActionDispatcher = funcActionDispatcher;
-            m_directCallExceptions = directCallExceptions;
         }
 
-        private bool NeedsDirectCall(string methodName)
+        private bool NeedsDirectCall(MethodInfo method)
         {
-            return m_directCallExceptions != null && m_directCallExceptions.Contains(methodName);
+            return method.GetCustomAttributes(typeof(RunOutsideGameLoop)).Any();
         }
 
         public override bool TryInvokeMember(InvokeMemberBinder binder, object[] args, out object result)
         {
             var methodInfo = m_instance.GetType().GetMethod(binder.Name);
             methodInfo.ThrowIfNull($"methodInfo {binder.Name}");
-            if (NeedsDirectCall(methodInfo.Name))
+            if (NeedsDirectCall(methodInfo))
             {
                 result = methodInfo.Invoke(m_instance, args);
                 return true;
@@ -44,6 +45,14 @@ namespace Iv4xr.SePlugin.Communication
             object r = null;
             m_funcActionDispatcher.Enqueue(() => { return r = methodInfo.Invoke(m_instance, args); });
             result = r;
+            return true;
+        }
+
+        public override bool TryGetMember(GetMemberBinder binder, out object result)
+        {
+            var p = m_instance.GetInstanceProperty<object>(binder.Name);
+            p.ThrowIfNull($"Member {binder.Name} is null!");
+            result = new GameLoopDynamicProxy<object>(p, m_funcActionDispatcher).ActLike(binder.ReturnType);
             return true;
         }
     }
@@ -78,34 +87,10 @@ namespace Iv4xr.SePlugin.Communication
         }
     }
 
-    public class ScreensOnGameLoop : AbstractServiceOnGameLoop, IScreens
-    {
-        private readonly IScreens m_screens;
-
-        public ScreensOnGameLoop(IScreens screens, FuncActionDispatcher funcActionDispatcher) : base(
-            funcActionDispatcher)
-        {
-            m_screens = screens;
-        }
-
-        public string FocusedScreen()
-        {
-            return m_screens.FocusedScreen();
-        }
-
-        public void WaitUntilTheGameLoaded()
-        {
-            m_screens.WaitUntilTheGameLoaded();
-        }
-
-        public IMedicals Medicals => m_screens.Medicals;
-        public ITerminal Terminal => m_screens.Terminal;                
-    }
-
     public class SynchronizedSpaceEngineersAdmin : AbstractServiceOnGameLoop, ISpaceEngineersAdmin
     {
         private ISpaceEngineersAdmin Admin { get; }
-        
+
         public SynchronizedSpaceEngineersAdmin(ISpaceEngineersAdmin admin, FuncActionDispatcher funcActionDispatcher) :
                 base(funcActionDispatcher)
         {
@@ -122,7 +107,6 @@ namespace Iv4xr.SePlugin.Communication
         public IBlocksAdmin Blocks => Admin.Blocks;
 
         public IObserverAdmin Observer => Admin.Observer;
-
     }
 
     public class SynchronizedSpaceEngineers : ISpaceEngineers
@@ -141,7 +125,7 @@ namespace Iv4xr.SePlugin.Communication
         {
             Character = new GameLoopDynamicProxy<ICharacterController>(se.Character, funcActionDispatcher)
                     .ActLike<ICharacterController>();
-            Session = se.Session;
+            Session = new GameLoopDynamicProxy<ISessionController>(se.Session, funcActionDispatcher).ActLike<ISessionController>();
             Items = new GameLoopDynamicProxy<IItems>(se.Items, funcActionDispatcher).ActLike<IItems>();
             Observer = new GameLoopDynamicProxy<IObserver>(se.Observer, funcActionDispatcher).ActLike<IObserver>();
             Definitions = new GameLoopDynamicProxy<IDefinitions>(se.Definitions, funcActionDispatcher)
@@ -155,7 +139,7 @@ namespace Iv4xr.SePlugin.Communication
                 new GameLoopDynamicProxy<IObserverAdmin>(se.Admin.Observer, funcActionDispatcher)
                         .ActLike<IObserverAdmin>()
             ), funcActionDispatcher);
-            Screens = new ScreensOnGameLoop(se.Screens, funcActionDispatcher);
+            Screens = new GameLoopDynamicProxy<IScreens>(se.Screens, funcActionDispatcher).ActLike<IScreens>();
         }
     }
 }
