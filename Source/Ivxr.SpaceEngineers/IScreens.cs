@@ -13,6 +13,20 @@ namespace Iv4xr.SpaceEngineers
         ITerminal Terminal { get; }
         IMainMenu MainMenu { get; }
         IMessageBox MessageBox { get; }
+        IJoinGame JoinGame { get; }
+        IServerConnect ServerConnect { get; }
+    }
+
+    public interface IServerConnect
+    {
+        void Connect();
+        void EnterAddress(string address);
+        void ToggleAddServerToFavorites();
+    }
+    
+    public interface IJoinGame
+    {
+        void DirectConnect();
     }
 
     public interface IMainMenu

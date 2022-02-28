@@ -129,8 +129,27 @@ class ScreenTest : MockOrRealGameTest(forceRealGame = true, loadScenario = false
     }
 
     @Test
+    fun messageBoxData() = testContext {
+        println(screens.messageBox.data())
+    }
+
+    @Test
     fun character() = testContext {
         screens.mainMenu.character()
     }
+
+    @Test
+    fun directConnect() = testContext {
+        screens.serverConnect.connect()
+    }
+
+    @Test
+    fun enterAddress() = testContext {
+        screens.mainMenu.joinGame()
+        delay(1000)
+        screens.joinGame.directConnect()
+        screens.serverConnect.enterAddress("1.2.3.4:20016")
+    }
+
 
 }
