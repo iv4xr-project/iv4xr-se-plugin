@@ -12,6 +12,17 @@ interface Screens {
     val terminal: Terminal
     val mainMenu: MainMenu
     val messageBox: MessageBox
+    val joinGame: JoinGame
+    val serverConnect: ServerConnect
+}
+
+interface ServerConnect {
+    fun connect()
+    fun enterAddress(address: String)
+}
+
+interface JoinGame {
+    fun directConnect()
 }
 
 interface MessageBox {

@@ -8,6 +8,7 @@ using Iv4xr.SePlugin.Communication;
 using Iv4xr.SpaceEngineers;
 using Iv4xr.SpaceEngineers.WorldModel;
 using Sandbox.Game.Gui;
+using Sandbox.Game.Screens;
 using Sandbox.Graphics.GUI;
 using SpaceEngineers.Game.GUI;
 
@@ -77,7 +78,8 @@ namespace Iv4xr.SePlugin.Control
         private MedicalsScreen m_medicalsScreen = new MedicalsScreen();
         private MainMenuScreen m_mainMenuScreen = new MainMenuScreen();
         private MessageBoxScreen m_messageBoxScreen = new MessageBoxScreen();
-        
+        private JoinGameScreen m_joinGameScreen = new JoinGameScreen();
+        private ServerConnectScreen m_serverConnectScreen = new ServerConnectScreen();
 
         public Screens(GameSession gameSession, LowLevelObserver lowLevelObserver)
         {
@@ -88,6 +90,8 @@ namespace Iv4xr.SePlugin.Control
         public ITerminal Terminal => m_terminalScreen;
         public IMainMenu MainMenu => m_mainMenuScreen;
         public IMessageBox MessageBox => m_messageBoxScreen;
+        public IJoinGame JoinGame => m_joinGameScreen;
+        public IServerConnect ServerConnect => m_serverConnectScreen;
 
         private MyGuiScreenBase ScreenWithFocus()
         {
@@ -117,6 +121,41 @@ namespace Iv4xr.SePlugin.Control
             }
 
             throw new TimeoutException();
+        }
+    }
+
+    public class ServerConnectScreen : IServerConnect
+    {
+        private MyGuiScreenServerConnect Screen => MyGuiScreenExtensions.EnsureFocusedScreen<MyGuiScreenServerConnect>();
+
+        [RunOutsideGameLoop]
+        public void ToggleAddServerToFavorites()
+        {
+            Screen.ClickCheckBox("m_favoriteCheckbox");
+        }
+        
+        [RunOutsideGameLoop]
+        public void Connect()
+        {
+            Screen.Controls.ButtonByText(MyCommonTexts.MultiplayerJoinConnect).PressButton();
+        }
+
+        [RunOutsideGameLoop]
+        public void EnterAddress(string address)
+        {
+            Screen.EnterText("m_addrTextbox", address);
+            
+        }
+    }
+
+    public class JoinGameScreen : IJoinGame
+    {
+        private MyGuiScreenJoinGame Screen => MyGuiScreenExtensions.EnsureFocusedScreen<MyGuiScreenJoinGame>();
+        
+        [RunOutsideGameLoop]
+        public void DirectConnect()
+        {
+            Screen.ClickButton("m_directConnectButton");
         }
     }
 

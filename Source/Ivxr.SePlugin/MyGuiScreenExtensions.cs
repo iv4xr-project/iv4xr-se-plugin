@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Iv4xr.PluginLib;
 using Sandbox.Game;
 using Sandbox.Game.Gui;
@@ -33,12 +34,23 @@ namespace Iv4xr.SePlugin
         {
             return screen.GetInstanceFieldOrThrow<MyGuiControlSearchBox>(fieldName);
         }
+        
+        public static MyGuiControlTextbox TextBox(this object screen, string fieldName)
+        {
+            return screen.GetInstanceFieldOrThrow<MyGuiControlTextbox>(fieldName);
+        }
 
         public static MyGuiControlRadioButton RadioButton(this object screen, string fieldName)
         {
             return screen.GetInstanceFieldOrThrow<MyGuiControlRadioButton>(fieldName);
         }
 
+        public static MyGuiControlButton ButtonByText(this MyGuiControls group, MyStringId stringId)
+        {
+            return group.GetInstanceFieldOrThrow<List<MyGuiControlBase>>("m_visibleControls").OfType<MyGuiControlButton>()
+                    .First(x => x.Text == MyTexts.Get(stringId).ToString());
+        }
+        
         public static MyGuiControlButton ButtonByText(this MyGuiControlElementGroup group, MyStringId stringId)
         {
             return group.GetInstanceFieldOrThrow<List<MyGuiControlBase>>("m_controlElements").OfType<MyGuiControlButton>()
@@ -71,6 +83,13 @@ namespace Iv4xr.SePlugin
             var searchBox = screen.SearchBox(fieldName);
             searchBox.ThrowIfCantUse(fieldName);
             searchBox.SearchText = text;
+        }
+        
+        public static void EnterText(this object screen, string fieldName, string text)
+        {
+            var searchBox = screen.TextBox(fieldName);
+            searchBox.ThrowIfCantUse(fieldName);
+            searchBox.SetText(new StringBuilder(text));
         }
 
         public static MyGuiControlTable Table(this MyGuiScreenBase screen, string fieldName)
