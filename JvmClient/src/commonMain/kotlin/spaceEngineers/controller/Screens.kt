@@ -2,6 +2,7 @@ package spaceEngineers.controller
 
 import spaceEngineers.model.Faction
 import spaceEngineers.model.MedicalRoom
+import spaceEngineers.model.MessageBoxData
 import spaceEngineers.model.TerminalScreenData
 
 interface Screens {
@@ -10,6 +11,13 @@ interface Screens {
     val medicals: Medicals
     val terminal: Terminal
     val mainMenu: MainMenu
+    val messageBox: MessageBox
+}
+
+interface MessageBox {
+    fun pressYes()
+    fun pressNo()
+    fun data(): MessageBoxData
 }
 
 interface MainMenu {

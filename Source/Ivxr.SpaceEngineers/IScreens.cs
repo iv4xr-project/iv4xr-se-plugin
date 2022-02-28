@@ -12,6 +12,7 @@ namespace Iv4xr.SpaceEngineers
         IMedicals Medicals { get; }
         ITerminal Terminal { get; }
         IMainMenu MainMenu { get; }
+        IMessageBox MessageBox { get; }
     }
 
     public interface IMainMenu
@@ -23,6 +24,13 @@ namespace Iv4xr.SpaceEngineers
         void Options();
         void Character();
         void ExitToWindows();
+    }
+
+    public interface IMessageBox
+    {
+        void PressYes();
+        void PressNo();
+        MessageBoxData Data();
     }
 
     public interface IMedicals

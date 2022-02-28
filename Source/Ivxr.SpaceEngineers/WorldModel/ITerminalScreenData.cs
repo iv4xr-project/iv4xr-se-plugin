@@ -48,4 +48,11 @@ namespace Iv4xr.SpaceEngineers.WorldModel
         public TerminalProductionData Production;
         public TerminalInventoryData Inventory;
     }
+
+    public class MessageBoxData
+    {
+        public string Caption;
+        public string Text;
+        public int ButtonType;
+    }
 }
