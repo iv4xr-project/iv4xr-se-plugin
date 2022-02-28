@@ -116,4 +116,19 @@ class ScreenTest : MockOrRealGameTest(forceRealGame = true, loadScenario = false
         //screens.terminal.inventory.left.doubleClickSelectedItem()
     }
 
+    @Test
+    fun mainMenuContinue() = testContext {
+        screens.mainMenu.`continue`()
+    }
+
+    @Test
+    fun exitToWindows() = testContext {
+        screens.mainMenu.exitToWindows()
+    }
+
+    @Test
+    fun character() = testContext {
+        screens.mainMenu.character()
+    }
+
 }

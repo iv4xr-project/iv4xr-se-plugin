@@ -11,6 +11,18 @@ namespace Iv4xr.SpaceEngineers
         void WaitUntilTheGameLoaded();
         IMedicals Medicals { get; }
         ITerminal Terminal { get; }
+        IMainMenu MainMenu { get; }
+    }
+
+    public interface IMainMenu
+    {
+        void Continue();
+        void NewGame();
+        void LoadGame();
+        void JoinGame();
+        void Options();
+        void Character();
+        void ExitToWindows();
     }
 
     public interface IMedicals
