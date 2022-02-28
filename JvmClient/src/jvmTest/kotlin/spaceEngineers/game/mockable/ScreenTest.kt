@@ -108,5 +108,11 @@ class ScreenTest : MockOrRealGameTest(forceRealGame = true, loadScenario = false
         character.showInventory()
     }
 
+    @Test
+    fun selectItemAndClick() = testContext {
+        screens.terminal.inventory.left.selectItem(0)
+        screens.terminal.inventory.dropSelected()
+        //screens.terminal.inventory.left.doubleClickSelectedItem()
+    }
 
 }

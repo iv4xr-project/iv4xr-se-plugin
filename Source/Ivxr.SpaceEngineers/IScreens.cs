@@ -56,6 +56,9 @@ namespace Iv4xr.SpaceEngineers
         void Filter(string text);
         void SwapToGrid();
         void SwapToCharacterOrItem();
+        void SelectItem(int index);
+        void ClickSelectedItem();
+        void DoubleClickSelectedItem();
 
         void FilterAll();
         void FilterEnergy();

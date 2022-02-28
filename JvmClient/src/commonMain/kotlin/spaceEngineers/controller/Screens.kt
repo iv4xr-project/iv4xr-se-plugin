@@ -31,6 +31,10 @@ interface InventoryTab {
     fun transferInventoryItem(sourceInventoryId: Int, destinationInventoryId: Int, itemId: Int)
     fun withdraw()
     fun deposit()
+    fun dropSelected()
+    fun fromBuildPlannerToProductionQueue()
+    fun selectedToProductionQueue()
+
     val left: InventorySide
     val right: InventorySide
 }
@@ -55,4 +59,7 @@ interface InventorySide {
     fun filterSystem()
     fun filterStorage()
     fun toggleHideEmpty()
+    fun selectItem(index: Int)
+    fun clickSelectedItem()
+    fun doubleClickSelectedItem()
 }

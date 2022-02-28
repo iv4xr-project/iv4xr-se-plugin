@@ -16,6 +16,11 @@ namespace Iv4xr.SePlugin
         {
             return screen.GetInstanceFieldOrThrow<MyGuiControlButton>(fieldName);
         }
+        
+        public static MyGuiControlGrid Grid(this object screen, string fieldName)
+        {
+            return screen.GetInstanceFieldOrThrow<MyGuiControlGrid>(fieldName);
+        }
 
         public static MyGuiControlCheckbox CheckBox(this object screen, string fieldName)
         {

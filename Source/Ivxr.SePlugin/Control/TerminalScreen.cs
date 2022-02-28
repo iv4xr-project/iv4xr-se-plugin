@@ -20,7 +20,7 @@ namespace Iv4xr.SePlugin.Control
     {
         private readonly GameSession m_session;
         private readonly LowLevelObserver m_levelObserver;
-        
+
         public TerminalScreen(GameSession gameSession, LowLevelObserver lowLevelObserver)
         {
             m_session = gameSession;
@@ -135,7 +135,7 @@ namespace Iv4xr.SePlugin.Control
 
             return availableInventories;
         }
-        
+
         internal static List<MyInventory> LeftInventories()
         {
             var inventoriesControl = TerminalInventoryController()
@@ -228,11 +228,13 @@ namespace Iv4xr.SePlugin.Control
     {
         private class LeftInventory : IInventorySide
         {
+            MyGuiControlGrid grid => TerminalScreen.TerminalInventoryController().Grid("m_leftFocusedInventory");
+
             private void ClickRadio(string fieldName)
             {
                 TerminalScreen.TerminalInventoryController().ClickRadio(fieldName);
             }
-            
+
             public void Filter(string text)
             {
                 TerminalScreen.TerminalInventoryController().EnterSearchText("m_searchBoxLeft", text);
@@ -246,6 +248,21 @@ namespace Iv4xr.SePlugin.Control
             public void SwapToCharacterOrItem()
             {
                 ClickRadio("m_leftSuitButton");
+            }
+
+            public void SelectItem(int index)
+            {
+                grid.SelectedIndex = index;
+            }
+
+            public void ClickSelectedItem()
+            {
+                grid.CallMethod("TryTriggerSingleClickEvent");
+            }
+
+            public void DoubleClickSelectedItem()
+            {
+                grid.CallMethod("DoubleClickItem");
             }
 
             public void FilterAll()
@@ -281,11 +298,13 @@ namespace Iv4xr.SePlugin.Control
 
         private class RightInventory : IInventorySide
         {
+            MyGuiControlGrid grid => TerminalScreen.TerminalInventoryController().Grid("m_rightFocusedInventory");
+
             private void ClickRadio(string fieldName)
             {
                 TerminalScreen.TerminalInventoryController().ClickRadio(fieldName);
             }
-            
+
             public void Filter(string text)
             {
                 TerminalScreen.TerminalInventoryController().EnterSearchText("m_searchBoxRight", text);
@@ -299,6 +318,21 @@ namespace Iv4xr.SePlugin.Control
             public void SwapToCharacterOrItem()
             {
                 ClickRadio("m_rightSuitButton");
+            }
+
+            public void SelectItem(int index)
+            {
+                grid.SelectedIndex = index;
+            }
+
+            public void ClickSelectedItem()
+            {
+                grid.CallMethod("TryTriggerSingleClickEvent");
+            }
+
+            public void DoubleClickSelectedItem()
+            {
+                grid.CallMethod("DoubleClickItem");
             }
 
             public void FilterAll()
@@ -349,12 +383,12 @@ namespace Iv4xr.SePlugin.Control
 
         public void DropSelected()
         {
-            TerminalScreen.TerminalInventoryController().ClickButton("m_throwOutButton"); 
+            TerminalScreen.TerminalInventoryController().ClickButton("m_throwOutButton");
         }
 
         public void Withdraw()
         {
-           TerminalScreen.TerminalInventoryController().ClickButton("m_withdrawButton");
+            TerminalScreen.TerminalInventoryController().ClickButton("m_withdrawButton");
         }
 
         public void Deposit()
