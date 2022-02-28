@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using Iv4xr.PluginLib;
 using Iv4xr.SePlugin.Communication;
@@ -73,10 +74,10 @@ namespace Iv4xr.SePlugin.Control
     public class Screens : IScreens
     {
         private TerminalScreen m_terminalScreen;
-
         private MedicalsScreen m_medicalsScreen = new MedicalsScreen();
-
         private MainMenuScreen m_mainMenuScreen = new MainMenuScreen();
+        private MessageBoxScreen m_messageBoxScreen = new MessageBoxScreen();
+        
 
         public Screens(GameSession gameSession, LowLevelObserver lowLevelObserver)
         {
@@ -86,6 +87,7 @@ namespace Iv4xr.SePlugin.Control
         public IMedicals Medicals => m_medicalsScreen;
         public ITerminal Terminal => m_terminalScreen;
         public IMainMenu MainMenu => m_mainMenuScreen;
+        public IMessageBox MessageBox => m_messageBoxScreen;
 
         private MyGuiScreenBase ScreenWithFocus()
         {
@@ -115,6 +117,38 @@ namespace Iv4xr.SePlugin.Control
             }
 
             throw new TimeoutException();
+        }
+    }
+
+    public class MessageBoxScreen : IMessageBox
+    {
+        private MyGuiScreenMessageBox Screen()
+        {
+            return MyGuiScreenExtensions.EnsureFocusedScreen<MyGuiScreenMessageBox>();
+        }
+        
+        [RunOutsideGameLoop]
+        public void PressYes()
+        {
+            Screen().ClickButton("m_yesButton");
+        }
+
+        [RunOutsideGameLoop]
+        public void PressNo()
+        {
+            Screen().ClickButton("m_noButton");
+        }
+
+        [RunOutsideGameLoop]
+        public MessageBoxData Data()
+        {
+            var screen = Screen();
+            return new MessageBoxData()
+            {
+                Text = screen.MessageText.ToString(),
+                Caption = screen.GetInstanceFieldOrThrow<StringBuilder>("m_messageCaption").ToString(),
+                ButtonType = (int) screen.GetInstanceFieldOrThrow<MyMessageBoxButtonsType>("m_buttonType")
+            };
         }
     }
 

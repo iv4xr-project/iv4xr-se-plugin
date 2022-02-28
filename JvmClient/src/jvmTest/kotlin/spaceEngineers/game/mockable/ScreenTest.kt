@@ -124,6 +124,8 @@ class ScreenTest : MockOrRealGameTest(forceRealGame = true, loadScenario = false
     @Test
     fun exitToWindows() = testContext {
         screens.mainMenu.exitToWindows()
+        println(screens.messageBox.data())
+        screens.messageBox.pressNo()
     }
 
     @Test
