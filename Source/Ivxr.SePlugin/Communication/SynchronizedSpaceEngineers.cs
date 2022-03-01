@@ -87,28 +87,6 @@ namespace Iv4xr.SePlugin.Communication
         }
     }
 
-    public class SynchronizedSpaceEngineersAdmin : AbstractServiceOnGameLoop, ISpaceEngineersAdmin
-    {
-        private ISpaceEngineersAdmin Admin { get; }
-
-        public SynchronizedSpaceEngineersAdmin(ISpaceEngineersAdmin admin, FuncActionDispatcher funcActionDispatcher) :
-                base(funcActionDispatcher)
-        {
-            Admin = admin;
-        }
-
-        public void SetFrameLimitEnabled(bool enabled)
-        {
-            Enqueue(() => { Admin.SetFrameLimitEnabled(enabled); });
-        }
-
-        public ICharacterAdmin Character => Admin.Character;
-
-        public IBlocksAdmin Blocks => Admin.Blocks;
-
-        public IObserverAdmin Observer => Admin.Observer;
-    }
-
     public class SynchronizedSpaceEngineers : ISpaceEngineers
     {
         public ICharacterController Character { get; }
@@ -131,14 +109,7 @@ namespace Iv4xr.SePlugin.Communication
             Definitions = new GameLoopDynamicProxy<IDefinitions>(se.Definitions, funcActionDispatcher)
                     .ActLike<IDefinitions>();
             Blocks = new GameLoopDynamicProxy<IBlocks>(se.Blocks, funcActionDispatcher).ActLike<IBlocks>();
-            Admin = new SynchronizedSpaceEngineersAdmin(new SpaceEngineersAdmin(
-                new GameLoopDynamicProxy<ICharacterAdmin>(se.Admin.Character, funcActionDispatcher)
-                        .ActLike<ICharacterAdmin>(),
-                new GameLoopDynamicProxy<IBlocksAdmin>(se.Admin.Blocks, funcActionDispatcher)
-                        .ActLike<IBlocksAdmin>(),
-                new GameLoopDynamicProxy<IObserverAdmin>(se.Admin.Observer, funcActionDispatcher)
-                        .ActLike<IObserverAdmin>()
-            ), funcActionDispatcher);
+            Admin = new GameLoopDynamicProxy<ISpaceEngineersAdmin>(se.Admin, funcActionDispatcher).ActLike<ISpaceEngineersAdmin>();
             Screens = new GameLoopDynamicProxy<IScreens>(se.Screens, funcActionDispatcher).ActLike<IScreens>();
         }
     }
