@@ -118,13 +118,13 @@ namespace Iv4xr.SePlugin.Control
         public CharacterObservation MoveAndRotate(PlainVec3D movement, PlainVec2F rotation3, float roll, int ticks)
         {
             var vector3d = movement.ToVector3D();
-            if (vector3d == Vector3D.Down && Character.CurrentMovementState == MyCharacterMovementEnum.Standing && !Character.JetpackRunning)
+            if (!Character.JetpackRunning)
             {
-                Character.Crouch();
-            }
-            else if (vector3d == Vector3D.Up && Character.CurrentMovementState == MyCharacterMovementEnum.Crouching && !Character.JetpackRunning)
-            {
-                Character.Stand();
+                if ((vector3d == Vector3D.Down && Character.CurrentMovementState == MyCharacterMovementEnum.Standing)
+                    || (vector3d == Vector3D.Up && Character.CurrentMovementState == MyCharacterMovementEnum.Crouching))
+                {
+                    Character.Crouch();
+                }
             }
 
             IvxrPlugin.Context.ContinuousMovementController.ChangeMovement(
