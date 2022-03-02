@@ -7,6 +7,7 @@ interface SpaceEngineersAdmin {
     val character: CharacterAdmin
     val observer: ObserverAdmin
     fun setFrameLimitEnabled(enabled: Boolean)
+    fun updateDefaultInteractDistance(distance: Float)
 }
 
 interface BlocksAdmin {
@@ -51,6 +52,7 @@ interface CharacterAdmin {
     fun switch(id: String)
 
     fun remove(id: String)
+    fun showTerminal(blockId: String)
 }
 
 interface ObserverAdmin {

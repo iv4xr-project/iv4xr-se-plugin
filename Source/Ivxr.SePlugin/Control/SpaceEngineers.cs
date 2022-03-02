@@ -3,6 +3,7 @@ using Iv4xr.PluginLib.Control;
 using Iv4xr.SePlugin.Config;
 using Iv4xr.SpaceEngineers;
 using Sandbox;
+using VRage.Game;
 
 namespace Iv4xr.SePlugin.Control
 {
@@ -63,6 +64,10 @@ namespace Iv4xr.SePlugin.Control
         public ICharacterAdmin Character { get; }
         public IBlocksAdmin Blocks { get; }
         public IObserverAdmin Observer { get; }
+        public void UpdateDefaultInteractDistance(float distance)
+        {
+            MyConstants.DEFAULT_INTERACTIVE_DISTANCE = distance;
+        }
 
         public SpaceEngineersAdmin(ICharacterAdmin character, IBlocksAdmin blocks, IObserverAdmin observer)
         {

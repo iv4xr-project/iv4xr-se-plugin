@@ -34,7 +34,7 @@ namespace Iv4xr.SePlugin.Communication
 
         public override bool TryInvokeMember(InvokeMemberBinder binder, object[] args, out object result)
         {
-            var methodInfo = m_instance.GetType().GetMethod(binder.Name);
+            var methodInfo = m_instance.GetType().GetMethod(binder.Name, args.Select(x => x.GetType()).ToArray());
             methodInfo.ThrowIfNull($"methodInfo {binder.Name}");
             if (NeedsDirectCall(methodInfo))
             {

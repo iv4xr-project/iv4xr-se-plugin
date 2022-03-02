@@ -52,6 +52,7 @@ interface Medicals {
 interface Terminal {
     fun data(): TerminalScreenData
     fun selectTab(index: Int)
+    fun close()
 
     val production: ProductionTab
     val inventory: InventoryTab

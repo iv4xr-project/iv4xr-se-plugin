@@ -39,7 +39,7 @@ class SpaceEngineersJavaProxy(
             return subInterfacesByName.getOrPut(dottedPrefix + name) {
                 createSubProxy(memberDefinition.returnType.classifier as KClass<*>, dottedPrefix + name)
             }
-        } else if (method.name == "close") {
+        } else if (method.name == "close" && implementedInterface == SpaceEngineers::class) {
             stringLineReaderWriter.closeIfCloseable()
             return null
         }

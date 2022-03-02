@@ -61,6 +61,7 @@ namespace Iv4xr.SpaceEngineers
         void SelectTab(int index);
         IInventoryTab Inventory { get; }
         IProductionTab Production { get; }
+        void Close();
     }
     
     public interface IProductionTab {

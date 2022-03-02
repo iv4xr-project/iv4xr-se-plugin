@@ -27,10 +27,11 @@ namespace Iv4xr.SePlugin.Control
             m_levelObserver = lowLevelObserver;
         }
 
+        private MyGuiScreenTerminal Screen => MyGuiScreenExtensions.EnsureFocusedScreen<MyGuiScreenTerminal>();
+
         private TerminalProductionData ProductionData()
         {
-            var screen = MyGuiScreenExtensions.EnsureFocusedScreen<MyGuiScreenTerminal>();
-            var productionTab = screen.ProductionTab();
+            var productionTab = Screen.ProductionTab();
 
             var productionQueueGrid = productionTab.TabControlByName<MyGuiControlScrollablePanel>("QueueScrollableArea")
                     .ScrollableChild<MyGuiControlGrid>();
@@ -50,7 +51,7 @@ namespace Iv4xr.SePlugin.Control
             var blueprintItems = blueprintsGrid.GridItemUserDataOfType<MyBlueprintDefinition>()
                     .Select(bp => bp.ToProductionQueueItem()).ToList();
 
-            var assemblers = screen.ProductionTab().TabControlByName<MyGuiControlCombobox>("AssemblersCombobox")
+            var assemblers = Screen.ProductionTab().TabControlByName<MyGuiControlCombobox>("AssemblersCombobox")
                     .ItemsAsList().Select(
                         i => i.Value.ToString()).ToList();
 
@@ -83,10 +84,9 @@ namespace Iv4xr.SePlugin.Control
 
         public TerminalScreenData Data()
         {
-            var screen = MyGuiScreenExtensions.EnsureFocusedScreen<MyGuiScreenTerminal>();
             return new TerminalScreenData()
             {
-                SelectedTab = screen.GetTabs().Pages[screen.GetTabs().SelectedPage].Name.Replace("Page", ""),
+                SelectedTab = Screen.GetTabs().Pages[Screen.GetTabs().SelectedPage].Name.Replace("Page", ""),
                 Production = ProductionData(),
                 Inventory = InventoryData(),
             };
@@ -94,13 +94,16 @@ namespace Iv4xr.SePlugin.Control
 
         public void SelectTab(int index)
         {
-            var screen = MyGuiScreenExtensions.EnsureFocusedScreen<MyGuiScreenTerminal>();
-            screen.GetTabs().SelectedPage = index;
+            Screen.GetTabs().SelectedPage = index;
         }
 
         public IInventoryTab Inventory { get; } = new InventoryTab();
 
         public IProductionTab Production { get; } = new ProductionTab();
+        public void Close()
+        {
+            Screen.CloseScreen();
+        }
 
         internal static List<MyInventory> Inventories(MyGuiControlList inventoriesControl)
         {
