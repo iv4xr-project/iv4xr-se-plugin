@@ -53,6 +53,11 @@ class MultiplayerSteps : AbstractMultiplayerSteps() {
         character.moveAndRotate(Vec3F.DOWN, ticks = 0)
     }
 
+    @When("Character {string} stands up.")
+    fun character_stands_up(name: String) = client(name) {
+        character.moveAndRotate(Vec3F.UP, ticks = 0)
+    }
+
     @Then("Character {string} is crouching as seen by server.")
     fun character_is_crouching_as_seen_by_server(name: String) = server {
         val characterId = getCharacterIdByName(name)

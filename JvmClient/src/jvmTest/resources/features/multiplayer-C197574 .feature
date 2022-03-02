@@ -16,5 +16,8 @@ Feature: C197574 Character can crouch / stand back up
     Then Character "A" is crouching as seen by itself.
     Then Character "A" is crouching as seen by server.
     #Then Character "A" is crouching as seen by client "B".
+    And Test waits 2 seconds.
+    When Character "A" stands up.
+    Then Character "A" is standing as seen by itself.
 
 
