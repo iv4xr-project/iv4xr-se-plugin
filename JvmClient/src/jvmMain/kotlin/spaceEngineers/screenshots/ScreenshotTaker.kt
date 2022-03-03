@@ -2,7 +2,7 @@ package spaceEngineers.screenshots
 
 import com.google.gson.Gson
 import spaceEngineers.controller.Character.Companion.DISTANCE_CENTER_CAMERA
-import spaceEngineers.controller.JVMSpaceEngineersBuilder
+import spaceEngineers.controller.JvmSpaceEngineersBuilder
 import spaceEngineers.controller.SpaceEngineers
 import spaceEngineers.model.BlockDefinition
 import spaceEngineers.model.BuildProgressModel
@@ -17,7 +17,7 @@ import java.lang.Thread.sleep
 
 fun main() {
     ScreenshotTaker(
-        se = JVMSpaceEngineersBuilder.default().localhost("agentId"),
+        se = JvmSpaceEngineersBuilder.default().localhost("agentId"),
         outputDirectory = File(System.getProperty("user.home"), "screenshots_v2")
     ).run()
 }

@@ -4,5 +4,6 @@
     {
         public DefinitionId Id;
         public int Amount;
+        public uint ItemId;
     }
 }

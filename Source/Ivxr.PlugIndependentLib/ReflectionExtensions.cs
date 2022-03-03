@@ -12,6 +12,14 @@ namespace Iv4xr.PluginLib
             return method.Invoke(instance, args);
         }
         
+        public static object CallMethod(this object instance, string methodName)
+        {
+            instance.ThrowIfNull("Instance to call method on is null.");
+            var method = instance.GetType().GetMethod(methodName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+            method.ThrowIfNull($"Method {methodName} is not found on object {instance.GetType().Name}");
+            return method.Invoke(instance, new object[]{});
+        }
+        
         public static void SetInstanceField(this object instance, string fieldName, object value)
         {
             BindingFlags bindFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic

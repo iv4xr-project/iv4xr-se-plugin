@@ -62,6 +62,8 @@ namespace Iv4xr.SpaceEngineers
         void BeginUsingTool();
         void EndUsingTool();
         void Use();
+        void ShowTerminal();
+        void ShowInventory();
     }
 
     public interface IBlocks

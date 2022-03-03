@@ -1,7 +1,7 @@
 package bdd
 
 import spaceEngineers.controller.ContextControllerWrapper
-import spaceEngineers.controller.JVMSpaceEngineersBuilder
+import spaceEngineers.controller.JvmSpaceEngineersBuilder
 import spaceEngineers.transport.closeIfCloseable
 import testhelp.TEST_AGENT
 
@@ -10,7 +10,7 @@ object CucumberStaticConnection: AutoCloseable {
 
     var environment: ContextControllerWrapper? = null
 
-    val spaceEngineersBuilder = JVMSpaceEngineersBuilder.default()
+    val spaceEngineersBuilder = JvmSpaceEngineersBuilder.default()
 
     fun connect() {
         close()

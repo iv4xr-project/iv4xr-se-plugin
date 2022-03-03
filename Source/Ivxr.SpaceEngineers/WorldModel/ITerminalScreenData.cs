@@ -25,8 +25,8 @@ namespace Iv4xr.SpaceEngineers.WorldModel
         }
 
     }
-    
-    public class TerminalScreenData
+
+    public class TerminalProductionData
     {
         public List<ProductionQueueItem> ProductionQueue;
         public List<AmountedDefinitionId> Inventory;
@@ -34,6 +34,18 @@ namespace Iv4xr.SpaceEngineers.WorldModel
         public List<string> Assemblers;
         public bool ProductionCooperativeMode;
         public bool ProductionRepeatMode;
+    }
+
+    public class TerminalInventoryData
+    {
+        public List<Inventory> LeftInventories;
+        public List<Inventory> RightInventories;
+    }
+    
+    public class TerminalScreenData
+    {
         public string SelectedTab;
+        public TerminalProductionData Production;
+        public TerminalInventoryData Inventory;
     }
 }

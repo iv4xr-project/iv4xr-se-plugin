@@ -27,7 +27,16 @@ data class AmountedDefinitionId(
 }
 
 @Serializable
-data class TerminalScreenData(
+data class TerminalInventoryData(
+    @SerialName("LeftInventories")
+    val leftInventories: List<Inventory>,
+    @SerialName("RightInventories")
+    val rightInventories: List<Inventory>,
+)
+
+
+@Serializable
+data class TerminalProductionData(
     @SerialName("ProductionQueue")
     val productionQueue: List<ProductionQueueItem>,
     @SerialName("Inventory")
@@ -38,6 +47,15 @@ data class TerminalScreenData(
     val productionCooperativeMode: Boolean,
     @SerialName("ProductionRepeatMode")
     val productionRepeatMode: Boolean,
+)
+
+@Serializable
+data class TerminalScreenData(
     @SerialName("SelectedTab")
     val selectedTab: String,
+
+    @SerialName("Production")
+    val production: TerminalProductionData,
+    @SerialName("Inventory")
+    val inventory: TerminalInventoryData,
 )

@@ -17,6 +17,8 @@ data class Inventory(
     val cargoPercentage: Float,
     @SerialName("Items")
     val items: List<InventoryItem>,
+    @SerialName("Id")
+    val id: Int,
 )
 
 @Serializable
@@ -25,4 +27,6 @@ data class InventoryItem(
     val id: DefinitionId,
     @SerialName("Amount")
     val amount: Int,
+    @SerialName("ItemId")
+    val itemId: Int,
 )

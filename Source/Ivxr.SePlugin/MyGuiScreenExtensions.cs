@@ -4,6 +4,7 @@ using System.Linq;
 using Iv4xr.PluginLib;
 using Sandbox.Game;
 using Sandbox.Game.Gui;
+using Sandbox.Game.Screens.Helpers;
 using Sandbox.Graphics.GUI;
 using VRage.Game.ModAPI;
 
@@ -11,14 +12,57 @@ namespace Iv4xr.SePlugin
 {
     public static class MyGuiScreenExtensions
     {
-        public static MyGuiControlButton Button(this MyGuiScreenBase screen, string fieldName)
+        public static MyGuiControlButton Button(this object screen, string fieldName)
         {
             return screen.GetInstanceFieldOrThrow<MyGuiControlButton>(fieldName);
         }
-
-        public static void Click(this MyGuiScreenBase screen, string fieldName)
+        
+        public static MyGuiControlGrid Grid(this object screen, string fieldName)
         {
-            screen.Button(fieldName).PressButton();
+            return screen.GetInstanceFieldOrThrow<MyGuiControlGrid>(fieldName);
+        }
+
+        public static MyGuiControlCheckbox CheckBox(this object screen, string fieldName)
+        {
+            return screen.GetInstanceFieldOrThrow<MyGuiControlCheckbox>(fieldName);
+        }
+
+        public static MyGuiControlSearchBox SearchBox(this object screen, string fieldName)
+        {
+            return screen.GetInstanceFieldOrThrow<MyGuiControlSearchBox>(fieldName);
+        }
+
+        public static MyGuiControlRadioButton RadioButton(this object screen, string fieldName)
+        {
+            return screen.GetInstanceFieldOrThrow<MyGuiControlRadioButton>(fieldName);
+        }
+
+        public static void ClickButton(this object screen, string fieldName)
+        {
+            var button = screen.Button(fieldName);
+            button.ThrowIfDisabled(fieldName);
+            button.PressButton();
+        }
+
+        public static void ClickRadio(this object screen, string fieldName)
+        {
+            var radio = screen.RadioButton(fieldName);
+            radio.ThrowIfDisabled(fieldName);
+            radio.Selected = true;
+        }
+
+        public static void ClickCheckBox(this object screen, string fieldName)
+        {
+            var radio = screen.CheckBox(fieldName);
+            radio.ThrowIfDisabled(fieldName);
+            radio.IsChecked = !radio.IsChecked;
+        }
+
+        public static void EnterSearchText(this object screen, string fieldName, string text)
+        {
+            var searchBox = screen.SearchBox(fieldName);
+            searchBox.ThrowIfDisabled(fieldName);
+            searchBox.SearchText = text;
         }
 
         public static MyGuiControlTable Table(this MyGuiScreenBase screen, string fieldName)
@@ -85,6 +129,14 @@ namespace Iv4xr.SePlugin
             }
 
             return list;
+        }
+
+        private static void ThrowIfDisabled(this MyGuiControlBase controlBase, string fieldName)
+        {
+            if (!controlBase.Enabled)
+            {
+                throw new InvalidOperationException($"Control {fieldName} of type {controlBase.GetType()} is disabled!");
+            }
         }
     }
 }

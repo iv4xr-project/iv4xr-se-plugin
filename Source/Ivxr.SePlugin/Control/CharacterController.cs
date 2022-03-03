@@ -66,6 +66,16 @@ namespace Iv4xr.SePlugin.Control
             MySession.Static.ControlledEntity.Use();
         }
 
+        public void ShowTerminal()
+        {
+            Character.ShowTerminal();
+        }
+
+        public void ShowInventory()
+        {
+            Character.ShowInventory();
+        }
+        
         public void Use(string blockId, int functionIndex, int action)
         {
             var block = m_lowLevelObserver.GetBlockById(blockId);

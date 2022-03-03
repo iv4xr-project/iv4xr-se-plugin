@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Iv4xr.SpaceEngineers.WorldModel;
 using Sandbox.Definitions;
+using Sandbox.Game;
 using Sandbox.Game.Entities.Character;
 using Sandbox.Game.Entities.Cube;
 using Sandbox.Game.Multiplayer;
@@ -155,6 +156,31 @@ namespace Iv4xr.SePlugin
                 Id = i.GetDefinitionId().ToDefinitionId(),
             };
         }
+        
+        public static Inventory ToInventory(this MyInventory myInventory)
+        {
+            return new Inventory()
+            {
+                CurrentMass = (float)myInventory.CurrentMass,
+                CurrentVolume = (float)myInventory.CurrentVolume,
+                MaxMass = (float)myInventory.MaxMass,
+                MaxVolume = (float)myInventory.MaxVolume,
+                CargoPercentage = myInventory.CargoPercentage,
+                Items = myInventory.GetItems().Select(ToInventoryItem).ToList(),
+                Id = myInventory.InventoryId.m_hash,
+            };
+        }
+        
+        public static InventoryItem ToInventoryItem(this MyPhysicalInventoryItem myItem)
+        {
+            return new InventoryItem()
+            {
+                Amount = (int)myItem.Amount,
+                Id = myItem.Content.GetId().ToDefinitionId(),
+                ItemId =  myItem.ItemId,
+            };
+        }
+
         
     }
 }

@@ -50,6 +50,9 @@ interface Character {
 
     fun beginUsingTool()
     fun endUsingTool()
+    fun showTerminal()
+    fun showInventory()
+
 
     companion object {
         /**
