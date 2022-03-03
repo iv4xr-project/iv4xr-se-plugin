@@ -42,6 +42,11 @@ namespace Iv4xr.SpaceEngineers
     public interface IInventoryTab
     {
         void TransferInventoryItem(int sourceInventoryId, int destinationInventoryId, int itemId);
+        void DropSelected();
+        void Withdraw();
+        void Deposit();
+        void FromBuildPlannerToProductionQueue();
+        void SelectedToProductionQueue();
         IInventorySide Left { get; }
         IInventorySide Right { get; }
     }
@@ -51,5 +56,13 @@ namespace Iv4xr.SpaceEngineers
         void Filter(string text);
         void SwapToGrid();
         void SwapToCharacterOrItem();
+
+        void FilterAll();
+        void FilterEnergy();
+        void FilterShip();
+        void FilterSystem();
+        void FilterStorage();
+
+        void ToggleHideEmpty();
     }
 }

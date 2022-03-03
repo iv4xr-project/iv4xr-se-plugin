@@ -73,4 +73,40 @@ class ScreenTest : MockOrRealGameTest(forceRealGame = true, loadScenario = false
         screens.terminal.inventory.left.filter("Gener")
     }
 
+    @Test
+    fun filterLeftEnergy() = testContext {
+        screens.terminal.inventory.left.filterEnergy()
+    }
+
+    @Test
+    fun filterLeftAll() = testContext {
+        screens.terminal.inventory.left.filterAll()
+    }
+
+    @Test
+    fun deposit() = testContext {
+        screens.terminal.inventory.deposit()
+    }
+
+    @Test
+    fun withdraw() = testContext {
+        screens.terminal.inventory.withdraw()
+    }
+
+    @Test
+    fun leftToggleHideEmpty() = testContext {
+        screens.terminal.inventory.left.toggleHideEmpty()
+    }
+
+    @Test
+    fun showTerminal() = testContext {
+        character.showTerminal()
+    }
+
+    @Test
+    fun showInventory() = testContext {
+        character.showInventory()
+    }
+
+
 }

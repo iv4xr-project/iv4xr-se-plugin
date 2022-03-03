@@ -29,6 +29,8 @@ interface Terminal {
 
 interface InventoryTab {
     fun transferInventoryItem(sourceInventoryId: Int, destinationInventoryId: Int, itemId: Int)
+    fun withdraw()
+    fun deposit()
     val left: InventorySide
     val right: InventorySide
 }
@@ -47,4 +49,10 @@ interface InventorySide {
     fun filter(text: String)
     fun swapToGrid()
     fun swapToCharacterOrItem()
+    fun filterAll()
+    fun filterEnergy()
+    fun filterShip()
+    fun filterSystem()
+    fun filterStorage()
+    fun toggleHideEmpty()
 }

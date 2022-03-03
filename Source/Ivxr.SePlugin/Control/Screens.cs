@@ -71,9 +71,14 @@ namespace Iv4xr.SePlugin.Control
 
     public class Screens : IScreens
     {
-        private TerminalScreen m_terminalScreen = new TerminalScreen();
+        private TerminalScreen m_terminalScreen;
 
         private MedicalsScreen m_medicalsScreen = new MedicalsScreen();
+
+        public Screens(GameSession gameSession, LowLevelObserver lowLevelObserver)
+        {
+            m_terminalScreen = new TerminalScreen(gameSession, lowLevelObserver);
+        }
 
         public IMedicals Medicals => m_medicalsScreen;
         public ITerminal Terminal => m_terminalScreen;

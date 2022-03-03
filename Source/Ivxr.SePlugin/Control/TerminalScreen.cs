@@ -18,6 +18,15 @@ namespace Iv4xr.SePlugin.Control
 {
     public class TerminalScreen : ITerminal
     {
+        private readonly GameSession m_session;
+        private readonly LowLevelObserver m_levelObserver;
+        
+        public TerminalScreen(GameSession gameSession, LowLevelObserver lowLevelObserver)
+        {
+            m_session = gameSession;
+            m_levelObserver = lowLevelObserver;
+        }
+
         private TerminalProductionData ProductionData()
         {
             var screen = MyGuiScreenExtensions.EnsureFocusedScreen<MyGuiScreenTerminal>();
@@ -219,6 +228,11 @@ namespace Iv4xr.SePlugin.Control
     {
         private class LeftInventory : IInventorySide
         {
+            private void ClickRadio(string fieldName)
+            {
+                TerminalScreen.TerminalInventoryController().ClickRadio(fieldName);
+            }
+            
             public void Filter(string text)
             {
                 TerminalScreen.TerminalInventoryController().EnterSearchText("m_searchBoxLeft", text);
@@ -226,17 +240,52 @@ namespace Iv4xr.SePlugin.Control
 
             public void SwapToGrid()
             {
-                TerminalScreen.TerminalInventoryController().ClickRadio("m_leftGridButton");
+                ClickRadio("m_leftGridButton");
             }
 
             public void SwapToCharacterOrItem()
             {
-                TerminalScreen.TerminalInventoryController().ClickRadio("m_leftSuitButton");
+                ClickRadio("m_leftSuitButton");
+            }
+
+            public void FilterAll()
+            {
+                ClickRadio("m_leftFilterAllButton");
+            }
+
+            public void FilterEnergy()
+            {
+                ClickRadio("m_leftFilterEnergyButton");
+            }
+
+            public void FilterShip()
+            {
+                ClickRadio("m_leftFilterShipButton");
+            }
+
+            public void FilterSystem()
+            {
+                ClickRadio("m_leftFilterSystemButton");
+            }
+
+            public void FilterStorage()
+            {
+                ClickRadio("m_leftFilterStorageButton");
+            }
+
+            public void ToggleHideEmpty()
+            {
+                TerminalScreen.TerminalInventoryController().ClickCheckBox("m_hideEmptyLeft");
             }
         }
 
         private class RightInventory : IInventorySide
         {
+            private void ClickRadio(string fieldName)
+            {
+                TerminalScreen.TerminalInventoryController().ClickRadio(fieldName);
+            }
+            
             public void Filter(string text)
             {
                 TerminalScreen.TerminalInventoryController().EnterSearchText("m_searchBoxRight", text);
@@ -244,12 +293,42 @@ namespace Iv4xr.SePlugin.Control
 
             public void SwapToGrid()
             {
-                TerminalScreen.TerminalInventoryController().ClickRadio("m_rightGridButton");
+                ClickRadio("m_rightGridButton");
             }
 
             public void SwapToCharacterOrItem()
             {
-                TerminalScreen.TerminalInventoryController().ClickRadio("m_rightSuitButton");
+                ClickRadio("m_rightSuitButton");
+            }
+
+            public void FilterAll()
+            {
+                ClickRadio("m_rightFilterAllButton");
+            }
+
+            public void FilterEnergy()
+            {
+                ClickRadio("m_rightFilterEnergyButton");
+            }
+
+            public void FilterShip()
+            {
+                ClickRadio("m_rightFilterShipButton");
+            }
+
+            public void FilterSystem()
+            {
+                ClickRadio("m_rightFilterSystemButton");
+            }
+
+            public void FilterStorage()
+            {
+                ClickRadio("m_rightFilterStorageButton");
+            }
+
+            public void ToggleHideEmpty()
+            {
+                TerminalScreen.TerminalInventoryController().ClickCheckBox("m_hideEmptyRight");
             }
         }
 
@@ -266,6 +345,31 @@ namespace Iv4xr.SePlugin.Control
             MyInventory.TransferByUser(sourceInventory, destinationInventory, (uint)itemId,
                 destinationInventory.ItemCount);
             TerminalInventoryController().CallMethod("RefreshSelectedInventoryItem", new object[] { });
+        }
+
+        public void DropSelected()
+        {
+            TerminalScreen.TerminalInventoryController().ClickButton("m_throwOutButton"); 
+        }
+
+        public void Withdraw()
+        {
+           TerminalScreen.TerminalInventoryController().ClickButton("m_withdrawButton");
+        }
+
+        public void Deposit()
+        {
+            TerminalScreen.TerminalInventoryController().ClickButton("m_depositAllButton");
+        }
+
+        public void FromBuildPlannerToProductionQueue()
+        {
+            TerminalScreen.TerminalInventoryController().ClickButton("m_addToProductionButton");
+        }
+
+        public void SelectedToProductionQueue()
+        {
+            TerminalScreen.TerminalInventoryController().ClickButton("m_selectedToProductionButton");
         }
 
         public IInventorySide Left { get; } = new LeftInventory();
