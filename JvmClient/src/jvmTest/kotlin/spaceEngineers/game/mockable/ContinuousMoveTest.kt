@@ -3,6 +3,7 @@ package spaceEngineers.game.mockable
 import spaceEngineers.model.Vec3F
 import spaceEngineers.model.extensions.normalizeAsWalk
 import testhelp.MockOrRealGameTest
+import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -22,6 +23,7 @@ class ContinuousMoveTest : MockOrRealGameTest() {
         assertEquals(2.9368255f, (position2 - position).length())
     }
 
+    @Ignore
     @Test
     fun moveByTicksAnotherCharacter() = testContext {
         delay(5_000)

@@ -1,10 +1,11 @@
 package spaceEngineers.game.mockable
 
+import kotlin.test.Ignore
 import testhelp.MockOrRealGameTest
 import kotlin.test.Test
 
 
-//@Ignore
+@Ignore
 class ScreenTest : MockOrRealGameTest(forceRealGame = true, loadScenario = false) {
 
 
@@ -47,9 +48,9 @@ class ScreenTest : MockOrRealGameTest(forceRealGame = true, loadScenario = false
 
     @Test
     fun transferItem() = testContext {
-        val li = screens.terminal.data().inventory.leftInventories.first()
-        val item = li.items.first()
-        screens.terminal.inventory.transferInventoryItem(0, 0, item.itemId)
+        val firstLeftInventory = screens.terminal.data().inventory.leftInventories.first()
+        val firstItem = firstLeftInventory.items.first()
+        screens.terminal.inventory.transferInventoryItem(0, 0, firstItem.itemId)
     }
 
     @Test

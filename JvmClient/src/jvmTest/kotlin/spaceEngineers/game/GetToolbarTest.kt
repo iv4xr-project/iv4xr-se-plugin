@@ -58,7 +58,7 @@ class GetToolbarTest : MockOrRealGameTest() {
 
         val location = ToolbarLocation(0, 2)
         val (success, fail) = blockTypes.partition { blockType ->
-            sleep(10)
+            delay(10)
             (checkBlockType(blockType, location) && checkPlacement(blockType, location))
         }
         assertTrue(success.size >= 184)
