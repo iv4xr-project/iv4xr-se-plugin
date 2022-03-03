@@ -4,7 +4,6 @@ import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import spaceEngineers.controller.ContextControllerWrapper
-import spaceEngineers.controller.JsonRpcSpaceEngineers
 import spaceEngineers.controller.SpaceEngineers
 import java.io.*
 import java.lang.reflect.Modifier
@@ -25,11 +24,6 @@ fun SpaceEngineers?.closeIfCloseable() {
     this?.let {
         if (it is ContextControllerWrapper) {
             it.spaceEngineers.closeIfCloseable()
-        }
-        if (it is JsonRpcSpaceEngineers) {
-            if (it.stringLineReaderWriter is AutoCloseable) {
-                it.stringLineReaderWriter.close()
-            }
         }
         if (it is AutoCloseable) {
             it.close()

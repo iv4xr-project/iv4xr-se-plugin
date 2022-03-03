@@ -6,7 +6,7 @@ import spaceEngineers.transport.closeIfCloseable
 class MultipleConnectionManager(
     val connections: MutableMap<String, SpaceEngineers> = mutableMapOf(),
     val characterIdByName: MutableMap<String, String> = mutableMapOf(),
-    val spaceEngineersBuilder: JsonRpcSpaceEngineersBuilder = JVMSpaceEngineersBuilder.default(),
+    val spaceEngineersBuilder: JsonRpcSpaceEngineersBuilder = JvmSpaceEngineersBuilder.default(),
 ): AutoCloseable {
 
     val server: SpaceEngineers

@@ -1,7 +1,7 @@
 package spaceEngineers.game
 
 import org.junit.jupiter.api.Disabled
-import spaceEngineers.controller.JVMSpaceEngineersBuilder
+import spaceEngineers.controller.JvmSpaceEngineersBuilder
 import spaceEngineers.controller.SpaceEngineers.Companion.DEFAULT_AGENT_ID
 import spaceEngineers.controller.loadFromTestResources
 import spaceEngineers.model.DefinitionId
@@ -26,7 +26,7 @@ class BasicUsageTest {
     @Test
     fun placeBlock() {
         // We create SpaceEngineers interface, that connects to local Space Engineers game.
-        val context = JVMSpaceEngineersBuilder.default().localhost(DEFAULT_AGENT_ID)
+        val context = JvmSpaceEngineersBuilder.default().localhost(DEFAULT_AGENT_ID)
         with(context) {
             // We load testing scenario.
             session.loadFromTestResources(SIMPLE_PLACE_GRIND_TORCH)

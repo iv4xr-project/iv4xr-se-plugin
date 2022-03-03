@@ -1,6 +1,6 @@
 package spaceEngineers.controller
 
-class JVMSpaceEngineersBuilder {
+class JvmSpaceEngineersBuilder {
 
     companion object {
         fun default(): JsonRpcSpaceEngineersBuilder {

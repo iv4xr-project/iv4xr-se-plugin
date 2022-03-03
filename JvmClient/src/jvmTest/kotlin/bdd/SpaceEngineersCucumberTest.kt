@@ -7,7 +7,6 @@ import io.cucumber.java.en.When
 import io.cucumber.junit.Cucumber
 import kotlinx.coroutines.runBlocking
 import org.junit.runner.RunWith
-import spaceEngineers.controller.JsonRpcSpaceEngineers
 import spaceEngineers.controller.extensions.*
 import spaceEngineers.controller.loadFromTestResources
 import spaceEngineers.model.Block
@@ -306,8 +305,6 @@ class SpaceEngineersCucumberTest : AbstractSpaceEngineersSteps() {
     @Then("Character saves metadata about each threshold and file names.")
     fun character_saves_metadata_about_each_threshold_and_file_names() {
         val block = observeLatestNewBlock()
-        val cw = environment.spaceEngineers as JsonRpcSpaceEngineers
-        //val meta = cw.blockDefinitions().first { it.definitionId.type == block.definitionId.type }
         val blockDir = File(outputDirectory, "${block.definitionId.type}").apply { mkdirs() }
         //File(blockDir, "blockDefinition.json").writeText(cw.gsonReaderWriter.gson.toJson(meta))
         File(

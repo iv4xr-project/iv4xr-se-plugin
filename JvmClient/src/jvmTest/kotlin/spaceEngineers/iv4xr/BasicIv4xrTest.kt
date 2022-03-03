@@ -37,7 +37,7 @@ class BasicIv4xrTest {
         // Otherwise, JsonRpcSpaceEngineersBuilder.localhost(agentId) can be used directly (also SpaceEngineers interface implementation).
         val controllerWrapper =
             ContextControllerWrapper(
-                spaceEngineers = JVMSpaceEngineersBuilder.default().localhost(agentId),
+                spaceEngineers = JvmSpaceEngineersBuilder.default().localhost(agentId),
                 context = context
             )
         // We create iv4xr environment and pass ID of the world (scenario to load).
