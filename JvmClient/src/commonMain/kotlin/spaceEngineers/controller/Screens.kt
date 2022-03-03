@@ -9,6 +9,17 @@ interface Screens {
     fun waitUntilTheGameLoaded()
     val medicals: Medicals
     val terminal: Terminal
+    val mainMenu: MainMenu
+}
+
+interface MainMenu {
+    fun `continue`()
+    fun newGame()
+    fun loadGame()
+    fun joinGame()
+    fun options()
+    fun character()
+    fun exitToWindows()
 }
 
 interface Medicals {

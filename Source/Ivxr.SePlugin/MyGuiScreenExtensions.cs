@@ -6,7 +6,9 @@ using Sandbox.Game;
 using Sandbox.Game.Gui;
 using Sandbox.Game.Screens.Helpers;
 using Sandbox.Graphics.GUI;
+using VRage;
 using VRage.Game.ModAPI;
+using VRage.Utils;
 
 namespace Iv4xr.SePlugin
 {
@@ -16,7 +18,7 @@ namespace Iv4xr.SePlugin
         {
             return screen.GetInstanceFieldOrThrow<MyGuiControlButton>(fieldName);
         }
-        
+
         public static MyGuiControlGrid Grid(this object screen, string fieldName)
         {
             return screen.GetInstanceFieldOrThrow<MyGuiControlGrid>(fieldName);
@@ -37,31 +39,37 @@ namespace Iv4xr.SePlugin
             return screen.GetInstanceFieldOrThrow<MyGuiControlRadioButton>(fieldName);
         }
 
+        public static MyGuiControlButton ButtonByText(this MyGuiControlElementGroup group, MyStringId stringId)
+        {
+            return group.GetInstanceFieldOrThrow<List<MyGuiControlBase>>("m_controlElements").OfType<MyGuiControlButton>()
+                    .First(x => x.Text == MyTexts.Get(stringId).ToString());
+        }
+
         public static void ClickButton(this object screen, string fieldName)
         {
             var button = screen.Button(fieldName);
-            button.ThrowIfDisabled(fieldName);
+            button.ThrowIfCantUse(fieldName);
             button.PressButton();
         }
 
         public static void ClickRadio(this object screen, string fieldName)
         {
             var radio = screen.RadioButton(fieldName);
-            radio.ThrowIfDisabled(fieldName);
+            radio.ThrowIfCantUse(fieldName);
             radio.Selected = true;
         }
 
         public static void ClickCheckBox(this object screen, string fieldName)
         {
             var radio = screen.CheckBox(fieldName);
-            radio.ThrowIfDisabled(fieldName);
+            radio.ThrowIfCantUse(fieldName);
             radio.IsChecked = !radio.IsChecked;
         }
 
         public static void EnterSearchText(this object screen, string fieldName, string text)
         {
             var searchBox = screen.SearchBox(fieldName);
-            searchBox.ThrowIfDisabled(fieldName);
+            searchBox.ThrowIfCantUse(fieldName);
             searchBox.SearchText = text;
         }
 
@@ -131,11 +139,16 @@ namespace Iv4xr.SePlugin
             return list;
         }
 
-        private static void ThrowIfDisabled(this MyGuiControlBase controlBase, string fieldName)
+        private static void ThrowIfCantUse(this MyGuiControlBase controlBase, string fieldName)
         {
             if (!controlBase.Enabled)
             {
                 throw new InvalidOperationException($"Control {fieldName} of type {controlBase.GetType()} is disabled!");
+            }
+
+            if (!controlBase.Visible)
+            {
+                throw new InvalidOperationException($"Control {fieldName} of type {controlBase.GetType()} is not visible!");
             }
         }
     }

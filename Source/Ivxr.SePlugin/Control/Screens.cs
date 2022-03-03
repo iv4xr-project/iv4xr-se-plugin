@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Iv4xr.PluginLib;
 using Iv4xr.SePlugin.Communication;
 using Iv4xr.SpaceEngineers;
 using Iv4xr.SpaceEngineers.WorldModel;
@@ -75,6 +76,8 @@ namespace Iv4xr.SePlugin.Control
 
         private MedicalsScreen m_medicalsScreen = new MedicalsScreen();
 
+        private MainMenuScreen m_mainMenuScreen = new MainMenuScreen();
+
         public Screens(GameSession gameSession, LowLevelObserver lowLevelObserver)
         {
             m_terminalScreen = new TerminalScreen(gameSession, lowLevelObserver);
@@ -82,6 +85,7 @@ namespace Iv4xr.SePlugin.Control
 
         public IMedicals Medicals => m_medicalsScreen;
         public ITerminal Terminal => m_terminalScreen;
+        public IMainMenu MainMenu => m_mainMenuScreen;
 
         private MyGuiScreenBase ScreenWithFocus()
         {
@@ -111,6 +115,63 @@ namespace Iv4xr.SePlugin.Control
             }
 
             throw new TimeoutException();
+        }
+    }
+
+    public class MainMenuScreen : IMainMenu
+    {
+        private MyGuiScreenMainMenu Screen()
+        {
+            return MyGuiScreenExtensions.EnsureFocusedScreen<MyGuiScreenMainMenu>();
+        }
+
+        private MyGuiControlElementGroup Buttons()
+        {
+            return Screen()
+                    .GetInstanceFieldOrThrow<MyGuiControlElementGroup>("m_elementGroup");
+        }
+        
+        [RunOutsideGameLoop]
+        public void Continue()
+        {
+            var screen = Screen();
+            screen.ClickButton("m_continueButton");
+        }
+        
+        [RunOutsideGameLoop]
+        public void NewGame()
+        {
+            Buttons().ButtonByText(MyCommonTexts.ScreenMenuButtonCampaign).PressButton();
+        }
+        
+        [RunOutsideGameLoop]
+        public void LoadGame()
+        {
+            Buttons().ButtonByText(MyCommonTexts.ScreenMenuButtonLoadGame).PressButton();
+        }
+        
+        [RunOutsideGameLoop]
+        public void JoinGame()
+        {
+            Buttons().ButtonByText(MyCommonTexts.ScreenMenuButtonJoinGame).PressButton();
+        }
+        
+        [RunOutsideGameLoop]
+        public void Options()
+        {
+            Buttons().ButtonByText(MyCommonTexts.ScreenMenuButtonOptions).PressButton();
+        }
+        
+        [RunOutsideGameLoop]
+        public void Character()
+        {
+            Buttons().ButtonByText(MyCommonTexts.ScreenMenuButtonInventory).PressButton();
+        }
+        
+        [RunOutsideGameLoop]
+        public void ExitToWindows()
+        {
+            Buttons().ButtonByText(MyCommonTexts.ScreenMenuButtonExitToWindows).PressButton();
         }
     }
 }
