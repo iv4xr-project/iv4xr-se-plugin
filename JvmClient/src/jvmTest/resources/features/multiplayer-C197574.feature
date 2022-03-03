@@ -1,11 +1,11 @@
 Feature: C197574 Character can crouch / stand back up
 
   Background:
-    Given Dedicated server is at "127.0.0.1", plugin running at port "3333".
+    Given Dedicated server is at "127.0.0.1", plugin running at port "3345".
     #And Server loads scenario "simple-place-grind-torch-with-tools".
-    And Client "A" is at "127.0.0.1", plugin running at port "3334".
+    And Client "A" is at "127.0.0.1", plugin running at port "3333".
     And Client "A" connects to the server.
-    And Test waits 40 seconds.
+    And Test waits 25 seconds.
     #And Client "B" is at "127.0.0.1", plugin running at port "3333".
 
   Scenario: C197574 Character can crouch / stand back up
@@ -16,5 +16,8 @@ Feature: C197574 Character can crouch / stand back up
     Then Character "A" is crouching as seen by itself.
     Then Character "A" is crouching as seen by server.
     #Then Character "A" is crouching as seen by client "B".
+    And Test waits 2 seconds.
+    When Character "A" stands up.
+    Then Character "A" is standing as seen by itself.
 
 
