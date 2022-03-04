@@ -16,79 +16,17 @@ using VRage.Game.ModAPI;
 
 namespace Iv4xr.SePlugin.Control
 {
-    public class TerminalScreen : ITerminal
+    public class TerminalScreen : AbstractScreen<MyGuiScreenTerminal, TerminalScreenData>, ITerminal
     {
-        private readonly GameSession m_session;
-        private readonly LowLevelObserver m_levelObserver;
-
-        public TerminalScreen(GameSession gameSession, LowLevelObserver lowLevelObserver)
+        public TerminalScreen() : base(ScreenCloseType.Normal)
         {
-            m_session = gameSession;
-            m_levelObserver = lowLevelObserver;
         }
 
-        private MyGuiScreenTerminal Screen => MyGuiScreenExtensions.EnsureFocusedScreen<MyGuiScreenTerminal>();
-
-        private TerminalProductionData ProductionData()
-        {
-            var productionTab = Screen.ProductionTab();
-
-            var productionQueueGrid = productionTab.TabControlByName<MyGuiControlScrollablePanel>("QueueScrollableArea")
-                    .ScrollableChild<MyGuiControlGrid>();
-            var productionQueueItems = productionQueueGrid.GridItemUserDataOfType<MyProductionBlock.QueueItem>()
-                    .Select(item => item.Blueprint).Select(bp => bp.ToProductionQueueItem()).ToList();
-
-
-            var inventoryGrid = productionTab.TabControlByName<MyGuiControlScrollablePanel>("InventoryScrollableArea")
-                    .ScrollableChild<MyGuiControlGrid>();
-            var inventoryItems = inventoryGrid.GridItemUserDataOfType<MyPhysicalInventoryItem>()
-                    .Select(piItem => piItem.ToAmountedDefinition())
-                    .ToList();
-
-            var blueprintsGrid =
-                    productionTab.TabControlByName<MyGuiControlScrollablePanel>("BlueprintsScrollableArea")
-                            .ScrollableChild<MyGuiControlGrid>();
-            var blueprintItems = blueprintsGrid.GridItemUserDataOfType<MyBlueprintDefinition>()
-                    .Select(bp => bp.ToProductionQueueItem()).ToList();
-
-            var assemblers = Screen.ProductionTab().TabControlByName<MyGuiControlCombobox>("AssemblersCombobox")
-                    .ItemsAsList().Select(
-                        i => i.Value.ToString()).ToList();
-
-            return new TerminalProductionData()
-            {
-                Assemblers = assemblers,
-                ProductionQueue = productionQueueItems,
-                Inventory = inventoryItems,
-                Blueprints = blueprintItems,
-                ProductionRepeatMode = productionTab.TabControlByName<MyGuiControlCheckbox>("RepeatCheckbox")
-                        .IsChecked,
-                ProductionCooperativeMode =
-                        productionTab.TabControlByName<MyGuiControlCheckbox>("SlaveCheckbox").IsChecked
-            };
-        }
-
-        private TerminalInventoryData InventoryData()
-        {
-            var controller = TerminalInventoryController();
-            var inventories =
-                    controller.CallMethod("GetSourceInventories", new object[] { }) as MyInventory[];
-
-            var rightInventories = RightInventories();
-            return new TerminalInventoryData()
-            {
-                LeftInventories = inventories.Select(i => i.ToInventory()).ToList(),
-                RightInventories = rightInventories.Select(i => i.ToInventory()).ToList(),
-            };
-        }
-
-        public TerminalScreenData Data()
+        public new TerminalScreenData Data()
         {
             return new TerminalScreenData()
             {
                 SelectedTab = Screen.GetTabs().Pages[Screen.GetTabs().SelectedPage].Name.Replace("Page", ""),
-                Production = ProductionData(),
-                Inventory = InventoryData(),
             };
         }
 
@@ -100,12 +38,8 @@ namespace Iv4xr.SePlugin.Control
         public IInventoryTab Inventory { get; } = new InventoryTab();
 
         public IProductionTab Production { get; } = new ProductionTab();
-        public void Close()
-        {
-            Screen.CloseScreen();
-        }
 
-        internal static List<MyInventory> Inventories(MyGuiControlList inventoriesControl)
+        private static List<MyInventory> Inventories(MyGuiControlList inventoriesControl)
         {
             var dstControlEnumerator = inventoriesControl.Controls.GetEnumerator();
             List<MyInventory> availableInventories = new List<MyInventory>();
@@ -160,8 +94,47 @@ namespace Iv4xr.SePlugin.Control
         }
     }
 
-    public class ProductionTab : IProductionTab
+    public class ProductionTab : AbstractScreen<MyGuiScreenTerminal, TerminalProductionData>, IProductionTab
     {
+        public new TerminalProductionData Data()
+        {
+            var productionTab = Screen.ProductionTab();
+
+            var productionQueueGrid = productionTab.TabControlByName<MyGuiControlScrollablePanel>("QueueScrollableArea")
+                    .ScrollableChild<MyGuiControlGrid>();
+            var productionQueueItems = productionQueueGrid.GridItemUserDataOfType<MyProductionBlock.QueueItem>()
+                    .Select(item => item.Blueprint).Select(bp => bp.ToProductionQueueItem()).ToList();
+
+
+            var inventoryGrid = productionTab.TabControlByName<MyGuiControlScrollablePanel>("InventoryScrollableArea")
+                    .ScrollableChild<MyGuiControlGrid>();
+            var inventoryItems = inventoryGrid.GridItemUserDataOfType<MyPhysicalInventoryItem>()
+                    .Select(piItem => piItem.ToAmountedDefinition())
+                    .ToList();
+
+            var blueprintsGrid =
+                    productionTab.TabControlByName<MyGuiControlScrollablePanel>("BlueprintsScrollableArea")
+                            .ScrollableChild<MyGuiControlGrid>();
+            var blueprintItems = blueprintsGrid.GridItemUserDataOfType<MyBlueprintDefinition>()
+                    .Select(bp => bp.ToProductionQueueItem()).ToList();
+
+            var assemblers = Screen.ProductionTab().TabControlByName<MyGuiControlCombobox>("AssemblersCombobox")
+                    .ItemsAsList().Select(
+                        i => i.Value.ToString()).ToList();
+
+            return new TerminalProductionData()
+            {
+                Assemblers = assemblers,
+                ProductionQueue = productionQueueItems,
+                Inventory = inventoryItems,
+                Blueprints = blueprintItems,
+                ProductionRepeatMode = productionTab.TabControlByName<MyGuiControlCheckbox>("RepeatCheckbox")
+                        .IsChecked,
+                ProductionCooperativeMode =
+                        productionTab.TabControlByName<MyGuiControlCheckbox>("SlaveCheckbox").IsChecked
+            };
+        }
+
         public void ToggleProductionRepeatMode()
         {
             var screen = MyGuiScreenExtensions.EnsureFocusedScreen<MyGuiScreenTerminal>();
@@ -188,7 +161,7 @@ namespace Iv4xr.SePlugin.Control
             var blueprint = (MyBlueprintDefinitionBase)item.UserData;
             var controller = screen.GetInstanceFieldOrThrow<object>("m_controllerProduction");
             MyFixedPoint one = 1;
-            controller.CallMethod("EnqueueBlueprint", new object[] { blueprint, one });
+            controller.CallMethod<object>("EnqueueBlueprint", new object[] { blueprint, one });
         }
 
         public void RemoveFromProductionQueue(int index)
@@ -227,8 +200,20 @@ namespace Iv4xr.SePlugin.Control
         }
     }
 
-    public class InventoryTab : IInventoryTab
+    public class InventoryTab : AbstractScreen<MyGuiScreenTerminal, TerminalInventoryData>, IInventoryTab
     {
+        public new TerminalInventoryData Data()
+        {
+            var controller = TerminalInventoryController();
+            var inventories = controller.CallMethod<MyInventory[]>("GetSourceInventories");
+            var rightInventories = TerminalScreen.RightInventories();
+            return new TerminalInventoryData()
+            {
+                LeftInventories = inventories.Select(i => i.ToInventory()).ToList(),
+                RightInventories = rightInventories.Select(i => i.ToInventory()).ToList(),
+            };
+        }
+
         private class LeftInventory : IInventorySide
         {
             MyGuiControlGrid grid => TerminalScreen.TerminalInventoryController().Grid("m_leftFocusedInventory");
@@ -260,12 +245,12 @@ namespace Iv4xr.SePlugin.Control
 
             public void ClickSelectedItem()
             {
-                grid.CallMethod("TryTriggerSingleClickEvent");
+                grid.CallMethod<object>("TryTriggerSingleClickEvent");
             }
 
             public void DoubleClickSelectedItem()
             {
-                grid.CallMethod("DoubleClickItem");
+                grid.CallMethod<object>("DoubleClickItem");
             }
 
             public void FilterAll()
@@ -330,12 +315,12 @@ namespace Iv4xr.SePlugin.Control
 
             public void ClickSelectedItem()
             {
-                grid.CallMethod("TryTriggerSingleClickEvent");
+                grid.CallMethod<object>("TryTriggerSingleClickEvent");
             }
 
             public void DoubleClickSelectedItem()
             {
-                grid.CallMethod("DoubleClickItem");
+                grid.CallMethod<object>("DoubleClickItem");
             }
 
             public void FilterAll()
@@ -381,7 +366,7 @@ namespace Iv4xr.SePlugin.Control
             var destinationInventory = rightInventory[destinationInventoryId];
             MyInventory.TransferByUser(sourceInventory, destinationInventory, (uint)itemId,
                 destinationInventory.ItemCount);
-            TerminalInventoryController().CallMethod("RefreshSelectedInventoryItem", new object[] { });
+            TerminalInventoryController().CallMethod<object>("RefreshSelectedInventoryItem", new object[] { });
         }
 
         public void DropSelected()

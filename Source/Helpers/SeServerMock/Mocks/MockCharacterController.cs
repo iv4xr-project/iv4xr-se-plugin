@@ -49,5 +49,15 @@ namespace SeServerMock.Mocks
         {
             throw new NotImplementedException();
         }
+
+        public void ShowTerminal()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ShowInventory()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -53,9 +53,4 @@ data class TerminalProductionData(
 data class TerminalScreenData(
     @SerialName("SelectedTab")
     val selectedTab: String,
-
-    @SerialName("Production")
-    val production: TerminalProductionData,
-    @SerialName("Inventory")
-    val inventory: TerminalInventoryData,
 )

@@ -35,7 +35,7 @@ namespace Iv4xr.SePlugin.Control
             var blocks = new Blocks(gameSession, lowLevelObserver);
             Blocks = blocks;
             Admin = new SpaceEngineersAdmin(characterController, blocks, new ObserverAdmin(lowLevelObserver));
-            Screens = new Screens(gameSession, lowLevelObserver);
+            Screens = new Screens();
         }
 
         public RealSpaceEngineers(

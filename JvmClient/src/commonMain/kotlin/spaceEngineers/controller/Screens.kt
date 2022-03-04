@@ -1,9 +1,6 @@
 package spaceEngineers.controller
 
-import spaceEngineers.model.Faction
-import spaceEngineers.model.MedicalRoom
-import spaceEngineers.model.MessageBoxData
-import spaceEngineers.model.TerminalScreenData
+import spaceEngineers.model.*
 
 interface Screens {
     fun focusedScreen(): String
@@ -17,8 +14,10 @@ interface Screens {
 }
 
 interface ServerConnect {
+    fun data(): ServerConnectData
     fun connect()
     fun enterAddress(address: String)
+    fun toggleAddServerToFavorites()
 }
 
 interface JoinGame {
@@ -26,9 +25,9 @@ interface JoinGame {
 }
 
 interface MessageBox {
+    fun data(): MessageBoxData
     fun pressYes()
     fun pressNo()
-    fun data(): MessageBoxData
 }
 
 interface MainMenu {
@@ -59,6 +58,7 @@ interface Terminal {
 }
 
 interface InventoryTab {
+    fun data(): TerminalInventoryData
     fun transferInventoryItem(sourceInventoryId: Int, destinationInventoryId: Int, itemId: Int)
     fun withdraw()
     fun deposit()
@@ -71,6 +71,7 @@ interface InventoryTab {
 }
 
 interface ProductionTab {
+    fun data(): TerminalProductionData
     fun addToProductionQueue(index: Int)
     fun removeFromProductionQueue(index: Int)
     fun selectBlueprint(index: Int)

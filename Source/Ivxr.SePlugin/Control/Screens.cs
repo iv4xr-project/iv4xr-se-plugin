@@ -14,20 +14,59 @@ using SpaceEngineers.Game.GUI;
 
 namespace Iv4xr.SePlugin.Control
 {
-    public class MedicalsScreen : IMedicals
+    public abstract class AbstractScreen<TScreen, TData>
+            where TScreen : MyGuiScreenBase
+            where TData : class
+    {
+        protected enum ScreenCloseType
+        {
+            None,
+            Now,
+            Normal,
+        }
+
+        protected TScreen Screen => MyGuiScreenExtensions.EnsureFocusedScreen<TScreen>();
+
+        private readonly ScreenCloseType m_screenClose;
+
+        protected AbstractScreen(ScreenCloseType screenCloseType = ScreenCloseType.None)
+        {
+            m_screenClose = screenCloseType;
+        }
+
+        public TData Data()
+        {
+            throw new NotImplementedException($"Data not implemented for screen {Screen.DisplayName()}");
+        }
+
+        public void Close()
+        {
+            switch (m_screenClose)
+            {
+                case ScreenCloseType.Now:
+                    Screen.CloseScreenNow();
+                    break;
+                case ScreenCloseType.Normal:
+                    Screen.CloseScreen();
+                    break;
+                default:
+                    throw new InvalidOperationException($"Unable to close window {Screen.DisplayName()}");
+            }
+        }
+    }
+
+    public class MedicalsScreen : AbstractScreen<MyGuiScreenMedicals, object>, IMedicals
     {
         public void Respawn(int roomIndex)
         {
-            var screen = EnsureMedicalScreen();
-            screen.Table("m_respawnsTable").SelectedRowIndex = roomIndex;
-            screen.ClickButton("m_respawnButton");
+            Screen.Table("m_respawnsTable").SelectedRowIndex = roomIndex;
+            Screen.ClickButton("m_respawnButton");
         }
 
         public void ChooseFaction(int factionIndex)
         {
-            var screen = EnsureMedicalScreen();
-            screen.Table("m_factionsTable").SelectedRowIndex = factionIndex;
-            screen.ClickButton("m_selectFactionButton");
+            Screen.Table("m_factionsTable").SelectedRowIndex = factionIndex;
+            Screen.ClickButton("m_selectFactionButton");
         }
 
         public List<MedicalRoom> MedicalRooms()
@@ -50,40 +89,29 @@ namespace Iv4xr.SePlugin.Control
             ).ToList();
         }
 
-        public T EnsureFocusedScreen<T>() where T : MyGuiScreenBase
-        {
-            return MyGuiScreenExtensions.EnsureFocusedScreen<T>();
-        }
-
-
-        private MyGuiScreenMedicals EnsureMedicalScreen()
-        {
-            return EnsureFocusedScreen<MyGuiScreenMedicals>();
-        }
-
         private List<MyGuiControlTable.Row> MedicalRoomRows()
         {
-            return EnsureMedicalScreen().Table("m_respawnsTable").RowsAsList();
+            return Screen.Table("m_respawnsTable").RowsAsList();
         }
 
         private List<MyGuiControlTable.Row> FactionRows()
         {
-            return EnsureMedicalScreen().Table("m_factionsTable").RowsAsList();
+            return Screen.Table("m_factionsTable").RowsAsList();
         }
     }
 
     public class Screens : IScreens
     {
-        private TerminalScreen m_terminalScreen;
-        private MedicalsScreen m_medicalsScreen = new MedicalsScreen();
-        private MainMenuScreen m_mainMenuScreen = new MainMenuScreen();
-        private MessageBoxScreen m_messageBoxScreen = new MessageBoxScreen();
-        private JoinGameScreen m_joinGameScreen = new JoinGameScreen();
-        private ServerConnectScreen m_serverConnectScreen = new ServerConnectScreen();
+        private readonly TerminalScreen m_terminalScreen;
+        private readonly MedicalsScreen m_medicalsScreen = new MedicalsScreen();
+        private readonly MainMenuScreen m_mainMenuScreen = new MainMenuScreen();
+        private readonly MessageBoxScreen m_messageBoxScreen = new MessageBoxScreen();
+        private readonly JoinGameScreen m_joinGameScreen = new JoinGameScreen();
+        private readonly ServerConnectScreen m_serverConnectScreen = new ServerConnectScreen();
 
-        public Screens(GameSession gameSession, LowLevelObserver lowLevelObserver)
+        public Screens()
         {
-            m_terminalScreen = new TerminalScreen(gameSession, lowLevelObserver);
+            m_terminalScreen = new TerminalScreen();
         }
 
         public IMedicals Medicals => m_medicalsScreen;
@@ -92,11 +120,6 @@ namespace Iv4xr.SePlugin.Control
         public IMessageBox MessageBox => m_messageBoxScreen;
         public IJoinGame JoinGame => m_joinGameScreen;
         public IServerConnect ServerConnect => m_serverConnectScreen;
-
-        private MyGuiScreenBase ScreenWithFocus()
-        {
-            return MyScreenManager.GetScreenWithFocus();
-        }
 
         [RunOutsideGameLoop]
         public string FocusedScreen()
@@ -107,13 +130,13 @@ namespace Iv4xr.SePlugin.Control
         [RunOutsideGameLoop]
         public void WaitUntilTheGameLoaded()
         {
-            var timeoutMs = 60_000;
-            var singleSleepMs = 100;
-            var sleepAfter = 2000;
+            const int timeoutMs = 60_000;
+            const int singleSleepMs = 100;
+            const int sleepAfter = 2000;
             for (var i = 0; i < timeoutMs / singleSleepMs; i++)
             {
                 Thread.Sleep(singleSleepMs);
-                if (!(ScreenWithFocus() is MyGuiScreenLoading))
+                if (!(MyScreenManager.GetScreenWithFocus() is MyGuiScreenLoading))
                 {
                     Thread.Sleep(sleepAfter);
                     return;
@@ -124,16 +147,24 @@ namespace Iv4xr.SePlugin.Control
         }
     }
 
-    public class ServerConnectScreen : IServerConnect
+    public class ServerConnectScreen : AbstractScreen<MyGuiScreenServerConnect, ServerConnectData>, IServerConnect
     {
-        private MyGuiScreenServerConnect Screen => MyGuiScreenExtensions.EnsureFocusedScreen<MyGuiScreenServerConnect>();
-
+        public new ServerConnectData Data()
+        {
+            return new ServerConnectData()
+            {
+                    Address = Screen.Controls.TextBox("m_addrTextbox").Text,
+                    AddServerToFavorites =  Screen.CheckBox("m_favoriteCheckbox").IsChecked
+            };
+        }
+        
+        
         [RunOutsideGameLoop]
         public void ToggleAddServerToFavorites()
         {
             Screen.ClickCheckBox("m_favoriteCheckbox");
         }
-        
+
         [RunOutsideGameLoop]
         public void Connect()
         {
@@ -144,14 +175,11 @@ namespace Iv4xr.SePlugin.Control
         public void EnterAddress(string address)
         {
             Screen.EnterText("m_addrTextbox", address);
-            
         }
     }
 
-    public class JoinGameScreen : IJoinGame
+    public class JoinGameScreen : AbstractScreen<MyGuiScreenJoinGame, object>, IJoinGame
     {
-        private MyGuiScreenJoinGame Screen => MyGuiScreenExtensions.EnsureFocusedScreen<MyGuiScreenJoinGame>();
-        
         [RunOutsideGameLoop]
         public void DirectConnect()
         {
@@ -159,88 +187,77 @@ namespace Iv4xr.SePlugin.Control
         }
     }
 
-    public class MessageBoxScreen : IMessageBox
+    public class MessageBoxScreen : AbstractScreen<MyGuiScreenMessageBox, MessageBoxData>, IMessageBox
     {
-        private MyGuiScreenMessageBox Screen()
-        {
-            return MyGuiScreenExtensions.EnsureFocusedScreen<MyGuiScreenMessageBox>();
-        }
-        
         [RunOutsideGameLoop]
         public void PressYes()
         {
-            Screen().ClickButton("m_yesButton");
+            Screen.ClickButton("m_yesButton");
         }
 
         [RunOutsideGameLoop]
         public void PressNo()
         {
-            Screen().ClickButton("m_noButton");
+            Screen.ClickButton("m_noButton");
         }
 
         [RunOutsideGameLoop]
-        public MessageBoxData Data()
+        public new MessageBoxData Data()
         {
-            var screen = Screen();
+            var screen = Screen;
             return new MessageBoxData()
             {
                 Text = screen.MessageText.ToString(),
                 Caption = screen.GetInstanceFieldOrThrow<StringBuilder>("m_messageCaption").ToString(),
-                ButtonType = (int) screen.GetInstanceFieldOrThrow<MyMessageBoxButtonsType>("m_buttonType")
+                ButtonType = (int)screen.GetInstanceFieldOrThrow<MyMessageBoxButtonsType>("m_buttonType")
             };
         }
     }
 
-    public class MainMenuScreen : IMainMenu
+    public class MainMenuScreen : AbstractScreen<MyGuiScreenMainMenu, object>, IMainMenu
     {
-        private MyGuiScreenMainMenu Screen()
-        {
-            return MyGuiScreenExtensions.EnsureFocusedScreen<MyGuiScreenMainMenu>();
-        }
-
         private MyGuiControlElementGroup Buttons()
         {
-            return Screen()
+            return Screen
                     .GetInstanceFieldOrThrow<MyGuiControlElementGroup>("m_elementGroup");
         }
-        
+
         [RunOutsideGameLoop]
         public void Continue()
         {
-            var screen = Screen();
-            screen.ClickButton("m_continueButton");
+            Screen.ClickButton("m_continueButton");
         }
-        
+
         [RunOutsideGameLoop]
         public void NewGame()
         {
             Buttons().ButtonByText(MyCommonTexts.ScreenMenuButtonCampaign).PressButton();
         }
-        
+
         [RunOutsideGameLoop]
         public void LoadGame()
         {
             Buttons().ButtonByText(MyCommonTexts.ScreenMenuButtonLoadGame).PressButton();
         }
-        
+
         [RunOutsideGameLoop]
         public void JoinGame()
         {
             Buttons().ButtonByText(MyCommonTexts.ScreenMenuButtonJoinGame).PressButton();
         }
-        
+
         [RunOutsideGameLoop]
         public void Options()
         {
             Buttons().ButtonByText(MyCommonTexts.ScreenMenuButtonOptions).PressButton();
         }
-        
+
         [RunOutsideGameLoop]
         public void Character()
         {
             Buttons().ButtonByText(MyCommonTexts.ScreenMenuButtonInventory).PressButton();
         }
-        
+
         [RunOutsideGameLoop]
         public void ExitToWindows()
         {

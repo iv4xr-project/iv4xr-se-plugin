@@ -45,8 +45,6 @@ namespace Iv4xr.SpaceEngineers.WorldModel
     public class TerminalScreenData
     {
         public string SelectedTab;
-        public TerminalProductionData Production;
-        public TerminalInventoryData Inventory;
     }
 
     public class MessageBoxData
@@ -54,5 +52,11 @@ namespace Iv4xr.SpaceEngineers.WorldModel
         public string Caption;
         public string Text;
         public int ButtonType;
+    }
+
+    public class ServerConnectData
+    {
+        public string Address;
+        public bool AddServerToFavorites;
     }
 }

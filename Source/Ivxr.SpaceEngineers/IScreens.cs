@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Iv4xr.SpaceEngineers.Navigation;
+﻿using System.Collections.Generic;
 using Iv4xr.SpaceEngineers.WorldModel;
 
 namespace Iv4xr.SpaceEngineers
@@ -19,6 +17,7 @@ namespace Iv4xr.SpaceEngineers
 
     public interface IServerConnect
     {
+        ServerConnectData Data();
         void Connect();
         void EnterAddress(string address);
         void ToggleAddServerToFavorites();
@@ -65,6 +64,7 @@ namespace Iv4xr.SpaceEngineers
     }
     
     public interface IProductionTab {
+        TerminalProductionData Data();
         void ToggleProductionRepeatMode();
         void ToggleProductionCooperativeMode();
         void AddToProductionQueue(int index);
@@ -76,6 +76,7 @@ namespace Iv4xr.SpaceEngineers
 
     public interface IInventoryTab
     {
+        TerminalInventoryData Data();
         void TransferInventoryItem(int sourceInventoryId, int destinationInventoryId, int itemId);
         void DropSelected();
         void Withdraw();
@@ -85,7 +86,7 @@ namespace Iv4xr.SpaceEngineers
         IInventorySide Left { get; }
         IInventorySide Right { get; }
     }
-    
+
     public interface IInventorySide
     {
         void Filter(string text);
