@@ -1,14 +1,26 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 
 namespace Iv4xr.PluginLib
 {
     public static class ReflectionExtensions
     {
+        public static MethodInfo GetMethodOrParentMethod(this object instance, string methodName, Type type,
+            BindingFlags bindingAttr = BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)
+        {
+            var method = type.GetMethod(methodName, bindingAttr);
+            if (method != null)
+            {
+                return method;
+            }
+
+            return type == typeof(object) ? null : instance.GetMethodOrParentMethod(methodName, type.GetTypeInfo().BaseType, bindingAttr);
+        }
+
         public static TReturnType CallMethod<TReturnType>(this object instance, string methodName, object[] args)
         {
             instance.ThrowIfNull("Instance to call method on is null.");
-            var method = instance.GetType().GetMethod(methodName,
-                BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+            var method = instance.GetMethodOrParentMethod(methodName, instance.GetType());
             method.ThrowIfNull($"Method {methodName} is not found on object {instance.GetType().Name}");
             return (TReturnType)method.Invoke(instance, args);
         }
@@ -16,8 +28,7 @@ namespace Iv4xr.PluginLib
         public static TReturnType CallMethod<TReturnType>(this object instance, string methodName)
         {
             instance.ThrowIfNull("Instance to call method on is null.");
-            var method = instance.GetType().GetMethod(methodName,
-                BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+            var method = instance.GetMethodOrParentMethod(methodName, instance.GetType());
             method.ThrowIfNull($"Method {methodName} is not found on object {instance.GetType().Name}");
             return (TReturnType)method.Invoke(instance, new object[] { });
         }

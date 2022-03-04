@@ -13,6 +13,8 @@ namespace Iv4xr.SpaceEngineers
         IMessageBox MessageBox { get; }
         IJoinGame JoinGame { get; }
         IServerConnect ServerConnect { get; }
+        ILoadGame LoadGame { get; }
+        INewGame NewGame { get; }
     }
 
     public interface IServerConnect
@@ -103,5 +105,21 @@ namespace Iv4xr.SpaceEngineers
         void FilterStorage();
 
         void ToggleHideEmpty();
+    }
+
+    public interface ILoadGame
+    {
+        LoadGameData Data();
+        void Filter(string text);
+        void DoubleClickWorld(int index);
+        void Load();
+        void Edit();
+        void Delete();
+        void Save();
+        void Publish();
+    }
+
+    public interface INewGame
+    {
     }
 }

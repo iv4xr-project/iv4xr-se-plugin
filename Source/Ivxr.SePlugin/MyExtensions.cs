@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Iv4xr.SpaceEngineers.WorldModel;
 using Sandbox.Definitions;
@@ -13,6 +14,7 @@ using VRage.Game;
 using VRage.Game.Entity;
 using VRage.Game.ModAPI.Ingame;
 using VRageMath;
+using File = Iv4xr.SpaceEngineers.WorldModel.File;
 
 namespace Iv4xr.SePlugin
 {
@@ -181,6 +183,25 @@ namespace Iv4xr.SePlugin
             };
         }
 
+        public static File ToFile(this FileInfo fileInfo)
+        {
+            return new File()
+            {
+                Name = fileInfo.Name,
+                FullName = fileInfo.FullName,
+                IsDirectory = (fileInfo.Attributes & FileAttributes.Directory) != 0
+            };
+        }
+        
+        public static File ToFile(this DirectoryInfo directoryInfo)
+        {
+            return new File()
+            {
+                Name = directoryInfo.Name,
+                FullName = directoryInfo.FullName,
+                IsDirectory = true,
+            };
+        }
         
     }
 }

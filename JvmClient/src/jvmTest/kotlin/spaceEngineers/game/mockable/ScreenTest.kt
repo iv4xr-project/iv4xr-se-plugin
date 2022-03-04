@@ -140,10 +140,32 @@ class ScreenTest : MockOrRealGameTest(forceRealGame = true, loadScenario = false
     @Test
     fun enterAddress() = testContext {
         screens.mainMenu.joinGame()
-        delay(1000)
+        delay(100)
         screens.joinGame.directConnect()
         screens.serverConnect.enterAddress("1.2.3.4:20016")
     }
 
+    @Test
+    fun enterAddress2() = testContext {
+        screens.serverConnect.enterAddress("1.2.3.4:20016")
+        screens.serverConnect.toggleAddServerToFavorites()
+        println(screens.serverConnect.data())
+    }
 
+    @Test
+    fun closeTerminal() = testContext {
+        screens.terminal.close()
+    }
+
+    @Test
+    fun selectLoad() = testContext {
+        //screens.mainMenu.loadGame()
+        //delay(5000)
+        screens.loadGame.doubleClickWorld(0)
+    }
+
+    @Test
+    fun loadData() = testContext {
+        println(screens.loadGame.data())
+    }
 }

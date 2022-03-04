@@ -59,4 +59,18 @@ namespace Iv4xr.SpaceEngineers.WorldModel
         public string Address;
         public bool AddServerToFavorites;
     }
+
+    public class File
+    {
+        public string Name;
+        public string FullName;
+        public bool IsDirectory;
+    }
+
+    public class LoadGameData
+    {
+        public File CurrentDirectory;
+        public File RootDirectory;
+        public List<File> Files;
+    }
 }

@@ -22,7 +22,7 @@ namespace Iv4xr.SePlugin.Control
         {
         }
 
-        public new TerminalScreenData Data()
+        public override TerminalScreenData Data()
         {
             return new TerminalScreenData()
             {
@@ -96,7 +96,7 @@ namespace Iv4xr.SePlugin.Control
 
     public class ProductionTab : AbstractScreen<MyGuiScreenTerminal, TerminalProductionData>, IProductionTab
     {
-        public new TerminalProductionData Data()
+        public override TerminalProductionData Data()
         {
             var productionTab = Screen.ProductionTab();
 
@@ -202,7 +202,7 @@ namespace Iv4xr.SePlugin.Control
 
     public class InventoryTab : AbstractScreen<MyGuiScreenTerminal, TerminalInventoryData>, IInventoryTab
     {
-        public new TerminalInventoryData Data()
+        public override TerminalInventoryData Data()
         {
             var controller = TerminalInventoryController();
             var inventories = controller.CallMethod<MyInventory[]>("GetSourceInventories");

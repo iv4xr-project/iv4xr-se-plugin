@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -9,6 +10,7 @@ using Iv4xr.SpaceEngineers;
 using Iv4xr.SpaceEngineers.WorldModel;
 using Sandbox.Game.Gui;
 using Sandbox.Game.Screens;
+using Sandbox.Game.Screens.Helpers;
 using Sandbox.Graphics.GUI;
 using SpaceEngineers.Game.GUI;
 
@@ -34,7 +36,7 @@ namespace Iv4xr.SePlugin.Control
             m_screenClose = screenCloseType;
         }
 
-        public TData Data()
+        public virtual TData Data()
         {
             throw new NotImplementedException($"Data not implemented for screen {Screen.DisplayName()}");
         }
@@ -108,6 +110,8 @@ namespace Iv4xr.SePlugin.Control
         private readonly MessageBoxScreen m_messageBoxScreen = new MessageBoxScreen();
         private readonly JoinGameScreen m_joinGameScreen = new JoinGameScreen();
         private readonly ServerConnectScreen m_serverConnectScreen = new ServerConnectScreen();
+        private readonly NewGameScreen m_newGameScreen = new NewGameScreen();
+        private readonly LoadGameScreen m_loadGameScreen = new LoadGameScreen();
 
         public Screens()
         {
@@ -120,6 +124,8 @@ namespace Iv4xr.SePlugin.Control
         public IMessageBox MessageBox => m_messageBoxScreen;
         public IJoinGame JoinGame => m_joinGameScreen;
         public IServerConnect ServerConnect => m_serverConnectScreen;
+        public ILoadGame LoadGame => m_loadGameScreen;
+        public INewGame NewGame => m_newGameScreen;
 
         [RunOutsideGameLoop]
         public string FocusedScreen()
@@ -149,16 +155,15 @@ namespace Iv4xr.SePlugin.Control
 
     public class ServerConnectScreen : AbstractScreen<MyGuiScreenServerConnect, ServerConnectData>, IServerConnect
     {
-        public new ServerConnectData Data()
+        public override ServerConnectData Data()
         {
             return new ServerConnectData()
             {
-                    Address = Screen.Controls.TextBox("m_addrTextbox").Text,
-                    AddServerToFavorites =  Screen.CheckBox("m_favoriteCheckbox").IsChecked
+                Address = Screen.Controls.TextBox("m_addrTextbox").Text,
+                AddServerToFavorites = Screen.CheckBox("m_favoriteCheckbox").IsChecked
             };
         }
-        
-        
+
         [RunOutsideGameLoop]
         public void ToggleAddServerToFavorites()
         {
@@ -202,7 +207,7 @@ namespace Iv4xr.SePlugin.Control
         }
 
         [RunOutsideGameLoop]
-        public new MessageBoxData Data()
+        public override MessageBoxData Data()
         {
             var screen = Screen;
             return new MessageBoxData()
@@ -262,6 +267,101 @@ namespace Iv4xr.SePlugin.Control
         public void ExitToWindows()
         {
             Buttons().ButtonByText(MyCommonTexts.ScreenMenuButtonExitToWindows).PressButton();
+        }
+    }
+
+    public class NewGameScreen : AbstractScreen<MyGuiScreenNewGame, object>, INewGame
+    {
+    }
+
+    public class LoadGameScreen : AbstractScreen<MyGuiScreenLoadSandbox, LoadGameData>, ILoadGame
+    {
+        private MyGuiControlSaveBrowser Browser =>
+                Screen.GetInstanceFieldOrThrow<MyGuiControlSaveBrowser>("m_saveBrowser");
+
+        [RunOutsideGameLoop]
+        public override LoadGameData Data()
+        {
+            var rows = Browser.RowsAsList().Select(
+                row =>
+                {
+                    var cellText = row.GetCell(0).Text.ToString();
+                    if (row.UserData is FileInfo info)
+                    {
+                        var file = info.ToFile();
+                        file.Name = cellText;
+                        return file;
+                    } else if (row.UserData is DirectoryInfo directoryInfo)
+                    {
+                        return directoryInfo.ToFile();
+                    }
+                    else if (row.UserData == null && cellText == "..")
+                    {
+                        var currDir = Browser.GetInstanceFieldOrThrow<DirectoryInfo>("m_currentDir");
+                        var file = currDir.Parent.ToFile();
+                        file.Name = "..";
+                        return file;
+                    }
+
+                    throw new InvalidDataException("Unable to convert data from ControlDirectoryBrowser");
+
+                });
+            return new LoadGameData()
+            {
+                CurrentDirectory = Browser.GetInstanceFieldOrThrow<DirectoryInfo>("m_currentDir").ToFile(),
+                RootDirectory = Browser.GetInstanceFieldOrThrow<DirectoryInfo>("m_topMostDir").ToFile(),
+                Files = rows.ToList(),
+            };
+        }
+
+        [RunOutsideGameLoop]
+        public void Filter(string text)
+        {
+            Screen.EnterSearchText("m_searchBox", text);
+        }
+
+        [RunOutsideGameLoop]
+        public void DoubleClickWorld(int index)
+        {
+            Browser.SelectedRowIndex = index;
+            MyGuiControlTable browserAsTable = Browser;
+            browserAsTable.CallMethod<object>("OnItemDoubleClicked",
+                new object[]
+                {
+                    Browser,
+                    new MyGuiControlTable.EventArgs() { RowIndex = index }
+                }
+            );
+        }
+
+        [RunOutsideGameLoop]
+        public void Load()
+        {
+            Screen.ClickButton("m_loadButton");
+        }
+
+        [RunOutsideGameLoop]
+        public void Edit()
+        {
+            Screen.ClickButton("m_editButton");
+        }
+
+        [RunOutsideGameLoop]
+        public void Delete()
+        {
+            Screen.ClickButton("m_deleteButton");
+        }
+
+        [RunOutsideGameLoop]
+        public void Save()
+        {
+            Screen.ClickButton("m_saveButton");
+        }
+
+        [RunOutsideGameLoop]
+        public void Publish()
+        {
+            Screen.ClickButton("m_publishButton");
         }
     }
 }

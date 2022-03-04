@@ -11,6 +11,7 @@ interface Screens {
     val messageBox: MessageBox
     val joinGame: JoinGame
     val serverConnect: ServerConnect
+    val loadGame: LoadGame
 }
 
 interface ServerConnect {
@@ -94,4 +95,15 @@ interface InventorySide {
     fun selectItem(index: Int)
     fun clickSelectedItem()
     fun doubleClickSelectedItem()
+}
+
+interface LoadGame {
+    fun data(): LoadGameData
+    fun filter(text: String)
+    fun doubleClickWorld(index: Int)
+    fun load()
+    fun edit()
+    fun delete()
+    fun save()
+    fun publish()
 }
