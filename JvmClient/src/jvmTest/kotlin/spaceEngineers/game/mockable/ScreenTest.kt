@@ -1,13 +1,18 @@
 package spaceEngineers.game.mockable
 
+import spaceEngineers.controller.extensions.blockDefinitionByType
+import spaceEngineers.model.DefinitionId
+import spaceEngineers.model.Vec3F
 import kotlin.test.Ignore
 import testhelp.MockOrRealGameTest
+import java.lang.Thread.sleep
 import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 
 @Ignore
-class ScreenTest : MockOrRealGameTest(forceRealGame = true, loadScenario = false) {
-
+class ScreenTest : MockOrRealGameTest(forceRealGame = true, loadScenario = false, scenarioId = "automation-se") {
 
 
     @Test
@@ -21,8 +26,26 @@ class ScreenTest : MockOrRealGameTest(forceRealGame = true, loadScenario = false
     }
 
     @Test
+    fun observe() = testContext {
+        observer.observe()
+    }
+
+    @Test
     fun focusedScreen() = testContext {
         println(screens.focusedScreen())
+    }
+
+    @Test
+    fun showMainMenu() = testContext {
+        screens.gamePlay.showMainMenu()
+        sleep(300)
+        screens.mainMenu.exitToMainMenu()
+        sleep(1300)
+        screens.messageBox.pressNo()
+    }
+    @Test
+    fun exitToMainMenu() = testContext {
+        session.exitToMainMenu()
     }
 
     @Test
@@ -167,5 +190,49 @@ class ScreenTest : MockOrRealGameTest(forceRealGame = true, loadScenario = false
     @Test
     fun loadData() = testContext {
         println(screens.loadGame.data())
+    }
+
+    @Test
+    fun production() = testContext {
+        val blockDisplayName = "Cockpit"
+        val definition = DefinitionId.create("Cockpit", "LargeBlockCockpit")
+        val blockDefinitions = definitions.blockDefinitions().filter { it.definitionId == definition }
+        with(screens.terminal.production) {
+            selectBlueprint(0)
+            enterBlueprintSearchBox(blockDisplayName)
+            val data = data()
+            assertEquals(2, data.blueprints.size)
+            assertTrue(data.productionQueue.isEmpty())
+            val index = data.blueprints.indexOfFirst { it.displayName == blockDisplayName }
+            addToProductionQueue(index)
+            val productionQueue = data().productionQueue
+            productionQueue.forEach { it ->
+                val blueprint = it.blueprint
+                println(blueprint.displayName + " (${it.amount})" + blueprint.prerequisites.map { "${it.amount}: ${it.id}" } + " -> " + blueprint.results.map { "${it.amount}: ${it.id}" })
+                println()
+            }
+            //println(productionQueue.flatMap { it.blueprint.results }.map { "${it.amount}: ${it.id}" })
+            blockDefinitions.forEach { blockDefinition ->
+                println(blockDefinition.components.map { "${it.count}: ${it.definition.definitionId} - ${it.deconstructItem.definitionId}" })
+                assertEquals(productionQueue.size, blockDefinition.components.size)
+            }
+
+
+        }
+    }
+
+    @Test
+    fun productionData() = testContext {
+        screens.terminal.production.data().productionQueue.forEach(::println)
+    }
+
+    @Test
+    fun gamePlayData() = testContext {
+        println(screens.gamePlay.data())
+    }
+
+    @Test
+    fun drillDefinitions() = testContext {
+        println(definitions.allDefinitions().map { it.definitionId }.filter { it.toString().contains("Drill") })
     }
 }
