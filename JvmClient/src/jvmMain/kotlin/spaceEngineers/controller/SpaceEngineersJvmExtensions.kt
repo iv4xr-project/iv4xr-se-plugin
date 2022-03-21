@@ -10,6 +10,18 @@ fun String.unixToWindowsPath(): String {
     }
 }
 
+fun String.processHomeDir(): String {
+    return replace("~", System.getProperty("user.home"))
+}
+
+fun File.processHomeDir(): File {
+    return File(absolutePath.processHomeDir())
+}
+
+fun String.toFile(): File {
+    return File(processHomeDir())
+}
+
 fun Session.loadFromTestResources(scenarioId: String, scenarioDir: String = SCENARIO_DIR) {
     loadScenario(File(scenarioDir, scenarioId).absolutePath.unixToWindowsPath())
 }

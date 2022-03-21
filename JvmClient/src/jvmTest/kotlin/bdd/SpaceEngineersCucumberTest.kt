@@ -28,16 +28,6 @@ import kotlin.test.assertTrue
 @RunWith(Cucumber::class)
 class SpaceEngineersCucumberTest : AbstractSpaceEngineersSteps() {
 
-    @After
-    fun clearContinuousMovement() {
-        try {
-            character.moveAndRotate(ticks = 0)
-        } catch(e: Exception) {
-            // probably better idea to catch here, since we don't know how scenario went
-            e.printStackTrace()
-        }
-    }
-
     @Given("Toolbar has mapping:")
     fun toolbar_has_mapping(dataTable: List<Map<String, String>>) {
         context.updateToolbarLocation(dataTable)
