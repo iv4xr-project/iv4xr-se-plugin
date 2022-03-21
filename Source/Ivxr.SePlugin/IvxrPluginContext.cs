@@ -16,6 +16,7 @@ namespace Iv4xr.SePlugin
         public ILog Log { get; private set; }
         public readonly JsonRpcStarter JsonRpcStarter;
         public readonly FuncActionDispatcher FuncActionDispatcher;
+        private readonly FuncActionDispatcher MainThreadFuncActionDispatcher;
         private const string CONFIG_FILE = "ivxr-plugin.config";
 
         private readonly GameSession m_gameSession = new GameSession();
@@ -38,9 +39,10 @@ namespace Iv4xr.SePlugin
             var se = new RealSpaceEngineers(m_gameSession, Log, config);
 
             FuncActionDispatcher = new FuncActionDispatcher(seLog);
+            MainThreadFuncActionDispatcher = new FuncActionDispatcher(seLog);
 
             JsonRpcStarter = new JsonRpcStarter(
-                new SynchronizedSpaceEngineers(se, FuncActionDispatcher),
+                new SynchronizedSpaceEngineers(se, FuncActionDispatcher, MainThreadFuncActionDispatcher),
                 hostname: config.Hostname,
                 port: config.JsonRpcPort
             ) { Log = Log };

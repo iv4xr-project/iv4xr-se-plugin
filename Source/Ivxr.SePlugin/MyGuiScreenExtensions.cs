@@ -25,6 +25,16 @@ namespace Iv4xr.SePlugin
             return screen.GetInstanceFieldOrThrow<MyGuiControlGrid>(fieldName);
         }
 
+        public static void ClickItem(this MyGuiControlGrid grid)
+        {
+            grid.CallMethod<object>("TryTriggerSingleClickEvent");
+        }
+        
+        public static void DoubleClickItem(this MyGuiControlGrid grid)
+        {
+            grid.CallMethod<object>("DoubleClickItem");
+        }
+
         public static MyGuiControlCheckbox CheckBox(this object screen, string fieldName)
         {
             return screen.GetInstanceFieldOrThrow<MyGuiControlCheckbox>(fieldName);

@@ -15,6 +15,13 @@ namespace Iv4xr.SpaceEngineers
         IServerConnect ServerConnect { get; }
         ILoadGame LoadGame { get; }
         INewGame NewGame { get; }
+        IGamePlay GamePlay { get; }
+    }
+
+    public interface IGamePlay
+    {
+        GamePlayData Data();
+        void ShowMainMenu();
     }
 
     public interface IServerConnect
@@ -39,6 +46,7 @@ namespace Iv4xr.SpaceEngineers
         void Options();
         void Character();
         void ExitToWindows();
+        void ExitToMainMenu();
     }
 
     public interface IMessageBox

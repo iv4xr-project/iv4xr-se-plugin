@@ -50,6 +50,11 @@ namespace Iv4xr.SePlugin.Control
             return m_lowLevelObserver.ObserveCharacters();
         }
 
+        public List<FloatingObject> ObserveFloatingObjects()
+        {
+            return m_lowLevelObserver.ObserveFloatingObjects();
+        }
+
         public NavGraph NavigationGraph()
         {
             var navGraphEditor = new NavGraphEditor(m_lowLevelObserver);

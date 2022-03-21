@@ -1,6 +1,7 @@
 package spaceEngineers.controller
 
 import spaceEngineers.model.CharacterObservation
+import spaceEngineers.model.FloatingObject
 import spaceEngineers.model.Observation
 import spaceEngineers.model.extensions.allBlocks
 import spaceEngineers.navigation.NavGraph
@@ -44,6 +45,10 @@ class ContextControllerWrapper(
 
         override fun observeCharacters(): List<CharacterObservation> {
             return spaceEngineers.observer.observeCharacters()
+        }
+
+        override fun observeFloatingObjects(): List<FloatingObject> {
+            return spaceEngineers.observer.observeFloatingObjects()
         }
 
         override fun navigationGraph(): NavGraph {

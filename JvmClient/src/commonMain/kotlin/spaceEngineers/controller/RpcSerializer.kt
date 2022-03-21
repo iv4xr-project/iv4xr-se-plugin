@@ -32,6 +32,9 @@ val json = Json {
         polymorphic(DefinitionBase::class) {
             default { DataDefinitionBase.serializer() }
         }
+        polymorphic(PhysicalItemDefinition::class) {
+            default { DataPhysicalItemDefinition.serializer() }
+        }
     }
 }
 
@@ -76,7 +79,7 @@ abstract class RpcSerializer(
         parameters: List<TypedParameter<*>>,
         methodName: String,
     ): O {
-        lateinit var x : KClass<KotlinJsonRpcResponse<O>>
+        lateinit var x: KClass<KotlinJsonRpcResponse<O>>
         return callRpc<O>(
             stringLineReaderWriter,
             encodeRequest(parameters, methodName),

@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Iv4xr.SePlugin.Control;
 using Iv4xr.SpaceEngineers.WorldModel;
 using Sandbox.Definitions;
 using Sandbox.Game;
+using Sandbox.Game.Entities;
 using Sandbox.Game.Entities.Character;
 using Sandbox.Game.Entities.Cube;
 using Sandbox.Game.Multiplayer;
@@ -140,13 +142,22 @@ namespace Iv4xr.SePlugin
             };
         }
         
-        public static ProductionQueueItem ToProductionQueueItem(this MyBlueprintDefinitionBase bp)
+        public static BlueprintDefinition ToBlueprintDefinition(this MyBlueprintDefinitionBase bp)
         {
-            return new ProductionQueueItem()
+            return new BlueprintDefinition()
             {
                 DisplayName = bp.DisplayNameText,
                 Prerequisites = bp.Prerequisites.Select(i => i.ToAmountedDefinition()).ToList(),
                 Results = bp.Results.Select(i => i.ToAmountedDefinition()).ToList(),
+            };
+        }
+        
+        public static ProductionQueueItem ToProductionQueueItem(this MyProductionBlock.QueueItem bp)
+        {
+            return new ProductionQueueItem()
+            {
+                Amount = bp.Amount.ToIntSafe(),
+                Blueprint = bp.Blueprint.ToBlueprintDefinition()
             };
         }
         
@@ -201,6 +212,29 @@ namespace Iv4xr.SePlugin
                 FullName = directoryInfo.FullName,
                 IsDirectory = true,
             };
+        }
+
+        public static FloatingObject ToFloatingObject(this MyFloatingObject floatingObject)
+        {
+            return new FloatingObject()
+            {
+                Amount = (float)floatingObject.Amount.Value,
+                ItemDefinition = floatingObject.ItemDefinition.ToPhysicalItemDefinition(),
+                DisplayName = floatingObject.DisplayName,
+                EntityId = floatingObject.EntityId,
+            };
+        }
+      
+        
+        public static PhysicalItemDefinition ToPhysicalItemDefinition(this MyPhysicalItemDefinition myDefinitionBase)
+        {
+            var result = new PhysicalItemDefinition();
+            BlockDefinitionEntityBuilder.AddBaseFields(myDefinitionBase, result);
+            result.Health = myDefinitionBase.Health;
+            result.Mass = myDefinitionBase.Mass;
+            result.Volume = myDefinitionBase.Volume;
+            result.Size = myDefinitionBase.Size.ToPlain();
+            return result;
         }
         
     }

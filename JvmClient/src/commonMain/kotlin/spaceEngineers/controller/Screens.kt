@@ -12,6 +12,12 @@ interface Screens {
     val joinGame: JoinGame
     val serverConnect: ServerConnect
     val loadGame: LoadGame
+    val gamePlay: GamePlay
+}
+
+interface GamePlay {
+    fun data(): GamePlayData
+    fun showMainMenu()
 }
 
 interface ServerConnect {
@@ -39,6 +45,7 @@ interface MainMenu {
     fun options()
     fun character()
     fun exitToWindows()
+    fun exitToMainMenu()
 }
 
 interface Medicals {

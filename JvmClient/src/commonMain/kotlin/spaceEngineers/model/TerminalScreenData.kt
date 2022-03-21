@@ -5,6 +5,14 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ProductionQueueItem(
+    @SerialName("Amount")
+    val amount: Int,
+    @SerialName("Blueprint")
+    val blueprint: BlueprintDefinition,
+)
+
+@Serializable
+data class BlueprintDefinition(
     @SerialName("DisplayName")
     val displayName: String,
     @SerialName("Prerequisites")
@@ -42,7 +50,7 @@ data class TerminalProductionData(
     @SerialName("Inventory")
     val inventory: List<AmountedDefinitionId>,
     @SerialName("Blueprints")
-    val blueprints: List<ProductionQueueItem>,
+    val blueprints: List<BlueprintDefinition>,
     @SerialName("ProductionCooperativeMode")
     val productionCooperativeMode: Boolean,
     @SerialName("ProductionRepeatMode")

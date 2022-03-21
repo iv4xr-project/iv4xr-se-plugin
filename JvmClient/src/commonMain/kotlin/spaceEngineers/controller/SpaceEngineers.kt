@@ -23,6 +23,7 @@ interface Session {
     fun connect(address: String)
     fun disconnect()
     fun exitGame()
+    fun exitToMainMenu()
 }
 
 interface Character {
@@ -67,6 +68,7 @@ interface Observer {
     fun observeBlocks(): Observation
     fun observeNewBlocks(): Observation
     fun observeCharacters(): List<CharacterObservation>
+    fun observeFloatingObjects(): List<FloatingObject>
     fun navigationGraph(): NavGraph
 
     /**
