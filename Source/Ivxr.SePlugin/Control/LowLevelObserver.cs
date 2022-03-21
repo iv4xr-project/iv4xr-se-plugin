@@ -113,6 +113,17 @@ namespace Iv4xr.SePlugin.Control
             }
         }
 
+        public List<FloatingObject> ObserveFloatingObjects(Vector3D? position = null)
+        {
+            return SurroundingFloatingObjects(GetBoundingSphere(position)).ToList();
+        }
+
+        internal IEnumerable<FloatingObject> SurroundingFloatingObjects(BoundingSphereD sphere)
+        {
+            return EnumerateSurroundingEntities(sphere).OfType<MyFloatingObject>()
+                    .Select(mfo => mfo.ToFloatingObject());
+        }
+
         internal IEnumerable<CharacterObservation> CollectSurroundingCharacters(BoundingSphereD sphere)
         {
             return EnumerateSurroundingEntities(sphere).OfType<MyCharacter>().Select(
@@ -152,8 +163,8 @@ namespace Iv4xr.SePlugin.Control
         public MyCubeGrid GetGridById(string gridId)
         {
             return Grids().First(grid =>
-                            grid.EntityId.ToString() == gridId
-                    );
+                    grid.EntityId.ToString() == gridId
+            );
         }
 
         public MyCubeGrid GetGridContainingBlock(string blockId)

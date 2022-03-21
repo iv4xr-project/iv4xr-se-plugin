@@ -10,21 +10,29 @@ namespace Iv4xr.SePlugin
         public override void BeforeStart()
         {
             base.BeforeStart();
-
-            Context.InitSession();
+            if (Context != null)
+            {
+                Context.InitSession();
+            }
         }
 
         public override void UpdateBeforeSimulation()
         {
             base.UpdateBeforeSimulation();
-            Context.Tick();
+            if (Context != null)
+            {
+                Context.Tick();
+            }
         }
+
 
         protected override void UnloadData()
         {
             base.UnloadData();
-
-            Context.EndSession();
+            if (Context != null)
+            {
+                Context.EndSession();
+            }
         }
     }
 }

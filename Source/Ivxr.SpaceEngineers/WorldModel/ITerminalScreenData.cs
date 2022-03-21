@@ -15,6 +15,12 @@ namespace Iv4xr.SpaceEngineers.WorldModel
 
     public class ProductionQueueItem
     {
+        public int Amount;
+        public BlueprintDefinition Blueprint;
+    }
+
+    public class BlueprintDefinition
+    {
         public string DisplayName;
         public List<AmountedDefinitionId> Prerequisites;
         public List<AmountedDefinitionId> Results;
@@ -30,7 +36,7 @@ namespace Iv4xr.SpaceEngineers.WorldModel
     {
         public List<ProductionQueueItem> ProductionQueue;
         public List<AmountedDefinitionId> Inventory;
-        public List<ProductionQueueItem> Blueprints;
+        public List<BlueprintDefinition> Blueprints;
         public List<string> Assemblers;
         public bool ProductionCooperativeMode;
         public bool ProductionRepeatMode;
@@ -72,5 +78,10 @@ namespace Iv4xr.SpaceEngineers.WorldModel
         public File CurrentDirectory;
         public File RootDirectory;
         public List<File> Files;
+    }
+
+    public class GamePlayData
+    {
+        public List<OreMarker> OreMarkers;
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Iv4xr.PluginLib;
+using Iv4xr.SePlugin.Communication;
 using Iv4xr.SpaceEngineers;
 using Iv4xr.SpaceEngineers.WorldModel;
 using Sandbox.Definitions;
@@ -103,7 +104,7 @@ namespace Iv4xr.SePlugin.Control
             var productionQueueGrid = productionTab.TabControlByName<MyGuiControlScrollablePanel>("QueueScrollableArea")
                     .ScrollableChild<MyGuiControlGrid>();
             var productionQueueItems = productionQueueGrid.GridItemUserDataOfType<MyProductionBlock.QueueItem>()
-                    .Select(item => item.Blueprint).Select(bp => bp.ToProductionQueueItem()).ToList();
+                    .Select(bp => bp.ToProductionQueueItem()).ToList();
 
 
             var inventoryGrid = productionTab.TabControlByName<MyGuiControlScrollablePanel>("InventoryScrollableArea")
@@ -115,8 +116,8 @@ namespace Iv4xr.SePlugin.Control
             var blueprintsGrid =
                     productionTab.TabControlByName<MyGuiControlScrollablePanel>("BlueprintsScrollableArea")
                             .ScrollableChild<MyGuiControlGrid>();
-            var blueprintItems = blueprintsGrid.GridItemUserDataOfType<MyBlueprintDefinition>()
-                    .Select(bp => bp.ToProductionQueueItem()).ToList();
+            var blueprintItems = blueprintsGrid.GridItemUserDataOfType<MyBlueprintDefinitionBase>()
+                    .Select(bp => bp.ToBlueprintDefinition()).ToList();
 
             var assemblers = Screen.ProductionTab().TabControlByName<MyGuiControlCombobox>("AssemblersCombobox")
                     .ItemsAsList().Select(
@@ -149,8 +150,8 @@ namespace Iv4xr.SePlugin.Control
             var cb = (MyGuiControlCheckbox)productionTab.Controls.GetControlByName("SlaveCheckbox");
             cb.IsChecked = !cb.IsChecked;
         }
-
-
+        
+        [RunOnMainThread]
         public void AddToProductionQueue(int index)
         {
             var screen = MyGuiScreenExtensions.EnsureFocusedScreen<MyGuiScreenTerminal>();
@@ -245,12 +246,12 @@ namespace Iv4xr.SePlugin.Control
 
             public void ClickSelectedItem()
             {
-                grid.CallMethod<object>("TryTriggerSingleClickEvent");
+                grid.ClickItem();
             }
 
             public void DoubleClickSelectedItem()
             {
-                grid.CallMethod<object>("DoubleClickItem");
+                grid.DoubleClickItem();
             }
 
             public void FilterAll()

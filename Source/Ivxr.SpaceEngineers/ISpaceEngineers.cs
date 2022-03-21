@@ -23,6 +23,7 @@ namespace Iv4xr.SpaceEngineers
         void Connect(string address);
         void Disconnect();
         void ExitGame();
+        void ExitToMainMenu();
     }
 
     public interface IObserver
@@ -31,6 +32,7 @@ namespace Iv4xr.SpaceEngineers
         Observation ObserveBlocks();
         Observation ObserveNewBlocks();
         List<CharacterObservation> ObserveCharacters();
+        List<FloatingObject> ObserveFloatingObjects();
         NavGraph NavigationGraph();
         void SwitchCamera();
         void TakeScreenshot(string absolutePath);

@@ -8,11 +8,20 @@ using Iv4xr.PluginLib;
 using Iv4xr.SePlugin.Communication;
 using Iv4xr.SpaceEngineers;
 using Iv4xr.SpaceEngineers.WorldModel;
+using Sandbox;
+using Sandbox.Definitions;
+using Sandbox.Game;
+using Sandbox.Game.Entities.Cube;
 using Sandbox.Game.Gui;
 using Sandbox.Game.Screens;
 using Sandbox.Game.Screens.Helpers;
+using Sandbox.Game.World;
 using Sandbox.Graphics.GUI;
 using SpaceEngineers.Game.GUI;
+using VRage.Game;
+using VRage.Game.Entity;
+using VRage.Voxels;
+using VRageMath;
 
 namespace Iv4xr.SePlugin.Control
 {
@@ -28,6 +37,11 @@ namespace Iv4xr.SePlugin.Control
         }
 
         protected TScreen Screen => MyGuiScreenExtensions.EnsureFocusedScreen<TScreen>();
+
+        protected void CheckScreen()
+        {
+            MyGuiScreenExtensions.EnsureFocusedScreen<TScreen>();
+        }
 
         private readonly ScreenCloseType m_screenClose;
 
@@ -112,6 +126,7 @@ namespace Iv4xr.SePlugin.Control
         private readonly ServerConnectScreen m_serverConnectScreen = new ServerConnectScreen();
         private readonly NewGameScreen m_newGameScreen = new NewGameScreen();
         private readonly LoadGameScreen m_loadGameScreen = new LoadGameScreen();
+        private readonly GamePlayScreen m_gamePlayScreen = new GamePlayScreen();
 
         public Screens()
         {
@@ -126,6 +141,7 @@ namespace Iv4xr.SePlugin.Control
         public IServerConnect ServerConnect => m_serverConnectScreen;
         public ILoadGame LoadGame => m_loadGameScreen;
         public INewGame NewGame => m_newGameScreen;
+        public IGamePlay GamePlay => m_gamePlayScreen;
 
         [RunOutsideGameLoop]
         public string FocusedScreen()
@@ -200,7 +216,7 @@ namespace Iv4xr.SePlugin.Control
             Screen.ClickButton("m_yesButton");
         }
 
-        [RunOutsideGameLoop]
+        [RunOnMainThread]
         public void PressNo()
         {
             Screen.ClickButton("m_noButton");
@@ -268,6 +284,13 @@ namespace Iv4xr.SePlugin.Control
         {
             Buttons().ButtonByText(MyCommonTexts.ScreenMenuButtonExitToWindows).PressButton();
         }
+        
+        [RunOutsideGameLoop]
+        public void ExitToMainMenu()
+        {
+            CheckScreen();
+            Buttons().ButtonByText(MyCommonTexts.ScreenMenuButtonExitToMainMenu).PressButton();
+        }
     }
 
     public class NewGameScreen : AbstractScreen<MyGuiScreenNewGame, object>, INewGame
@@ -291,7 +314,8 @@ namespace Iv4xr.SePlugin.Control
                         var file = info.ToFile();
                         file.Name = cellText;
                         return file;
-                    } else if (row.UserData is DirectoryInfo directoryInfo)
+                    }
+                    else if (row.UserData is DirectoryInfo directoryInfo)
                     {
                         return directoryInfo.ToFile();
                     }
@@ -304,7 +328,6 @@ namespace Iv4xr.SePlugin.Control
                     }
 
                     throw new InvalidDataException("Unable to convert data from ControlDirectoryBrowser");
-
                 });
             return new LoadGameData()
             {
@@ -362,6 +385,96 @@ namespace Iv4xr.SePlugin.Control
         public void Publish()
         {
             Screen.ClickButton("m_publishButton");
+        }
+    }
+
+    public class GamePlayScreen : AbstractScreen<MyGuiScreenGamePlay, GamePlayData>, IGamePlay
+    {
+        class PositionedOreMarker
+        {
+            public Vector3D Position;
+            public MyEntityOreDeposit OreDeposit;
+            public string Name;
+            public double Distance;
+        }
+
+
+        //based on MyGuiScreenHudSpace.DrawOreMarkers
+        private IEnumerable<PositionedOreMarker> CreateMarkers()
+        {
+            MyHudOreMarkers oreMarkers = MyHud.OreMarkers;
+            Vector3D controlledEntityPosition = Vector3D.Zero;
+            if (MySession.Static != null && MySession.Static.ControlledEntity != null)
+            {
+                controlledEntityPosition = ((MyEntity)MySession.Static.ControlledEntity).WorldMatrix.Translation;
+            }
+
+            PositionedOreMarker[] nearestOreDeposits =
+                    new PositionedOreMarker[MyDefinitionManager.Static.VoxelMaterialCount];
+            float[] nearestDistancesSquared = new float[nearestOreDeposits.Length];
+
+            for (int i = 0; i < nearestOreDeposits.Length; i++)
+            {
+                nearestOreDeposits[i] = null;
+                nearestDistancesSquared[i] = float.MaxValue;
+            }
+
+
+            foreach (MyEntityOreDeposit oreMarker in oreMarkers)
+            {
+                for (int i = 0; i < oreMarker.Materials.Count; i++)
+                {
+                    MyEntityOreDeposit.Data depositData = oreMarker.Materials[i];
+
+                    var oreMaterial = depositData.Material;
+                    Vector3D oreWorldPosition;
+                    var voxelMap = oreMarker.VoxelMap;
+                    MyVoxelCoordSystems.LocalPositionToWorldPosition(
+                        (voxelMap.PositionComp.GetPosition() - (Vector3D)voxelMap.StorageMin),
+                        ref depositData.AverageLocalPosition, out oreWorldPosition);
+
+                    //ProfilerShort.BeginNextBlock("Distance");
+                    Vector3D diff = (controlledEntityPosition - oreWorldPosition);
+                    float distanceSquared = (float)diff.LengthSquared();
+
+                    float nearestDistanceSquared = nearestDistancesSquared[oreMaterial.Index];
+                    if (distanceSquared < nearestDistanceSquared)
+                    {
+                        MyVoxelMaterialDefinition voxelMaterial = MyDefinitionManager.Static.GetVoxelMaterialDefinition(oreMaterial.Index);
+                        nearestOreDeposits[oreMaterial.Index] = new PositionedOreMarker()
+                        {
+                            Position = oreWorldPosition,
+                            OreDeposit = oreMarker,
+                            Name = oreMarkers.GetOreName(voxelMaterial),
+                            Distance = diff.Length(),
+                        };
+                        nearestDistancesSquared[oreMaterial.Index] = distanceSquared;
+                    }
+                }
+            }
+            return nearestOreDeposits.Where(nod => nod?.OreDeposit?.VoxelMap != null && !nod.OreDeposit.VoxelMap.Closed);
+        }
+
+        public override GamePlayData Data()
+        {
+            return new GamePlayData()
+            {
+                OreMarkers =  CreateMarkers().Select(positionedOreMarker =>
+                        new OreMarker()
+                        {
+                            Text = positionedOreMarker.Name,
+                            Position = positionedOreMarker.Position.ToPlain(),
+                            Distance = positionedOreMarker.Distance,
+                            Materials = positionedOreMarker.OreDeposit.Materials.Select(data => data.Material.ToDefinitionId()).ToList(),
+                        }
+                    ).ToList()
+            };
+        }
+
+        public void ShowMainMenu()
+        {
+            CheckScreen();
+            MyGuiSandbox.AddScreen(MyGuiSandbox.CreateScreen(MyPerGameSettings.GUI.MainMenu, MySandboxGame.IsPaused == false));
         }
     }
 }

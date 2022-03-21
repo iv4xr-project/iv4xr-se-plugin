@@ -13,7 +13,7 @@ namespace Iv4xr.SePlugin.Control
     {
         public ILog Log { get; set; }
 
-        [RunOutsideGameLoop]
+        [RunOnMainThread]
         public void LoadScenario(string scenarioPath)
         {
             Log.WriteLine($"Loading scenario: '{scenarioPath}'");
@@ -27,7 +27,7 @@ namespace Iv4xr.SePlugin.Control
             MySessionLoader.ExitGame();
         }
 
-        [RunOutsideGameLoop]
+        [RunOnMainThread]
         public void Connect(string address)
         {
             MySessionLoader.UnloadAndExitToMenu();
@@ -38,8 +38,14 @@ namespace Iv4xr.SePlugin.Control
             MyGameService.PingServer(address);
         }
 
-        [RunOutsideGameLoop]
+        [RunOnMainThread]
         public void Disconnect()
+        {
+            MySessionLoader.UnloadAndExitToMenu();
+        }
+
+        [RunOnMainThread]
+        public void ExitToMainMenu()
         {
             MySessionLoader.UnloadAndExitToMenu();
         }
