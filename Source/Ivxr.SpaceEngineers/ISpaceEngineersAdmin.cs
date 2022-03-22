@@ -10,6 +10,7 @@ namespace Iv4xr.SpaceEngineers
         IBlocksAdmin Blocks { get; }
         IObserverAdmin Observer { get;  }
         void UpdateDefaultInteractDistance(float distance);
+        DebugInfo DebugInfo();
     }
 
     public interface IObserverAdmin
