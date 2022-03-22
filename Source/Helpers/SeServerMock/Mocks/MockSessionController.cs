@@ -27,5 +27,10 @@ namespace SeServerMock.Mocks
         {
             throw new NotImplementedException();
         }
+
+        public void ExitToMainMenu()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

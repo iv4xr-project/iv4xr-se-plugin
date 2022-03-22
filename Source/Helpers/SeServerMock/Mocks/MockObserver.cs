@@ -76,6 +76,11 @@ namespace SeServerMock.Mocks
             throw new NotImplementedException();
         }
 
+        public List<FloatingObject> ObserveFloatingObjects()
+        {
+            throw new NotImplementedException();
+        }
+
         public NavGraph NavigationGraph()
         {
             throw new NotImplementedException();
