@@ -15,4 +15,11 @@ data class DebugInfo(
     val machineName: String,
     @SerialName("SessionReady")
     val sessionReady: Boolean,
+    @SerialName("MultiplayerActive")
+    val multiplayerActive: Boolean,
+    @SerialName("IsServer")
+    val isServer: Boolean,
+    @SerialName("UserName")
+    val userName: String,
+
 )
