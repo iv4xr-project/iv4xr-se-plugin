@@ -2,6 +2,7 @@
 using Iv4xr.PluginLib;
 using Iv4xr.PluginLib.Json;
 using Iv4xr.SePlugin.Config;
+using VRage.FileSystem;
 using VRage.Plugins;
 
 namespace Iv4xr.SePlugin
@@ -20,8 +21,9 @@ namespace Iv4xr.SePlugin
                 Log.WriteLine("Init already called.");
                 return;
             }
+            var config = GetConfiguration(MyFileSystem.UserDataPath) as IvxrPluginConfiguration;
 
-            Context = new IvxrPluginContext();
+            Context = new IvxrPluginContext(config.ToPluginConfig());
 
             Log = Context.Log;
             Log.WriteLine($"{nameof(IvxrPlugin)} initialization finished.");

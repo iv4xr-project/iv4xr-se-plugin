@@ -29,7 +29,7 @@ namespace Iv4xr.SePlugin
             new ConfigLoader(m_log, new NewtonJsoner(), configPath).Save(ToPluginConfig());
         }
 
-        private PluginConfig ToPluginConfig()
+        public PluginConfig ToPluginConfig()
         {
             return new PluginConfig()
             {
