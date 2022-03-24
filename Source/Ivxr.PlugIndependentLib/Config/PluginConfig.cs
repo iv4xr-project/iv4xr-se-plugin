@@ -13,5 +13,6 @@
         public const string HOSTNAME = "127.0.0.1";
         public const double RADIUS = 25.0d;
         public const int PORT = 3333;
+        public const string CONFIG_FILE = "ivxr-plugin.config";
     }
 }

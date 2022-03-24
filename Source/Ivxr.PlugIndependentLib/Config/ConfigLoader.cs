@@ -20,7 +20,12 @@ namespace Iv4xr.SePlugin.Config
 
         public void SaveDefault()
         {
-            var jsonConfig = Jsoner.ToJson(new PluginConfig());
+            Save(new PluginConfig());
+        }
+
+        public void Save(PluginConfig config)
+        {
+            var jsonConfig = Jsoner.ToJson(config);
             
             File.WriteAllText(ConfigPath, jsonConfig);
         }
