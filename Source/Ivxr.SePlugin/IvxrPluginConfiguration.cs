@@ -9,9 +9,12 @@ namespace Iv4xr.SePlugin
 {
     public class IvxrPluginConfiguration : IPluginConfiguration
     {
-        [Category("Network")] public string Hostname = PluginConfigDefaults.HOSTNAME;
-        [Category("Network")] public int Port = PluginConfigDefaults.PORT;
-        [Category("Observation")] public double ObservationRadius = PluginConfigDefaults.RADIUS;
+        [Category("Network")] 
+        public string Hostname = PluginConfigDefaults.HOSTNAME;
+        [Category("Network")]
+        public int Port = PluginConfigDefaults.PORT;
+        [Category("Observation")] 
+        public double ObservationRadius = PluginConfigDefaults.RADIUS;
 
         private readonly ILog m_log;
 
@@ -25,7 +28,7 @@ namespace Iv4xr.SePlugin
 
         public void Save(string userDataPath)
         {
-            var configPath = Path.Combine(userDataPath, PluginConfigDefaults.CONFIG_FILE);
+            var configPath = Path.Combine(userDataPath, ConfigLoader.CONFIG_FILE);
             new ConfigLoader(m_log, new NewtonJsoner(), configPath).Save(ToPluginConfig());
         }
 

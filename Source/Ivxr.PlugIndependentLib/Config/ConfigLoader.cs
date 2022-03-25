@@ -7,6 +7,7 @@ namespace Iv4xr.SePlugin.Config
 {
     public class ConfigLoader
     {
+        public const string CONFIG_FILE = "ivxr-plugin.config";
         public ILog Log { get; set; }
         public IJsoner Jsoner { get; }
         public string ConfigPath { get; }

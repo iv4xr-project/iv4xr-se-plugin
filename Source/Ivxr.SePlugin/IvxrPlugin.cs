@@ -81,7 +81,7 @@ namespace Iv4xr.SePlugin
 
         public IPluginConfiguration GetConfiguration(string userDataPath)
         {
-            var configPath = Path.Combine(userDataPath, PluginConfigDefaults.CONFIG_FILE);
+            var configPath = Path.Combine(userDataPath, ConfigLoader.CONFIG_FILE);
             var config = new ConfigLoader(Log, new NewtonJsoner(), configPath).LoadOrSaveDefault();
             return new IvxrPluginConfiguration(config, Log);
         }
