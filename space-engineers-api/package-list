@@ -310,6 +310,7 @@ $dokka.location:spaceEngineers.controller/SpaceEngineers/session/#/PointingToDec
 $dokka.location:spaceEngineers.controller/SpaceEngineersAdmin///PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-space-engineers-admin/index.html
 $dokka.location:spaceEngineers.controller/SpaceEngineersAdmin/blocks/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-space-engineers-admin/blocks.html
 $dokka.location:spaceEngineers.controller/SpaceEngineersAdmin/character/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-space-engineers-admin/character.html
+$dokka.location:spaceEngineers.controller/SpaceEngineersAdmin/debugInfo/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-space-engineers-admin/debug-info.html
 $dokka.location:spaceEngineers.controller/SpaceEngineersAdmin/observer/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-space-engineers-admin/observer.html
 $dokka.location:spaceEngineers.controller/SpaceEngineersAdmin/setFrameLimitEnabled/#kotlin.Boolean/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-space-engineers-admin/set-frame-limit-enabled.html
 $dokka.location:spaceEngineers.controller/SpaceEngineersAdmin/updateDefaultInteractDistance/#kotlin.Float/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-space-engineers-admin/update-default-interact-distance.html
@@ -1393,6 +1394,16 @@ $dokka.location:spaceEngineers.model/DataWeaponBlockDefinition/mountPoints/#/Poi
 $dokka.location:spaceEngineers.model/DataWeaponBlockDefinition/public/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-weapon-block-definition/public.html
 $dokka.location:spaceEngineers.model/DataWeaponBlockDefinition/size/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-weapon-block-definition/size.html
 $dokka.location:spaceEngineers.model/DataWeaponBlockDefinition/type/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-data-weapon-block-definition/type.html
+$dokka.location:spaceEngineers.model/DebugInfo///PointingToDeclaration/space-engineers-api/spaceEngineers.model/-debug-info/index.html
+$dokka.location:spaceEngineers.model/DebugInfo/DebugInfo/#kotlin.Boolean#kotlin.String#kotlin.Int#kotlin.String#kotlin.Boolean#kotlin.Boolean#kotlin.Boolean#kotlin.String/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-debug-info/-debug-info.html
+$dokka.location:spaceEngineers.model/DebugInfo/executable/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-debug-info/executable.html
+$dokka.location:spaceEngineers.model/DebugInfo/isDedicated/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-debug-info/is-dedicated.html
+$dokka.location:spaceEngineers.model/DebugInfo/isServer/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-debug-info/is-server.html
+$dokka.location:spaceEngineers.model/DebugInfo/machineName/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-debug-info/machine-name.html
+$dokka.location:spaceEngineers.model/DebugInfo/multiplayerActive/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-debug-info/multiplayer-active.html
+$dokka.location:spaceEngineers.model/DebugInfo/sessionReady/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-debug-info/session-ready.html
+$dokka.location:spaceEngineers.model/DebugInfo/userName/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-debug-info/user-name.html
+$dokka.location:spaceEngineers.model/DebugInfo/version/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-debug-info/version.html
 $dokka.location:spaceEngineers.model/DecoyDefinition///PointingToDeclaration/space-engineers-api/spaceEngineers.model/-decoy-definition/index.html
 $dokka.location:spaceEngineers.model/DecoyDefinition/lightningRodRadiusLarge/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-decoy-definition/lightning-rod-radius-large.html
 $dokka.location:spaceEngineers.model/DecoyDefinition/lightningRodRadiusSmall/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-decoy-definition/lightning-rod-radius-small.html
