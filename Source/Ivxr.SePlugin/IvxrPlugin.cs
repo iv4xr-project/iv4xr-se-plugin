@@ -1,10 +1,13 @@
-﻿using Iv4xr.PluginLib;
-using Iv4xr.SePlugin.Communication;
+﻿using System.IO;
+using Iv4xr.PluginLib;
+using Iv4xr.PluginLib.Json;
+using Iv4xr.SePlugin.Config;
+using VRage.FileSystem;
 using VRage.Plugins;
 
 namespace Iv4xr.SePlugin
 {
-    public class IvxrPlugin : IPlugin
+    public class IvxrPlugin : IConfigurablePlugin
     {
         public static IvxrPluginContext Context { get; private set; }
 
@@ -18,8 +21,9 @@ namespace Iv4xr.SePlugin
                 Log.WriteLine("Init already called.");
                 return;
             }
+            var config = GetConfiguration(MyFileSystem.UserDataPath) as IvxrPluginConfiguration;
 
-            Context = new IvxrPluginContext();
+            Context = new IvxrPluginContext(config.ToPluginConfig());
 
             Log = Context.Log;
             Log.WriteLine($"{nameof(IvxrPlugin)} initialization finished.");
@@ -69,5 +73,17 @@ namespace Iv4xr.SePlugin
         }
 
         #endregion
+
+        public string GetPluginTitle()
+        {
+            return "IV4XR";
+        }
+
+        public IPluginConfiguration GetConfiguration(string userDataPath)
+        {
+            var configPath = Path.Combine(userDataPath, ConfigLoader.CONFIG_FILE);
+            var config = new ConfigLoader(Log, new NewtonJsoner(), configPath).LoadOrSaveDefault();
+            return new IvxrPluginConfiguration(config, Log);
+        }
     }
 }

@@ -17,12 +17,11 @@ namespace Iv4xr.SePlugin
         public readonly JsonRpcStarter JsonRpcStarter;
         public readonly FuncActionDispatcher FuncActionDispatcher;
         private readonly FuncActionDispatcher MainThreadFuncActionDispatcher;
-        private const string CONFIG_FILE = "ivxr-plugin.config";
 
         private readonly GameSession m_gameSession = new GameSession();
         public readonly ContinuousMovementController ContinuousMovementController;
 
-        public IvxrPluginContext()
+        public IvxrPluginContext(PluginConfig config)
         {
             var seLog = new SeLog(
                 Assembly.GetExecutingAssembly().GetName().Version.ToString(),
@@ -31,9 +30,6 @@ namespace Iv4xr.SePlugin
             );
             Log = seLog;
 
-            var configPath = Path.Combine(MyFileSystem.UserDataPath, CONFIG_FILE);
-            var configLoader = new ConfigLoader(Log, new Jsoner(), configPath);
-            var config = configLoader.LoadOrSaveDefault();
             ContinuousMovementController = new ContinuousMovementController(seLog, m_gameSession);
 
             var se = new RealSpaceEngineers(m_gameSession, Log, config);
