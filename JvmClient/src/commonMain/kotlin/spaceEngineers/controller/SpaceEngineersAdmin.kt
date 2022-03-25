@@ -8,6 +8,7 @@ interface SpaceEngineersAdmin {
     val observer: ObserverAdmin
     fun setFrameLimitEnabled(enabled: Boolean)
     fun updateDefaultInteractDistance(distance: Float)
+    fun debugInfo(): DebugInfo
 }
 
 interface BlocksAdmin {
