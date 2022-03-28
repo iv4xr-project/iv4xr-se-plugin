@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Iv4xr.SePlugin.Control;
+using Iv4xr.SpaceEngineers;
 using Iv4xr.SpaceEngineers.WorldModel;
 using Sandbox.Definitions;
 using Sandbox.Game;
@@ -237,5 +238,28 @@ namespace Iv4xr.SePlugin
             return result;
         }
         
+        public static List<Role> Roles(this DebugInfo debugInfo)
+        {
+            var roles = new List<Role>();
+            if (debugInfo.IsDedicated || (debugInfo.IsServer && debugInfo.SessionReady && debugInfo.MultiplayerActive))
+            {
+                roles.Add(Role.Admin);
+            }
+
+            if (!debugInfo.IsDedicated)
+            {
+                roles.Add(Role.Game);
+            }
+
+            roles.Add(Role.Observer);
+
+            return roles;
+        }
+        
+        public static bool CanDoRole(this DebugInfo debugInfo, Role role)
+        {
+            return debugInfo.Roles().Contains(role);
+        }
+
     }
 }

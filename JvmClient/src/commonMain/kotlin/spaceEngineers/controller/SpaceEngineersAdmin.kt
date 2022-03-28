@@ -9,6 +9,13 @@ interface SpaceEngineersAdmin {
     fun setFrameLimitEnabled(enabled: Boolean)
     fun updateDefaultInteractDistance(distance: Float)
     fun debugInfo(): DebugInfo
+    val tests: TestAdmin
+}
+
+interface TestAdmin {
+    fun adminOnly()
+    fun gameOnly()
+    fun observerOnly()
 }
 
 interface BlocksAdmin {

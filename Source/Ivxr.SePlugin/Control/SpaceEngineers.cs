@@ -65,6 +65,7 @@ namespace Iv4xr.SePlugin.Control
         public ICharacterAdmin Character { get; }
         public IBlocksAdmin Blocks { get; }
         public IObserverAdmin Observer { get; }
+        public ITestAdmin Tests { get; }
         public void UpdateDefaultInteractDistance(float distance)
         {
             MyConstants.DEFAULT_INTERACTIVE_DISTANCE = distance;
@@ -81,6 +82,7 @@ namespace Iv4xr.SePlugin.Control
             Character = character;
             Blocks = blocks;
             Observer = observer;
+            Tests = new TestAdmin();
         }
     }
 }

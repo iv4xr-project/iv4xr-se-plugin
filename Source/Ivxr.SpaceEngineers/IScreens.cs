@@ -3,6 +3,7 @@ using Iv4xr.SpaceEngineers.WorldModel;
 
 namespace Iv4xr.SpaceEngineers
 {
+    [Role(Role.Game)]
     public interface IScreens
     {
         string FocusedScreen();
