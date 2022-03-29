@@ -20,6 +20,7 @@ using Sandbox.Graphics.GUI;
 using SpaceEngineers.Game.GUI;
 using VRage.Game;
 using VRage.Game.Entity;
+using VRage.Input;
 using VRage.Voxels;
 using VRageMath;
 
@@ -199,12 +200,81 @@ namespace Iv4xr.SePlugin.Control
         }
     }
 
-    public class JoinGameScreen : AbstractScreen<MyGuiScreenJoinGame, object>, IJoinGame
+    public class JoinGameScreen : AbstractScreen<MyGuiScreenJoinGame, JoinGameData>, IJoinGame
     {
         [RunOutsideGameLoop]
         public void DirectConnect()
         {
             Screen.ClickButton("m_directConnectButton");
+        }
+
+        [RunOutsideGameLoop]
+        public void JoinWorld()
+        {
+            Screen.ClickButton("m_joinButton");
+        }
+
+        [RunOutsideGameLoop]
+        public void Refresh()
+        {
+            Screen.ClickButton("m_refreshButton");
+        }
+
+        [RunOutsideGameLoop]
+        public void ServerDetails()
+        {
+            Screen.ClickButton("m_detailsButton");
+        }
+
+        private MyGuiControlTabControl Tabs =>
+                Screen.GetInstanceFieldOrThrow<MyGuiControlTabControl>("m_joinGameTabs");
+
+
+        [RunOutsideGameLoop]
+        public void SelectTab(int index)
+        {
+            Tabs.SelectedPage = index;
+        }
+
+        [RunOutsideGameLoop]
+        public void SelectGame(int index)
+        {
+            GamesTable.SelectedRowIndex = index;
+            Screen.CallMethod<object>("OnTableItemSelected", new object[]
+            {
+                GamesTable, new MyGuiControlTable.EventArgs()
+                {
+                    RowIndex = index,
+                    MouseButton = MyMouseButtonsEnum.Left,
+                }
+            });
+        }
+
+        private MyGuiControlTable GamesTable =>
+                Screen.GetInstanceFieldOrThrow<MyGuiControlTable>("m_gamesTable");
+
+        private List<ListedGameInformation> ListedGames()
+        {
+            return GamesTable.Rows.Select(row =>
+            {
+                var cells = row.GetInstanceFieldOrThrow<List<MyGuiControlTable.Cell>>("Cells");
+                return new ListedGameInformation()
+                {
+                    World = cells[3].Text.ToString(),
+                    Server = cells[6].Text.ToString(),
+                    //4 mode
+                };
+            }).ToList();
+        }
+
+        [RunOutsideGameLoop]
+        public override JoinGameData Data()
+        {
+            return new JoinGameData()
+            {
+                SelectedTab = Tabs.Pages[Tabs.SelectedPage].Name.Replace("Page", ""),
+                Games = ListedGames(),
+            };
         }
     }
 
@@ -284,7 +354,7 @@ namespace Iv4xr.SePlugin.Control
         {
             Buttons().ButtonByText(MyCommonTexts.ScreenMenuButtonExitToWindows).PressButton();
         }
-        
+
         [RunOutsideGameLoop]
         public void ExitToMainMenu()
         {
@@ -440,7 +510,8 @@ namespace Iv4xr.SePlugin.Control
                     float nearestDistanceSquared = nearestDistancesSquared[oreMaterial.Index];
                     if (distanceSquared < nearestDistanceSquared)
                     {
-                        MyVoxelMaterialDefinition voxelMaterial = MyDefinitionManager.Static.GetVoxelMaterialDefinition(oreMaterial.Index);
+                        MyVoxelMaterialDefinition voxelMaterial =
+                                MyDefinitionManager.Static.GetVoxelMaterialDefinition(oreMaterial.Index);
                         nearestOreDeposits[oreMaterial.Index] = new PositionedOreMarker()
                         {
                             Position = oreWorldPosition,
@@ -452,29 +523,33 @@ namespace Iv4xr.SePlugin.Control
                     }
                 }
             }
-            return nearestOreDeposits.Where(nod => nod?.OreDeposit?.VoxelMap != null && !nod.OreDeposit.VoxelMap.Closed);
+
+            return nearestOreDeposits.Where(nod =>
+                    nod?.OreDeposit?.VoxelMap != null && !nod.OreDeposit.VoxelMap.Closed);
         }
 
         public override GamePlayData Data()
         {
             return new GamePlayData()
             {
-                OreMarkers =  CreateMarkers().Select(positionedOreMarker =>
+                OreMarkers = CreateMarkers().Select(positionedOreMarker =>
                         new OreMarker()
                         {
                             Text = positionedOreMarker.Name,
                             Position = positionedOreMarker.Position.ToPlain(),
                             Distance = positionedOreMarker.Distance,
-                            Materials = positionedOreMarker.OreDeposit.Materials.Select(data => data.Material.ToDefinitionId()).ToList(),
+                            Materials = positionedOreMarker.OreDeposit.Materials
+                                    .Select(data => data.Material.ToDefinitionId()).ToList(),
                         }
-                    ).ToList()
+                ).ToList()
             };
         }
 
         public void ShowMainMenu()
         {
             CheckScreen();
-            MyGuiSandbox.AddScreen(MyGuiSandbox.CreateScreen(MyPerGameSettings.GUI.MainMenu, MySandboxGame.IsPaused == false));
+            MyGuiSandbox.AddScreen(MyGuiSandbox.CreateScreen(MyPerGameSettings.GUI.MainMenu,
+                MySandboxGame.IsPaused == false));
         }
     }
 }

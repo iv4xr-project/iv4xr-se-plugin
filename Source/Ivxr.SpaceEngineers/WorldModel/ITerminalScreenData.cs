@@ -84,4 +84,16 @@ namespace Iv4xr.SpaceEngineers.WorldModel
     {
         public List<OreMarker> OreMarkers;
     }
+
+    public class ListedGameInformation
+    {
+        public string World;
+        public string Server;
+    }
+
+    public class JoinGameData
+    {
+        public string SelectedTab;
+        public List<ListedGameInformation> Games;
+    }
 }
