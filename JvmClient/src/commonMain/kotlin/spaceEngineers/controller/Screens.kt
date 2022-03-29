@@ -29,6 +29,12 @@ interface ServerConnect {
 
 interface JoinGame {
     fun directConnect()
+    fun joinWorld()
+    fun refresh()
+    fun serverDetails()
+    fun selectTab(index: Int)
+    fun selectGame(index: Int)
+    fun data(): JoinGameData
 }
 
 interface MessageBox {

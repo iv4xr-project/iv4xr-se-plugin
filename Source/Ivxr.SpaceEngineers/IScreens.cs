@@ -35,6 +35,12 @@ namespace Iv4xr.SpaceEngineers
     public interface IJoinGame
     {
         void DirectConnect();
+        void JoinWorld();
+        void Refresh();
+        void ServerDetails();
+        void SelectTab(int index);
+        void SelectGame(int index);
+        JoinGameData Data();
     }
 
     public interface IMainMenu
