@@ -2,28 +2,35 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
     <title>SpaceEngineersJavaProxy</title>
-<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script><script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async="async"></script><link href="../../../styles/style.css" rel="Stylesheet"><link href="../../../styles/logo-styles.css" rel="Stylesheet"><link href="../../../styles/jetbrains-mono.css" rel="Stylesheet"><link href="../../../styles/main.css" rel="Stylesheet"><script type="text/javascript" src="../../../scripts/clipboard.js" async="async"></script><script type="text/javascript" src="../../../scripts/navigation-loader.js" async="async"></script><script type="text/javascript" src="../../../scripts/platform-content-handler.js" async="async"></script><script type="text/javascript" src="../../../scripts/main.js" async="async"></script>  </head>
+<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>    <script>const storage = localStorage.getItem("dokka-dark-mode")
+const savedDarkMode = storage ? JSON.parse(storage) : false
+if(savedDarkMode === true){
+    document.getElementsByTagName("html")[0].classList.add("theme-dark")
+}</script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async="async"></script><link href="../../../styles/style.css" rel="Stylesheet"><link href="../../../styles/jetbrains-mono.css" rel="Stylesheet"><link href="../../../styles/main.css" rel="Stylesheet"><link href="../../../styles/prism.css" rel="Stylesheet"><link href="../../../styles/logo-styles.css" rel="Stylesheet"><script type="text/javascript" src="../../../scripts/clipboard.js" async="async"></script><script type="text/javascript" src="../../../scripts/navigation-loader.js" async="async"></script><script type="text/javascript" src="../../../scripts/platform-content-handler.js" async="async"></script><script type="text/javascript" src="../../../scripts/main.js" defer="defer"></script><script type="text/javascript" src="../../../scripts/prism.js" async="async"></script>  </head>
   <body>
+    <div class="navigation-wrapper" id="navigation-wrapper">
+      <div id="leftToggler"><span class="icon-toggler"></span></div>
+      <div class="library-name"><a href="../../../index.html">space-engineers-api</a></div>
+      <div>0.6.0</div>
+      <div class="pull-right d-flex">
+        <div class="filter-section" id="filter-section"><button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":dokkaHtml/jvmMain">jvm</button></div>
+<button id="theme-toggle-button"><span id="theme-toggle"></span></button>
+        <div id="searchBar"></div>
+      </div>
+    </div>
     <div id="container">
-      <div id="leftColumn"><a href="../../../index.html">
-          <div id="logo"></div>
-        </a>
-        <div id="paneSearch"></div>
+      <div id="leftColumn">
         <div id="sideMenu"></div>
       </div>
       <div id="main">
-        <div id="leftToggler"><span class="icon-toggler"></span></div>
-<script type="text/javascript" src="../../../scripts/main.js"></script>        <div class="main-content" id="content" pageIds="space-engineers-api::spaceEngineers.controller/SpaceEngineersJavaProxy///PointingToDeclaration//-879532132">
-          <div class="navigation-wrapper" id="navigation-wrapper">
-            <div class="breadcrumbs"><a href="../../../index.html">space-engineers-api</a>/<a href="../index.html">spaceEngineers.controller</a>/<a href="index.html">SpaceEngineersJavaProxy</a></div>
-            <div class="pull-right d-flex">
-              <div class="filter-section" id="filter-section"><button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":dokkaHtml/jvmMain">jvm</button></div>
-              <div id="searchBar"></div>
-            </div>
-          </div>
+        <div class="main-content" id="content" pageIds="space-engineers-api::spaceEngineers.controller/SpaceEngineersJavaProxy///PointingToDeclaration//-879532132">
+          <div class="breadcrumbs"><a href="../../../index.html">space-engineers-api</a>/<a href="../index.html">spaceEngineers.controller</a>/<a href="index.html">SpaceEngineersJavaProxy</a></div>
           <div class="cover ">
             <h1 class="cover"><span>Space</span><wbr></wbr><span>Engineers</span><wbr></wbr><span>Java</span><wbr></wbr><span><span>Proxy</span></span></h1>
-            <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/jvmMain"><div class="symbol monospace">class <a href="index.html">SpaceEngineersJavaProxy</a>(agentId: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, stringLineReaderWriter: <span data-unresolved-link="spaceEngineers.transport/StringLineReaderWriter///PointingToDeclaration/">StringLineReaderWriter</span>, implementedInterface: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-class/index.html">KClass</a>&lt;*&gt;, prefixName: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, memberFunctions: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-function/index.html">KFunction</a>&lt;*&gt;&gt;, subInterfacesByName: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-map/index.html">MutableMap</a>&lt;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>&gt;) : <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/reflect/InvocationHandler.html">InvocationHandler</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+            <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+              <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark jvm-like" data-filterable-current=":dokkaHtml/jvmMain" data-filterable-set=":dokkaHtml/jvmMain" data-active="" data-toggle=":dokkaHtml/jvmMain">jvm</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/jvmMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">SpaceEngineersJavaProxy</a><span class="token punctuation">(</span>agentId<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span>stringLineReaderWriter<span class="token operator">: </span><span data-unresolved-link="spaceEngineers.transport/StringLineReaderWriter///PointingToDeclaration/">StringLineReaderWriter</span><span class="token punctuation">, </span>implementedInterface<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-class/index.html">KClass</a><span class="token operator">&lt;</span><span class="token operator">*</span><span class="token operator">&gt;</span><span class="token punctuation">, </span>prefixName<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span>memberFunctions<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-function/index.html">KFunction</a><span class="token operator">&lt;</span><span class="token operator">*</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token punctuation">, </span>subInterfacesByName<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-map/index.html">MutableMap</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt;</span><span class="token punctuation">)</span> : <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/reflect/InvocationHandler.html">InvocationHandler</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div>            </div>
           </div>
           <div class="tabbedcontent">
             <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="Types">Types</button><button class="section-tab" data-togglable="Functions">Functions</button><button class="section-tab" data-togglable="Properties">Properties</button></div>
@@ -32,20 +39,17 @@
               <div class="table" data-togglable="Types"><a data-name="-1329468632%2FClasslikes%2F-879532132" anchor-label="Companion" id="-1329468632%2FClasslikes%2F-879532132" data-filterable-set=":dokkaHtml/jvmMain"></a>
                 <div class="table-row" data-filterable-current=":dokkaHtml/jvmMain" data-filterable-set=":dokkaHtml/jvmMain">
                   <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="-companion/index.html"><span><span>Companion</span></span></a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1329468632%2FClasslikes%2F-879532132"></span>
+                    <div class=""><span class="inline-flex">
+                        <div><a href="-companion/index.html"><span><span>Companion</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1329468632%2FClasslikes%2F-879532132"></span>
                           <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                         </span></span></div>
                     <div>
-                      <div class="platform-tags ">
-                        <div class="platform-tag jvm-like">jvm</div>
+                      <div class="title">
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark jvm-like" data-filterable-current=":dokkaHtml/jvmMain" data-filterable-set=":dokkaHtml/jvmMain" data-active="" data-toggle=":dokkaHtml/jvmMain">jvm</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/jvmMain"><div class="symbol monospace"><span class="token keyword">object </span><a href="-companion/index.html">Companion</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div>                        </div>
                       </div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":dokkaHtml/jvmMain" data-filterable-set=":dokkaHtml/jvmMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/jvmMain"><div class="symbol monospace">object <a href="-companion/index.html">Companion</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-</div>
-</div>
                     </div>
                   </div>
                 </div>
@@ -54,40 +58,34 @@
               <div class="table" data-togglable="Functions"><a data-name="-112762693%2FFunctions%2F-879532132" anchor-label="callRpc" id="-112762693%2FFunctions%2F-879532132" data-filterable-set=":dokkaHtml/jvmMain"></a>
                 <div class="table-row" data-filterable-current=":dokkaHtml/jvmMain" data-filterable-set=":dokkaHtml/jvmMain">
                   <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="call-rpc.html"><span>call</span><wbr></wbr><span><span>Rpc</span></span></a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-112762693%2FFunctions%2F-879532132"></span>
+                    <div class=""><span class="inline-flex">
+                        <div><a href="call-rpc.html"><span>call</span><wbr></wbr><span><span>Rpc</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-112762693%2FFunctions%2F-879532132"></span>
                           <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                         </span></span></div>
                     <div>
-                      <div class="platform-tags ">
-                        <div class="platform-tag jvm-like">jvm</div>
+                      <div class="title">
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark jvm-like" data-filterable-current=":dokkaHtml/jvmMain" data-filterable-set=":dokkaHtml/jvmMain" data-active="" data-toggle=":dokkaHtml/jvmMain">jvm</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/jvmMain"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="call-rpc.html">O</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt; </span><a href="call-rpc.html"><span class="token function">callRpc</span></a><span class="token punctuation">(</span>rw<span class="token operator">: </span><span data-unresolved-link="spaceEngineers.transport/StringLineReaderWriter///PointingToDeclaration/">StringLineReaderWriter</span><span class="token punctuation">, </span>encodedRequest<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span>returnType<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-type/index.html">KType</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="call-rpc.html">O</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div>                        </div>
                       </div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":dokkaHtml/jvmMain" data-filterable-set=":dokkaHtml/jvmMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/jvmMain"><div class="symbol monospace">fun &lt;<a href="call-rpc.html">O</a> : <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>&gt; <a href="call-rpc.html">callRpc</a>(rw: <span data-unresolved-link="spaceEngineers.transport/StringLineReaderWriter///PointingToDeclaration/">StringLineReaderWriter</span>, encodedRequest: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, returnType: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-type/index.html">KType</a>): <a href="call-rpc.html">O</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-</div>
-</div>
                     </div>
                   </div>
                 </div>
 <a data-name="1957348181%2FFunctions%2F-879532132" anchor-label="invoke" id="1957348181%2FFunctions%2F-879532132" data-filterable-set=":dokkaHtml/jvmMain"></a>
                 <div class="table-row" data-filterable-current=":dokkaHtml/jvmMain" data-filterable-set=":dokkaHtml/jvmMain">
                   <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="invoke.html"><span><span>invoke</span></span></a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1957348181%2FFunctions%2F-879532132"></span>
+                    <div class=""><span class="inline-flex">
+                        <div><a href="invoke.html"><span><span>invoke</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1957348181%2FFunctions%2F-879532132"></span>
                           <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                         </span></span></div>
                     <div>
-                      <div class="platform-tags ">
-                        <div class="platform-tag jvm-like">jvm</div>
+                      <div class="title">
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark jvm-like" data-filterable-current=":dokkaHtml/jvmMain" data-filterable-set=":dokkaHtml/jvmMain" data-active="" data-toggle=":dokkaHtml/jvmMain">jvm</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/jvmMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">operator override </span><span class="token keyword">fun </span><a href="invoke.html"><span class="token function">invoke</span></a><span class="token punctuation">(</span>proxy<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a><span class="token punctuation">, </span>method<span class="token operator">: </span><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/reflect/Method.html">Method</a><span class="token punctuation">, </span>args<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><span class="token keyword">out </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a><span class="token operator">?</span><span class="token operator">&gt;</span><span class="token operator">?</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a><span class="token operator">?</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div>                        </div>
                       </div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":dokkaHtml/jvmMain" data-filterable-set=":dokkaHtml/jvmMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/jvmMain"><div class="symbol monospace">open operator override fun <a href="invoke.html">invoke</a>(proxy: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>, method: <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/reflect/Method.html">Method</a>, args: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html">Array</a>&lt;out <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>?&gt;?): <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>?<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-</div>
-</div>
                     </div>
                   </div>
                 </div>
@@ -96,15 +94,16 @@
               <div class="table" data-togglable="Properties"><a data-name="-1529703455%2FProperties%2F-879532132" anchor-label="agentId" id="-1529703455%2FProperties%2F-879532132" data-filterable-set=":dokkaHtml/jvmMain"></a>
                 <div class="table-row" data-filterable-current=":dokkaHtml/jvmMain" data-filterable-set=":dokkaHtml/jvmMain">
                   <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="agent-id.html">agentId</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1529703455%2FProperties%2F-879532132"></span>
+                    <div class=""><span class="inline-flex">
+                        <div><a href="agent-id.html">agentId</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1529703455%2FProperties%2F-879532132"></span>
                           <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                         </span></span></div>
                     <div>
-                      <div class="platform-tags ">
-                        <div class="platform-tag jvm-like">jvm</div>
-                      </div>
                       <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/jvmMain"><a data-name="-1529703455%2FProperties%2F-879532132" anchor-label="agentId" id="-1529703455%2FProperties%2F-879532132" data-filterable-set=":dokkaHtml/jvmMain"></a><div class="symbol monospace">val <a href="agent-id.html">agentId</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted" data-togglable="Properties">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark jvm-like" data-filterable-current=":dokkaHtml/jvmMain" data-filterable-set=":dokkaHtml/jvmMain" data-active="" data-toggle=":dokkaHtml/jvmMain">jvm</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/jvmMain"><a data-name="-1529703455%2FProperties%2F-879532132" anchor-label="agentId" id="-1529703455%2FProperties%2F-879532132" data-filterable-set=":dokkaHtml/jvmMain"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="agent-id.html">agentId</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div>                        </div>
                       </div>
                     </div>
                   </div>
@@ -112,15 +111,16 @@
 <a data-name="1310239037%2FProperties%2F-879532132" anchor-label="dottedPrefix" id="1310239037%2FProperties%2F-879532132" data-filterable-set=":dokkaHtml/jvmMain"></a>
                 <div class="table-row" data-filterable-current=":dokkaHtml/jvmMain" data-filterable-set=":dokkaHtml/jvmMain">
                   <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="dotted-prefix.html">dottedPrefix</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1310239037%2FProperties%2F-879532132"></span>
+                    <div class=""><span class="inline-flex">
+                        <div><a href="dotted-prefix.html">dottedPrefix</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1310239037%2FProperties%2F-879532132"></span>
                           <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                         </span></span></div>
                     <div>
-                      <div class="platform-tags ">
-                        <div class="platform-tag jvm-like">jvm</div>
-                      </div>
                       <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/jvmMain"><a data-name="1310239037%2FProperties%2F-879532132" anchor-label="dottedPrefix" id="1310239037%2FProperties%2F-879532132" data-filterable-set=":dokkaHtml/jvmMain"></a><div class="symbol monospace">val <a href="dotted-prefix.html">dottedPrefix</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted" data-togglable="Properties">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark jvm-like" data-filterable-current=":dokkaHtml/jvmMain" data-filterable-set=":dokkaHtml/jvmMain" data-active="" data-toggle=":dokkaHtml/jvmMain">jvm</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/jvmMain"><a data-name="1310239037%2FProperties%2F-879532132" anchor-label="dottedPrefix" id="1310239037%2FProperties%2F-879532132" data-filterable-set=":dokkaHtml/jvmMain"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="dotted-prefix.html">dottedPrefix</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div>                        </div>
                       </div>
                     </div>
                   </div>
@@ -128,15 +128,16 @@
 <a data-name="324975778%2FProperties%2F-879532132" anchor-label="implementedInterface" id="324975778%2FProperties%2F-879532132" data-filterable-set=":dokkaHtml/jvmMain"></a>
                 <div class="table-row" data-filterable-current=":dokkaHtml/jvmMain" data-filterable-set=":dokkaHtml/jvmMain">
                   <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="implemented-interface.html">implementedInterface</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="324975778%2FProperties%2F-879532132"></span>
+                    <div class=""><span class="inline-flex">
+                        <div><a href="implemented-interface.html">implementedInterface</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="324975778%2FProperties%2F-879532132"></span>
                           <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                         </span></span></div>
                     <div>
-                      <div class="platform-tags ">
-                        <div class="platform-tag jvm-like">jvm</div>
-                      </div>
                       <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/jvmMain"><a data-name="324975778%2FProperties%2F-879532132" anchor-label="implementedInterface" id="324975778%2FProperties%2F-879532132" data-filterable-set=":dokkaHtml/jvmMain"></a><div class="symbol monospace">val <a href="implemented-interface.html">implementedInterface</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-class/index.html">KClass</a>&lt;*&gt;<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted" data-togglable="Properties">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark jvm-like" data-filterable-current=":dokkaHtml/jvmMain" data-filterable-set=":dokkaHtml/jvmMain" data-active="" data-toggle=":dokkaHtml/jvmMain">jvm</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/jvmMain"><a data-name="324975778%2FProperties%2F-879532132" anchor-label="implementedInterface" id="324975778%2FProperties%2F-879532132" data-filterable-set=":dokkaHtml/jvmMain"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="implemented-interface.html">implementedInterface</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-class/index.html">KClass</a><span class="token operator">&lt;</span><span class="token operator">*</span><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div>                        </div>
                       </div>
                     </div>
                   </div>
@@ -144,15 +145,16 @@
 <a data-name="1817967584%2FProperties%2F-879532132" anchor-label="memberFunctions" id="1817967584%2FProperties%2F-879532132" data-filterable-set=":dokkaHtml/jvmMain"></a>
                 <div class="table-row" data-filterable-current=":dokkaHtml/jvmMain" data-filterable-set=":dokkaHtml/jvmMain">
                   <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="member-functions.html">memberFunctions</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1817967584%2FProperties%2F-879532132"></span>
+                    <div class=""><span class="inline-flex">
+                        <div><a href="member-functions.html">memberFunctions</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1817967584%2FProperties%2F-879532132"></span>
                           <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                         </span></span></div>
                     <div>
-                      <div class="platform-tags ">
-                        <div class="platform-tag jvm-like">jvm</div>
-                      </div>
                       <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/jvmMain"><a data-name="1817967584%2FProperties%2F-879532132" anchor-label="memberFunctions" id="1817967584%2FProperties%2F-879532132" data-filterable-set=":dokkaHtml/jvmMain"></a><div class="symbol monospace">val <a href="member-functions.html">memberFunctions</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a>&lt;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-function/index.html">KFunction</a>&lt;*&gt;&gt;<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted" data-togglable="Properties">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark jvm-like" data-filterable-current=":dokkaHtml/jvmMain" data-filterable-set=":dokkaHtml/jvmMain" data-active="" data-toggle=":dokkaHtml/jvmMain">jvm</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/jvmMain"><a data-name="1817967584%2FProperties%2F-879532132" anchor-label="memberFunctions" id="1817967584%2FProperties%2F-879532132" data-filterable-set=":dokkaHtml/jvmMain"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="member-functions.html">memberFunctions</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-function/index.html">KFunction</a><span class="token operator">&lt;</span><span class="token operator">*</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div>                        </div>
                       </div>
                     </div>
                   </div>
@@ -160,15 +162,16 @@
 <a data-name="1705031804%2FProperties%2F-879532132" anchor-label="prefixName" id="1705031804%2FProperties%2F-879532132" data-filterable-set=":dokkaHtml/jvmMain"></a>
                 <div class="table-row" data-filterable-current=":dokkaHtml/jvmMain" data-filterable-set=":dokkaHtml/jvmMain">
                   <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="prefix-name.html">prefixName</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1705031804%2FProperties%2F-879532132"></span>
+                    <div class=""><span class="inline-flex">
+                        <div><a href="prefix-name.html">prefixName</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1705031804%2FProperties%2F-879532132"></span>
                           <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                         </span></span></div>
                     <div>
-                      <div class="platform-tags ">
-                        <div class="platform-tag jvm-like">jvm</div>
-                      </div>
                       <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/jvmMain"><a data-name="1705031804%2FProperties%2F-879532132" anchor-label="prefixName" id="1705031804%2FProperties%2F-879532132" data-filterable-set=":dokkaHtml/jvmMain"></a><div class="symbol monospace">val <a href="prefix-name.html">prefixName</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted" data-togglable="Properties">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark jvm-like" data-filterable-current=":dokkaHtml/jvmMain" data-filterable-set=":dokkaHtml/jvmMain" data-active="" data-toggle=":dokkaHtml/jvmMain">jvm</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/jvmMain"><a data-name="1705031804%2FProperties%2F-879532132" anchor-label="prefixName" id="1705031804%2FProperties%2F-879532132" data-filterable-set=":dokkaHtml/jvmMain"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="prefix-name.html">prefixName</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div>                        </div>
                       </div>
                     </div>
                   </div>
@@ -176,15 +179,16 @@
 <a data-name="-1056632546%2FProperties%2F-879532132" anchor-label="stringLineReaderWriter" id="-1056632546%2FProperties%2F-879532132" data-filterable-set=":dokkaHtml/jvmMain"></a>
                 <div class="table-row" data-filterable-current=":dokkaHtml/jvmMain" data-filterable-set=":dokkaHtml/jvmMain">
                   <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="string-line-reader-writer.html">stringLineReaderWriter</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1056632546%2FProperties%2F-879532132"></span>
+                    <div class=""><span class="inline-flex">
+                        <div><a href="string-line-reader-writer.html">stringLineReaderWriter</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1056632546%2FProperties%2F-879532132"></span>
                           <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                         </span></span></div>
                     <div>
-                      <div class="platform-tags ">
-                        <div class="platform-tag jvm-like">jvm</div>
-                      </div>
                       <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/jvmMain"><a data-name="-1056632546%2FProperties%2F-879532132" anchor-label="stringLineReaderWriter" id="-1056632546%2FProperties%2F-879532132" data-filterable-set=":dokkaHtml/jvmMain"></a><div class="symbol monospace">val <a href="string-line-reader-writer.html">stringLineReaderWriter</a>: <span data-unresolved-link="spaceEngineers.transport/StringLineReaderWriter///PointingToDeclaration/">StringLineReaderWriter</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted" data-togglable="Properties">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark jvm-like" data-filterable-current=":dokkaHtml/jvmMain" data-filterable-set=":dokkaHtml/jvmMain" data-active="" data-toggle=":dokkaHtml/jvmMain">jvm</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/jvmMain"><a data-name="-1056632546%2FProperties%2F-879532132" anchor-label="stringLineReaderWriter" id="-1056632546%2FProperties%2F-879532132" data-filterable-set=":dokkaHtml/jvmMain"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="string-line-reader-writer.html">stringLineReaderWriter</a><span class="token operator">: </span><span data-unresolved-link="spaceEngineers.transport/StringLineReaderWriter///PointingToDeclaration/">StringLineReaderWriter</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div>                        </div>
                       </div>
                     </div>
                   </div>
@@ -192,15 +196,16 @@
 <a data-name="2072754053%2FProperties%2F-879532132" anchor-label="subInterfacesByName" id="2072754053%2FProperties%2F-879532132" data-filterable-set=":dokkaHtml/jvmMain"></a>
                 <div class="table-row" data-filterable-current=":dokkaHtml/jvmMain" data-filterable-set=":dokkaHtml/jvmMain">
                   <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="sub-interfaces-by-name.html">subInterfacesByName</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2072754053%2FProperties%2F-879532132"></span>
+                    <div class=""><span class="inline-flex">
+                        <div><a href="sub-interfaces-by-name.html">subInterfacesByName</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2072754053%2FProperties%2F-879532132"></span>
                           <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                         </span></span></div>
                     <div>
-                      <div class="platform-tags ">
-                        <div class="platform-tag jvm-like">jvm</div>
-                      </div>
                       <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/jvmMain"><a data-name="2072754053%2FProperties%2F-879532132" anchor-label="subInterfacesByName" id="2072754053%2FProperties%2F-879532132" data-filterable-set=":dokkaHtml/jvmMain"></a><div class="symbol monospace">val <a href="sub-interfaces-by-name.html">subInterfacesByName</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-map/index.html">MutableMap</a>&lt;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a>&gt;<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted" data-togglable="Properties">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark jvm-like" data-filterable-current=":dokkaHtml/jvmMain" data-filterable-set=":dokkaHtml/jvmMain" data-active="" data-toggle=":dokkaHtml/jvmMain">jvm</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/jvmMain"><a data-name="2072754053%2FProperties%2F-879532132" anchor-label="subInterfacesByName" id="2072754053%2FProperties%2F-879532132" data-filterable-set=":dokkaHtml/jvmMain"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="sub-interfaces-by-name.html">subInterfacesByName</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-map/index.html">MutableMap</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div>                        </div>
                       </div>
                     </div>
                   </div>
@@ -209,7 +214,7 @@
             </div>
           </div>
         </div>
-        <div class="footer"><span class="go-to-top-icon"><a href="#content"></a></span><span>© 2022 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span></div>
+        <div class="footer"><span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2022 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span></div>
       </div>
     </div>
   </body>

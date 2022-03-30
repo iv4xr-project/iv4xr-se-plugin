@@ -2,28 +2,35 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
     <title>GsonReaderWriter</title>
-<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script><script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async="async"></script><link href="../../../styles/style.css" rel="Stylesheet"><link href="../../../styles/logo-styles.css" rel="Stylesheet"><link href="../../../styles/jetbrains-mono.css" rel="Stylesheet"><link href="../../../styles/main.css" rel="Stylesheet"><script type="text/javascript" src="../../../scripts/clipboard.js" async="async"></script><script type="text/javascript" src="../../../scripts/navigation-loader.js" async="async"></script><script type="text/javascript" src="../../../scripts/platform-content-handler.js" async="async"></script><script type="text/javascript" src="../../../scripts/main.js" async="async"></script>  </head>
+<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>    <script>const storage = localStorage.getItem("dokka-dark-mode")
+const savedDarkMode = storage ? JSON.parse(storage) : false
+if(savedDarkMode === true){
+    document.getElementsByTagName("html")[0].classList.add("theme-dark")
+}</script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async="async"></script><link href="../../../styles/style.css" rel="Stylesheet"><link href="../../../styles/jetbrains-mono.css" rel="Stylesheet"><link href="../../../styles/main.css" rel="Stylesheet"><link href="../../../styles/prism.css" rel="Stylesheet"><link href="../../../styles/logo-styles.css" rel="Stylesheet"><script type="text/javascript" src="../../../scripts/clipboard.js" async="async"></script><script type="text/javascript" src="../../../scripts/navigation-loader.js" async="async"></script><script type="text/javascript" src="../../../scripts/platform-content-handler.js" async="async"></script><script type="text/javascript" src="../../../scripts/main.js" defer="defer"></script><script type="text/javascript" src="../../../scripts/prism.js" async="async"></script>  </head>
   <body>
+    <div class="navigation-wrapper" id="navigation-wrapper">
+      <div id="leftToggler"><span class="icon-toggler"></span></div>
+      <div class="library-name"><a href="../../../index.html">space-engineers-api</a></div>
+      <div>0.6.0</div>
+      <div class="pull-right d-flex">
+        <div class="filter-section" id="filter-section"><button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":dokkaHtml/jvmMain">jvm</button></div>
+<button id="theme-toggle-button"><span id="theme-toggle"></span></button>
+        <div id="searchBar"></div>
+      </div>
+    </div>
     <div id="container">
-      <div id="leftColumn"><a href="../../../index.html">
-          <div id="logo"></div>
-        </a>
-        <div id="paneSearch"></div>
+      <div id="leftColumn">
         <div id="sideMenu"></div>
       </div>
       <div id="main">
-        <div id="leftToggler"><span class="icon-toggler"></span></div>
-<script type="text/javascript" src="../../../scripts/main.js"></script>        <div class="main-content" id="content" pageIds="space-engineers-api::spaceEngineers.transport/GsonReaderWriter///PointingToDeclaration//-879532132">
-          <div class="navigation-wrapper" id="navigation-wrapper">
-            <div class="breadcrumbs"><a href="../../../index.html">space-engineers-api</a>/<a href="../index.html">spaceEngineers.transport</a>/<a href="index.html">GsonReaderWriter</a></div>
-            <div class="pull-right d-flex">
-              <div class="filter-section" id="filter-section"><button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":dokkaHtml/jvmMain">jvm</button></div>
-              <div id="searchBar"></div>
-            </div>
-          </div>
+        <div class="main-content" id="content" pageIds="space-engineers-api::spaceEngineers.transport/GsonReaderWriter///PointingToDeclaration//-879532132">
+          <div class="breadcrumbs"><a href="../../../index.html">space-engineers-api</a>/<a href="../index.html">spaceEngineers.transport</a>/<a href="index.html">GsonReaderWriter</a></div>
           <div class="cover ">
             <h1 class="cover"><span>Gson</span><wbr></wbr><span>Reader</span><wbr></wbr><span><span>Writer</span></span></h1>
-            <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/jvmMain"><div class="symbol monospace">open class <a href="index.html">GsonReaderWriter</a>(gson: <span data-unresolved-link="com.google.gson/Gson///PointingToDeclaration/">Gson</span>, stringLineReaderWriter: <span data-unresolved-link="spaceEngineers.transport/StringLineReaderWriter///PointingToDeclaration/">StringLineReaderWriter</span>) : <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/AutoCloseable.html">AutoCloseable</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+            <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+              <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark jvm-like" data-filterable-current=":dokkaHtml/jvmMain" data-filterable-set=":dokkaHtml/jvmMain" data-active="" data-toggle=":dokkaHtml/jvmMain">jvm</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/jvmMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">class </span><a href="index.html">GsonReaderWriter</a><span class="token punctuation">(</span>gson<span class="token operator">: </span><span data-unresolved-link="com.google.gson/Gson///PointingToDeclaration/">Gson</span><span class="token punctuation">, </span>stringLineReaderWriter<span class="token operator">: </span><span data-unresolved-link="spaceEngineers.transport/StringLineReaderWriter///PointingToDeclaration/">StringLineReaderWriter</span><span class="token punctuation">)</span> : <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/AutoCloseable.html">AutoCloseable</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div>            </div>
           </div>
           <div class="tabbedcontent">
             <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="Functions">Functions</button><button class="section-tab" data-togglable="Properties">Properties</button></div>
@@ -32,20 +39,17 @@
               <div class="table" data-togglable="Functions"><a data-name="1602752157%2FFunctions%2F-879532132" anchor-label="close" id="1602752157%2FFunctions%2F-879532132" data-filterable-set=":dokkaHtml/jvmMain"></a>
                 <div class="table-row" data-filterable-current=":dokkaHtml/jvmMain" data-filterable-set=":dokkaHtml/jvmMain">
                   <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="close.html"><span><span>close</span></span></a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1602752157%2FFunctions%2F-879532132"></span>
+                    <div class=""><span class="inline-flex">
+                        <div><a href="close.html"><span><span>close</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1602752157%2FFunctions%2F-879532132"></span>
                           <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                         </span></span></div>
                     <div>
-                      <div class="platform-tags ">
-                        <div class="platform-tag jvm-like">jvm</div>
+                      <div class="title">
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark jvm-like" data-filterable-current=":dokkaHtml/jvmMain" data-filterable-set=":dokkaHtml/jvmMain" data-active="" data-toggle=":dokkaHtml/jvmMain">jvm</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/jvmMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="close.html"><span class="token function">close</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div>                        </div>
                       </div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":dokkaHtml/jvmMain" data-filterable-set=":dokkaHtml/jvmMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/jvmMain"><div class="symbol monospace">open override fun <a href="close.html">close</a>()<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-</div>
-</div>
                     </div>
                   </div>
                 </div>
@@ -54,15 +58,16 @@
               <div class="table" data-togglable="Properties"><a data-name="1403527546%2FProperties%2F-879532132" anchor-label="gson" id="1403527546%2FProperties%2F-879532132" data-filterable-set=":dokkaHtml/jvmMain"></a>
                 <div class="table-row" data-filterable-current=":dokkaHtml/jvmMain" data-filterable-set=":dokkaHtml/jvmMain">
                   <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="gson.html">gson</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1403527546%2FProperties%2F-879532132"></span>
+                    <div class=""><span class="inline-flex">
+                        <div><a href="gson.html">gson</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1403527546%2FProperties%2F-879532132"></span>
                           <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                         </span></span></div>
                     <div>
-                      <div class="platform-tags ">
-                        <div class="platform-tag jvm-like">jvm</div>
-                      </div>
                       <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/jvmMain"><a data-name="1403527546%2FProperties%2F-879532132" anchor-label="gson" id="1403527546%2FProperties%2F-879532132" data-filterable-set=":dokkaHtml/jvmMain"></a><div class="symbol monospace">val <a href="gson.html">gson</a>: <span data-unresolved-link="com.google.gson/Gson///PointingToDeclaration/">Gson</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted" data-togglable="Properties">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark jvm-like" data-filterable-current=":dokkaHtml/jvmMain" data-filterable-set=":dokkaHtml/jvmMain" data-active="" data-toggle=":dokkaHtml/jvmMain">jvm</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/jvmMain"><a data-name="1403527546%2FProperties%2F-879532132" anchor-label="gson" id="1403527546%2FProperties%2F-879532132" data-filterable-set=":dokkaHtml/jvmMain"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="gson.html">gson</a><span class="token operator">: </span><span data-unresolved-link="com.google.gson/Gson///PointingToDeclaration/">Gson</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div>                        </div>
                       </div>
                     </div>
                   </div>
@@ -70,15 +75,16 @@
 <a data-name="-1268501014%2FProperties%2F-879532132" anchor-label="stringLineReaderWriter" id="-1268501014%2FProperties%2F-879532132" data-filterable-set=":dokkaHtml/jvmMain"></a>
                 <div class="table-row" data-filterable-current=":dokkaHtml/jvmMain" data-filterable-set=":dokkaHtml/jvmMain">
                   <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="string-line-reader-writer.html">stringLineReaderWriter</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1268501014%2FProperties%2F-879532132"></span>
+                    <div class=""><span class="inline-flex">
+                        <div><a href="string-line-reader-writer.html">stringLineReaderWriter</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1268501014%2FProperties%2F-879532132"></span>
                           <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                         </span></span></div>
                     <div>
-                      <div class="platform-tags ">
-                        <div class="platform-tag jvm-like">jvm</div>
-                      </div>
                       <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/jvmMain"><a data-name="-1268501014%2FProperties%2F-879532132" anchor-label="stringLineReaderWriter" id="-1268501014%2FProperties%2F-879532132" data-filterable-set=":dokkaHtml/jvmMain"></a><div class="symbol monospace">val <a href="string-line-reader-writer.html">stringLineReaderWriter</a>: <span data-unresolved-link="spaceEngineers.transport/StringLineReaderWriter///PointingToDeclaration/">StringLineReaderWriter</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+                        <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted" data-togglable="Properties">
+                          <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark jvm-like" data-filterable-current=":dokkaHtml/jvmMain" data-filterable-set=":dokkaHtml/jvmMain" data-active="" data-toggle=":dokkaHtml/jvmMain">jvm</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/jvmMain"><a data-name="-1268501014%2FProperties%2F-879532132" anchor-label="stringLineReaderWriter" id="-1268501014%2FProperties%2F-879532132" data-filterable-set=":dokkaHtml/jvmMain"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="string-line-reader-writer.html">stringLineReaderWriter</a><span class="token operator">: </span><span data-unresolved-link="spaceEngineers.transport/StringLineReaderWriter///PointingToDeclaration/">StringLineReaderWriter</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div>                        </div>
                       </div>
                     </div>
                   </div>
@@ -87,7 +93,7 @@
             </div>
           </div>
         </div>
-        <div class="footer"><span class="go-to-top-icon"><a href="#content"></a></span><span>© 2022 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span></div>
+        <div class="footer"><span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2022 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span></div>
       </div>
     </div>
   </body>
