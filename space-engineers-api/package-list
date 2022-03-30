@@ -206,7 +206,13 @@ $dokka.location:spaceEngineers.controller/Items/equip/#spaceEngineers.model.Tool
 $dokka.location:spaceEngineers.controller/Items/setToolbarItem/#kotlin.String#spaceEngineers.model.ToolbarLocation/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-items/set-toolbar-item.html
 $dokka.location:spaceEngineers.controller/Items/toolbar/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-items/toolbar.html
 $dokka.location:spaceEngineers.controller/JoinGame///PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-join-game/index.html
+$dokka.location:spaceEngineers.controller/JoinGame/data/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-join-game/data.html
 $dokka.location:spaceEngineers.controller/JoinGame/directConnect/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-join-game/direct-connect.html
+$dokka.location:spaceEngineers.controller/JoinGame/joinWorld/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-join-game/join-world.html
+$dokka.location:spaceEngineers.controller/JoinGame/refresh/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-join-game/refresh.html
+$dokka.location:spaceEngineers.controller/JoinGame/selectGame/#kotlin.Int/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-join-game/select-game.html
+$dokka.location:spaceEngineers.controller/JoinGame/selectTab/#kotlin.Int/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-join-game/select-tab.html
+$dokka.location:spaceEngineers.controller/JoinGame/serverDetails/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-join-game/server-details.html
 $dokka.location:spaceEngineers.controller/JsonRpcSpaceEngineersBuilder///PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-json-rpc-space-engineers-builder/index.html
 $dokka.location:spaceEngineers.controller/JsonRpcSpaceEngineersBuilder/fromStringLineReaderWriter/#kotlin.String#spaceEngineers.transport.StringLineReaderWriter/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-json-rpc-space-engineers-builder/from-string-line-reader-writer.html
 $dokka.location:spaceEngineers.controller/JsonRpcSpaceEngineersBuilder/localhost/#kotlin.String/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-json-rpc-space-engineers-builder/localhost.html
@@ -1489,6 +1495,10 @@ $dokka.location:spaceEngineers.model/InventoryItem/InventoryItem/#spaceEngineers
 $dokka.location:spaceEngineers.model/InventoryItem/amount/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-inventory-item/amount.html
 $dokka.location:spaceEngineers.model/InventoryItem/id/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-inventory-item/id.html
 $dokka.location:spaceEngineers.model/InventoryItem/itemId/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-inventory-item/item-id.html
+$dokka.location:spaceEngineers.model/JoinGameData///PointingToDeclaration/space-engineers-api/spaceEngineers.model/-join-game-data/index.html
+$dokka.location:spaceEngineers.model/JoinGameData/JoinGameData/#kotlin.String#kotlin.collections.List[spaceEngineers.model.ListedGameInformation]/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-join-game-data/-join-game-data.html
+$dokka.location:spaceEngineers.model/JoinGameData/games/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-join-game-data/games.html
+$dokka.location:spaceEngineers.model/JoinGameData/selectedTab/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-join-game-data/selected-tab.html
 $dokka.location:spaceEngineers.model/JumpDriveDefinition///PointingToDeclaration/space-engineers-api/spaceEngineers.model/-jump-drive-definition/index.html
 $dokka.location:spaceEngineers.model/JumpDriveDefinition/maxJumpDistance/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-jump-drive-definition/max-jump-distance.html
 $dokka.location:spaceEngineers.model/JumpDriveDefinition/maxJumpMass/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-jump-drive-definition/max-jump-mass.html
@@ -1502,6 +1512,10 @@ $dokka.location:spaceEngineers.model/LandingGearDefinition/maxLockSeparatingVelo
 $dokka.location:spaceEngineers.model/LightingBlockDefinition///PointingToDeclaration/space-engineers-api/spaceEngineers.model/-lighting-block-definition/index.html
 $dokka.location:spaceEngineers.model/LightingBlockDefinition/reflectorConeDegrees/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-lighting-block-definition/reflector-cone-degrees.html
 $dokka.location:spaceEngineers.model/LightingBlockDefinition/requiredPowerInput/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-lighting-block-definition/required-power-input.html
+$dokka.location:spaceEngineers.model/ListedGameInformation///PointingToDeclaration/space-engineers-api/spaceEngineers.model/-listed-game-information/index.html
+$dokka.location:spaceEngineers.model/ListedGameInformation/ListedGameInformation/#kotlin.String#kotlin.String/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-listed-game-information/-listed-game-information.html
+$dokka.location:spaceEngineers.model/ListedGameInformation/server/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-listed-game-information/server.html
+$dokka.location:spaceEngineers.model/ListedGameInformation/world/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-listed-game-information/world.html
 $dokka.location:spaceEngineers.model/LoadGameData///PointingToDeclaration/space-engineers-api/spaceEngineers.model/-load-game-data/index.html
 $dokka.location:spaceEngineers.model/LoadGameData/LoadGameData/#spaceEngineers.model.File#spaceEngineers.model.File#kotlin.collections.List[spaceEngineers.model.File]/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-load-game-data/-load-game-data.html
 $dokka.location:spaceEngineers.model/LoadGameData/currentDirectory/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-load-game-data/current-directory.html
