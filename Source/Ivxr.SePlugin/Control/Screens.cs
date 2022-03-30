@@ -23,6 +23,7 @@ using VRage.Game.Entity;
 using VRage.Input;
 using VRage.Voxels;
 using VRageMath;
+using static Iv4xr.SePlugin.Communication.CallTarget;
 
 namespace Iv4xr.SePlugin.Control
 {
@@ -144,13 +145,13 @@ namespace Iv4xr.SePlugin.Control
         public INewGame NewGame => m_newGameScreen;
         public IGamePlay GamePlay => m_gamePlayScreen;
 
-        [RunOutsideGameLoop]
+        [CallOn(CurrentThread)]
         public string FocusedScreen()
         {
             return MyScreenManager.GetScreenWithFocus().DisplayName();
         }
 
-        [RunOutsideGameLoop]
+        [CallOn(CurrentThread)]
         public void WaitUntilTheGameLoaded()
         {
             const int timeoutMs = 60_000;
@@ -181,19 +182,16 @@ namespace Iv4xr.SePlugin.Control
             };
         }
 
-        [RunOutsideGameLoop]
         public void ToggleAddServerToFavorites()
         {
             Screen.ClickCheckBox("m_favoriteCheckbox");
         }
 
-        [RunOutsideGameLoop]
         public void Connect()
         {
             Screen.Controls.ButtonByText(MyCommonTexts.MultiplayerJoinConnect).PressButton();
         }
 
-        [RunOutsideGameLoop]
         public void EnterAddress(string address)
         {
             Screen.EnterText("m_addrTextbox", address);
@@ -202,25 +200,21 @@ namespace Iv4xr.SePlugin.Control
 
     public class JoinGameScreen : AbstractScreen<MyGuiScreenJoinGame, JoinGameData>, IJoinGame
     {
-        [RunOutsideGameLoop]
         public void DirectConnect()
         {
             Screen.ClickButton("m_directConnectButton");
         }
-
-        [RunOutsideGameLoop]
+        
         public void JoinWorld()
         {
             Screen.ClickButton("m_joinButton");
         }
-
-        [RunOutsideGameLoop]
+        
         public void Refresh()
         {
             Screen.ClickButton("m_refreshButton");
         }
-
-        [RunOutsideGameLoop]
+        
         public void ServerDetails()
         {
             Screen.ClickButton("m_detailsButton");
@@ -229,14 +223,12 @@ namespace Iv4xr.SePlugin.Control
         private MyGuiControlTabControl Tabs =>
                 Screen.GetInstanceFieldOrThrow<MyGuiControlTabControl>("m_joinGameTabs");
 
-
-        [RunOutsideGameLoop]
+        
         public void SelectTab(int index)
         {
             Tabs.SelectedPage = index;
         }
-
-        [RunOutsideGameLoop]
+        
         public void SelectGame(int index)
         {
             GamesTable.SelectedRowIndex = index;
@@ -266,8 +258,7 @@ namespace Iv4xr.SePlugin.Control
                 };
             }).ToList();
         }
-
-        [RunOutsideGameLoop]
+        
         public override JoinGameData Data()
         {
             return new JoinGameData()
@@ -280,19 +271,16 @@ namespace Iv4xr.SePlugin.Control
 
     public class MessageBoxScreen : AbstractScreen<MyGuiScreenMessageBox, MessageBoxData>, IMessageBox
     {
-        [RunOutsideGameLoop]
         public void PressYes()
         {
             Screen.ClickButton("m_yesButton");
         }
 
-        [RunOnMainThread]
         public void PressNo()
         {
             Screen.ClickButton("m_noButton");
         }
 
-        [RunOutsideGameLoop]
         public override MessageBoxData Data()
         {
             var screen = Screen;
@@ -313,49 +301,41 @@ namespace Iv4xr.SePlugin.Control
                     .GetInstanceFieldOrThrow<MyGuiControlElementGroup>("m_elementGroup");
         }
 
-        [RunOutsideGameLoop]
         public void Continue()
         {
             Screen.ClickButton("m_continueButton");
         }
 
-        [RunOutsideGameLoop]
         public void NewGame()
         {
             Buttons().ButtonByText(MyCommonTexts.ScreenMenuButtonCampaign).PressButton();
         }
 
-        [RunOutsideGameLoop]
         public void LoadGame()
         {
             Buttons().ButtonByText(MyCommonTexts.ScreenMenuButtonLoadGame).PressButton();
         }
 
-        [RunOutsideGameLoop]
         public void JoinGame()
         {
             Buttons().ButtonByText(MyCommonTexts.ScreenMenuButtonJoinGame).PressButton();
         }
 
-        [RunOutsideGameLoop]
         public void Options()
         {
             Buttons().ButtonByText(MyCommonTexts.ScreenMenuButtonOptions).PressButton();
         }
 
-        [RunOutsideGameLoop]
         public void Character()
         {
             Buttons().ButtonByText(MyCommonTexts.ScreenMenuButtonInventory).PressButton();
         }
 
-        [RunOutsideGameLoop]
         public void ExitToWindows()
         {
             Buttons().ButtonByText(MyCommonTexts.ScreenMenuButtonExitToWindows).PressButton();
         }
-
-        [RunOutsideGameLoop]
+        
         public void ExitToMainMenu()
         {
             CheckScreen();
@@ -372,7 +352,6 @@ namespace Iv4xr.SePlugin.Control
         private MyGuiControlSaveBrowser Browser =>
                 Screen.GetInstanceFieldOrThrow<MyGuiControlSaveBrowser>("m_saveBrowser");
 
-        [RunOutsideGameLoop]
         public override LoadGameData Data()
         {
             var rows = Browser.RowsAsList().Select(
@@ -407,13 +386,11 @@ namespace Iv4xr.SePlugin.Control
             };
         }
 
-        [RunOutsideGameLoop]
         public void Filter(string text)
         {
             Screen.EnterSearchText("m_searchBox", text);
         }
 
-        [RunOutsideGameLoop]
         public void DoubleClickWorld(int index)
         {
             Browser.SelectedRowIndex = index;
@@ -427,31 +404,26 @@ namespace Iv4xr.SePlugin.Control
             );
         }
 
-        [RunOutsideGameLoop]
         public void Load()
         {
             Screen.ClickButton("m_loadButton");
         }
 
-        [RunOutsideGameLoop]
         public void Edit()
         {
             Screen.ClickButton("m_editButton");
         }
 
-        [RunOutsideGameLoop]
         public void Delete()
         {
             Screen.ClickButton("m_deleteButton");
         }
 
-        [RunOutsideGameLoop]
         public void Save()
         {
             Screen.ClickButton("m_saveButton");
         }
 
-        [RunOutsideGameLoop]
         public void Publish()
         {
             Screen.ClickButton("m_publishButton");

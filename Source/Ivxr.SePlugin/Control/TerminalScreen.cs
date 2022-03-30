@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Iv4xr.PluginLib;
-using Iv4xr.SePlugin.Communication;
 using Iv4xr.SpaceEngineers;
 using Iv4xr.SpaceEngineers.WorldModel;
 using Sandbox.Definitions;
@@ -151,7 +150,6 @@ namespace Iv4xr.SePlugin.Control
             cb.IsChecked = !cb.IsChecked;
         }
         
-        [RunOnMainThread]
         public void AddToProductionQueue(int index)
         {
             var screen = MyGuiScreenExtensions.EnsureFocusedScreen<MyGuiScreenTerminal>();

@@ -25,7 +25,6 @@ namespace Iv4xr.SePlugin.Communication
                 {
                     ExceptionDispatchInfo.Capture(Exception).Throw();
                 }
-                
             }
 
             return ReturnValue;
@@ -82,32 +81,33 @@ namespace Iv4xr.SePlugin.Communication
         }
     }
 
-    public class FuncActionDispatcher
+    public interface ICallable
     {
-        private ILog m_log;
+        object Call(Func<object> func);
+    }
+
+    public class DirectCallDispatcher : ICallable
+    {
+        public object Call(Func<object> func)
+        {
+            return func();
+        }
+    }
+
+    public class FuncActionDispatcher : ICallable
+    {
+        private readonly ILog m_log;
 
         public FuncActionDispatcher(ILog log)
         {
             m_log = log;
         }
-        
+
         private readonly ConcurrentQueue<FuncToRunOnGameLoop> m_functions =
                 new ConcurrentQueue<FuncToRunOnGameLoop>();
 
-        public async Task<dynamic> EnqueueAsync(Func<dynamic> func)
-        {
-            var functionToRun = new FuncToRunOnGameLoop(func, m_log);
-            m_functions.Enqueue(functionToRun);
-            await Task.Yield();
-            return functionToRun.Take().ReturnOrThrow();
-        }
 
-        public async Task<object> EnqueueAsync(Action func)
-        {
-            return await EnqueueAsync(ActionToNullReturningFunc(func));
-        }
-
-        public dynamic Enqueue(Func<object> func)
+        public object Call(Func<object> func)
         {
             var taskToRun = new FuncToRunOnGameLoop(func, m_log);
             m_functions.Enqueue(taskToRun);
@@ -115,9 +115,9 @@ namespace Iv4xr.SePlugin.Communication
             return taskToRun.Take().ReturnOrThrow();
         }
 
-        public void Enqueue(Action func)
+        public void Call(Action func)
         {
-            Enqueue(ActionToNullReturningFunc(func));
+            Call(ActionToNullReturningFunc(func));
         }
 
         public void CallEverything()
@@ -128,7 +128,7 @@ namespace Iv4xr.SePlugin.Communication
             }
         }
 
-        private static Func<dynamic> ActionToNullReturningFunc(Action action)
+        private static Func<object> ActionToNullReturningFunc(Action action)
         {
             return () =>
             {

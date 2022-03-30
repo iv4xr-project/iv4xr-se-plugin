@@ -1,21 +1,22 @@
 ﻿using Iv4xr.SePlugin.Communication;
 using Iv4xr.SpaceEngineers;
+using static Iv4xr.SePlugin.Communication.CallTarget;
 
 namespace Iv4xr.SePlugin.Control
 {
     public class TestAdmin : ITestAdmin
     {
-        [RunOutsideGameLoop]
+        [CallOn(CurrentThread)]
         public void AdminOnly()
         {
         }
 
-        [RunOutsideGameLoop]
+        [CallOn(CurrentThread)]
         public void GameOnly()
         {
         }
 
-        [RunOutsideGameLoop]
+        [CallOn(CurrentThread)]
         public void ObserverOnly()
         {
         }

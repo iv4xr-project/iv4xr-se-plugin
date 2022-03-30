@@ -33,7 +33,7 @@ namespace Iv4xr.SePlugin
 
         public void Update()
         {
-            //m_log.WriteLine("Update called.");
+            Context.MethodCallContext.MainThread.CallEverything();
         }
 
 

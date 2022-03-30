@@ -15,8 +15,7 @@ namespace Iv4xr.SePlugin
     {
         public ILog Log { get; private set; }
         public readonly JsonRpcStarter JsonRpcStarter;
-        public readonly FuncActionDispatcher FuncActionDispatcher;
-        private readonly FuncActionDispatcher MainThreadFuncActionDispatcher;
+        public readonly MethodCallContext MethodCallContext;
 
         private readonly GameSession m_gameSession = new GameSession();
         public readonly ContinuousMovementController ContinuousMovementController;
@@ -34,11 +33,10 @@ namespace Iv4xr.SePlugin
 
             var se = new RealSpaceEngineers(m_gameSession, Log, config);
 
-            FuncActionDispatcher = new FuncActionDispatcher(seLog);
-            MainThreadFuncActionDispatcher = new FuncActionDispatcher(seLog);
+            MethodCallContext = new MethodCallContext(Log);
 
             JsonRpcStarter = new JsonRpcStarter(
-                new SynchronizedSpaceEngineers(se, FuncActionDispatcher, MainThreadFuncActionDispatcher),
+                new SynchronizedSpaceEngineers(se, MethodCallContext),
                 hostname: config.Hostname,
                 port: config.JsonRpcPort
             ) { Log = Log };
@@ -54,9 +52,8 @@ namespace Iv4xr.SePlugin
         {
         }
 
-        public void Tick()
+        public void BeforeSimulation()
         {
-            FuncActionDispatcher.CallEverything();
             if (m_gameSession.Initialized())
             {
                 ContinuousMovementController.Tick();
