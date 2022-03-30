@@ -26,7 +26,7 @@ class GoalBuilder(
         val goal =
             Goal("Agent at position $position with epsilon $epsilon")
                 .toSolve { belief: SeAgentState ->
-                    abs(Vec3.dist(belief.wom.position, position) - distance) < epsilon
+                    abs(Vec3.dist(belief.worldmodel.position, position) - distance) < epsilon
                 }
                 .withTactic(
                     tactic
