@@ -191,7 +191,7 @@ namespace Iv4xr.SePlugin
             {
                 Amount = (int)myItem.Amount,
                 Id = myItem.Content.GetId().ToDefinitionId(),
-                ItemId =  myItem.ItemId,
+                ItemId = myItem.ItemId,
             };
         }
 
@@ -241,7 +241,10 @@ namespace Iv4xr.SePlugin
         public static List<Role> Roles(this DebugInfo debugInfo)
         {
             var roles = new List<Role>();
-            if (debugInfo.IsDedicated || (debugInfo.IsServer && debugInfo.SessionReady && debugInfo.MultiplayerActive))
+            if (debugInfo.IsDedicated ||
+                debugInfo.IsServer && debugInfo.SessionReady && debugInfo.MultiplayerActive ||
+                !debugInfo.SessionReady && !debugInfo.IsDedicated && !debugInfo.MultiplayerActive
+            )
             {
                 roles.Add(Role.Admin);
             }
@@ -260,6 +263,5 @@ namespace Iv4xr.SePlugin
         {
             return debugInfo.Roles().Contains(role);
         }
-
     }
 }

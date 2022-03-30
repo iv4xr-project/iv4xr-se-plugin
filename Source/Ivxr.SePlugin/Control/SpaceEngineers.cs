@@ -5,6 +5,7 @@ using Iv4xr.SpaceEngineers;
 using Iv4xr.SpaceEngineers.WorldModel;
 using Sandbox;
 using VRage.Game;
+using static Iv4xr.SePlugin.Communication.CallTarget;
 
 namespace Iv4xr.SePlugin.Control
 {
@@ -71,7 +72,7 @@ namespace Iv4xr.SePlugin.Control
             MyConstants.DEFAULT_INTERACTIVE_DISTANCE = distance;
         }
 
-        [RunOutsideGameLoop]
+        [CallOn(CurrentThread)]
         public DebugInfo DebugInfo()
         {
             return DebugInfoCreator.Create();

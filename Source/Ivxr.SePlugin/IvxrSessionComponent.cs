@@ -21,7 +21,17 @@ namespace Iv4xr.SePlugin
             base.UpdateBeforeSimulation();
             if (Context != null)
             {
-                Context.Tick();
+                Context.BeforeSimulation();
+                Context.MethodCallContext.BeforeSimulation.CallEverything();
+            }
+        }
+
+        public override void UpdateAfterSimulation()
+        {
+            base.UpdateAfterSimulation();
+            if (Context != null)
+            {
+                Context.MethodCallContext.AfterSimulation.CallEverything();
             }
         }
 

@@ -4,15 +4,6 @@ using Iv4xr.SpaceEngineers;
 
 namespace Iv4xr.SePlugin.Communication
 {
-    [AttributeUsage(AttributeTargets.Method, Inherited = false)]
-    public class RunOutsideGameLoop : Attribute
-    {
-    }
-
-    public class RunOnMainThread : Attribute
-    {
-    }
-
     public class SynchronizedSpaceEngineers : ISpaceEngineers
     {
         public ICharacterController Character { get; }
@@ -25,33 +16,20 @@ namespace Iv4xr.SePlugin.Communication
         public IScreens Screens { get; }
 
 
-        public SynchronizedSpaceEngineers(ISpaceEngineers se, FuncActionDispatcher beforeSimulationFuncActionDispatcher,
-            FuncActionDispatcher mainThreadFuncActionDispatcher)
+        public SynchronizedSpaceEngineers(ISpaceEngineers se, MethodCallContext methodCallContext)
         {
-            Character = new GameLoopDynamicProxy<ICharacterController>(se.Character,
-                        beforeSimulationFuncActionDispatcher, mainThreadFuncActionDispatcher)
+            Character = new GameLoopDynamicProxy<ICharacterController>(se.Character, methodCallContext)
                     .ActLike<ICharacterController>();
-            Session = new GameLoopDynamicProxy<ISessionController>(se.Session, beforeSimulationFuncActionDispatcher,
-                        mainThreadFuncActionDispatcher)
+            Session = new GameLoopDynamicProxy<ISessionController>(se.Session, methodCallContext)
                     .ActLike<ISessionController>();
-            Items = new GameLoopDynamicProxy<IItems>(se.Items, beforeSimulationFuncActionDispatcher,
-                mainThreadFuncActionDispatcher).ActLike<IItems>();
-            Observer = new GameLoopDynamicProxy<IObserver>(se.Observer, beforeSimulationFuncActionDispatcher,
-                        mainThreadFuncActionDispatcher)
-                    .ActLike<IObserver>();
-            Definitions = new GameLoopDynamicProxy<IDefinitions>(se.Definitions, beforeSimulationFuncActionDispatcher,
-                        mainThreadFuncActionDispatcher)
+            Items = new GameLoopDynamicProxy<IItems>(se.Items, methodCallContext).ActLike<IItems>();
+            Observer = new GameLoopDynamicProxy<IObserver>(se.Observer, methodCallContext).ActLike<IObserver>();
+            Definitions = new GameLoopDynamicProxy<IDefinitions>(se.Definitions, methodCallContext)
                     .ActLike<IDefinitions>();
-            Blocks =
-                    new GameLoopDynamicProxy<IBlocks>(se.Blocks, beforeSimulationFuncActionDispatcher,
-                                mainThreadFuncActionDispatcher)
-                            .ActLike<IBlocks>();
-            Admin = new GameLoopDynamicProxy<ISpaceEngineersAdmin>(se.Admin, beforeSimulationFuncActionDispatcher,
-                        mainThreadFuncActionDispatcher)
+            Blocks = new GameLoopDynamicProxy<IBlocks>(se.Blocks, methodCallContext).ActLike<IBlocks>();
+            Admin = new GameLoopDynamicProxy<ISpaceEngineersAdmin>(se.Admin, methodCallContext)
                     .ActLike<ISpaceEngineersAdmin>();
-            Screens = new GameLoopDynamicProxy<IScreens>(se.Screens, beforeSimulationFuncActionDispatcher,
-                        mainThreadFuncActionDispatcher)
-                    .ActLike<IScreens>();
+            Screens = new GameLoopDynamicProxy<IScreens>(se.Screens, methodCallContext).ActLike<IScreens>();
         }
     }
 }
