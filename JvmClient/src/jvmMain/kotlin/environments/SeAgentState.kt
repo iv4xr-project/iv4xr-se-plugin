@@ -1,6 +1,6 @@
 package environments
 
-import eu.iv4xr.framework.mainConcepts.W3DAgentState
+import eu.iv4xr.framework.environments.W3DAgentState
 import eu.iv4xr.framework.mainConcepts.WorldModel
 
 class SeAgentState(val agentId: String) : W3DAgentState() {
@@ -9,16 +9,16 @@ class SeAgentState(val agentId: String) : W3DAgentState() {
         get() = env() as SeEnvironment
 
     private fun setOrUpdate(worldModel: WorldModel) {
-        if (wom == null) {
-            wom = worldModel
+        if (worldmodel == null) {
+            worldmodel = worldModel
         } else {
-            wom.mergeNewObservation(worldModel)
+            worldmodel.mergeNewObservation(worldModel)
         }
     }
 
 
-    override fun updateState() {
+    override fun updateState(agentId: String) {
         this.setOrUpdate(seEnv.observe())
-        super.updateState()
+        super.updateState(agentId)
     }
 }
