@@ -319,6 +319,7 @@ $dokka.location:spaceEngineers.controller/SpaceEngineersAdmin/character/#/Pointi
 $dokka.location:spaceEngineers.controller/SpaceEngineersAdmin/debugInfo/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-space-engineers-admin/debug-info.html
 $dokka.location:spaceEngineers.controller/SpaceEngineersAdmin/observer/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-space-engineers-admin/observer.html
 $dokka.location:spaceEngineers.controller/SpaceEngineersAdmin/setFrameLimitEnabled/#kotlin.Boolean/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-space-engineers-admin/set-frame-limit-enabled.html
+$dokka.location:spaceEngineers.controller/SpaceEngineersAdmin/tests/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-space-engineers-admin/tests.html
 $dokka.location:spaceEngineers.controller/SpaceEngineersAdmin/updateDefaultInteractDistance/#kotlin.Float/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-space-engineers-admin/update-default-interact-distance.html
 $dokka.location:spaceEngineers.controller/SpaceEngineersJavaProxy.Companion///PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-space-engineers-java-proxy/-companion/index.html
 $dokka.location:spaceEngineers.controller/SpaceEngineersJavaProxy.Companion/createSubProxy/#kotlin.String#spaceEngineers.transport.StringLineReaderWriter#kotlin.reflect.KClass[TypeParam(bounds=[kotlin.Any])]#kotlin.String#kotlin.collections.MutableMap[kotlin.String,kotlin.Any]/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-space-engineers-java-proxy/-companion/create-sub-proxy.html
@@ -365,6 +366,10 @@ $dokka.location:spaceEngineers.controller/Terminal/data/#/PointingToDeclaration/
 $dokka.location:spaceEngineers.controller/Terminal/inventory/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-terminal/inventory.html
 $dokka.location:spaceEngineers.controller/Terminal/production/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-terminal/production.html
 $dokka.location:spaceEngineers.controller/Terminal/selectTab/#kotlin.Int/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-terminal/select-tab.html
+$dokka.location:spaceEngineers.controller/TestAdmin///PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-test-admin/index.html
+$dokka.location:spaceEngineers.controller/TestAdmin/adminOnly/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-test-admin/admin-only.html
+$dokka.location:spaceEngineers.controller/TestAdmin/gameOnly/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-test-admin/game-only.html
+$dokka.location:spaceEngineers.controller/TestAdmin/observerOnly/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-test-admin/observer-only.html
 $dokka.location:spaceEngineers.controller/TypedParameter///PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-typed-parameter/index.html
 $dokka.location:spaceEngineers.controller/TypedParameter/TypedParameter/#kotlin.String#TypeParam(bounds=[kotlin.Any])?#kotlin.reflect.KClass[TypeParam(bounds=[kotlin.Any])]/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-typed-parameter/-typed-parameter.html
 $dokka.location:spaceEngineers.controller/TypedParameter/name/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-typed-parameter/name.html
