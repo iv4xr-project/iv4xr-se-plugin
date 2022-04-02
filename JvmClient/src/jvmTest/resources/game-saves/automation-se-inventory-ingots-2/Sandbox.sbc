@@ -6,7 +6,7 @@
   <SpectatorPosition>
     <Position x="38.487743935691533" y="76.279640155102314" z="7.5428447517925106" />
     <Forward x="-0.268589884" y="-0.619030952" z="-0.738010943" />
-    <Up x="-0.422749758" y="0.76418823" z="-0.487133473" />
+    <Up x="-0.422749758" y="0.7641882" z="-0.4871335" />
     <Orientation>
       <X>-0.301384658</X>
       <Y>0.200404152</Y>
@@ -256,7 +256,7 @@
       <dictionary />
     </variables>
   </ScriptManagerData>
-  <AppVersion>1201002</AppVersion>
+  <AppVersion>1200032</AppVersion>
   <Factions>
     <Factions>
       <MyObjectBuilder_Faction>
@@ -346,6 +346,7 @@
     </PlayerToFactionsVis>
   </Factions>
   <Mods />
+  <CreativeTools />
   <Scenario Type="MyObjectBuilder_ScenarioDefinition" Subtype="EasyStart1" />
   <RespawnCooldowns />
   <Identities>
@@ -450,7 +451,7 @@
       <TransferedPCUDelta>0</TransferedPCUDelta>
     </MyObjectBuilder_Identity>
   </Identities>
-  <PreviousEnvironmentHostility>NORMAL</PreviousEnvironmentHostility>
+  <PreviousEnvironmentHostility>SAFE</PreviousEnvironmentHostility>
   <AllPlayersData>
     <dictionary>
       <item>
@@ -541,6 +542,7 @@
               <HeadAngle x="-70.2895" y="0" />
             </CameraControllerSettings>
           </EntityCameraData>
+          <BuildColorSlots />
           <CreativeToolsEnabled>false</CreativeToolsEnabled>
           <RemoteAdminSettings>0</RemoteAdminSettings>
           <PromoteLevel>None</PromoteLevel>
@@ -630,6 +632,7 @@
             <SlotsGamepad />
           </Toolbar>
           <EntityCameraData />
+          <BuildColorSlots />
           <CreativeToolsEnabled>false</CreativeToolsEnabled>
           <RemoteAdminSettings>0</RemoteAdminSettings>
           <PromoteLevel>None</PromoteLevel>
@@ -684,6 +687,7 @@
             <SlotsGamepad />
           </Toolbar>
           <EntityCameraData />
+          <BuildColorSlots />
           <CreativeToolsEnabled>false</CreativeToolsEnabled>
           <RemoteAdminSettings>0</RemoteAdminSettings>
           <PromoteLevel>None</PromoteLevel>
@@ -779,6 +783,7 @@
               <HeadAngle x="0" y="0" />
             </CameraControllerSettings>
           </EntityCameraData>
+          <BuildColorSlots />
           <CreativeToolsEnabled>true</CreativeToolsEnabled>
           <RemoteAdminSettings>1</RemoteAdminSettings>
           <PromoteLevel>Admin</PromoteLevel>
@@ -788,6 +793,8 @@
       </item>
     </dictionary>
   </AllPlayersData>
+  <ChatHistory />
+  <FactionChatHistory />
   <NonPlayerIdentities>
     <long>144115188075855880</long>
     <long>144115188075855882</long>
@@ -1129,4 +1136,7 @@
     <string>Silicon_01</string>
     <string>Nickel_01</string>
   </VicinityVoxelCache>
+  <RemoteAdminSettings>
+    <dictionary />
+  </RemoteAdminSettings>
 </MyObjectBuilder_Checkpoint>
