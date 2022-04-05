@@ -42,20 +42,38 @@ namespace Iv4xr.SePlugin.Communication
         {
             if (!debugInfo.CanDoRole(annotatedRole))
             {
-                throw new InvalidOperationException($"Invalid role: {annotatedRole} for {methodInfo}");
+                throw new InvalidOperationException($"Invalid role: {annotatedRole} for {methodInfo} ({debugInfo})");
             }
         }
 
         private void CheckInterfaceRoles(InvokeMemberBinder binder, object[] args)
         {
             m_instance.GetType().GetInterfaces().Select(
-                interfaceType => interfaceType.GetMethod(binder.Name, args.Select(x => x.GetType()).ToArray())
+                interfaceType => GetMethod(interfaceType, binder, args)
             ).Where(t => t != null).ForEach(CheckRoles);
+        }
+
+        private MethodInfo GetMethod(Type type, InvokeMemberBinder binder, object[] args)
+        {
+            // TODO: find better way to find the method needed even if some of the args are null and their types unknown
+            var methodInfoList = type.GetMethods().Where(
+                mi =>
+                        mi.Name == binder.Name
+            ).ToList();
+            if (methodInfoList.Count > 1)
+            {
+                return type.GetMethod(
+                    binder.Name,
+                    args.Select(x => x.GetType()).ToArray()
+                );
+            }
+
+            return methodInfoList.Count == 1 ? methodInfoList.First() : null;
         }
 
         public override bool TryInvokeMember(InvokeMemberBinder binder, object[] args, out object result)
         {
-            var methodInfo = m_instance.GetType().GetMethod(binder.Name, args.Select(x => x.GetType()).ToArray());
+            var methodInfo = GetMethod(m_instance.GetType(), binder, args);
             methodInfo.ThrowIfNull($"methodInfo {binder.Name}");
             CheckRoles(methodInfo);
             CheckInterfaceRoles(binder, args);

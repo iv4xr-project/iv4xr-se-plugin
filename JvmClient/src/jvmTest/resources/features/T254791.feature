@@ -12,6 +12,6 @@ Feature: T254791 Components can be added to a stockpile of currently built block
       | Motor        | 4      |
       | Medical      | 3      |
       | Construction | 2      |
-    When Character builds block "SurvivalKitLarge".
+    When Character builds block "SurvivalKit/SurvivalKitLarge".
     And Character torches up the block in front completely.
     Then Character inventory contains no components.

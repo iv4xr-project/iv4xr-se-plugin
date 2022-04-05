@@ -2,8 +2,7 @@
 {
     public class ToolbarItem
     {
-        public string Type;
-        public string SubType;
+        public DefinitionId Id;
         public string Name;
     }
 }

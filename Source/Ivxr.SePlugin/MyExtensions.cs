@@ -237,12 +237,21 @@ namespace Iv4xr.SePlugin
             result.Size = myDefinitionBase.Size.ToPlain();
             return result;
         }
+
+        public static ToolbarItem ToToolbarItem(this MyToolbarItemDefinition toolbarItem)
+        {
+            return new ToolbarItem()
+            {
+                Id = toolbarItem.Definition.Id.ToDefinitionId(),
+                Name = toolbarItem.DisplayName.ToString()
+            };
+        }
         
         public static List<Role> Roles(this DebugInfo debugInfo)
         {
             var roles = new List<Role>();
             if (debugInfo.IsDedicated ||
-                debugInfo.IsServer && debugInfo.SessionReady && debugInfo.MultiplayerActive ||
+                debugInfo.IsServer && debugInfo.SessionReady ||
                 !debugInfo.SessionReady && !debugInfo.IsDedicated && !debugInfo.MultiplayerActive
             )
             {

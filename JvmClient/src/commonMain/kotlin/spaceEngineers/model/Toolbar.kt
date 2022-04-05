@@ -19,7 +19,7 @@ data class Toolbar(
 
     fun findLocation(blockType: String): ToolbarLocation? {
         val itemIndex = items.indexOfFirst {
-            it?.subType == blockType
+            it?.id?.type == blockType
         }
         if (itemIndex < 0) {
             return null

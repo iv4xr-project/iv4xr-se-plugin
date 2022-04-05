@@ -206,7 +206,7 @@ class ScreenSteps : AbstractMultiplayerSteps() {
         assertNotNull(block)
         character.beginUsingTool()
 
-        withTimeout(10000) {
+        withTimeout(20000) {
             while (observer.observe().targetBlock?.let { it.integrity < it.maxIntegrity} == true ) {
                 yield()
             }
@@ -217,7 +217,7 @@ class ScreenSteps : AbstractMultiplayerSteps() {
     @When("Character builds block {string}.")
     fun character_builds_block(blockType: String) = mainClient {
         val toolbarLocation = ToolbarLocation(8, 0)
-        items.setToolbarItem(blockType, toolbarLocation)
+        items.setToolbarItem(DefinitionId.parse(blockType), toolbarLocation)
         smallPause()
         items.equip(toolbarLocation)
         smallPause()
