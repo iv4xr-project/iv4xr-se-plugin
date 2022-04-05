@@ -39,6 +39,10 @@ class ConnectionManager(
         connectionSetup.clients.map { connectionsById.getValue(it.createId()) }
     }
 
+    val games by lazy {
+        connectionSetup.games.map { connectionsById.getValue(it.createId()) }
+    }
+
     suspend fun mainClient(block: suspend ContextControllerWrapper.() -> Unit) {
         block(mainClient.spaceEngineers)
     }
@@ -50,6 +54,16 @@ class ConnectionManager(
     suspend fun clients(block: suspend ContextControllerWrapper.() -> Unit) {
         coroutineScope {
             clients.map {
+                async {
+                    block(it.spaceEngineers)
+                }
+            }.awaitAll()
+        }
+    }
+
+    suspend fun games(block: suspend ContextControllerWrapper.() -> Unit) {
+        coroutineScope {
+            games.map {
                 async {
                     block(it.spaceEngineers)
                 }
