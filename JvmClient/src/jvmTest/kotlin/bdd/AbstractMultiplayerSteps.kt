@@ -9,8 +9,8 @@ abstract class AbstractMultiplayerSteps(
 
 ) : AutoCloseable {
 
-    //var mcm: MCM = MCM(ConnectionSetup.SINGLE_COMPUTER_DEDICATED)
-    lateinit var cm: ConnectionManager
+    val cm: ConnectionManager
+        get() = CM
 
     override fun close() {
         cm.close()
@@ -43,9 +43,15 @@ abstract class AbstractMultiplayerSteps(
         cm.clients(block)
     }
 
+    fun games(block: suspend SpaceEngineers.() -> Unit) = runBlocking {
+        cm.games(block)
+    }
+
     fun admin(block: suspend SpaceEngineers.() -> Unit) = runBlocking {
         cm.admin(block)
     }
 
-
+    companion object {
+        lateinit var CM: ConnectionManager
+    }
 }

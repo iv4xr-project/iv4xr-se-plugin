@@ -1,41 +1,22 @@
 package bdd
 
-import io.cucumber.java.After
-import io.cucumber.java.Before
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeout
 import kotlinx.coroutines.yield
-import spaceEngineers.controller.*
-import spaceEngineers.controller.connection.ConnectionSetup
-import spaceEngineers.controller.connection.ConnectionManager
 import spaceEngineers.model.DefinitionId
 import spaceEngineers.model.TerminalBlock
 import spaceEngineers.model.ToolbarLocation
 import spaceEngineers.model.extensions.allBlocks
-import java.io.BufferedReader
-import java.io.File
-import java.io.InputStreamReader
 import java.lang.Thread.sleep
-import kotlin.concurrent.thread
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
-
 class ScreenSteps : AbstractMultiplayerSteps() {
 
-    @Before
-    fun before() {
-        cm = ConnectionManager(ConnectionSetup.DOUBLE_PC_DEDICATED_DEV)
-        //mcm = MCM(ConnectionSetup.SINGLE_REMOTE_DEDICATED_DEV)
 
-        //cm = ConnectionManager(ConnectionSetup.SINGLE_COMPUTER_DEDICATED_STEAM)
-        //cm = ConnectionManager(ConnectionSetup.SINGLE_COMPUTER_DEDICATED_DEV)
-        //cm = ConnectionManager(ConnectionSetup.OFFLINE_DEV)
-    }
 
     val filesToCopy = listOf(
         "AustinHarris.JsonRpc.dll",
@@ -46,25 +27,6 @@ class ScreenSteps : AbstractMultiplayerSteps() {
         "Newtonsoft.Json.dll",
     )
 
-    @After
-    fun cleanup() {
-        if (cm.initiated) {
-            clients {
-                try {
-                    session.exitToMainMenu()
-                } catch (e: Throwable) {
-                    println(e.message)
-                }
-            }
-            runBlocking {
-                smallPause()
-            }
-        }
-
-        close()
-        process?.destroyForcibly()
-
-    }
 
     @Given("Character opens terminal of the nearest grid.")
     fun character_opens_terminal_of_the_nearest_grid() = mainClient {
@@ -205,7 +167,6 @@ class ScreenSteps : AbstractMultiplayerSteps() {
         assertTrue(observer.observeFloatingObjects().any { it.itemDefinition.definitionId == definition })
     }
 
-
     @Given("Character inventory contains no components.")
     fun character_inventory_contains_no_components() = observers {
         assertTrue(observer.observe().inventory.items.none { it.id.id == "MyObjectBuilder_Component" })
@@ -252,82 +213,6 @@ class ScreenSteps : AbstractMultiplayerSteps() {
                 "Amount unexpected for $definitionId: ${item.amount} vs ${row["amount"]?.toInt()}"
             )
         }
-    }
-
-    @Given("Scenario used is {string}.")
-    fun scenario_used_is(scenarioId: String) = runBlocking {
-        if (cm.connectionSetup.offlineSinglePlayer) {
-            loadScenarioSinglePlayer(scenarioId)
-        } else {
-            startDedicatedWithSessionAsync(scenarioId)
-            connectClients()
-        }
-    }
-
-    private fun connectClients() {
-        clients {
-            val process = cm.admin.gameProcess
-            screens.mainMenu.joinGame()
-            smallPause()
-            screens.joinGame.directConnect()
-            smallPause()
-            screens.serverConnect.enterAddress("${process.address}:27016")
-            smallPause()
-            screens.serverConnect.connect()
-            screens.waitUntilTheGameLoaded()
-        }
-        runBlocking {
-            bigPause()
-            bigPause()
-        }
-    }
-
-    fun loadScenarioSinglePlayer(scenarioId: String) = mainClient {
-        session.loadFromTestResources(scenarioId)
-        screens.waitUntilTheGameLoaded()
-        smallPause()
-    }
-
-    var process: Process? = null
-
-    suspend fun startDedicatedWithSessionAsync(scenarioId: String) {
-        val scenarioDir = "src/jvmTest/resources/game-saves/".processHomeDir()
-        val scenarioPath = File(scenarioDir, scenarioId).absolutePath.unixToWindowsPath()
-        val wdFile = File(cm.connectionSetup.admin.executablePath.processHomeDir())
-        assertTrue(wdFile.exists())
-        val wd = wdFile.absolutePath
-        val executable = File("${wd}/SpaceEngineersDedicated.exe")
-        assertTrue(executable.exists())
-        val cmd = executable.absolutePath
-        val args = "-session:${scenarioPath} -plugin Ivxr.SePlugin.dll -console -start"
-        val fullArgs = (listOf(cmd) + args.split(" ")).toTypedArray()
-        var gameStarted = false
-        thread(start = true) {
-            process = ProcessBuilder(* fullArgs)
-                .directory(wd.toFile())
-                .redirectErrorStream(true)
-                .start()
-            process?.apply {
-                val reader = BufferedReader(InputStreamReader(this.inputStream, "UTF-8"))
-                var line: String?
-                while (reader.readLine().also { line = it } != null) {
-                    println(line)
-                    if (line?.contains("Game ready...") == true) {
-                        gameStarted = true
-                    }
-                }
-                println("EOF")
-            }
-        }
-        withTimeout(1120_000) {
-            while (!gameStarted) {
-                if (process == null || process?.isAlive == false) {
-                    throw IllegalStateException("Server process already finished")
-                }
-                yield()
-            }
-        }
-        smallPause()
     }
 
     @Given("Character opens terminal.")
