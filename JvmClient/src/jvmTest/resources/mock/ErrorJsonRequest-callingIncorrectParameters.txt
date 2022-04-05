@@ -1,2 +1,0 @@
-{"jsonrpc":"2.0","result":null,"id":5419924225391666997}
-{"jsonrpc":"2.0","error":{"code":-32602,"message":"Invalid params","data":"Expecting 0 parameters, and received 1"},"id":-7309486905240743734}

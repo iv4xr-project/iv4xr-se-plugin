@@ -3,6 +3,7 @@ package spaceEngineers.game
 import org.junit.jupiter.api.Disabled
 import spaceEngineers.controller.SpaceEngineers
 import spaceEngineers.game.mockable.filterForScreenshots
+import spaceEngineers.model.DefinitionId
 import spaceEngineers.model.ToolbarLocation
 import spaceEngineers.model.extensions.allBlocks
 import testhelp.MockOrRealGameTest
@@ -12,34 +13,6 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 
-fun SpaceEngineers.checkBlockType(
-    blockType: String,
-    location: ToolbarLocation = ToolbarLocation(0, 0)
-): Boolean {
-    items.setToolbarItem(blockType, location)
-    sleep(10)
-    val toolbar = items.toolbar()
-    sleep(10)
-    val toolbarItem = toolbar[location]
-    return toolbarItem != null && toolbarItem.subType == blockType
-}
-
-fun SpaceEngineers.checkPlacement(
-    blockType: String,
-    location: ToolbarLocation = ToolbarLocation(0, 0)
-): Boolean {
-    observer.observeNewBlocks()
-    sleep(10)
-    items.equip(location)
-    sleep(10)
-    blocks.place()
-    sleep(10)
-    return (observer.observeNewBlocks().allBlocks.let { it.isNotEmpty() && it.first().definitionId.type == blockType }).also {
-        observer.observeBlocks().allBlocks.forEach {
-            admin.blocks.remove(it.id)
-        }
-    }
-}
 
 
 class GetToolbarTest : MockOrRealGameTest() {
@@ -48,18 +21,18 @@ class GetToolbarTest : MockOrRealGameTest() {
     @Test
     fun toolbar() = testContext {
         val toolbar = items.toolbar()
-        assertEquals(toolbar[ToolbarLocation(0, 0)]?.subType, "LargeBlockArmorBlock")
+        assertEquals(toolbar[ToolbarLocation(0, 0)]?.id?.type, "LargeBlockArmorBlock")
         assertEquals(toolbar.items.size, toolbar.pageCount * toolbar.slotCount)
     }
 
     @Test
     fun setToolbar() = testContext {
-        val blockTypes = definitions.blockDefinitions().filterForScreenshots().map { it.definitionId.type }
+        val blockTypes = definitions.blockDefinitions().filterForScreenshots().map { it.definitionId }
 
         val location = ToolbarLocation(0, 2)
-        val (success, fail) = blockTypes.partition { blockType ->
+        val (success, fail) = blockTypes.partition { definitionId ->
             delay(10)
-            (checkBlockType(blockType, location) && checkPlacement(blockType, location))
+            (checkBlockType(definitionId, location) && checkPlacement(definitionId, location))
         }
         assertTrue(success.size >= 184)
     }
@@ -69,13 +42,43 @@ class GetToolbarTest : MockOrRealGameTest() {
     fun equipSmall() = testContext {
         val location = ToolbarLocation(2, 1)
         observer.observeNewBlocks()
-        val blockType = "SmallHeavyBlockArmorBlock"
-        items.setToolbarItem(blockType, location)
+        val blockDefinition = DefinitionId.cubeBlock("SmallHeavyBlockArmorBlock")
+        items.setToolbarItem(blockDefinition, location)
         items.equip(location)
         blocks.place()
         val blocks = observer.observeNewBlocks().allBlocks
         assertEquals(1, blocks.size)
         val block = blocks.first()
-        assertEquals(blockType, block.definitionId.type)
+        assertEquals(blockDefinition.type, block.definitionId.type)
+    }
+
+
+    suspend fun SpaceEngineers.checkBlockType(
+        definitionId: DefinitionId,
+        location: ToolbarLocation = ToolbarLocation(0, 0)
+    ): Boolean {
+        items.setToolbarItem(definitionId, location)
+        delay(10)
+        val toolbar = items.toolbar()
+        delay(10)
+        val toolbarItem = toolbar[location]
+        return toolbarItem != null && toolbarItem.id.type == definitionId.type
+    }
+
+    suspend fun SpaceEngineers.checkPlacement(
+        definitionId: DefinitionId,
+        location: ToolbarLocation = ToolbarLocation(0, 0)
+    ): Boolean {
+        observer.observeNewBlocks()
+        delay(10)
+        items.equip(location)
+        delay(10)
+        blocks.place()
+        delay(10)
+        return (observer.observeNewBlocks().allBlocks.let { it.isNotEmpty() && it.first().definitionId.type == definitionId.type }).also {
+            observer.observeBlocks().allBlocks.forEach {
+                admin.blocks.remove(it.id)
+            }
+        }
     }
 }

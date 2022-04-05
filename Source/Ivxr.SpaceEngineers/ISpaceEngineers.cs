@@ -51,7 +51,7 @@ namespace Iv4xr.SpaceEngineers
     {
         void Equip(ToolbarLocation toolbarLocation);
 
-        void SetToolbarItem(string name, ToolbarLocation toolbarLocation);
+        void SetToolbarItem(DefinitionId definitionId, ToolbarLocation toolbarLocation);
 
         Toolbar Toolbar();
     }

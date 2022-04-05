@@ -9,10 +9,7 @@ import kotlinx.coroutines.runBlocking
 import org.junit.runner.RunWith
 import spaceEngineers.controller.extensions.*
 import spaceEngineers.controller.loadFromTestResources
-import spaceEngineers.model.Block
-import spaceEngineers.model.CharacterMovement
-import spaceEngineers.model.ToolbarLocation
-import spaceEngineers.model.Vec3F
+import spaceEngineers.model.*
 import spaceEngineers.model.extensions.allBlocks
 import spaceEngineers.model.extensions.normalizeAsRun
 import spaceEngineers.transport.SocketReaderWriter
@@ -55,7 +52,7 @@ class SpaceEngineersCucumberTest : AbstractSpaceEngineersSteps() {
     fun character_sets_toolbar_slot_page_to(slot: Int, page: Int, itemName: String) {
         val location = ToolbarLocation(slot, page)
 
-        environment.items.setToolbarItem(itemName, location)
+        environment.items.setToolbarItem(DefinitionId.parse(itemName), location)
 
         // Note: maybe we should use the toolbar mapping instead, and have some way to define exact names of the tools
         if (itemName.startsWith("Welder")) {
@@ -147,9 +144,12 @@ class SpaceEngineersCucumberTest : AbstractSpaceEngineersSteps() {
 
     @When("Character selects block {string} and places it.")
     fun character_places_selects_block_and_places_it(blockType: String) {
+        val toolbar = environment.items.toolbar()
         val toolbarLocation =
-            environment.items.toolbar().findLocation(blockType) ?: error("cannot find $blockType in toolbar")
-        environment.items.setToolbarItem(blockType, toolbarLocation);
+            toolbar.findLocation(blockType) ?: error("cannot find $blockType in toolbar")
+        val definitionId =
+            toolbar.items.first { it?.id?.type == blockType }?.id ?: error("Cannot find $blockType in toolbar")
+        environment.items.setToolbarItem(definitionId, toolbarLocation);
         environment.items.equip(toolbarLocation)
         sleep(150)
         environment.blocks.place()

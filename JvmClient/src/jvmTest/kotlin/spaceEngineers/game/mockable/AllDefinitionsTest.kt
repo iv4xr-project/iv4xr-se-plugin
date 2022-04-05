@@ -10,7 +10,7 @@ class AllDefinitionsTest : MockOrRealGameTest(mockFile = inMockResourcesDirector
     @Test
     fun allCount() = testContext {
         assertEquals(
-            1636,
+            1949,
             definitions.allDefinitions().size
         )
     }
@@ -18,7 +18,7 @@ class AllDefinitionsTest : MockOrRealGameTest(mockFile = inMockResourcesDirector
     @Test
     fun uniqueIdTypeCount() = testContext {
         assertEquals(
-            1636,
+            1949,
             definitions.allDefinitions().map { "${it.definitionId}" }.distinct().size
         )
     }
@@ -26,7 +26,7 @@ class AllDefinitionsTest : MockOrRealGameTest(mockFile = inMockResourcesDirector
     @Test
     fun uniqueTypeCount() = testContext {
         assertEquals(
-            1589,
+            1900,
             definitions.allDefinitions().map { it.definitionId.type }.distinct().size
         )
     }
@@ -34,7 +34,7 @@ class AllDefinitionsTest : MockOrRealGameTest(mockFile = inMockResourcesDirector
     @Test
     fun publicCount() = testContext {
         assertEquals(
-            1314,
+            1600,
             definitions.allDefinitions().count { it.public }
         )
     }
@@ -42,7 +42,7 @@ class AllDefinitionsTest : MockOrRealGameTest(mockFile = inMockResourcesDirector
     @Test
     fun enabledCount() = testContext {
         assertEquals(
-            1636,
+            1949,
             definitions.allDefinitions().count { it.enabled }
         )
     }
@@ -50,7 +50,7 @@ class AllDefinitionsTest : MockOrRealGameTest(mockFile = inMockResourcesDirector
     @Test
     fun inSurvivalCount() = testContext {
         assertEquals(
-            1466,
+            1774,
             definitions.allDefinitions().count { it.availableInSurvival }
         )
     }
@@ -58,18 +58,18 @@ class AllDefinitionsTest : MockOrRealGameTest(mockFile = inMockResourcesDirector
     @Test
     fun typeDuplicities() = testContext {
         assertEquals(
-            34,
+            36,
             definitions.allDefinitions().groupBy { it.definitionId.type }.map { it.key to it.value.size }
                 .filter { it.second > 1 }
-                .onEach(::println).size
+                .size
         )
     }
 
     @Test
     fun allIds() = testContext {
         assertEquals(
-            123,
-            definitions.allDefinitions().map { it.definitionId.id }.distinct().onEach(::println).size
+            126,
+            definitions.allDefinitions().map { it.definitionId.id }.distinct().size
         )
     }
 

@@ -48,6 +48,7 @@ abstract class MockOrRealGameTest(
         if (loadScenario) {
             try {
                 spaceEngineers.session.loadFromTestResources(scenarioId)
+                spaceEngineers.screens.waitUntilTheGameLoaded()
             } catch (e: Throwable) {
                 spaceEngineers.closeIfCloseable()
                 throw e
@@ -66,7 +67,11 @@ abstract class MockOrRealGameTest(
         }
     }
 
-    private fun getSpaceEngineers(forceRealGame: Boolean, file: File, builder: JsonRpcSpaceEngineersBuilder): SpaceEngineers {
+    private fun getSpaceEngineers(
+        forceRealGame: Boolean,
+        file: File,
+        builder: JsonRpcSpaceEngineersBuilder
+    ): SpaceEngineers {
         return if (useRealGame(forceRealGame, file)) {
             builder.fromStringLineReaderWriter(agentId, readerWriter(file))
         } else {

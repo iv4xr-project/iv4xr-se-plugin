@@ -13,6 +13,7 @@ import spaceEngineers.controller.*
 import spaceEngineers.controller.SpaceEngineers.Companion.DEFAULT_AGENT_ID
 import spaceEngineers.iv4xr.goal.GoalBuilder
 import spaceEngineers.iv4xr.goal.TacticLib
+import spaceEngineers.model.DefinitionId
 import spaceEngineers.model.ToolbarLocation
 import kotlin.test.assertTrue
 
@@ -24,15 +25,15 @@ class BasicIv4xrTest {
     fun placeGrindDownTorchUp() {
         // Setup constants to use later.
         val agentId = DEFAULT_AGENT_ID //agent id
-        val blockType = "LargeHeavyBlockArmorBlock" // Block type that we will operate with (it's a cube block).
+        val blockType = DefinitionId.cubeBlock("LargeHeavyBlockArmorBlock") // Block type that we will operate with (it's a cube block).
         val context = SpaceEngineersTestContext() // This context saves recent information about operations (for example last built blocks and all the observations).
         val blockLocation = ToolbarLocation(1, 0) // We will put block here in the toolbar.
-        val welder = "Welder2Item" // We will use this welder.
+        val welder = DefinitionId.physicalGun("Welder2Item") // We will use this welder.
         val welderLocation = ToolbarLocation(2, 0) // We will put welder here in the toolbar.
-        val grinder = "AngleGrinder2Item" // We will use this grinder.
+        val grinder = DefinitionId.physicalGun("AngleGrinder2Item") // We will use this grinder.
         val grinderLocation = ToolbarLocation(3, 0) // We will put grinder here in the toolbar.
         // We map position of the block in the toolbar.
-        context.blockTypeToToolbarLocation[blockType] = blockLocation
+        context.blockTypeToToolbarLocation[blockType.type] = blockLocation
         // We create instance of SpaceEngineers interface. ContextControllerWrapper is "smarter" implementation, that saves recent information into context created above.
         // Otherwise, JsonRpcSpaceEngineersBuilder.localhost(agentId) can be used directly (also SpaceEngineers interface implementation).
         val controllerWrapper =
@@ -71,8 +72,8 @@ class BasicIv4xrTest {
                 tactic = tactics.moveForward(),
             ),
             goals.blockOfTypeExists(
-                blockType,
-                tactic = tactics.buildBlock(blockType),
+                blockType.type,
+                tactic = tactics.buildBlock(blockType.type),
             ),
             goals.lastBuiltBlockIntegrityIsBelow(
                 percentage = 0.1,
