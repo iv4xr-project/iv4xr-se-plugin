@@ -5,9 +5,7 @@ import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import kotlinx.coroutines.withTimeout
 import kotlinx.coroutines.yield
-import spaceEngineers.model.DefinitionId
-import spaceEngineers.model.TerminalBlock
-import spaceEngineers.model.ToolbarLocation
+import spaceEngineers.model.*
 import spaceEngineers.model.extensions.allBlocks
 import java.lang.Thread.sleep
 import kotlin.test.assertEquals
@@ -194,6 +192,38 @@ class ScreenSteps : AbstractMultiplayerSteps() {
             }
         }
         character.endUsingTool()
+    }
+
+
+    @When("Character torches up the block in front completely.")
+    fun character_torches_up_the_block_completely() = mainClient {
+        val toolbar = items.toolbar()
+        val grinderLocation = toolbar.findLocation("WelderItem") ?: error("No welder found")
+        items.equip(grinderLocation)
+        smallPause()
+
+        val block = observer.observe().targetBlock ?: error("No target block")
+        assertNotNull(block)
+        character.beginUsingTool()
+
+        withTimeout(10000) {
+            while (observer.observe().targetBlock?.let { it.integrity < it.maxIntegrity} == true ) {
+                yield()
+            }
+        }
+        character.endUsingTool()
+    }
+
+    @When("Character builds block {string}.")
+    fun character_builds_block(blockType: String) = mainClient {
+        val toolbarLocation = ToolbarLocation(8, 0)
+        items.setToolbarItem(blockType, toolbarLocation)
+        smallPause()
+        items.equip(toolbarLocation)
+        smallPause()
+        blocks.place()
+        smallPause()
+        items.equip(ToolbarLocation(9, 0))
     }
 
     @Then("Character inventory contains components:")

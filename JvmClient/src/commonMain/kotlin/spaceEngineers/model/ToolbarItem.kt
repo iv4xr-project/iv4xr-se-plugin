@@ -14,6 +14,6 @@ data class ToolbarItem(
 ) {
 
     override fun toString(): String {
-        return name
+        return "$type/$subType - $name"
     }
 }
