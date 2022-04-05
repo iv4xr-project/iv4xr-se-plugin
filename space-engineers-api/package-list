@@ -1959,6 +1959,68 @@ $dokka.location:spaceEngineers.transport/SocketReaderWriter/socket/#/PointingToD
 $dokka.location:spaceEngineers.transport/SocketReaderWriter/writer/#/PointingToDeclaration/space-engineers-api/spaceEngineers.transport/-socket-reader-writer/writer.html
 $dokka.location:spaceEngineers.transport/StringLineReaderWriter///PointingToDeclaration/space-engineers-api/spaceEngineers.transport/-string-line-reader-writer/index.html
 $dokka.location:spaceEngineers.transport/StringLineReaderWriter/sendAndReceiveLine/#kotlin.String/PointingToDeclaration/space-engineers-api/spaceEngineers.transport/-string-line-reader-writer/send-and-receive-line.html
+$dokka.location:spaceEngineers.util.generator.maze////PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/index.html
+$dokka.location:spaceEngineers.util.generator.maze//cleanBlocks/spaceEngineers.controller.SpaceEngineers#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/clean-blocks.html
+$dokka.location:spaceEngineers.util.generator.maze//main/#kotlin.Array[kotlin.String]/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/main.html
+$dokka.location:spaceEngineers.util.generator.maze//plus/spaceEngineers.util.generator.maze.Position#spaceEngineers.util.generator.maze.Direction/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/plus.html
+$dokka.location:spaceEngineers.util.generator.maze//plus/spaceEngineers.util.generator.maze.Position#spaceEngineers.util.generator.maze.Position/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/plus.html
+$dokka.location:spaceEngineers.util.generator.maze/BlockMazePlacer///PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/-block-maze-placer/index.html
+$dokka.location:spaceEngineers.util.generator.maze/BlockMazePlacer/BlockMazePlacer/#spaceEngineers.util.generator.maze.Maze#spaceEngineers.controller.SpaceEngineers#spaceEngineers.model.DefinitionId#spaceEngineers.model.DefinitionId/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/-block-maze-placer/-block-maze-placer.html
+$dokka.location:spaceEngineers.util.generator.maze/BlockMazePlacer/bottomBlockDefinitionId/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/-block-maze-placer/bottom-block-definition-id.html
+$dokka.location:spaceEngineers.util.generator.maze/BlockMazePlacer/generate/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/-block-maze-placer/generate.html
+$dokka.location:spaceEngineers.util.generator.maze/BlockMazePlacer/maze/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/-block-maze-placer/maze.html
+$dokka.location:spaceEngineers.util.generator.maze/BlockMazePlacer/spaceEngineers/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/-block-maze-placer/space-engineers.html
+$dokka.location:spaceEngineers.util.generator.maze/BlockMazePlacer/wallBlockDefinitionId/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/-block-maze-placer/wall-block-definition-id.html
+$dokka.location:spaceEngineers.util.generator.maze/DirectedPosition///PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/-directed-position/index.html
+$dokka.location:spaceEngineers.util.generator.maze/DirectedPosition/DirectedPosition/#spaceEngineers.util.generator.maze.Position#spaceEngineers.util.generator.maze.Direction/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/-directed-position/-directed-position.html
+$dokka.location:spaceEngineers.util.generator.maze/DirectedPosition/back/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/-directed-position/back.html
+$dokka.location:spaceEngineers.util.generator.maze/DirectedPosition/direction/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/-directed-position/direction.html
+$dokka.location:spaceEngineers.util.generator.maze/DirectedPosition/id/#kotlin.String/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/-directed-position/id.html
+$dokka.location:spaceEngineers.util.generator.maze/DirectedPosition/position/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/-directed-position/position.html
+$dokka.location:spaceEngineers.util.generator.maze/Direction.DOWN///PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/-direction/-d-o-w-n/index.html
+$dokka.location:spaceEngineers.util.generator.maze/Direction.LEFT///PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/-direction/-l-e-f-t/index.html
+$dokka.location:spaceEngineers.util.generator.maze/Direction.RIGHT///PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/-direction/-r-i-g-h-t/index.html
+$dokka.location:spaceEngineers.util.generator.maze/Direction.UP///PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/-direction/-u-p/index.html
+$dokka.location:spaceEngineers.util.generator.maze/Direction///PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/-direction/index.html
+$dokka.location:spaceEngineers.util.generator.maze/Direction/arrow/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/-direction/arrow.html
+$dokka.location:spaceEngineers.util.generator.maze/Direction/oposite/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/-direction/oposite.html
+$dokka.location:spaceEngineers.util.generator.maze/Direction/rotateRight/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/-direction/rotate-right.html
+$dokka.location:spaceEngineers.util.generator.maze/Direction/toMovementDirection/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/-direction/to-movement-direction.html
+$dokka.location:spaceEngineers.util.generator.maze/Direction/toMovementDirection/#spaceEngineers.util.generator.maze.Direction/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/-direction/to-movement-direction.html
+$dokka.location:spaceEngineers.util.generator.maze/Direction/unaryMinus/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/-direction/unary-minus.html
+$dokka.location:spaceEngineers.util.generator.maze/Direction/vector/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/-direction/vector.html
+$dokka.location:spaceEngineers.util.generator.maze/Maze.Cell.END///PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/-maze/-cell/-e-n-d/index.html
+$dokka.location:spaceEngineers.util.generator.maze/Maze.Cell.OUT_OF_BOUNDS///PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/-maze/-cell/-o-u-t_-o-f_-b-o-u-n-d-s/index.html
+$dokka.location:spaceEngineers.util.generator.maze/Maze.Cell.SPACE///PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/-maze/-cell/-s-p-a-c-e/index.html
+$dokka.location:spaceEngineers.util.generator.maze/Maze.Cell.START///PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/-maze/-cell/-s-t-a-r-t/index.html
+$dokka.location:spaceEngineers.util.generator.maze/Maze.Cell.WALL///PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/-maze/-cell/-w-a-l-l/index.html
+$dokka.location:spaceEngineers.util.generator.maze/Maze.Cell///PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/-maze/-cell/index.html
+$dokka.location:spaceEngineers.util.generator.maze/Maze.Cell/canMove/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/-maze/-cell/can-move.html
+$dokka.location:spaceEngineers.util.generator.maze/Maze///PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/-maze/index.html
+$dokka.location:spaceEngineers.util.generator.maze/Maze/Maze/#kotlin.Int#kotlin.Int#kotlin.Int#kotlin.random.Random/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/-maze/-maze.html
+$dokka.location:spaceEngineers.util.generator.maze/Maze/end/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/-maze/end.html
+$dokka.location:spaceEngineers.util.generator.maze/Maze/get/#kotlin.Int#kotlin.Int/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/-maze/get.html
+$dokka.location:spaceEngineers.util.generator.maze/Maze/height/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/-maze/height.html
+$dokka.location:spaceEngineers.util.generator.maze/Maze/rnd/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/-maze/rnd.html
+$dokka.location:spaceEngineers.util.generator.maze/Maze/start/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/-maze/start.html
+$dokka.location:spaceEngineers.util.generator.maze/Maze/startX/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/-maze/start-x.html
+$dokka.location:spaceEngineers.util.generator.maze/Maze/toString/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/-maze/to-string.html
+$dokka.location:spaceEngineers.util.generator.maze/Maze/width/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/-maze/width.html
+$dokka.location:spaceEngineers.util.generator.maze/MovementDirection.BACK///PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/-movement-direction/-b-a-c-k/index.html
+$dokka.location:spaceEngineers.util.generator.maze/MovementDirection.FORWARD///PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/-movement-direction/-f-o-r-w-a-r-d/index.html
+$dokka.location:spaceEngineers.util.generator.maze/MovementDirection.LEFT///PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/-movement-direction/-l-e-f-t/index.html
+$dokka.location:spaceEngineers.util.generator.maze/MovementDirection.RIGHT///PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/-movement-direction/-r-i-g-h-t/index.html
+$dokka.location:spaceEngineers.util.generator.maze/MovementDirection///PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/-movement-direction/index.html
+$dokka.location:spaceEngineers.util.generator.maze/MovementDirection/arrow/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/-movement-direction/arrow.html
+$dokka.location:spaceEngineers.util.generator.maze/Position///PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/-position/index.html
+$dokka.location:spaceEngineers.util.generator.maze/Position/Position/#kotlin.Int#kotlin.Int/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/-position/-position.html
+$dokka.location:spaceEngineers.util.generator.maze/Position/down/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/-position/down.html
+$dokka.location:spaceEngineers.util.generator.maze/Position/left/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/-position/left.html
+$dokka.location:spaceEngineers.util.generator.maze/Position/right/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/-position/right.html
+$dokka.location:spaceEngineers.util.generator.maze/Position/surround/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/-position/surround.html
+$dokka.location:spaceEngineers.util.generator.maze/Position/up/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/-position/up.html
+$dokka.location:spaceEngineers.util.generator.maze/Position/x/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/-position/x.html
+$dokka.location:spaceEngineers.util.generator.maze/Position/y/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/-position/y.html
 $dokka.location:spaceEngineers.util.generator////PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator/index.html
 $dokka.location:spaceEngineers.util.generator//blockDataClassesImports/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator/block-data-classes-imports.html
 $dokka.location:spaceEngineers.util.generator//camelCase/kotlin.String#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator/camel-case.html
@@ -2029,4 +2091,5 @@ spaceEngineers.screenshots
 spaceEngineers.transport
 spaceEngineers.transport.jsonrpc
 spaceEngineers.util.generator
+spaceEngineers.util.generator.maze
 
