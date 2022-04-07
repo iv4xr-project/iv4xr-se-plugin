@@ -231,7 +231,7 @@ $dokka.location:spaceEngineers.controller/InventoryTab/transferInventoryItem/#ko
 $dokka.location:spaceEngineers.controller/InventoryTab/withdraw/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-inventory-tab/withdraw.html
 $dokka.location:spaceEngineers.controller/Items///PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-items/index.html
 $dokka.location:spaceEngineers.controller/Items/equip/#spaceEngineers.model.ToolbarLocation/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-items/equip.html
-$dokka.location:spaceEngineers.controller/Items/setToolbarItem/#kotlin.String#spaceEngineers.model.ToolbarLocation/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-items/set-toolbar-item.html
+$dokka.location:spaceEngineers.controller/Items/setToolbarItem/#spaceEngineers.model.DefinitionId#spaceEngineers.model.ToolbarLocation/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-items/set-toolbar-item.html
 $dokka.location:spaceEngineers.controller/Items/toolbar/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-items/toolbar.html
 $dokka.location:spaceEngineers.controller/JoinGame///PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-join-game/index.html
 $dokka.location:spaceEngineers.controller/JoinGame/data/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-join-game/data.html
@@ -1454,8 +1454,11 @@ $dokka.location:spaceEngineers.model/DefinitionBase/public/#/PointingToDeclarati
 $dokka.location:spaceEngineers.model/DefinitionId.Companion///PointingToDeclaration/space-engineers-api/spaceEngineers.model/-definition-id/-companion/index.html
 $dokka.location:spaceEngineers.model/DefinitionId.Companion/CUBE_BLOCK/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-definition-id/-companion/-c-u-b-e_-b-l-o-c-k.html
 $dokka.location:spaceEngineers.model/DefinitionId.Companion/ID_PREFIX/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-definition-id/-companion/-i-d_-p-r-e-f-i-x.html
+$dokka.location:spaceEngineers.model/DefinitionId.Companion/PHYSICAL_GUN/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-definition-id/-companion/-p-h-y-s-i-c-a-l_-g-u-n.html
 $dokka.location:spaceEngineers.model/DefinitionId.Companion/create/#kotlin.String#kotlin.String/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-definition-id/-companion/create.html
 $dokka.location:spaceEngineers.model/DefinitionId.Companion/cubeBlock/#kotlin.String/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-definition-id/-companion/cube-block.html
+$dokka.location:spaceEngineers.model/DefinitionId.Companion/parse/#kotlin.String/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-definition-id/-companion/parse.html
+$dokka.location:spaceEngineers.model/DefinitionId.Companion/physicalGun/#kotlin.String/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-definition-id/-companion/physical-gun.html
 $dokka.location:spaceEngineers.model/DefinitionId///PointingToDeclaration/space-engineers-api/spaceEngineers.model/-definition-id/index.html
 $dokka.location:spaceEngineers.model/DefinitionId/DefinitionId/#kotlin.String#kotlin.String/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-definition-id/-definition-id.html
 $dokka.location:spaceEngineers.model/DefinitionId/id/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-definition-id/id.html
@@ -1736,11 +1739,10 @@ $dokka.location:spaceEngineers.model/Toolbar/items/#/PointingToDeclaration/spac
 $dokka.location:spaceEngineers.model/Toolbar/pageCount/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-toolbar/page-count.html
 $dokka.location:spaceEngineers.model/Toolbar/slotCount/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-toolbar/slot-count.html
 $dokka.location:spaceEngineers.model/ToolbarItem///PointingToDeclaration/space-engineers-api/spaceEngineers.model/-toolbar-item/index.html
-$dokka.location:spaceEngineers.model/ToolbarItem/ToolbarItem/#kotlin.String#kotlin.String#kotlin.String/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-toolbar-item/-toolbar-item.html
+$dokka.location:spaceEngineers.model/ToolbarItem/ToolbarItem/#spaceEngineers.model.DefinitionId#kotlin.String/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-toolbar-item/-toolbar-item.html
+$dokka.location:spaceEngineers.model/ToolbarItem/id/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-toolbar-item/id.html
 $dokka.location:spaceEngineers.model/ToolbarItem/name/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-toolbar-item/name.html
-$dokka.location:spaceEngineers.model/ToolbarItem/subType/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-toolbar-item/sub-type.html
 $dokka.location:spaceEngineers.model/ToolbarItem/toString/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-toolbar-item/to-string.html
-$dokka.location:spaceEngineers.model/ToolbarItem/type/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-toolbar-item/type.html
 $dokka.location:spaceEngineers.model/ToolbarLocation.Companion///PointingToDeclaration/space-engineers-api/spaceEngineers.model/-toolbar-location/-companion/index.html
 $dokka.location:spaceEngineers.model/ToolbarLocation.Companion/fromIndex/#kotlin.Int#kotlin.Int/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-toolbar-location/-companion/from-index.html
 $dokka.location:spaceEngineers.model/ToolbarLocation///PointingToDeclaration/space-engineers-api/spaceEngineers.model/-toolbar-location/index.html
