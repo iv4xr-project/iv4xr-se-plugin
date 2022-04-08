@@ -4,8 +4,9 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>Iv4xr.SePlugin</RootNamespace>
     <PackageVersion></PackageVersion>
-    <AssemblyVersion>0.7.0</AssemblyVersion>
+    <AssemblyVersion>0.7.1.*</AssemblyVersion>
     <FileVersion></FileVersion>
+    <Deterministic>false</Deterministic>
   </PropertyGroup>
 
   <ItemGroup>
