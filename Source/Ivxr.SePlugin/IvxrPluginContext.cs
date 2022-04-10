@@ -50,6 +50,7 @@ namespace Iv4xr.SePlugin
 
         public void InitSession()
         {
+            ContinuousMovementController.Reset();
         }
 
         public void BeforeSimulation()
