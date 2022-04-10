@@ -1,4 +1,4 @@
-package bdd
+package bdd.screenshots
 
 import spaceEngineers.model.Block
 

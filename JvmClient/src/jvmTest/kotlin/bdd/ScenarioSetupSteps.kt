@@ -85,6 +85,9 @@ class ScenarioSetupSteps : AbstractMultiplayerSteps() {
         } else {
             error("Unknown setup")
         }
+        observers {
+            observer.observeNewBlocks()
+        }
     }
 
     private fun createLobbyGame(scenarioId: String) = mainClient {
@@ -117,6 +120,7 @@ class ScenarioSetupSteps : AbstractMultiplayerSteps() {
 
     private fun connectClientsDirectly() {
         clients {
+            //TODO: if not in main menu, exit to it rather than failing
             val process = cm.admin.gameProcess
             screens.mainMenu.joinGame()
             smallPause()

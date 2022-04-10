@@ -2,6 +2,7 @@ package spaceEngineers.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import spaceEngineers.model.extensions.sum
 import kotlin.math.abs
 import kotlin.math.sqrt
 
@@ -70,6 +71,25 @@ data class Vec3F(
     }
 
     companion object {
+
+        fun directionFromString(value: String): Vec3F {
+            return when (value) {
+                "forward" -> FORWARD
+                "backward" -> BACKWARD
+                "left" -> LEFT
+                "right" -> RIGHT
+                "up" -> UP
+                "down" -> DOWN
+                else -> {
+                    if (value.contains("-")) {
+                        value.split("-").map(::directionFromString).sum().normalized()
+                    } else {
+                        error("No vector defined for value $value")
+                    }
+                }
+            }
+        }
+
         val UNIT_X = Vec3F(1, 0, 0)
         val UNIT_Y = Vec3F(0, 1, 0)
         val UNIT_Z = Vec3F(0, 0, 1)

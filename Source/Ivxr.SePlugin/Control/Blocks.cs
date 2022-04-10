@@ -42,6 +42,7 @@ namespace Iv4xr.SePlugin.Control
         public string PlaceAt(DefinitionId blockDefinitionId, PlainVec3D position, PlainVec3D orientationForward,
             PlainVec3D orientationUp)
         {
+            Definitions.CheckDefinitionIdExists(blockDefinitionId.ToMyDefinitionId());
             return m_blockPlacer.PlaceSingleBlock(m_session.CurrentCharacterId, blockDefinitionId, position.ToVector3(), orientationForward.ToVector3(),
                 orientationUp.ToVector3()).BlockId().ToString();
         }
@@ -49,6 +50,7 @@ namespace Iv4xr.SePlugin.Control
         public string PlaceInGrid(DefinitionId blockDefinitionId, string gridId, PlainVec3I minPosition, PlainVec3I orientationForward,
             PlainVec3I orientationUp)
         {
+            Definitions.CheckDefinitionIdExists(blockDefinitionId.ToMyDefinitionId());
             //var playerId = m_session.Character.GetPlayerId();
             var grid = m_observer.GetGridById(gridId);
             return m_blockPlacer.PlaceInGrid(
