@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Iv4xr.PluginLib;
 using Iv4xr.PluginLib.Control;
-using Iv4xr.SpaceEngineers.WorldModel;
 using Sandbox.Game.Entities;
 
 namespace Iv4xr.SePlugin.Control
@@ -31,6 +31,11 @@ namespace Iv4xr.SePlugin.Control
             return m_continuousMovementContextDictionary.ContainsKey(m_session.CurrentCharacterId)
                     ? m_continuousMovementContextDictionary[m_session.CurrentCharacterId]
                     : null;
+        }
+        
+        public void Reset()
+        {
+            m_continuousMovementContextDictionary.Values.ForEach(ctx => ctx.Reset());
         }
 
         public void Tick()

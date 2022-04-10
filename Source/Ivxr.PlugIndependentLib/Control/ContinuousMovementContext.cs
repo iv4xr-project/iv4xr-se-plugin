@@ -18,5 +18,12 @@ namespace Iv4xr.PluginLib.Control
         {
             return (MoveVector.Length() > 0 || RotationVector.Length() > 0) && TicksLeft > 0;
         }
+
+        public void Reset()
+        {
+            TicksLeft = 0;
+            MoveVector = PlainVec3DConst.Zero;
+            RotationVector = PlainVec2FConst.Zero;
+        }
     }
 }
