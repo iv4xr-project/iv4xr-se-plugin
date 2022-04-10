@@ -1,19 +1,16 @@
 Feature: C197588 Jetpack persists through entering/exiting cockpit blocks
 
   Background:
-    Given Toolbar has mapping:
-      | slot | page | blockType                 |
-      | 2    | 0    | LargeBlockCockpitSeat     |
+    Given Scenario used is "simple-place-grind-torch-with-tools-1".
 
   Scenario: C197588 Jetpack persists through entering/exiting cockpit blocks
-    Given I load scenario "simple-place-grind-torch-with-tools".
     When Character selects block "LargeBlockCockpitSeat" and places it.
-    When Character moves forward for 16 units.
+    When Character moves forward for 15 units.
     And jetpack is off.
     And Character turns on jetpack.
     Then jetpack is on.
     And Character uses.
-    And Character waits 1 seconds.
+    And Test waits for 1 seconds.
     And Character uses.
     Then jetpack is on.
 

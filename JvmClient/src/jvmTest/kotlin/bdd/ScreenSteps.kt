@@ -14,8 +14,6 @@ import kotlin.test.assertTrue
 
 class ScreenSteps : AbstractMultiplayerSteps() {
 
-
-
     val filesToCopy = listOf(
         "AustinHarris.JsonRpc.dll",
         "ImpromptuInterface.dll",
@@ -117,19 +115,6 @@ class ScreenSteps : AbstractMultiplayerSteps() {
         }
     }
 
-    @Then("Character inventory does not contain ingot {string} anymore.")
-    fun character_inventory_does_not_contain_anymore(type: String) = observers {
-        val definition = DefinitionId.create("Ingot", type)
-        assertTrue(observer.observe().inventory.items.none { it.id == definition })
-    }
-
-    @Then("There is floating ingot {string} in space around.")
-    fun there_is_floating_in_space_around(type: String) = observers {
-        val definition = DefinitionId.create("Ingot", type)
-        assertTrue(observer.observeFloatingObjects().any { it.itemDefinition.definitionId == definition })
-    }
-
-
     @Given("Character inventory contains ore {string}.")
     fun character_inventory_contains_ore(type: String) = mainClient {
         if (screens.focusedScreen() != "TerminalScreen") {
@@ -151,28 +136,6 @@ class ScreenSteps : AbstractMultiplayerSteps() {
             left.selectItem(index)
             dropSelected()
         }
-    }
-
-    @Then("Character inventory does not contain ore {string} anymore.")
-    fun character_inventory_does_not_contain_ore_anymore(type: String) = observers {
-        val definition = DefinitionId.create("Ore", type)
-        assertTrue(observer.observe().inventory.items.none { it.id == definition })
-    }
-
-    @Then("There is floating ore {string} in space around.")
-    fun there_is_floating_ore_in_space_around(type: String) = observers {
-        val definition = DefinitionId.create("Ore", type)
-        assertTrue(observer.observeFloatingObjects().any { it.itemDefinition.definitionId == definition })
-    }
-
-    @Given("Character inventory contains no components.")
-    fun character_inventory_contains_no_components() = observers {
-        assertTrue(observer.observe().inventory.items.none { it.id.id == "MyObjectBuilder_Component" })
-    }
-
-    @Given("Character stands in front of block {string}.")
-    fun character_stands_in_front_of_block(type: String) = observers {
-        assertEquals(observer.observe().targetBlock?.definitionId?.type, type)
     }
 
     @When("Character grinds down the block in front completely.")
@@ -226,25 +189,6 @@ class ScreenSteps : AbstractMultiplayerSteps() {
         items.equip(ToolbarLocation(9, 0))
     }
 
-    @Then("Character inventory contains components:")
-    fun character_inventory_contains_components(map: List<Map<String, String>>) = observers {
-        val items = observer.observe().inventory.items
-        map.forEach { row ->
-            val definitionId = DefinitionId.create("Component", row["component"]!!)
-            val item = items.find { it.id == definitionId }
-            assertNotNull(
-                item
-            ) {
-                "Item not found: $definitionId"
-            }
-            assertEquals(
-                item.amount,
-                row["amount"]?.toInt(),
-                "Amount unexpected for $definitionId: ${item.amount} vs ${row["amount"]?.toInt()}"
-            )
-        }
-    }
-
     @Given("Character opens terminal.")
     fun character_opens_terminal() = mainClient {
         character.showTerminal()
@@ -256,18 +200,6 @@ class ScreenSteps : AbstractMultiplayerSteps() {
         val block = observer.observeBlocks().allBlocks.first { it is TerminalBlock && it.definitionId == assemblerId }
         admin.character.showTerminal(block.id)
         screens.terminal.selectTab(2)
-    }
-
-    @When("Character equips {string}.")
-    fun character_equips(tool: String) = mainClient {
-        val toolbarLocation = items.toolbar().findLocation(tool) ?: error("Item $tool not found in the toolbar!")
-        items.equip(toolbarLocation)
-        pause()
-    }
-
-    @Given("Test waits for {int} seconds.")
-    fun test_waits_for_seconds(seconds: Int) {
-        sleep(seconds * 1000L)
     }
 
 }

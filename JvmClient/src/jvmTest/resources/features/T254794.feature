@@ -2,7 +2,6 @@ Feature: T254794 Components can be removed from a stockpile of currently built b
 
   Background:
     Given Scenario used is "automation-se-in-front-of-survival-kit-2".
-    #And Test waits for 10000000 seconds.
 
   Scenario: T254794 Components can be removed from a stockpile of currently built block (using grinder)
     Given Character inventory contains no components.

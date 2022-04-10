@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Linq;
-using Iv4xr.PluginLib.Control;
 using Iv4xr.SpaceEngineers;
 using Iv4xr.SpaceEngineers.WorldModel;
 using Sandbox.Definitions;
-using Sandbox.Game.Entities;
 using Sandbox.Game.Screens.Helpers;
-using Sandbox.Game.World;
 using VRage.Game;
 using VRage.ObjectBuilders;
 
@@ -72,13 +69,15 @@ namespace Iv4xr.SePlugin.Control
 
         public void SetToolbarItem(DefinitionId definitionId, ToolbarLocation toolbarLocation)
         {
+            var myDefinitionId = definitionId.ToMyDefinitionId();
+            Definitions.CheckDefinitionIdExists(myDefinitionId);
             if (IsWeapon(definitionId.Type))
             {
-                SetToolbarItem<MyObjectBuilder_ToolbarItemWeapon>(definitionId.ToMyDefinitionId(), toolbarLocation);
+                SetToolbarItem<MyObjectBuilder_ToolbarItemWeapon>(myDefinitionId, toolbarLocation);
             }
             else
             {
-                SetToolbarItem<MyObjectBuilder_ToolbarItemCubeBlock>(definitionId.ToMyDefinitionId(), toolbarLocation);
+                SetToolbarItem<MyObjectBuilder_ToolbarItemCubeBlock>(myDefinitionId, toolbarLocation);
             }
         }
 

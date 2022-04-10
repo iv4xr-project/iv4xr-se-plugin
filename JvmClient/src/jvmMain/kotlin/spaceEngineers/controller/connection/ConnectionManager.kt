@@ -1,8 +1,6 @@
 package spaceEngineers.controller.connection
 
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.*
 import spaceEngineers.controller.*
 import spaceEngineers.transport.SocketReaderWriter
 import spaceEngineers.transport.closeIfCloseable
@@ -25,7 +23,7 @@ class ConnectionManager(
 
     val admin by lazy { connectionsById.getValue(connectionSetup.admin.createId()) }
 
-    val characterId by lazy {
+    val mainClientCharacterId by lazy {
         mainClient.spaceEngineers.observer.observe().id
     }
 
@@ -43,39 +41,30 @@ class ConnectionManager(
         connectionSetup.games.map { connectionsById.getValue(it.createId()) }
     }
 
-    suspend fun mainClient(block: suspend ContextControllerWrapper.() -> Unit) {
-        block(mainClient.spaceEngineers)
+    suspend fun <T> mainClient(block: suspend ContextControllerWrapper.() -> T): T {
+        return block(mainClient.spaceEngineers)
     }
 
     suspend fun admin(block: suspend ContextControllerWrapper.() -> Unit) {
         block(admin.spaceEngineers)
     }
 
-    suspend fun clients(block: suspend ContextControllerWrapper.() -> Unit) {
+    private suspend fun List<ProcessWithConnection>.parallelEach(block: suspend ContextControllerWrapper.() -> Unit) =
         coroutineScope {
-            clients.map {
+            this@parallelEach.map {
                 async {
                     block(it.spaceEngineers)
                 }
             }.awaitAll()
         }
-    }
 
-    suspend fun games(block: suspend ContextControllerWrapper.() -> Unit) {
-        coroutineScope {
-            games.map {
-                async {
-                    block(it.spaceEngineers)
-                }
-            }.awaitAll()
-        }
-    }
+    suspend fun clients(block: suspend ContextControllerWrapper.() -> Unit) = clients.parallelEach(block)
 
-    suspend fun observers(block: suspend ContextControllerWrapper.() -> Unit) {
-        observers.forEach {
-            it.spaceEngineers.admin.character.switch(characterId)
-            block(it.spaceEngineers)
-        }
+    suspend fun games(block: suspend ContextControllerWrapper.() -> Unit) = games.parallelEach(block)
+
+    suspend fun observers(block: suspend ContextControllerWrapper.() -> Unit) = observers.parallelEach {
+        spaceEngineers.admin.character.switch(mainClientCharacterId)
+        block(this)
     }
 
     private fun createConnection(

@@ -2,6 +2,7 @@ package bdd
 
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
+import spaceEngineers.controller.ContextControllerWrapper
 import spaceEngineers.controller.SpaceEngineers
 import spaceEngineers.controller.connection.ConnectionManager
 
@@ -28,26 +29,23 @@ abstract class AbstractMultiplayerSteps(
         delay(15_000)
     }
 
-    fun observers(block: suspend SpaceEngineers.() -> Unit) = runBlocking {
-        smallPause()
+    fun observers(block: suspend ContextControllerWrapper.() -> Unit) = runBlocking {
         cm.observers(block)
-        smallPause()
     }
 
-    fun mainClient(block: suspend SpaceEngineers.() -> Unit) = runBlocking {
+    fun <T> mainClient(block: suspend ContextControllerWrapper.() -> T): T = runBlocking {
         cm.mainClient(block)
-        smallPause()
     }
 
-    fun clients(block: suspend SpaceEngineers.() -> Unit) = runBlocking {
+    fun clients(block: suspend ContextControllerWrapper.() -> Unit) = runBlocking {
         cm.clients(block)
     }
 
-    fun games(block: suspend SpaceEngineers.() -> Unit) = runBlocking {
+    fun games(block: suspend ContextControllerWrapper.() -> Unit) = runBlocking {
         cm.games(block)
     }
 
-    fun admin(block: suspend SpaceEngineers.() -> Unit) = runBlocking {
+    fun admin(block: suspend ContextControllerWrapper.() -> Unit) = runBlocking {
         cm.admin(block)
     }
 

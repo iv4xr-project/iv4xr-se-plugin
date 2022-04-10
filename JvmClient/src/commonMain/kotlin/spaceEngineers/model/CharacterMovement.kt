@@ -20,6 +20,12 @@ value class CharacterMovement(val value: UShort) {
     val rotation: UShort
         get() = value and rotationMask.toUShort()
 
+    val isCrouching: Boolean
+        get() = (mode == crouching.toUShort())
+
+    val isStanding: Boolean
+        get() = (mode == standing.toUShort())
+
     companion object {
         const val movementTypeMask      = 0x000f // 4 bits (0 - 3) for movement type should be enough even for the future
         const val movementDirectionMask = 0x03f0 // 6 bits (4 - 9)

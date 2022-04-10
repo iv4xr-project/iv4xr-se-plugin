@@ -19,6 +19,8 @@ data class DefinitionId(
         const val ID_PREFIX = "MyObjectBuilder_"
         const val CUBE_BLOCK = "CubeBlock"
         const val PHYSICAL_GUN = "PhysicalGunObject"
+        const val ORE = "Ore"
+        const val INGOT = "Ingot"
 
         fun cubeBlock(type: String): DefinitionId {
             return create(CUBE_BLOCK, type)
@@ -35,6 +37,14 @@ data class DefinitionId(
             val parts = definition.split("/")
             check(parts.size == 2)
             return create(parts.first(), parts.last())
+        }
+
+        fun ore(type: String): DefinitionId {
+            return create(ORE, type)
+        }
+
+        fun ingot(type: String): DefinitionId {
+            return create(INGOT, type)
         }
 
         fun create(id: String, type: String): DefinitionId {
