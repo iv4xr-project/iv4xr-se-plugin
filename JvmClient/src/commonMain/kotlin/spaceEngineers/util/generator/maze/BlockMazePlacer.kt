@@ -45,6 +45,9 @@ class BlockMazePlacer(
     }
 
     fun generateAsSingleGrid() {
+        spaceEngineers.admin.character.teleport(
+            Vec3F(10,  10, 10)
+        )
         val z = 0
         var gridId: String? = null
         for (x in 0..maze.width) {
