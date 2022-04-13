@@ -47,6 +47,8 @@ interface Character {
 
     fun turnOnJetpack(): CharacterObservation
     fun turnOffJetpack(): CharacterObservation
+    fun turnOnDampeners(): CharacterObservation
+    fun turnOffDampeners(): CharacterObservation
     fun switchHelmet(): CharacterObservation
 
     fun beginUsingTool()

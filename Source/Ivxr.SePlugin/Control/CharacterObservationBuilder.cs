@@ -41,6 +41,7 @@ namespace Iv4xr.SePlugin.Control
                     OrientationUp = MySector.MainCamera.UpVector.ToPlain(),
                 },
                 JetpackRunning = character.JetpackComp.TurnedOn,
+                DampenersOn = character.JetpackComp.DampenersTurnedOn,
                 HelmetEnabled = character.OxygenComponent.HelmetEnabled,
                 Health = character.StatComp.HealthRatio,
                 Oxygen = character.GetSuitGasFillLevel(MyCharacterOxygenComponent.OxygenId),
