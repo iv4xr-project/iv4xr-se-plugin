@@ -52,10 +52,9 @@ namespace Iv4xr.SePlugin.Control
 
         private MyCharacter Character => m_gameSession.Character;
 
-        internal Vector3D CurrentPlayerPosition()
-        {
-            return Character.PositionComp.GetPosition();
-        }
+        internal Vector3D CurrentPlayerPosition() => Character.PositionComp.GetPosition();
+
+        internal Vector3D CurrentPlayerOrientationUp() => Character.PositionComp.GetOrientation().Up;
 
         public CharacterObservation GetCharacterObservation()
         {
@@ -151,6 +150,11 @@ namespace Iv4xr.SePlugin.Control
             return EnumerateSurroundingEntities(sphere)
                     .OfType<MyCubeGrid>()
                     .Select(grid => m_entityBuilder.CreateSeGrid(grid, sphere, mode)).ToList();
+        }
+
+        internal CubeGrid ConvertToSeGrid(MyCubeGrid sourceGrid, BoundingSphereD sphere)
+        {
+            return m_entityBuilder.CreateSeGrid(sourceGrid, sphere, ObservationMode.BLOCKS);
         }
 
         public IEnumerable<MyCubeGrid> Grids()
