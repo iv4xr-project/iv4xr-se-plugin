@@ -32,6 +32,19 @@ namespace Iv4xr.SePlugin.Control
             Log = log;
         }
 
+        public CharacterObservation TurnOnDampeners()
+        {
+            Character.JetpackComp.EnableDampeners(true);
+            return m_observer.Observe();
+        }
+        
+        public CharacterObservation TurnOffDampeners()
+        {
+            Character.JetpackComp.EnableDampeners(false);
+            return m_observer.Observe();
+        }
+
+
         public CharacterObservation TurnOnJetpack()
         {
             Character.JetpackComp.TurnOnJetpack(true);

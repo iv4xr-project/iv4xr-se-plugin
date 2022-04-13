@@ -19,6 +19,8 @@ data class CharacterObservation(
     val extent: Vec3F,
     @SerialName("JetpackRunning")
     val jetpackRunning: Boolean,
+    @SerialName("DampenersOn")
+    val dampenersOn: Boolean = false,
     @SerialName("HelmetEnabled")
     val helmetEnabled: Boolean = true,
     @SerialName("Health")

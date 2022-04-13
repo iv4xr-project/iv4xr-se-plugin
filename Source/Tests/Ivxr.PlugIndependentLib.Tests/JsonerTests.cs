@@ -42,7 +42,8 @@ namespace Ivxr.PlugIndependentLib.Tests
 
             Assert.Equal("{\"Velocity\":{\"X\":0.0,\"Y\":0.0,\"Z\":0.0}," +
                          "\"Extent\":{\"X\":0.0,\"Y\":0.0,\"Z\":0.0}," +
-                         "\"Camera\":null,\"JetpackRunning\":false,\"HelmetEnabled\":true,\"Health\":0.5,\"Oxygen\":0.0," +
+                         "\"Camera\":null,\"JetpackRunning\":false,\"DampenersOn\":false," +
+                         "\"HelmetEnabled\":true,\"Health\":0.5,\"Oxygen\":0.0," +
                          "\"Hydrogen\":0.0,\"SuitEnergy\":0.0," +
                          "\"HeadLocalXAngle\":0.0,\"HeadLocalYAngle\":0.0,\"TargetBlock\":null,\"TargetUseObject\":null," +
                          "\"Movement\":0,\"Inventory\":null,\"BootsState\":0,\"DisplayName\":\"Name\",\"Id\":\"Foo\"," +
@@ -59,7 +60,7 @@ namespace Ivxr.PlugIndependentLib.Tests
             const string configJson = "{\"JsonRpcPort\":3333}";
 
             var config = m_jsoner.ToObject<PluginConfig>(configJson);
-            
+
             Assert.Equal(PluginConfigDefaults.RADIUS, config.ObservationRadius);
         }
     }

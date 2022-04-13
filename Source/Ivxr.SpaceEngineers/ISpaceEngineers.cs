@@ -70,6 +70,8 @@ namespace Iv4xr.SpaceEngineers
         CharacterObservation MoveAndRotate(PlainVec3D movement, PlainVec2F rotation3, float roll = 0, int ticks = 1);
         CharacterObservation TurnOnJetpack();
         CharacterObservation TurnOffJetpack();
+        CharacterObservation TurnOnDampeners();
+        CharacterObservation TurnOffDampeners();
         CharacterObservation SwitchHelmet();
         void BeginUsingTool();
         void EndUsingTool();

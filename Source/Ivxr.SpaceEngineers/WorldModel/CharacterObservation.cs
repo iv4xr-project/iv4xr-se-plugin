@@ -10,6 +10,7 @@ namespace Iv4xr.SpaceEngineers.WorldModel
         
         public Pose Camera;
         public bool JetpackRunning;
+        public bool DampenersOn;
         public bool HelmetEnabled;
         public float Health;
         public float Oxygen;
