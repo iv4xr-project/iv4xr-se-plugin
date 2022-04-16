@@ -179,9 +179,23 @@ namespace Ivxr.SeGameLib.Tests
             var slimGraph = fatGraph.ToNavGraph();
             
             Assert.Equal(fatGraph.Nodes.Count, slimGraph.Nodes.Count);
-            
+
             var edges = fatGraph.Nodes.Select(n => n.Neighbours.Count).Sum() / 2;
             Assert.Equal(edges, slimGraph.Edges.Count);
+        }
+
+        [Fact]
+        public void GuessesWhichSideIsUp()
+        {
+            Assert.True(NavGraphEditor.GuessWhichSideIsUp(new Vector3D(1.012E-06, 5.182E-05, 0.999))
+                        == Vector3I.Backward);
+            
+            Assert.True(NavGraphEditor.GuessWhichSideIsUp(new Vector3D(-1.012E-06, -5.182E-05, -0.999))
+                        == Vector3I.Forward);
+            
+            Assert.True(NavGraphEditor.GuessWhichSideIsUp(new Vector3D(-0.2, 0.7, 0.1)) == Vector3I.Up);
+            
+            Assert.True(NavGraphEditor.GuessWhichSideIsUp(new Vector3D(-10.2, 5.7, 0)) == Vector3I.Left);
         }
     }
 }

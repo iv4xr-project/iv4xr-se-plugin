@@ -22,10 +22,10 @@ fun main(args: Array<String>) {
     spaceEngineers.cleanBlocks()
 
     val placer = BlockMazePlacer(
-        maze = Maze(25, 25),
+        maze = Maze(12, 25),
         spaceEngineers = spaceEngineers,
         bottomBlockDefinitionId = DefinitionId.cubeBlock("LargeBlockArmorBlock"),
         wallBlockDefinitionId = DefinitionId.cubeBlock("LargeHeavyBlockArmorBlock"),
     )
-    placer.generate()
+    placer.generateAsSingleGrid()
 }
