@@ -74,8 +74,8 @@ class ScenarioSetupSteps : AbstractMultiplayerSteps() {
     @Given("Scenario used is {string}.")
     fun scenario_used_is(scenarioId: String) = runBlocking {
         if (cm.connectionSetup.offlineSinglePlayer) {
-            loadScenarioSinglePlayer(scenarioId)
-            //createLobbyGame(scenarioId)
+            //loadScenarioSinglePlayer(scenarioId)
+            createLobbyGame(scenarioId)
         } else if (cm.connectionSetup.admin.type == AppType.GAME) {
             createLobbyGame(scenarioId)
             connectToFirstFriendlyGame()
@@ -95,6 +95,9 @@ class ScenarioSetupSteps : AbstractMultiplayerSteps() {
         pause()
         val data = screens.loadGame.data()
         val index = data.files.indexOfFirst { it.fullName.contains(scenarioId) }
+        check(index > -1) {
+            "Scenario $scenarioId not found in the list, found: ${data.files.map { it.name }}"
+        }
         screens.loadGame.doubleClickWorld(index)
         bigPause()
         screens.waitUntilTheGameLoaded()
@@ -103,12 +106,12 @@ class ScenarioSetupSteps : AbstractMultiplayerSteps() {
     private fun connectToFirstFriendlyGame() {
         clients {
             screens.mainMenu.joinGame()
-            smallPause()
+            pause()
             screens.joinGame.selectTab(5)
-            smallPause()
+            pause()
             screens.joinGame.selectGame(0)
 
-            smallPause()
+            pause()
             screens.joinGame.joinWorld()
             smallPause()
             screens.waitUntilTheGameLoaded()
@@ -116,6 +119,7 @@ class ScenarioSetupSteps : AbstractMultiplayerSteps() {
         runBlocking {
             pause()
         }
+        ensureCharacterExists()
     }
 
     private fun connectClientsDirectly() {
@@ -133,7 +137,20 @@ class ScenarioSetupSteps : AbstractMultiplayerSteps() {
         }
         runBlocking {
             bigPause()
-            bigPause()
+        }
+        ensureCharacterExists()
+    }
+
+    fun ensureCharacterExists() = clients {
+        if (screens.focusedScreen() == "Medicals") {
+            try {
+                screens.medicals.chooseFaction(0)
+            } catch (e: Exception) {
+
+            }
+            pause()
+            screens.medicals.respawn(0)
+            pause()
         }
     }
 
@@ -153,7 +170,7 @@ class ScenarioSetupSteps : AbstractMultiplayerSteps() {
         val executable = File("${wd}/SpaceEngineersDedicated.exe")
         assertTrue(executable.exists())
         val cmd = executable.absolutePath
-        val args = "-session:${scenarioPath} -console -start"
+        val args = "-session:${scenarioPath} -plugin Ivxr.SePlugin.dll -console -start"
         val fullArgs = (listOf(cmd) + args.split(" ")).toTypedArray()
         var gameStarted = false
         thread(start = true) {
