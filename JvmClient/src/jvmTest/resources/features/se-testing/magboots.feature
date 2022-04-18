@@ -1,7 +1,7 @@
 Feature: Magboots
 
   Background:
-    Given Scenario used is "simple-place-grind-torch-with-tools-for-walking".
+    Given Scenario used is "simple-place-grind-torch-with-tools".
 
   Scenario: C197556 Boots can become yellow when in green state by initiating jet-pack
     Given Character boots are green after 100ms.
