@@ -2,7 +2,7 @@ Feature: Character movement
 
 
   Scenario: C284506 Character can fall when in gravity.
-    Given Scenario used is "alient-planet-outside-jetpack-on-floating".
+    Given Scenario used is "moon-base-flying".
     And jetpack is on.
     And Character speed is 0 m/s.
     When Character turns off jetpack.
@@ -11,9 +11,9 @@ Feature: Character movement
 
 
   Scenario Outline: C284506 Character can move
-    Given Scenario used is "simple-place-grind-torch-with-tools-for-walking".
+    Given Scenario used is "walking-platform".
     When Character moves "<direction>" for 600 ticks using "<movement>".
-    Then Character speed is <speed> m/s after 3000 milliseconds.
+    Then Character speed is <speed> m/s after 2000 milliseconds.
     Examples:
       | direction    | movement | speed |
       | forward-left | crouch   | 2     |
@@ -21,7 +21,7 @@ Feature: Character movement
       | forward-left | run      | 6     |
       | forward-left | sprint   | 6     |
       | forward      | crouch   | 2     |
-      | forward      | walk     | 3     |
+      | forward      | walk     | 4     |
       | forward      | run      | 6     |
       | forward      | sprint   | 10    |
       | left         | crouch   | 2     |
