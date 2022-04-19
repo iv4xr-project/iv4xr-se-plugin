@@ -26,9 +26,7 @@ Feature: Integration demo
 
     Examples:
       | blockType                 | integrity |
-      | LargeBlockGyro            | 63105.0   |
-      | LargeBlockSmallGenerator  | 12065.0   |
-      | LargeBlockCockpitSeat     | 7380.0    |
+
       | LargeHeavyBlockArmorBlock | 16500.0   |
 
 
