@@ -22,6 +22,7 @@ import kotlin.reflect.typeOf
 val json = Json {
     encodeDefaults = true
     ignoreUnknownKeys = true
+    allowSpecialFloatingPointValues = true
     serializersModule = SerializersModule {
         polymorphic(Block::class) {
             default { BlockSerializer }
