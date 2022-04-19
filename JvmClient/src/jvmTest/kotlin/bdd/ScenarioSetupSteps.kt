@@ -90,7 +90,7 @@ class ScenarioSetupSteps : AbstractMultiplayerSteps() {
         }
     }
 
-    private fun createLobbyGame(scenarioId: String) = mainClient {
+    private fun createLobbyGame(scenarioId: String) = admin {
         screens.mainMenu.loadGame()
         pause()
         val data = screens.loadGame.data()
