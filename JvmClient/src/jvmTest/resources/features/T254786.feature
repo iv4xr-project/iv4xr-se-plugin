@@ -11,7 +11,7 @@ Feature: T254786 Refined ingots can be thrown out of inventory and picked up aga
     Examples:
       | ingot  |
       | Iron   |
-      #| Nickel |
-      #| Stone  |
+      | Nickel |
+      | Stone  |
 
 
