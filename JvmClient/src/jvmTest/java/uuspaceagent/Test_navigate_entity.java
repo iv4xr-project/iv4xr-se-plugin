@@ -55,7 +55,7 @@ public class Test_navigate_entity {
 
         int turn= 0;
         while(G.getStatus().inProgress()) {
-            console(">> [" + turn + "] " + showWOMAgent(state.wom));
+            //console(">> [" + turn + "] " + showWOMAgent(state.wom));
             agent.update();
             //Thread.sleep(50);
             turn++;

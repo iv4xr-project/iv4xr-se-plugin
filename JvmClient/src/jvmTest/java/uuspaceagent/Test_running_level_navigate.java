@@ -7,10 +7,7 @@ import eu.iv4xr.framework.spatial.Vec3;
 import nl.uu.cs.aplib.mainConcepts.GoalStructure;
 import nl.uu.cs.aplib.utils.Pair;
 import org.junit.jupiter.api.Test;
-import spaceEngineers.controller.ContextControllerWrapper;
-import spaceEngineers.controller.JsonRpcSpaceEngineers;
-import spaceEngineers.controller.JsonRpcSpaceEngineersBuilder;
-import spaceEngineers.controller.SpaceEngineersTestContext;
+import spaceEngineers.controller.*;
 import spaceEngineers.transport.SocketReaderWriterKt;
 
 import java.util.Collection;
@@ -33,12 +30,12 @@ public class Test_running_level_navigate {
         console("*** start test...");
 
         var agentId = "se0";
-        JsonRpcSpaceEngineers seRpcController = JsonRpcSpaceEngineersBuilder.Companion.localhost(agentId);
+        SpaceEngineers seRpcController = new SpaceEngineersJavaProxyBuilder().localhost(agentId);
 
         var context = new SpaceEngineersTestContext();
         var controllerWrapper = new ContextControllerWrapper(seRpcController, context);
         // WorldId is empty because we are going to connect to a running level, not load a new one
-        var theEnv = new SeEnvironment( "", controllerWrapper, context);
+        var theEnv = new SeEnvironment( "", controllerWrapper);
 
         console("** Creating a test-agent");
         UUSeAgentState state = new UUSeAgentState(agentId);

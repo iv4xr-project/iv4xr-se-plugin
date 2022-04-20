@@ -3,9 +3,7 @@ package uuspaceagent;
 import environments.SeEnvironment;
 import eu.iv4xr.framework.mainConcepts.TestAgent;
 import nl.uu.cs.aplib.utils.Pair;
-import spaceEngineers.controller.ContextControllerWrapper;
-import spaceEngineers.controller.JsonRpcSpaceEngineersBuilder;
-import spaceEngineers.controller.SpaceEngineersTestContext;
+import spaceEngineers.controller.*;
 import spaceEngineers.model.ToolbarLocation;
 
 public class TestUtils {
@@ -25,13 +23,12 @@ public class TestUtils {
         context.getBlockTypeToToolbarLocation().put(blockType, new ToolbarLocation(1, 0))  ;
 
         var controllerWrapper = new ContextControllerWrapper(
-                //JsonRpcCharacterController.Companion.localhost(agentId),
-                JsonRpcSpaceEngineersBuilder.Companion.localhost(agentId),
+                new SpaceEngineersJavaProxyBuilder().localhost(agentId),
                 context
         ) ;
 
         console("** Loading the world " + worldName) ;
-        var theEnv = new SeEnvironment( worldName, controllerWrapper, context ) ;
+        var theEnv = new SeEnvironment( worldName, controllerWrapper ) ;
         theEnv.loadWorld() ;
 
         var myAgentState = new UUSeAgentState(agentId) ;

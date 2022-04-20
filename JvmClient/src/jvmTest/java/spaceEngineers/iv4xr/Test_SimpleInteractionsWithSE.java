@@ -14,8 +14,7 @@ import static uuspaceagent.TestUtils.console;
 
 import org.junit.jupiter.api.Test;
 import spaceEngineers.controller.ContextControllerWrapper;
-//import spaceEngineers.controller.JsonRpcCharacterController;
-import spaceEngineers.controller.JsonRpcSpaceEngineersBuilder;
+import spaceEngineers.controller.SpaceEngineersJavaProxyBuilder;
 import spaceEngineers.controller.SpaceEngineersTestContext;
 import spaceEngineers.iv4xr.goal.TacticLib;
 import spaceEngineers.model.*;
@@ -31,14 +30,11 @@ public class Test_SimpleInteractionsWithSE {
         context.getBlockTypeToToolbarLocation().put(blockType, new ToolbarLocation(1, 0))  ;
 
         var controllerWrapper = new ContextControllerWrapper(
-                //JsonRpcCharacterController.Companion.localhost(agentId),
-                JsonRpcSpaceEngineersBuilder.Companion.localhost(agentId),
+                new SpaceEngineersJavaProxyBuilder().localhost(agentId),
                 context
         ) ;
 
-        var theEnv = new SeEnvironment("iv4xr-uu-test1",
-                controllerWrapper,
-                context ) ;
+        var theEnv = new SeEnvironment("iv4xr-uu-test1", controllerWrapper) ;
         theEnv.loadWorld() ;
         theEnv.observeForNewBlocks() ;
 
@@ -89,14 +85,12 @@ public class Test_SimpleInteractionsWithSE {
         context.getBlockTypeToToolbarLocation().put(blockType, new ToolbarLocation(1, 0))  ;
 
         var controllerWrapper = new ContextControllerWrapper(
-                //JsonRpcCharacterController.Companion.localhost(agentId),
-                JsonRpcSpaceEngineersBuilder.Companion.localhost(agentId),
+                new SpaceEngineersJavaProxyBuilder().localhost(agentId),
                 context
         ) ;
 
         var theEnv = new SeEnvironment( "myworld-3", // "simple-place-grind-torch-with-tools", //"iv4xr-uu-test1",
-                controllerWrapper,
-                context ) ;
+                controllerWrapper) ;
         theEnv.loadWorld() ;
         theEnv.observeForNewBlocks() ;
 

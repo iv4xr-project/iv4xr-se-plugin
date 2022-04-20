@@ -4,15 +4,14 @@ import eu.iv4xr.framework.mainConcepts.TestAgent;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.spatial.Vec3;
 import org.junit.jupiter.api.Test;
-import spaceEngineers.controller.JsonRpcSpaceEngineers;
-import spaceEngineers.controller.JsonRpcSpaceEngineersBuilder;
+import spaceEngineers.controller.SpaceEngineers;
+import spaceEngineers.controller.SpaceEngineersJavaProxyBuilder;
 import spaceEngineers.transport.SocketReaderWriterKt;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.*;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static uuspaceagent.PrintInfos.showWOMAgent;
@@ -30,13 +29,13 @@ public class Test_pathfinding_entity {
     //@Test
     public void test_agent_pos() throws InterruptedException {
         // This is not loading a level, but connecting to an existing one
-        JsonRpcSpaceEngineers rpc = JsonRpcSpaceEngineersBuilder.Companion.localhost("you");
-        spaceEngineers.model.Vec3F agentPos = rpc.getObserver().observe().getPosition();
+        SpaceEngineers se = new SpaceEngineersJavaProxyBuilder().localhost("you");
+        spaceEngineers.model.Vec3F agentPos = se.getObserver().observe().getPosition();
 
         assertTrue(agentPos != null);
         console("agent position: " + agentPos);
 
-        SocketReaderWriterKt.closeIfCloseable(rpc);
+        SocketReaderWriterKt.closeIfCloseable(se);
     }
 
     /**
@@ -151,7 +150,7 @@ public class Test_pathfinding_entity {
      * Test that if we try to calculate the path to a non reachable position,
      * we can use a thread to interrupt the pathfinder calculation.
      */
-    @Test
+    //@Test
     public void test_pathfinder_loop() throws InterruptedException {
         console("*** start test...");
 
