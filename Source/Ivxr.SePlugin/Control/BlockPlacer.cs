@@ -1,34 +1,36 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using Iv4xr.SpaceEngineers.WorldModel;
 using Sandbox.Definitions;
 using Sandbox.Game.Entities;
 using Sandbox.Game.Entities.Cube;
+using Sandbox.Game.World;
 using Sandbox.ModAPI;
 using VRage;
 using VRage.Game;
 using VRage.ObjectBuilders;
+using VRage.Utils;
 using VRageMath;
 
 namespace Iv4xr.SePlugin.Control
 {
     public class BlockPlacer
     {
-        private MyObjectBuilder_CubeBlock CubeBlockBuilderByBlockType(DefinitionId blockDefinitionId)
+        private MyObjectBuilder_CubeBlock CubeBlockBuilderByBlockType(long ownerId, DefinitionId blockDefinitionId)
         {
             var definitionBase = MyDefinitionManager.Static
                     .GetAllDefinitions()
-                    .First(definition =>
-                    {
-                        return definition.ToDefinitionId().Type == blockDefinitionId.Type;
-                    });
+                    .First(definition => definition.ToDefinitionId().Type == blockDefinitionId.Type);
 
             var obj = (MyObjectBuilder_CubeBlock)MyObjectBuilderSerializer.CreateNewObject(definitionBase.Id);
             obj.Min = new SerializableVector3I(0, 0, 0);
             obj.SubtypeName = blockDefinitionId.Type;
             obj.BlockOrientation = new SerializableBlockOrientation(Base6Directions.Direction.Forward,
                 Base6Directions.Direction.Up);
-
+            obj.Owner = ownerId;
+            obj.BuiltBy = ownerId;
             return obj;
         }
 
@@ -53,17 +55,55 @@ namespace Iv4xr.SePlugin.Control
 
             // Create the grid (not sure if all the lines below are required)
             MyAPIGateway.Entities.RemapObjectBuilder(gridBuilder);
-            var entity = MyAPIGateway.Entities.CreateFromObjectBuilderAndAdd(gridBuilder);
+            MyCubeGrid entity = (MyCubeGrid) MyAPIGateway.Entities.CreateFromObjectBuilderAndAdd(gridBuilder);
             MyAPIGateway.Multiplayer.SendEntitiesCreated(new List<MyObjectBuilder_EntityBase> { gridBuilder });
 
+            
             // Return the created entity
-            return (MyCubeGrid)entity;
+            return entity;
         }
 
-        public MySlimBlock PlaceBlock(DefinitionId blockDefinitionId, Vector3 position, Vector3 orientationForward,
+        public MySlimBlock PlaceInGrid(
+            MyDefinitionId blockDefinitionId,
+            MyCubeGrid currentGrid,
+            Vector3I min,
+            Vector3I orientationForward,
+            Vector3I orientationUp,
+            long playerId
+        )
+        {
+            HashSet<MyCubeGrid.MyBlockLocation> blocksBuildQueue = new HashSet<MyCubeGrid.MyBlockLocation>();
+            var orientation = Quaternion.CreateFromForwardUp(orientationForward, orientationUp);
+            var myBlockLocation = new MyCubeGrid.MyBlockLocation(
+                blockDefinitionId, min, min, min, orientation, MyEntityIdentifier.AllocateId(),
+                playerId
+            );
+            blocksBuildQueue.Add(myBlockLocation);
+            var blockIds = currentGrid.CubeBlocks.Select(b => b.UniqueId).ToImmutableHashSet();
+            currentGrid.BuildBlocks(MyPlayer.SelectedColor, MyStringHash.GetOrCompute(MyPlayer.SelectedArmorSkin),
+                blocksBuildQueue, MySession.Static.LocalCharacterEntityId, MySession.Static.LocalPlayerId);
+            var blockIds2 = currentGrid.CubeBlocks.Select(b => b.UniqueId).ToImmutableHashSet();
+            var newIds = blockIds2.Except(blockIds);
+            if (newIds.IsEmpty)
+            {
+                throw new InvalidOperationException("Couldn't build the block");
+            }
+
+            if (newIds.Count > 1)
+            {
+                throw new InvalidOperationException("Built more than one block!");
+            }
+
+            var id = newIds.First();
+            return currentGrid.CubeBlocks.First(b => b.UniqueId == id);
+        }
+
+        public MySlimBlock PlaceSingleBlock(long ownerId, DefinitionId blockDefinitionId, Vector3 position,
+            Vector3 orientationForward,
             Vector3 orientationUp)
         {
-            var grid = PlaceBlock(CubeBlockBuilderByBlockType(blockDefinitionId), position, orientationForward, orientationUp);
+            var grid = PlaceBlock(CubeBlockBuilderByBlockType(ownerId, blockDefinitionId), position, orientationForward,
+                orientationUp);
             return grid.CubeBlocks.First();
         }
     }

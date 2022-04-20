@@ -37,7 +37,7 @@ fun getBlockIdsToTypes(defs: List<BlockDefinition>): Map<String, List<String>> {
 
 
 fun generateBlockIdsToTypes() {
-    val defs = JsonRpcSpaceEngineersBuilder.localhost().definitions.blockDefinitions()
+    val defs = JvmSpaceEngineersBuilder.default().localhost().definitions.blockDefinitions()
     val idToTypes = getBlockIdsToTypes(defs)
     idToTypesFile.writeText(SocketReaderWriter.SPACE_ENG_GSON.toJson(idToTypes))
 }

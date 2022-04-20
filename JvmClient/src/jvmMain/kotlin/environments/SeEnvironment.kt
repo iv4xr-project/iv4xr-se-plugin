@@ -77,10 +77,10 @@ fun CharacterObservation.toWorldModel(): WorldModel {
 class SeEnvironment(
     val worldId: String,
     val controller: ContextControllerWrapper,
-    val context: SpaceEngineersTestContext
 ) : W3DEnvironment(), AutoCloseable {
     val SCENARIO_DIR = "src/jvmTest/resources/game-saves/"
 
+    val context: SpaceEngineersTestContext = controller.context
 
     override fun loadWorld() {
         val scenario = File("$SCENARIO_DIR$worldId").absolutePath

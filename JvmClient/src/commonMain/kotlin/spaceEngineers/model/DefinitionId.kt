@@ -18,12 +18,39 @@ data class DefinitionId(
     companion object {
         const val ID_PREFIX = "MyObjectBuilder_"
         const val CUBE_BLOCK = "CubeBlock"
+        const val PHYSICAL_GUN = "PhysicalGunObject"
+        const val ORE = "Ore"
+        const val INGOT = "Ingot"
 
         fun cubeBlock(type: String): DefinitionId {
             return create(CUBE_BLOCK, type)
         }
 
+        fun physicalGun(type: String): DefinitionId {
+            return create(PHYSICAL_GUN, type)
+        }
+
+        fun parse(definition: String): DefinitionId {
+            if (!definition.contains("/")) {
+                return cubeBlock(definition)
+            }
+            val parts = definition.split("/")
+            check(parts.size == 2)
+            return create(parts.first(), parts.last())
+        }
+
+        fun ore(type: String): DefinitionId {
+            return create(ORE, type)
+        }
+
+        fun ingot(type: String): DefinitionId {
+            return create(INGOT, type)
+        }
+
         fun create(id: String, type: String): DefinitionId {
+            if (id.startsWith(ID_PREFIX)) {
+                return DefinitionId(id, type)
+            }
             return DefinitionId("$ID_PREFIX$id", type)
         }
     }

@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Iv4xr.PluginLib;
 using Iv4xr.SpaceEngineers.WorldModel;
 using Sandbox.Game;
 using Sandbox.Game.Entities;
@@ -26,7 +27,7 @@ namespace Iv4xr.SePlugin.Control
             var orientation = character.PositionComp.GetOrientation();
             return new CharacterObservation
             { 
-                Id = character.EntityId.ToString(),
+                Id = character.CharacterId().ToString(),
                 DisplayName = character.DisplayName,
                 Position = character.PositionComp.GetPosition().ToPlain(), // Consider reducing allocations.
                 OrientationForward = orientation.Forward.ToPlain(),
@@ -40,6 +41,7 @@ namespace Iv4xr.SePlugin.Control
                     OrientationUp = MySector.MainCamera.UpVector.ToPlain(),
                 },
                 JetpackRunning = character.JetpackComp.TurnedOn,
+                DampenersOn = character.JetpackComp.DampenersTurnedOn,
                 HelmetEnabled = character.OxygenComponent.HelmetEnabled,
                 Health = character.StatComp.HealthRatio,
                 Oxygen = character.GetSuitGasFillLevel(MyCharacterOxygenComponent.OxygenId),
@@ -50,15 +52,16 @@ namespace Iv4xr.SePlugin.Control
                 TargetBlock = TargetBlock(character),
                 TargetUseObject = UseObject(character),
                 Movement = (CharacterMovementEnum)character.CurrentMovementState,
-                Inventory = GetInventory(character.GetInventory()),
+                Inventory = character.GetInventory().ToInventory(),
                 BootsState = GetBootState(character),
             };
         }
         
         private static BootsState GetBootState(MyCharacter character)
         {
-            return (BootsState)character
-                    .GetInstanceField("m_bootsState").GetInstanceField("m_value");
+            return character
+                    .GetInstanceFieldOrThrow<object>("m_bootsState")
+                    .GetInstanceFieldOrThrow<BootsState>("m_value");
         }
         
         private Block TargetBlock(MyCharacter character)
@@ -86,28 +89,6 @@ namespace Iv4xr.SePlugin.Control
             var detector = character.Components.Get<MyCharacterDetectorComponent>();
             return detector?.UseObject != null ? EntityBuilder.CreateUseObject(detector.UseObject) : null;
         }
-        
-        
-        private InventoryItem GetInventoryItem(MyPhysicalInventoryItem myItem)
-        {
-            return new InventoryItem()
-            {
-                Amount = (int)myItem.Amount,
-                Id = myItem.Content.GetId().ToDefinitionId(),
-            };
-        }
 
-        private Inventory GetInventory(MyInventory myInventory)
-        {
-            return new Inventory()
-            {
-                CurrentMass = (float)myInventory.CurrentMass,
-                CurrentVolume = (float)myInventory.CurrentVolume,
-                MaxMass = (float)myInventory.MaxMass,
-                MaxVolume = (float)myInventory.MaxVolume,
-                CargoPercentage = myInventory.CargoPercentage,
-                Items = myInventory.GetItems().Select(GetInventoryItem).ToList(),
-            };
-        }
     }
 }

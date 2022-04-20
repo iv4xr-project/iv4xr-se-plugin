@@ -1,8 +1,11 @@
 ﻿using Iv4xr.PluginLib;
-using Iv4xr.PluginLib.Control;
+using Iv4xr.SePlugin.Communication;
 using Iv4xr.SePlugin.Config;
 using Iv4xr.SpaceEngineers;
+using Iv4xr.SpaceEngineers.WorldModel;
 using Sandbox;
+using VRage.Game;
+using static Iv4xr.SePlugin.Communication.CallTarget;
 
 namespace Iv4xr.SePlugin.Control
 {
@@ -14,6 +17,7 @@ namespace Iv4xr.SePlugin.Control
         public IObserver Observer { get; }
         public IDefinitions Definitions { get; }
         public ISpaceEngineersAdmin Admin { get; }
+        public IScreens Screens { get; }
 
         public IBlocks Blocks { get; }
 
@@ -32,7 +36,8 @@ namespace Iv4xr.SePlugin.Control
             Character = characterController;
             var blocks = new Blocks(gameSession, lowLevelObserver);
             Blocks = blocks;
-            Admin = new SpaceEngineersAdmin(characterController, blocks);
+            Admin = new SpaceEngineersAdmin(characterController, blocks, new ObserverAdmin(lowLevelObserver));
+            Screens = new Screens();
         }
 
         public RealSpaceEngineers(
@@ -60,11 +65,25 @@ namespace Iv4xr.SePlugin.Control
 
         public ICharacterAdmin Character { get; }
         public IBlocksAdmin Blocks { get; }
+        public IObserverAdmin Observer { get; }
+        public ITestAdmin Tests { get; }
+        public void UpdateDefaultInteractDistance(float distance)
+        {
+            MyConstants.DEFAULT_INTERACTIVE_DISTANCE = distance;
+        }
 
-        public SpaceEngineersAdmin(ICharacterAdmin character, IBlocksAdmin blocks)
+        [CallOn(CurrentThread)]
+        public DebugInfo DebugInfo()
+        {
+            return DebugInfoCreator.Create();
+        }
+
+        public SpaceEngineersAdmin(ICharacterAdmin character, IBlocksAdmin blocks, IObserverAdmin observer)
         {
             Character = character;
             Blocks = blocks;
+            Observer = observer;
+            Tests = new TestAdmin();
         }
     }
 }

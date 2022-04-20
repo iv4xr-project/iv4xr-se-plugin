@@ -1,12 +1,11 @@
 package testhelp
 
-import spaceEngineers.controller.JsonRpcSpaceEngineers
-import spaceEngineers.controller.JsonRpcSpaceEngineersBuilder
-import spaceEngineers.controller.SpaceEngineers
-import spaceEngineers.controller.loadFromTestResources
+import spaceEngineers.controller.*
 import spaceEngineers.transport.GsonResponseAppendToFileReaderWriter
 import spaceEngineers.transport.SocketReaderWriter
+import spaceEngineers.transport.SocketReaderWriter.Companion.DEFAULT_PORT
 import spaceEngineers.transport.StringLineReaderWriter
+import spaceEngineers.transport.closeIfCloseable
 import java.io.File
 
 
@@ -17,6 +16,8 @@ abstract class MockOrRealGameTest(
     private val forceWrite: Boolean = false,
     private val scenarioId: String = SIMPLE_PLACE_GRIND_TORCH,
     private val loadScenario: Boolean = true,
+    private val port: Int = DEFAULT_PORT,
+    private val spaceEngineersBuilder: JsonRpcSpaceEngineersBuilder = SpaceEngineersJavaProxyBuilder()
 ) {
 
     var useRealGame: Boolean = forceRealGame
@@ -39,12 +40,19 @@ abstract class MockOrRealGameTest(
         forceRealGame: Boolean = this.forceRealGame,
         scenarioId: String = this.scenarioId,
         file: File = mockFile ?: inMockResourcesDirectory("${this::class.simpleName}-${getTestMethodName()}.txt"),
+        spaceEngineersBuilder: JsonRpcSpaceEngineersBuilder = this.spaceEngineersBuilder,
         block: suspend SpaceEngineers.() -> Unit
     ) {
-        val spaceEngineers = getSpaceEngineers(forceRealGame, file)
+        val spaceEngineers = getSpaceEngineers(forceRealGame, file, spaceEngineersBuilder)
         useRealGame = useRealGame(forceRealGame, file)
         if (loadScenario) {
-            spaceEngineers.session.loadFromTestResources(scenarioId)
+            try {
+                spaceEngineers.session.loadFromTestResources(scenarioId)
+                spaceEngineers.screens.waitUntilTheGameLoaded()
+            } catch (e: Throwable) {
+                spaceEngineers.closeIfCloseable()
+                throw e
+            }
         }
         spaceEngineersSuspend(agentId = agentId, spaceEngineers = spaceEngineers, block = block)
     }
@@ -59,11 +67,15 @@ abstract class MockOrRealGameTest(
         }
     }
 
-    private fun getSpaceEngineers(forceRealGame: Boolean, file: File): JsonRpcSpaceEngineers {
+    private fun getSpaceEngineers(
+        forceRealGame: Boolean,
+        file: File,
+        builder: JsonRpcSpaceEngineersBuilder
+    ): SpaceEngineers {
         return if (useRealGame(forceRealGame, file)) {
-            JsonRpcSpaceEngineersBuilder.fromStringLineReaderWriter(agentId, readerWriter(file))
+            builder.fromStringLineReaderWriter(agentId, readerWriter(file))
         } else {
-            JsonRpcSpaceEngineersBuilder.mock(agentId, file)
+            builder.mock(agentId, file)
         }
     }
 
@@ -74,7 +86,7 @@ abstract class MockOrRealGameTest(
 
     private fun readerWriter(
         file: File, rw: SocketReaderWriter = SocketReaderWriter(
-            port = 3333
+            port = port
         )
     ): StringLineReaderWriter {
         if (!file.exists() || forceWrite) {

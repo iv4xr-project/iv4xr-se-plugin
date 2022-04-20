@@ -1,7 +1,7 @@
 package spaceEngineers.model
 
 enum class CharacterMovementType(val speed: Float) {
-    WALK(0.3f), RUN(1f), SPRINT(1.7f);
+    WALK(0.2f), RUN(1f), SPRINT(1.7f);
 
     companion object {
 

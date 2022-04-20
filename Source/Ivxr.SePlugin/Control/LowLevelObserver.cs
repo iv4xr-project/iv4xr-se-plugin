@@ -9,6 +9,7 @@ using Sandbox.Game.Entities;
 using Sandbox.Game.Entities.Character;
 using Sandbox.Game.Entities.Character.Components;
 using Sandbox.Game.Entities.Cube;
+using Sandbox.Game.Multiplayer;
 using Sandbox.Game.Weapons;
 using Sandbox.Game.World;
 using VRage.Game;
@@ -32,7 +33,7 @@ namespace Iv4xr.SePlugin.Control
             }
         }
 
-        private double m_radius = PluginConfig.DEFAULT_RADIUS;
+        private double m_radius = PluginConfigDefaults.RADIUS;
 
         private readonly IGameSession m_gameSession;
 
@@ -51,42 +52,41 @@ namespace Iv4xr.SePlugin.Control
 
         private MyCharacter Character => m_gameSession.Character;
 
-        internal Vector3D CurrentPlayerPosition()
-        {
-            return Character.PositionComp.GetPosition();
-        }
+        internal Vector3D CurrentPlayerPosition() => Character.PositionComp.GetPosition();
+
+        internal Vector3D CurrentPlayerOrientationUp() => Character.PositionComp.GetOrientation().Up;
 
         public CharacterObservation GetCharacterObservation()
         {
             return m_characterBuilder.CreateCharacterObservation(Character);
         }
 
-        public Observation GetNewBlocks()
+        public Observation GetNewBlocks(Vector3? position = null)
         {
             return new Observation()
             {
                 Character = GetCharacterObservation(),
-                Grids = CollectSurroundingBlocks(GetBoundingSphere(), ObservationMode.NEW_BLOCKS)
+                Grids = CollectSurroundingBlocks(GetBoundingSphere(position), ObservationMode.NEW_BLOCKS)
             };
         }
 
-        public Observation GetBlocks()
+        public Observation GetBlocks(Vector3D? position = null)
         {
             return new Observation()
             {
                 Character = GetCharacterObservation(),
-                Grids = CollectSurroundingBlocks(GetBoundingSphere(), ObservationMode.BLOCKS)
+                Grids = CollectSurroundingBlocks(GetBoundingSphere(position), ObservationMode.BLOCKS)
             };
         }
 
-        internal BoundingSphereD GetBoundingSphere()
+        internal BoundingSphereD GetBoundingSphere(Vector3D? position = null)
         {
-            return GetBoundingSphere(m_radius);
+            return GetBoundingSphere(position, m_radius);
         }
 
-        internal BoundingSphereD GetBoundingSphere(double radius)
+        internal BoundingSphereD GetBoundingSphere(Vector3D? position, double radius)
         {
-            return new BoundingSphereD(CurrentPlayerPosition(), radius);
+            return new BoundingSphereD(position ?? CurrentPlayerPosition(), radius);
         }
 
         public HashSet<MySlimBlock> GetBlocksOf(MyCubeGrid grid)
@@ -112,15 +112,37 @@ namespace Iv4xr.SePlugin.Control
             }
         }
 
+        public List<FloatingObject> ObserveFloatingObjects(Vector3D? position = null)
+        {
+            return SurroundingFloatingObjects(GetBoundingSphere(position)).ToList();
+        }
+
+        internal IEnumerable<FloatingObject> SurroundingFloatingObjects(BoundingSphereD sphere)
+        {
+            return EnumerateSurroundingEntities(sphere).OfType<MyFloatingObject>()
+                    .Select(mfo => mfo.ToFloatingObject());
+        }
+
         internal IEnumerable<CharacterObservation> CollectSurroundingCharacters(BoundingSphereD sphere)
         {
             return EnumerateSurroundingEntities(sphere).OfType<MyCharacter>().Select(
                 c => m_characterBuilder.CreateCharacterObservation(c));
         }
 
-        public List<CharacterObservation> ObserverCharacters()
+        public List<CharacterObservation> ObserveCharacters(Vector3D? position = null)
         {
-            return CollectSurroundingCharacters(GetBoundingSphere()).ToList();
+            return CollectSurroundingCharacters(GetBoundingSphere(position)).ToList();
+        }
+
+        public List<CharacterObservation> AllCharacters()
+        {
+            return Sync.Players.GetOnlinePlayers()
+                    .Where(p => p.Character != null)
+                    .Select(p => p.Character)
+                    .Select(c =>
+                            m_characterBuilder.CreateCharacterObservation(c)
+                    )
+                    .ToList();
         }
 
         internal List<CubeGrid> CollectSurroundingBlocks(BoundingSphereD sphere, ObservationMode mode)
@@ -128,6 +150,25 @@ namespace Iv4xr.SePlugin.Control
             return EnumerateSurroundingEntities(sphere)
                     .OfType<MyCubeGrid>()
                     .Select(grid => m_entityBuilder.CreateSeGrid(grid, sphere, mode)).ToList();
+        }
+
+        internal CubeGrid ConvertToSeGrid(MyCubeGrid sourceGrid, BoundingSphereD sphere)
+        {
+            return m_entityBuilder.CreateSeGrid(sourceGrid, sphere, ObservationMode.BLOCKS);
+        }
+
+        public IEnumerable<MyCubeGrid> Grids()
+        {
+            BoundingSphereD sphere = GetBoundingSphere();
+            return EnumerateSurroundingEntities(sphere)
+                    .OfType<MyCubeGrid>();
+        }
+
+        public MyCubeGrid GetGridById(string gridId)
+        {
+            return Grids().First(grid =>
+                    grid.EntityId.ToString() == gridId
+            );
         }
 
         public MyCubeGrid GetGridContainingBlock(string blockId)

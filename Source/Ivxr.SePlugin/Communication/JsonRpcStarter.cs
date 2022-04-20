@@ -24,8 +24,8 @@ namespace Iv4xr.SePlugin.Communication
 
         public JsonRpcStarter(
             ISpaceEngineers se,
-            string hostname = PluginConfig.DEFAULT_HOSTNAME,
-            int port = PluginConfig.DEFAULT_PORT
+            string hostname = PluginConfigDefaults.HOSTNAME,
+            int port = PluginConfigDefaults.PORT
         )
         {
             m_hostname = hostname;

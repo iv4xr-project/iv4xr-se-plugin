@@ -36,6 +36,8 @@ const val commonBlockFields = """
     override val working: Boolean = false,
     @SerialName("OwnerId")
     override val ownerId: CharacterId,
+    @SerialName("BuiltBy")
+    override val builtBy: CharacterId,
 """
 
 

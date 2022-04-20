@@ -3,6 +3,7 @@ package spaceEngineers.controller.extensions
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withTimeout
 import kotlinx.coroutines.yield
+import spaceEngineers.controller.ContextControllerWrapper
 import spaceEngineers.controller.SpaceEngineers
 import spaceEngineers.model.Block
 import spaceEngineers.model.ToolbarLocation
@@ -38,6 +39,14 @@ suspend fun SpaceEngineers.grindUntilIntegrityPercentage(
 ) {
     val integrity = block.maxIntegrity * percentage / 100.0
     grindUntilIntegrityValue(block, integrity, toolLocation, checkBlockIntegrity, timeoutMs)
+}
+
+suspend fun ContextControllerWrapper.grindDownToPercentage(percentage: Double) {
+    grindDownToPercentage(context.lastNewBlock!!, percentage)
+}
+
+suspend fun ContextControllerWrapper.torchUpToPercentage(percentage: Double) {
+    torchUpToPercentage(context.lastNewBlock!!, percentage, torchLocation = context.torchLocation!!)
 }
 
 suspend fun SpaceEngineers.grindDownToPercentage(

@@ -41,17 +41,21 @@ namespace Iv4xr.SePlugin.Navigation
         public FatNavGraph GetGraph()
         {
             var sphere = m_lowLevelObserver.GetBoundingSphere(
+                null,
                 m_lowLevelObserver.Radius * 2d);  // Get some look-ahead
 
-            var grid = m_lowLevelObserver.CollectSurroundingBlocks(sphere, ObservationMode.BLOCKS)
-                    .OrderByDescending(g => g.Blocks.Count).First();  // Get the biggest grid.
-            
-            // TODO: guess which face of the blocks in the grid is "up" (which surface to walk on)
-            // perhaps compare the angle of all vectors with the up vector of the character?
+            var sourceGrid = m_lowLevelObserver.Grids().ToList()
+                    .OrderByDescending(g => g.BlocksCount).First();  // Get the biggest grid.
+
+            // Convert both "ends" of the orientation vector
+            var zeroInGridCoordinates = sourceGrid.WorldToGridScaledLocal(Vector3D.Zero);
+            var characterOrientationUpInGrid = sourceGrid.WorldToGridScaledLocal(
+                m_lowLevelObserver.CurrentPlayerOrientationUp()) - zeroInGridCoordinates;
             
             // TODO: offset the start position to be below the character's feet
-            // TODO: calculate which direction is actually up
-            return CreateGraph(grid, m_lowLevelObserver.CurrentPlayerPosition(), Vector3I.Up);
+            return CreateGraph(m_lowLevelObserver.ConvertToSeGrid(sourceGrid, sphere),
+                m_lowLevelObserver.CurrentPlayerPosition(),
+                GuessWhichSideIsUp(characterOrientationUpInGrid));
         }
 
         internal FatNavGraph CreateGraph(CubeGrid grid, Vector3D start, Vector3I up)
@@ -138,6 +142,20 @@ namespace Iv4xr.SePlugin.Navigation
                 throw new InvalidOperationException("Couldn't find a starting block for nav graph.");
             
             return startBlock;
+        }
+
+        /// <param name="characterOrientationUpInGrid">character orientation up converted to grid coordinates</param>
+        internal static Vector3I GuessWhichSideIsUp(Vector3D characterOrientationUpInGrid)
+        {
+            var closestAngleVector = new StepVectors(Vector3I.Up).Enumerate()
+                    .Select(v => new Tuple<double, Vector3I>(characterOrientationUpInGrid.Dot(v), v))
+                    .OrderBy(x => x.Item1)
+                    .Select(pair => pair.Item2).First();
+
+            return ((characterOrientationUpInGrid + closestAngleVector).LengthSquared() >
+                (characterOrientationUpInGrid - closestAngleVector).LengthSquared())
+                    ? closestAngleVector
+                    : -closestAngleVector;
         }
     }
 }

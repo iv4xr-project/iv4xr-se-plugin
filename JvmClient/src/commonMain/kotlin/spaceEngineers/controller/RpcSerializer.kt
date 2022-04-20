@@ -32,6 +32,9 @@ val json = Json {
         polymorphic(DefinitionBase::class) {
             default { DataDefinitionBase.serializer() }
         }
+        polymorphic(PhysicalItemDefinition::class) {
+            default { DataPhysicalItemDefinition.serializer() }
+        }
     }
 }
 
@@ -54,14 +57,12 @@ abstract class RpcSerializer(
 ) {
 
     inline fun <reified I : Any, reified O : Any> processSingleParameterMethod(
-        method: KFunction<O>,
         parameter: I,
         parameterName: String,
         parameterType: KClass<I>,
-        methodName: String = method.name
+        methodName: String
     ): O {
         return processParameters<O>(
-            method = method,
             parameters = listOf<TypedParameter<*>>(
                 TypedParameter<I>(
                     name = parameterName,
@@ -75,13 +76,13 @@ abstract class RpcSerializer(
 
     @OptIn(ExperimentalStdlibApi::class)
     inline fun <reified O : Any> processParameters(
-        method: KFunction<O?>,
         parameters: List<TypedParameter<*>>,
-        methodName: String = method.name,
+        methodName: String,
     ): O {
+        lateinit var x: KClass<KotlinJsonRpcResponse<O>>
         return callRpc<O>(
             stringLineReaderWriter,
-            encodeRequest(method, parameters, methodName),
+            encodeRequest(parameters, methodName),
             typeOf<KotlinJsonRpcResponse<O>>()
         )
     }
@@ -90,10 +91,9 @@ abstract class RpcSerializer(
         return Random.nextLong()
     }
 
-    open fun <O : Any> encodeRequest(
-        method: KFunction<O?>,
+    open fun encodeRequest(
         parameters: List<TypedParameter<*>>,
-        methodName: String = method.name
+        methodName: String
     ): String {
         return json.encodeToString(KotlinJsonRpcRequest(
             id = nextRequestId(),
@@ -128,11 +128,9 @@ abstract class RpcSerializer(
 
 
     protected inline fun <reified O : Any> processNoParameterMethod(
-        method: KFunction<O?>,
-        methodName: String = method.name
+        methodName: String,
     ): O {
         return processParameters<O>(
-            method = method,
             parameters = emptyList(),
             methodName = methodName
         )

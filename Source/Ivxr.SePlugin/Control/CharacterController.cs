@@ -6,6 +6,7 @@ using Iv4xr.SpaceEngineers;
 using Iv4xr.SpaceEngineers.WorldModel;
 using Sandbox.Game.Entities;
 using Sandbox.Game.Entities.Character;
+using Sandbox.Game.Gui;
 using Sandbox.Game.World;
 using VRage.Game;
 using VRage.Game.Entity.UseObject;
@@ -30,6 +31,19 @@ namespace Iv4xr.SePlugin.Control
             m_lowLevelObserver = lowLevelObserver;
             Log = log;
         }
+
+        public CharacterObservation TurnOnDampeners()
+        {
+            Character.JetpackComp.EnableDampeners(true);
+            return m_observer.Observe();
+        }
+        
+        public CharacterObservation TurnOffDampeners()
+        {
+            Character.JetpackComp.EnableDampeners(false);
+            return m_observer.Observe();
+        }
+
 
         public CharacterObservation TurnOnJetpack()
         {
@@ -66,6 +80,16 @@ namespace Iv4xr.SePlugin.Control
             MySession.Static.ControlledEntity.Use();
         }
 
+        public void ShowTerminal()
+        {
+            Character.ShowTerminal();
+        }
+
+        public void ShowInventory()
+        {
+            Character.ShowInventory();
+        }
+        
         public void Use(string blockId, int functionIndex, int action)
         {
             var block = m_lowLevelObserver.GetBlockById(blockId);
@@ -83,7 +107,19 @@ namespace Iv4xr.SePlugin.Control
 
         public void Switch(string id)
         {
-            m_session.SetCharacter(id);
+            m_session.SetCharacter(long.Parse(id));
+        }
+
+        public void Remove(string id)
+        {
+            m_session.RemoveCharacter(long.Parse(id));
+        }
+
+        public void ShowTerminal(string blockId)
+        {
+            var block = m_lowLevelObserver.GetBlockById(blockId);
+            block.FatBlock.ThrowIfNull("Block has to be functional to show terminal");
+            MyGuiScreenTerminal.Show(MyTerminalPageEnum.Inventory, Character, block.FatBlock);
         }
 
         public CharacterObservation Teleport(PlainVec3D position, PlainVec3D? orientationForward,
@@ -113,13 +149,13 @@ namespace Iv4xr.SePlugin.Control
         public CharacterObservation MoveAndRotate(PlainVec3D movement, PlainVec2F rotation3, float roll, int ticks)
         {
             var vector3d = movement.ToVector3D();
-            if (vector3d == Vector3D.Down && Character.CurrentMovementState == MyCharacterMovementEnum.Standing && !Character.JetpackRunning)
+            if (!Character.JetpackRunning)
             {
-                Character.Crouch();
-            }
-            else if (vector3d == Vector3D.Up && Character.CurrentMovementState == MyCharacterMovementEnum.Crouching && !Character.JetpackRunning)
-            {
-                Character.Stand();
+                if ((vector3d == Vector3D.Down && Character.CurrentMovementState == MyCharacterMovementEnum.Standing)
+                    || (vector3d == Vector3D.Up && Character.CurrentMovementState == MyCharacterMovementEnum.Crouching))
+                {
+                    Character.Crouch();
+                }
             }
 
             IvxrPlugin.Context.ContinuousMovementController.ChangeMovement(

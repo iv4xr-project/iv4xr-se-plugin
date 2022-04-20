@@ -4,7 +4,6 @@ import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import spaceEngineers.controller.ContextControllerWrapper
-import spaceEngineers.controller.JsonRpcSpaceEngineers
 import spaceEngineers.controller.SpaceEngineers
 import java.io.*
 import java.lang.reflect.Modifier
@@ -26,10 +25,8 @@ fun SpaceEngineers?.closeIfCloseable() {
         if (it is ContextControllerWrapper) {
             it.spaceEngineers.closeIfCloseable()
         }
-        if (it is JsonRpcSpaceEngineers) {
-            if (it.stringLineReaderWriter is AutoCloseable) {
-                it.stringLineReaderWriter.close()
-            }
+        if (it is AutoCloseable) {
+            it.close()
         }
     }
 }
@@ -64,6 +61,7 @@ class SocketReaderWriter @JvmOverloads constructor(
         }
         exception?.let {
             if (!connected) {
+                close()
                 throw it
             }
         }
@@ -75,9 +73,15 @@ class SocketReaderWriter @JvmOverloads constructor(
     }
 
     override fun close() {
-        closeSafely(reader)
-        closeSafely(writer)
-        closeSafely(socket)
+        if (this::reader.isInitialized) {
+            closeSafely(reader)
+        }
+        if (this::writer.isInitialized) {
+            closeSafely(writer)
+        }
+        if (this::socket.isInitialized) {
+            closeSafely(socket)
+        }
     }
 
     companion object {

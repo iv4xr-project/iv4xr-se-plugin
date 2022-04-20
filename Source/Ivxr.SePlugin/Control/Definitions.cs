@@ -107,5 +107,14 @@ namespace Iv4xr.SePlugin.Control
 
             return result;
         }
+        
+        public static void CheckDefinitionIdExists(MyDefinitionId id)
+        {
+            if (MyDefinitionManager.Static.GetAllDefinitions().All(definition => definition.Id != id))
+            {
+                throw new InvalidOperationException($"Invalid definition id {id}");
+            }
+        }
+
     }
 }

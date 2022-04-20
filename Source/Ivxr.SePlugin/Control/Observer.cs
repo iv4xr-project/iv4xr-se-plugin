@@ -47,7 +47,12 @@ namespace Iv4xr.SePlugin.Control
 
         public List<CharacterObservation> ObserveCharacters()
         {
-            return m_lowLevelObserver.ObserverCharacters();
+            return m_lowLevelObserver.ObserveCharacters();
+        }
+
+        public List<FloatingObject> ObserveFloatingObjects()
+        {
+            return m_lowLevelObserver.ObserveFloatingObjects();
         }
 
         public NavGraph NavigationGraph()

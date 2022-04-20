@@ -15,13 +15,12 @@ namespace Iv4xr.SePlugin
     {
         public ILog Log { get; private set; }
         public readonly JsonRpcStarter JsonRpcStarter;
-        public readonly FuncActionDispatcher FuncActionDispatcher;
-        private const string CONFIG_FILE = "ivxr-plugin.config";
+        public readonly MethodCallContext MethodCallContext;
 
         private readonly GameSession m_gameSession = new GameSession();
         public readonly ContinuousMovementController ContinuousMovementController;
 
-        public IvxrPluginContext()
+        public IvxrPluginContext(PluginConfig config)
         {
             var seLog = new SeLog(
                 Assembly.GetExecutingAssembly().GetName().Version.ToString(),
@@ -30,17 +29,14 @@ namespace Iv4xr.SePlugin
             );
             Log = seLog;
 
-            var configPath = Path.Combine(MyFileSystem.UserDataPath, CONFIG_FILE);
-            var configLoader = new ConfigLoader(Log, new Jsoner(), configPath);
-            var config = configLoader.LoadOrSaveDefault();
             ContinuousMovementController = new ContinuousMovementController(seLog, m_gameSession);
 
             var se = new RealSpaceEngineers(m_gameSession, Log, config);
 
-            FuncActionDispatcher = new FuncActionDispatcher(seLog);
+            MethodCallContext = new MethodCallContext(Log);
 
             JsonRpcStarter = new JsonRpcStarter(
-                new SynchronizedSpaceEngineers(se, FuncActionDispatcher),
+                new SynchronizedSpaceEngineers(se, MethodCallContext),
                 hostname: config.Hostname,
                 port: config.JsonRpcPort
             ) { Log = Log };
@@ -54,7 +50,15 @@ namespace Iv4xr.SePlugin
 
         public void InitSession()
         {
-            m_gameSession.InitSession();
+            ContinuousMovementController.Reset();
+        }
+
+        public void BeforeSimulation()
+        {
+            if (m_gameSession.Initialized())
+            {
+                ContinuousMovementController.Tick();
+            }
         }
 
         public void EndSession()

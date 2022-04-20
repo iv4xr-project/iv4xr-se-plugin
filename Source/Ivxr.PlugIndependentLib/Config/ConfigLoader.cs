@@ -7,6 +7,7 @@ namespace Iv4xr.SePlugin.Config
 {
     public class ConfigLoader
     {
+        public const string CONFIG_FILE = "ivxr-plugin.config";
         public ILog Log { get; set; }
         public IJsoner Jsoner { get; }
         public string ConfigPath { get; }
@@ -20,7 +21,12 @@ namespace Iv4xr.SePlugin.Config
 
         public void SaveDefault()
         {
-            var jsonConfig = Jsoner.ToJson(new PluginConfig());
+            Save(new PluginConfig());
+        }
+
+        public void Save(PluginConfig config)
+        {
+            var jsonConfig = Jsoner.ToJson(config);
             
             File.WriteAllText(ConfigPath, jsonConfig);
         }

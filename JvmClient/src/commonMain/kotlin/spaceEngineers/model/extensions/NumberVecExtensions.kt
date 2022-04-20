@@ -33,3 +33,11 @@ fun NumberVec3<Float>.crossProduct(b: NumberVec3<Float>): Vec3F {
 fun NumberVec3<Float>.toArray(): FloatArray {
     return floatArrayOf(x, y, z)
 }
+
+public inline fun Iterable<Vec3F>.sum(): Vec3F {
+    var sum = Vec3F.ZERO
+    for (element in this) {
+        sum += element
+    }
+    return sum
+}

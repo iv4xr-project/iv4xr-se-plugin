@@ -7,43 +7,38 @@ using VRageMath;
 
 namespace Iv4xr.SePlugin.Control
 {
-    public class MyAgentIdentity : MyIdentity.Friend
-    {
-        public override MyIdentity CreateNewIdentity(MyObjectBuilder_Identity objectBuilder)
-        {
-            return base.CreateNewIdentity(objectBuilder);
-        }
-    }
-
-
     public static class AgentSpawner
     {
-        public static MyCharacter SpawnAgent(ulong steamId, string name, Color color, MatrixD startPosition,
-            long identityId = 1000)
+        public static MyCharacter SpawnAgent(
+            ulong steamId, string name, Color color, MatrixD startPosition, long identityId
+        )
         {
-            var character = MyCharacter.CreateCharacter(
-                startPosition, Vector3.Zero, name, "", color, null, identityId: identityId);
-            character.SwitchJetpack();
-            
-            var playerId = new MyPlayer.PlayerId(steamId);
-
             var identityBuilder = new MyObjectBuilder_Identity
             {
                 DisplayName = name,
-                CharacterEntityId = character.EntityId,
-                ColorMask = color.ToVector3()
+                ColorMask = color.ToVector3(),
+                IdentityId = identityId,
             };
-            var identity = new MyAgentIdentity().CreateNewIdentity(identityBuilder);
-            
-            var myPlayer = new MyPlayer(Sync.Clients.LocalClient, playerId)
-            {
-                Identity = identity
-            };
-            var characterController = new MyEntityController(myPlayer);
+
+            var identity = MySession.Static.Players.CreateNewIdentity(identityBuilder);
+
+            var character = MyCharacter.CreateCharacter(
+                startPosition, Vector3.Zero, name, "", color, null, identityId: identityId);
+
+
+            var client = new MyNetworkClient(steamId, name);
+            //client.SetInstanceProperty("IsLocal", true);
+
+            var player = MySession.Static.Players.CreateNewPlayer(
+                identity: identity, steamClient: client, playerName: name,
+                realPlayer: true
+            );
+
+            var characterController = new MyEntityController(player);
 
             characterController.TakeControl(character);
 
-            return character;
+            return player.Character;
         }
     }
 }

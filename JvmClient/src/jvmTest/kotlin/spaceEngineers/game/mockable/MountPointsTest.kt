@@ -33,8 +33,8 @@ class MountPointsTest: MockOrRealGameTest(mockFile = inMockResourcesDirectory("M
             it.definitionId.type
         }.toSet().let { blockTypes ->
             assertEquals(
-                blockTypes.size,
-                64
+                68,
+                blockTypes.size
             )
         }
     }

@@ -177,9 +177,9 @@ namespace Iv4xr.SePlugin.Control
 			{
 			    jumpDriveDefinition.RequiredPowerInput = myJumpDriveDefinition.RequiredPowerInput;
 			    jumpDriveDefinition.PowerNeededForJump = myJumpDriveDefinition.PowerNeededForJump;
+			    jumpDriveDefinition.MinJumpDistance = myJumpDriveDefinition.MinJumpDistance;
 			    jumpDriveDefinition.MaxJumpDistance = myJumpDriveDefinition.MaxJumpDistance;
-			    jumpDriveDefinition.MaxJumpMass = myJumpDriveDefinition.MaxJumpMass;
-			    jumpDriveDefinition.JumpDelay = myJumpDriveDefinition.JumpDelay;    
+			    jumpDriveDefinition.MaxJumpMass = myJumpDriveDefinition.MaxJumpMass;    
 			}
 			if (myBlockDefinition is MyLandingGearDefinition myLandingGearDefinition && 
 			    blockDefinition is LandingGearDefinition landingGearDefinition )

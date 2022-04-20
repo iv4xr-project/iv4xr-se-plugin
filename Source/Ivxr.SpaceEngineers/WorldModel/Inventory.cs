@@ -10,5 +10,6 @@ namespace Iv4xr.SpaceEngineers.WorldModel
         public float MaxVolume;
         public float CargoPercentage;
         public List<InventoryItem> Items;
+        public int Id;
     }
 }

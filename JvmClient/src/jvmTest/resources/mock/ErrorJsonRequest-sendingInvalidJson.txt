@@ -1,2 +1,0 @@
-{"jsonrpc":"2.0","result":null,"id":3215500651282140004}
-{"jsonrpc":"2.0","error":{"code":-32600,"message":"Invalid Request","data":"Missing property 'method'"},"id":null}

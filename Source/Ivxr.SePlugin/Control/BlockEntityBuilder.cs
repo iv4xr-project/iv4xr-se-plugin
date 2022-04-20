@@ -60,6 +60,7 @@ namespace Iv4xr.SePlugin.Control
 
             block.GridPosition = sourceBlock.Position.ToPlain();
             block.OwnerId = sourceBlock.OwnerId.ToString();
+            block.BuiltBy = sourceBlock.BuiltBy.ToString();
         }
 
         private void AddCustomFields(MySlimBlock sourceBlock, Block block)

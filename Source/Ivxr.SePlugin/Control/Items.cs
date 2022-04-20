@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Linq;
-using Iv4xr.PluginLib.Control;
 using Iv4xr.SpaceEngineers;
 using Iv4xr.SpaceEngineers.WorldModel;
 using Sandbox.Definitions;
-using Sandbox.Game.Entities;
 using Sandbox.Game.Screens.Helpers;
-using Sandbox.Game.World;
 using VRage.Game;
 using VRage.ObjectBuilders;
 
@@ -38,15 +35,15 @@ namespace Iv4xr.SePlugin.Control
                 (toolbar.SelectedSlot.Value == toolbarLocation.Slot))
                 return; // Already set (setting it again would change grid size).
 
-            var toolbarItem =  toolbar[toolbarLocation.Slot];
+            var toolbarItem = toolbar[toolbarLocation.Slot];
             if (toolbarItem is MyToolbarItemWeapon weapon)
             {
                 // Very dirty and fast hack, but works for tools, needs more sophistication.
-                m_session.Character.SwitchToWeapon(weapon);    
+                m_session.Character.SwitchToWeapon(weapon);
             }
             else
             {
-                toolbar.ActivateItemAtSlot(toolbarLocation.Slot);    
+                toolbar.ActivateItemAtSlot(toolbarLocation.Slot);
             }
         }
 
@@ -67,24 +64,20 @@ namespace Iv4xr.SePlugin.Control
         private static ToolbarItem GetToolbarItem(MyToolbarItem myToolbarItem)
         {
             if (!(myToolbarItem is MyToolbarItemDefinition definition)) return null;
-            var id = definition.Definition.Id;
-            return new ToolbarItem()
-            {
-                Type = id.TypeId.ToString(),
-                SubType = id.SubtypeId.String,
-                Name = definition.DisplayName.ToString()
-            };
+            return definition.ToToolbarItem();
         }
 
-        public void SetToolbarItem(string name, ToolbarLocation toolbarLocation)
+        public void SetToolbarItem(DefinitionId definitionId, ToolbarLocation toolbarLocation)
         {
-            if (IsWeapon(name))
+            var myDefinitionId = definitionId.ToMyDefinitionId();
+            Definitions.CheckDefinitionIdExists(myDefinitionId);
+            if (IsWeapon(definitionId.Type))
             {
-                SetToolbarWeapon(toolbarLocation.Slot, toolbarLocation.Page, name);
+                SetToolbarItem<MyObjectBuilder_ToolbarItemWeapon>(myDefinitionId, toolbarLocation);
             }
             else
             {
-                SetToolbarBlock(toolbarLocation.Slot, toolbarLocation.Page, name);
+                SetToolbarItem<MyObjectBuilder_ToolbarItemCubeBlock>(myDefinitionId, toolbarLocation);
             }
         }
 
@@ -95,34 +88,16 @@ namespace Iv4xr.SePlugin.Control
                     .Any(definition => definition.Id.SubtypeName == itemName);
         }
 
-        private void SetToolbarBlock(int slot, int page, string itemName)
-        {
-            var toolDefinitionId = MyDefinitionManager.Static
-                    .GetAllDefinitions()
-                    .First(definition => definition.Id.SubtypeName == itemName).Id;
-            SetToolbarItem<MyObjectBuilder_ToolbarItemCubeBlock>(slot, page, toolDefinitionId);
-        }
-
-        private void SetToolbarWeapon(int slot, int page, string itemName)
-        {
-            var toolDefinitionId = MyDefinitionManager.Static
-                    .GetWeaponDefinitions()
-                    .First(definition => definition.Id.SubtypeName == itemName).Id;
-            SetToolbarItem<MyObjectBuilder_ToolbarItemWeapon>(slot, page, toolDefinitionId);
-        }
-
-        private void SetToolbarItem<T>(int slot, int page, MyDefinitionId id)
+        private void SetToolbarItem<T>(MyDefinitionId id, ToolbarLocation toolbarLocation)
                 where T : MyObjectBuilder_ToolbarItemDefinition, new()
         {
             var toolbarItemBuilder = MyObjectBuilderSerializer.CreateNewObject<T>();
             toolbarItemBuilder.DefinitionId = id;
 
             var toolbar = m_session.Character.Toolbar;
-            var owner = toolbar.Owner;
-            //toolbar.Owner = m_session.Character;
-            toolbar.SwitchToPage(page);
+            toolbar.SwitchToPage(toolbarLocation.Page);
             var item = MyToolbarItemFactory.CreateToolbarItem(toolbarItemBuilder);
-            toolbar.SetItemAtSlot(slot, item);
+            toolbar.SetItemAtSlot(toolbarLocation.Slot, item);
         }
     }
 }

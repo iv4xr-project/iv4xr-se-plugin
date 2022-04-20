@@ -1,2 +1,0 @@
-{"jsonrpc":"2.0","result":null,"id":4805811386073571791}
-{"jsonrpc":"2.0","error":{"code":-32601,"message":"Method not found","data":"The method does not exist / is not available."},"id":5249017211905834916}

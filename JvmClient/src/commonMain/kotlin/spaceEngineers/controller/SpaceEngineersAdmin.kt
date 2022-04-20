@@ -1,18 +1,39 @@
 package spaceEngineers.controller
 
-import spaceEngineers.model.BlockId
-import spaceEngineers.model.CharacterObservation
-import spaceEngineers.model.DefinitionId
-import spaceEngineers.model.Vec3F
+import spaceEngineers.model.*
 
 interface SpaceEngineersAdmin {
     val blocks: BlocksAdmin
     val character: CharacterAdmin
+    val observer: ObserverAdmin
     fun setFrameLimitEnabled(enabled: Boolean)
+    fun updateDefaultInteractDistance(distance: Float)
+    fun debugInfo(): DebugInfo
+    val tests: TestAdmin
+}
+
+interface TestAdmin {
+    fun adminOnly()
+    fun gameOnly()
+    fun observerOnly()
 }
 
 interface BlocksAdmin {
-    fun placeAt(blockDefinitionId: DefinitionId, position: Vec3F, orientationForward: Vec3F, orientationUp: Vec3F): String
+    fun placeAt(
+        blockDefinitionId: DefinitionId,
+        position: Vec3F,
+        orientationForward: Vec3F,
+        orientationUp: Vec3F
+    ): String
+
+    fun placeInGrid(
+        blockDefinitionId: DefinitionId,
+        gridId: String,
+        minPosition: Vec3I,
+        orientationForward: Vec3I,
+        orientationUp: Vec3I
+    ): String
+
     fun remove(blockId: BlockId)
     fun setIntegrity(blockId: BlockId, integrity: Float)
 }
@@ -34,7 +55,14 @@ interface CharacterAdmin {
      */
     fun use(blockId: BlockId, functionIndex: Int, action: Int)
 
-    fun create(id: String, position: Vec3F, orientationForward: Vec3F, orientationUp: Vec3F): CharacterObservation
+    fun create(name: String, position: Vec3F, orientationForward: Vec3F, orientationUp: Vec3F): CharacterObservation
 
     fun switch(id: String)
+
+    fun remove(id: String)
+    fun showTerminal(blockId: String)
+}
+
+interface ObserverAdmin {
+    fun observeCharacters(): List<CharacterObservation>
 }

@@ -36,6 +36,8 @@ fun Iterable<BlockDefinition>.filterSidePoints(): List<BlockDefinition> {
 }
 
 
+private const val EXPECTED_DEFINITION_COUNT = 897
+
 class BlockDefinitionsTest : MockOrRealGameTest(inMockResourcesDirectory("BlockDefinitionsTest.txt")) {
 
     @Test
@@ -47,7 +49,7 @@ class BlockDefinitionsTest : MockOrRealGameTest(inMockResourcesDirectory("BlockD
 
     @Test
     fun allCount() = testContext {
-        assertEquals(626, definitions.blockDefinitions().size)
+        assertEquals(EXPECTED_DEFINITION_COUNT, definitions.blockDefinitions().size)
     }
 
     @Test
@@ -62,7 +64,10 @@ class BlockDefinitionsTest : MockOrRealGameTest(inMockResourcesDirectory("BlockD
 
     @Test
     fun allByIdCount() = testContext {
-        assertEquals(626, definitions.blockDefinitions().map { "${it.definitionId.id}${it.definitionId.type}" }.distinct().size)
+        assertEquals(
+            EXPECTED_DEFINITION_COUNT,
+            definitions.blockDefinitions().map { "${it.definitionId.id}${it.definitionId.type}" }.distinct().size
+        )
     }
 
     @Test
@@ -70,35 +75,36 @@ class BlockDefinitionsTest : MockOrRealGameTest(inMockResourcesDirectory("BlockD
         definitions.blockDefinitions().let { blockDefinitions ->
             assertEquals(
                 13,
-                blockDefinitions.filter { it.definitionId.type.isEmpty() }.map { "${it.definitionId.id}${it.definitionId.type}" }
+                blockDefinitions.filter { it.definitionId.type.isEmpty() }
+                    .map { "${it.definitionId.id}${it.definitionId.type}" }
                     .size
             )
-            blockDefinitions.filter { it.definitionId.type.isEmpty() }.map { "${it.definitionId.id}-${it.definitionId.type}" }
+            blockDefinitions.filter { it.definitionId.type.isEmpty() }
+                .map { "${it.definitionId.id}-${it.definitionId.type}" }
                 .forEach(::println)
         }
     }
 
     @Test
     fun enabledCount() = testContext {
-        assertEquals(626, definitions.blockDefinitions().count { it.enabled })
+        assertEquals(EXPECTED_DEFINITION_COUNT, definitions.blockDefinitions().count { it.enabled })
     }
 
     @Test
     fun publicCount() = testContext {
-        assertEquals(589, definitions.blockDefinitions().count { it.public })
+        assertEquals(851, definitions.blockDefinitions().count { it.public })
     }
 
     @Test
     fun availableInSurvivalCount() = testContext {
-        assertEquals(626, definitions.blockDefinitions().count { it.availableInSurvival })
+        assertEquals(EXPECTED_DEFINITION_COUNT, definitions.blockDefinitions().count { it.availableInSurvival })
     }
 
     @Test
     fun notPublic() = testContext {
-        definitions.blockDefinitions().let {
-            blockDefinitions ->
-            blockDefinitions.filterNot { it.public }.map { it.definitionId.type }.forEach(::println)
-            assertEquals(37, blockDefinitions.count { !it.public })
+        definitions.blockDefinitions().let { blockDefinitions ->
+            blockDefinitions.filterNot { it.public }.map { it.definitionId.type }
+            assertEquals(46, blockDefinitions.count { !it.public })
 
         }
     }
@@ -114,12 +120,11 @@ class BlockDefinitionsTest : MockOrRealGameTest(inMockResourcesDirectory("BlockD
 
     @Test
     fun bigWithNiceMountPoints() = testContext {
-        definitions.blockDefinitions().let {
-            blockDefinitions ->
+        definitions.blockDefinitions().let { blockDefinitions ->
             assertEquals(
+                395,
                 blockDefinitions.filterForBig()
-                .filterSidePoints().size,
-            272
+                    .filterSidePoints().size
             )
             blockDefinitions
                 .filterForBig()
@@ -138,70 +143,31 @@ class BlockDefinitionsTest : MockOrRealGameTest(inMockResourcesDirectory("BlockD
     fun mountPointCount() = testContext {
         definitions.blockDefinitions().let { blockDefinitions ->
             assertEquals(
+                2547,
                 blockDefinitions.filterForBig()
-                    .filterSidePoints().flatMap { it.mountPoints }.size,
-                1582
+                    .filterSidePoints().flatMap { it.mountPoints }.size
             )
             assertEquals(
+                2541,
                 blockDefinitions.filterForBig()
-                    .filterSidePoints().flatMap { it.mountPoints.filter { it.enabled } }.size,
-                1578
+                    .filterSidePoints().flatMap { it.mountPoints.filter { it.enabled } }.size
             )
         }
     }
 
     @Test
-    fun blockTypesWithNoProgressModels() = testContext {
-        assertEquals(
-            definitions.blockDefinitions().filter { it.buildProgressModels.isEmpty() }.map { it.definitionId.type }.toSet(),
-            setOf("Monolith", "Stereolith", "DeadAstronaut", "LargeDeadAstronaut")
-        )
-    }
-
-    @Test
     fun large1x1x1() = testContext {
         assertEquals(
-            definitions.blockDefinitions().filterForScreenshots().size,
-            202
+            296,
+            definitions.blockDefinitions().filterForScreenshots().size
         )
     }
 
     @Test
     fun allSmallBlocks() = testContext {
         assertEquals(
-            definitions.blockDefinitions().filter { it.cubeSize == CubeSize.Small }.map { it.definitionId.type }.size,
-            260
-        )
-    }
-
-    @Test
-    fun blockDefinitionsBySize() = testContext {
-        val sizeToCount = definitions.blockDefinitions().filter { it.cubeSize == CubeSize.Large }.map { it.size }
-            .groupBy { it.length() }
-            .map { it.value.first() to it.value.size }.toMap()
-        assertEquals(
-            sizeToCount, mapOf(
-                Vec3F.ONE to 272,
-                Vec3F(2, 1, 2) to 4,
-                Vec3F(1, 6, 2) to 1,
-                Vec3F(1, 2, 1) to 40,
-                Vec3F(1, 3, 1) to 6,
-                Vec3F(2, 2, 3) to 5,
-                Vec3F(3, 3, 3) to 7,
-                Vec3F(4, 2, 1) to 1,
-                Vec3F(1, 4, 1) to 2,
-                Vec3F(5, 3, 5) to 5,
-                Vec3F(5, 2, 1) to 1,
-                Vec3F(2, 4, 2) to 1,
-                Vec3F(3, 2, 3) to 5,
-                Vec3F(3, 1, 3) to 5,
-                Vec3F(5, 2, 5) to 2,
-                Vec3F(5, 5, 1) to 1,
-                Vec3F(5, 3, 1) to 1,
-                Vec3F(3, 2, 4) to 2,
-                Vec3F(3, 3, 5) to 2,
-                Vec3F(1, 2, 3) to 3
-            )
+            384,
+            definitions.blockDefinitions().filter { it.cubeSize == CubeSize.Small }.map { it.definitionId.type }.size
         )
     }
 

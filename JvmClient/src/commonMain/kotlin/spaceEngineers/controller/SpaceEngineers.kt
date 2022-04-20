@@ -11,6 +11,7 @@ interface SpaceEngineers {
     val definitions: Definitions
     val blocks: Blocks
     val admin: SpaceEngineersAdmin
+    val screens: Screens
 
     companion object {
         const val DEFAULT_AGENT_ID = "se0"
@@ -19,10 +20,15 @@ interface SpaceEngineers {
 
 interface Session {
     fun loadScenario(scenarioPath: String)
+    fun connect(address: String)
+    fun disconnect()
+    fun exitGame()
+    fun exitToMainMenu()
 }
 
 interface Character {
     fun use()
+
     /**
      * @param movement Unit vector representing direction of a movement.
      *      The direction is relative to the character itself, not coordinates of the system.
@@ -38,12 +44,18 @@ interface Character {
         roll: Float = 0f,
         ticks: Int = 1,
     ): CharacterObservation
+
     fun turnOnJetpack(): CharacterObservation
     fun turnOffJetpack(): CharacterObservation
+    fun turnOnDampeners(): CharacterObservation
+    fun turnOffDampeners(): CharacterObservation
     fun switchHelmet(): CharacterObservation
 
     fun beginUsingTool()
     fun endUsingTool()
+    fun showTerminal()
+    fun showInventory()
+
 
     companion object {
         /**
@@ -58,6 +70,7 @@ interface Observer {
     fun observeBlocks(): Observation
     fun observeNewBlocks(): Observation
     fun observeCharacters(): List<CharacterObservation>
+    fun observeFloatingObjects(): List<FloatingObject>
     fun navigationGraph(): NavGraph
 
     /**
@@ -72,7 +85,7 @@ interface Observer {
 
 interface Items {
     fun equip(toolbarLocation: ToolbarLocation)
-    fun setToolbarItem(name: String, toolbarLocation: ToolbarLocation)
+    fun setToolbarItem(definitionId: DefinitionId, toolbarLocation: ToolbarLocation)
     fun toolbar(): Toolbar
 }
 
