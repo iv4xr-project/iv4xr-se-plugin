@@ -1510,7 +1510,8 @@ $dokka.location:spaceEngineers.model/FueledPowerProducerDefinition/fuelProductio
 $dokka.location:spaceEngineers.model/FunctionalBlock///PointingToDeclaration/space-engineers-api/spaceEngineers.model/-functional-block/index.html
 $dokka.location:spaceEngineers.model/FunctionalBlock/enabled/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-functional-block/enabled.html
 $dokka.location:spaceEngineers.model/GamePlayData///PointingToDeclaration/space-engineers-api/spaceEngineers.model/-game-play-data/index.html
-$dokka.location:spaceEngineers.model/GamePlayData/GamePlayData/#kotlin.collections.List[spaceEngineers.model.OreMarker]/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-game-play-data/-game-play-data.html
+$dokka.location:spaceEngineers.model/GamePlayData/GamePlayData/#kotlin.collections.List[spaceEngineers.model.OreMarker]#spaceEngineers.model.Hud/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-game-play-data/-game-play-data.html
+$dokka.location:spaceEngineers.model/GamePlayData/hud/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-game-play-data/hud.html
 $dokka.location:spaceEngineers.model/GamePlayData/oreMarkers/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-game-play-data/ore-markers.html
 $dokka.location:spaceEngineers.model/GasFueledPowerProducerDefinition///PointingToDeclaration/space-engineers-api/spaceEngineers.model/-gas-fueled-power-producer-definition/index.html
 $dokka.location:spaceEngineers.model/GasFueledPowerProducerDefinition/fuelCapacity/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-gas-fueled-power-producer-definition/fuel-capacity.html
@@ -1529,6 +1530,17 @@ $dokka.location:spaceEngineers.model/GravityGeneratorSphereDefinition/minRadius/
 $dokka.location:spaceEngineers.model/GyroDefinition///PointingToDeclaration/space-engineers-api/spaceEngineers.model/-gyro-definition/index.html
 $dokka.location:spaceEngineers.model/GyroDefinition/forceMagnitude/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-gyro-definition/force-magnitude.html
 $dokka.location:spaceEngineers.model/GyroDefinition/requiredPowerInput/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-gyro-definition/required-power-input.html
+$dokka.location:spaceEngineers.model/Hud///PointingToDeclaration/space-engineers-api/spaceEngineers.model/-hud/index.html
+$dokka.location:spaceEngineers.model/Hud/Hud/#kotlin.collections.Map[kotlin.String,kotlin.Float]/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-hud/-hud.html
+$dokka.location:spaceEngineers.model/Hud/stats/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-hud/stats.html
+$dokka.location:spaceEngineers.model/Hud/statsWrapper/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-hud/stats-wrapper.html
+$dokka.location:spaceEngineers.model/HudStatsWrapper///PointingToDeclaration/space-engineers-api/spaceEngineers.model/-hud-stats-wrapper/index.html
+$dokka.location:spaceEngineers.model/HudStatsWrapper/artificialGravity/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-hud-stats-wrapper/artificial-gravity.html
+$dokka.location:spaceEngineers.model/HudStatsWrapper/dampenersOn/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-hud-stats-wrapper/dampeners-on.html
+$dokka.location:spaceEngineers.model/HudStatsWrapper/helmet/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-hud-stats-wrapper/helmet.html
+$dokka.location:spaceEngineers.model/HudStatsWrapper/jetpackOn/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-hud-stats-wrapper/jetpack-on.html
+$dokka.location:spaceEngineers.model/HudStatsWrapper/naturalGravity/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-hud-stats-wrapper/natural-gravity.html
+$dokka.location:spaceEngineers.model/HudStatsWrapper/speed/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-hud-stats-wrapper/speed.html
 $dokka.location:spaceEngineers.model/Inventory///PointingToDeclaration/space-engineers-api/spaceEngineers.model/-inventory/index.html
 $dokka.location:spaceEngineers.model/Inventory/Inventory/#kotlin.Float#kotlin.Float#kotlin.Float#kotlin.Float#kotlin.Float#kotlin.collections.List[spaceEngineers.model.InventoryItem]#kotlin.Int/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-inventory/-inventory.html
 $dokka.location:spaceEngineers.model/Inventory/cargoPercentage/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-inventory/cargo-percentage.html
