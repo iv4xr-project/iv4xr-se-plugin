@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Iv4xr.PluginLib;
 using Sandbox.Game.Entities.Character;
 using Sandbox.Game.Multiplayer;
 using Sandbox.Game.World;
+using VRage;
 using VRageMath;
 
 namespace Iv4xr.SePlugin.Control
@@ -126,8 +128,17 @@ namespace Iv4xr.SePlugin.Control
 
         private long GetMainCharacterId()
         {
-            return Sync.Players
-                           .GetOnlinePlayers()
+            if (!MyVRage.Platform.SessionReady)
+            {
+                throw new InvalidOperationException("Session is not ready!");
+            }
+            var session = MySession.Static
+                    .ThrowIfNull("MySession.Static");
+            var players = session.Players
+                    .ThrowIfNull("Sync.Players");
+            var onlinePlayers = players.GetOnlinePlayers()
+                    .ThrowIfNull("Sync.Players.GetOnlinePlayers");
+            return onlinePlayers
                            .FirstOrDefault(p => p.IsLocalPlayer)
                            ?.Character?.CharacterId() ??
                    throw new NullReferenceException("The main character is missing!");
