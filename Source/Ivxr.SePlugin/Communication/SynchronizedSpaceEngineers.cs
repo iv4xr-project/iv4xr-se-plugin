@@ -14,6 +14,7 @@ namespace Iv4xr.SePlugin.Communication
         public IBlocks Blocks { get; }
         public ISpaceEngineersAdmin Admin { get; }
         public IScreens Screens { get; }
+        public IPause Pause { get; }
 
 
         public SynchronizedSpaceEngineers(ISpaceEngineers se, MethodCallContext methodCallContext)
@@ -30,6 +31,7 @@ namespace Iv4xr.SePlugin.Communication
             Admin = new GameLoopDynamicProxy<ISpaceEngineersAdmin>(se.Admin, methodCallContext)
                     .ActLike<ISpaceEngineersAdmin>();
             Screens = new GameLoopDynamicProxy<IScreens>(se.Screens, methodCallContext).ActLike<IScreens>();
+            Pause = new GameLoopDynamicProxy<IPause>(se.Pause, methodCallContext).ActLike<IPause>();
         }
     }
 }

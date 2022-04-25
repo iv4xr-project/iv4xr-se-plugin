@@ -12,10 +12,16 @@ interface SpaceEngineers {
     val blocks: Blocks
     val admin: SpaceEngineersAdmin
     val screens: Screens
+    val pause: Pause
 
     companion object {
         const val DEFAULT_AGENT_ID = "se0"
     }
+}
+
+interface Pause {
+    fun setPaused(paused: Boolean)
+    fun isPaused(): Boolean
 }
 
 interface Session {

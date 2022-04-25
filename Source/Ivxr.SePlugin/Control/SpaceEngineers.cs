@@ -18,6 +18,7 @@ namespace Iv4xr.SePlugin.Control
         public IDefinitions Definitions { get; }
         public ISpaceEngineersAdmin Admin { get; }
         public IScreens Screens { get; }
+        public IPause Pause { get; }
 
         public IBlocks Blocks { get; }
 
@@ -38,6 +39,7 @@ namespace Iv4xr.SePlugin.Control
             Blocks = blocks;
             Admin = new SpaceEngineersAdmin(characterController, blocks, new ObserverAdmin(lowLevelObserver));
             Screens = new Screens();
+            Pause = new PauseController();
         }
 
         public RealSpaceEngineers(

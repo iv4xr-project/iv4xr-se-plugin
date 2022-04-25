@@ -15,25 +15,32 @@ namespace Iv4xr.SpaceEngineers
         IBlocks Blocks { get; }
         ISpaceEngineersAdmin Admin { get; }
         IScreens Screens { get; }
+        IPause Pause { get; }
     }
-    
+
+    public interface IPause
+    {
+        void SetPaused(bool paused);
+        bool IsPaused();
+    }
+
     public interface ISessionController
     {
         [Role(Admin)]
         void LoadScenario(string scenarioPath);
-        
+
         [Role(Game)]
         void Connect(string address);
-        
+
         [Role(Game)]
         void Disconnect();
-        
+
         void ExitGame();
-        
+
         [Role(Game)]
         void ExitToMainMenu();
     }
-    
+
     public interface IObserver
     {
         CharacterObservation Observe();
@@ -55,7 +62,7 @@ namespace Iv4xr.SpaceEngineers
 
         Toolbar Toolbar();
     }
-    
+
     public interface IDefinitions
     {
         List<BlockDefinition> BlockDefinitions();
@@ -63,7 +70,7 @@ namespace Iv4xr.SpaceEngineers
         Dictionary<string, string> BlockHierarchy();
         Dictionary<string, string> BlockDefinitionHierarchy();
     }
-    
+
     [Role(Game)]
     public interface ICharacterController
     {
