@@ -17,6 +17,7 @@ namespace Iv4xr.SpaceEngineers
         ILoadGame LoadGame { get; }
         INewGame NewGame { get; }
         IGamePlay GamePlay { get; }
+        ISaveAs SaveAs { get; }
     }
 
     public interface IGamePlay
@@ -54,6 +55,9 @@ namespace Iv4xr.SpaceEngineers
         void Character();
         void ExitToWindows();
         void ExitToMainMenu();
+        void SaveAs();
+        void Save();
+        void Players();
     }
 
     public interface IMessageBox
@@ -136,5 +140,13 @@ namespace Iv4xr.SpaceEngineers
 
     public interface INewGame
     {
+    }
+
+    public interface ISaveAs
+    {
+        SaveAsData Data();
+        void PressOk();
+        void PressCancel();
+        void SetName(string name);
     }
 }

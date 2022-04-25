@@ -133,6 +133,7 @@ namespace Iv4xr.SePlugin.Control
         private readonly NewGameScreen m_newGameScreen = new NewGameScreen();
         private readonly LoadGameScreen m_loadGameScreen = new LoadGameScreen();
         private readonly GamePlayScreen m_gamePlayScreen = new GamePlayScreen();
+        private readonly SaveAsScreen m_saveAsScreen = new SaveAsScreen();
 
         public Screens()
         {
@@ -148,6 +149,7 @@ namespace Iv4xr.SePlugin.Control
         public ILoadGame LoadGame => m_loadGameScreen;
         public INewGame NewGame => m_newGameScreen;
         public IGamePlay GamePlay => m_gamePlayScreen;
+        public ISaveAs SaveAs => m_saveAsScreen;
 
         [CallOn(CurrentThread)]
         public string FocusedScreen()
@@ -304,6 +306,11 @@ namespace Iv4xr.SePlugin.Control
             return Screen
                     .GetInstanceFieldOrThrow<MyGuiControlElementGroup>("m_elementGroup");
         }
+        
+        private void PressButtonByText(MyStringId stringId)
+        {
+            Buttons().ButtonByText(stringId).PressButton();
+        }
 
         public void Continue()
         {
@@ -312,43 +319,84 @@ namespace Iv4xr.SePlugin.Control
 
         public void NewGame()
         {
-            Buttons().ButtonByText(MyCommonTexts.ScreenMenuButtonCampaign).PressButton();
+            PressButtonByText(MyCommonTexts.ScreenMenuButtonCampaign);
         }
 
         public void LoadGame()
         {
-            Buttons().ButtonByText(MyCommonTexts.ScreenMenuButtonLoadGame).PressButton();
+            PressButtonByText(MyCommonTexts.ScreenMenuButtonLoadGame);
         }
 
         public void JoinGame()
         {
-            Buttons().ButtonByText(MyCommonTexts.ScreenMenuButtonJoinGame).PressButton();
+            PressButtonByText(MyCommonTexts.ScreenMenuButtonJoinGame);
         }
 
         public void Options()
         {
-            Buttons().ButtonByText(MyCommonTexts.ScreenMenuButtonOptions).PressButton();
+            PressButtonByText(MyCommonTexts.ScreenMenuButtonOptions);
         }
 
         public void Character()
         {
-            Buttons().ButtonByText(MyCommonTexts.ScreenMenuButtonInventory).PressButton();
+            PressButtonByText(MyCommonTexts.ScreenMenuButtonInventory);
         }
 
         public void ExitToWindows()
         {
-            Buttons().ButtonByText(MyCommonTexts.ScreenMenuButtonExitToWindows).PressButton();
+            PressButtonByText(MyCommonTexts.ScreenMenuButtonExitToWindows);
         }
 
         public void ExitToMainMenu()
         {
             CheckScreen();
-            Buttons().ButtonByText(MyCommonTexts.ScreenMenuButtonExitToMainMenu).PressButton();
+            PressButtonByText(MyCommonTexts.ScreenMenuButtonExitToMainMenu);
+        }
+        
+        public void SaveAs()
+        {
+            PressButtonByText(MyCommonTexts.LoadScreenButtonSaveAs);
+        }
+
+        public void Save()
+        {
+            PressButtonByText(MyCommonTexts.ScreenMenuButtonSave);
+        }
+        
+        public void Players()
+        {
+            PressButtonByText(MyCommonTexts.ScreenMenuButtonPlayers);
         }
     }
 
     public class NewGameScreen : AbstractScreen<MyGuiScreenNewGame, object>, INewGame
     {
+    }
+
+    public class SaveAsScreen : AbstractScreen<MyGuiScreenSaveAs, SaveAsData>, ISaveAs
+    {
+        public override SaveAsData Data()
+        {
+            return new SaveAsData()
+            {
+                Name = Screen.TextBox("m_nameTextbox").Text
+            };
+        }
+        
+        public void PressOk()
+        {
+            Screen.ClickButton("m_okButton");
+        }
+
+        public void PressCancel()
+        {
+            Screen.ClickButton("m_cancelButton");
+        }
+
+        public void SetName(string name)
+        {
+            Screen.TextBox("m_nameTextbox").Text = name;
+        }
     }
 
     public class LoadGameScreen : AbstractScreen<MyGuiScreenLoadSandbox, LoadGameData>, ILoadGame

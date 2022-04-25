@@ -13,6 +13,7 @@ interface Screens {
     val serverConnect: ServerConnect
     val loadGame: LoadGame
     val gamePlay: GamePlay
+    val saveAs: SaveAs
 }
 
 interface GamePlay {
@@ -52,6 +53,15 @@ interface MainMenu {
     fun character()
     fun exitToWindows()
     fun exitToMainMenu()
+    fun saveAs()
+    fun save()
+}
+
+interface SaveAs {
+    fun data(): SaveAsData
+    fun pressOk()
+    fun pressCancel()
+    fun setName(name: String)
 }
 
 interface Medicals {

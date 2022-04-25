@@ -102,4 +102,9 @@ namespace Iv4xr.SpaceEngineers.WorldModel
         public string SelectedTab;
         public List<ListedGameInformation> Games;
     }
+
+    public class SaveAsData
+    {
+        public string Name;
+    }
 }
