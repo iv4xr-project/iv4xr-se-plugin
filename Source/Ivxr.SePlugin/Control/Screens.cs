@@ -13,14 +13,18 @@ using Sandbox.Definitions;
 using Sandbox.Game;
 using Sandbox.Game.Entities.Cube;
 using Sandbox.Game.Gui;
+using Sandbox.Game.GUI;
 using Sandbox.Game.Screens;
 using Sandbox.Game.Screens.Helpers;
 using Sandbox.Game.World;
 using Sandbox.Graphics.GUI;
 using SpaceEngineers.Game.GUI;
+using VRage;
 using VRage.Game;
 using VRage.Game.Entity;
 using VRage.Input;
+using VRage.ModAPI;
+using VRage.Utils;
 using VRage.Voxels;
 using VRageMath;
 using static Iv4xr.SePlugin.Communication.CallTarget;
@@ -160,7 +164,7 @@ namespace Iv4xr.SePlugin.Control
             for (var i = 0; i < timeoutMs / singleSleepMs; i++)
             {
                 Thread.Sleep(singleSleepMs);
-                if (!(MyScreenManager.GetScreenWithFocus() is MyGuiScreenLoading))
+                if (!(MyScreenManager.GetScreenWithFocus() is MyGuiScreenLoading) && MyVRage.Platform.SessionReady)
                 {
                     Thread.Sleep(sleepAfter);
                     return;
@@ -204,17 +208,17 @@ namespace Iv4xr.SePlugin.Control
         {
             Screen.ClickButton("m_directConnectButton");
         }
-        
+
         public void JoinWorld()
         {
             Screen.ClickButton("m_joinButton");
         }
-        
+
         public void Refresh()
         {
             Screen.ClickButton("m_refreshButton");
         }
-        
+
         public void ServerDetails()
         {
             Screen.ClickButton("m_detailsButton");
@@ -223,12 +227,12 @@ namespace Iv4xr.SePlugin.Control
         private MyGuiControlTabControl Tabs =>
                 Screen.GetInstanceFieldOrThrow<MyGuiControlTabControl>("m_joinGameTabs");
 
-        
+
         public void SelectTab(int index)
         {
             Tabs.SelectedPage = index;
         }
-        
+
         public void SelectGame(int index)
         {
             GamesTable.SelectedRowIndex = index;
@@ -258,7 +262,7 @@ namespace Iv4xr.SePlugin.Control
                 };
             }).ToList();
         }
-        
+
         public override JoinGameData Data()
         {
             return new JoinGameData()
@@ -335,7 +339,7 @@ namespace Iv4xr.SePlugin.Control
         {
             Buttons().ButtonByText(MyCommonTexts.ScreenMenuButtonExitToWindows).PressButton();
         }
-        
+
         public void ExitToMainMenu()
         {
             CheckScreen();
@@ -513,7 +517,15 @@ namespace Iv4xr.SePlugin.Control
                             Materials = positionedOreMarker.OreDeposit.Materials
                                     .Select(data => data.Material.ToDefinitionId()).ToList(),
                         }
-                ).ToList()
+                ).ToList(),
+                Hud = new Hud()
+                {
+                    Stats = MyHud.Stats.GetInstanceField<Dictionary<MyStringHash, IMyHudStat>>("m_stats").Values
+                            .ToDictionary(
+                                x => x.GetType().Name.Replace("MyStat", ""),
+                                x => x.CurrentValue
+                            )
+                }
             };
         }
 

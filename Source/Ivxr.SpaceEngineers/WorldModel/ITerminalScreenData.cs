@@ -80,9 +80,15 @@ namespace Iv4xr.SpaceEngineers.WorldModel
         public List<File> Files;
     }
 
+    public class Hud
+    {
+        public Dictionary<string, float> Stats;
+    }
+
     public class GamePlayData
     {
         public List<OreMarker> OreMarkers;
+        public Hud Hud;
     }
 
     public class ListedGameInformation

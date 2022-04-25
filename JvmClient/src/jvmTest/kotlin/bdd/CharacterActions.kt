@@ -5,7 +5,6 @@ import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
 import spaceEngineers.controller.extensions.blockingMoveForwardByDistance
 import spaceEngineers.controller.extensions.grindDownToPercentage
 import spaceEngineers.controller.extensions.torchBackToMax
@@ -141,5 +140,14 @@ class CharacterActions : AbstractMultiplayerSteps() {
         pause()
     }
 
+    @When("Character turns off dampeners.")
+    fun character_turns_off_dampeners() = mainClient {
+        character.turnOffDampeners()
+    }
+
+    @When("Character turns on dampeners.")
+    fun character_turns_on_dampeners() = mainClient {
+        character.turnOnDampeners()
+    }
 
 }
