@@ -33,6 +33,7 @@ namespace Iv4xr.SePlugin.Control
                 OrientationForward = orientation.Forward.ToPlain(),
                 OrientationUp = orientation.Up.ToPlain(),
                 Velocity = character.Physics.LinearVelocity.ToPlain(),
+                Gravity = character.Physics.Gravity.ToPlain(),
                 Extent = character.PositionComp.LocalAABB.Size.ToPlain(),
                 Camera = new Pose()
                 {

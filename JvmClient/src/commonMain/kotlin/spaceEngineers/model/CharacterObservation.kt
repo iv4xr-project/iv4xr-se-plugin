@@ -15,6 +15,8 @@ data class CharacterObservation(
     override val orientationUp: Vec3F,
     @SerialName("Velocity")
     val velocity: Vec3F,
+    @SerialName("Gravity")
+    val gravity: Vec3F = Vec3F.ZERO,
     @SerialName("Extent")
     val extent: Vec3F,
     @SerialName("JetpackRunning")

@@ -7,6 +7,7 @@ namespace Iv4xr.SpaceEngineers.WorldModel
     {
         public PlainVec3D Velocity; // Agent's velocity
         public PlainVec3D Extent; // Agent's dimensions (x,y,z size/2)
+        public PlainVec3D Gravity;
         
         public Pose Camera;
         public bool JetpackRunning;
