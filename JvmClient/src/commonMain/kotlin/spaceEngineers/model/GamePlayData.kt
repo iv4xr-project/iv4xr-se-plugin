@@ -32,8 +32,37 @@ data class OreMarker(
     var materials: List<DefinitionId>,
 )
 
+
+interface HudStatsWrapper {
+    val dampenersOn: Boolean
+    val jetpackOn: Boolean
+    val speed: Float
+    val artificialGravity: Float
+    val naturalGravity: Float
+    val helmet: Boolean
+}
+
+@Serializable
+data class Hud(
+    @SerialName("Stats")
+    val stats: Map<String, Float>,
+) {
+    val statsWrapper: HudStatsWrapper
+        get() = object : HudStatsWrapper {
+            override val dampenersOn: Boolean = stats["ControlledEntityDampeners"] == 1.0f
+            override val jetpackOn: Boolean = stats["PlayerJetpack"] == 1.0f
+            override val helmet: Boolean = stats["PlayerHelmet"] == 1.0f
+            override val speed: Float = stats["ControlledEntitySpeed"] ?: error("no speed in stats")
+            override val artificialGravity: Float = stats["ArtificialGravity"] ?: error("no artificialGravity in stats")
+            override val naturalGravity: Float = stats["NaturalGravity"] ?: error("no naturalGravity in stats")
+        }
+}
+
+
 @Serializable
 data class GamePlayData(
     @SerialName("OreMarkers")
     val oreMarkers: List<OreMarker>,
+    @SerialName("Hud")
+    val hud: Hud,
 )
