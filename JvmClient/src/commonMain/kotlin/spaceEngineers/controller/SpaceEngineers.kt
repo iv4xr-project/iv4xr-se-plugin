@@ -44,6 +44,7 @@ interface Character {
         roll: Float = 0f,
         ticks: Int = 1,
     ): CharacterObservation
+    fun jump(movement: Vec3F = Vec3F.ZERO)
 
     fun turnOnJetpack(): CharacterObservation
     fun turnOffJetpack(): CharacterObservation

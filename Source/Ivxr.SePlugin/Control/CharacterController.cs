@@ -45,6 +45,12 @@ namespace Iv4xr.SePlugin.Control
         }
 
 
+        public CharacterObservation Jump(PlainVec3D movement)
+        {
+            Character.Jump(movement.ToVector3());
+            return m_observer.Observe();
+        }
+
         public CharacterObservation TurnOnJetpack()
         {
             Character.JetpackComp.TurnOnJetpack(true);

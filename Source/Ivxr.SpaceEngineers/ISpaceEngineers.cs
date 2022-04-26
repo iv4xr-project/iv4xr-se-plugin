@@ -68,6 +68,7 @@ namespace Iv4xr.SpaceEngineers
     public interface ICharacterController
     {
         CharacterObservation MoveAndRotate(PlainVec3D movement, PlainVec2F rotation3, float roll = 0, int ticks = 1);
+        CharacterObservation Jump(PlainVec3D movement);
         CharacterObservation TurnOnJetpack();
         CharacterObservation TurnOffJetpack();
         CharacterObservation TurnOnDampeners();
