@@ -273,6 +273,8 @@ $dokka.location:spaceEngineers.controller/MainMenu/joinGame/#/PointingToDeclarat
 $dokka.location:spaceEngineers.controller/MainMenu/loadGame/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-main-menu/load-game.html
 $dokka.location:spaceEngineers.controller/MainMenu/newGame/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-main-menu/new-game.html
 $dokka.location:spaceEngineers.controller/MainMenu/options/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-main-menu/options.html
+$dokka.location:spaceEngineers.controller/MainMenu/save/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-main-menu/save.html
+$dokka.location:spaceEngineers.controller/MainMenu/saveAs/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-main-menu/save-as.html
 $dokka.location:spaceEngineers.controller/Medicals///PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-medicals/index.html
 $dokka.location:spaceEngineers.controller/Medicals/chooseFaction/#kotlin.Int/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-medicals/choose-faction.html
 $dokka.location:spaceEngineers.controller/Medicals/factions/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-medicals/factions.html
@@ -312,6 +314,11 @@ $dokka.location:spaceEngineers.controller/RpcSerializer/nextRequestId/#/Pointing
 $dokka.location:spaceEngineers.controller/RpcSerializer/processParameters/#kotlin.collections.List[spaceEngineers.controller.TypedParameter[*]]#kotlin.String/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-rpc-serializer/process-parameters.html
 $dokka.location:spaceEngineers.controller/RpcSerializer/processSingleParameterMethod/#TypeParam(bounds=[kotlin.Any])#kotlin.String#kotlin.reflect.KClass[TypeParam(bounds=[kotlin.Any])]#kotlin.String/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-rpc-serializer/process-single-parameter-method.html
 $dokka.location:spaceEngineers.controller/RpcSerializer/stringLineReaderWriter/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-rpc-serializer/string-line-reader-writer.html
+$dokka.location:spaceEngineers.controller/SaveAs///PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-save-as/index.html
+$dokka.location:spaceEngineers.controller/SaveAs/data/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-save-as/data.html
+$dokka.location:spaceEngineers.controller/SaveAs/pressCancel/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-save-as/press-cancel.html
+$dokka.location:spaceEngineers.controller/SaveAs/pressOk/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-save-as/press-ok.html
+$dokka.location:spaceEngineers.controller/SaveAs/setName/#kotlin.String/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-save-as/set-name.html
 $dokka.location:spaceEngineers.controller/Screens///PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-screens/index.html
 $dokka.location:spaceEngineers.controller/Screens/focusedScreen/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-screens/focused-screen.html
 $dokka.location:spaceEngineers.controller/Screens/gamePlay/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-screens/game-play.html
@@ -320,6 +327,7 @@ $dokka.location:spaceEngineers.controller/Screens/loadGame/#/PointingToDeclarati
 $dokka.location:spaceEngineers.controller/Screens/mainMenu/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-screens/main-menu.html
 $dokka.location:spaceEngineers.controller/Screens/medicals/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-screens/medicals.html
 $dokka.location:spaceEngineers.controller/Screens/messageBox/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-screens/message-box.html
+$dokka.location:spaceEngineers.controller/Screens/saveAs/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-screens/save-as.html
 $dokka.location:spaceEngineers.controller/Screens/serverConnect/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-screens/server-connect.html
 $dokka.location:spaceEngineers.controller/Screens/terminal/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-screens/terminal.html
 $dokka.location:spaceEngineers.controller/Screens/waitUntilTheGameLoaded/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-screens/wait-until-the-game-loaded.html
@@ -1722,6 +1730,9 @@ $dokka.location:spaceEngineers.model/RotationMatrix/right/#/PointingToDeclaratio
 $dokka.location:spaceEngineers.model/RotationMatrix/toString/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-rotation-matrix/to-string.html
 $dokka.location:spaceEngineers.model/RotationMatrix/up/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-rotation-matrix/up.html
 $dokka.location:spaceEngineers.model/RotationMatrix/values/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-rotation-matrix/values.html
+$dokka.location:spaceEngineers.model/SaveAsData///PointingToDeclaration/space-engineers-api/spaceEngineers.model/-save-as-data/index.html
+$dokka.location:spaceEngineers.model/SaveAsData/SaveAsData/#kotlin.String/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-save-as-data/-save-as-data.html
+$dokka.location:spaceEngineers.model/SaveAsData/name/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-save-as-data/name.html
 $dokka.location:spaceEngineers.model/ServerConnectData///PointingToDeclaration/space-engineers-api/spaceEngineers.model/-server-connect-data/index.html
 $dokka.location:spaceEngineers.model/ServerConnectData/ServerConnectData/#kotlin.String#kotlin.Boolean/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-server-connect-data/-server-connect-data.html
 $dokka.location:spaceEngineers.model/ServerConnectData/addServerToFavorites/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-server-connect-data/add-server-to-favorites.html
