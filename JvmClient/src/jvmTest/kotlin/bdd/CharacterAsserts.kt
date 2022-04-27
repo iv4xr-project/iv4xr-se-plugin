@@ -8,7 +8,7 @@ import kotlinx.coroutines.delay
 import spaceEngineers.model.DefinitionId
 import spaceEngineers.model.Vec3F
 import spaceEngineers.model.extensions.allBlocks
-import testhelp.assertVecEquals
+import testhelp.*
 import java.lang.Thread.sleep
 import kotlin.test.*
 
@@ -52,7 +52,7 @@ class CharacterAsserts : AbstractMultiplayerSteps() {
 
     @Then("Character speed is {int} m\\/s.")
     fun character_speed_is_100m_s(speed: Int) = observers {
-        assertEquals(speed.toFloat(), observer.observe().velocity.length(), 0.05f)
+        assertEquals(speed.toFloat(), observer.observe().velocity.length(), DEFAULT_SPEED_TOLERANCE)
     }
 
     @Then("jetpack is off.")
@@ -78,17 +78,21 @@ class CharacterAsserts : AbstractMultiplayerSteps() {
     @Then("Character forward orientation is \\({double}, {double}, {double}).")
     fun character_is_facing(x: Double, y: Double, z: Double) = observers {
         val position = Vec3F(x, y, z)
-        assertVecEquals(position, observer.observe().orientationForward, diff = 0.1f)
+        assertVecEquals(
+            position,
+            observer.observe().orientationForward,
+            absoluteTolerance = DEFAULT_ORIENTATION_TOLERANCE
+        )
     }
 
     @Then("Character speed is {int} m\\/s after {long} milliseconds.")
     fun character_speed_is_m_s_after_milliseconds(speed: Int, delayMs: Long) {
         sleep(delayMs)
         mainClient {
-            assertEquals(speed.toFloat(), screens.gamePlay.data().hud.statsWrapper.speed, 0.05f)
+            assertEquals(speed.toFloat(), screens.gamePlay.data().hud.statsWrapper.speed, DEFAULT_SPEED_TOLERANCE)
         }
         observers {
-            assertEquals(speed.toFloat(), observer.observe().velocity.length(), 0.05f)
+            assertEquals(speed.toFloat(), observer.observe().velocity.length(), DEFAULT_SPEED_TOLERANCE)
         }
     }
 
@@ -143,7 +147,7 @@ class CharacterAsserts : AbstractMultiplayerSteps() {
     @And("Character is at \\({double}, {double}, {double}).")
     fun i_see_character_at_x_y_z(x: Double, y: Double, z: Double) = observers {
         val position = Vec3F(x, y, z)
-        assertVecEquals(position, observer.observe().position, diff = 0.1f)
+        assertVecEquals(position, observer.observe().position, absoluteTolerance = DEFAULT_POSITION_TOLERANCE)
     }
 
     @Then("I can see {int} new block\\(s) with data:")
@@ -201,7 +205,7 @@ class CharacterAsserts : AbstractMultiplayerSteps() {
     fun character_has_less_than_hydrogen_after_milliseconds(hydrogenPercentage: Int, delayMs: Int) = observers {
         delay(delayMs.toLong())
         observer.observe().hydrogen.let { hydrogen ->
-            assertTrue(hydrogen < hydrogenPercentage / 100f, "Hydrogen level is ${hydrogen * 100}")
+            assertLessThan(hydrogen, hydrogenPercentage / 100f, "Hydrogen level is ${hydrogen * 100}")
 
         }
     }
@@ -214,6 +218,9 @@ class CharacterAsserts : AbstractMultiplayerSteps() {
 
     @Then("Character begins to fall towards the ground.")
     fun character_begins_to_fall_towards_the_ground() = observers {
-        assertTrue(observer.observe().velocity.length() > 0f)
+        with(observer.observe()) {
+            assertGreaterThan(velocity.length(), 0f)
+            assertSameDirection(velocity, gravity)
+        }
     }
 }

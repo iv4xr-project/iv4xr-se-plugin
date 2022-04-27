@@ -15,7 +15,7 @@ class Vec3Test {
     private val xyz1 = Vec3F(x = 1, y = 1, z = 1)
 
     private fun assertEquals(v1: Vec3F, v2: Vec3F, diff: Float = 0f) {
-        assertVecEquals(v1, v2, diff = diff)
+        assertVecEquals(v1, v2, absoluteTolerance = diff)
     }
 
     @Test
