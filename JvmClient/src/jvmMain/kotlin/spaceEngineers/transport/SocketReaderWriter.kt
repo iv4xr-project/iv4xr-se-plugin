@@ -43,6 +43,8 @@ class SocketReaderWriter @JvmOverloads constructor(
     lateinit var reader: BufferedReader
     lateinit var writer: PrintWriter
 
+    val address: String = "$host:$port"
+
     init {
         val startTime = System.nanoTime()
         var connected = false

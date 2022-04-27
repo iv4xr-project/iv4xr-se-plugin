@@ -2,7 +2,7 @@ package spaceEngineers.transport
 
 import java.io.File
 
-class GsonResponseWriteToFileReaderWriter(val rw: StringLineReaderWriter, val file: File) : StringLineReaderWriter,
+class GsonResponseWriteToFileReaderWriter(override val rw: StringLineReaderWriter, val file: File) : StringLineReaderWrapper,
     AutoCloseable {
     override fun sendAndReceiveLine(line: String): String {
         return rw.sendAndReceiveLine(line).also { responseLine ->
