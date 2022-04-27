@@ -2,41 +2,49 @@ package testhelp
 
 
 import spaceEngineers.model.CharacterObservation
-import spaceEngineers.model.Observation
 import spaceEngineers.model.Vec3F
-import kotlin.math.abs
 import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
-fun checkMockObservation(obs: Observation?) {
-    assertNotNull(obs)
-    obs.let { observation ->
-        assertEquals("Mock", observation.character.id)
-        assertEquals(Vec3F(4.0f, 2.0f, 0.0f), observation.character.position)
-        observation.grids.first().let { grid ->
-            assertEquals(1, grid.blocks.size)
-            grid.blocks.first().let { block ->
-                assertEquals("blk", block.id)
-                assertEquals(10f, block.maxIntegrity)
-                assertEquals(1f, block.buildIntegrity)
-                assertEquals(5f, block.integrity)
-                assertEquals("MockBlock", block.definitionId.type)
-                assertEquals(Vec3F(5f, 5f, 5f), block.position)
-            }
-        }
-    }
+
+const val DEFAULT_VECTOR_EQUALITY_TOLERANCE: Float = 0.01f
+const val DEFAULT_VECTOR_DIRECTION_TOLERANCE: Float = 0.0001f
+const val DEFAULT_SPEED_TOLERANCE: Float = 0.05f
+const val DEFAULT_POSITION_TOLERANCE: Float = 0.1f
+const val DEFAULT_ORIENTATION_TOLERANCE: Float = 0.1f
+
+fun assertSameDirection(vec1: Vec3F, vec2: Vec3F, absoluteTolerance: Float = DEFAULT_VECTOR_DIRECTION_TOLERANCE) {
+    assertLessThan((vec1.normalized() - vec2.normalized()).length(), absoluteTolerance)
 }
 
-fun assertFloatEquals(expected: Float, result: Float, diff: Float = 0.1f, message: String? = null) {
-    val calculatedDiff = abs(expected - result)
-    assertTrue(calculatedDiff <= diff, message ?: "calculated diff is $calculatedDiff")
+fun assertLessThan(lower: Float, higher: Float, message: String? = null) {
+    assertTrue(lower < higher, message ?: "$lower is not lower than $higher")
 }
 
-fun assertVecEquals(v1: Vec3F, v2: Vec3F, diff: Float = 0.01f, message: String = "") {
-    assertFloatEquals(v1.x, v2.x, diff = diff, message = "$message Vectors not equal (x) ${v1.x} vs ${v2.x} ($v1 vs $v2)")
-    assertFloatEquals(v1.y, v2.y, diff = diff, message = "$message Vectors not equal (y) ${v1.y} vs ${v2.y} ($v1 vs $v2)")
-    assertFloatEquals(v1.z, v2.z, diff = diff, message = "$message Vectors not equal (z) ${v1.z} vs ${v2.z} ($v1 vs $v2)")
+fun assertGreaterThan(higher: Float, lower: Float, message: String? = null) {
+    assertTrue(higher > lower, message ?: "$higher is not greater than $lower")
+}
+
+
+fun assertVecEquals(v1: Vec3F, v2: Vec3F, absoluteTolerance: Float = DEFAULT_VECTOR_EQUALITY_TOLERANCE, message: String = "") {
+    assertEquals(
+        v1.x,
+        v2.x,
+        absoluteTolerance = absoluteTolerance,
+        message = "$message Vectors not equal (x) ${v1.x} vs ${v2.x} ($v1 vs $v2)"
+    )
+    assertEquals(
+        v1.y,
+        v2.y,
+        absoluteTolerance = absoluteTolerance,
+        message = "$message Vectors not equal (y) ${v1.y} vs ${v2.y} ($v1 vs $v2)"
+    )
+    assertEquals(
+        v1.z,
+        v2.z,
+        absoluteTolerance = absoluteTolerance,
+        message = "$message Vectors not equal (z) ${v1.z} vs ${v2.z} ($v1 vs $v2)"
+    )
 }
 
 fun assertCharacterObservationEquals(co1: CharacterObservation, co2: CharacterObservation) {
