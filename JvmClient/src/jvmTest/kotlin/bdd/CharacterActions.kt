@@ -150,4 +150,25 @@ class CharacterActions : AbstractMultiplayerSteps() {
         character.turnOnDampeners()
     }
 
+    @When("Player saves the game as {string} and reloads.")
+    fun player_saves_the_game_as_and_reloads(scenarioId: String) {
+        mainClient {
+            screens.gamePlay.showMainMenu()
+            smallPause()
+            screens.mainMenu.saveAs()
+            smallPause()
+            screens.saveAs.setName(scenarioId)
+            smallPause()
+            screens.saveAs.pressOk()
+            pause()
+            exitToMainMenu {
+                throw it
+            }
+            //TODO: remove pause, wait until the game is in main menu
+            pause()
+            loadScenario(scenarioId)
+
+        }
+    }
+
 }
