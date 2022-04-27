@@ -1,5 +1,17 @@
 Feature: Jetpack mode
 
+  Scenario: C284489 Jetpack is persistent A
+    Given Scenario used is "simple-place-grind-torch".
+    And jetpack is off.
+    When Player saves the game as "jetpack-persistent-A-saved" and reloads.
+    Then jetpack is off.
+
+  Scenario: C284489 Jetpack is persistent B
+    Given Scenario used is "moon-base-flying".
+    And jetpack is on.
+    When Player saves the game as "jetpack-persistent-B-saved" and reloads.
+    Then jetpack is on.
+
   Scenario: C284492 Character with jetpack can reach the maximum speed of 110 m/s
     Given Scenario used is "moon-base-flying".
     And jetpack is on.

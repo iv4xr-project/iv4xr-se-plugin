@@ -30,25 +30,15 @@ class CharacterAsserts : AbstractMultiplayerSteps() {
         repeatUntilSuccess { assertTrue(observer.observe().bootsState.isGreen()) }
     }
 
-    @Then("Character boots are green after {int}ms.")
-    fun character_boots_are_green_after_ms(ms: Int) = observers {
-        repeatUntilSuccess(initialDelayMs = ms.toLong()) {
-            assertTrue(observer.observe().bootsState.isGreen())
-        }
-    }
-
     @Then("Character boots are yellow.")
     fun character_boots_are_yellow() = observers {
-        assertTrue(observer.observe().bootsState.isYellow())
+        repeatUntilSuccess {  assertTrue(observer.observe().bootsState.isYellow()) }
     }
 
-    @Then("Character boots are yellow after {int}ms.")
-    fun character_boots_are_yellow_after_ms(ms: Int) = observers {
-        repeatUntilSuccess(initialDelayMs = ms.toLong()) {
-            assertTrue(observer.observe().bootsState.isYellow())
-        }
+    @Then("Character boots are white.")
+    fun character_boots_are_white() = observers {
+        repeatUntilSuccess {  assertTrue(observer.observe().bootsState.isWhite()) }
     }
-
 
     @Then("Character speed is {int} m\\/s.")
     fun character_speed_is_100m_s(speed: Int) = observers {

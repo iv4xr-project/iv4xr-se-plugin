@@ -1,17 +1,29 @@
 Feature: Magboots
 
-  Background:
-    Given Scenario used is "simple-place-grind-torch-with-tools".
 
   Scenario: C197556 Boots can become yellow when in green state by initiating jet-pack
-    Given Character boots are green after 100ms.
+    Given Scenario used is "simple-place-grind-torch-with-tools".
+    And Character boots are green.
     And Character turns on jetpack.
-    Then Character boots are yellow after 200ms.
+    Then Character boots are yellow.
 
 
   Scenario: C197556 Boots can become green
-    Given Character boots are green after 100ms.
-    And Character turns on jetpack.
-    Then Character boots are yellow after 200ms.
+    Given Scenario used is "simple-place-grind-torch-with-tools-jetpack".
+    Then Character boots are yellow.
     When Character turns off jetpack.
-    Then Character boots are green after 100ms.
+    Then Character boots are green.
+
+
+  Scenario: C284511 Boot state is persistent A
+    Given Scenario used is "simple-place-grind-torch".
+    And Character boots are green.
+    When Player saves the game as "magboots-persistent-A-saved" and reloads.
+    And Character boots are green.
+
+
+  Scenario: C284511 Boot state is persistent B
+    Given Scenario used is "moon-base-flying".
+    And Character boots are white.
+    When Player saves the game as "magboots-persistent-B-saved" and reloads.
+    And Character boots are white.
