@@ -51,4 +51,6 @@ data class CharacterObservation(
     val bootsState: BootsState,
     @SerialName("DisplayName")
     val displayName: String,
+    @SerialName("RelativeDampeningEntity")
+    val relativeDampeningEntity: BaseEntity? = null,
 ) : Entity

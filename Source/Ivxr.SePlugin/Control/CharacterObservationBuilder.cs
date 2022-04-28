@@ -55,6 +55,7 @@ namespace Iv4xr.SePlugin.Control
                 Movement = (CharacterMovementEnum)character.CurrentMovementState,
                 Inventory = character.GetInventory().ToInventory(),
                 BootsState = GetBootState(character),
+                RelativeDampeningEntity = character.RelativeDampeningEntity.ToEntity(),
             };
         }
         
