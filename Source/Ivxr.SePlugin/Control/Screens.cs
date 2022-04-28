@@ -554,6 +554,7 @@ namespace Iv4xr.SePlugin.Control
 
         public override GamePlayData Data()
         {
+            CheckScreen();
             return new GamePlayData()
             {
                 OreMarkers = CreateMarkers().Select(positionedOreMarker =>
