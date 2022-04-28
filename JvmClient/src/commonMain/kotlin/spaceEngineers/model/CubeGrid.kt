@@ -18,4 +18,6 @@ data class CubeGrid(
     val blocks: List<Block> = emptyList(),
     @SerialName("Mass")
     val mass: Float,
+    @SerialName("Parked")
+    val parked: Boolean = false,
 ) : Entity

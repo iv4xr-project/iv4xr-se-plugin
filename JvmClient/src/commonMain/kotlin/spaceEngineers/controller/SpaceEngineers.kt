@@ -51,6 +51,7 @@ interface Character {
     fun turnOnDampeners(): CharacterObservation
     fun turnOffDampeners(): CharacterObservation
     fun switchHelmet(): CharacterObservation
+    fun switchParkedStatus(): Boolean
 
     fun beginUsingTool()
     fun endUsingTool()

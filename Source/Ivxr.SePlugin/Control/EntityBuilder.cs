@@ -68,6 +68,7 @@ namespace Iv4xr.SePlugin.Control
                 OrientationUp = orientationUp.ToPlain(),
                 Blocks = seBlocks,
                 Mass = sourceGrid.Mass,
+                Parked = sourceGrid.IsParked,
             };
         }
 

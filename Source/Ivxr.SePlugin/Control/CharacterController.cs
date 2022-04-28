@@ -37,7 +37,7 @@ namespace Iv4xr.SePlugin.Control
             Character.JetpackComp.EnableDampeners(true);
             return m_observer.Observe();
         }
-        
+
         public CharacterObservation TurnOffDampeners()
         {
             Character.JetpackComp.EnableDampeners(false);
@@ -95,7 +95,18 @@ namespace Iv4xr.SePlugin.Control
         {
             Character.ShowInventory();
         }
-        
+
+        public bool SwitchParkedStatus()
+        {
+            var controlledEntity = MySession.Static.ControlledEntity;
+            if (!(controlledEntity is MyShipController ctrl))
+                throw new InvalidOperationException(
+                    $"Current ControlledEntity is not of type MyShipController, but {controlledEntity.GetType()}"
+                );
+            ctrl.SwitchParkedStatus();
+            return ctrl.CubeGrid.IsParked;
+        }
+
         public void Use(string blockId, int functionIndex, int action)
         {
             var block = m_lowLevelObserver.GetBlockById(blockId);
@@ -105,9 +116,11 @@ namespace Iv4xr.SePlugin.Control
             obj.Use((UseActionEnum)action, Character);
         }
 
-        public CharacterObservation Create(string name, PlainVec3D position, PlainVec3D orientationForward, PlainVec3D orientationUp)
+        public CharacterObservation Create(string name, PlainVec3D position, PlainVec3D orientationForward,
+            PlainVec3D orientationUp)
         {
-            m_session.CreateCharacter(name, position.ToVector3D(), orientationForward.ToVector3D(), orientationUp.ToVector3D());
+            m_session.CreateCharacter(name, position.ToVector3D(), orientationForward.ToVector3D(),
+                orientationUp.ToVector3D());
             return m_observer.Observe();
         }
 

@@ -6,5 +6,6 @@ namespace Iv4xr.SpaceEngineers.WorldModel
     {
         public List<Block> Blocks;
         public float Mass;
+        public bool Parked;
     }
 }

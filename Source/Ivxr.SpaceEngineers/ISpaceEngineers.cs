@@ -79,6 +79,7 @@ namespace Iv4xr.SpaceEngineers
         void Use();
         void ShowTerminal();
         void ShowInventory();
+        bool SwitchParkedStatus();
     }
 
     [Role(Game)]
