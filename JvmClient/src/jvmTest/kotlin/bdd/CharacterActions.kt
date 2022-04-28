@@ -171,4 +171,9 @@ class CharacterActions : AbstractMultiplayerSteps() {
         }
     }
 
+    @When("Character jumps.")
+    fun character_jumps() = mainClient {
+        character.jump()
+    }
+
 }

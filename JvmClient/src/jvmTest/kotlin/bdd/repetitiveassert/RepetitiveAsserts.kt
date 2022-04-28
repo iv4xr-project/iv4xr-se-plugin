@@ -14,6 +14,7 @@ suspend fun repeatUntilSuccess(
             return
         } catch (e: AssertionError) {
             //swallow
+            println(e.message)
         }
         delay(config.delayMs)
     }
