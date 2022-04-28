@@ -126,6 +126,7 @@ namespace Iv4xr.SePlugin
             {
                 throw new NullReferenceException("character");
             }
+
             if (character.GetIdentity() == null)
             {
                 throw new NullReferenceException("character.identity");
@@ -133,7 +134,7 @@ namespace Iv4xr.SePlugin
 
             return character.GetIdentity().IdentityId;
         }
-        
+
         public static AmountedDefinitionId ToAmountedDefinition(this MyBlueprintDefinitionBase.Item item)
         {
             return new AmountedDefinitionId()
@@ -142,7 +143,7 @@ namespace Iv4xr.SePlugin
                 Amount = item.Amount.ToIntSafe()
             };
         }
-        
+
         public static BlueprintDefinition ToBlueprintDefinition(this MyBlueprintDefinitionBase bp)
         {
             return new BlueprintDefinition()
@@ -152,7 +153,7 @@ namespace Iv4xr.SePlugin
                 Results = bp.Results.Select(i => i.ToAmountedDefinition()).ToList(),
             };
         }
-        
+
         public static ProductionQueueItem ToProductionQueueItem(this MyProductionBlock.QueueItem bp)
         {
             return new ProductionQueueItem()
@@ -161,7 +162,7 @@ namespace Iv4xr.SePlugin
                 Blueprint = bp.Blueprint.ToBlueprintDefinition()
             };
         }
-        
+
         public static AmountedDefinitionId ToAmountedDefinition(this MyPhysicalInventoryItem i)
         {
             return new AmountedDefinitionId()
@@ -170,7 +171,7 @@ namespace Iv4xr.SePlugin
                 Id = i.GetDefinitionId().ToDefinitionId(),
             };
         }
-        
+
         public static Inventory ToInventory(this MyInventory myInventory)
         {
             return new Inventory()
@@ -184,7 +185,7 @@ namespace Iv4xr.SePlugin
                 Id = myInventory.InventoryId.m_hash,
             };
         }
-        
+
         public static InventoryItem ToInventoryItem(this MyPhysicalInventoryItem myItem)
         {
             return new InventoryItem()
@@ -204,7 +205,7 @@ namespace Iv4xr.SePlugin
                 IsDirectory = (fileInfo.Attributes & FileAttributes.Directory) != 0
             };
         }
-        
+
         public static File ToFile(this DirectoryInfo directoryInfo)
         {
             return new File()
@@ -225,8 +226,8 @@ namespace Iv4xr.SePlugin
                 EntityId = floatingObject.EntityId,
             };
         }
-      
-        
+
+
         public static PhysicalItemDefinition ToPhysicalItemDefinition(this MyPhysicalItemDefinition myDefinitionBase)
         {
             var result = new PhysicalItemDefinition();
@@ -246,14 +247,14 @@ namespace Iv4xr.SePlugin
                 Name = toolbarItem.DisplayName.ToString()
             };
         }
-        
+
         public static List<Role> Roles(this DebugInfo debugInfo)
         {
             var roles = new List<Role>();
             if (debugInfo.IsDedicated ||
                 debugInfo.IsServer && debugInfo.SessionReady ||
                 !debugInfo.SessionReady && !debugInfo.IsDedicated && !debugInfo.MultiplayerActive
-            )
+               )
             {
                 roles.Add(Role.Admin);
             }
@@ -267,10 +268,25 @@ namespace Iv4xr.SePlugin
 
             return roles;
         }
-        
+
         public static bool CanDoRole(this DebugInfo debugInfo, Role role)
         {
             return debugInfo.Roles().Contains(role);
+        }
+
+        public static Entity ToEntity(this MyEntity entity, Entity newEntity = null)
+        {
+            if (entity == null)
+            {
+                return null;
+            }
+            var orientation = entity.PositionComp.GetOrientation();
+            var result = newEntity ?? new Entity();
+            result.Id = entity.EntityId.ToString();
+            result.Position = entity.PositionComp.GetPosition().ToPlain();
+            result.OrientationForward = orientation.Forward.ToPlain();
+            result.OrientationUp = orientation.Up.ToPlain();
+            return result;
         }
     }
 }

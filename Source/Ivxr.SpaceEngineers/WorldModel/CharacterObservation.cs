@@ -25,5 +25,6 @@ namespace Iv4xr.SpaceEngineers.WorldModel
         public Inventory Inventory;
         public BootsState BootsState;
         public string DisplayName;
+        public Entity RelativeDampeningEntity;
     }
 }
