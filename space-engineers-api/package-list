@@ -158,8 +158,10 @@ $dokka.location:spaceEngineers.controller//loadFromTestResources/spaceEngineers.
 $dokka.location:spaceEngineers.controller//processHomeDir/java.io.File#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/process-home-dir.html
 $dokka.location:spaceEngineers.controller//processHomeDir/kotlin.String#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/process-home-dir.html
 $dokka.location:spaceEngineers.controller//serializerMapping/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/serializer-mapping.html
+$dokka.location:spaceEngineers.controller//socketReaderWriter/spaceEngineers.transport.StringLineReaderWriter#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/socket-reader-writer.html
 $dokka.location:spaceEngineers.controller//toFile/kotlin.String#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/to-file.html
 $dokka.location:spaceEngineers.controller//unixToWindowsPath/kotlin.String#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/unix-to-windows-path.html
+$dokka.location:spaceEngineers.controller//wrapExceptionWithStringLineReaderInfo/spaceEngineers.transport.StringLineReaderWriter#kotlin.Function0[TypeParam(bounds=[kotlin.Any])]/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/wrap-exception-with-string-line-reader-info.html
 $dokka.location:spaceEngineers.controller/BlockDefinitionSerializer///PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-block-definition-serializer/index.html
 $dokka.location:spaceEngineers.controller/BlockSerializer///PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-block-serializer/index.html
 $dokka.location:spaceEngineers.controller/Blocks///PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-blocks/index.html
@@ -343,6 +345,8 @@ $dokka.location:spaceEngineers.controller/Session/disconnect/#/PointingToDeclara
 $dokka.location:spaceEngineers.controller/Session/exitGame/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-session/exit-game.html
 $dokka.location:spaceEngineers.controller/Session/exitToMainMenu/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-session/exit-to-main-menu.html
 $dokka.location:spaceEngineers.controller/Session/loadScenario/#kotlin.String/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-session/load-scenario.html
+$dokka.location:spaceEngineers.controller/SocketReaderWriterException///PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-socket-reader-writer-exception/index.html
+$dokka.location:spaceEngineers.controller/SocketReaderWriterException/SocketReaderWriterException/#spaceEngineers.transport.jsonrpc.KotlinJsonRpcError#kotlin.String/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-socket-reader-writer-exception/-socket-reader-writer-exception.html
 $dokka.location:spaceEngineers.controller/SpaceEngineers.Companion///PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-space-engineers/-companion/index.html
 $dokka.location:spaceEngineers.controller/SpaceEngineers.Companion/DEFAULT_AGENT_ID/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-space-engineers/-companion/-d-e-f-a-u-l-t_-a-g-e-n-t_-i-d.html
 $dokka.location:spaceEngineers.controller/SpaceEngineers///PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-space-engineers/index.html
@@ -368,7 +372,7 @@ $dokka.location:spaceEngineers.controller/SpaceEngineersJavaProxy.Companion/from
 $dokka.location:spaceEngineers.controller/SpaceEngineersJavaProxy///PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-space-engineers-java-proxy/index.html
 $dokka.location:spaceEngineers.controller/SpaceEngineersJavaProxy/SpaceEngineersJavaProxy/#kotlin.String#spaceEngineers.transport.StringLineReaderWriter#kotlin.reflect.KClass[*]#kotlin.String#kotlin.collections.List[kotlin.reflect.KFunction[*]]#kotlin.collections.MutableMap[kotlin.String,kotlin.Any]/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-space-engineers-java-proxy/-space-engineers-java-proxy.html
 $dokka.location:spaceEngineers.controller/SpaceEngineersJavaProxy/agentId/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-space-engineers-java-proxy/agent-id.html
-$dokka.location:spaceEngineers.controller/SpaceEngineersJavaProxy/callRpc/#spaceEngineers.transport.StringLineReaderWriter#kotlin.String#kotlin.reflect.KType/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-space-engineers-java-proxy/call-rpc.html
+$dokka.location:spaceEngineers.controller/SpaceEngineersJavaProxy/callRpc/#kotlin.String#kotlin.reflect.KType/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-space-engineers-java-proxy/call-rpc.html
 $dokka.location:spaceEngineers.controller/SpaceEngineersJavaProxy/dottedPrefix/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-space-engineers-java-proxy/dotted-prefix.html
 $dokka.location:spaceEngineers.controller/SpaceEngineersJavaProxy/implementedInterface/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-space-engineers-java-proxy/implemented-interface.html
 $dokka.location:spaceEngineers.controller/SpaceEngineersJavaProxy/invoke/#kotlin.Any#java.lang.reflect.Method#kotlin.Array[kotlin.Any?]?/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-space-engineers-java-proxy/invoke.html
@@ -1963,11 +1967,6 @@ $dokka.location:spaceEngineers.transport/AlwaysReturnSameLineReaderWriter///Poin
 $dokka.location:spaceEngineers.transport/AlwaysReturnSameLineReaderWriter/AlwaysReturnSameLineReaderWriter/#kotlin.String/PointingToDeclaration/space-engineers-api/spaceEngineers.transport/-always-return-same-line-reader-writer/-always-return-same-line-reader-writer.html
 $dokka.location:spaceEngineers.transport/AlwaysReturnSameLineReaderWriter/response/#/PointingToDeclaration/space-engineers-api/spaceEngineers.transport/-always-return-same-line-reader-writer/response.html
 $dokka.location:spaceEngineers.transport/AlwaysReturnSameLineReaderWriter/sendAndReceiveLine/#kotlin.String/PointingToDeclaration/space-engineers-api/spaceEngineers.transport/-always-return-same-line-reader-writer/send-and-receive-line.html
-$dokka.location:spaceEngineers.transport/GsonReaderWriter///PointingToDeclaration/space-engineers-api/spaceEngineers.transport/-gson-reader-writer/index.html
-$dokka.location:spaceEngineers.transport/GsonReaderWriter/GsonReaderWriter/#com.google.gson.Gson#spaceEngineers.transport.StringLineReaderWriter/PointingToDeclaration/space-engineers-api/spaceEngineers.transport/-gson-reader-writer/-gson-reader-writer.html
-$dokka.location:spaceEngineers.transport/GsonReaderWriter/close/#/PointingToDeclaration/space-engineers-api/spaceEngineers.transport/-gson-reader-writer/close.html
-$dokka.location:spaceEngineers.transport/GsonReaderWriter/gson/#/PointingToDeclaration/space-engineers-api/spaceEngineers.transport/-gson-reader-writer/gson.html
-$dokka.location:spaceEngineers.transport/GsonReaderWriter/stringLineReaderWriter/#/PointingToDeclaration/space-engineers-api/spaceEngineers.transport/-gson-reader-writer/string-line-reader-writer.html
 $dokka.location:spaceEngineers.transport/GsonResponseAppendToFileReaderWriter///PointingToDeclaration/space-engineers-api/spaceEngineers.transport/-gson-response-append-to-file-reader-writer/index.html
 $dokka.location:spaceEngineers.transport/GsonResponseAppendToFileReaderWriter/GsonResponseAppendToFileReaderWriter/#spaceEngineers.transport.StringLineReaderWriter#java.io.File#kotlin.Boolean/PointingToDeclaration/space-engineers-api/spaceEngineers.transport/-gson-response-append-to-file-reader-writer/-gson-response-append-to-file-reader-writer.html
 $dokka.location:spaceEngineers.transport/GsonResponseAppendToFileReaderWriter/close/#/PointingToDeclaration/space-engineers-api/spaceEngineers.transport/-gson-response-append-to-file-reader-writer/close.html
@@ -1992,11 +1991,14 @@ $dokka.location:spaceEngineers.transport/SocketReaderWriter.Companion/SPACE_ENG_
 $dokka.location:spaceEngineers.transport/SocketReaderWriter.Companion/closeSafely/#java.io.Closeable?/PointingToDeclaration/space-engineers-api/spaceEngineers.transport/-socket-reader-writer/-companion/close-safely.html
 $dokka.location:spaceEngineers.transport/SocketReaderWriter///PointingToDeclaration/space-engineers-api/spaceEngineers.transport/-socket-reader-writer/index.html
 $dokka.location:spaceEngineers.transport/SocketReaderWriter/SocketReaderWriter/#kotlin.String#kotlin.Int#kotlin.Int#kotlin.Int#kotlin.Int/PointingToDeclaration/space-engineers-api/spaceEngineers.transport/-socket-reader-writer/-socket-reader-writer.html
+$dokka.location:spaceEngineers.transport/SocketReaderWriter/address/#/PointingToDeclaration/space-engineers-api/spaceEngineers.transport/-socket-reader-writer/address.html
 $dokka.location:spaceEngineers.transport/SocketReaderWriter/close/#/PointingToDeclaration/space-engineers-api/spaceEngineers.transport/-socket-reader-writer/close.html
 $dokka.location:spaceEngineers.transport/SocketReaderWriter/reader/#/PointingToDeclaration/space-engineers-api/spaceEngineers.transport/-socket-reader-writer/reader.html
 $dokka.location:spaceEngineers.transport/SocketReaderWriter/sendAndReceiveLine/#kotlin.String/PointingToDeclaration/space-engineers-api/spaceEngineers.transport/-socket-reader-writer/send-and-receive-line.html
 $dokka.location:spaceEngineers.transport/SocketReaderWriter/socket/#/PointingToDeclaration/space-engineers-api/spaceEngineers.transport/-socket-reader-writer/socket.html
 $dokka.location:spaceEngineers.transport/SocketReaderWriter/writer/#/PointingToDeclaration/space-engineers-api/spaceEngineers.transport/-socket-reader-writer/writer.html
+$dokka.location:spaceEngineers.transport/StringLineReaderWrapper///PointingToDeclaration/space-engineers-api/spaceEngineers.transport/-string-line-reader-wrapper/index.html
+$dokka.location:spaceEngineers.transport/StringLineReaderWrapper/rw/#/PointingToDeclaration/space-engineers-api/spaceEngineers.transport/-string-line-reader-wrapper/rw.html
 $dokka.location:spaceEngineers.transport/StringLineReaderWriter///PointingToDeclaration/space-engineers-api/spaceEngineers.transport/-string-line-reader-writer/index.html
 $dokka.location:spaceEngineers.transport/StringLineReaderWriter/sendAndReceiveLine/#kotlin.String/PointingToDeclaration/space-engineers-api/spaceEngineers.transport/-string-line-reader-writer/send-and-receive-line.html
 $dokka.location:spaceEngineers.util.generator.maze////PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/index.html
