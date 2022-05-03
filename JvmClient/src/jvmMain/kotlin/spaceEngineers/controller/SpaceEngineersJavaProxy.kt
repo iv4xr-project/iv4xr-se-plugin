@@ -15,6 +15,7 @@ import kotlin.random.Random
 import kotlin.reflect.*
 import kotlin.reflect.full.createType
 import kotlin.reflect.full.memberFunctions
+import kotlin.reflect.full.valueParameters
 
 
 class SpaceEngineersJavaProxy(
@@ -62,8 +63,9 @@ class SpaceEngineersJavaProxy(
             { index, parameter ->
                 val javaParameter = method.parameters[index]
                 val type = parameter.type
-                val ktype: KClass<Any> = type.kotlin as KClass<Any>
-                TypedParameter(javaParameter.name, args!![index], ktype)
+                val kclass: KClass<Any> = type.kotlin as KClass<Any>
+                val ktype = kotlinMethodDefinition.valueParameters[index].type
+                TypedParameter(javaParameter.name, args!![index], kclass, ktype)
             },
             returnType = responseReturnType
         )

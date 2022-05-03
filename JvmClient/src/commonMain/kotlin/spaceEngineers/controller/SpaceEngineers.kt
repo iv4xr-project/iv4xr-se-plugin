@@ -2,6 +2,8 @@ package spaceEngineers.controller
 
 import spaceEngineers.model.*
 import spaceEngineers.navigation.NavGraph
+import spaceEngineers.movement.FrameSnapshot
+
 
 interface SpaceEngineers {
     val session: Session
@@ -12,10 +14,18 @@ interface SpaceEngineers {
     val blocks: Blocks
     val admin: SpaceEngineersAdmin
     val screens: Screens
+    val input: Input
 
     companion object {
         const val DEFAULT_AGENT_ID = "se0"
     }
+}
+
+interface Input {
+    fun startRecording()
+    fun stopRecording(): List<FrameSnapshot>
+    fun startPlaying(snapshots: List<FrameSnapshot>)
+    fun stopPlaying()
 }
 
 interface Session {

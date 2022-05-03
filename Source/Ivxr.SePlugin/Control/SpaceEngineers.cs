@@ -1,7 +1,9 @@
 ﻿using Iv4xr.PluginLib;
 using Iv4xr.SePlugin.Communication;
 using Iv4xr.SePlugin.Config;
+using Iv4xr.SePlugin.UI;
 using Iv4xr.SpaceEngineers;
+using Iv4xr.SpaceEngineers.UI;
 using Iv4xr.SpaceEngineers.WorldModel;
 using Sandbox;
 using VRage.Game;
@@ -18,6 +20,7 @@ namespace Iv4xr.SePlugin.Control
         public IDefinitions Definitions { get; }
         public ISpaceEngineersAdmin Admin { get; }
         public IScreens Screens { get; }
+        public IInput Input { get; }
 
         public IBlocks Blocks { get; }
 
@@ -38,6 +41,7 @@ namespace Iv4xr.SePlugin.Control
             Blocks = blocks;
             Admin = new SpaceEngineersAdmin(characterController, blocks, new ObserverAdmin(lowLevelObserver));
             Screens = new Screens();
+            Input = RealInput.Instance;
         }
 
         public RealSpaceEngineers(

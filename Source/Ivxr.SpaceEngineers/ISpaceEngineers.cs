@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Iv4xr.SpaceEngineers.Navigation;
+using Iv4xr.SpaceEngineers.UI;
 using Iv4xr.SpaceEngineers.WorldModel;
 using static Iv4xr.SpaceEngineers.Role;
 
@@ -15,6 +16,7 @@ namespace Iv4xr.SpaceEngineers
         IBlocks Blocks { get; }
         ISpaceEngineersAdmin Admin { get; }
         IScreens Screens { get; }
+        IInput Input { get; }
     }
     
     public interface ISessionController

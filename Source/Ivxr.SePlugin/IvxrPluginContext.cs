@@ -7,6 +7,7 @@ using Iv4xr.SePlugin.Config;
 using Iv4xr.SePlugin.Control;
 using Iv4xr.SePlugin.Json;
 using Iv4xr.SePlugin.SeLib;
+using Iv4xr.SePlugin.UI;
 using VRage.FileSystem;
 
 namespace Iv4xr.SePlugin
@@ -48,17 +49,34 @@ namespace Iv4xr.SePlugin
             JsonRpcStarter.Start();
         }
 
-        public void InitSession()
+        public void BeforeStart()
         {
             ContinuousMovementController.Reset();
         }
 
+        public void Update()
+        {
+            MethodCallContext.MainThread.CallEverything();
+        }
+
         public void BeforeSimulation()
         {
+            MethodCallContext.BeforeSimulation.CallEverything();
             if (m_gameSession.Initialized())
             {
                 ContinuousMovementController.Tick();
             }
+        }
+        
+        public void AfterSimulation()
+        {
+            MethodCallContext.AfterSimulation.CallEverything();
+        }
+        
+
+        public void HandleInput()
+        {
+            RealInput.Instance.Tick();
         }
 
         public void EndSession()
