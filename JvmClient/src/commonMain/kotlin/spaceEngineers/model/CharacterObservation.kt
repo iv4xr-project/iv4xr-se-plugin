@@ -53,4 +53,6 @@ data class CharacterObservation(
     val displayName: String,
     @SerialName("RelativeDampeningEntity")
     val relativeDampeningEntity: BaseEntity? = null,
+    @SerialName("MovementFlags")
+    val movementFlags: CharacterMovementFlags = CharacterMovementFlags(0u),
 ) : Entity

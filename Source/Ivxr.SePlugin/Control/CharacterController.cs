@@ -107,6 +107,12 @@ namespace Iv4xr.SePlugin.Control
             return ctrl.CubeGrid.IsParked;
         }
 
+        public bool SwitchWalk()
+        {
+            Character.SwitchWalk();
+            return Character.WantsWalk;
+        }
+
         public void Use(string blockId, int functionIndex, int action)
         {
             var block = m_lowLevelObserver.GetBlockById(blockId);

@@ -14,19 +14,18 @@ namespace Iv4xr.SePlugin.Control
 {
     public class CharacterObservationBuilder
     {
-
         private readonly EntityBuilder m_entityBuilder;
 
         internal CharacterObservationBuilder(EntityBuilder entityBuilder)
         {
             m_entityBuilder = entityBuilder;
         }
-        
+
         public CharacterObservation CreateCharacterObservation(MyCharacter character)
         {
             var orientation = character.PositionComp.GetOrientation();
             return new CharacterObservation
-            { 
+            {
                 Id = character.CharacterId().ToString(),
                 DisplayName = character.DisplayName,
                 Position = character.PositionComp.GetPosition().ToPlain(), // Consider reducing allocations.
@@ -56,16 +55,17 @@ namespace Iv4xr.SePlugin.Control
                 Inventory = character.GetInventory().ToInventory(),
                 BootsState = GetBootState(character),
                 RelativeDampeningEntity = character.RelativeDampeningEntity.ToEntity(),
+                MovementFlags = (CharacterMovementFlags)((byte)character.MovementFlags),
             };
         }
-        
+
         private static BootsState GetBootState(MyCharacter character)
         {
             return character
                     .GetInstanceFieldOrThrow<object>("m_bootsState")
                     .GetInstanceFieldOrThrow<BootsState>("m_value");
         }
-        
+
         private Block TargetBlock(MyCharacter character)
         {
             return TargetWeaponBlock(character) ?? TargetDetectorBlock(character);
@@ -91,6 +91,5 @@ namespace Iv4xr.SePlugin.Control
             var detector = character.Components.Get<MyCharacterDetectorComponent>();
             return detector?.UseObject != null ? EntityBuilder.CreateUseObject(detector.UseObject) : null;
         }
-
     }
 }

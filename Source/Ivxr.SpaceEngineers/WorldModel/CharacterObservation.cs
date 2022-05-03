@@ -26,5 +26,6 @@ namespace Iv4xr.SpaceEngineers.WorldModel
         public BootsState BootsState;
         public string DisplayName;
         public Entity RelativeDampeningEntity;
+        public CharacterMovementFlags MovementFlags;
     }
 }

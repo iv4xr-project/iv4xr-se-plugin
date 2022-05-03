@@ -62,6 +62,7 @@ interface Character {
     fun turnOffDampeners(): CharacterObservation
     fun switchHelmet(): CharacterObservation
     fun switchParkedStatus(): Boolean
+    fun switchWalk(): Boolean
 
     fun beginUsingTool()
     fun endUsingTool()
