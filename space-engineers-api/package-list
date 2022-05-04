@@ -181,6 +181,7 @@ $dokka.location:spaceEngineers.controller/Character/moveAndRotate/#spaceEngineer
 $dokka.location:spaceEngineers.controller/Character/showInventory/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-character/show-inventory.html
 $dokka.location:spaceEngineers.controller/Character/showTerminal/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-character/show-terminal.html
 $dokka.location:spaceEngineers.controller/Character/switchHelmet/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-character/switch-helmet.html
+$dokka.location:spaceEngineers.controller/Character/switchParkedStatus/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-character/switch-parked-status.html
 $dokka.location:spaceEngineers.controller/Character/turnOffDampeners/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-character/turn-off-dampeners.html
 $dokka.location:spaceEngineers.controller/Character/turnOffJetpack/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-character/turn-off-jetpack.html
 $dokka.location:spaceEngineers.controller/Character/turnOnDampeners/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-character/turn-on-dampeners.html
@@ -643,12 +644,13 @@ $dokka.location:spaceEngineers.model/ConveyorSorterDefinition/powerInput/#/Point
 $dokka.location:spaceEngineers.model/CryoChamberDefinition///PointingToDeclaration/space-engineers-api/spaceEngineers.model/-cryo-chamber-definition/index.html
 $dokka.location:spaceEngineers.model/CryoChamberDefinition/idlePowerConsumption/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-cryo-chamber-definition/idle-power-consumption.html
 $dokka.location:spaceEngineers.model/CubeGrid///PointingToDeclaration/space-engineers-api/spaceEngineers.model/-cube-grid/index.html
-$dokka.location:spaceEngineers.model/CubeGrid/CubeGrid/#kotlin.String#spaceEngineers.model.Vec3F#spaceEngineers.model.Vec3F#spaceEngineers.model.Vec3F#kotlin.collections.List[spaceEngineers.model.Block]#kotlin.Float/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-cube-grid/-cube-grid.html
+$dokka.location:spaceEngineers.model/CubeGrid/CubeGrid/#kotlin.String#spaceEngineers.model.Vec3F#spaceEngineers.model.Vec3F#spaceEngineers.model.Vec3F#kotlin.collections.List[spaceEngineers.model.Block]#kotlin.Float#kotlin.Boolean/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-cube-grid/-cube-grid.html
 $dokka.location:spaceEngineers.model/CubeGrid/blocks/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-cube-grid/blocks.html
 $dokka.location:spaceEngineers.model/CubeGrid/id/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-cube-grid/id.html
 $dokka.location:spaceEngineers.model/CubeGrid/mass/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-cube-grid/mass.html
 $dokka.location:spaceEngineers.model/CubeGrid/orientationForward/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-cube-grid/orientation-forward.html
 $dokka.location:spaceEngineers.model/CubeGrid/orientationUp/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-cube-grid/orientation-up.html
+$dokka.location:spaceEngineers.model/CubeGrid/parked/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-cube-grid/parked.html
 $dokka.location:spaceEngineers.model/CubeGrid/position/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-cube-grid/position.html
 $dokka.location:spaceEngineers.model/CubeSize.Large///PointingToDeclaration/space-engineers-api/spaceEngineers.model/-cube-size/-large/index.html
 $dokka.location:spaceEngineers.model/CubeSize.Large/value/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-cube-size/-large/value.html
