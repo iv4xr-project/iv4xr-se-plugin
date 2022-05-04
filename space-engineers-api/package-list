@@ -487,6 +487,12 @@ $dokka.location:spaceEngineers.model/AmountedDefinitionId/id/#/PointingToDeclara
 $dokka.location:spaceEngineers.model/AmountedDefinitionId/toString/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-amounted-definition-id/to-string.html
 $dokka.location:spaceEngineers.model/AssemblerDefinition///PointingToDeclaration/space-engineers-api/spaceEngineers.model/-assembler-definition/index.html
 $dokka.location:spaceEngineers.model/AssemblerDefinition/assemblySpeed/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-assembler-definition/assembly-speed.html
+$dokka.location:spaceEngineers.model/BaseEntity///PointingToDeclaration/space-engineers-api/spaceEngineers.model/-base-entity/index.html
+$dokka.location:spaceEngineers.model/BaseEntity/BaseEntity/#kotlin.String#spaceEngineers.model.Vec3F#spaceEngineers.model.Vec3F#spaceEngineers.model.Vec3F/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-base-entity/-base-entity.html
+$dokka.location:spaceEngineers.model/BaseEntity/id/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-base-entity/id.html
+$dokka.location:spaceEngineers.model/BaseEntity/orientationForward/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-base-entity/orientation-forward.html
+$dokka.location:spaceEngineers.model/BaseEntity/orientationUp/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-base-entity/orientation-up.html
+$dokka.location:spaceEngineers.model/BaseEntity/position/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-base-entity/position.html
 $dokka.location:spaceEngineers.model/BasePose///PointingToDeclaration/space-engineers-api/spaceEngineers.model/-base-pose/index.html
 $dokka.location:spaceEngineers.model/BasePose/BasePose/#spaceEngineers.model.Vec3F#spaceEngineers.model.Vec3F#spaceEngineers.model.Vec3F/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-base-pose/-base-pose.html
 $dokka.location:spaceEngineers.model/BasePose/orientationForward/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-base-pose/orientation-forward.html
@@ -581,6 +587,8 @@ $dokka.location:spaceEngineers.model/CharacterMovement///PointingToDeclaration/
 $dokka.location:spaceEngineers.model/CharacterMovement/CharacterMovement/#kotlin.UShort/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-character-movement/-character-movement.html
 $dokka.location:spaceEngineers.model/CharacterMovement/direction/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-character-movement/direction.html
 $dokka.location:spaceEngineers.model/CharacterMovement/isCrouching/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-character-movement/is-crouching.html
+$dokka.location:spaceEngineers.model/CharacterMovement/isFalling/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-character-movement/is-falling.html
+$dokka.location:spaceEngineers.model/CharacterMovement/isJumping/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-character-movement/is-jumping.html
 $dokka.location:spaceEngineers.model/CharacterMovement/isStanding/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-character-movement/is-standing.html
 $dokka.location:spaceEngineers.model/CharacterMovement/mode/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-character-movement/mode.html
 $dokka.location:spaceEngineers.model/CharacterMovement/rotation/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-character-movement/rotation.html
@@ -596,7 +604,7 @@ $dokka.location:spaceEngineers.model/CharacterMovementType.WALK///PointingToDecl
 $dokka.location:spaceEngineers.model/CharacterMovementType///PointingToDeclaration/space-engineers-api/spaceEngineers.model/-character-movement-type/index.html
 $dokka.location:spaceEngineers.model/CharacterMovementType/speed/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-character-movement-type/speed.html
 $dokka.location:spaceEngineers.model/CharacterObservation///PointingToDeclaration/space-engineers-api/spaceEngineers.model/-character-observation/index.html
-$dokka.location:spaceEngineers.model/CharacterObservation/CharacterObservation/#kotlin.String#spaceEngineers.model.Vec3F#spaceEngineers.model.Vec3F#spaceEngineers.model.Vec3F#spaceEngineers.model.Vec3F#spaceEngineers.model.Vec3F#spaceEngineers.model.Vec3F#kotlin.Boolean#kotlin.Boolean#kotlin.Boolean#kotlin.Float#kotlin.Float#kotlin.Float#kotlin.Float#spaceEngineers.model.BasePose#kotlin.Float#kotlin.Float#spaceEngineers.model.Block?#spaceEngineers.model.UseObject?#spaceEngineers.model.CharacterMovement#spaceEngineers.model.Inventory#spaceEngineers.model.BootsState#kotlin.String/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-character-observation/-character-observation.html
+$dokka.location:spaceEngineers.model/CharacterObservation/CharacterObservation/#kotlin.String#spaceEngineers.model.Vec3F#spaceEngineers.model.Vec3F#spaceEngineers.model.Vec3F#spaceEngineers.model.Vec3F#spaceEngineers.model.Vec3F#spaceEngineers.model.Vec3F#kotlin.Boolean#kotlin.Boolean#kotlin.Boolean#kotlin.Float#kotlin.Float#kotlin.Float#kotlin.Float#spaceEngineers.model.BasePose#kotlin.Float#kotlin.Float#spaceEngineers.model.Block?#spaceEngineers.model.UseObject?#spaceEngineers.model.CharacterMovement#spaceEngineers.model.Inventory#spaceEngineers.model.BootsState#kotlin.String#spaceEngineers.model.BaseEntity?/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-character-observation/-character-observation.html
 $dokka.location:spaceEngineers.model/CharacterObservation/bootsState/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-character-observation/boots-state.html
 $dokka.location:spaceEngineers.model/CharacterObservation/camera/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-character-observation/camera.html
 $dokka.location:spaceEngineers.model/CharacterObservation/dampenersOn/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-character-observation/dampeners-on.html
@@ -616,6 +624,7 @@ $dokka.location:spaceEngineers.model/CharacterObservation/orientationForward/#/P
 $dokka.location:spaceEngineers.model/CharacterObservation/orientationUp/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-character-observation/orientation-up.html
 $dokka.location:spaceEngineers.model/CharacterObservation/oxygen/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-character-observation/oxygen.html
 $dokka.location:spaceEngineers.model/CharacterObservation/position/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-character-observation/position.html
+$dokka.location:spaceEngineers.model/CharacterObservation/relativeDampeningEntity/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-character-observation/relative-dampening-entity.html
 $dokka.location:spaceEngineers.model/CharacterObservation/suitEnergy/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-character-observation/suit-energy.html
 $dokka.location:spaceEngineers.model/CharacterObservation/targetBlock/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-character-observation/target-block.html
 $dokka.location:spaceEngineers.model/CharacterObservation/targetUseObject/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-character-observation/target-use-object.html
