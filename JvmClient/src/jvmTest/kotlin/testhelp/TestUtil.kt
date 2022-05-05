@@ -7,6 +7,7 @@ import kotlinx.serialization.json.JsonPrimitive
 import spaceEngineers.controller.*
 import spaceEngineers.transport.closeIfCloseable
 import spaceEngineers.transport.jsonrpc.KotlinJsonRpcError
+import java.lang.reflect.UndeclaredThrowableException
 
 const val TEST_AGENT = SpaceEngineers.DEFAULT_AGENT_ID
 
@@ -63,6 +64,14 @@ fun spaceEngineersSimplePlaceGrindTorchSuspend(
         }
     } finally {
         spaceEngineers.closeIfCloseable()
+    }
+}
+
+fun <R> hideUndeclaredThrowableException(block: suspend () -> R) = runBlocking {
+    try {
+        block()
+    } catch (e: UndeclaredThrowableException) {
+        throw e.cause ?: e
     }
 }
 

@@ -4,21 +4,11 @@ import io.cucumber.java.After
 import io.cucumber.java.Before
 import io.cucumber.java.en.Given
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withTimeout
-import kotlinx.coroutines.yield
 import kotlinx.serialization.json.Json
-import spaceEngineers.controller.connection.AppType
 import spaceEngineers.controller.connection.ConnectionManager
 import spaceEngineers.controller.connection.ConnectionSetup
-import spaceEngineers.controller.loadFromTestResources
-import spaceEngineers.controller.processHomeDir
-import spaceEngineers.controller.toFile
-import spaceEngineers.controller.unixToWindowsPath
-import java.io.BufferedReader
+import testhelp.hideUndeclaredThrowableException
 import java.io.File
-import java.io.InputStreamReader
-import kotlin.concurrent.thread
-import kotlin.test.assertTrue
 
 class ScenarioSetupSteps : AbstractMultiplayerSteps() {
 
@@ -53,7 +43,7 @@ class ScenarioSetupSteps : AbstractMultiplayerSteps() {
     }
 
     @Given("Scenario used is {string}.")
-    fun scenario_used_is(scenarioId: String) = runBlocking {
+    fun scenario_used_is(scenarioId: String) = hideUndeclaredThrowableException {
         loadScenario(scenarioId)
     }
 
