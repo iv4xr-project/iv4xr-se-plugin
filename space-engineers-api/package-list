@@ -201,6 +201,7 @@ $dokka.location:spaceEngineers.controller/ContextControllerWrapper/blocks/#/Poin
 $dokka.location:spaceEngineers.controller/ContextControllerWrapper/character/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-context-controller-wrapper/character.html
 $dokka.location:spaceEngineers.controller/ContextControllerWrapper/context/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-context-controller-wrapper/context.html
 $dokka.location:spaceEngineers.controller/ContextControllerWrapper/definitions/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-context-controller-wrapper/definitions.html
+$dokka.location:spaceEngineers.controller/ContextControllerWrapper/input/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-context-controller-wrapper/input.html
 $dokka.location:spaceEngineers.controller/ContextControllerWrapper/items/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-context-controller-wrapper/items.html
 $dokka.location:spaceEngineers.controller/ContextControllerWrapper/observer/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-context-controller-wrapper/observer.html
 $dokka.location:spaceEngineers.controller/ContextControllerWrapper/screens/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-context-controller-wrapper/screens.html
@@ -214,6 +215,11 @@ $dokka.location:spaceEngineers.controller/Definitions/blockHierarchy/#/PointingT
 $dokka.location:spaceEngineers.controller/GamePlay///PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-game-play/index.html
 $dokka.location:spaceEngineers.controller/GamePlay/data/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-game-play/data.html
 $dokka.location:spaceEngineers.controller/GamePlay/showMainMenu/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-game-play/show-main-menu.html
+$dokka.location:spaceEngineers.controller/Input///PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-input/index.html
+$dokka.location:spaceEngineers.controller/Input/startPlaying/#kotlin.collections.List[spaceEngineers.movement.FrameSnapshot]/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-input/start-playing.html
+$dokka.location:spaceEngineers.controller/Input/startRecording/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-input/start-recording.html
+$dokka.location:spaceEngineers.controller/Input/stopPlaying/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-input/stop-playing.html
+$dokka.location:spaceEngineers.controller/Input/stopRecording/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-input/stop-recording.html
 $dokka.location:spaceEngineers.controller/InventorySide///PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-inventory-side/index.html
 $dokka.location:spaceEngineers.controller/InventorySide/clickSelectedItem/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-inventory-side/click-selected-item.html
 $dokka.location:spaceEngineers.controller/InventorySide/doubleClickSelectedItem/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-inventory-side/double-click-selected-item.html
@@ -355,6 +361,7 @@ $dokka.location:spaceEngineers.controller/SpaceEngineers/admin/#/PointingToDecla
 $dokka.location:spaceEngineers.controller/SpaceEngineers/blocks/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-space-engineers/blocks.html
 $dokka.location:spaceEngineers.controller/SpaceEngineers/character/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-space-engineers/character.html
 $dokka.location:spaceEngineers.controller/SpaceEngineers/definitions/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-space-engineers/definitions.html
+$dokka.location:spaceEngineers.controller/SpaceEngineers/input/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-space-engineers/input.html
 $dokka.location:spaceEngineers.controller/SpaceEngineers/items/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-space-engineers/items.html
 $dokka.location:spaceEngineers.controller/SpaceEngineers/observer/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-space-engineers/observer.html
 $dokka.location:spaceEngineers.controller/SpaceEngineers/screens/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-space-engineers/screens.html
@@ -417,7 +424,8 @@ $dokka.location:spaceEngineers.controller/TestAdmin/adminOnly/#/PointingToDeclar
 $dokka.location:spaceEngineers.controller/TestAdmin/gameOnly/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-test-admin/game-only.html
 $dokka.location:spaceEngineers.controller/TestAdmin/observerOnly/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-test-admin/observer-only.html
 $dokka.location:spaceEngineers.controller/TypedParameter///PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-typed-parameter/index.html
-$dokka.location:spaceEngineers.controller/TypedParameter/TypedParameter/#kotlin.String#TypeParam(bounds=[kotlin.Any])?#kotlin.reflect.KClass[TypeParam(bounds=[kotlin.Any])]/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-typed-parameter/-typed-parameter.html
+$dokka.location:spaceEngineers.controller/TypedParameter/TypedParameter/#kotlin.String#TypeParam(bounds=[kotlin.Any])?#kotlin.reflect.KClass[TypeParam(bounds=[kotlin.Any])]#kotlin.reflect.KType/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-typed-parameter/-typed-parameter.html
+$dokka.location:spaceEngineers.controller/TypedParameter/ktype/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-typed-parameter/ktype.html
 $dokka.location:spaceEngineers.controller/TypedParameter/name/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-typed-parameter/name.html
 $dokka.location:spaceEngineers.controller/TypedParameter/toJsonElementPair/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-typed-parameter/to-json-element-pair.html
 $dokka.location:spaceEngineers.controller/TypedParameter/type/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-typed-parameter/type.html
@@ -1900,6 +1908,75 @@ $dokka.location:spaceEngineers.model/Vector/get/#kotlin.Int/PointingToDeclaratio
 $dokka.location:spaceEngineers.model/WeaponBlockDefinition///PointingToDeclaration/space-engineers-api/spaceEngineers.model/-weapon-block-definition/index.html
 $dokka.location:spaceEngineers.model/WeaponBlockDefinition/inventoryFillFactorMin/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-weapon-block-definition/inventory-fill-factor-min.html
 $dokka.location:spaceEngineers.model/WeaponBlockDefinition/inventoryMaxVolume/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-weapon-block-definition/inventory-max-volume.html
+$dokka.location:spaceEngineers.movement////PointingToDeclaration/space-engineers-api/spaceEngineers.movement/index.html
+$dokka.location:spaceEngineers.movement//fromChar/#kotlin.Char/PointingToDeclaration/space-engineers-api/spaceEngineers.movement/from-char.html
+$dokka.location:spaceEngineers.movement//leftShift/#/PointingToDeclaration/space-engineers-api/spaceEngineers.movement/left-shift.html
+$dokka.location:spaceEngineers.movement//toKeyboardSnapshot/spaceEngineers.movement.CompositeDirection3d#spaceEngineers.model.CharacterMovementType/PointingToDeclaration/space-engineers-api/spaceEngineers.movement/to-keyboard-snapshot.html
+$dokka.location:spaceEngineers.movement/BasicDirection3d.BACKWARD///PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-basic-direction3d/-b-a-c-k-w-a-r-d/index.html
+$dokka.location:spaceEngineers.movement/BasicDirection3d.DOWN///PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-basic-direction3d/-d-o-w-n/index.html
+$dokka.location:spaceEngineers.movement/BasicDirection3d.FORWARD///PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-basic-direction3d/-f-o-r-w-a-r-d/index.html
+$dokka.location:spaceEngineers.movement/BasicDirection3d.LEFT///PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-basic-direction3d/-l-e-f-t/index.html
+$dokka.location:spaceEngineers.movement/BasicDirection3d.NONE///PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-basic-direction3d/-n-o-n-e/index.html
+$dokka.location:spaceEngineers.movement/BasicDirection3d.RIGHT///PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-basic-direction3d/-r-i-g-h-t/index.html
+$dokka.location:spaceEngineers.movement/BasicDirection3d.UP///PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-basic-direction3d/-u-p/index.html
+$dokka.location:spaceEngineers.movement/BasicDirection3d///PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-basic-direction3d/index.html
+$dokka.location:spaceEngineers.movement/BasicDirection3d/keycode/#/PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-basic-direction3d/keycode.html
+$dokka.location:spaceEngineers.movement/BasicDirection3d/vector/#/PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-basic-direction3d/vector.html
+$dokka.location:spaceEngineers.movement/CompositeDirection3d.BACKWARD///PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-composite-direction3d/-b-a-c-k-w-a-r-d/index.html
+$dokka.location:spaceEngineers.movement/CompositeDirection3d.DOWN///PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-composite-direction3d/-d-o-w-n/index.html
+$dokka.location:spaceEngineers.movement/CompositeDirection3d.DOWN_BACKWARD///PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-composite-direction3d/-d-o-w-n_-b-a-c-k-w-a-r-d/index.html
+$dokka.location:spaceEngineers.movement/CompositeDirection3d.DOWN_FORWARD///PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-composite-direction3d/-d-o-w-n_-f-o-r-w-a-r-d/index.html
+$dokka.location:spaceEngineers.movement/CompositeDirection3d.DOWN_LEFT///PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-composite-direction3d/-d-o-w-n_-l-e-f-t/index.html
+$dokka.location:spaceEngineers.movement/CompositeDirection3d.DOWN_LEFT_BACKWARD///PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-composite-direction3d/-d-o-w-n_-l-e-f-t_-b-a-c-k-w-a-r-d/index.html
+$dokka.location:spaceEngineers.movement/CompositeDirection3d.DOWN_LEFT_FORWARD///PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-composite-direction3d/-d-o-w-n_-l-e-f-t_-f-o-r-w-a-r-d/index.html
+$dokka.location:spaceEngineers.movement/CompositeDirection3d.DOWN_RIGHT///PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-composite-direction3d/-d-o-w-n_-r-i-g-h-t/index.html
+$dokka.location:spaceEngineers.movement/CompositeDirection3d.DOWN_RIGHT_BACKWARD///PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-composite-direction3d/-d-o-w-n_-r-i-g-h-t_-b-a-c-k-w-a-r-d/index.html
+$dokka.location:spaceEngineers.movement/CompositeDirection3d.DOWN_RIGHT_FORWARD///PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-composite-direction3d/-d-o-w-n_-r-i-g-h-t_-f-o-r-w-a-r-d/index.html
+$dokka.location:spaceEngineers.movement/CompositeDirection3d.FORWARD///PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-composite-direction3d/-f-o-r-w-a-r-d/index.html
+$dokka.location:spaceEngineers.movement/CompositeDirection3d.LEFT///PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-composite-direction3d/-l-e-f-t/index.html
+$dokka.location:spaceEngineers.movement/CompositeDirection3d.LEFT_BACKWARD///PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-composite-direction3d/-l-e-f-t_-b-a-c-k-w-a-r-d/index.html
+$dokka.location:spaceEngineers.movement/CompositeDirection3d.LEFT_FORWARD///PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-composite-direction3d/-l-e-f-t_-f-o-r-w-a-r-d/index.html
+$dokka.location:spaceEngineers.movement/CompositeDirection3d.NONE///PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-composite-direction3d/-n-o-n-e/index.html
+$dokka.location:spaceEngineers.movement/CompositeDirection3d.RIGHT///PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-composite-direction3d/-r-i-g-h-t/index.html
+$dokka.location:spaceEngineers.movement/CompositeDirection3d.RIGHT_BACKWARD///PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-composite-direction3d/-r-i-g-h-t_-b-a-c-k-w-a-r-d/index.html
+$dokka.location:spaceEngineers.movement/CompositeDirection3d.RIGHT_FORWARD///PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-composite-direction3d/-r-i-g-h-t_-f-o-r-w-a-r-d/index.html
+$dokka.location:spaceEngineers.movement/CompositeDirection3d.UP///PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-composite-direction3d/-u-p/index.html
+$dokka.location:spaceEngineers.movement/CompositeDirection3d.UP_BACKWARD///PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-composite-direction3d/-u-p_-b-a-c-k-w-a-r-d/index.html
+$dokka.location:spaceEngineers.movement/CompositeDirection3d.UP_FORWARD///PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-composite-direction3d/-u-p_-f-o-r-w-a-r-d/index.html
+$dokka.location:spaceEngineers.movement/CompositeDirection3d.UP_LEFT///PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-composite-direction3d/-u-p_-l-e-f-t/index.html
+$dokka.location:spaceEngineers.movement/CompositeDirection3d.UP_LEFT_BACKWARD///PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-composite-direction3d/-u-p_-l-e-f-t_-b-a-c-k-w-a-r-d/index.html
+$dokka.location:spaceEngineers.movement/CompositeDirection3d.UP_LEFT_FORWARD///PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-composite-direction3d/-u-p_-l-e-f-t_-f-o-r-w-a-r-d/index.html
+$dokka.location:spaceEngineers.movement/CompositeDirection3d.UP_RIGHT///PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-composite-direction3d/-u-p_-r-i-g-h-t/index.html
+$dokka.location:spaceEngineers.movement/CompositeDirection3d.UP_RIGHT_BACKWARD///PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-composite-direction3d/-u-p_-r-i-g-h-t_-b-a-c-k-w-a-r-d/index.html
+$dokka.location:spaceEngineers.movement/CompositeDirection3d.UP_RIGHT_FORWARD///PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-composite-direction3d/-u-p_-r-i-g-h-t_-f-o-r-w-a-r-d/index.html
+$dokka.location:spaceEngineers.movement/CompositeDirection3d///PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-composite-direction3d/index.html
+$dokka.location:spaceEngineers.movement/CompositeDirection3d/basicDirections/#/PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-composite-direction3d/basic-directions.html
+$dokka.location:spaceEngineers.movement/CompositeDirection3d/vector/#/PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-composite-direction3d/vector.html
+$dokka.location:spaceEngineers.movement/FrameSnapshot.Companion///PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-frame-snapshot/-companion/index.html
+$dokka.location:spaceEngineers.movement/FrameSnapshot.Companion/fromDirection/#spaceEngineers.movement.CompositeDirection3d#spaceEngineers.model.CharacterMovementType/PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-frame-snapshot/-companion/from-direction.html
+$dokka.location:spaceEngineers.movement/FrameSnapshot///PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-frame-snapshot/index.html
+$dokka.location:spaceEngineers.movement/FrameSnapshot/FrameSnapshot/#spaceEngineers.movement.InputSnapshot/PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-frame-snapshot/-frame-snapshot.html
+$dokka.location:spaceEngineers.movement/FrameSnapshot/input/#/PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-frame-snapshot/input.html
+$dokka.location:spaceEngineers.movement/InputSnapshot///PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-input-snapshot/index.html
+$dokka.location:spaceEngineers.movement/InputSnapshot/InputSnapshot/#spaceEngineers.movement.KeyboardSnapshot?#spaceEngineers.movement.MouseSnapshot?/PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-input-snapshot/-input-snapshot.html
+$dokka.location:spaceEngineers.movement/InputSnapshot/keyboard/#/PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-input-snapshot/keyboard.html
+$dokka.location:spaceEngineers.movement/InputSnapshot/mouse/#/PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-input-snapshot/mouse.html
+$dokka.location:spaceEngineers.movement/KeyboardSnapshot///PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-keyboard-snapshot/index.html
+$dokka.location:spaceEngineers.movement/KeyboardSnapshot/KeyboardSnapshot/#kotlin.collections.List[kotlin.Int]#kotlin.collections.List[kotlin.Char]/PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-keyboard-snapshot/-keyboard-snapshot.html
+$dokka.location:spaceEngineers.movement/KeyboardSnapshot/pressedKeys/#/PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-keyboard-snapshot/pressed-keys.html
+$dokka.location:spaceEngineers.movement/KeyboardSnapshot/text/#/PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-keyboard-snapshot/text.html
+$dokka.location:spaceEngineers.movement/MouseSnapshot///PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-mouse-snapshot/index.html
+$dokka.location:spaceEngineers.movement/MouseSnapshot/MouseSnapshot/#kotlin.Int#kotlin.Int#kotlin.Int#kotlin.Int#kotlin.Int#kotlin.Boolean#kotlin.Boolean#kotlin.Boolean#kotlin.Boolean#kotlin.Boolean/PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-mouse-snapshot/-mouse-snapshot.html
+$dokka.location:spaceEngineers.movement/MouseSnapshot/cursorPositionX/#/PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-mouse-snapshot/cursor-position-x.html
+$dokka.location:spaceEngineers.movement/MouseSnapshot/cursorPositionY/#/PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-mouse-snapshot/cursor-position-y.html
+$dokka.location:spaceEngineers.movement/MouseSnapshot/leftButton/#/PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-mouse-snapshot/left-button.html
+$dokka.location:spaceEngineers.movement/MouseSnapshot/middleButton/#/PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-mouse-snapshot/middle-button.html
+$dokka.location:spaceEngineers.movement/MouseSnapshot/rightButton/#/PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-mouse-snapshot/right-button.html
+$dokka.location:spaceEngineers.movement/MouseSnapshot/scrollWheelValue/#/PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-mouse-snapshot/scroll-wheel-value.html
+$dokka.location:spaceEngineers.movement/MouseSnapshot/x/#/PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-mouse-snapshot/x.html
+$dokka.location:spaceEngineers.movement/MouseSnapshot/xButton1/#/PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-mouse-snapshot/x-button1.html
+$dokka.location:spaceEngineers.movement/MouseSnapshot/xButton2/#/PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-mouse-snapshot/x-button2.html
+$dokka.location:spaceEngineers.movement/MouseSnapshot/y/#/PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-mouse-snapshot/y.html
 $dokka.location:spaceEngineers.navigation////PointingToDeclaration/space-engineers-api/spaceEngineers.navigation/index.html
 $dokka.location:spaceEngineers.navigation/Edge///PointingToDeclaration/space-engineers-api/spaceEngineers.navigation/-edge/index.html
 $dokka.location:spaceEngineers.navigation/Edge/Edge/#kotlin.Int#kotlin.Int/PointingToDeclaration/space-engineers-api/spaceEngineers.navigation/-edge/-edge.html
@@ -2140,6 +2217,7 @@ spaceEngineers.controller.extensions
 spaceEngineers.iv4xr.goal
 spaceEngineers.model
 spaceEngineers.model.extensions
+spaceEngineers.movement
 spaceEngineers.navigation
 spaceEngineers.screenshots
 spaceEngineers.transport
