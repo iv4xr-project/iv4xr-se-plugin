@@ -15,5 +15,12 @@ data class FrameSnapshot(
                 input = InputSnapshot(keyboard = compositeDirection3d.toKeyboardSnapshot(movementType))
             )
         }
+
+        fun fromRotationDirection(rotationDirection: RotationDirection) : FrameSnapshot {
+            return FrameSnapshot(
+                input = InputSnapshot(keyboard = rotationDirection.toKeyboardSnapshot())
+            )
+        }
     }
 }
+

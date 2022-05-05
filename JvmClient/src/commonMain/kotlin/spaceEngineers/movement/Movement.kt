@@ -10,9 +10,12 @@ interface CharacterMovement {
         movementType: CharacterMovementType = CharacterMovementType.RUN,
         ticks: Int = 1
     )
+
+    fun rotate(rotationDirection: RotationDirection, ticks: Int = 1)
 }
 
 class ReplayMovement(val spaceEngineers: SpaceEngineers) : CharacterMovement {
+
     override fun move(direction3d: CompositeDirection3d, movementType: CharacterMovementType, ticks: Int) =
         with(spaceEngineers) {
             if (movementType.requiresWalkCheck) {
@@ -26,9 +29,22 @@ class ReplayMovement(val spaceEngineers: SpaceEngineers) : CharacterMovement {
                 List(ticks) { frame }
             )
         }
+
+    override fun rotate(rotationDirection: RotationDirection, ticks: Int) =
+        with(spaceEngineers) {
+            val frame = FrameSnapshot.fromRotationDirection(rotationDirection)
+            this.input.startPlaying(
+                List(ticks) { frame }
+            )
+        }
+
 }
 
-class VectorMovement(val spaceEngineers: SpaceEngineers) : CharacterMovement {
+class VectorMovement(
+    val spaceEngineers: SpaceEngineers,
+    private val vectorMultiplier: Float = 9f,
+) : CharacterMovement {
+
     override fun move(direction3d: CompositeDirection3d, movementType: CharacterMovementType, ticks: Int) =
         with(spaceEngineers) {
             character.moveAndRotate(
@@ -37,6 +53,16 @@ class VectorMovement(val spaceEngineers: SpaceEngineers) : CharacterMovement {
             )
             Unit
         }
+
+    override fun rotate(rotationDirection: RotationDirection, ticks: Int) =
+        with(spaceEngineers) {
+            character.moveAndRotate(
+                rotation3 = rotationDirection.vector * vectorMultiplier,
+                ticks = ticks
+            )
+            Unit
+        }
+
 }
 
 
