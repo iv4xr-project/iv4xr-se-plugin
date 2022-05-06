@@ -27,17 +27,29 @@ class CharacterAsserts : AbstractMultiplayerSteps() {
 
     @Then("Character boots are green.")
     fun character_boots_are_green() = observers {
-        repeatUntilSuccess { assertTrue(observer.observe().bootsState.isGreen()) }
+        repeatUntilSuccess {
+            observer.observe().bootsState.let { bootState ->
+                assertTrue(bootState.isGreen(), message = "BootState is $bootState")
+            }
+        }
     }
 
     @Then("Character boots are yellow.")
     fun character_boots_are_yellow() = observers {
-        repeatUntilSuccess { assertTrue(observer.observe().bootsState.isYellow()) }
+        repeatUntilSuccess {
+            observer.observe().bootsState.let { bootState ->
+                assertTrue(bootState.isYellow(), message = "BootState is $bootState")
+            }
+        }
     }
 
     @Then("Character boots are white.")
     fun character_boots_are_white() = observers {
-        repeatUntilSuccess { assertTrue(observer.observe().bootsState.isWhite()) }
+        repeatUntilSuccess {
+            observer.observe().bootsState.let { bootState ->
+                assertTrue(bootState.isWhite(), message = "BootState is $bootState")
+            }
+        }
     }
 
     @Then("Character speed is {int} m\\/s.")
@@ -48,10 +60,14 @@ class CharacterAsserts : AbstractMultiplayerSteps() {
     @Then("jetpack is off.")
     fun jetpack_is_off() {
         mainClient {
-            assertFalse(screens.gamePlay.data().hud.statsWrapper.jetpackOn)
+            repeatUntilSuccess {
+                assertFalse(screens.gamePlay.data().hud.statsWrapper.jetpackOn)
+            }
         }
         observers {
-            assertFalse(observer.observe().jetpackRunning)
+            repeatUntilSuccess {
+                assertFalse(observer.observe().jetpackRunning)
+            }
         }
     }
 
@@ -182,7 +198,7 @@ class CharacterAsserts : AbstractMultiplayerSteps() {
 
     @Given("character has about {int} hydrogen.")
     fun character_has_about_hydrogen(hydrogenPercentage: Int) = observers {
-        assertEquals(hydrogenPercentage.toFloat(), observer.observe().hydrogen * 100f, 5f)
+        assertEquals(hydrogenPercentage.toFloat(), observer.observe().hydrogen * 100f, 1f)
     }
 
     @Then("character doesn't have full hydrogen tank anymore after {int} milliseconds.")
@@ -207,10 +223,19 @@ class CharacterAsserts : AbstractMultiplayerSteps() {
     }
 
     @Then("Character begins to fall towards the ground.")
-    fun character_begins_to_fall_towards_the_ground() = observers {
-        with(observer.observe()) {
-            assertGreaterThan(velocity.length(), 0f)
-            assertSameDirection(velocity, gravity)
+    fun character_begins_to_fall_towards_the_ground() {
+        val gravity = mainClient {
+            //gravity is not synchronized, we need to take it from the main client
+            with(observer.observe()) {
+                assertSameDirection(velocity, gravity)
+                gravity
+            }
+        }
+        observers {
+            with(observer.observe()) {
+                assertSameDirection(velocity, gravity)
+                assertGreaterThan(velocity.length(), 0f)
+            }
         }
     }
 
@@ -251,13 +276,13 @@ class CharacterAsserts : AbstractMultiplayerSteps() {
     }
 
     @Then("Character dampeners are on.")
-    fun character_dampeners_are_on() = observers {
-        assertTrue(observer.observe().dampenersOn)
+    fun character_dampeners_are_on() = mainClient {
+        repeatUntilSuccess { assertTrue(observer.observe().dampenersOn) }
     }
 
     @Then("Character dampeners are off.")
-    fun character_dampeners_are_off() = observers {
-        assertFalse(observer.observe().dampenersOn)
+    fun character_dampeners_are_off() = mainClient {
+        repeatUntilSuccess { assertFalse(observer.observe().dampenersOn) }
     }
 
     @Then("UI dampeners are on.")
@@ -268,5 +293,11 @@ class CharacterAsserts : AbstractMultiplayerSteps() {
     @Then("UI dampeners are off.")
     fun ui_dampeners_are_off() = mainClient {
         assertFalse(screens.gamePlay.data().hud.statsWrapper.dampenersOn)
+    }
+
+    @Then("Dampeners are switched to relative mode.")
+    fun dampeners_are_switched_to_relative_mode() = mainClient {
+        assertNotNull(observer.observe().relativeDampeningEntity)
+        assertTrue(screens.gamePlay.data().hud.statsWrapper.relativeDampenersOn)
     }
 }
