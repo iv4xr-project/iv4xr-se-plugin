@@ -62,7 +62,7 @@ abstract class AbstractMultiplayerSteps(
         cm.admin(block)
     }
 
-    fun exitToMainMenu(onException: (Throwable) -> Unit = {println(it)}) {
+    fun exitToMainMenu(onException: (Throwable) -> Unit = { println(it) }) {
         clients {
             try {
                 session.exitToMainMenu()
@@ -104,7 +104,7 @@ abstract class AbstractMultiplayerSteps(
         screens.mainMenu.loadGame()
         pause()
         val data = screens.loadGame.data()
-        val index = data.files.indexOfFirst { it.fullName.contains(scenarioId) }
+        val index = data.files.indexOfFirst { it.name == scenarioId }
         check(index > -1) {
             "Scenario $scenarioId not found in the list, found: ${data.files.map { it.name }}"
         }
