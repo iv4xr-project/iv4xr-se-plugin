@@ -104,9 +104,11 @@ abstract class AbstractMultiplayerSteps(
         screens.mainMenu.loadGame()
         pause()
         val data = screens.loadGame.data()
-        val index = data.files.indexOfFirst { it.name == scenarioId }
+        val filtered = data.files.filter { it.name == scenarioId && !it.fullName.contains("-saved") }
+        check(filtered.size < 2) { "Multiple non '-saved' files with same name: $filtered" }
+        val index = data.files.indexOfFirst { it.name == scenarioId && !it.fullName.contains("-saved") }
         check(index > -1) {
-            "Scenario $scenarioId not found in the list, found: ${data.files.map { it.name }}"
+            "Scenario $scenarioId not found in the list, found: ${data.files.map { it.name }.sorted()}"
         }
         screens.loadGame.doubleClickWorld(index)
         bigPause()
