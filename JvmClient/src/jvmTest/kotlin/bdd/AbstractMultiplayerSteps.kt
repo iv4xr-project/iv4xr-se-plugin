@@ -212,6 +212,10 @@ abstract class AbstractMultiplayerSteps(
         smallPause()
     }
 
+    suspend fun pauseAfterAction() {
+        delay(1000)
+    }
+
     companion object {
         lateinit var CM: ConnectionManager
     }

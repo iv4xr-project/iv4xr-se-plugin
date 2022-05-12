@@ -47,6 +47,12 @@ class CharacterActions : AbstractMultiplayerSteps() {
         replayMovement.move(CompositeDirection3d.FORWARD, ticks = ticks)
     }
 
+    @When("Character moves backward for {int} ticks.")
+    fun character_moves_backward_for_ticks(ticks: Int) = mainClient {
+        val replayMovement = ReplayMovement(this)
+        replayMovement.move(CompositeDirection3d.BACKWARD, ticks = ticks)
+    }
+
     @When("Character runs forward for {int} ticks.")
     fun character_runs_forward_for_ticks(ticks: Int) = mainClient {
         character.moveAndRotate(Vec3F.FORWARD.normalizeAsRun(), ticks = ticks)
@@ -76,16 +82,19 @@ class CharacterActions : AbstractMultiplayerSteps() {
     @When("Character turns on jetpack.")
     fun character_turns_on_jetpack() = mainClient {
         character.turnOnJetpack()
+        pauseAfterAction()
     }
 
     @When("Character turns off jetpack.")
     fun character_turns_off_jetpack() = mainClient {
         character.turnOffJetpack()
+        pauseAfterAction()
     }
 
     @Then("Character uses.")
     fun character_uses() = mainClient {
         character.use()
+        pauseAfterAction()
     }
 
 

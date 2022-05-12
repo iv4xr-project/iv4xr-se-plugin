@@ -40,6 +40,15 @@ class ScenarioSetupSteps : AbstractMultiplayerSteps() {
         }
         process?.destroyForcibly()
         CM.close()
+        killDedicatedServerWindows()
+    }
+
+
+    fun killDedicatedServerWindows() {
+        var process = ProcessBuilder(* arrayOf("""taskkill /IM "SpaceEngineersDedicated.exe" /F """))
+            .redirectErrorStream(true)
+            .start()
+        process.waitFor()
     }
 
     @Given("Scenario used is {string}.")

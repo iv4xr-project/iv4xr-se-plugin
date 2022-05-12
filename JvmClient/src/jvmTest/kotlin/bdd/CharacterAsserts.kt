@@ -74,10 +74,14 @@ class CharacterAsserts : AbstractMultiplayerSteps() {
     @Then("jetpack is on.")
     fun jetpack_is_on() {
         mainClient {
-            assertTrue(screens.gamePlay.data().hud.statsWrapper.jetpackOn)
+            repeatUntilSuccess {
+                assertTrue(screens.gamePlay.data().hud.statsWrapper.jetpackOn)
+            }
         }
         observers {
-            assertTrue(observer.observe().jetpackRunning)
+            repeatUntilSuccess {
+                assertTrue(observer.observe().jetpackRunning)
+            }
         }
     }
 
@@ -249,7 +253,9 @@ class CharacterAsserts : AbstractMultiplayerSteps() {
         // jumping is actually for a very short time, the rest is falling (even if it's still going up)
         repeatUntilSuccess {
             with(observer.observe()) {
-                assertSameDirection(velocity, orientationUp)
+                if (velocity.length() > 0) {
+                    assertSameDirection(velocity, orientationUp)
+                }
                 assertTrue(movement.isFalling, movement.toString())
             }
         }

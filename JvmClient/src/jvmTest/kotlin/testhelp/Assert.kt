@@ -14,6 +14,8 @@ const val DEFAULT_POSITION_TOLERANCE: Float = 0.1f
 const val DEFAULT_ORIENTATION_TOLERANCE: Float = 0.1f
 
 fun assertSameDirection(vec1: Vec3F, vec2: Vec3F, absoluteTolerance: Float = DEFAULT_VECTOR_DIRECTION_TOLERANCE) {
+    assertGreaterThan(vec1.length(), 0f, "Vec1 is zero, cannot normalize")
+    assertGreaterThan(vec2.length(), 0f, "Vec2 is zero, cannot normalize")
     assertLessThan((vec1.normalized() - vec2.normalized()).length(), absoluteTolerance)
 }
 
