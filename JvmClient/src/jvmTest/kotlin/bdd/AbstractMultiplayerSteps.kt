@@ -150,7 +150,13 @@ abstract class AbstractMultiplayerSteps(
         runBlocking {
             bigPause()
         }
-        ensureCharacterExists()
+        checkCharacterExists()
+    }
+
+    fun checkCharacterExists() = clients {
+        if (screens.focusedScreen() == "Medicals") {
+            error("Character does not exist!!")
+        }
     }
 
     fun ensureCharacterExists() = clients {
