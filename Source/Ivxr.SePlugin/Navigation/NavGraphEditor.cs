@@ -12,6 +12,9 @@ namespace Iv4xr.SePlugin.Navigation
 {
     public class NavGraphEditor
     {
+        // Distance between the position of the character and the position (center) of the cube he's standing on.
+        private const double PositionOffset = 1.2475;
+        
         private class GridLocation
         {
             public GridLocation(Block block)
@@ -83,7 +86,7 @@ namespace Iv4xr.SePlugin.Navigation
                 if (map.ContainsKey(currentPosition + up) || map.ContainsKey(currentPosition + 2*up))
                     continue;
 
-                var fatNode = nodeBuilder.Create(currentCube.Position);  // TODO(P): Add some position offset.
+                var fatNode = nodeBuilder.Create(currentCube.Position.ToVector3D() + PositionOffset * up);
                 map[currentPosition].Node = fatNode;
                 navGraph.Nodes.Add(fatNode);
 
