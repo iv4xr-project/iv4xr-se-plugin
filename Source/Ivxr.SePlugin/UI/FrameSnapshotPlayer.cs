@@ -37,5 +37,10 @@ namespace Iv4xr.SePlugin.UI
             m_controller.SetCurrent(m_snapshots.First());
             m_snapshots.RemoveAt(0);
         }
+
+        public void Reset()
+        {
+            StopPlaying();
+        }
     }
 }

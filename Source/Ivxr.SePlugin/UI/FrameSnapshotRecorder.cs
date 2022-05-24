@@ -44,5 +44,11 @@ namespace Iv4xr.SePlugin.UI
             m_isRecording = false;
             return m_snapshots;
         }
+
+        public void Reset()
+        {
+            m_isRecording = false;
+            m_snapshots.Clear();
+        }
     }
 }

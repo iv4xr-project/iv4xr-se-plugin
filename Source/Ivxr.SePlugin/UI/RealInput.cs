@@ -34,5 +34,11 @@ namespace Iv4xr.SePlugin.UI
             m_player.Tick();
             m_recorder.Tick();
         }
+
+        public void Reset()
+        {
+            m_player.Reset();
+            m_recorder.Reset();
+        }
     }
 }
