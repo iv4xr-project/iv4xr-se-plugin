@@ -3,6 +3,7 @@ package environments
 import eu.iv4xr.framework.environments.W3DEnvironment
 import eu.iv4xr.framework.mainConcepts.WorldEntity
 import eu.iv4xr.framework.mainConcepts.WorldModel
+import eu.iv4xr.framework.spatial.meshes.Mesh
 import spaceEngineers.controller.ContextControllerWrapper
 import spaceEngineers.controller.SpaceEngineersTestContext
 import spaceEngineers.controller.extensions.moveForward
@@ -81,6 +82,10 @@ class SeEnvironment(
     val SCENARIO_DIR = "src/jvmTest/resources/game-saves/"
 
     val context: SpaceEngineersTestContext = controller.context
+
+    init {
+        worldNavigableMesh = Mesh()
+    }
 
     override fun loadWorld() {
         val scenario = File("$SCENARIO_DIR$worldId").absolutePath
