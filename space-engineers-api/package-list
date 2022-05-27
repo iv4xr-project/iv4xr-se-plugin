@@ -1587,6 +1587,7 @@ $dokka.location:spaceEngineers.model/HudStatsWrapper/dampenersOn/#/PointingToDec
 $dokka.location:spaceEngineers.model/HudStatsWrapper/helmet/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-hud-stats-wrapper/helmet.html
 $dokka.location:spaceEngineers.model/HudStatsWrapper/jetpackOn/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-hud-stats-wrapper/jetpack-on.html
 $dokka.location:spaceEngineers.model/HudStatsWrapper/naturalGravity/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-hud-stats-wrapper/natural-gravity.html
+$dokka.location:spaceEngineers.model/HudStatsWrapper/relativeDampenersOn/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-hud-stats-wrapper/relative-dampeners-on.html
 $dokka.location:spaceEngineers.model/HudStatsWrapper/speed/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-hud-stats-wrapper/speed.html
 $dokka.location:spaceEngineers.model/Inventory///PointingToDeclaration/space-engineers-api/spaceEngineers.model/-inventory/index.html
 $dokka.location:spaceEngineers.model/Inventory/Inventory/#kotlin.Float#kotlin.Float#kotlin.Float#kotlin.Float#kotlin.Float#kotlin.collections.List[spaceEngineers.model.InventoryItem]#kotlin.Int/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-inventory/-inventory.html
