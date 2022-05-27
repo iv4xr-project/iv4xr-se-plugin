@@ -45,7 +45,7 @@ namespace Iv4xr.SePlugin.Control
         {
             if (GetCharacterByIdOrNull(characterId) == null)
             {
-                throw new InvalidOperationException($"Character ({characterId}) not found!");
+                throw new InvalidOperationException($"Character ({characterId}) not found! Only found: {FoundCharacterIds()}");
             }
         }
 
@@ -97,10 +97,18 @@ namespace Iv4xr.SePlugin.Control
                     .FirstOrDefault(c => c.CharacterId() == characterId);
         }
 
+        private string FoundCharacterIds()
+        {
+            return string.Join(",", Sync.Players.GetOnlinePlayers()
+                    .Where(p => p.Character != null)
+                    .Select(p => p.Character)
+                    .Where(c => c?.GetIdentity() != null).Select(c => c.CharacterId()).ToList());
+        }
+
         private MyCharacter GetCharacterById(long characterId)
         {
             return GetCharacterByIdOrNull(characterId) ??
-                   throw new InvalidOperationException($"Character ({characterId}) not found!");
+                   throw new InvalidOperationException($"Character ({characterId}) not found! Only found: {FoundCharacterIds()}");
         }
 
         public MyCharacter Character

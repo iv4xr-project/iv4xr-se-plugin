@@ -35,6 +35,7 @@ data class OreMarker(
 
 interface HudStatsWrapper {
     val dampenersOn: Boolean
+    val relativeDampenersOn: Boolean
     val jetpackOn: Boolean
     val speed: Float
     val artificialGravity: Float
@@ -49,7 +50,8 @@ data class Hud(
 ) {
     val statsWrapper: HudStatsWrapper
         get() = object : HudStatsWrapper {
-            override val dampenersOn: Boolean = stats["ControlledEntityDampeners"] == 1.0f
+            override val dampenersOn: Boolean = (stats["ControlledEntityDampeners"] ?: 0f) > 0f
+            override val relativeDampenersOn: Boolean = stats["ControlledEntityDampeners"] == 0.5f
             override val jetpackOn: Boolean = stats["PlayerJetpack"] == 1.0f
             override val helmet: Boolean = stats["PlayerHelmet"] == 1.0f
             override val speed: Float = stats["ControlledEntitySpeed"] ?: error("no speed in stats")

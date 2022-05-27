@@ -12,6 +12,8 @@ import spaceEngineers.model.*
 import spaceEngineers.model.extensions.allBlocks
 import spaceEngineers.model.extensions.normalizeAsMovement
 import spaceEngineers.model.extensions.normalizeAsRun
+import spaceEngineers.movement.CompositeDirection3d
+import spaceEngineers.movement.ReplayMovement
 import kotlin.test.assertEquals
 
 
@@ -41,7 +43,8 @@ class CharacterActions : AbstractMultiplayerSteps() {
 
     @When("Character moves forward for {int} ticks.")
     fun character_moves_forward_for_ticks(ticks: Int) = mainClient {
-        character.moveAndRotate(Vec3F.FORWARD, ticks = ticks)
+        val replayMovement = ReplayMovement(this)
+        replayMovement.move(CompositeDirection3d.FORWARD, ticks = ticks)
     }
 
     @When("Character runs forward for {int} ticks.")
@@ -176,4 +179,10 @@ class CharacterActions : AbstractMultiplayerSteps() {
         character.jump()
     }
 
+    @When("Character unparks.")
+    fun character_unparks() = mainClient {
+        if (character.switchParkedStatus()) {
+            character.switchParkedStatus()
+        }
+    }
 }

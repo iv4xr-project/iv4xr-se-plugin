@@ -11,6 +11,7 @@ import kotlinx.coroutines.yield
 import spaceEngineers.controller.*
 import spaceEngineers.controller.connection.AppType
 import spaceEngineers.controller.connection.ConnectionManager
+import testhelp.hideUndeclaredThrowableException
 import java.io.BufferedReader
 import java.io.File
 import java.io.InputStreamReader
@@ -41,23 +42,23 @@ abstract class AbstractMultiplayerSteps(
         delay(15_000)
     }
 
-    fun observers(block: suspend ContextControllerWrapper.() -> Unit) = runBlocking {
+    fun observers(block: suspend ContextControllerWrapper.() -> Unit) = hideUndeclaredThrowableException {
         cm.observers(block)
     }
 
-    fun <T> mainClient(block: suspend ContextControllerWrapper.() -> T): T = runBlocking {
+    fun <T> mainClient(block: suspend ContextControllerWrapper.() -> T): T = hideUndeclaredThrowableException {
         cm.mainClient(block)
     }
 
-    fun clients(block: suspend ContextControllerWrapper.() -> Unit) = runBlocking {
+    fun clients(block: suspend ContextControllerWrapper.() -> Unit) = hideUndeclaredThrowableException {
         cm.clients(block)
     }
 
-    fun games(block: suspend ContextControllerWrapper.() -> Unit) = runBlocking {
+    fun games(block: suspend ContextControllerWrapper.() -> Unit) = hideUndeclaredThrowableException {
         cm.games(block)
     }
 
-    fun admin(block: suspend ContextControllerWrapper.() -> Unit) = runBlocking {
+    fun admin(block: suspend ContextControllerWrapper.() -> Unit) = hideUndeclaredThrowableException {
         cm.admin(block)
     }
 
@@ -80,7 +81,7 @@ abstract class AbstractMultiplayerSteps(
         }
     }
 
-    fun loadScenario(scenarioId: String) = runBlocking {
+    fun loadScenario(scenarioId: String) = hideUndeclaredThrowableException {
         if (cm.connectionSetup.offlineSinglePlayer) {
             loadScenarioSinglePlayer(scenarioId)
             //createLobbyGame(scenarioId)
