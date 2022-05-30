@@ -13,7 +13,7 @@ import kotlin.test.assertTrue
 
 class MovementWrapperTest : MockOrRealGameTest() {
 
-    private val vectorAbsoluteTolerance = 0.000001f
+    private val vectorAbsoluteTolerance = 0.001f
 
     @Test
     fun vectorRotate() = testContext {
@@ -40,7 +40,7 @@ class MovementWrapperTest : MockOrRealGameTest() {
         val position = observer.observe().position
         movement.move(CompositeDirection3d.FORWARD, CharacterMovementType.WALK, ticks = 110)
         delay(2000)
-        assertEquals(5.080468f, (position - observer.observe().position).length(), absoluteTolerance = 0.06f)
+        assertEquals(5.4397435f, (position - observer.observe().position).length(), absoluteTolerance = 0.06f)
     }
 
     private suspend fun SpaceEngineers.testRotation(movement: CharacterMovement) {

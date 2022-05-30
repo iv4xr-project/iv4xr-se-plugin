@@ -7,6 +7,7 @@ import spaceEngineers.model.DefinitionId
 import spaceEngineers.model.ToolbarLocation
 import spaceEngineers.model.extensions.allBlocks
 import testhelp.MockOrRealGameTest
+import testhelp.assertGreaterThan
 import java.lang.Thread.sleep
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -34,7 +35,7 @@ class GetToolbarTest : MockOrRealGameTest() {
             delay(10)
             (checkBlockType(definitionId, location) && checkPlacement(definitionId, location))
         }
-        assertTrue(success.size >= 184)
+        assertGreaterThan(success.size, 184)
     }
 
     @Disabled("Doesn't work, result block will be Large, not Small.")
@@ -75,7 +76,7 @@ class GetToolbarTest : MockOrRealGameTest() {
         delay(10)
         blocks.place()
         delay(10)
-        return (observer.observeNewBlocks().allBlocks.let { it.isNotEmpty() && it.first().definitionId.type == definitionId.type }).also {
+        return (observer.observeNewBlocks().allBlocks.let { it.isNotEmpty() && it.first().definitionId == definitionId }).also {
             observer.observeBlocks().allBlocks.forEach {
                 admin.blocks.remove(it.id)
             }

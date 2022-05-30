@@ -21,6 +21,16 @@ data class DefinitionId(
         const val PHYSICAL_GUN = "PhysicalGunObject"
         const val ORE = "Ore"
         const val INGOT = "Ingot"
+        const val DOOR = "AirtightSlideDoor"
+        const val REACTOR = "Reactor"
+
+        fun door(type: String): DefinitionId {
+            return create(DOOR, type)
+        }
+
+        fun reactor(type: String): DefinitionId {
+            return create(REACTOR, type)
+        }
 
         fun cubeBlock(type: String): DefinitionId {
             return create(CUBE_BLOCK, type)

@@ -13,27 +13,26 @@ class PolymorphicBlocksTest : MockOrRealGameTest() {
 
     @Test
     fun smallGenerator() = testContext {
-        buildAndCheckType<FueledPowerProducer>("LargeBlockSmallGenerator")
-        buildAndCheckType<TerminalBlock>("LargeBlockSmallGenerator")
-        buildAndCheckType<FunctionalBlock>("LargeBlockSmallGenerator")
+        buildAndCheckType<FueledPowerProducer>(DefinitionId.reactor("LargeBlockSmallGenerator"))
+        buildAndCheckType<TerminalBlock>(DefinitionId.reactor("LargeBlockSmallGenerator"))
+        buildAndCheckType<FunctionalBlock>(DefinitionId.reactor("LargeBlockSmallGenerator"))
     }
 
     @Test
     fun slideDoor() = testContext {
-        buildAndCheckType<DoorBase>("LargeBlockSlideDoor")
-        buildAndCheckType<TerminalBlock>("LargeBlockSlideDoor")
-        buildAndCheckType<FunctionalBlock>("LargeBlockSlideDoor")
+        buildAndCheckType<DoorBase>(DefinitionId.door("LargeBlockSlideDoor"))
+        buildAndCheckType<TerminalBlock>(DefinitionId.door("LargeBlockSlideDoor"))
+        buildAndCheckType<FunctionalBlock>(DefinitionId.door("LargeBlockSlideDoor"))
     }
 
 
-    private inline fun <reified T> SpaceEngineers.buildAndCheckType(blockType: String) {
+    private inline fun <reified T> SpaceEngineers.buildAndCheckType(definitionId: DefinitionId) {
         val z = 1000
-        val definitionId = DefinitionId.cubeBlock(blockType)
         admin.character.teleport(Vec3F(0, 0, z + 15), Vec3F.FORWARD, Vec3F.UP)
         observer.observeNewBlocks()
         admin.blocks.placeAt(definitionId, Vec3F(0, 0, z + 0), Vec3F.FORWARD, Vec3F.UP)
         val block = observer.observeNewBlocks().allBlocks.first()
-        assertEquals(block.definitionId.type, blockType)
+        assertEquals(block.definitionId.type, definitionId.type)
         assertTrue(block is T)
         admin.blocks.remove(block.id)
     }

@@ -107,14 +107,21 @@ namespace Iv4xr.SePlugin.Control
 
             return result;
         }
-        
+
         public static void CheckDefinitionIdExists(MyDefinitionId id)
         {
             if (MyDefinitionManager.Static.GetAllDefinitions().All(definition => definition.Id != id))
             {
-                throw new InvalidOperationException($"Invalid definition id {id}");
+                var foundIds = string.Join(",", FindSimilar(id));
+                throw new InvalidOperationException($"Invalid definition id {id}, maybe you meant: {foundIds}");
             }
         }
 
+        private static IEnumerable<MyDefinitionId> FindSimilar(MyDefinitionId id)
+        {
+            return MyDefinitionManager.Static.GetAllDefinitions().Select(def => def.Id).Where(
+                def => def.TypeId.ToString() == id.TypeId.ToString() ||
+                       def.SubtypeId.String == id.SubtypeId.String);
+        }
     }
 }
