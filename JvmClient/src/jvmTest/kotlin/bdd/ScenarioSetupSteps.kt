@@ -45,7 +45,7 @@ class ScenarioSetupSteps : AbstractMultiplayerSteps() {
 
 
     fun killDedicatedServerWindows() {
-        var process = ProcessBuilder(* arrayOf("""taskkill /IM "SpaceEngineersDedicated.exe" /F """))
+        var process = ProcessBuilder(* arrayOf("""C:\windows\system32/taskkill""", "/IM", "SpaceEngineersDedicated.exe", "/F"))
             .redirectErrorStream(true)
             .start()
         process.waitFor()
