@@ -60,7 +60,7 @@ namespace Iv4xr.SePlugin.Control
             var position = sourceGrid.PositionComp.GetPosition();
             var orientationUp = sourceGrid.PositionComp.GetOrientation().Up;
             var orientationForward = sourceGrid.PositionComp.GetOrientation().Forward;
-            return new CubeGrid
+            var result =  new CubeGrid
             {
                 Id = sourceGrid.EntityId.ToString(),
                 Position = position.ToPlain(),
@@ -70,6 +70,8 @@ namespace Iv4xr.SePlugin.Control
                 Mass = sourceGrid.Mass,
                 Parked = sourceGrid.IsParked,
             };
+            sourceGrid.ToEntity(result);
+            return result;
         }
 
         private readonly PreviousBlocksFilter m_previousBlocksFilter = new PreviousBlocksFilter();

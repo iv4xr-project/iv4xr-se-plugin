@@ -20,4 +20,12 @@ data class CubeGrid(
     val mass: Float,
     @SerialName("Parked")
     val parked: Boolean = false,
-) : Entity
+    @SerialName("Velocity")
+    override val velocity: Vec3F,
+    @SerialName("Name")
+    override val name: String,
+    @SerialName("DisplayName")
+    override val displayName: String,
+    @SerialName("InScene")
+    override val inScene: Boolean,
+) : ExtendedEntity

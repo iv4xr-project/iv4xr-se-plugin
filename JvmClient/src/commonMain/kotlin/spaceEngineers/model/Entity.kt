@@ -10,6 +10,23 @@ interface Entity : Pose {
     val id: String
 }
 
+interface ExtendedEntity : Entity {
+    @SerialName("Id")
+    override val id: String
+
+    @SerialName("Velocity")
+    val velocity: Vec3F
+
+    @SerialName("Name")
+    val name: String
+
+    @SerialName("DisplayName")
+    val displayName: String
+
+    @SerialName("InScene")
+    val inScene: Boolean
+}
+
 
 @Serializable
 data class BaseEntity(
@@ -21,4 +38,12 @@ data class BaseEntity(
     override val orientationForward: Vec3F,
     @SerialName("OrientationUp")
     override val orientationUp: Vec3F,
-) : Entity
+    @SerialName("Velocity")
+    override val velocity: Vec3F,
+    @SerialName("Name")
+    override val name: String,
+    @SerialName("DisplayName")
+    override val displayName: String,
+    @SerialName("InScene")
+    override val inScene: Boolean,
+) : ExtendedEntity

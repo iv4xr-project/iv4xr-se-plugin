@@ -5,7 +5,6 @@ namespace Iv4xr.SpaceEngineers.WorldModel
     // Intended to be maximally compatible with Iv4xr.framework.world.WorldModel from the iv4XR Java framework.
     public class CharacterObservation: Entity
     {
-        public PlainVec3D Velocity; // Agent's velocity
         public PlainVec3D Extent; // Agent's dimensions (x,y,z size/2)
         public PlainVec3D Gravity;
         
@@ -24,7 +23,6 @@ namespace Iv4xr.SpaceEngineers.WorldModel
         public CharacterMovementEnum Movement;
         public Inventory Inventory;
         public BootsState BootsState;
-        public string DisplayName;
         public Entity RelativeDampeningEntity;
         public CharacterMovementFlags MovementFlags;
     }

@@ -3,5 +3,9 @@
     public class Entity: Pose
     {
         public string Id;
+        public string Name;
+        public string DisplayName;
+        public PlainVec3D Velocity;
+        public bool InScene;    
     }
 }

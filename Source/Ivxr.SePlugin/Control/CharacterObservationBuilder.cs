@@ -1,14 +1,10 @@
-﻿using System.Linq;
-using Iv4xr.PluginLib;
+﻿using Iv4xr.PluginLib;
 using Iv4xr.SpaceEngineers.WorldModel;
-using Sandbox.Game;
 using Sandbox.Game.Entities;
 using Sandbox.Game.Entities.Character;
 using Sandbox.Game.Entities.Character.Components;
 using Sandbox.Game.Weapons;
 using Sandbox.Game.World;
-using VRage.Game;
-using VRage.Game.Entity;
 
 namespace Iv4xr.SePlugin.Control
 {
@@ -24,14 +20,8 @@ namespace Iv4xr.SePlugin.Control
         public CharacterObservation CreateCharacterObservation(MyCharacter character)
         {
             var orientation = character.PositionComp.GetOrientation();
-            return new CharacterObservation
+            var result = new CharacterObservation
             {
-                Id = character.CharacterId().ToString(),
-                DisplayName = character.DisplayName,
-                Position = character.PositionComp.GetPosition().ToPlain(), // Consider reducing allocations.
-                OrientationForward = orientation.Forward.ToPlain(),
-                OrientationUp = orientation.Up.ToPlain(),
-                Velocity = character.Physics.LinearVelocity.ToPlain(),
                 Gravity = character.Physics.Gravity.ToPlain(),
                 Extent = character.PositionComp.LocalAABB.Size.ToPlain(),
                 Camera = new Pose()
@@ -54,9 +44,12 @@ namespace Iv4xr.SePlugin.Control
                 Movement = (CharacterMovementEnum)character.CurrentMovementState,
                 Inventory = character.GetInventory().ToInventory(),
                 BootsState = GetBootState(character),
-                RelativeDampeningEntity = character.RelativeDampeningEntity.ToEntity(),
+                RelativeDampeningEntity = character.RelativeDampeningEntity.ToEntityOrNull(),
                 MovementFlags = (CharacterMovementFlags)((byte)character.MovementFlags),
             };
+            character.ToEntity(result);
+            result.Id = character.CharacterId().ToString();
+            return result;
         }
 
         private static BootsState GetBootState(MyCharacter character)
