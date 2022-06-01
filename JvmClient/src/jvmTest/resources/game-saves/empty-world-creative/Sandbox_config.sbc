@@ -2,14 +2,15 @@
 <MyObjectBuilder_WorldConfiguration xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Settings xsi:type="MyObjectBuilder_SessionSettings">
     <GameMode>Creative</GameMode>
-    <InventorySizeMultiplier>10</InventorySizeMultiplier>
+    <InventorySizeMultiplier>3</InventorySizeMultiplier>
     <BlocksInventorySizeMultiplier>1</BlocksInventorySizeMultiplier>
     <AssemblerSpeedMultiplier>3</AssemblerSpeedMultiplier>
     <AssemblerEfficiencyMultiplier>3</AssemblerEfficiencyMultiplier>
     <RefinerySpeedMultiplier>3</RefinerySpeedMultiplier>
-    <OnlineMode>OFFLINE</OnlineMode>
+    <OnlineMode>PUBLIC</OnlineMode>
     <MaxPlayers>4</MaxPlayers>
     <MaxFloatingObjects>56</MaxFloatingObjects>
+    <TotalBotLimit>32</TotalBotLimit>
     <MaxBackupSaves>5</MaxBackupSaves>
     <MaxGridSize>0</MaxGridSize>
     <MaxBlocksPerPlayer>0</MaxBlocksPerPlayer>
@@ -24,7 +25,7 @@
     <WeaponsEnabled>true</WeaponsEnabled>
     <ShowPlayerNamesOnHud>true</ShowPlayerNamesOnHud>
     <ThrusterDamage>true</ThrusterDamage>
-    <CargoShipsEnabled>true</CargoShipsEnabled>
+    <CargoShipsEnabled>false</CargoShipsEnabled>
     <EnableSpectator>false</EnableSpectator>
     <WorldSizeKm>0</WorldSizeKm>
     <RespawnShipDelete>false</RespawnShipDelete>
@@ -37,8 +38,10 @@
     <AutoSaveInMinutes>0</AutoSaveInMinutes>
     <EnableSaving>true</EnableSaving>
     <InfiniteAmmo>false</InfiniteAmmo>
-    <EnableContainerDrops>true</EnableContainerDrops>
+    <EnableContainerDrops>false</EnableContainerDrops>
     <SpawnShipTimeMultiplier>0</SpawnShipTimeMultiplier>
+    <ProceduralDensity>0.35</ProceduralDensity>
+    <ProceduralSeed>843101749</ProceduralSeed>
     <DestructibleBlocks>true</DestructibleBlocks>
     <EnableIngameScripts>false</EnableIngameScripts>
     <ViewDistance>15000</ViewDistance>
@@ -47,22 +50,22 @@
     <EnableOxygen>true</EnableOxygen>
     <EnableOxygenPressurization>true</EnableOxygenPressurization>
     <Enable3rdPersonView>true</Enable3rdPersonView>
-    <EnableEncounters>true</EnableEncounters>
+    <EnableEncounters>false</EnableEncounters>
     <EnableConvertToStation>true</EnableConvertToStation>
     <StationVoxelSupport>false</StationVoxelSupport>
     <EnableSunRotation>true</EnableSunRotation>
-    <EnableRespawnShips>true</EnableRespawnShips>
+    <EnableRespawnShips>false</EnableRespawnShips>
     <ScenarioEditMode>false</ScenarioEditMode>
     <Scenario>false</Scenario>
     <CanJoinRunning>false</CanJoinRunning>
     <PhysicsIterations>8</PhysicsIterations>
-    <SunRotationIntervalMinutes>119.999992</SunRotationIntervalMinutes>
+    <SunRotationIntervalMinutes>60</SunRotationIntervalMinutes>
     <EnableJetpack>true</EnableJetpack>
     <SpawnWithTools>true</SpawnWithTools>
     <StartInRespawnScreen>false</StartInRespawnScreen>
     <EnableVoxelDestruction>true</EnableVoxelDestruction>
     <MaxDrones>5</MaxDrones>
-    <EnableDrones>true</EnableDrones>
+    <EnableDrones>false</EnableDrones>
     <EnableWolfs>false</EnableWolfs>
     <EnableSpiders>false</EnableSpiders>
     <FloraDensityMultiplier>1</FloraDensityMultiplier>
@@ -77,35 +80,35 @@
     <EnableTurretsFriendlyFire>false</EnableTurretsFriendlyFire>
     <EnableSubgridDamage>false</EnableSubgridDamage>
     <SyncDistance>3000</SyncDistance>
-    <ExperimentalMode>false</ExperimentalMode>
+    <ExperimentalMode>true</ExperimentalMode>
     <AdaptiveSimulationQuality>true</AdaptiveSimulationQuality>
-    <EnableVoxelHand>true</EnableVoxelHand>
+    <EnableVoxelHand>false</EnableVoxelHand>
     <RemoveOldIdentitiesH>0</RemoveOldIdentitiesH>
-    <TrashRemovalEnabled>true</TrashRemovalEnabled>
-    <StopGridsPeriodMin>15</StopGridsPeriodMin>
-    <TrashFlagsValue>7706</TrashFlagsValue>
+    <TrashRemovalEnabled>false</TrashRemovalEnabled>
+    <StopGridsPeriodMin>0</StopGridsPeriodMin>
+    <TrashFlagsValue>0</TrashFlagsValue>
     <AFKTimeountMin>0</AFKTimeountMin>
-    <BlockCountThreshold>20</BlockCountThreshold>
-    <PlayerDistanceThreshold>500</PlayerDistanceThreshold>
+    <BlockCountThreshold>0</BlockCountThreshold>
+    <PlayerDistanceThreshold>0</PlayerDistanceThreshold>
     <OptimalGridCount>0</OptimalGridCount>
     <PlayerInactivityThreshold>0</PlayerInactivityThreshold>
-    <PlayerCharacterRemovalThreshold>15</PlayerCharacterRemovalThreshold>
+    <PlayerCharacterRemovalThreshold>0</PlayerCharacterRemovalThreshold>
     <VoxelTrashRemovalEnabled>false</VoxelTrashRemovalEnabled>
     <VoxelPlayerDistanceThreshold>5000</VoxelPlayerDistanceThreshold>
     <VoxelGridDistanceThreshold>5000</VoxelGridDistanceThreshold>
     <VoxelAgeThreshold>24</VoxelAgeThreshold>
-    <EnableResearch>true</EnableResearch>
-    <EnableGoodBotHints>true</EnableGoodBotHints>
-    <OptimalSpawnDistance>900</OptimalSpawnDistance>
+    <EnableResearch>false</EnableResearch>
+    <EnableGoodBotHints>false</EnableGoodBotHints>
+    <OptimalSpawnDistance>16000</OptimalSpawnDistance>
     <EnableAutorespawn>true</EnableAutorespawn>
-    <EnableBountyContracts>true</EnableBountyContracts>
+    <EnableBountyContracts>false</EnableBountyContracts>
     <EnableSupergridding>false</EnableSupergridding>
-    <EnableEconomy>true</EnableEconomy>
-    <DepositsCountCoefficient>1</DepositsCountCoefficient>
-    <DepositSizeDenominator>60</DepositSizeDenominator>
+    <EnableEconomy>false</EnableEconomy>
+    <DepositsCountCoefficient>2</DepositsCountCoefficient>
+    <DepositSizeDenominator>30</DepositSizeDenominator>
     <WeatherSystem>true</WeatherSystem>
-    <HarvestRatioMultiplier>0.8</HarvestRatioMultiplier>
-    <TradeFactionsCount>15</TradeFactionsCount>
+    <HarvestRatioMultiplier>1</HarvestRatioMultiplier>
+    <TradeFactionsCount>8</TradeFactionsCount>
     <StationsDistanceInnerRadius>10000000</StationsDistanceInnerRadius>
     <StationsDistanceOuterRadiusStart>10000000</StationsDistanceOuterRadiusStart>
     <StationsDistanceOuterRadiusEnd>30000000</StationsDistanceOuterRadiusEnd>
@@ -125,7 +128,7 @@
     <PostMatchDuration>0</PostMatchDuration>
     <EnableFriendlyFire>true</EnableFriendlyFire>
     <EnableTeamBalancing>false</EnableTeamBalancing>
-    <CharacterSpeedMultiplier>1</CharacterSpeedMultiplier>
+    <CharacterSpeedMultiplier>0.75</CharacterSpeedMultiplier>
     <EnableRecoil>true</EnableRecoil>
     <EnvironmentDamageMultiplier>1</EnvironmentDamageMultiplier>
     <EnableGamepadAimAssist>false</EnableGamepadAimAssist>
@@ -133,6 +136,6 @@
     <EnableFactionPlayerNames>false</EnableFactionPlayerNames>
   </Settings>
   <Mods />
-  <SessionName>empty-world-creative</SessionName>
-  <LastSaveTime>2021-04-28T14:12:49.1653903+02:00</LastSaveTime>
+  <SessionName>amaze-20x20</SessionName>
+  <LastSaveTime>2022-04-07T16:34:28.2399353+02:00</LastSaveTime>
 </MyObjectBuilder_WorldConfiguration>
