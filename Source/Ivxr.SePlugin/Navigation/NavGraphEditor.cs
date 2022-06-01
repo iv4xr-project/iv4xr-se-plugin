@@ -45,7 +45,7 @@ namespace Iv4xr.SePlugin.Navigation
         {
             var sphere = m_lowLevelObserver.GetBoundingSphere(
                 null,
-                m_lowLevelObserver.Radius * 2d);  // Get some look-ahead
+                m_lowLevelObserver.Radius * 3d);  // Get some look-ahead
 
             var sourceGrid = m_lowLevelObserver.Grids().ToList()
                     .OrderByDescending(g => g.BlocksCount).First();  // Get the biggest grid.
