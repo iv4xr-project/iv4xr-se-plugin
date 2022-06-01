@@ -1,16 +1,16 @@
 # Screens
 
-## Basic necessary info
+## Introduction
 
-The game is split into "screens". Screen is something like scene in game development terminology. There
-is `GamePlayScreen` for the main gameplay. There is `TerminalScreen` for operating terminals, there is `MainMenuScreen`
+The game is organized into "screens". Screen is something like scene in game development terminology. There
+is `GamePlayScreen` for the main gameplay. There is `TerminalScreen` for operating terminals, there is `MainMenuScreen`,
 and many more.
 
 This API allows more advanced features outside the game itself such as loading multiplayer games, joining dedicated
-server and lobby games, saving game, checking dialogs, respawning, controlling refineries, assemblers and more.
+server and lobby games, saving game, checking dialogs, respawning, controlling refineries, assemblers, and more.
 
-The game has its own GUI components. Buttons, text fields, tables, etc. Screen API is trying to allow reading important
-data from screens and to manipulate screen by pressing buttons, entering text fields, etc.
+The game has its own GUI components. Buttons, text fields, tables, etc. Screen API is allows reading important data from
+screens and to manipulate screen by pressing buttons, entering text fields, etc.
 
 ## Implemented screens
 
@@ -33,11 +33,13 @@ thrown.
 
 ## Extra points
 
-- There is no synchronization and no waiting for results. If you do a lot of actions in the row, there can be a
-  problem (typically exception, that expected screen doesn't have focus - yet).
+- There is no synchronization and no waiting for results. If you do a lot of actions in a row, there can be a problem (
+  typically an exception saying, that the expected screen doesn't have focus - yet).
 - In SE code, all screen classes have `MyGui` prefix and `Screen` suffix, we removed that for API and client side to
   improve readability.
 - `Medicals` screen is both for choosing faction and respawn point.
-- MainMenuScreen is used both for main menu (outside game) and ingame menu (when pressing ESC while playing), even
-  though buttons differ.
-- API is trying to throw meaningful exceptions when possibly (ex. when trying to click disabled button). If you run into a situation, where API doesn't work, but doesn't throw any exception, please [report this](https://github.com/iv4xr-project/iv4xr-se-plugin/issues/new).
+- `MainMenu` is used both for main menu (outside game) and in-game menu (when pressing ESC while playing), even though
+  the buttons differ.
+- API is trying to throw meaningful exceptions when possible (ex. when trying to click a disabled button). If you run
+  into a situation, where API doesn't work, but doesn't throw any exception,
+  please [report this](https://github.com/iv4xr-project/iv4xr-se-plugin/issues/new).
