@@ -51,7 +51,7 @@ class PlaceRemoveTest : MockOrRealGameTest() {
         admin.character.teleport(Vec3F(0, 0, z + 15), Vec3F.FORWARD, Vec3F.UP)
         observer.observeNewBlocks()
         val blockId =
-            admin.blocks.placeAt(DefinitionId.cubeBlock(blockType), Vec3F(0, 0, z + 0), Vec3F.FORWARD, Vec3F.UP)
+            admin.blocks.placeAt(DefinitionId.reactor(blockType), Vec3F(0, 0, z + 0), Vec3F.FORWARD, Vec3F.UP)
         val observation = observer.observe()
         val block = observer.observeNewBlocks().allBlocks.first()
         assertEquals(block.id, blockId)
@@ -81,7 +81,7 @@ class PlaceRemoveTest : MockOrRealGameTest() {
         admin.character.teleport(Vec3F(0, 0, z + 15), Vec3F.FORWARD, Vec3F.UP)
         observer.observeNewBlocks()
         val blockId =
-            admin.blocks.placeAt(DefinitionId.cubeBlock(blockType), Vec3F(0, 0, z + 0), Vec3F.FORWARD, Vec3F.UP)
+            admin.blocks.placeAt(DefinitionId.reactor(blockType), Vec3F(0, 0, z + 0), Vec3F.FORWARD, Vec3F.UP)
         val observation = observer.observe()
         val block = observer.observeNewBlocks().allBlocks.first()
         assertEquals(block.id, blockId)
@@ -97,7 +97,7 @@ class PlaceRemoveTest : MockOrRealGameTest() {
     @Test
     fun placeAtSurvivalFunctional() = testContext(scenarioId = "violent-survival") {
         val blockType = "LargeBlockSmallGenerator"
-        val blockDefinition = DefinitionId.cubeBlock(blockType)
+        val blockDefinition = DefinitionId.reactor(blockType)
         val z = 1000
         admin.character.teleport(Vec3F(0, 0, z + 15), Vec3F.FORWARD, Vec3F.UP)
         val obs = observer.observeNewBlocks()

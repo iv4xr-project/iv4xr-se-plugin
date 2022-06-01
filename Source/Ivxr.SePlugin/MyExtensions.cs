@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Iv4xr.PluginLib;
 using Iv4xr.SePlugin.Control;
 using Iv4xr.SpaceEngineers;
 using Iv4xr.SpaceEngineers.WorldModel;
@@ -218,13 +219,13 @@ namespace Iv4xr.SePlugin
 
         public static FloatingObject ToFloatingObject(this MyFloatingObject floatingObject)
         {
-            return new FloatingObject()
+            var result = new FloatingObject()
             {
                 Amount = (float)floatingObject.Amount.Value,
                 ItemDefinition = floatingObject.ItemDefinition.ToPhysicalItemDefinition(),
-                DisplayName = floatingObject.DisplayName,
-                EntityId = floatingObject.EntityId,
             };
+            floatingObject.ToEntity(result);
+            return result;
         }
 
 
@@ -274,18 +275,24 @@ namespace Iv4xr.SePlugin
             return debugInfo.Roles().Contains(role);
         }
 
+        public static Entity ToEntityOrNull(this MyEntity entity, Entity newEntity = null)
+        {
+            return entity == null ? null : ToEntity(entity, newEntity);
+        }
+
         public static Entity ToEntity(this MyEntity entity, Entity newEntity = null)
         {
-            if (entity == null)
-            {
-                return null;
-            }
+            entity.ThrowIfNull("entity");
             var orientation = entity.PositionComp.GetOrientation();
             var result = newEntity ?? new Entity();
             result.Id = entity.EntityId.ToString();
             result.Position = entity.PositionComp.GetPosition().ToPlain();
             result.OrientationForward = orientation.Forward.ToPlain();
             result.OrientationUp = orientation.Up.ToPlain();
+            result.DisplayName = entity.DisplayName;
+            result.Name = entity.Name;
+            result.Velocity = entity.Physics?.LinearVelocity.ToPlain() ?? new PlainVec3D();
+            result.InScene = entity.InScene;
             return result;
         }
     }

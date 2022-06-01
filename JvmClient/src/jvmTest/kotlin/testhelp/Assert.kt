@@ -25,6 +25,10 @@ fun assertGreaterThan(higher: Float, lower: Float, message: String? = null) {
     assertTrue(higher > lower, message ?: "$higher is not greater than $lower")
 }
 
+fun assertGreaterThan(higher: Number, lower: Number, message: String? = null) {
+    assertTrue(higher.toDouble() > lower.toDouble(), message ?: "$higher is not greater than $lower")
+}
+
 
 fun assertVecEquals(v1: Vec3F, v2: Vec3F, absoluteTolerance: Float = DEFAULT_VECTOR_EQUALITY_TOLERANCE, message: String = "") {
     assertEquals(
