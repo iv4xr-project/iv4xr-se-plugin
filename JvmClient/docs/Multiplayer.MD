@@ -3,13 +3,13 @@
 ## Overview
 
 It is possible to control multiple game instances at once, each of them having the plugin installed. That means managing
-connection for every plugin separately.
+the connection for every plugin separately.
 
 ## About multiplayer
 
 There are 2 basic types of multiplayer in SE:
 
-- Lobby - game is created by the game itself and one of the players is "host" of the game.
+- Lobby - game is created by the game itself and one of the players is the "host" of the game.
 - Dedicated server (DS) - game is created by the dedicated server. Dedicated server is not involved as player.
 
 The dedicated server and single game instance can run both on the same machine. Just make sure you change the plugin
