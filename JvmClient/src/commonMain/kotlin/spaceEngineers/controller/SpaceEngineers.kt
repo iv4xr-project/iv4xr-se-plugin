@@ -84,7 +84,7 @@ interface Observer {
     fun observeNewBlocks(): Observation
     fun observeCharacters(): List<CharacterObservation>
     fun observeFloatingObjects(): List<FloatingObject>
-    fun navigationGraph(): NavGraph
+    fun navigationGraph(gridId: String): NavGraph
 
     /**
      * Creates screenshot in the game. If there's an error, no exception is thrown (swallowed by the game itself).

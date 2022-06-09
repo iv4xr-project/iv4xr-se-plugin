@@ -51,8 +51,8 @@ class ContextControllerWrapper(
             return spaceEngineers.observer.observeFloatingObjects()
         }
 
-        override fun navigationGraph(): NavGraph {
-            return spaceEngineers.observer.navigationGraph()
+        override fun navigationGraph(gridId: String): NavGraph {
+            return spaceEngineers.observer.navigationGraph(gridId)
         }
 
         override fun takeScreenshot(absolutePath: String) {

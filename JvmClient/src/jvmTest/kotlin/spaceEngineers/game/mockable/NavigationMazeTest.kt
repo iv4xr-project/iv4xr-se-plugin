@@ -3,6 +3,7 @@ package spaceEngineers.game.mockable
 import spaceEngineers.controller.Observer
 import spaceEngineers.controller.SpaceEngineers
 import spaceEngineers.controller.extensions.distanceTo
+import spaceEngineers.controller.extensions.navigationGraph
 import spaceEngineers.model.Vec3F
 import spaceEngineers.model.extensions.normalizeAsWalk
 import spaceEngineers.navigation.Edge

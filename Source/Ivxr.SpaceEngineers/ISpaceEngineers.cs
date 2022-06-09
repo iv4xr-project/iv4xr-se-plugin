@@ -43,7 +43,7 @@ namespace Iv4xr.SpaceEngineers
         Observation ObserveNewBlocks();
         List<CharacterObservation> ObserveCharacters();
         List<FloatingObject> ObserveFloatingObjects();
-        NavGraph NavigationGraph();
+        NavGraph NavigationGraph(string gridId);
         void SwitchCamera();
         void TakeScreenshot(string absolutePath);
     }
