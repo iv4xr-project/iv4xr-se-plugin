@@ -123,17 +123,6 @@ in IDEA and select "Run".
 Eclipse does not support Kotlin multiplatform projects and so far we haven't been able to configure it to run with
 Kotlin JVM. We recommend using the project with JetBrains [IDEA](https://www.jetbrains.com/idea/download/).
 
-## Naming convention
-
-The project contains plugin in C# and JVM client in Kotlin. Those 2 languages have different naming conventions.
-
-- Properties and methods in C# usually begin with uppercase ("`PascalCase`"), but they begin with lowercase in
-  Kotlin ("`camelCase`").
-- Interfaces in C# sometimes have "I" prefix to signal interface. We usually refer to interface without the "I" in the
-  documentation unless directly referencing a class.
-- If you see reference to variable or property, always interpret it in context of the particular language.
-- Since the server is implemented in C#, JSON-RPC protocol uses C# conventions and all method names and parameters are
-  in `PascalCase`.
 
 ## Advanced/plugin customization
 
