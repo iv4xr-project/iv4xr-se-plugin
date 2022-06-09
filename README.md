@@ -34,10 +34,11 @@ It's not necessary to build anything to try out this plugin. This section descri
 
 #### *3rd Party Dependencies*
 
-Apart from the game libraries, the plugin requires two additional libraries to run:
+Apart from the game libraries, the plugin requires three additional libraries to run:
 
 * `AustinHarris.JsonRpc.dll`, which in turn requires:
 * `Newtonsoft.Json.dll`
+* `ImpromptuInterface.dll`
 
 There are many ways how to obtain the libraries. One of them is the following:
 
@@ -83,7 +84,7 @@ Before starting the build of the solution, make sure a correct build configurati
 
 The network protocol is based on [JSON-RPC 2.0](https://www.jsonrpc.org/specification). JSON-RPC messages are separated by newlines, TCP is used as the transport layer. The protocol (individual API) is now more stable than in the beginning of the development, but it's still possible it will change as we learn new things.
 
-For an up to date list of provided API calls see the interface `ISpaceEngineers` in the project **`Ivxr.PlugIndependentLib`** (it currently resides [here](https://github.com/iv4xr-project/iv4xr-se-plugin/blob/main/Source/Ivxr.PlugIndependentLib/Control/ISpaceEngineers.cs)). 
+For an up to date list of provided API calls see the interface [ISpaceEngineers](https://github.com/iv4xr-project/iv4xr-se-plugin/blob/main/Source/Ivxr.SpaceEngineers/ISpaceEngineers.cs) in the project **`Ivxr.SpaceEngineers`**. 
 
 You can also check out the [JvmClient](https://github.com/iv4xr-project/iv4xr-se-plugin/tree/main/JvmClient) in this repository for client side implementation of the interface in Kotlin and examples how to use it.
 
@@ -94,29 +95,32 @@ Overview of the solution projects:
 * **`Ivxr.SePlugin`** – The **main plugin project**. Contains most of the important logic. It is one of the plugin libraries, the main one.
   * See the project details below.
 * **`Ivxr.SePlugin.Tests`** – Unit tests for the main project.
-* **`Ivxr.PlugIndependentLib`** – Contains service code that is *entirely independent of the Space Engineers codebase* for better dependency management and easier testing. Also contains **the definition of the C# API** which is exposed via JSON-RPC.
-  * D `ISpaceEngineers` – the main interface grouping other interfaces such as `ICharacterController`, `ISpaceEngineersAdmin`, and others.
+* **`Ivxr.PlugIndependentLib`** – Contains service code that is *entirely independent of the Space Engineers codebase* for better dependency management and easier testing.
   * Contains some basic interfaces such as the logging interface.
   * It is a secondary plugin library.
+* **`Ivxr.PlugIndependentLib.Test`**
+* **`Ivxr.SpaceEngineers`** – Contains **the main interfaces and models of the C# API** which is exposed via JSON-RPC.
+  * [ISpaceEngineers](https://github.com/iv4xr-project/iv4xr-se-plugin/blob/main/Source/Ivxr.SpaceEngineers/ISpaceEngineers.cs) – the main interface grouping other interfaces such as `ICharacterController`, `ISpaceEngineersAdmin`, and others.
+  * Does not depend on Space Engineers codebase.
   * The TCP/IP server has now been replaced by the JSON-RPC library.
-* **`SeServerMock`** – A testing project which runs a TCP/IP server based on the infrastructure from the two main libraries and using some simple mock implementations of the classes which would normally depend on a running game.
 
 #### Project details: `Ivxr.SePlugin`
 
 List of notable classes – top level:
 
-* `IvxrPlugin` – Entry point of the plugin, implements the game's `IPlugin` interface.
+* `IvxrPlugin` – Entry point of the plugin, implements the game's `IConfigurablePlugin` and `IHandleInputPlugin` interfaces.
 * `IvxrSessionComponent` –  Inherits from game's `MySessionComponentBase` which allows the component to hook the plugin into game events such as `UpdateBeforeSimulation` called each timestep of the game.
 * `IvxrPluginContext` – Root of the dependency tree of the plugin, constructs all the important objects.
 
 Notable sub-namespaces (and the solution sub-folders):
 
 * `Control` – Interfacing with the game: Obtaining observation and control of the character. Notable classes:
-  * `Dispatcher` – The command hub.
   * `CharacterController` – Self-explanatory.
   * `Observer` – Extracts observations from the game.
+  * `Screens` – Implementation of `IScreens` interface for controlling game screens.
 * `Session` – Session control such as loading a saved game. Has a separate command dispatcher because it needs to run (in the "lobby") even when no actual game is running.
 * `WorldModel` – Classes supporting the communication (JSON over TCP/IP).
+* `Communication` – Classes for JSON-RPC mappings, thread synchronizations and other tools required for the communication.
 
 
 
