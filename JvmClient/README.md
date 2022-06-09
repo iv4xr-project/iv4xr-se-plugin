@@ -1,4 +1,4 @@
-# Client implementation for JVM in Kotlin
+# Client implementation in Kotlin
 
 This pilot implementation of a plugin client servers as a demo for
 the [iv4XR testing framework](https://github.com/iv4xr-project/aplib), showing that iv4XR test agents can control [_
@@ -115,8 +115,7 @@ For now, we run BDD tests from IDEA.
 * Make sure you have
   installed [plugins](https://www.jetbrains.com/help/idea/enabling-cucumber-support-in-project.html#cucumber-plugin) `Gherkin`
   and `Cucumber for Java`
-*
-Right-click [.feature file](https://github.com/iv4xr-project/iv4xrDemo-space-engineers/tree/se-dev/src/jvmTest/resources/features)
+* Right-click [.feature file](https://github.com/iv4xr-project/iv4xrDemo-space-engineers/tree/se-dev/src/jvmTest/resources/features)
 in IDEA and select "Run".
 
 ## Using Eclipse
@@ -135,54 +134,6 @@ The project contains plugin in C# and JVM client in Kotlin. Those 2 languages ha
 - If you see reference to variable or property, always interpret it in context of the particular language.
 - Since the server is implemented in C#, JSON-RPC protocol uses C# conventions and all method names and parameters are
   in `PascalCase`.
-
-## Moving character
-
-### Basic movement API
-
--
-Method [moveAndRotate](https://iv4xr-project.github.io/iv4xr-se-plugin/space-engineers-api/spaceEngineers.controller/-character/move-and-rotate.html)
-accepts movement vector. Vector represents direction.
-- It's value defines type (speed) of movement. If it's less than 0.4, it is slow movement. If less than or equal to 1.6,
-  it is walk. If over 1.6, it is sprint. This is relevant when actually walking (ex. not using jetpack).
-- Use convenience extension methods `normalizeAsWalk`, `normalizeAsRun`, `normalizeAsSprint` to adjust vector size to
-  your needs.
--
-Check [CharacterMovementType](https://iv4xr-project.github.io/iv4xr-se-plugin/space-engineers-api/spaceEngineers.model/-character-movement-type/index.html)
-for more information and to check constants.
-- There is also movement while in crouch.
-
-### Movement types and speed
-
-There are other movement types on Space Engineers, so this is not full list of possibilities. Following table describes
-differences between movements and their speeds. Sprint speed is 10 only when walking forward.
-
-| Movement type | Max speed (m/s) | Movement vector threshold |
-| --- | --- | --- |
-| Crouch walk |   2  | ? |
-| Walk        |   3  | 0.4 <  |
-| Run         |   6  | 1.6 <= |
-| Sprint      |  10  | 1.6 > |
-| Jetpack     | 110  | ? |
-
-### Continuous movement
-
-Calling [`moveAndRotate`](https://iv4xr-project.github.io/iv4xr-se-plugin/space-engineers-api/spaceEngineers.controller/-character/move-and-rotate.html)
-will behave in a similar fashion as a single keyboard stroke. To keep moving, the command has to be sent repeatedly,
-behaving as key constantly being pressed. This is quite inconvenient for the code and not very deterministic since
-commands are sent rapidly over TCP without any kind of time synchronization.
-
-For that reason, `moveAndRotate` has `ticks` parameter with the default value of 1, which determines the number of ticks
-for the command to be active (equivalent to the key being pressed). One second has 60 ticks. To stop the movement
-preemptively before the specified number of ticks elapses, call `moveAndRotate` with 0 ticks (or supersede the movement
-by sending a new command).
-
-This movement is quite deterministic when repeating exactly the same scenario with exact positions and movement values.
-Sometimes the values are still slightly off, especially when the scenario is loaded for the first time.
-
-## Rotating character
-
-TODO: Explore how roll and rotation vector size affects rotation.
 
 ## Advanced/plugin customization
 
