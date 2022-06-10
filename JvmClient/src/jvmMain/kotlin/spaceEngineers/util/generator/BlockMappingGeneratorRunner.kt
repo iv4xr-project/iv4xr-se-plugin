@@ -1,17 +1,23 @@
 package spaceEngineers.util.generator
 
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import spaceEngineers.controller.*
 import spaceEngineers.model.BlockDefinition
 import spaceEngineers.transport.SocketReaderWriter
 import java.io.File
 
+val blockHierarchyFile = File("./src/jvmMain/resources/block-hierarchy.json")
+
 val parentMappings = SocketReaderWriter.SPACE_ENG_GSON.fromJson<Map<String, String>>(
-    File("./src/jvmMain/resources/block-hierarchy.json").readText(),
+    blockHierarchyFile.readText(),
     Map::class.java
 )
 
+val blockDefinitionHierarchyFile = File("./src/jvmMain/resources/block-definition-hierarchy.json")
+
 val parentBlockDefinitionMappings = SocketReaderWriter.SPACE_ENG_GSON.fromJson<Map<String, String>>(
-    File("./src/jvmMain/resources/block-definition-hierarchy.json").readText(),
+    blockDefinitionHierarchyFile.readText(),
     Map::class.java
 ).map {
     it.key.removeDefinitionPrefix() to it.value.removeDefinitionPrefix()
@@ -90,17 +96,27 @@ namespace Iv4xr.SpaceEngineers.WorldModel
 
 
 
-    generateMappings(parentMappings = parentMappings, idsWithSerializers = blockMappings.keys, variableName = "generatedSerializerMappings").let {
+    generateMappings(
+        parentMappings = parentMappings,
+        idsWithSerializers = blockMappings.keys,
+        variableName = "generatedSerializerMappings"
+    ).let {
         serializerMappings.appendText("$it\n")
     }
 
-    generateCsMappings(parentMappings = parentMappings, idsWithSerializers = blockMappings.keys, className = "BlockMapper").let {
+    generateCsMappings(
+        parentMappings = parentMappings,
+        idsWithSerializers = blockMappings.keys,
+        className = "BlockMapper"
+    ).let {
         csClassesAndMappings.appendText("$it\n")
     }
 
-    csClassesAndMappings.appendText("""
+    csClassesAndMappings.appendText(
+        """
 }
-    """.trimIndent())
+    """.trimIndent()
+    )
 
 }
 
@@ -125,7 +141,8 @@ namespace Iv4xr.SpaceEngineers.WorldModel
     )
 
     val csFieldMappings = File("../Source/Ivxr.SePlugin/Control/BlockDefinitionCustomFieldsMapper.cs")
-    csFieldMappings.writeText("""
+    csFieldMappings.writeText(
+        """
 $generatedText
 using Iv4xr.SpaceEngineers.WorldModel;
 using Sandbox.Definitions;
@@ -136,7 +153,8 @@ namespace Iv4xr.SePlugin.Control
     {
         public static void AddCustomFields(MyCubeBlockDefinition myBlockDefinition, BlockDefinition blockDefinition)
         {
-""".trimStart())
+""".trimStart()
+    )
 
     blockDefinitionMappings.map { it ->
         val parents = getBlockParentsById(it.key, parentBlockDefinitionMappings)
@@ -166,27 +184,70 @@ namespace Iv4xr.SePlugin.Control
 
 
 
-    generateMappings(parentMappings = parentBlockDefinitionMappings, idsWithSerializers = blockDefinitionMappings.keys, variableName = "generatedBlockDefinitionSerializerMappings").let {
+    generateMappings(
+        parentMappings = parentBlockDefinitionMappings,
+        idsWithSerializers = blockDefinitionMappings.keys,
+        variableName = "generatedBlockDefinitionSerializerMappings"
+    ).let {
         serializerMappings.appendText("$it\n")
     }
 
-    generateCsMappings(parentMappings = parentBlockDefinitionMappings, idsWithSerializers = blockDefinitionMappings.keys, className = "BlockDefinitionMapper").let {
+    generateCsMappings(
+        parentMappings = parentBlockDefinitionMappings,
+        idsWithSerializers = blockDefinitionMappings.keys,
+        className = "BlockDefinitionMapper"
+    ).let {
         csClassesAndMappings.appendText("$it\n")
     }
 
-    csClassesAndMappings.appendText("""
+    csClassesAndMappings.appendText(
+        """
 }
-    """.trimIndent())
+    """.trimIndent()
+    )
 
-    csFieldMappings.appendText("""
+    csFieldMappings.appendText(
+        """
         }
     }
 }
-    """)
+    """
+    )
 
 }
 
+val jsonWriter = Json {
+    prettyPrint = true
+    prettyPrintIndent = "  "
+}
+
+fun generateBlockDefinitionHierarchyJson(spaceEngineers: SpaceEngineers) {
+    val hierarchy = spaceEngineers.definitions.blockDefinitionHierarchy()
+    blockDefinitionHierarchyFile.writeText(
+        jsonWriter.encodeToString(hierarchy)
+    )
+}
+
+
+fun generateBlockHierarchyJson(spaceEngineers: SpaceEngineers) {
+    val hierarchy = spaceEngineers.definitions.blockHierarchy()
+        .filter { it.key !in filteredParents && it.value !in filteredParents }.map {
+        it.key.removeBuilderPrefix() to it.value.removeBuilderPrefix()
+    }.toMap()
+    blockHierarchyFile.writeText(
+        jsonWriter.encodeToString(hierarchy)
+    )
+}
+
+fun generateSourceJsonFromGame() {
+    val spaceEngineers = JvmSpaceEngineersBuilder.default().localhost()
+    generateBlockDefinitionHierarchyJson(spaceEngineers)
+    generateBlockHierarchyJson(spaceEngineers)
+}
+
 fun main() {
+    // This run requires SE game running and updates definition json files for the generator.
+    //generateSourceJsonFromGame()
     generateBlockFiles()
     generateBlockDefinitionFiles()
 }
