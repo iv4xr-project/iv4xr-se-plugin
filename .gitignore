@@ -386,3 +386,4 @@ Desktop.ini
 .DS_Store
 
 **/BinaryDependencies/*.dll
+se-env.bat
