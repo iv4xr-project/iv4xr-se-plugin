@@ -2214,6 +2214,8 @@ $dokka.location:spaceEngineers.util.generator.maze/Position/x/#/PointingToDeclar
 $dokka.location:spaceEngineers.util.generator.maze/Position/y/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/-position/y.html
 $dokka.location:spaceEngineers.util.generator////PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator/index.html
 $dokka.location:spaceEngineers.util.generator//blockDataClassesImports/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator/block-data-classes-imports.html
+$dokka.location:spaceEngineers.util.generator//blockDefinitionHierarchyFile/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator/block-definition-hierarchy-file.html
+$dokka.location:spaceEngineers.util.generator//blockHierarchyFile/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator/block-hierarchy-file.html
 $dokka.location:spaceEngineers.util.generator//camelCase/kotlin.String#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator/camel-case.html
 $dokka.location:spaceEngineers.util.generator//commonBlockDefinitionFields/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator/common-block-definition-fields.html
 $dokka.location:spaceEngineers.util.generator//commonBlockFields/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator/common-block-fields.html
@@ -2223,12 +2225,15 @@ $dokka.location:spaceEngineers.util.generator//filePrefix/#/PointingToDeclaratio
 $dokka.location:spaceEngineers.util.generator//filteredParents/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator/filtered-parents.html
 $dokka.location:spaceEngineers.util.generator//findImportantParent/#kotlin.String#kotlin.collections.Set[kotlin.String]#kotlin.collections.Map[kotlin.String,kotlin.String]/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator/find-important-parent.html
 $dokka.location:spaceEngineers.util.generator//generateBlockDefinitionFiles/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator/generate-block-definition-files.html
+$dokka.location:spaceEngineers.util.generator//generateBlockDefinitionHierarchyJson/#spaceEngineers.controller.SpaceEngineers/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator/generate-block-definition-hierarchy-json.html
 $dokka.location:spaceEngineers.util.generator//generateBlockFiles/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator/generate-block-files.html
+$dokka.location:spaceEngineers.util.generator//generateBlockHierarchyJson/#spaceEngineers.controller.SpaceEngineers/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator/generate-block-hierarchy-json.html
 $dokka.location:spaceEngineers.util.generator//generateBlockIdsToTypes/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator/generate-block-ids-to-types.html
 $dokka.location:spaceEngineers.util.generator//generateCsMappings/#kotlin.collections.Map[kotlin.String,kotlin.String]#kotlin.collections.Set[kotlin.String]#kotlin.String/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator/generate-cs-mappings.html
 $dokka.location:spaceEngineers.util.generator//generateMappings/#kotlin.collections.Map[kotlin.String,kotlin.String]#kotlin.collections.Set[kotlin.String]#kotlin.String/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator/generate-mappings.html
 $dokka.location:spaceEngineers.util.generator//generateMappingsForSingleClass/#kotlin.String#kotlin.collections.Map[kotlin.String,kotlin.String]#kotlin.collections.Set[kotlin.String]/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator/generate-mappings-for-single-class.html
 $dokka.location:spaceEngineers.util.generator//generateMappingsForSingleCsClass/#kotlin.String#kotlin.collections.Map[kotlin.String,kotlin.String]#kotlin.collections.Set[kotlin.String]/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator/generate-mappings-for-single-cs-class.html
+$dokka.location:spaceEngineers.util.generator//generateSourceJsonFromGame/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator/generate-source-json-from-game.html
 $dokka.location:spaceEngineers.util.generator//generatedText/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator/generated-text.html
 $dokka.location:spaceEngineers.util.generator//getBlockIdsToTypes/#kotlin.collections.List[spaceEngineers.model.BlockDefinition]/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator/get-block-ids-to-types.html
 $dokka.location:spaceEngineers.util.generator//getBlockParentsById/#kotlin.String#kotlin.collections.Map[kotlin.String,kotlin.String]/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator/get-block-parents-by-id.html
@@ -2236,6 +2241,7 @@ $dokka.location:spaceEngineers.util.generator//getOverriddenFields/#kotlin.colle
 $dokka.location:spaceEngineers.util.generator//idToTypes/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator/id-to-types.html
 $dokka.location:spaceEngineers.util.generator//idToTypesFile/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator/id-to-types-file.html
 $dokka.location:spaceEngineers.util.generator//interfaceName/kotlin.String#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator/interface-name.html
+$dokka.location:spaceEngineers.util.generator//jsonWriter/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator/json-writer.html
 $dokka.location:spaceEngineers.util.generator//main/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator/main.html
 $dokka.location:spaceEngineers.util.generator//mapToCsType/#kotlin.String/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator/map-to-cs-type.html
 $dokka.location:spaceEngineers.util.generator//padTabs/kotlin.String#kotlin.Int/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator/pad-tabs.html
