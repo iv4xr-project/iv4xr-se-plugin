@@ -14,13 +14,13 @@ namespace Iv4xr.SePlugin.Control.Screen.Terminal
 {
     public class InventoryTab : AbstractTerminalTab<TerminalInventoryData>, IInventoryTab
     {
-        public InventoryTab() : base(MyTerminalPageEnum.Inventory)
+        public InventoryTab() : base(MyTerminalPageEnum.Inventory, "m_controllerInventory")
         {
         }
 
         public override TerminalInventoryData Data()
         {
-            var controller = TerminalInventoryController();
+            var controller = UntypedController;
             var inventories = controller.CallMethod<MyInventory[]>("GetSourceInventories");
             var rightInventories = RightInventories();
             return new TerminalInventoryData()
@@ -177,32 +177,32 @@ namespace Iv4xr.SePlugin.Control.Screen.Terminal
             var destinationInventory = rightInventory[destinationInventoryId];
             MyInventory.TransferByUser(sourceInventory, destinationInventory, (uint)itemId,
                 destinationInventory.ItemCount);
-            TerminalInventoryController().CallMethod<object>("RefreshSelectedInventoryItem", new object[] { });
+            UntypedController.CallMethod<object>("RefreshSelectedInventoryItem", new object[] { });
         }
 
         public void DropSelected()
         {
-            TerminalInventoryController().ClickButton("m_throwOutButton");
+            UntypedController.ClickButton("m_throwOutButton");
         }
 
         public void Withdraw()
         {
-            TerminalInventoryController().ClickButton("m_withdrawButton");
+            UntypedController.ClickButton("m_withdrawButton");
         }
 
         public void Deposit()
         {
-            TerminalInventoryController().ClickButton("m_depositAllButton");
+            UntypedController.ClickButton("m_depositAllButton");
         }
 
         public void FromBuildPlannerToProductionQueue()
         {
-            TerminalInventoryController().ClickButton("m_addToProductionButton");
+            UntypedController.ClickButton("m_addToProductionButton");
         }
 
         public void SelectedToProductionQueue()
         {
-            TerminalInventoryController().ClickButton("m_selectedToProductionButton");
+            UntypedController.ClickButton("m_selectedToProductionButton");
         }
 
         public IInventorySide Left { get; } = new LeftInventory();
@@ -244,21 +244,21 @@ namespace Iv4xr.SePlugin.Control.Screen.Terminal
             return availableInventories;
         }
 
-        internal static List<MyInventory> LeftInventories()
+        private static List<MyInventory> LeftInventories()
         {
             var inventoriesControl = TerminalInventoryController()
                     .GetInstanceFieldOrThrow<MyGuiControlList>("m_leftOwnersControl");
             return Inventories(inventoriesControl);
         }
 
-        internal static List<MyInventory> RightInventories()
+        private static List<MyInventory> RightInventories()
         {
             var inventoriesControl = TerminalInventoryController()
                     .GetInstanceFieldOrThrow<MyGuiControlList>("m_rightOwnersControl");
             return Inventories(inventoriesControl);
         }
 
-        internal static object TerminalInventoryController()
+        private static object TerminalInventoryController()
         {
             var screen = MyGuiScreenExtensions.EnsureFocusedScreen<MyGuiScreenTerminal>();
             return screen.GetInstanceFieldOrThrow<object>("m_controllerInventory");

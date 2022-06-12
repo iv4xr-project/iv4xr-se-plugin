@@ -6,7 +6,7 @@ namespace Iv4xr.SePlugin.Control.Screen.Terminal
 {
     public class CommsTab : AbstractTerminalTab<TerminalCommsData>, ICommsTab
     {
-        public CommsTab() : base(MyTerminalPageEnum.Comms)
+        public CommsTab() : base(MyTerminalPageEnum.Comms, "m_controllerChat")
         {
         }
 

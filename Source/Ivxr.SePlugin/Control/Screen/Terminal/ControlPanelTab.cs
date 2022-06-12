@@ -6,7 +6,7 @@ namespace Iv4xr.SePlugin.Control.Screen.Terminal
 {
     public class ControlPanelTab : AbstractTerminalTab<TerminalControlPanelData>, IControlPanelTab
     {
-        public ControlPanelTab() : base(MyTerminalPageEnum.ControlPanel)
+        public ControlPanelTab() : base(MyTerminalPageEnum.ControlPanel, "m_controllerControlPanel")
         {
         }
 
@@ -17,5 +17,6 @@ namespace Iv4xr.SePlugin.Control.Screen.Terminal
             {
             };
         }
+        
     }
 }

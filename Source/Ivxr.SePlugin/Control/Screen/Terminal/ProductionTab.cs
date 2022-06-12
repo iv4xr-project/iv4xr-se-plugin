@@ -16,7 +16,7 @@ namespace Iv4xr.SePlugin.Control.Screen.Terminal
 {
     public class ProductionTab : AbstractTerminalTab<TerminalProductionData>, IProductionTab
     {
-        public ProductionTab() : base(MyTerminalPageEnum.Production)
+        public ProductionTab() : base(MyTerminalPageEnum.Production, "m_controllerProduction")
         {
         }
 
@@ -73,15 +73,13 @@ namespace Iv4xr.SePlugin.Control.Screen.Terminal
         
         public void AddToProductionQueue(int index)
         {
-            var screen = MyGuiScreenExtensions.EnsureFocusedScreen<MyGuiScreenTerminal>();
             var blueprintsGrid = Tab.TabControlByName<MyGuiControlScrollablePanel>(
                 "BlueprintsScrollableArea").ScrollableChild<MyGuiControlGrid>();
             blueprintsGrid.SelectedIndex = index;
             var item = blueprintsGrid.SelectedItem;
             var blueprint = (MyBlueprintDefinitionBase)item.UserData;
-            var controller = screen.GetInstanceFieldOrThrow<object>("m_controllerProduction");
             MyFixedPoint one = 1;
-            controller.CallMethod<object>("EnqueueBlueprint", new object[] { blueprint, one });
+            UntypedController.CallMethod<object>("EnqueueBlueprint", new object[] { blueprint, one });
         }
 
         public void RemoveFromProductionQueue(int index)
@@ -91,16 +89,14 @@ namespace Iv4xr.SePlugin.Control.Screen.Terminal
                 "QueueScrollableArea").ScrollableChild<MyGuiControlGrid>();
             blueprintsGrid.SelectedIndex = index;
             MyFixedPoint minusOne = -1;
-            var controller = screen.GetInstanceFieldOrThrow<object>("m_controllerProduction");
-            var assembler = controller.GetInstanceFieldOrThrow<MyAssembler>("m_selectedAssembler");
+            var assembler = UntypedController.GetInstanceFieldOrThrow<MyAssembler>("m_selectedAssembler");
             assembler.RemoveQueueItemRequest(index, minusOne);
         }
 
         public void SelectBlueprint(int index)
         {
             var screen = MyGuiScreenExtensions.EnsureFocusedScreen<MyGuiScreenTerminal>();
-            var controller = screen.GetInstanceFieldOrThrow<object>("m_controllerProduction");
-            var bpg = controller.GetInstanceFieldOrThrow<MyGuiControlRadioButtonGroup>("m_blueprintButtonGroup");
+            var bpg = UntypedController.GetInstanceFieldOrThrow<MyGuiControlRadioButtonGroup>("m_blueprintButtonGroup");
             bpg.SelectByIndex(index);
         }
 

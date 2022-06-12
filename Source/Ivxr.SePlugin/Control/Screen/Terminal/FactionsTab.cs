@@ -6,7 +6,7 @@ namespace Iv4xr.SePlugin.Control.Screen.Terminal
 {
     public class FactionsTab : AbstractTerminalTab<TerminalFactionsData>, IFactionsTab
     {
-        public FactionsTab() : base(MyTerminalPageEnum.Factions)
+        public FactionsTab() : base(MyTerminalPageEnum.Factions, "m_controllerFactions")
         {
         }
 
