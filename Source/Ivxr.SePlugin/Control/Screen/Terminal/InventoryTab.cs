@@ -1,20 +1,28 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Iv4xr.PluginLib;
 using Iv4xr.SpaceEngineers;
 using Iv4xr.SpaceEngineers.WorldModel.Screen;
 using Sandbox.Game;
+using Sandbox.Game.Entities;
 using Sandbox.Game.Gui;
+using Sandbox.Game.Screens.Helpers;
 using Sandbox.Graphics.GUI;
+using VRage.Game.ModAPI;
 
 namespace Iv4xr.SePlugin.Control.Screen.Terminal
 {
-    public class InventoryTab : AbstractScreen<MyGuiScreenTerminal, TerminalInventoryData>, IInventoryTab
+    public class InventoryTab : AbstractTerminalTab<TerminalInventoryData>, IInventoryTab
     {
+        public InventoryTab() : base(MyTerminalPageEnum.Inventory)
+        {
+        }
+
         public override TerminalInventoryData Data()
         {
             var controller = TerminalInventoryController();
             var inventories = controller.CallMethod<MyInventory[]>("GetSourceInventories");
-            var rightInventories = TerminalScreen.RightInventories();
+            var rightInventories = RightInventories();
             return new TerminalInventoryData()
             {
                 LeftInventories = inventories.Select(i => MyExtensions.ToInventory(i)).ToList(),
@@ -24,16 +32,16 @@ namespace Iv4xr.SePlugin.Control.Screen.Terminal
 
         private class LeftInventory : IInventorySide
         {
-            MyGuiControlGrid grid => TerminalScreen.TerminalInventoryController().Grid("m_leftFocusedInventory");
+            MyGuiControlGrid grid => TerminalInventoryController().Grid("m_leftFocusedInventory");
 
             private void ClickRadio(string fieldName)
             {
-                TerminalScreen.TerminalInventoryController().ClickRadio(fieldName);
+                TerminalInventoryController().ClickRadio(fieldName);
             }
 
             public void Filter(string text)
             {
-                TerminalScreen.TerminalInventoryController().EnterSearchText("m_searchBoxLeft", text);
+                TerminalInventoryController().EnterSearchText("m_searchBoxLeft", text);
             }
 
             public void SwapToGrid()
@@ -88,22 +96,22 @@ namespace Iv4xr.SePlugin.Control.Screen.Terminal
 
             public void ToggleHideEmpty()
             {
-                TerminalScreen.TerminalInventoryController().ClickCheckBox("m_hideEmptyLeft");
+                TerminalInventoryController().ClickCheckBox("m_hideEmptyLeft");
             }
         }
 
         private class RightInventory : IInventorySide
         {
-            MyGuiControlGrid grid => TerminalScreen.TerminalInventoryController().Grid("m_rightFocusedInventory");
+            MyGuiControlGrid grid => TerminalInventoryController().Grid("m_rightFocusedInventory");
 
             private void ClickRadio(string fieldName)
             {
-                TerminalScreen.TerminalInventoryController().ClickRadio(fieldName);
+                TerminalInventoryController().ClickRadio(fieldName);
             }
 
             public void Filter(string text)
             {
-                TerminalScreen.TerminalInventoryController().EnterSearchText("m_searchBoxRight", text);
+                TerminalInventoryController().EnterSearchText("m_searchBoxRight", text);
             }
 
             public void SwapToGrid()
@@ -158,19 +166,14 @@ namespace Iv4xr.SePlugin.Control.Screen.Terminal
 
             public void ToggleHideEmpty()
             {
-                TerminalScreen.TerminalInventoryController().ClickCheckBox("m_hideEmptyRight");
+                TerminalInventoryController().ClickCheckBox("m_hideEmptyRight");
             }
-        }
-
-        private object TerminalInventoryController()
-        {
-            return TerminalScreen.TerminalInventoryController();
         }
 
         public void TransferInventoryItem(int sourceInventoryId, int destinationInventoryId, int itemId)
         {
-            var sourceInventory = TerminalScreen.LeftInventories()[sourceInventoryId];
-            var rightInventory = TerminalScreen.RightInventories();
+            var sourceInventory = LeftInventories()[sourceInventoryId];
+            var rightInventory = RightInventories();
             var destinationInventory = rightInventory[destinationInventoryId];
             MyInventory.TransferByUser(sourceInventory, destinationInventory, (uint)itemId,
                 destinationInventory.ItemCount);
@@ -179,31 +182,87 @@ namespace Iv4xr.SePlugin.Control.Screen.Terminal
 
         public void DropSelected()
         {
-            TerminalScreen.TerminalInventoryController().ClickButton("m_throwOutButton");
+            TerminalInventoryController().ClickButton("m_throwOutButton");
         }
 
         public void Withdraw()
         {
-            TerminalScreen.TerminalInventoryController().ClickButton("m_withdrawButton");
+            TerminalInventoryController().ClickButton("m_withdrawButton");
         }
 
         public void Deposit()
         {
-            TerminalScreen.TerminalInventoryController().ClickButton("m_depositAllButton");
+            TerminalInventoryController().ClickButton("m_depositAllButton");
         }
 
         public void FromBuildPlannerToProductionQueue()
         {
-            TerminalScreen.TerminalInventoryController().ClickButton("m_addToProductionButton");
+            TerminalInventoryController().ClickButton("m_addToProductionButton");
         }
 
         public void SelectedToProductionQueue()
         {
-            TerminalScreen.TerminalInventoryController().ClickButton("m_selectedToProductionButton");
+            TerminalInventoryController().ClickButton("m_selectedToProductionButton");
         }
 
         public IInventorySide Left { get; } = new LeftInventory();
 
         public IInventorySide Right { get; } = new RightInventory();
+        
+        
+        private static List<MyInventory> Inventories(MyGuiControlList inventoriesControl)
+        {
+            var dstControlEnumerator = inventoriesControl.Controls.GetEnumerator();
+            List<MyInventory> availableInventories = new List<MyInventory>();
+
+            MyGuiControlInventoryOwner dstControl = null;
+            while (dstControlEnumerator.MoveNext())
+            {
+                if (dstControlEnumerator.Current.Visible)
+                {
+                    dstControl = dstControlEnumerator.Current as MyGuiControlInventoryOwner;
+
+                    if (dstControl == null || !dstControl.Enabled)
+                    {
+                        continue;
+                    }
+
+                    var dstOwner = dstControl.InventoryOwner;
+
+                    for (int i = 0; i < dstOwner.InventoryCount; ++i)
+                    {
+                        var tmp = dstOwner.GetInventory(i);
+
+                        if (tmp != null)
+                        {
+                            availableInventories.Add(tmp);
+                        }
+                    }
+                }
+            }
+
+            return availableInventories;
+        }
+
+        internal static List<MyInventory> LeftInventories()
+        {
+            var inventoriesControl = TerminalInventoryController()
+                    .GetInstanceFieldOrThrow<MyGuiControlList>("m_leftOwnersControl");
+            return Inventories(inventoriesControl);
+        }
+
+        internal static List<MyInventory> RightInventories()
+        {
+            var inventoriesControl = TerminalInventoryController()
+                    .GetInstanceFieldOrThrow<MyGuiControlList>("m_rightOwnersControl");
+            return Inventories(inventoriesControl);
+        }
+
+        internal static object TerminalInventoryController()
+        {
+            var screen = MyGuiScreenExtensions.EnsureFocusedScreen<MyGuiScreenTerminal>();
+            return screen.GetInstanceFieldOrThrow<object>("m_controllerInventory");
+        }
+        
     }
 }
