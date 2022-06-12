@@ -48,6 +48,26 @@ namespace Iv4xr.SpaceEngineers.WorldModel
         public List<Inventory> RightInventories;
     }
     
+    public class TerminalControlPanelData
+    {
+    }
+    
+    public class TerminalInfoData
+    {
+    }
+    
+    public class TerminalFactionsData
+    {
+    }
+    
+    public class TerminalCommsData
+    {
+    }
+    
+    public class TerminalGpsData
+    {
+    }
+    
     public class TerminalScreenData
     {
         public string SelectedTab;

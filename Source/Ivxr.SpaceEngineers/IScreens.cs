@@ -80,8 +80,38 @@ namespace Iv4xr.SpaceEngineers
         TerminalScreenData Data();
         void SelectTab(int index);
         IInventoryTab Inventory { get; }
+        IControlPanelTab ControlPanel { get;  }
         IProductionTab Production { get; }
+        IInfoTab Info { get;  }
+        IFactionsTab Factions { get;  }
+        ICommsTab Comms { get;  }
+        IGpsTab Gps { get;  }
         void Close();
+    }
+
+    public interface IGpsTab
+    {
+        
+    }
+
+    public interface ICommsTab
+    {
+        
+    }
+
+    public interface IFactionsTab
+    {
+        
+    }
+
+    public interface IControlPanelTab
+    {
+        
+    }
+
+    public interface IInfoTab
+    {
+        
     }
     
     public interface IProductionTab {
