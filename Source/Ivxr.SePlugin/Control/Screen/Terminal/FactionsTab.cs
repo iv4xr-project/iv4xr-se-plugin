@@ -1,11 +1,15 @@
 ﻿using Iv4xr.SpaceEngineers;
 using Iv4xr.SpaceEngineers.WorldModel.Screen;
-using Sandbox.Game.Gui;
+using VRage.Game.ModAPI;
 
 namespace Iv4xr.SePlugin.Control.Screen.Terminal
 {
-    public class FactionsTab : AbstractScreen<MyGuiScreenTerminal, TerminalFactionsData>, IFactionsTab
+    public class FactionsTab : AbstractTerminalTab<TerminalFactionsData>, IFactionsTab
     {
+        public FactionsTab() : base(MyTerminalPageEnum.Factions)
+        {
+        }
+
         public override TerminalFactionsData Data()
         {
             

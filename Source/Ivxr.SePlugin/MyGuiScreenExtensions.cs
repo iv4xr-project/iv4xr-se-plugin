@@ -140,11 +140,6 @@ namespace Iv4xr.SePlugin
             return source.Items.OfType<MyGuiGridItem>().Select(i => i.UserData).OfType<TResult>();
         }
 
-        public static MyGuiControlTabPage ProductionTab(this MyGuiScreenTerminal terminal)
-        {
-            return terminal.GetTabs().Pages[(int)MyTerminalPageEnum.Production];
-        }
-
         public static TType TabControlByName<TType>(this MyGuiControlTabPage tab, string name)
                 where TType : MyGuiControlBase
         {

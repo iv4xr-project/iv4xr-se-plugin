@@ -1,11 +1,15 @@
 ﻿using Iv4xr.SpaceEngineers;
 using Iv4xr.SpaceEngineers.WorldModel.Screen;
-using Sandbox.Game.Gui;
+using VRage.Game.ModAPI;
 
 namespace Iv4xr.SePlugin.Control.Screen.Terminal
 {
-    public class ControlPanelTab : AbstractScreen<MyGuiScreenTerminal, TerminalControlPanelData>, IControlPanelTab
+    public class ControlPanelTab : AbstractTerminalTab<TerminalControlPanelData>, IControlPanelTab
     {
+        public ControlPanelTab() : base(MyTerminalPageEnum.ControlPanel)
+        {
+        }
+
         public override TerminalControlPanelData Data()
         {
             

@@ -14,31 +14,33 @@ using VRage.Game.ModAPI;
 
 namespace Iv4xr.SePlugin.Control.Screen.Terminal
 {
-    public class ProductionTab : AbstractScreen<MyGuiScreenTerminal, TerminalProductionData>, IProductionTab
+    public class ProductionTab : AbstractTerminalTab<TerminalProductionData>, IProductionTab
     {
+        public ProductionTab() : base(MyTerminalPageEnum.Production)
+        {
+        }
+
         public override TerminalProductionData Data()
         {
-            var productionTab = Screen.ProductionTab();
-
-            var productionQueueGrid = productionTab.TabControlByName<MyGuiControlScrollablePanel>("QueueScrollableArea")
+            var productionQueueGrid = Tab.TabControlByName<MyGuiControlScrollablePanel>("QueueScrollableArea")
                     .ScrollableChild<MyGuiControlGrid>();
             var productionQueueItems = productionQueueGrid.GridItemUserDataOfType<MyProductionBlock.QueueItem>()
                     .Select(bp => MyExtensions.ToProductionQueueItem(bp)).ToList();
 
 
-            var inventoryGrid = productionTab.TabControlByName<MyGuiControlScrollablePanel>("InventoryScrollableArea")
+            var inventoryGrid = Tab.TabControlByName<MyGuiControlScrollablePanel>("InventoryScrollableArea")
                     .ScrollableChild<MyGuiControlGrid>();
             var inventoryItems = inventoryGrid.GridItemUserDataOfType<MyPhysicalInventoryItem>()
                     .Select(piItem => piItem.ToAmountedDefinition())
                     .ToList();
 
             var blueprintsGrid =
-                    productionTab.TabControlByName<MyGuiControlScrollablePanel>("BlueprintsScrollableArea")
+                    Tab.TabControlByName<MyGuiControlScrollablePanel>("BlueprintsScrollableArea")
                             .ScrollableChild<MyGuiControlGrid>();
             var blueprintItems = blueprintsGrid.GridItemUserDataOfType<MyBlueprintDefinitionBase>()
                     .Select(bp => bp.ToBlueprintDefinition()).ToList();
 
-            var assemblers = Screen.ProductionTab().TabControlByName<MyGuiControlCombobox>("AssemblersCombobox")
+            var assemblers = Tab.TabControlByName<MyGuiControlCombobox>("AssemblersCombobox")
                     .ItemsAsList().Select(
                         i => i.Value.ToString()).ToList();
 
@@ -48,17 +50,16 @@ namespace Iv4xr.SePlugin.Control.Screen.Terminal
                 ProductionQueue = productionQueueItems,
                 Inventory = inventoryItems,
                 Blueprints = blueprintItems,
-                ProductionRepeatMode = productionTab.TabControlByName<MyGuiControlCheckbox>("RepeatCheckbox")
+                ProductionRepeatMode = Tab.TabControlByName<MyGuiControlCheckbox>("RepeatCheckbox")
                         .IsChecked,
                 ProductionCooperativeMode =
-                        productionTab.TabControlByName<MyGuiControlCheckbox>("SlaveCheckbox").IsChecked
+                        Tab.TabControlByName<MyGuiControlCheckbox>("SlaveCheckbox").IsChecked
             };
         }
 
         public void ToggleProductionRepeatMode()
         {
-            var screen = MyGuiScreenExtensions.EnsureFocusedScreen<MyGuiScreenTerminal>();
-            var cb = screen.ProductionTab().TabControlByName<MyGuiControlCheckbox>("RepeatCheckbox");
+            var cb = Tab.TabControlByName<MyGuiControlCheckbox>("RepeatCheckbox");
             cb.IsChecked = !cb.IsChecked;
         }
 
@@ -73,7 +74,7 @@ namespace Iv4xr.SePlugin.Control.Screen.Terminal
         public void AddToProductionQueue(int index)
         {
             var screen = MyGuiScreenExtensions.EnsureFocusedScreen<MyGuiScreenTerminal>();
-            var blueprintsGrid = screen.ProductionTab().TabControlByName<MyGuiControlScrollablePanel>(
+            var blueprintsGrid = Tab.TabControlByName<MyGuiControlScrollablePanel>(
                 "BlueprintsScrollableArea").ScrollableChild<MyGuiControlGrid>();
             blueprintsGrid.SelectedIndex = index;
             var item = blueprintsGrid.SelectedItem;
@@ -86,7 +87,7 @@ namespace Iv4xr.SePlugin.Control.Screen.Terminal
         public void RemoveFromProductionQueue(int index)
         {
             var screen = MyGuiScreenExtensions.EnsureFocusedScreen<MyGuiScreenTerminal>();
-            var blueprintsGrid = screen.ProductionTab().TabControlByName<MyGuiControlScrollablePanel>(
+            var blueprintsGrid = Tab.TabControlByName<MyGuiControlScrollablePanel>(
                 "QueueScrollableArea").ScrollableChild<MyGuiControlGrid>();
             blueprintsGrid.SelectedIndex = index;
             MyFixedPoint minusOne = -1;
@@ -105,15 +106,13 @@ namespace Iv4xr.SePlugin.Control.Screen.Terminal
 
         public void SelectAssembler(int index)
         {
-            var screen = MyGuiScreenExtensions.EnsureFocusedScreen<MyGuiScreenTerminal>();
-            screen.ProductionTab().TabControlByName<MyGuiControlCombobox>("AssemblersCombobox")
+            Tab.TabControlByName<MyGuiControlCombobox>("AssemblersCombobox")
                     .SelectItemByIndex(index);
         }
 
         public void EnterBlueprintSearchBox(string text)
         {
-            var screen = MyGuiScreenExtensions.EnsureFocusedScreen<MyGuiScreenTerminal>();
-            var searchBox = screen.ProductionTab().TabControlByName<MyGuiControlSearchBox>(
+            var searchBox = Tab.TabControlByName<MyGuiControlSearchBox>(
                 "BlueprintsSearchBox");
             searchBox.SearchText = text;
         }

@@ -1,11 +1,15 @@
 ﻿using Iv4xr.SpaceEngineers;
 using Iv4xr.SpaceEngineers.WorldModel.Screen;
-using Sandbox.Game.Gui;
+using VRage.Game.ModAPI;
 
 namespace Iv4xr.SePlugin.Control.Screen.Terminal
 {
-    public class GpsTab : AbstractScreen<MyGuiScreenTerminal, TerminalGpsData>, IGpsTab
+    public class GpsTab : AbstractTerminalTab<TerminalGpsData>, IGpsTab
     {
+        public GpsTab() : base(MyTerminalPageEnum.Gps)
+        {
+        }
+
         public override TerminalGpsData Data()
         {
             
