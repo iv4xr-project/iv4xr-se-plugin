@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Iv4xr.PluginLib;
 using Iv4xr.SpaceEngineers;
-using Iv4xr.SpaceEngineers.WorldModel;
+using Iv4xr.SpaceEngineers.WorldModel.Screen;
 using Sandbox.Game;
 using Sandbox.Game.Entities;
 using Sandbox.Game.Gui;

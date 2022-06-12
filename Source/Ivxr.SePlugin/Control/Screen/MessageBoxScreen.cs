@@ -2,6 +2,7 @@
 using Iv4xr.PluginLib;
 using Iv4xr.SpaceEngineers;
 using Iv4xr.SpaceEngineers.WorldModel;
+using Iv4xr.SpaceEngineers.WorldModel.Screen;
 using Sandbox.Graphics.GUI;
 
 namespace Iv4xr.SePlugin.Control.Screen

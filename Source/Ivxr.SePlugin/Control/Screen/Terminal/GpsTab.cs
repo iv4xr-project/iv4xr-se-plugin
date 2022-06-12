@@ -1,5 +1,5 @@
 ﻿using Iv4xr.SpaceEngineers;
-using Iv4xr.SpaceEngineers.WorldModel;
+using Iv4xr.SpaceEngineers.WorldModel.Screen;
 using Sandbox.Game.Gui;
 
 namespace Iv4xr.SePlugin.Control.Screen.Terminal

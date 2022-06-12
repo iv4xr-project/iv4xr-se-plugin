@@ -2,7 +2,7 @@
 using System.Linq;
 using Iv4xr.PluginLib;
 using Iv4xr.SpaceEngineers;
-using Iv4xr.SpaceEngineers.WorldModel;
+using Iv4xr.SpaceEngineers.WorldModel.Screen;
 using Sandbox.Game.Screens;
 using Sandbox.Game.Screens.Helpers;
 using Sandbox.Graphics.GUI;
