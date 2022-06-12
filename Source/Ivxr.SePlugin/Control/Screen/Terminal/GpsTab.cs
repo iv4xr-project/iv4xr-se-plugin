@@ -6,7 +6,7 @@ namespace Iv4xr.SePlugin.Control.Screen.Terminal
 {
     public class GpsTab : AbstractTerminalTab<TerminalGpsData>, IGpsTab
     {
-        public GpsTab() : base(MyTerminalPageEnum.Gps)
+        public GpsTab() : base(MyTerminalPageEnum.Gps, "m_controllerGps")
         {
         }
 

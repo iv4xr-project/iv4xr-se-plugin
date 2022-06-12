@@ -6,7 +6,7 @@ namespace Iv4xr.SePlugin.Control.Screen.Terminal
 {
     public class InfoTab : AbstractTerminalTab<TerminalInfoData>, IInfoTab
     {
-        public InfoTab() : base(MyTerminalPageEnum.Info)
+        public InfoTab() : base(MyTerminalPageEnum.Info, "m_controllerInfo")
         {
         }
 
