@@ -6,6 +6,7 @@ using Iv4xr.PluginLib;
 using Iv4xr.SePlugin.Control;
 using Iv4xr.SpaceEngineers;
 using Iv4xr.SpaceEngineers.WorldModel;
+using Iv4xr.SpaceEngineers.WorldModel.Screen;
 using Sandbox.Definitions;
 using Sandbox.Game;
 using Sandbox.Game.Entities;
@@ -18,7 +19,7 @@ using VRage.Game;
 using VRage.Game.Entity;
 using VRage.Game.ModAPI.Ingame;
 using VRageMath;
-using File = Iv4xr.SpaceEngineers.WorldModel.File;
+using File = Iv4xr.SpaceEngineers.WorldModel.Screen.File;
 
 namespace Iv4xr.SePlugin
 {
