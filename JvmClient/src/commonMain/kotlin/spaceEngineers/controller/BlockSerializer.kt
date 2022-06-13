@@ -37,3 +37,14 @@ object BlockSerializer : JsonContentPolymorphicSerializer<Block>(Block::class) {
         return generatedSerializerMappings[id] ?: DataBlock.serializer()
     }
 }
+
+object BlockOrGroupItemSerializer : JsonContentPolymorphicSerializer<BlockOrGroupItem>(BlockOrGroupItem::class) {
+    override fun selectDeserializer(element: JsonElement): DeserializationStrategy<out BlockOrGroupItem> {
+        if (element.jsonObject.containsKey("Name")) {
+            return BlockGroupItem.serializer()
+        } else if (element.jsonObject.containsKey("Block")) {
+            return BlockItem.serializer()
+        }
+        error("Cannot find serializer for $element")
+    }
+}

@@ -77,9 +77,28 @@ interface Terminal {
     fun selectTab(index: Int)
     fun close()
 
-    val production: ProductionTab
     val inventory: InventoryTab
+    val controlPanel: ControlPanelTab
+    val production: ProductionTab
+    val info: InfoTab
+    val factions: FactionsTab
+    val comms: CommsTab
+    val gps: GpsTab
 }
+
+interface CommsTab
+
+interface GpsTab
+
+interface FactionsTab
+
+interface ControlPanelTab {
+    fun data(): TerminalControlPanelData
+    fun filterBlocks(text: String)
+    fun enterBlockGroup(text: String)
+}
+
+interface InfoTab
 
 interface InventoryTab {
     fun data(): TerminalInventoryData

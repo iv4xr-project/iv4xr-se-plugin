@@ -107,7 +107,11 @@ namespace Iv4xr.SpaceEngineers
 
     public interface IControlPanelTab
     {
-        
+        TerminalControlPanelData Data();
+        void FilterBlocks(string text);
+        void EnterBlockGroup(string text);
+        void GroupSave();
+        void GroupDelete();
     }
 
     public interface IInfoTab
