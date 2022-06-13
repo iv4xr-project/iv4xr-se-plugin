@@ -34,6 +34,9 @@ val json = Json {
         polymorphic(PhysicalItemDefinition::class) {
             default { DataPhysicalItemDefinition.serializer() }
         }
+        polymorphic(BlockOrGroupItem::class) {
+            default { BlockOrGroupItemSerializer }
+        }
     }
 }
 
