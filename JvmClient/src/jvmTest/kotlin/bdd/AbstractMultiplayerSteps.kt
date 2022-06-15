@@ -157,7 +157,9 @@ abstract class AbstractMultiplayerSteps(
 
             }
             pause()
-            screens.medicals.respawn(0)
+            screens.medicals.selectRespawn(0)
+            delay(100)
+            screens.medicals.respawn()
             pause()
         }
     }

@@ -22,7 +22,8 @@ class ScreenTest : MockOrRealGameTest(forceRealGame = true, loadScenario = false
 
     @Test
     fun respawn() = testContext {
-        screens.medicals.respawn(1)
+        screens.medicals.selectRespawn(1)
+        screens.medicals.respawn()
     }
 
     @Test

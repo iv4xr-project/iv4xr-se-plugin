@@ -100,7 +100,7 @@ class ScenarioSetupSteps : AbstractMultiplayerSteps() {
             with(screens.medicals) {
                 val index = medicalRooms().indexOfFirst { it.name == observerMedbay }
                 check(index != -1)
-                respawn(index)
+                respawn()
             }
         }
         mainClient {
@@ -108,7 +108,7 @@ class ScenarioSetupSteps : AbstractMultiplayerSteps() {
                 val index = medicalRooms().indexOfFirst { it.name == mainMedbay }
                 check(index != -1)
                 //TODO: throw for -1 on server
-                respawn(index)
+                respawn()
             }
         }
     }

@@ -71,7 +71,8 @@ namespace Iv4xr.SpaceEngineers
     public interface IMedicals
     {
         List<MedicalRoom> MedicalRooms();
-        void Respawn(int roomIndex);
+        void SelectRespawn(int roomIndex);
+        void Respawn();
         List<Faction> Factions();
         void ChooseFaction(int factionIndex);
         void Refresh();
