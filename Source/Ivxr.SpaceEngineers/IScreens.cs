@@ -74,6 +74,8 @@ namespace Iv4xr.SpaceEngineers
         void Respawn(int roomIndex);
         List<Faction> Factions();
         void ChooseFaction(int factionIndex);
+        void Refresh();
+        void ShowMessageOfTheDay();
     }
 
     public interface ITerminal
