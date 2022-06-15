@@ -5,6 +5,7 @@ import io.cucumber.java.en.And
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import kotlinx.coroutines.delay
+import spaceEngineers.model.CharacterMovement
 import spaceEngineers.model.DefinitionId
 import spaceEngineers.model.Vec3F
 import spaceEngineers.model.extensions.allBlocks
@@ -255,7 +256,7 @@ class CharacterAsserts : AbstractMultiplayerSteps() {
             repeatUntilSuccess {
                 with(observer.observe()) {
                     assertSameDirection(velocity, orientationUp)
-                    assertTrue(movement.isFalling, movement.toString())
+                    assertTrue(movement.isFalling || movement.isJumping, movement.toString())
                 }
             }
         }
@@ -263,7 +264,7 @@ class CharacterAsserts : AbstractMultiplayerSteps() {
             repeatUntilSuccess {
                 with(observer.observe()) {
                     //assertSameDirection(velocity, orientationUp)
-                    assertTrue(movement.isFalling, movement.toString())
+                    assertTrue(movement.isFalling || movement.isJumping, movement.toString())
                 }
             }
         }
