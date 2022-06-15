@@ -10,9 +10,13 @@ namespace Iv4xr.SePlugin.Control.Screen
 {
     public class MedicalsScreen : AbstractScreen<MyGuiScreenMedicals, object>, IMedicals
     {
-        public void Respawn(int roomIndex)
+        public void SelectRespawn(int roomIndex)
         {
             Screen.Table("m_respawnsTable").SelectedRowIndex = roomIndex;
+        }
+        
+        public void Respawn()
+        {
             Screen.ClickButton("m_respawnButton");
         }
 
