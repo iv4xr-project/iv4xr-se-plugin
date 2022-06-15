@@ -74,9 +74,8 @@ class CharacterActions : AbstractMultiplayerSteps() {
         } else {
             CharacterMovementType.valueOf(movement.uppercase())
         }
-        val vector = Vec3F.directionFromString(direction)
-
-        character.moveAndRotate(vector.normalizeAsMovement(movementType), ticks = ticks)
+        val movementWrapper = ReplayMovement(this)
+        movementWrapper.move(CompositeDirection3d.directionFromString(direction), movementType = movementType, ticks = ticks)
     }
 
     @When("Character turns on jetpack.")

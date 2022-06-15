@@ -9,7 +9,7 @@ import kotlin.test.assertTrue
 
 const val DEFAULT_VECTOR_EQUALITY_TOLERANCE: Float = 0.01f
 const val DEFAULT_VECTOR_DIRECTION_TOLERANCE: Float = 0.001f
-const val DEFAULT_SPEED_TOLERANCE: Float = 0.05f
+const val DEFAULT_SPEED_TOLERANCE: Float = 0.22f
 const val DEFAULT_POSITION_TOLERANCE: Float = 0.1f
 const val DEFAULT_ORIENTATION_TOLERANCE: Float = 0.1f
 
