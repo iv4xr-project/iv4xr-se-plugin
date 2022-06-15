@@ -147,6 +147,11 @@ namespace Iv4xr.SePlugin.Control
             MyGuiScreenTerminal.Show(MyTerminalPageEnum.Inventory, Character, block.FatBlock);
         }
 
+        public void Die()
+        {
+            Character.Die();
+        }
+
         public CharacterObservation Teleport(PlainVec3D position, PlainVec3D? orientationForward,
             PlainVec3D? orientationUp)
         {
