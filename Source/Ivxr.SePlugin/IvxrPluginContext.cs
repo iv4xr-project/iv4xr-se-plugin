@@ -51,6 +51,11 @@ namespace Iv4xr.SePlugin
 
         public void BeforeStart()
         {
+            Reset();
+        }
+
+        public void Reset()
+        {
             ContinuousMovementController.Reset();
             RealInput.Instance.Reset();
         }
