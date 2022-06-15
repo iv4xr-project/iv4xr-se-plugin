@@ -65,7 +65,7 @@ namespace Iv4xr.SePlugin.Control.Screen.Terminal
                     .ThrowIfNull(
                         $"Couldn't find control {id}, found: {string.Join(",", basicControls.Select(bc => bc.Id))}");
         }
-        
+
         bool GetSwitchById<TBlockType>(string id) where TBlockType : MyTerminalBlock
         {
             return ControlById<MyTerminalControlOnOffSwitch<TBlockType>>(
@@ -73,9 +73,30 @@ namespace Iv4xr.SePlugin.Control.Screen.Terminal
                     .GetInstanceFieldOrThrow<MyGuiControlOnOffSwitch>("m_onOffSwitch").Value;
         }
 
+        private MyGuiControlGenericFunctionalBlock BlockControl =>
+                UntypedController.GetInstanceFieldOrThrow<MyGuiControlGenericFunctionalBlock>("blockControl");
+
+        private MyGuiControlCombobox TransferToCombobox =>
+                BlockControl.GetInstanceFieldOrThrow<MyGuiControlCombobox>("m_transferToCombobox");
+
+        private MyGuiControlCombobox ShareModeCombobox =>
+                BlockControl.GetInstanceFieldOrThrow<MyGuiControlCombobox>("m_shareModeCombobox");
+
+        public void SelectShareMode(int index)
+        {
+            ShareModeCombobox.SelectItemByIndex(index);
+        }
+
+        public void TransferTo(int index)
+        {
+            TransferToCombobox.SelectItemByIndex(index);
+        }
+
         public override TerminalControlPanelData Data()
         {
             var listBox = UntypedController.GetInstanceFieldOrThrow<MyGuiControlListbox>("m_blockListbox");
+
+
             return new TerminalControlPanelData()
             {
                 Search = UntypedController.SearchBox("m_searchBox").SearchText,
@@ -85,6 +106,12 @@ namespace Iv4xr.SePlugin.Control.Screen.Terminal
                 ShowBlockInTerminal = GetSwitchById<MyTerminalBlock>("ShowInTerminal"),
                 ShowBLockInToolbarConfig = GetSwitchById<MyTerminalBlock>("ShowInToolbarConfig"),
                 ShowOnHUD = GetSwitchById<MyTerminalBlock>("ShowOnHUD"),
+                Owner = BlockControl.GetInstanceFieldOrThrow<MyGuiControlLabel>("m_ownerLabel").Text ?? "",
+                TransferTo = TransferToCombobox.GetInstanceFieldOrThrow<List<MyGuiControlCombobox.Item>>("m_items")
+                        .Select(i => i.Value.ToString()).ToList(),
+                ShareBlock = ShareModeCombobox.GetInstanceFieldOrThrow<List<MyGuiControlCombobox.Item>>("m_items")
+                        .Select(i => i.Value.ToString()).ToList(),
+                ShareBlockSelectedIndex = ShareModeCombobox.GetSelectedIndex().ToNullIfMinusOne(),
             };
         }
 

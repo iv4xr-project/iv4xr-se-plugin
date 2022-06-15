@@ -94,9 +94,6 @@ abstract class AbstractMultiplayerSteps(
         } else {
             error("Unknown setup")
         }
-        observers {
-            observer.observeNewBlocks()
-        }
     }
 
 
@@ -131,7 +128,6 @@ abstract class AbstractMultiplayerSteps(
         runBlocking {
             pause()
         }
-        ensureCharacterExists()
     }
 
     private fun connectClientsDirectly() {
@@ -150,14 +146,8 @@ abstract class AbstractMultiplayerSteps(
         runBlocking {
             bigPause()
         }
-        checkCharacterExists()
     }
 
-    fun checkCharacterExists() = clients {
-        if (screens.focusedScreen() == "Medicals") {
-            error("Character does not exist!!")
-        }
-    }
 
     fun ensureCharacterExists() = clients {
         if (screens.focusedScreen() == "Medicals") {
@@ -226,5 +216,7 @@ abstract class AbstractMultiplayerSteps(
 
     companion object {
         lateinit var CM: ConnectionManager
+
+        fun CMInitialized() = ::CM.isInitialized
     }
 }

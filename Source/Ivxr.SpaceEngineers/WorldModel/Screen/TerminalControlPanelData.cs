@@ -46,5 +46,9 @@ namespace Iv4xr.SpaceEngineers.WorldModel.Screen
         public bool ShowBlockInTerminal;
         public bool ShowBLockInToolbarConfig;
         public bool ShowOnHUD;
+        public string Owner;
+        public List<string> TransferTo;
+        public List<string> ShareBlock;
+        public int? ShareBlockSelectedIndex;
     }
 }
