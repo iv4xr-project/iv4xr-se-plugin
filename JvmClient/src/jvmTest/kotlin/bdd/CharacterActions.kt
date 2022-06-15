@@ -177,7 +177,8 @@ class CharacterActions : AbstractMultiplayerSteps() {
             }
             //TODO: remove pause, wait until the game is in main menu
             pause()
-            loadScenario(scenarioId)
+            createLobbyGame(scenarioId, filterSaved = false)
+            connectToFirstFriendlyGame()
 
         }
     }

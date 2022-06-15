@@ -97,13 +97,13 @@ abstract class AbstractMultiplayerSteps(
     }
 
 
-    private fun createLobbyGame(scenarioId: String) = admin {
+    fun createLobbyGame(scenarioId: String, filterSaved: Boolean = true) = admin {
         screens.mainMenu.loadGame()
         pause()
         val data = screens.loadGame.data()
-        val filtered = data.files.filter { it.name == scenarioId && !it.fullName.contains("-saved") }
+        val filtered = data.files.filter { it.name == scenarioId && (!it.fullName.contains("-saved") || !filterSaved) }
         check(filtered.size < 2) { "Multiple non '-saved' files with same name: $filtered" }
-        val index = data.files.indexOfFirst { it.name == scenarioId && !it.fullName.contains("-saved") }
+        val index = data.files.indexOfFirst { it.name == scenarioId && (!it.fullName.contains("-saved") || !filterSaved) }
         check(index > -1) {
             "Scenario $scenarioId not found in the list, found: ${data.files.map { it.name }.sorted()}"
         }
@@ -112,7 +112,7 @@ abstract class AbstractMultiplayerSteps(
         screens.waitUntilTheGameLoaded()
     }
 
-    private fun connectToFirstFriendlyGame() {
+    fun connectToFirstFriendlyGame() {
         clients {
             screens.mainMenu.joinGame()
             pause()
