@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Iv4xr.SpaceEngineers;
 using Iv4xr.SpaceEngineers.WorldModel;
@@ -13,6 +14,16 @@ namespace Iv4xr.SePlugin.Control.Screen
         {
             Screen.Table("m_respawnsTable").SelectedRowIndex = roomIndex;
             Screen.ClickButton("m_respawnButton");
+        }
+
+        public void ShowMessageOfTheDay()
+        {
+            Screen.ClickButton("m_MotdButton");
+        }
+
+        public void Refresh()
+        {
+            Screen.ClickButton("m_refreshButton");
         }
 
         public void ChooseFaction(int factionIndex)

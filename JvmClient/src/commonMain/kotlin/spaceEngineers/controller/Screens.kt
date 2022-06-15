@@ -69,6 +69,8 @@ interface Medicals {
     fun respawn(roomIndex: Int)
     fun factions(): List<Faction>
     fun chooseFaction(factionIndex: Int)
+    fun refresh()
+    fun showMessageOfTheDay()
 
 }
 
