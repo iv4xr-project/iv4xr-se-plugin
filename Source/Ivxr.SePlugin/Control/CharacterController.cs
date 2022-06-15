@@ -113,6 +113,11 @@ namespace Iv4xr.SePlugin.Control
             return Character.WantsWalk;
         }
 
+        public string MainCharacterId()
+        {
+            return m_session.MainCharacterId();
+        }
+
         public void Use(string blockId, int functionIndex, int action)
         {
             var block = m_lowLevelObserver.GetBlockById(blockId);

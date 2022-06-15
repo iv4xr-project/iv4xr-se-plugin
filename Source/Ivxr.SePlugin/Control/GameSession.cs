@@ -21,6 +21,7 @@ namespace Iv4xr.SePlugin.Control
         long CurrentCharacterId { get; }
 
         void RemoveCharacter(long id);
+        string MainCharacterId();
     }
 
     public class GameSession : IGameSession
@@ -86,6 +87,11 @@ namespace Iv4xr.SePlugin.Control
             // TODO: Possibly remove identity too. Something like:
             // Players.RemoveIdentity(player.Identity.IdentityId);
             SwitchToMainCharacter();
+        }
+
+        public string MainCharacterId()
+        {
+            return GetMainCharacterId().ToString();
         }
 
         private MyCharacter GetCharacterByIdOrNull(long characterId)
