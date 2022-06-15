@@ -62,6 +62,7 @@ interface CharacterAdmin {
     fun remove(id: String)
     fun showTerminal(blockId: String)
     fun die()
+    fun mainCharacterId(): String
 }
 
 interface ObserverAdmin {
