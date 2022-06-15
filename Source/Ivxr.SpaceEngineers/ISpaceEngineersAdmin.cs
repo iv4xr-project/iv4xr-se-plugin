@@ -51,5 +51,6 @@ namespace Iv4xr.SpaceEngineers
         void Switch(string id);
         void Remove(string id);
         void ShowTerminal(string blockId);
+        void Die();
     }
 }
