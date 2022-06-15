@@ -49,4 +49,15 @@ enum class CompositeDirection3d(val basicDirections: Set<BasicDirection3d>) {
     constructor(vararg basicDirection3d: BasicDirection3d) : this(basicDirection3d.toSet())
 
     val vector: Vec3F = basicDirections.map { it.vector }.sum()
+
+    companion object {
+        fun directionFromString(value: String): CompositeDirection3d {
+            val directions = if (value.contains("-")) {
+                value.split("-").map(BasicDirection3d.Companion::directionFromString).toSet()
+            } else {
+                setOf(BasicDirection3d.directionFromString(value))
+            }
+            return values().first { it.basicDirections == directions }
+        }
+    }
 }

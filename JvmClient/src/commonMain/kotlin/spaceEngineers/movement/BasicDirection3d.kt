@@ -2,6 +2,7 @@ package spaceEngineers.movement
 
 import spaceEngineers.model.CharacterMovementType
 import spaceEngineers.model.Vec3F
+import spaceEngineers.model.extensions.sum
 
 val leftShift = setOf(16, 160)
 
@@ -17,6 +18,23 @@ enum class BasicDirection3d(
     RIGHT(Vec3F.RIGHT, fromChar('d')),
     FORWARD(Vec3F.FORWARD, fromChar('w')),
     BACKWARD(Vec3F.BACKWARD, fromChar('s'));
+
+    companion object {
+        fun directionFromString(value: String): BasicDirection3d {
+            return when (value) {
+                "forward" -> FORWARD
+                "backward" -> BACKWARD
+                "left" -> LEFT
+                "right" -> RIGHT
+                "up" -> UP
+                "down" -> DOWN
+                else -> {
+                    error("No basic direction defined for value $value")
+                }
+            }
+        }
+
+    }
 
 }
 
