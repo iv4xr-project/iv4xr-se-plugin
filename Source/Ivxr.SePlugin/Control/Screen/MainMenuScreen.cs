@@ -56,6 +56,7 @@ namespace Iv4xr.SePlugin.Control.Screen
 
         public void ExitToMainMenu()
         {
+            IvxrPlugin.Context.Reset();
             CheckScreen();
             PressButtonByText(MyCommonTexts.ScreenMenuButtonExitToMainMenu);
         }
