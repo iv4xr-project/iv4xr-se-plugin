@@ -13,5 +13,15 @@ namespace Iv4xr.PluginLib
 
             return instance;
         }
+
+        public static int? ToNullIfMinusOne(this int value)
+        {
+            if (value == -1)
+            {
+                return null;
+            }
+
+            return value;
+        }
     }
 }

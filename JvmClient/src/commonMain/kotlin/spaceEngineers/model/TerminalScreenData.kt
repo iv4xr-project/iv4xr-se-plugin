@@ -78,6 +78,14 @@ data class TerminalControlPanelData(
     val showBLockInToolbarConfig: Boolean,
     @SerialName("ShowOnHUD")
     val showOnHUD: Boolean,
+    @SerialName("Owner")
+    val owner: String,
+    @SerialName("TransferTo")
+    val transferTo: List<String>,
+    @SerialName("ShareBlock")
+    val shareBlock: List<String>,
+    @SerialName("ShareBlockSelectedIndex")
+    val shareBlockSelectedIndex: Int,
 )
 
 @Serializable
