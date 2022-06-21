@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using Iv4xr.PluginLib;
 using Iv4xr.SpaceEngineers;
 using Iv4xr.SpaceEngineers.WorldModel;
 using Sandbox.Graphics.GUI;
@@ -12,7 +12,9 @@ namespace Iv4xr.SePlugin.Control.Screen
     {
         public void SelectRespawn(int roomIndex)
         {
-            Screen.Table("m_respawnsTable").SelectedRowIndex = roomIndex;
+            var table = Screen.Table("m_respawnsTable");
+            table.SelectedRowIndex = roomIndex;
+            Screen.CallMethod<object>("OnTableItemSelected", new object[] { table, new MyGuiControlTable.EventArgs()});
         }
         
         public void Respawn()
