@@ -70,11 +70,11 @@ namespace Iv4xr.SpaceEngineers
 
     public interface IMedicals
     {
-        List<MedicalRoom> MedicalRooms();
+        MedicalsData Data();
         void SelectRespawn(int roomIndex);
         void Respawn();
-        List<Faction> Factions();
-        void ChooseFaction(int factionIndex);
+        void SelectFaction(int factionIndex);
+        void Join();
         void Refresh();
         void ShowMessageOfTheDay();
     }

@@ -158,7 +158,8 @@ abstract class AbstractMultiplayerSteps(
     fun ensureCharacterExists() = clients {
         if (screens.focusedScreen() == "Medicals") {
             try {
-                screens.medicals.chooseFaction(0)
+                screens.medicals.selectFaction(0)
+                screens.medicals.join()
             } catch (e: Exception) {
 
             }

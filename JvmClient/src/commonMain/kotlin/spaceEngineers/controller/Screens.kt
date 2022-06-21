@@ -65,11 +65,11 @@ interface SaveAs {
 }
 
 interface Medicals {
-    fun medicalRooms(): List<MedicalRoom>
+    fun data(): MedicalsData
     fun selectRespawn(roomIndex: Int)
     fun respawn()
-    fun factions(): List<Faction>
-    fun chooseFaction(factionIndex: Int)
+    fun join()
+    fun selectFaction(factionIndex: Int)
     fun refresh()
     fun showMessageOfTheDay()
 

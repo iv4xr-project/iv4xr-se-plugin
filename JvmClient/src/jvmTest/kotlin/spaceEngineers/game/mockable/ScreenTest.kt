@@ -17,7 +17,7 @@ class ScreenTest : MockOrRealGameTest(forceRealGame = true, loadScenario = false
 
     @Test
     fun medicalRooms() = testContext {
-        screens.medicals.medicalRooms().apply(::println)
+        screens.medicals.data().medicalRooms.apply(::println)
     }
 
     @Test
@@ -51,12 +51,12 @@ class ScreenTest : MockOrRealGameTest(forceRealGame = true, loadScenario = false
 
     @Test
     fun chooseFaction() = testContext {
-        screens.medicals.chooseFaction(0)
+        screens.medicals.selectFaction(0)
     }
 
     @Test
     fun factions() = testContext {
-        screens.medicals.factions().apply(::println)
+        screens.medicals.data().factions.apply(::println)
     }
 
     @Test

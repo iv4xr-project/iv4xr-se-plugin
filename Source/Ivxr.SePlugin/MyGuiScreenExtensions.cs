@@ -106,6 +106,11 @@ namespace Iv4xr.SePlugin
         {
             return screen.GetInstanceFieldOrThrow<MyGuiControlTable>(fieldName);
         }
+        
+        public static MyGuiControlTable TableOrNull(this MyGuiScreenBase screen, string fieldName)
+        {
+            return screen.GetInstanceField<MyGuiControlTable>(fieldName);
+        }
 
         public static List<MyGuiControlTable.Row> RowsAsList(this MyGuiControlTable table)
         {
