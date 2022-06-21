@@ -4,14 +4,15 @@ import bdd.repetitiveassert.repeatUntilSuccess
 import io.cucumber.java.en.And
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
+import io.cucumber.java.en.When
 import kotlinx.coroutines.delay
-import spaceEngineers.model.CharacterMovement
 import spaceEngineers.model.DefinitionId
 import spaceEngineers.model.Vec3F
 import spaceEngineers.model.extensions.allBlocks
 import testhelp.*
 import java.lang.Thread.sleep
 import kotlin.test.*
+
 
 class CharacterAsserts : AbstractMultiplayerSteps() {
 
@@ -316,5 +317,59 @@ class CharacterAsserts : AbstractMultiplayerSteps() {
     fun dampeners_are_switched_to_relative_mode() = mainClient {
         assertNotNull(observer.observe().relativeDampeningEntity)
         assertTrue(screens.gamePlay.data().hud.statsWrapper.relativeDampenersOn)
+    }
+
+    @Then("Character thrusters work against the gravity.")
+    fun character_thrusters_work_against_the_gravity() = mainClient {
+        with(observer.observe()) {
+            assertVecEquals(gravity.normalized(), -orientationUp)
+            assertVecEquals(Vec3F.UP, jetpackFinalThrust.normalized())
+        }
+    }
+
+    @Then("Character is positioned {double}m in the {string} from it's original position.")
+    fun character_is_positioned_in_the_from_it_s_original_position(distance: Double, direction: String) {
+        val directionVector = Vec3F.directionFromString(direction)
+        observers {
+            val remembered = context.characterObservation ?: error("No original observation recorded for position")
+            val new = observer.observe()
+            val distanceVector = new.position - remembered.position
+            // those vector match because of the lazy hack, otherwise rotation matrix would have to be used first
+            assertVecEquals(distanceVector.normalized(), directionVector)
+            assertEquals(distance.toFloat(), distanceVector.length(), absoluteTolerance = 1f)
+        }
+    }
+
+    @When("Character remembers it's position.")
+    fun character_remembers_it_s_position() = observers {
+        val obs = observer.observe()
+        // TODO: lazy karel hack - teleporting so that character has clean orientation for easier calculations later
+        admin.character.teleport(obs.position, Vec3F.FORWARD, Vec3F.UP)
+        context.rememberCharacter(obs)
+        smallPause()
+    }
+
+    @And("Character is inside the block.")
+    fun character_is_inside_the_block() = mainClient {
+        assertNotEquals(
+            observer.observe().id,
+            observer.observeControlledEntity().id
+        )
+    }
+
+    @And("Character is inside block {string}.")
+    fun character_is_inside_block(displayName: String) = mainClient {
+        assertEquals(
+            displayName,
+            observer.observeControlledEntity().displayName
+        )
+    }
+
+    @And("Character is not inside a block.")
+    fun character_is_not_inside_a_block() = mainClient {
+        assertEquals(
+            observer.observe().id,
+            observer.observeControlledEntity().id
+        )
     }
 }

@@ -14,6 +14,13 @@ data class SpaceEngineersTestContext(
     var platformOrientationUp: Vec3F? = null,
 ) {
 
+    var characterObservation: CharacterObservation? = null
+        private set
+
+    fun rememberCharacter(characterObservation: CharacterObservation) {
+        this.characterObservation = characterObservation
+    }
+
     val lastNewBlockId: BlockId?
         get() = lastNewBlock?.id
 
