@@ -4,9 +4,11 @@ using Iv4xr.PluginLib;
 using Iv4xr.PluginLib.Control;
 using Iv4xr.SpaceEngineers;
 using Iv4xr.SpaceEngineers.WorldModel;
+using Sandbox.Engine.Multiplayer;
 using Sandbox.Game.Entities;
 using Sandbox.Game.Entities.Character;
 using Sandbox.Game.Gui;
+using Sandbox.Game.Multiplayer;
 using Sandbox.Game.World;
 using VRage.Game;
 using VRage.Game.Entity.UseObject;
@@ -35,6 +37,12 @@ namespace Iv4xr.SePlugin.Control
         public CharacterObservation TurnOnDampeners()
         {
             Character.JetpackComp.EnableDampeners(true);
+            return m_observer.Observe();
+        }
+
+        public CharacterObservation TurnOnRelativeDampeners()
+        {
+            MyMultiplayer.RaiseStaticEvent(s => MyPlayerCollection.SetDampeningEntity, Character.Entity.EntityId);
             return m_observer.Observe();
         }
 

@@ -75,6 +75,7 @@ namespace Iv4xr.SpaceEngineers
         CharacterObservation TurnOnJetpack();
         CharacterObservation TurnOffJetpack();
         CharacterObservation TurnOnDampeners();
+        CharacterObservation TurnOnRelativeDampeners();
         CharacterObservation TurnOffDampeners();
         CharacterObservation SwitchHelmet();
         void BeginUsingTool();

@@ -59,6 +59,7 @@ interface Character {
     fun turnOnJetpack(): CharacterObservation
     fun turnOffJetpack(): CharacterObservation
     fun turnOnDampeners(): CharacterObservation
+    fun turnOnRelativeDampeners(): CharacterObservation
     fun turnOffDampeners(): CharacterObservation
     fun switchHelmet(): CharacterObservation
     fun switchParkedStatus(): Boolean
