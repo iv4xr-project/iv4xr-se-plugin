@@ -1,10 +1,14 @@
 package bdd.repetitiveassert
 
 import kotlinx.coroutines.delay
+import kotlin.reflect.KClass
 
 suspend fun repeatUntilSuccess(
     config: RepetitiveAssertConfig,
-    assertBlock: AssertBlockContext.() -> Unit
+    swallowedExceptionTypes: Set<KClass<out Throwable>> = setOf<KClass<out Throwable>>(
+        AssertionError::class,
+    ),
+    assertBlock: suspend AssertBlockContext.() -> Unit
 ) {
 
     delay(config.initialDelayMs)
@@ -12,9 +16,13 @@ suspend fun repeatUntilSuccess(
         try {
             AssertBlockContext(config, it).assertBlock()
             return
-        } catch (e: AssertionError) {
-            //swallow
-            println(e.message)
+        } catch (e: Throwable) {
+            if (e::class in swallowedExceptionTypes) {
+                //swallow
+                println(e.message)
+            } else {
+                throw e
+            }
         }
         delay(config.delayMs)
     }
