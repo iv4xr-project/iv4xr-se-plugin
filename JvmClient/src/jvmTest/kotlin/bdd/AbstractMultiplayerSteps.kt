@@ -50,6 +50,11 @@ abstract class AbstractMultiplayerSteps(
         cm.mainClient(block)
     }
 
+    fun nonMainClientGameObservers(block: suspend ContextControllerWrapper.() -> Unit) = hideUndeclaredThrowableException {
+        cm.nonMainClientGameObservers(block)
+    }
+
+
     fun clients(block: suspend ContextControllerWrapper.() -> Unit) = hideUndeclaredThrowableException {
         cm.clients(block)
     }
@@ -83,12 +88,12 @@ abstract class AbstractMultiplayerSteps(
 
     fun loadScenario(scenarioId: String) = hideUndeclaredThrowableException {
         if (cm.connectionSetup.offlineSinglePlayer) {
-            loadScenarioSinglePlayer(scenarioId)
-            //createLobbyGame(scenarioId)
-        } else if (cm.connectionSetup.admin.type == AppType.GAME) {
+            //loadScenarioSinglePlayer(scenarioId)
+            createLobbyGame(scenarioId)
+        } else if (cm.connectionSetup.lobby) {
             createLobbyGame(scenarioId)
             connectToFirstFriendlyGame()
-        } else if (cm.connectionSetup.admin.type == AppType.DEDICATED) {
+        } else if (cm.connectionSetup.ds) {
             startDedicatedWithSessionAsync(scenarioId)
             connectClientsDirectly()
         } else {
@@ -134,6 +139,7 @@ abstract class AbstractMultiplayerSteps(
         clients {
             //TODO: if not in main menu, exit to it rather than failing
             val process = cm.admin.gameProcess
+            smallPause()
             screens.mainMenu.joinGame()
             smallPause()
             screens.joinGame.directConnect()

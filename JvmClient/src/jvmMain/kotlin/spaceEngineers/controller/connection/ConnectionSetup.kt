@@ -40,9 +40,20 @@ data class ConnectionSetup(
     val observers = connections.filter { it.roles.contains(Role.OBSERVER) }
     val clients = connections.filter { !it.roles.contains(Role.ADMIN) }
     val games = connections.filter { it.type == AppType.GAME }
+    val nonMainClientGameObservers = connections.filter {
+        it.type == AppType.GAME && !it.roles.contains(Role.MAIN_CLIENT) && it.roles.contains(Role.OBSERVER)
+    }
 
     val offlineSinglePlayer: Boolean by lazy {
         connections.size == 1 && admin.type == AppType.GAME
+    }
+
+    val ds: Boolean by lazy {
+        admin.type == AppType.DEDICATED
+    }
+
+    val lobby: Boolean by lazy {
+        !ds
     }
 
 

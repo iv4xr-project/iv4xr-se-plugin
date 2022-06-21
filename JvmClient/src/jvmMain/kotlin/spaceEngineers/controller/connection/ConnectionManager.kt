@@ -37,6 +37,10 @@ class ConnectionManager(
         connectionSetup.clients.map { connectionsById.getValue(it.createId()) }
     }
 
+    val nonMainClientGameObservers by lazy {
+        connectionSetup.nonMainClientGameObservers.map { connectionsById.getValue(it.createId()) }
+    }
+
     val games by lazy {
         connectionSetup.games.map { connectionsById.getValue(it.createId()) }
     }
@@ -60,7 +64,19 @@ class ConnectionManager(
 
     suspend fun clients(block: suspend ContextControllerWrapper.() -> Unit) = clients.parallelEach(block)
 
-    suspend fun games(block: suspend ContextControllerWrapper.() -> Unit) = games.parallelEach(block)
+    suspend fun nonMainClientGameObservers(block: suspend ContextControllerWrapper.() -> Unit) = nonMainClientGameObservers.parallelEach(block)
+
+    suspend fun games(block: suspend ContextControllerWrapper.() -> Unit) = games.parallelEach {
+        try {
+            spaceEngineers.admin.character.switch(spaceEngineers.admin.character.mainCharacterId())
+        } catch (e: Exception) {
+            /*  
+            We switch, but it's okay to fail - maybe sometimes we want to control the game and there is no character. 
+            Could use some refactoring to avoid this.
+            */
+        }
+        block(this)
+    }
 
     suspend fun observers(block: suspend ContextControllerWrapper.() -> Unit) = observers.parallelEach {
         spaceEngineers.admin.character.switch(mainClientCharacterId)
