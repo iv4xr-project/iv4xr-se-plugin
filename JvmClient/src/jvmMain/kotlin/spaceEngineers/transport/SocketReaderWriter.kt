@@ -34,9 +34,9 @@ fun SpaceEngineers?.closeIfCloseable() {
 class SocketReaderWriter @JvmOverloads constructor(
     host: String = DEFAULT_HOSTNAME,
     port: Int = DEFAULT_PORT,
-    maxWaitTimeMs: Int = 45_000,
+    maxWaitTimeMs: Int = 120_000,
     socketConnectionTimeoutMs: Int = 4_000,
-    socketDataTimeoutMs: Int = 45_000
+    socketDataTimeoutMs: Int = 120_000
 ) : AutoCloseable, StringLineReaderWriter {
 
     lateinit var socket: Socket

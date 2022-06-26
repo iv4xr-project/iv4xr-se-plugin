@@ -47,6 +47,7 @@ namespace Iv4xr.SePlugin.Control.Screen
             var table = Screen.Table("m_factionsTable");
             table.SelectedRowIndex = factionIndex;
             Screen.CallMethod<object>("OnFactionSelectClick", new object[] { null });
+            Screen.CallMethod<object>("OnFactionsTableItemDoubleClick", new object[] { null, null });
         }
 
         public void Join()

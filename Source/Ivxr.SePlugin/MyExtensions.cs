@@ -296,7 +296,7 @@ namespace Iv4xr.SePlugin
             result.OrientationUp = orientation.Up.ToPlain();
             result.DisplayName = entity.DisplayName ?? entity.GetType().Name;
             result.Name = entity.Name;
-            result.Velocity = entity.Physics?.LinearVelocity.ToPlain() ?? new PlainVec3D();
+            result.Velocity = entity.Physics?.LinearVelocity.ToPlain() ?? PlainVec3DConst.Zero;
             result.InScene = entity.InScene;
             return result;
         }

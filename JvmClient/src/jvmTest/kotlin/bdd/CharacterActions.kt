@@ -1,5 +1,9 @@
 package bdd
 
+import bdd.setup.connectClientsDirectly
+import bdd.setup.connectToFirstFriendlyGame
+import bdd.setup.createLobbyGame
+import bdd.setup.exitToMainMenu
 import io.cucumber.java.PendingException
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
@@ -9,11 +13,10 @@ import spaceEngineers.controller.extensions.blockingMoveForwardByDistance
 import spaceEngineers.controller.extensions.grindDownToPercentage
 import spaceEngineers.controller.extensions.torchBackToMax
 import spaceEngineers.model.*
+import spaceEngineers.model.CharacterMovement
 import spaceEngineers.model.extensions.allBlocks
-import spaceEngineers.model.extensions.normalizeAsMovement
 import spaceEngineers.model.extensions.normalizeAsRun
-import spaceEngineers.movement.CompositeDirection3d
-import spaceEngineers.movement.ReplayMovement
+import spaceEngineers.movement.*
 import kotlin.test.assertEquals
 
 
@@ -41,16 +44,10 @@ class CharacterActions : AbstractMultiplayerSteps() {
         character.moveAndRotate(Vec3F.UP, ticks = ticks)
     }
 
-    @When("Character moves forward for {int} ticks.")
-    fun character_moves_forward_for_ticks(ticks: Int) = mainClient {
+    @When("Character moves {string} for {int} ticks.")
+    fun character_moves_direction_for_ticks(direction: String, ticks: Int) = mainClient {
         val replayMovement = ReplayMovement(this)
-        replayMovement.move(CompositeDirection3d.FORWARD, ticks = ticks)
-    }
-
-    @When("Character moves backward for {int} ticks.")
-    fun character_moves_backward_for_ticks(ticks: Int) = mainClient {
-        val replayMovement = ReplayMovement(this)
-        replayMovement.move(CompositeDirection3d.BACKWARD, ticks = ticks)
+        replayMovement.move(CompositeDirection3d.directionFromString(direction), ticks = ticks)
     }
 
     @When("Character runs forward for {int} ticks.")
@@ -75,7 +72,11 @@ class CharacterActions : AbstractMultiplayerSteps() {
             CharacterMovementType.valueOf(movement.uppercase())
         }
         val movementWrapper = ReplayMovement(this)
-        movementWrapper.move(CompositeDirection3d.directionFromString(direction), movementType = movementType, ticks = ticks)
+        movementWrapper.move(
+            CompositeDirection3d.directionFromString(direction),
+            movementType = movementType,
+            ticks = ticks
+        )
     }
 
     @When("Character turns on jetpack.")
@@ -163,29 +164,44 @@ class CharacterActions : AbstractMultiplayerSteps() {
 
     @When("Player saves the game as {string} and reloads.")
     fun player_saves_the_game_as_and_reloads(scenarioId: String) {
-        mainClient {
-            screens.gamePlay.showMainMenu()
-            smallPause()
-            screens.mainMenu.saveAs()
-            smallPause()
-            screens.saveAs.setName(scenarioId)
-            smallPause()
-            screens.saveAs.pressOk()
-            pause()
-            exitToMainMenu {
-                throw it
-            }
-            //TODO: remove pause, wait until the game is in main menu
-            pause()
-            createLobbyGame(scenarioId, filterSaved = false)
-            connectToFirstFriendlyGame()
+        val cs = testSetup.connectionManager.connectionSetup
+        if (cs.ds) {
+            exitToMainMenu()
+            connectClientsDirectly(waitForMedical = false)
+        } else if (cs.lobby) {
+            mainClient {
+                screens.gamePlay.showMainMenu()
+                smallPause()
+                screens.mainMenu.saveAs()
+                smallPause()
+                screens.saveAs.setName(scenarioId)
+                smallPause()
+                screens.saveAs.pressOk()
+                pause()
+                exitToMainMenu {
+                    throw it
+                }
+                //TODO: remove pause, wait until the game is in main menu
+                pause()
+                createLobbyGame(scenarioId, filterSaved = false)
+                connectToFirstFriendlyGame()
 
+            }
         }
     }
 
     @When("Character jumps.")
     fun character_jumps() = mainClient {
-        character.jump()
+        //character.jump()
+        this.input.startPlaying(
+            listOf(
+                FrameSnapshot(
+                    InputSnapshot(
+                        keyboard = KeyboardSnapshot(pressedKeys = listOf(32), text = listOf(' '))
+                    )
+                )
+            )
+        )
     }
 
     @When("Character unparks.")
@@ -193,5 +209,25 @@ class CharacterActions : AbstractMultiplayerSteps() {
         if (character.switchParkedStatus()) {
             character.switchParkedStatus()
         }
+    }
+
+    @When("Uses item {int} from toolbar.")
+    fun uses_item_from_toolbar(indexStarting1: Int) = mainClient {
+        //TODO: more robust, don't send keys
+        //items.activate(ToolbarLocation(page = 0, slot = indexStarting1 - 1))
+        this.input.startPlaying(
+            listOf(
+                FrameSnapshot(
+                    InputSnapshot(
+                        keyboard = KeyboardSnapshot(pressedKeys = listOf(49), text = listOf('+'))
+                    )
+                )
+            )
+        )
+    }
+
+    @When("Character turns on relative dampeners.")
+    fun character_turns_on_relative_dampeners() = mainClient {
+        character.turnOnRelativeDampeners()
     }
 }

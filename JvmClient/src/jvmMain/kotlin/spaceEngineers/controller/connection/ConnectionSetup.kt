@@ -105,5 +105,19 @@ data class ConnectionSetup(
             "SINGLE_COMPUTER_DEDICATED_DEV_KAREL" to SINGLE_COMPUTER_DEDICATED_DEV_KAREL,
             "DOUBLE_PC_LOBBY_STEAM" to DOUBLE_PC_LOBBY_STEAM,
         )
+
+
+        private val json: Json = Json {
+        }
+
+        val CONNECTION_SETUP_DIR = "src/jvmTest/resources/connection-setup/"
+
+        fun loadConfigFromFile(file: File): ConnectionSetup {
+            return json.decodeFromString(ConnectionSetup.serializer(), file.readText())
+        }
+
+        fun loadConfigFromFile(name: String = "config.json"): ConnectionSetup {
+            return loadConfigFromFile(File(CONNECTION_SETUP_DIR, name))
+        }
     }
 }

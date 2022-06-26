@@ -19,7 +19,7 @@ suspend fun repeatUntilSuccess(
         } catch (e: Throwable) {
             if (e::class in swallowedExceptionTypes) {
                 //swallow
-                println(e.message)
+                println(e.message + ": " + e.cause?.message)
             } else {
                 throw e
             }

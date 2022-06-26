@@ -64,7 +64,8 @@ class ConnectionManager(
 
     suspend fun clients(block: suspend ContextControllerWrapper.() -> Unit) = clients.parallelEach(block)
 
-    suspend fun nonMainClientGameObservers(block: suspend ContextControllerWrapper.() -> Unit) = nonMainClientGameObservers.parallelEach(block)
+    suspend fun nonMainClientGameObservers(block: suspend ContextControllerWrapper.() -> Unit) =
+        nonMainClientGameObservers.parallelEach(block)
 
     suspend fun games(block: suspend ContextControllerWrapper.() -> Unit) = games.parallelEach {
         try {
@@ -79,7 +80,13 @@ class ConnectionManager(
     }
 
     suspend fun observers(block: suspend ContextControllerWrapper.() -> Unit) = observers.parallelEach {
-        spaceEngineers.admin.character.switch(mainClientCharacterId)
+        try {
+            mainClient.spaceEngineers.admin.character.localCharacterId()?.let {
+                spaceEngineers.admin.character.switch(it)
+            }
+        } catch(e: Exception) {
+
+        }
         block(this)
     }
 

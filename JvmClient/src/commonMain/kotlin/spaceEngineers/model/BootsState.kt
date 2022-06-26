@@ -8,15 +8,27 @@ import kotlin.jvm.JvmInline
 value class BootsState(val value: UInt) {
 
     fun isWhite(): Boolean {
-        return this.value in setOf(INIT, DISABLED).map { it.value }
+        return isColour(BootsColour.WHITE)
     }
 
     fun isYellow(): Boolean {
-        return value == PROXIMITY.value
+        return isColour(BootsColour.YELLOW)
     }
 
     fun isGreen(): Boolean {
-        return value == ENABLED.value
+        return isColour(BootsColour.GREEN)
+    }
+
+    fun toColour(): BootsColour {
+        return BootsColour.values().first { value in it.uIntValues }
+    }
+
+    fun isColour(bootsColour: BootsColour): Boolean {
+        return value in bootsColour.uIntValues
+    }
+
+    override fun toString(): String {
+        return "${toColour().toString().lowercase()}($value)"
     }
 
     companion object {

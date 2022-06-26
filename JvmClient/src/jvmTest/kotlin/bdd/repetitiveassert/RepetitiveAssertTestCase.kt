@@ -1,5 +1,7 @@
 package bdd.repetitiveassert
 
+
+import org.opentest4j.AssertionFailedError
 import kotlin.reflect.KClass
 
 interface RepetitiveAssertTestCase {
@@ -11,7 +13,7 @@ suspend fun RepetitiveAssertTestCase.repeatUntilSuccess(
     initialDelayMs: Long = config.initialDelayMs,
     delayMs: Long = config.delayMs,
     swallowedExceptionTypes: Set<KClass<out Throwable>> = setOf<KClass<out Throwable>>(
-        AssertionError::class,
+        AssertionError::class, AssertionFailedError::class
     ),
     assertBlock: suspend AssertBlockContext.() -> Unit
 ) {
