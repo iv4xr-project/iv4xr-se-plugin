@@ -1,7 +1,7 @@
 plugins {
-    id 'org.jetbrains.kotlin.multiplatform' version '1.6.10'
-    id 'org.jetbrains.kotlin.plugin.serialization' version '1.6.10'
-    id("org.jetbrains.dokka") version "1.6.10"
+    id 'org.jetbrains.kotlin.multiplatform' version '1.6.21'
+    id 'org.jetbrains.kotlin.plugin.serialization' version '1.6.21'
+    id("org.jetbrains.dokka") version "1.6.21"
     id 'maven-publish'
     id "se.thinkcode.cucumber-runner" version "0.0.11"
 }
@@ -35,7 +35,7 @@ kotlin {
         commonMain {
             dependencies {
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.1")
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
             }
         }
         commonTest {
