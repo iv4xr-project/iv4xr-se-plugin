@@ -1,0 +1,39 @@
+{
+    "connections": [
+        {
+            "address": "10.20.0.219",
+            "pluginPort": 3345,
+            "type": "DEDICATED",
+            "roles": [
+                "ADMIN",
+                "OBSERVER"
+            ],
+            "executablePath": "C:/Program Files (x86)/Steam/steamapps/common/SpaceEngineersDedicatedServer/DedicatedServer64",
+            "configPath": "~/AppData/Roaming/SpaceEngineersDedicated",
+            "gameVersion": "STEAM"
+        },
+        {
+            "address": "10.20.0.221",
+            "pluginPort": 3333,
+            "type": "GAME",
+            "roles": [
+                "MAIN_CLIENT",
+                "OBSERVER"
+            ],
+            "executablePath": "C:/Program Files (x86)/Steam/steamapps/common/SpaceEngineers/Bin64",
+            "configPath": "~/AppData/Roaming/SpaceEngineers",
+            "gameVersion": "STEAM"
+        },
+        {
+            "address": "10.20.0.248",
+            "pluginPort": 3333,
+            "type": "GAME",
+            "roles": [
+                "OBSERVER"
+            ],
+            "executablePath": "C:/Program Files (x86)/Steam/steamapps/common/SpaceEngineers/Bin64",
+            "configPath": "~/AppData/Roaming/SpaceEngineers",
+            "gameVersion": "STEAM"
+        }
+    ]
+}
