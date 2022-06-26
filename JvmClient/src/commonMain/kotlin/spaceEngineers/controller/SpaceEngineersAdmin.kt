@@ -63,6 +63,7 @@ interface CharacterAdmin {
     fun showTerminal(blockId: String)
     fun die()
     fun mainCharacterId(): String
+    fun localCharacterId(): String?
 }
 
 interface ObserverAdmin {

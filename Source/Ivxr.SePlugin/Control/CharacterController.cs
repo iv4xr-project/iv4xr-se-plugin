@@ -52,6 +52,11 @@ namespace Iv4xr.SePlugin.Control
             return m_observer.Observe();
         }
 
+        public string LocalCharacterId()
+        {
+            var character = MySession.Static.LocalCharacter;
+            return character?.CharacterId().ToString();
+        }
 
         public CharacterObservation Jump(PlainVec3D movement)
         {
