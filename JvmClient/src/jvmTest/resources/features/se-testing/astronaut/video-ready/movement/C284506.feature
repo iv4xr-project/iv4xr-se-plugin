@@ -2,8 +2,8 @@ Feature: C284506 Character can move
 
   Scenario Outline: C284506 Character can move
     Given Scenario config:
-      | scenario           | main_client_medbay | observer_medbay |
-      | character-movement | C284506-executor   | Observer Tier 1 |
+      | scenario           | main_client_medbay | observer_medbay | delay_after_spawn |
+      | character-movement | C284506-executor   | Observer Tier 1 | 2                 |
     When Character moves "<direction>" for 120 ticks using "<movement>".
     Then Character speed is <speed> m/s after 1200 milliseconds.
     Examples:
