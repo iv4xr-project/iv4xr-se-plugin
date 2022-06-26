@@ -6,6 +6,7 @@
     <PackageVersion></PackageVersion>
     <AssemblyVersion>0.7.0</AssemblyVersion>
     <FileVersion></FileVersion>
+	<DebugType>Full</DebugType>
   </PropertyGroup>
 
   <ItemGroup>

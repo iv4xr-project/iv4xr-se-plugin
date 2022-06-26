@@ -2,6 +2,7 @@ plugins {
     id 'org.jetbrains.kotlin.multiplatform' version '1.6.10'
     id 'org.jetbrains.kotlin.plugin.serialization' version '1.6.10'
     id("org.jetbrains.dokka") version "1.6.10"
+    id 'com.github.johnrengelman.shadow' version '6.1.0'
     id 'maven-publish'
 }
 
@@ -66,6 +67,12 @@ kotlin {
     }
 }
 
+// Output to build/libs/shadow.jar
+shadowJar{
+    archiveBaseName.set('se-shadow')
+    archiveClassifier.set('')
+    archiveVersion.set(version)
+}
 
 task cucumber() {
     dependsOn assemble, testClasses

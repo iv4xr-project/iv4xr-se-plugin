@@ -5,6 +5,7 @@
         <RootNamespace>Iv4xr.SpaceEngineers</RootNamespace>
         <AssemblyVersion>0.7.0</AssemblyVersion>
         <FileVersion></FileVersion>
+		<DebugType>Full</DebugType>
     </PropertyGroup>
 
 </Project>
