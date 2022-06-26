@@ -53,10 +53,9 @@ namespace Iv4xr.SpaceEngineers
     public interface IItems
     {
         void Equip(ToolbarLocation toolbarLocation);
-
         void SetToolbarItem(DefinitionId definitionId, ToolbarLocation toolbarLocation);
-
         Toolbar Toolbar();
+        void Activate(ToolbarLocation toolbarLocation);
     }
     
     public interface IDefinitions

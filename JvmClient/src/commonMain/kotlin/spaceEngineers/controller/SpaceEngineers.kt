@@ -102,6 +102,7 @@ interface Items {
     fun equip(toolbarLocation: ToolbarLocation)
     fun setToolbarItem(definitionId: DefinitionId, toolbarLocation: ToolbarLocation)
     fun toolbar(): Toolbar
+    fun activate(toolbarLocation: ToolbarLocation)
 }
 
 interface Blocks {

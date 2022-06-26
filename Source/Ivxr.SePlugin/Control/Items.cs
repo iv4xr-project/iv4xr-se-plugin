@@ -47,6 +47,13 @@ namespace Iv4xr.SePlugin.Control
             }
         }
 
+        public void Activate(ToolbarLocation toolbarLocation)
+        {
+            var toolbar = m_session.Character.Toolbar;
+            toolbar.SwitchToPageOrNot(toolbarLocation.Page);
+            toolbar.ActivateItemAtSlot(toolbarLocation.Slot);
+        }
+
         public Toolbar Toolbar()
         {
             var toolbar = MyToolbarComponent.CurrentToolbar;
