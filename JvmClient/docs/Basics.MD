@@ -2,14 +2,13 @@
 
 ## Units and position
 
-- Distant unit in game is meters. Speed is in meters per second.
+- The unit of distance in the game is one meter. Speed is in meters per second.
 - One big block size is 2.5 game meters. Some vectors are sent in meters, some are sent in "cubes".
 - [Block size](https://iv4xr-project.github.io/iv4xr-se-plugin/space-engineers-api/spaceEngineers.model/-block/size.html)
   is in large cubes so for example 1x1x1 large block is 2.5x2.5x2.5 in meters.
 - Use
   enum [CubeSize](https://iv4xr-project.github.io/iv4xr-se-plugin/space-engineers-api/spaceEngineers.model/-cube-size/index.html)
-  and/or [LARGE_BLOCK_CUBE_SIDE_SIZE](https://iv4xr-project.github.io/iv4xr-se-plugin/space-engineers-api/spaceEngineers.model/-l-a-r-g-e_-b-l-o-c-k_-c-u-b-e_-s-i-d-e_-s-i-z-e.html)
-  , [SMALL_BLOCK_CUBE_SIDE_SIZE](https://iv4xr-project.github.io/iv4xr-se-plugin/space-engineers-api/spaceEngineers.model/-s-m-a-l-l_-b-l-o-c-k_-c-u-b-e_-s-i-d-e_-s-i-z-e.html)
+  and/or [LARGE_BLOCK_CUBE_SIDE_SIZE](https://iv4xr-project.github.io/iv4xr-se-plugin/space-engineers-api/spaceEngineers.model/-l-a-r-g-e_-b-l-o-c-k_-c-u-b-e_-s-i-d-e_-s-i-z-e.html), [SMALL_BLOCK_CUBE_SIDE_SIZE](https://iv4xr-project.github.io/iv4xr-se-plugin/space-engineers-api/spaceEngineers.model/-s-m-a-l-l_-b-l-o-c-k_-c-u-b-e_-s-i-d-e_-s-i-z-e.html)
   constants for converting.
 - 5 small blocks to one big block. (So small block cube is 0.5x0.5x0.5 meters.)
 - Engineer character can fit into space of 2x3x2 in small blocks (1x1.5x1 meters), however the size in the code is
@@ -27,14 +26,14 @@
 
 ## Character and camera orientation
 
-- Character forward vector is identical to camera forward vector - when moving to a side, both forward vectors are
+- The character **forward** vector is identical to the camera forward vector; when moving to a side, both forward vectors are
   changed.
-- Character up vector differs from camera up vector when walking. Imagine character moving his head to look up rather
-  than whole body.
-- When jetpack is on, up vectors are identical. Imagine character rotating whole body to look up.
-- This works for 3d person camera mode, unknown for other modes.
-- There is possibility to move camera around character. What is happening with internal variables is not explored.
+- The character **up** vector differs from the camera up vector when walking. Imagine character moving his head to look up rather
+  than the whole body.
+- When jetpack is on, up vectors are identical. Imagine character rotating the whole body to look up.
+- This works for the 3rd person camera mode, unknown for other modes.
+- There is a possibility to move the camera around character. What is happening with internal variables has not been explored.
 
 ## Blocks
 
-[Blocks](Blocks.MD) are in a separate file.
+The description of [Blocks](Blocks.MD) is in a separate file.
