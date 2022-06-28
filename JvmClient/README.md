@@ -124,7 +124,7 @@ Eclipse does not support Kotlin multiplatform projects and so far we haven't bee
 Kotlin JVM. We recommend using the project with JetBrains [IDEA](https://www.jetbrains.com/idea/download/).
 
 
-## Advanced/plugin customization
+## Plugin customization (advanced)
 
 ### Adding new block-specific fields
 
