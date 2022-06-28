@@ -32,6 +32,7 @@ namespace Iv4xr.SePlugin.Control.Screen
                 IsMotdOpen = Screen.GetInstanceFieldOrThrow<bool>("m_isMotdOpen"),
                 Paused = Screen.GetInstanceFieldOrThrow<bool>("m_paused"),
                 IsMultiplayerReady = Screen.GetInstanceFieldOrThrow<bool>("m_isMultiplayerReady"),
+                RespawnButton = Screen.GetInstanceField<MyGuiControlBase>("m_respawnButton")?.ToControlBase(),
             };
         }
 

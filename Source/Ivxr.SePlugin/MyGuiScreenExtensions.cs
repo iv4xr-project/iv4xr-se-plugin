@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Iv4xr.PluginLib;
+using Iv4xr.SpaceEngineers.WorldModel.Screen;
 using Sandbox.Game;
 using Sandbox.Game.Gui;
 using Sandbox.Game.Screens.Helpers;
@@ -179,6 +180,16 @@ namespace Iv4xr.SePlugin
             {
                 throw new InvalidOperationException($"Control {fieldName} of type {controlBase.GetType()} is not visible!");
             }
+        }
+
+        public static GuiControlBase ToControlBase(this MyGuiControlBase controlBase)
+        {
+            return new GuiControlBase()
+            {
+                Enabled = controlBase.Enabled,
+                Visible = controlBase.Visible,
+                Name = controlBase.Name,
+            };
         }
     }
 }

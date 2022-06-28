@@ -19,5 +19,7 @@ data class MedicalsData(
     var paused: Boolean,
     @SerialName("IsMultiplayerReady")
     var isMultiplayerReady: Boolean,
+    @SerialName("RespawnButton")
+    val respawnButton: GuiControlBase?,
 )
 

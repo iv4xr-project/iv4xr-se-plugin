@@ -69,7 +69,7 @@ class MedbayDSSetup(
     }
 
     private fun ensureEveryoneIsDS() = observers {
-        if (!admin.debugInfo().apply(::println).isDedicated) {
+        if (!admin.debugInfo().isDedicated) {
             "Observer not dedicated when supposed to be DS!"
         }
     }

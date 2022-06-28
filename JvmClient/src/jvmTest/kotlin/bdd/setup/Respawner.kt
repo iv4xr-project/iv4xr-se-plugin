@@ -6,10 +6,14 @@ import bdd.repetitiveassert.SimpleRepetitiveAssertTestCase
 import bdd.repetitiveassert.repeatUntilSuccess
 import bdd.waitForGameplay
 import kotlinx.coroutines.delay
+import spaceEngineers.controller.ContextControllerWrapper
 import spaceEngineers.controller.SocketReaderWriterException
 import spaceEngineers.controller.SpaceEngineers
 import spaceEngineers.controller.connection.ConnectionManager
+import spaceEngineers.controller.extensions.toNullIfNegative1
+import spaceEngineers.model.canUse
 import spaceEngineers.transport.jsonrpc.KotlinJsonRpcError
+import spaceEngineers.util.whileWithTimeout
 
 class Respawner(
     override val connectionManager: ConnectionManager,
@@ -21,36 +25,40 @@ class Respawner(
 
     suspend fun respawn(mainMedbay: String, observerMedbay: String, faction: String) {
         nonMainClientGameObservers {
-            checkFaction(faction)
-            delay(500)
-            respawn(observerMedbay)
+            checkFactionAndRespawn(faction, observerMedbay)
         }
         mainClient {
-            checkFaction(faction)
-            delay(500)
-            respawn(mainMedbay)
+            checkFactionAndRespawn(faction, mainMedbay)
             waitForGameplay()
         }
         delay(100)
     }
 
-    private suspend fun SpaceEngineers.respawn(medbay: String) = with(screens.medicals) {
-        repeatUntilSuccess(
-            initialDelayMs = 0,
-            repeats = 10,
-            delayMs = 1_500,
-            swallowedExceptionTypes = setOf(SocketReaderWriterException::class, KotlinJsonRpcError::class)
-        ) {
-            val index = data().medicalRooms.indexOfFirst { it.name == medbay }
-            //TODO: throw for -1 on server
-            check(index != -1) { "Spawn point '$medbay' not found, found: ${data().medicalRooms.map { it.name }.sorted()}" }
-            delay(200L * repeatIndex)
-            selectRespawn(index)
-            delay(200L * repeatIndex)
-            respawn()
-            delay(200L * repeatIndex)
-        }
+    private suspend fun ContextControllerWrapper.checkFactionAndRespawn(
+        faction: String,
+        observerMedbay: String
+    ) {
+        checkFaction(faction)
+        respawn(observerMedbay)
     }
+
+
+    private suspend fun SpaceEngineers.respawn(
+        medbay: String,
+        waitTimeout: Long = 10_000L,
+    ) =
+        with(screens.medicals) {
+            whileWithTimeout(waitTimeout) { data().medicalRooms.isEmpty() }
+            val index = data().medicalRooms.indexOfFirst { it.name == medbay }.toNullIfNegative1()
+            check(index != null) {
+                "Spawn point '$medbay' not found, found: ${
+                    data().medicalRooms.map { it.name }.sorted()
+                }"
+            }
+            selectRespawn(index)
+            whileWithTimeout(waitTimeout) { data().run { showFactions || !respawnButton.canUse } }
+            respawn()
+        }
 
     private suspend fun SpaceEngineers.checkFaction(faction: String) {
         if (screens.focusedScreen() != "Medicals") {
@@ -69,7 +77,6 @@ class Respawner(
                 swallowedExceptionTypes = setOf(SocketReaderWriterException::class, KotlinJsonRpcError::class)
             ) {
                 val index = data.factions.indexOfFirst { it.name == faction }
-                //TODO: throw for -1 on server
                 check(index != -1) { "Faction '$faction' not found, found ${data.factions.map { it.name }}" }
                 selectFaction(index)
                 delay(500L * repeatIndex)

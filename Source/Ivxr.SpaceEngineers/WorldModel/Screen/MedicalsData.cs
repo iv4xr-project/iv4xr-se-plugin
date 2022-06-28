@@ -11,5 +11,6 @@ namespace Iv4xr.SpaceEngineers.WorldModel.Screen
         public bool IsMotdOpen;
         public bool Paused;
         public bool IsMultiplayerReady;
+        public GuiControlBase RespawnButton;
     }
 }
