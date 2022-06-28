@@ -161,7 +161,7 @@ namespace Iv4xr.SePlugin.Control
         public void ShowTerminal(string blockId)
         {
             var block = m_lowLevelObserver.GetBlockById(blockId);
-            block.FatBlock.ThrowIfNull("Block has to be functional to show terminal");
+            block.FatBlock.ThrowIfNull("FatBlock", "Block has to be functional to show terminal");
             MyGuiScreenTerminal.Show(MyTerminalPageEnum.Inventory, Character, block.FatBlock);
         }
 

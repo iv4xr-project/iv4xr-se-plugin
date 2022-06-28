@@ -19,17 +19,17 @@ namespace Iv4xr.PluginLib
 
         public static TReturnType CallMethod<TReturnType>(this object instance, string methodName, object[] args)
         {
-            instance.ThrowIfNull("Instance to call method on is null.");
+            instance.ThrowIfNull(null, "Instance to call method on is null.");
             var method = instance.GetMethodOrParentMethod(methodName, instance.GetType());
-            method.ThrowIfNull($"Method {methodName} is not found on object {instance.GetType().Name}");
+            method.ThrowIfNull(methodName, $"Method {methodName} is not found on object {instance.GetType().Name}");
             return (TReturnType)method.Invoke(instance, args);
         }
 
         public static TReturnType CallMethod<TReturnType>(this object instance, string methodName)
         {
-            instance.ThrowIfNull("Instance to call method on is null.");
+            instance.ThrowIfNull(null, "Instance to call method on is null.");
             var method = instance.GetMethodOrParentMethod(methodName, instance.GetType());
-            method.ThrowIfNull($"Method {methodName} is not found on object {instance.GetType().Name}");
+            method.ThrowIfNull(methodName, $"Method {methodName} is not found on object {instance.GetType().Name}");
             return (TReturnType)method.Invoke(instance, new object[] { });
         }
 
@@ -57,7 +57,7 @@ namespace Iv4xr.PluginLib
                                      | BindingFlags.Static;
             var t = instance.GetType();
             var field = t.GetProperty(fieldName, bindFlags);
-            field.ThrowIfNull($"Field {fieldName} not found for type {t.Name}");
+            field.ThrowIfNull(fieldName, $"Field {fieldName} not found for type {t.Name}");
             return (T)field.GetValue(instance);
         }
 
@@ -68,15 +68,15 @@ namespace Iv4xr.PluginLib
                                      | BindingFlags.Static;
             var t = instance.GetType();
             var field = t.GetField(fieldName, bindFlags);
-            field.ThrowIfNull($"Field {fieldName} not found for type {t.Name}");
+            field.ThrowIfNull(fieldName, $"Field {fieldName} not found for type {t.Name}");
             return (T)field.GetValue(instance);
         }
 
         public static T GetInstanceFieldOrThrow<T>(this object instance, string fieldName)
         {
-            instance.ThrowIfNull($"Instance of type {instance.GetType()} to get the field from is null.");
+            instance.ThrowIfNull(null, $"Instance of type {instance.GetType()} to get the field from is null.");
             var field = instance.GetInstanceField<T>(fieldName);
-            field.ThrowIfNull($"Field {fieldName} of type {typeof(T)} is null!");
+            field.ThrowIfNull(fieldName, $"Field {fieldName} of type {typeof(T)} is null!");
             return field;
         }
     }

@@ -62,7 +62,7 @@ namespace Iv4xr.SePlugin.Control.Screen.Terminal
         {
             Console.WriteLine(id);
             return (TControlType)basicControls.FirstOrDefault(control => control.Id == id)
-                    .ThrowIfNull(
+                    .ThrowIfNull(null,
                         $"Couldn't find control {id}, found: {string.Join(",", basicControls.Select(bc => bc.Id))}");
         }
 

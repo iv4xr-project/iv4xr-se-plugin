@@ -4,11 +4,11 @@ namespace Iv4xr.PluginLib
 {
     public static class BasicExtensions
     {
-        public static T ThrowIfNull<T>(this T instance, string message)
+        public static T ThrowIfNull<T>(this T instance, string paramName = null, string message = null)
         {
             if (instance == null)
             {
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(paramName, message);
             }
 
             return instance;
