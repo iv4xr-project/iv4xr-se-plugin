@@ -38,14 +38,14 @@ namespace Iv4xr.SePlugin.Control.Screen
         public void SelectRespawn(int roomIndex)
         {
             var table = Screen.Table("m_respawnsTable");
-            table.SelectedRowIndex = roomIndex;
+            table.SelectedRowIndex = roomIndex.CheckIndex();
             Screen.CallMethod<object>("OnTableItemSelected", new object[] { table, new MyGuiControlTable.EventArgs() });
         }
 
         public void SelectFaction(int factionIndex)
         {
             var table = Screen.Table("m_factionsTable");
-            table.SelectedRowIndex = factionIndex;
+            table.SelectedRowIndex = factionIndex.CheckIndex();
             Screen.CallMethod<object>("OnFactionSelectClick", new object[] { null });
             Screen.CallMethod<object>("OnFactionsTableItemDoubleClick", new object[] { null, null });
         }

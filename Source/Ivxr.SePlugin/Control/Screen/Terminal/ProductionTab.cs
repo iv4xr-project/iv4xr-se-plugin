@@ -75,7 +75,7 @@ namespace Iv4xr.SePlugin.Control.Screen.Terminal
         {
             var blueprintsGrid = Tab.TabControlByName<MyGuiControlScrollablePanel>(
                 "BlueprintsScrollableArea").ScrollableChild<MyGuiControlGrid>();
-            blueprintsGrid.SelectedIndex = index;
+            blueprintsGrid.SelectedIndex = index.CheckIndex();;
             var item = blueprintsGrid.SelectedItem;
             var blueprint = (MyBlueprintDefinitionBase)item.UserData;
             MyFixedPoint one = 1;
@@ -87,7 +87,7 @@ namespace Iv4xr.SePlugin.Control.Screen.Terminal
             var screen = MyGuiScreenExtensions.EnsureFocusedScreen<MyGuiScreenTerminal>();
             var blueprintsGrid = Tab.TabControlByName<MyGuiControlScrollablePanel>(
                 "QueueScrollableArea").ScrollableChild<MyGuiControlGrid>();
-            blueprintsGrid.SelectedIndex = index;
+            blueprintsGrid.SelectedIndex = index.CheckIndex();;
             MyFixedPoint minusOne = -1;
             var assembler = UntypedController.GetInstanceFieldOrThrow<MyAssembler>("m_selectedAssembler");
             assembler.RemoveQueueItemRequest(index, minusOne);
@@ -97,13 +97,13 @@ namespace Iv4xr.SePlugin.Control.Screen.Terminal
         {
             var screen = MyGuiScreenExtensions.EnsureFocusedScreen<MyGuiScreenTerminal>();
             var bpg = UntypedController.GetInstanceFieldOrThrow<MyGuiControlRadioButtonGroup>("m_blueprintButtonGroup");
-            bpg.SelectByIndex(index);
+            bpg.SelectByIndex(index.CheckIndex());
         }
 
         public void SelectAssembler(int index)
         {
             Tab.TabControlByName<MyGuiControlCombobox>("AssemblersCombobox")
-                    .SelectItemByIndex(index);
+                    .SelectItemByIndex(index.CheckIndex());
         }
 
         public void EnterBlueprintSearchBox(string text)

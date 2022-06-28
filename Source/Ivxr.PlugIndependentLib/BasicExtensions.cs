@@ -23,5 +23,15 @@ namespace Iv4xr.PluginLib
 
             return value;
         }
+
+        public static int CheckIndex(this int value, int maxValue = int.MaxValue)
+        {
+            if (value < 0 || value > maxValue)
+            {
+                throw new ArgumentOutOfRangeException($"{value} out of bounds [0, {maxValue}].");
+            }
+
+            return value;
+        }
     }
 }

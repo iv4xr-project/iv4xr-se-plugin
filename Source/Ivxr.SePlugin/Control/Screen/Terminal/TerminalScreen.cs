@@ -26,7 +26,7 @@ namespace Iv4xr.SePlugin.Control.Screen.Terminal
 
         public void SelectTab(int index)
         {
-            Screen.GetTabs().SelectedPage = index;
+            Screen.GetTabs().SelectedPage = index.CheckIndex();;
         }
 
         public IInventoryTab Inventory { get; } = new InventoryTab();

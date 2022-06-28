@@ -37,12 +37,12 @@ namespace Iv4xr.SePlugin.Control.Screen
 
         public void SelectTab(int index)
         {
-            Tabs.SelectedPage = index;
+            Tabs.SelectedPage = index.CheckIndex();
         }
 
         public void SelectGame(int index)
         {
-            GamesTable.SelectedRowIndex = index;
+            GamesTable.SelectedRowIndex = index.CheckIndex();
             Screen.CallMethod<object>("OnTableItemSelected", new object[]
             {
                 GamesTable, new MyGuiControlTable.EventArgs()

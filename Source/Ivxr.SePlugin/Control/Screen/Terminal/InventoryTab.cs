@@ -56,7 +56,7 @@ namespace Iv4xr.SePlugin.Control.Screen.Terminal
 
             public void SelectItem(int index)
             {
-                grid.SelectedIndex = index;
+                grid.SelectedIndex = index.CheckIndex();
             }
 
             public void ClickSelectedItem()
@@ -126,7 +126,7 @@ namespace Iv4xr.SePlugin.Control.Screen.Terminal
 
             public void SelectItem(int index)
             {
-                grid.SelectedIndex = index;
+                grid.SelectedIndex = index.CheckIndex();
             }
 
             public void ClickSelectedItem()

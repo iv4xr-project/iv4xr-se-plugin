@@ -55,7 +55,7 @@ namespace Iv4xr.SePlugin.Control.Screen
 
         public void DoubleClickWorld(int index)
         {
-            Browser.SelectedRowIndex = index;
+            Browser.SelectedRowIndex = index.CheckIndex();
             MyGuiControlTable browserAsTable = Browser;
             browserAsTable.CallMethod<object>("OnItemDoubleClicked",
                 new object[]
