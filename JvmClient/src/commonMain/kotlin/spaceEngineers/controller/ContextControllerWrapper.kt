@@ -1,6 +1,7 @@
 package spaceEngineers.controller
 
 import spaceEngineers.model.CharacterObservation
+import spaceEngineers.model.ExtendedEntity
 import spaceEngineers.model.FloatingObject
 import spaceEngineers.model.Observation
 import spaceEngineers.model.extensions.allBlocks
@@ -29,6 +30,10 @@ class ContextControllerWrapper(
     override val observer: Observer = object: Observer {
         override fun observe(): CharacterObservation {
             return spaceEngineers.observer.observe().apply(::addToHistory)
+        }
+
+        override fun observeControlledEntity(): ExtendedEntity {
+            return spaceEngineers.observer.observeControlledEntity()
         }
 
         override fun observeBlocks(): Observation {

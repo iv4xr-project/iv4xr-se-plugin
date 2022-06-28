@@ -46,7 +46,9 @@ namespace Iv4xr.SePlugin.Control
         {
             if (GetCharacterByIdOrNull(characterId) == null)
             {
-                throw new InvalidOperationException($"Character ({characterId}) not found! Only found: {FoundCharacterIds()}");
+                throw new InvalidOperationException(
+                    $"Character ({characterId}) not found! Only found: {FoundCharacterIds()}"
+                    );
             }
         }
 
@@ -114,7 +116,9 @@ namespace Iv4xr.SePlugin.Control
         private MyCharacter GetCharacterById(long characterId)
         {
             return GetCharacterByIdOrNull(characterId) ??
-                   throw new InvalidOperationException($"Character ({characterId}) not found! Only found: {FoundCharacterIds()}");
+                   throw new InvalidOperationException(
+                       $"Character ({characterId}) not found! Only found: {FoundCharacterIds()}"
+                       );
         }
 
         public MyCharacter Character
@@ -134,7 +138,7 @@ namespace Iv4xr.SePlugin.Control
 
         private void Init()
         {
-            if (!Initialized())
+            if (!Initialized() && !DebugInfoCreator.Create().IsDedicated)
             {
                 SwitchToMainCharacter();
             }
@@ -146,6 +150,7 @@ namespace Iv4xr.SePlugin.Control
             {
                 throw new InvalidOperationException("Session is not ready!");
             }
+
             var session = MySession.Static
                     .ThrowIfNull("MySession.Static");
             var players = session.Players

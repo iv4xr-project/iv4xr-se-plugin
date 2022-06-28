@@ -39,6 +39,7 @@ namespace Iv4xr.SpaceEngineers
     public interface IObserver
     {
         CharacterObservation Observe();
+        Entity ObserveControlledEntity();
         Observation ObserveBlocks();
         Observation ObserveNewBlocks();
         List<CharacterObservation> ObserveCharacters();

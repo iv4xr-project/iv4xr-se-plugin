@@ -3,6 +3,7 @@ using Iv4xr.SpaceEngineers.WorldModel;
 using Sandbox.Game.Entities;
 using Sandbox.Game.Entities.Character;
 using Sandbox.Game.Entities.Character.Components;
+using Sandbox.Game.GameSystems;
 using Sandbox.Game.Weapons;
 using Sandbox.Game.World;
 
@@ -46,6 +47,8 @@ namespace Iv4xr.SePlugin.Control
                 BootsState = GetBootState(character),
                 RelativeDampeningEntity = character.RelativeDampeningEntity.ToEntityOrNull(),
                 MovementFlags = (CharacterMovementFlags)((byte)character.MovementFlags),
+                JetpackControlThrust = character.JetpackComp.GetInstanceProperty<MyEntityThrustComponent>("ThrustComp").ControlThrust.ToPlain(),
+                JetpackFinalThrust = character.JetpackComp.FinalThrust.ToPlain(),
             };
             character.ToEntity(result);
             result.Id = character.CharacterId().ToString();

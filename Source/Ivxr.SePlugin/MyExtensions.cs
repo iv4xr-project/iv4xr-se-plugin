@@ -287,10 +287,14 @@ namespace Iv4xr.SePlugin
             var orientation = entity.PositionComp.GetOrientation();
             var result = newEntity ?? new Entity();
             result.Id = entity.EntityId.ToString();
+            if (entity is MyCharacter character)
+            {
+                result.Id = character.CharacterId().ToString();
+            }
             result.Position = entity.PositionComp.GetPosition().ToPlain();
             result.OrientationForward = orientation.Forward.ToPlain();
             result.OrientationUp = orientation.Up.ToPlain();
-            result.DisplayName = entity.DisplayName;
+            result.DisplayName = entity.DisplayName ?? entity.GetType().Name;
             result.Name = entity.Name;
             result.Velocity = entity.Physics?.LinearVelocity.ToPlain() ?? new PlainVec3D();
             result.InScene = entity.InScene;

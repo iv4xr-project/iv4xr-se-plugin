@@ -80,6 +80,7 @@ interface Character {
 
 interface Observer {
     fun observe(): CharacterObservation
+    fun observeControlledEntity(): ExtendedEntity
     fun observeBlocks(): Observation
     fun observeNewBlocks(): Observation
     fun observeCharacters(): List<CharacterObservation>

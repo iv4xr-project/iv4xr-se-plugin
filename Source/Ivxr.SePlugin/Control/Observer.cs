@@ -35,6 +35,11 @@ namespace Iv4xr.SePlugin.Control
             return m_lowLevelObserver.GetCharacterObservation();
         }
 
+        public Entity ObserveControlledEntity()
+        {
+            return m_lowLevelObserver.GetEntityObservation();
+        }
+
         public Observation ObserveBlocks()
         {
             return m_lowLevelObserver.GetBlocks();

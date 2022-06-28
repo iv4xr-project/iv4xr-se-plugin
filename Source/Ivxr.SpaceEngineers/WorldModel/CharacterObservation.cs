@@ -25,5 +25,7 @@ namespace Iv4xr.SpaceEngineers.WorldModel
         public BootsState BootsState;
         public Entity RelativeDampeningEntity;
         public CharacterMovementFlags MovementFlags;
+        public PlainVec3D JetpackControlThrust;
+        public PlainVec3D JetpackFinalThrust;
     }
 }
