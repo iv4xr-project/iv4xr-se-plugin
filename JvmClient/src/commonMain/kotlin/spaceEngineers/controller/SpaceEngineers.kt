@@ -34,6 +34,7 @@ interface Session {
     fun disconnect()
     fun exitGame()
     fun exitToMainMenu()
+    fun info(): SessionInfo
 }
 
 interface Character {

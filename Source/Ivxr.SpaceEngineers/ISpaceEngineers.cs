@@ -34,6 +34,8 @@ namespace Iv4xr.SpaceEngineers
         
         [Role(Game)]
         void ExitToMainMenu();
+
+        SessionInfo Info();
     }
     
     public interface IObserver

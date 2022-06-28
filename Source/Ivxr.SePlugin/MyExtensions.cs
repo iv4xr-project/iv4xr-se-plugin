@@ -300,5 +300,33 @@ namespace Iv4xr.SePlugin
             result.InScene = entity.InScene;
             return result;
         }
+
+        public static SessionSettings ToSessionSettings(this MyObjectBuilder_SessionSettings settings)
+        {
+            return new SessionSettings()
+            {
+                GameMode = (GameModeEnum)settings.GameMode,
+                InfiniteAmmo = settings.InfiniteAmmo,
+            };
+        }
+
+        public static SessionInfo ToSessionInfo(this MySession session)
+        {
+            return new SessionInfo()
+            {
+                Name = session.Name,
+                CurrentPath = session.CurrentPath,
+                IsAdminMenuEnabled = session.IsAdminMenuEnabled,
+                IsRunningExperimental = session.IsRunningExperimental,
+                Ready =  session.Ready,
+                IsUnloading = session.IsUnloading,
+                StreamingInProgress = session.StreamingInProgress,
+                IsCopyPastingEnabled = session.IsCopyPastingEnabled,
+                IsServer = session.IsServer,
+                IsPausable = session.IsPausable(),
+                GameDefinition = session.GameDefinition.ToDefinitionId(),
+                Settings = session.Settings.ToSessionSettings(),
+            };
+        }
     }
 }
