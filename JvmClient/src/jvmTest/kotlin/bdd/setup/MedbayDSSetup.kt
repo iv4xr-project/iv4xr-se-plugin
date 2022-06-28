@@ -3,6 +3,7 @@ package bdd.setup
 import kotlinx.coroutines.delay
 import spaceEngineers.controller.connection.ConnectionManager
 import spaceEngineers.controller.connection.ConnectionSetup
+import spaceEngineers.util.whileWithTimeout
 import testhelp.hideUndeclaredThrowableException
 
 
@@ -25,7 +26,7 @@ class MedbayDSSetup(
     }
 
     override fun afterAll() {
-        //exitToMainMenu()
+        exitToMainMenu()
         dedicatedServerManager.close()
         connectionManager.close()
     }
@@ -58,21 +59,14 @@ class MedbayDSSetup(
             val focusedScreen = screens.focusedScreen()
             if (focusedScreen == "MainMenu") {
                 connectClientsDirectly()
-                ensureEveryoneIsDS()
             } else if (focusedScreen == "Loading") {
-                error("Loading!")
+                whileWithTimeout(20_000L) { screens.focusedScreen() != "Loading" }
+                pause()
             } else {
 
             }
         }
+        ensureEveryoneIsSameSession()
         prepareCharacter()
     }
-
-    private fun ensureEveryoneIsDS() = observers {
-        if (!admin.debugInfo().isDedicated) {
-            "Observer not dedicated when supposed to be DS!"
-        }
-    }
-
-
 }

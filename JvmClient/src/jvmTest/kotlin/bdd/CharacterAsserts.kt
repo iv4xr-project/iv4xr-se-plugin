@@ -258,11 +258,6 @@ class CharacterAsserts : AbstractMultiplayerSteps() {
         }
     }
 
-    @Then("Character velocity direction is up.")
-    fun character_velocity_direction_is_up() = observers {
-
-    }
-
     @Then("Character is jumping.")
     fun character_is_jumping() {
         // jumping is actually for a very short time, the rest is falling (even if it's still going up)
@@ -289,8 +284,12 @@ class CharacterAsserts : AbstractMultiplayerSteps() {
     @Then("dampeners are off.")
     fun dampeners_are_off() {
         mainClient {
-            assertFalse(screens.gamePlay.data().hud.statsWrapper.dampenersOn)
-            assertFalse(observer.observe().dampenersOn)
+            repeatUntilSuccess {
+                assertFalse(screens.gamePlay.data().hud.statsWrapper.dampenersOn)
+            }
+            repeatUntilSuccess {
+                assertFalse(observer.observe().dampenersOn)
+            }
         }
         observers {
             //assertFalse(observer.observe().dampenersOn)

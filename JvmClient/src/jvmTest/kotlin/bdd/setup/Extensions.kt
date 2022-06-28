@@ -1,38 +1,37 @@
 package bdd.setup
 
-import bdd.waitForMedicalScreen
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import spaceEngineers.controller.SpaceEngineers
 import spaceEngineers.controller.connection.AppType
-import spaceEngineers.model.Vec3F
-import kotlin.random.Random
+import spaceEngineers.controller.extensions.waitForScreen
+import spaceEngineers.model.canUse
+import spaceEngineers.util.whileWithTimeout
+import kotlin.test.assertEquals
 
-suspend fun SpaceEngineers.dieAndConfirm(delayMs: Long = 500L) {
-    delay(delayMs)
+suspend fun SpaceEngineers.dieAndConfirm(delayMs: Long = 100L) {
     admin.character.die()
     delay(delayMs)
     val fs = screens.focusedScreen()
     check(fs == "MessageBox") { fs }
     screens.messageBox.pressYes()
-    delay(delayMs)
-
-    //check(admin.observer.observeCharacters().isEmpty())
 }
 
+fun ConnectionManagerUser.ensureEveryoneIsSameSession() {
+    val sessionInfos = all {
+        session.info()
+    }
+    assertEquals(sessionInfos.distinctBy { it.name }.size, 1)
+    assertEquals(sessionInfos.distinctBy { it.settings }.size, 1)
+}
 
 fun ConnectionManagerUser.prepareCharacter() {
     //TODO: ensure we are in the correct scenario
     games {
         when (val focusedScreen = screens.focusedScreen()) {
             "GamePlay" -> {
-                //val id = mainClient { admin.character.mainCharacterId() }
-
-
                 dieAndConfirm()
-
                 waitForMedicalScreen()
-                pause()
             }
             "Medicals" -> {
             }
@@ -51,13 +50,11 @@ fun ConnectionManagerUser.connectClientsDirectly(waitForMedical: Boolean = true)
     clients {
         //TODO: if not in main menu, exit to it rather than failing
         val process = connectionManager.admin.gameProcess
-        smallPause()
         screens.mainMenu.joinGame()
-        smallPause()
+        waitForJoinGameScreen()
         screens.joinGame.directConnect()
-        smallPause()
+        waitForServerConnectScreen()
         screens.serverConnect.enterAddress("${process.address}:27016")
-        smallPause()
         screens.serverConnect.connect()
         screens.waitUntilTheGameLoaded()
         if (waitForMedical) {
@@ -106,18 +103,37 @@ fun ConnectionManagerUser.createLobbyGame(scenarioId: String, filterSaved: Boole
 fun ConnectionManagerUser.connectToFirstFriendlyGame() {
     clients {
         screens.mainMenu.joinGame()
-        smallPause()
-        screens.joinGame.selectTab(5)
-        smallPause()
-
-        screens.joinGame.selectGame(0)
-
-        pause()
-        screens.joinGame.joinWorld()
+        waitForJoinGameScreen()
+        with(screens.joinGame) {
+            selectTab(5)
+            whileWithTimeout {
+                data().selectedTab != 5 || data().games.isEmpty()
+            }
+            selectGame(0)
+            whileWithTimeout { !data().joinWorldButton.canUse }
+            joinWorld()
+        }
         smallPause()
         screens.waitUntilTheGameLoaded()
     }
     runBlocking {
         pause()
     }
+}
+
+suspend fun SpaceEngineers.waitForMedicalScreen() {
+    screens.waitForScreen(timeoutMs = 40_321, screenName = "Medicals")
+}
+
+suspend fun SpaceEngineers.waitForJoinGameScreen() {
+    screens.waitForScreen(timeoutMs = 40_322, screenName = "JoinGame")
+}
+
+suspend fun SpaceEngineers.waitForServerConnectScreen() {
+    screens.waitForScreen(timeoutMs = 40_323, screenName = "ServerConnect")
+}
+
+
+suspend fun SpaceEngineers.waitForGameplay() {
+    screens.waitForScreen(timeoutMs = 60_001, screenName = "GamePlay")
 }

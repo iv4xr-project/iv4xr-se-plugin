@@ -74,8 +74,13 @@ namespace Iv4xr.SePlugin.Control.Screen
         {
             return new JoinGameData()
             {
-                SelectedTab = Tabs.Pages[Tabs.SelectedPage].Name.Replace("Page", ""),
+                SelectedTabName = Tabs.Pages[Tabs.SelectedPage].Name.Replace("Page", ""),
+                SelectedTab = Tabs.SelectedPage,
                 Games = ListedGames(),
+                ServerDetailsButton = Screen.Button("m_detailsButton").ToControlBase(),
+                DirectConnectButton = Screen.Button("m_directConnectButton").ToControlBase(),
+                RefreshButton = Screen.Button("m_refreshButton").ToControlBase(),
+                JoinWorldButton = Screen.Button("m_joinButton").ToControlBase(),
             };
         }
     }

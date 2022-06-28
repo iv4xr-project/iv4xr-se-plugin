@@ -1,13 +1,10 @@
 package spaceEngineers.controller.extensions
 
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.withTimeout
 import spaceEngineers.controller.Screens
+import spaceEngineers.util.whileWithTimeout
 
-suspend fun Screens.waitForScreen(timeoutMs: Long = 60_000, singleDelay: Long = 500, screenName: String) {
-    withTimeout(timeoutMs) {
-        while (focusedScreen() != screenName) {
-            delay(singleDelay)
-        }
+suspend fun Screens.waitForScreen(timeoutMs: Long = 60_000, singleDelay: Long = 50, screenName: String) {
+    whileWithTimeout(timeoutMs, singleDelay) {
+        focusedScreen() != screenName
     }
 }

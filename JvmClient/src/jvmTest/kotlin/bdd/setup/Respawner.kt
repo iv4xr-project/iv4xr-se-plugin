@@ -4,7 +4,6 @@ import bdd.repetitiveassert.RepetitiveAssertConfig
 import bdd.repetitiveassert.RepetitiveAssertTestCase
 import bdd.repetitiveassert.SimpleRepetitiveAssertTestCase
 import bdd.repetitiveassert.repeatUntilSuccess
-import bdd.waitForGameplay
 import kotlinx.coroutines.delay
 import spaceEngineers.controller.ContextControllerWrapper
 import spaceEngineers.controller.SocketReaderWriterException

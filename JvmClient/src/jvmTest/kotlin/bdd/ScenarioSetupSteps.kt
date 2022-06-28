@@ -60,13 +60,6 @@ fun after() {
     testSetup.afterScenario()
 }
 
-suspend fun SpaceEngineers.waitForMedicalScreen() {
-    screens.waitForScreen(timeoutMs = 40_321, screenName = "Medicals")
-}
-
-suspend fun SpaceEngineers.waitForGameplay() {
-    screens.waitForScreen(timeoutMs = 60_001, screenName = "GamePlay")
-}
 
 class ScenarioSetupSteps : AbstractMultiplayerSteps() {
 
