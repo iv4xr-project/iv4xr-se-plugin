@@ -9,12 +9,13 @@ import testhelp.hideUndeclaredThrowableException
 
 interface ConnectionManagerUser {
     val connectionManager: ConnectionManager
-    fun observers(block: suspend ContextControllerWrapper.() -> Unit): List<Unit>
+    fun <T> observers(block: suspend ContextControllerWrapper.() -> T): List<T>
     fun <T> mainClient(block: suspend ContextControllerWrapper.() -> T): T
-    fun nonMainClientGameObservers(block: suspend ContextControllerWrapper.() -> Unit): List<Unit>
-    fun clients(block: suspend ContextControllerWrapper.() -> Unit): List<Unit>
-    fun games(block: suspend ContextControllerWrapper.() -> Unit): List<Unit>
-    fun admin(block: suspend ContextControllerWrapper.() -> Unit)
+    fun <T> nonMainClientGameObservers(block: suspend ContextControllerWrapper.() -> T): List<T>
+    fun <T> clients(block: suspend ContextControllerWrapper.() -> T): List<T>
+    fun <T> all(block: suspend ContextControllerWrapper.() -> T): List<T>
+    fun <T> games(block: suspend ContextControllerWrapper.() -> T): List<T>
+    fun <T> admin(block: suspend ContextControllerWrapper.() -> T): T
 
     suspend fun smallPause()
 
@@ -28,29 +29,33 @@ class GlobalConnectionManagerUser() : ConnectionManagerUser {
     override val connectionManager: ConnectionManager
         get() = globalCm
 
-    override fun observers(block: suspend ContextControllerWrapper.() -> Unit) = hideUndeclaredThrowableException {
+    override fun <T> observers(block: suspend ContextControllerWrapper.() -> T) = hideUndeclaredThrowableException {
         connectionManager.observers(block)
     }
 
-    override fun <T> mainClient(block: suspend ContextControllerWrapper.() -> T): T = hideUndeclaredThrowableException {
+    override fun <T> mainClient(block: suspend ContextControllerWrapper.() -> T) = hideUndeclaredThrowableException {
         connectionManager.mainClient(block)
     }
 
-    override fun nonMainClientGameObservers(block: suspend ContextControllerWrapper.() -> Unit) =
+    override fun <T> nonMainClientGameObservers(block: suspend ContextControllerWrapper.() -> T) =
         hideUndeclaredThrowableException {
             connectionManager.nonMainClientGameObservers(block)
         }
 
 
-    override fun clients(block: suspend ContextControllerWrapper.() -> Unit) = hideUndeclaredThrowableException {
+    override fun <T> clients(block: suspend ContextControllerWrapper.() -> T) = hideUndeclaredThrowableException {
         connectionManager.clients(block)
     }
 
-    override fun games(block: suspend ContextControllerWrapper.() -> Unit) = hideUndeclaredThrowableException {
+    override fun <T> all(block: suspend ContextControllerWrapper.() -> T) = hideUndeclaredThrowableException {
+        connectionManager.all(block)
+    }
+
+    override fun <T> games(block: suspend ContextControllerWrapper.() -> T) = hideUndeclaredThrowableException {
         connectionManager.games(block)
     }
 
-    override fun admin(block: suspend ContextControllerWrapper.() -> Unit) = hideUndeclaredThrowableException {
+    override fun <T> admin(block: suspend ContextControllerWrapper.() -> T) = hideUndeclaredThrowableException {
         connectionManager.admin(block)
     }
 
@@ -68,32 +73,35 @@ class GlobalConnectionManagerUser() : ConnectionManagerUser {
 }
 
 
-
 class RealConnectionManagerUser(override val connectionManager: ConnectionManager) : ConnectionManagerUser {
 
-    override fun observers(block: suspend ContextControllerWrapper.() -> Unit) = hideUndeclaredThrowableException {
-        connectionManager.observers(block)
-    }
+    override fun <T> observers(block: suspend ContextControllerWrapper.() -> T) =
+        hideUndeclaredThrowableException {
+            connectionManager.observers(block)
+        }
 
-    override fun <T> mainClient(block: suspend ContextControllerWrapper.() -> T): T = hideUndeclaredThrowableException {
+    override fun <T> mainClient(block: suspend ContextControllerWrapper.() -> T) = hideUndeclaredThrowableException {
         connectionManager.mainClient(block)
     }
 
-    override fun nonMainClientGameObservers(block: suspend ContextControllerWrapper.() -> Unit) =
+    override fun <T> nonMainClientGameObservers(block: suspend ContextControllerWrapper.() -> T) =
         hideUndeclaredThrowableException {
             connectionManager.nonMainClientGameObservers(block)
         }
 
-
-    override fun clients(block: suspend ContextControllerWrapper.() -> Unit) = hideUndeclaredThrowableException {
+    override fun <T> clients(block: suspend ContextControllerWrapper.() -> T) = hideUndeclaredThrowableException {
         connectionManager.clients(block)
     }
 
-    override fun games(block: suspend ContextControllerWrapper.() -> Unit) = hideUndeclaredThrowableException {
+    override fun <T> all(block: suspend ContextControllerWrapper.() -> T) = hideUndeclaredThrowableException {
+        connectionManager.all(block)
+    }
+
+    override fun <T> games(block: suspend ContextControllerWrapper.() -> T) = hideUndeclaredThrowableException {
         connectionManager.games(block)
     }
 
-    override fun admin(block: suspend ContextControllerWrapper.() -> Unit) = hideUndeclaredThrowableException {
+    override fun <T> admin(block: suspend ContextControllerWrapper.() -> T) = hideUndeclaredThrowableException {
         connectionManager.admin(block)
     }
 

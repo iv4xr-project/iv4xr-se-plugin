@@ -45,15 +45,19 @@ class ConnectionManager(
         connectionSetup.games.map { connectionsById.getValue(it.createId()) }
     }
 
+    val all by lazy {
+        connectionsById.values
+    }
+
     suspend fun <T> mainClient(block: suspend ContextControllerWrapper.() -> T): T {
         return block(mainClient.spaceEngineers)
     }
 
-    suspend fun admin(block: suspend ContextControllerWrapper.() -> Unit) {
-        block(admin.spaceEngineers)
+    suspend fun <T> admin(block: suspend ContextControllerWrapper.() -> T): T {
+        return block(admin.spaceEngineers)
     }
 
-    private suspend fun List<ProcessWithConnection>.parallelEach(block: suspend ContextControllerWrapper.() -> Unit) =
+    private suspend fun <T> Collection<ProcessWithConnection>.parallelEach(block: suspend ContextControllerWrapper.() -> T) =
         coroutineScope {
             this@parallelEach.map {
                 async {
@@ -62,12 +66,14 @@ class ConnectionManager(
             }.awaitAll()
         }
 
-    suspend fun clients(block: suspend ContextControllerWrapper.() -> Unit) = clients.parallelEach(block)
+    suspend fun <T> clients(block: suspend ContextControllerWrapper.() -> T) = clients.parallelEach(block)
 
-    suspend fun nonMainClientGameObservers(block: suspend ContextControllerWrapper.() -> Unit) =
+    suspend fun <T> all(block: suspend ContextControllerWrapper.() -> T) = all.parallelEach(block)
+
+    suspend fun <T> nonMainClientGameObservers(block: suspend ContextControllerWrapper.() -> T) =
         nonMainClientGameObservers.parallelEach(block)
 
-    suspend fun games(block: suspend ContextControllerWrapper.() -> Unit) = games.parallelEach {
+    suspend fun <T> games(block: suspend ContextControllerWrapper.() -> T): List<T> = games.parallelEach {
         try {
             spaceEngineers.admin.character.switch(spaceEngineers.admin.character.mainCharacterId())
         } catch (e: Exception) {
@@ -79,12 +85,12 @@ class ConnectionManager(
         block(this)
     }
 
-    suspend fun observers(block: suspend ContextControllerWrapper.() -> Unit) = observers.parallelEach {
+    suspend fun <T> observers(block: suspend ContextControllerWrapper.() -> T): List<T> = observers.parallelEach {
         try {
             mainClient.spaceEngineers.admin.character.localCharacterId()?.let {
                 spaceEngineers.admin.character.switch(it)
             }
-        } catch(e: Exception) {
+        } catch (e: Exception) {
 
         }
         block(this)
