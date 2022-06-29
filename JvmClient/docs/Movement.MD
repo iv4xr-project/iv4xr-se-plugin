@@ -1,23 +1,22 @@
-# Moving character
+# Moving the character
 
 ## Basic movement API
 
-- Method [moveAndRotate]( https://iv4xr-project.github.io/iv4xr-se-plugin/space-engineers-api/spaceEngineers.controller/-character/move-and-rotate.html)
-accepts movement vector. Vector represents direction.
-- It's value defines type (speed) of movement. If it's less than 0.4, it is slow movement. If less than or equal to 1.6,
-  it is walk. If over 1.6, it is sprint. This is relevant when actually walking (ex. not using jetpack).
-- Use convenience extension methods `normalizeAsWalk`, `normalizeAsRun`, `normalizeAsSprint` to adjust vector size to
+- The method [moveAndRotate]( https://iv4xr-project.github.io/iv4xr-se-plugin/space-engineers-api/spaceEngineers.controller/-character/move-and-rotate.html)
+accepts a movement vector (among other parameters). The movement vector represents direction and speed.
+- The size of the vector defines type (speed) of the movement. If it's less than 0.4, it is a slow walk. If less than or equal to 1.6,
+  it is run (game default). If over 1.6, it is sprint. This is relevant when actually walking (not using jetpack).
+- Use convenience extension methods `normalizeAsWalk`, `normalizeAsRun`, `normalizeAsSprint` to adjust a vector size to
   your needs.
 - Check [CharacterMovementType](https://iv4xr-project.github.io/iv4xr-se-plugin/space-engineers-api/spaceEngineers.model/-character-movement-type/index.html)
-for more information and to check constants.
-- There is also movement while in crouch.
-- Sprint speed only works when walking forward.
-- This method only works on character, doesn't work when moving vehicles.
+for more information and to see the relevant constants.
+- Movement is possible even while crouching.
+- The sprint speed only works when running forward.
+- This method only works on the character, doesn't work when controlling vehicles.
 
 ## Movement types and speed
 
-There are other movement types on Space Engineers, so this is not full list of possibilities. Following table describes
-differences between movements and their speeds. Sprint speed is 10 only when walking forward.
+There are other movement types in Space Engineers, so this is not a full list of possibilities. The following table list movement types, their speeds and what size the movement vector should be to choose this type of movement. The sprint speed is 10 m/s only when moving forward.
 
 | Movement type | Max speed (m/s) | Movement vector threshold |
 | --- | --- | --- |
@@ -50,7 +49,7 @@ Sometimes the values are still slightly off, especially when the scenario is loa
   for rotating in specific directions.
 - The `roll` parameter is used for rotating in the remaining Z axis (keys `Q` and `E`). Use -1 or 1 values.
 
-TODO: Explore how roll and rotation vector size affects rotation.
+We didn't explore how roll and rotation vector size affects rotation.
 
 ## Input API
 
@@ -58,17 +57,17 @@ TODO: Explore how roll and rotation vector size affects rotation.
 API allows recording of keyboard and mouse input from the player and saving it into snapshots per every game frame.
 Those snapshots can then be sent to the game and emulate this input.
 
-Inputs can be any keys that the game uses so this API is potentially very powerful to do things otherwise impossible by
-current API.
+Inputs can be any keys that the game uses so this API is potentially very general and allows to do things otherwise impossible by
+the current API.
 
 
 ## Wrapper around moveAndRotate and Input API
 
-Both moveAndRotate and input API can be used to same things - moving character, but their API is very different.
+Both moveAndRotate and input API can be used to same things – moving the character, but these APIs are very different.
 
 A wrapper
 interface [CharacterMovement](https://iv4xr-project.github.io/iv4xr-se-plugin/space-engineers-api/spaceEngineers.movement/-character-movement/index.html)
-has been created to unify those 2 methods for movement. This wrapper uses enums to specify directions and orientations.
+has been created to unify those two methods for movement. This wrapper uses enums to specify directions and orientations.
 
 [ReplayMovement](https://iv4xr-project.github.io/iv4xr-se-plugin/space-engineers-api/spaceEngineers.movement/-replay-movement/index.html)
 implementation moves character by sending key presses emulating keyboard movement.
