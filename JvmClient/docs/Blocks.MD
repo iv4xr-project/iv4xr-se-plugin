@@ -1,14 +1,15 @@
 # Blocks
 
-Blocks are the main concept of the game. Some data and behaviour is better documented to avoid confusion. Some of these
-concepts are based on observations and are not verified by code so if you find inconsistency in anything, please raise
+Blocks are the main concept of the game and the topic can get quite complicated.
+Some of these descriptions are based on observations only and are not verified in the code
+so if you find any inconsistency, please report
 an [issue](https://github.com/iv4xr-project/iv4xr-se-plugin/issues/new).
 
 ## DefinitionId, id
 
-Block type itself has a unique combination of id and type (represented by
+The block type itself has a unique combination of id and type (represented by
 the [DefinitionId](https://iv4xr-project.github.io/iv4xr-se-plugin/space-engineers-api/spaceEngineers.model/-definition-id/index.html)
-class). Blocks are the same type, if they have same `DefinitionId`.
+class). Blocks are the same type, if they have the same `DefinitionId`.
 
 Created block instance has its own ID (this is different id from block definition id). This ID is a unique random
 integer (the current implementation exposes an internal block ID, and the exact guarantees of uniqueness are not known –

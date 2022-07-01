@@ -1,4 +1,4 @@
-# Using plugin in SE multiplayer
+# Using the plugin in SE multiplayer
 
 ## Overview
 
@@ -9,10 +9,10 @@ the connection for every plugin separately.
 
 There are 2 basic types of multiplayer in SE:
 
-- Lobby - game is created by the game itself and one of the players is the "host" of the game.
-- Dedicated server (DS) - game is created by the dedicated server. Dedicated server is not involved as player.
+- Lobby – a game is created by the local game process and one of the players is the "host" of the game.
+- Dedicated server (DS) – a game is created by the dedicated server. Dedicated server is not involved as a player.
 
-The dedicated server and single game instance can run both on the same machine. Just make sure you change the plugin
+The dedicated server and a single game instance can run both on the same machine. Just make sure you change the plugin
 port on either of them.
 
 ## Setup
@@ -52,9 +52,8 @@ C:\windows\system32/taskkill /IM SpaceEngineersDedicated.exe /F
 
 ## Admin API
 
-Admin commands work only on the host, who created the game, which is either a lobby host or a dedicated server. Calling
-admin commands on a game client will either raise exception or show unexpected results (we are trying to put exceptions
-everywhere).
+Admin commands work only on the host who created the game, which is either a lobby host or a dedicated server. Calling
+admin commands on a game client will either raise exception or show unexpected results (we are trying to raise exceptions wherever appropriate).
 
 ## Screen API
 
