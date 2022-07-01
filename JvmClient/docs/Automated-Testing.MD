@@ -1,4 +1,4 @@
-# Automatic testing
+# Automated testing
 
 ## Overview
 
