@@ -73,7 +73,7 @@ This section links to specific, more detailed parts of the documentation which d
 - Using the plugin in [multiplayer](JvmClient/docs/Multiplayer.MD).
 - [Block ownership](JvmClient/docs/Ownership.MD).
 - [Multiple characters](JvmClient/docs/Multiple-Characters.MD) in a single game.
-- Using the plugin for [automatic testing](JvmClient/docs/Automatic-Testing.MD).
+- Using the plugin for [automated testing](JvmClient/docs/Automated-Testing.MD).
 - [JvmClient](JvmClient/README.md) in this repository is a client side implementation of the interface in Kotlin.
 
 ## Architecture Overview
