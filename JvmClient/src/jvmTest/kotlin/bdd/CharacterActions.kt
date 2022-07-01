@@ -148,7 +148,8 @@ class CharacterActions : AbstractMultiplayerSteps() {
 
     @When("Character equips {string}.")
     fun character_equips(tool: String) = mainClient {
-        val toolbarLocation = items.toolbar().findLocation(tool) ?: error("Item $tool not found in the toolbar!")
+        val toolbarLocation = items.toolbar()
+            .let { toolbar -> toolbar.findLocation(DefinitionId.parse(tool)) ?: error("Item $tool not found in the toolbar, found: ${toolbar.items.filterNotNull().map { it.id }}") }
         items.equip(toolbarLocation)
         pause()
     }

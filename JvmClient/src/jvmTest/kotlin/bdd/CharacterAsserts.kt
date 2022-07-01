@@ -1,6 +1,7 @@
 package bdd
 
 import bdd.repetitiveassert.repeatUntilSuccess
+import io.cucumber.java.PendingException
 import io.cucumber.java.en.And
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
@@ -425,5 +426,14 @@ class CharacterAsserts : AbstractMultiplayerSteps() {
             assertNull(it, "Item is NOT supposed to float around: ${it?.itemDefinition?.definitionId}")
         }
     }
+
+    @Then("Character holds {string}.")
+    fun character_holds(definitionIdStr: String) = mainClient {
+        val definitionId = DefinitionId.parse(definitionIdStr)
+        val observation = observer.observe()
+        assertNotNull(observation.currentWeapon, "No weapon equipped at all")
+        assertEquals(definitionId, observation.currentWeapon?.definitionId)
+    }
+
 
 }
