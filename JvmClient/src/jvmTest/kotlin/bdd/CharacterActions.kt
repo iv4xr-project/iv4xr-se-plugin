@@ -11,6 +11,7 @@ import io.cucumber.java.en.When
 import kotlinx.coroutines.delay
 import spaceEngineers.controller.extensions.blockingMoveForwardByDistance
 import spaceEngineers.controller.extensions.grindDownToPercentage
+import spaceEngineers.controller.extensions.toNullIfNegative1
 import spaceEngineers.controller.extensions.torchBackToMax
 import spaceEngineers.model.*
 import spaceEngineers.model.CharacterMovement
@@ -229,5 +230,20 @@ class CharacterActions : AbstractMultiplayerSteps() {
     @When("Character turns on relative dampeners.")
     fun character_turns_on_relative_dampeners() = mainClient {
         character.turnOnRelativeDampeners()
+    }
+
+    @When("Character drops {string} from the inventory.")
+    fun character_drops_from_the_inventory(definitionIdStr: String) = mainClient {
+        val definitionId = DefinitionId.parse(definitionIdStr)
+        observer.observe().inventory.items.indexOfFirst { it.id == definitionId }.toNullIfNegative1()
+            ?: error("Item $definitionId not found in inventory")
+        character.showInventory()
+        with(screens.terminal.inventory) {
+            val firstLeftInventory = this.data().leftInventories.first()
+            val itemIndex = firstLeftInventory.items.indexOfFirst { it.id == definitionId }.toNullIfNegative1()
+                ?: error("Item $definitionId not found in inventory (2)")
+            left.selectItem(itemIndex)
+            dropSelected()
+        }
     }
 }

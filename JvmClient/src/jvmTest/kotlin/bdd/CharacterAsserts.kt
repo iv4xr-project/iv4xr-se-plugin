@@ -401,4 +401,29 @@ class CharacterAsserts : AbstractMultiplayerSteps() {
             assertEquals(observation.velocity.length(), relativeDampeningEntity.velocity.length(), 0.1f)
         }
     }
+
+    @Then("Item {string} is removed from the inventory.")
+    fun item_is_removed_from_the_inventory(definitionIdStr: String) = observers {
+        val definitionId = DefinitionId.parse(definitionIdStr)
+        observer.observe().inventory.items.firstOrNull { it.id == definitionId }.let {
+            assertNull(it, "Item is not supposed to be in the inventory: ${it?.id}")
+        }
+    }
+
+    @Then("There is item {string} floating around.")
+    fun there_is_item_floating_around(definitionIdStr: String) = observers {
+        val definitionId = DefinitionId.parse(definitionIdStr)
+        observer.observeFloatingObjects().firstOrNull { it.itemDefinition.definitionId == definitionId }.let {
+            assertNotNull(it, "Item is supposed to float around: ${it?.itemDefinition?.definitionId}")
+        }
+    }
+
+    @And("There is no item {string} floating around.")
+    fun there_is_no_item_floating_around(definitionIdStr: String) = observers {
+        val definitionId = DefinitionId.parse(definitionIdStr)
+        observer.observeFloatingObjects().firstOrNull { it.itemDefinition.definitionId == definitionId }.let {
+            assertNull(it, "Item is NOT supposed to float around: ${it?.itemDefinition?.definitionId}")
+        }
+    }
+
 }
