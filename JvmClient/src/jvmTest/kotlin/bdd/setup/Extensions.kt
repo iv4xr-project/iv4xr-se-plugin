@@ -38,6 +38,12 @@ fun ConnectionManagerUser.prepareCharacter() {
             "MainMenu" -> {
                 //connectClientsDirectly()
             }
+            "Terminal" -> {
+                screens.terminal.close()
+                delay(50)
+                dieAndConfirm()
+                waitForMedicalScreen()
+            }
             else -> {
                 error("Don't know what to do with screen $focusedScreen")
             }
