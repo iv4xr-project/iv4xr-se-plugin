@@ -25,6 +25,9 @@ interface ExtendedEntity : Entity {
 
     @SerialName("InScene")
     val inScene: Boolean
+
+    @SerialName("DefinitionId")
+    val definitionId: DefinitionId
 }
 
 
@@ -46,4 +49,6 @@ data class BaseEntity(
     override val displayName: String,
     @SerialName("InScene")
     override val inScene: Boolean,
+    @SerialName("DefinitionId")
+    override val definitionId: DefinitionId,
 ) : ExtendedEntity

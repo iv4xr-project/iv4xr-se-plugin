@@ -60,9 +60,14 @@ data class CharacterObservation(
     override val name: String,
     @SerialName("InScene")
     override val inScene: Boolean,
+    @SerialName("DefinitionId")
+    override val definitionId: DefinitionId,
 
     @SerialName("JetpackControlThrust")
     val jetpackControlThrust: Vec3F = Vec3F.ZERO,
     @SerialName("JetpackFinalThrust")
     val jetpackFinalThrust: Vec3F = Vec3F.ZERO,
+    @SerialName("CurrentWeapon")
+    val currentWeapon: BaseEntity? = null,
+
 ) : ExtendedEntity

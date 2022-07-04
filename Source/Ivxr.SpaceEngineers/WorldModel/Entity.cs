@@ -6,6 +6,7 @@
         public string Name;
         public string DisplayName;
         public PlainVec3D Velocity;
-        public bool InScene;    
+        public bool InScene;
+        public DefinitionId DefinitionId;
     }
 }

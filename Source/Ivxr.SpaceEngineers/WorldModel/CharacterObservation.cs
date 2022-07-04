@@ -27,5 +27,6 @@ namespace Iv4xr.SpaceEngineers.WorldModel
         public CharacterMovementFlags MovementFlags;
         public PlainVec3D JetpackControlThrust;
         public PlainVec3D JetpackFinalThrust;
+        public Entity CurrentWeapon;
     }
 }

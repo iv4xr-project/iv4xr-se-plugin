@@ -6,6 +6,7 @@ using Sandbox.Game.Entities.Character.Components;
 using Sandbox.Game.GameSystems;
 using Sandbox.Game.Weapons;
 using Sandbox.Game.World;
+using VRage.Game.Entity;
 
 namespace Iv4xr.SePlugin.Control
 {
@@ -49,10 +50,21 @@ namespace Iv4xr.SePlugin.Control
                 MovementFlags = (CharacterMovementFlags)((byte)character.MovementFlags),
                 JetpackControlThrust = character.JetpackComp.GetInstanceProperty<MyEntityThrustComponent>("ThrustComp").ControlThrust.ToPlain(),
                 JetpackFinalThrust = character.JetpackComp.FinalThrust.ToPlain(),
+                CurrentWeapon = WeaponEntity(character).ToEntityOrNull(),
             };
             character.ToEntity(result);
             result.Id = character.CharacterId().ToString();
             return result;
+        }
+
+        private MyEntity WeaponEntity(MyCharacter character)
+        {
+            if (character.CurrentWeapon is MyEntity weapon)
+            {
+                return weapon;
+            }
+
+            return null;
         }
 
         private static BootsState GetBootState(MyCharacter character)

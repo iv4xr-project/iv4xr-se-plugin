@@ -28,4 +28,6 @@ data class CubeGrid(
     override val displayName: String,
     @SerialName("InScene")
     override val inScene: Boolean,
+    @SerialName("DefinitionId")
+    override val definitionId: DefinitionId
 ) : ExtendedEntity

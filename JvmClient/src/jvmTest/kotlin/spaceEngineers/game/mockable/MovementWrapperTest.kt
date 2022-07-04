@@ -40,7 +40,7 @@ class MovementWrapperTest : MockOrRealGameTest() {
         val position = observer.observe().position
         movement.move(CompositeDirection3d.FORWARD, CharacterMovementType.WALK, ticks = 110)
         delay(2000)
-        assertEquals(5.4397435f, (position - observer.observe().position).length(), absoluteTolerance = 0.06f)
+        assertEquals(5.03f, (position - observer.observe().position).length(), absoluteTolerance = 0.06f)
     }
 
     private suspend fun SpaceEngineers.testRotation(movement: CharacterMovement) {

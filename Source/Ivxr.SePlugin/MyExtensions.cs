@@ -298,6 +298,7 @@ namespace Iv4xr.SePlugin
             result.Name = entity.Name;
             result.Velocity = entity.Physics?.LinearVelocity.ToPlain() ?? PlainVec3DConst.Zero;
             result.InScene = entity.InScene;
+            result.DefinitionId = entity.DefinitionId?.ToDefinitionId();
             return result;
         }
 
