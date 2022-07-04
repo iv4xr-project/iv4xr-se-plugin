@@ -2298,6 +2298,29 @@ $dokka.location:spaceEngineers.util.generator.maze/Position/surround/#/PointingT
 $dokka.location:spaceEngineers.util.generator.maze/Position/up/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/-position/up.html
 $dokka.location:spaceEngineers.util.generator.maze/Position/x/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/-position/x.html
 $dokka.location:spaceEngineers.util.generator.maze/Position/y/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.maze/-position/y.html
+$dokka.location:spaceEngineers.util.generator.python////PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.python/index.html
+$dokka.location:spaceEngineers.util.generator.python//TAB/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.python/-t-a-b.html
+$dokka.location:spaceEngineers.util.generator.python//filteredMethods/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.python/filtered-methods.html
+$dokka.location:spaceEngineers.util.generator.python//firstUppercase/kotlin.String#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.python/first-uppercase.html
+$dokka.location:spaceEngineers.util.generator.python//forcePythonType/kotlin.reflect.KClass[*]#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.python/force-python-type.html
+$dokka.location:spaceEngineers.util.generator.python//kotlinMethodToPython/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.python/kotlin-method-to-python.html
+$dokka.location:spaceEngineers.util.generator.python//kotlinTypeToPython/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.python/kotlin-type-to-python.html
+$dokka.location:spaceEngineers.util.generator.python//main/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.python/main.html
+$dokka.location:spaceEngineers.util.generator.python//toPythonMethod/kotlin.String#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.python/to-python-method.html
+$dokka.location:spaceEngineers.util.generator.python//toPythonType/kotlin.reflect.KClass[*]#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.python/to-python-type.html
+$dokka.location:spaceEngineers.util.generator.python//validTypes/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.python/valid-types.html
+$dokka.location:spaceEngineers.util.generator.python/ClientGenerator///PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.python/-client-generator/index.html
+$dokka.location:spaceEngineers.util.generator.python/ClientGenerator/ClientGenerator/#kotlin.reflect.KClass[*]/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.python/-client-generator/-client-generator.html
+$dokka.location:spaceEngineers.util.generator.python/ClientGenerator/generateInterface/#kotlin.reflect.KClass[*]/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.python/-client-generator/generate-interface.html
+$dokka.location:spaceEngineers.util.generator.python/ClientGenerator/generateInterfaces/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.python/-client-generator/generate-interfaces.html
+$dokka.location:spaceEngineers.util.generator.python/ClientGenerator/iface/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.python/-client-generator/iface.html
+$dokka.location:spaceEngineers.util.generator.python/ClientGenerator/printParameters/#kotlin.reflect.KFunction[*]/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.python/-client-generator/print-parameters.html
+$dokka.location:spaceEngineers.util.generator.python/DataClassGenerator///PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.python/-data-class-generator/index.html
+$dokka.location:spaceEngineers.util.generator.python/DataClassGenerator/DataClassGenerator/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.python/-data-class-generator/-data-class-generator.html
+$dokka.location:spaceEngineers.util.generator.python/DataClassGenerator/finishedTypes/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.python/-data-class-generator/finished-types.html
+$dokka.location:spaceEngineers.util.generator.python/DataClassGenerator/generate/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.python/-data-class-generator/generate.html
+$dokka.location:spaceEngineers.util.generator.python/DataClassGenerator/generate/#kotlin.reflect.KClass[*]/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.python/-data-class-generator/generate.html
+$dokka.location:spaceEngineers.util.generator.python/DataClassGenerator/generateDataClass/#kotlin.reflect.KType/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.python/-data-class-generator/generate-data-class.html
 $dokka.location:spaceEngineers.util.generator////PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator/index.html
 $dokka.location:spaceEngineers.util.generator//blockDataClassesImports/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator/block-data-classes-imports.html
 $dokka.location:spaceEngineers.util.generator//blockDefinitionHierarchyFile/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator/block-definition-hierarchy-file.html
@@ -2452,6 +2475,7 @@ spaceEngineers.transport.jsonrpc
 spaceEngineers.util
 spaceEngineers.util.generator
 spaceEngineers.util.generator.maze
+spaceEngineers.util.generator.python
 testrail
 testrail.model
 
