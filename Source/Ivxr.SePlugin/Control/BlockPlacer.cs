@@ -18,7 +18,8 @@ namespace Iv4xr.SePlugin.Control
 {
     public class BlockPlacer
     {
-        private MyObjectBuilder_CubeBlock CubeBlockBuilderByBlockType(long ownerId, DefinitionId blockDefinitionId)
+        private MyObjectBuilder_CubeBlock CubeBlockBuilderByBlockType(long ownerId, DefinitionId blockDefinitionId,
+            Vector3 colorMask)
         {
             var definitionBase = MyDefinitionManager.Static
                     .GetAllDefinitions()
@@ -31,6 +32,7 @@ namespace Iv4xr.SePlugin.Control
                 Base6Directions.Direction.Up);
             obj.Owner = ownerId;
             obj.BuiltBy = ownerId;
+            obj.ColorMaskHSV = colorMask;
             return obj;
         }
 
@@ -69,7 +71,9 @@ namespace Iv4xr.SePlugin.Control
             Vector3I min,
             Vector3I orientationForward,
             Vector3I orientationUp,
-            long playerId
+            long playerId,
+            Vector3? colorRgb,
+            MyStringHash skinId
         )
         {
             HashSet<MyCubeGrid.MyBlockLocation> blocksBuildQueue = new HashSet<MyCubeGrid.MyBlockLocation>();
@@ -80,7 +84,7 @@ namespace Iv4xr.SePlugin.Control
             );
             blocksBuildQueue.Add(myBlockLocation);
             var blockIds = currentGrid.CubeBlocks.Select(b => b.UniqueId).ToImmutableHashSet();
-            currentGrid.BuildBlocks(MyPlayer.SelectedColor, MyStringHash.GetOrCompute(MyPlayer.SelectedArmorSkin),
+            currentGrid.BuildBlocks(colorRgb?.RgbToHsv() ?? MyPlayer.SelectedColor, skinId,
                 blocksBuildQueue, MySession.Static.LocalCharacterEntityId, MySession.Static.LocalPlayerId);
             var blockIds2 = currentGrid.CubeBlocks.Select(b => b.UniqueId).ToImmutableHashSet();
             var newIds = blockIds2.Except(blockIds);
@@ -100,9 +104,11 @@ namespace Iv4xr.SePlugin.Control
 
         public MySlimBlock PlaceSingleBlock(long ownerId, DefinitionId blockDefinitionId, Vector3 position,
             Vector3 orientationForward,
-            Vector3 orientationUp)
+            Vector3 orientationUp, Vector3? colorRgb)
         {
-            var grid = PlaceBlock(CubeBlockBuilderByBlockType(ownerId, blockDefinitionId), position, orientationForward,
+            var grid = PlaceBlock(
+                CubeBlockBuilderByBlockType(ownerId, blockDefinitionId, colorRgb?.RgbToHsv() ?? MyPlayer.SelectedColor),
+                position, orientationForward,
                 orientationUp);
             return grid.CubeBlocks.First();
         }
