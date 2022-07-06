@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class KeyboardSnapshot(
     @SerialName("PressedKeys")
-    val pressedKeys: List<Int>,
+    val pressedKeys: List<Int> = emptyList(),
     @SerialName("Text")
-    val text: List<Char>,
+    val text: List<Char> = emptyList(),
 )

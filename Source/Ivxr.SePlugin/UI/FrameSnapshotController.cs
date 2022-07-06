@@ -82,7 +82,7 @@ namespace Iv4xr.SePlugin.UI
         {
             var input = snapshot.Input;
             var currentKeyboardState = RestoreState(input.Keyboard);
-            var text = input.Keyboard.Text;
+            var text = (input.Keyboard ?? EmptyKeyboard).Text;
             var currentMouseState = RestoreState(input.Mouse);
             var currentJoystickState = new MyJoystickState(); //no cares right now
 

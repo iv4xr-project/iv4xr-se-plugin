@@ -4,7 +4,6 @@ import bdd.setup.connectClientsDirectly
 import bdd.setup.connectToFirstFriendlyGame
 import bdd.setup.createLobbyGame
 import bdd.setup.exitToMainMenu
-import io.cucumber.java.PendingException
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
@@ -231,6 +230,21 @@ class CharacterActions : AbstractMultiplayerSteps() {
     @When("Character turns on relative dampeners.")
     fun character_turns_on_relative_dampeners() = mainClient {
         character.turnOnRelativeDampeners()
+    }
+
+    @Given("Character {string} the {string} mouse button.")
+    fun character_the_mouse_button(mouseActionName: String, mouseButtonName: String) = mainClient {
+        val clickCount = when (mouseActionName) {
+            "clicks" -> {
+                1
+            }
+            "double-clicks" -> {
+                2
+            }
+            else -> error("No action handler for $mouseActionName, try 'clicks' or 'double-clicks'.")
+        }
+
+        input.startPlaying(FrameSnapshot.clicks(mouseButton = MouseButton.valueOf(mouseButtonName.uppercase()), clickCount = clickCount))
     }
 
     @When("Character drops {string} from the inventory.")
