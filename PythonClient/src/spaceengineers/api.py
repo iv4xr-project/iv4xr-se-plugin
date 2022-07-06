@@ -1,14 +1,14 @@
-from spaceengineers.models import *
+from .models import *
 
 
 class BlocksAdmin(object):
 
-    def PlaceAt(self, blockDefinitionId: object, position: object, orientationForward: object,
-                orientationUp: object) -> str:
+    def PlaceAt(self, blockDefinitionId: DefinitionId, position: Vec3F, orientationForward: Vec3F, orientationUp: Vec3F,
+                color: Vec3F) -> str:
         pass
 
-    def PlaceInGrid(self, blockDefinitionId: object, gridId: str, minPosition: object, orientationForward: object,
-                    orientationUp: object) -> str:
+    def PlaceInGrid(self, blockDefinitionId: DefinitionId, gridId: str, minPosition: Vec3I, orientationForward: Vec3I,
+                    orientationUp: Vec3I, color: Vec3F) -> str:
         pass
 
     def Remove(self, blockId: str):
@@ -20,8 +20,8 @@ class BlocksAdmin(object):
 
 class CharacterAdmin(object):
 
-    def Create(self, name: str, position: object, orientationForward: object,
-               orientationUp: object) -> CharacterObservation:
+    def Create(self, name: str, position: Vec3F, orientationForward: Vec3F,
+               orientationUp: Vec3F) -> CharacterObservation:
         pass
 
     def Die(self):
@@ -42,7 +42,7 @@ class CharacterAdmin(object):
     def Switch(self, id: str):
         pass
 
-    def Teleport(self, position: object, orientationForward: object, orientationUp: object) -> CharacterObservation:
+    def Teleport(self, position: Vec3F, orientationForward: Vec3F, orientationUp: Vec3F) -> CharacterObservation:
         pass
 
     def Use(self, blockId: str, functionIndex: int, action: int):
@@ -51,7 +51,7 @@ class CharacterAdmin(object):
 
 class ObserverAdmin(object):
 
-    def ObserveCharacters(self) -> list:
+    def ObserveCharacters(self) -> List[CharacterObservation]:
         pass
 
 
@@ -79,6 +79,9 @@ class SpaceEngineersAdmin(object):
     def SetFrameLimitEnabled(self, enabled: bool):
         pass
 
+    def ShowNotification(self, text: str):
+        pass
+
     def UpdateDefaultInteractDistance(self, distance: float):
         pass
 
@@ -97,10 +100,10 @@ class Character(object):
     def EndUsingTool(self):
         pass
 
-    def Jump(self, movement: object):
+    def Jump(self, movement: Vec3F):
         pass
 
-    def MoveAndRotate(self, movement: object, rotation3: object, roll: float, ticks: int) -> CharacterObservation:
+    def MoveAndRotate(self, movement: Vec3F, rotation3: Vec2F, roll: float, ticks: int) -> CharacterObservation:
         pass
 
     def ShowInventory(self):
@@ -139,13 +142,13 @@ class Character(object):
 
 class Definitions(object):
 
-    def AllDefinitions(self) -> list:
+    def AllDefinitions(self) -> List[DefinitionBase]:
         pass
 
     def BlockDefinitionHierarchy(self) -> dict:
         pass
 
-    def BlockDefinitions(self) -> list:
+    def BlockDefinitions(self) -> List[BlockDefinition]:
         pass
 
     def BlockHierarchy(self) -> dict:
@@ -154,7 +157,7 @@ class Definitions(object):
 
 class Input(object):
 
-    def StartPlaying(self, snapshots: list):
+    def StartPlaying(self, snapshots: List[FrameSnapshot]):
         pass
 
     def StartRecording(self):
@@ -163,19 +166,19 @@ class Input(object):
     def StopPlaying(self):
         pass
 
-    def StopRecording(self) -> list:
+    def StopRecording(self) -> List[FrameSnapshot]:
         pass
 
 
 class Items(object):
 
-    def Activate(self, toolbarLocation: object):
+    def Activate(self, toolbarLocation: ToolbarLocation):
         pass
 
-    def Equip(self, toolbarLocation: object):
+    def Equip(self, toolbarLocation: ToolbarLocation):
         pass
 
-    def SetToolbarItem(self, definitionId: object, toolbarLocation: object):
+    def SetToolbarItem(self, definitionId: DefinitionId, toolbarLocation: ToolbarLocation):
         pass
 
     def Toolbar(self) -> Toolbar:
@@ -193,13 +196,13 @@ class Observer(object):
     def ObserveBlocks(self) -> Observation:
         pass
 
-    def ObserveCharacters(self) -> list:
+    def ObserveCharacters(self) -> List[CharacterObservation]:
         pass
 
-    def ObserveControlledEntity(self) -> object:
+    def ObserveControlledEntity(self) -> ExtendedEntity:
         pass
 
-    def ObserveFloatingObjects(self) -> list:
+    def ObserveFloatingObjects(self) -> List[FloatingObject]:
         pass
 
     def ObserveNewBlocks(self) -> Observation:

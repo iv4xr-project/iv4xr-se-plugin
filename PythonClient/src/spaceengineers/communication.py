@@ -6,6 +6,8 @@ from dataclasses import dataclass
 def cleanup_error_data(inner_data: dict):
     if not inner_data:
         return None
+    if type(inner_data) != dict:
+        return inner_data
     fields_to_remove = ("Source", "WatsonBuckets")
     for field_to_remove in fields_to_remove:
         if field_to_remove in inner_data:
@@ -25,7 +27,10 @@ class JsonRpcError(Exception):
             f"{data.get('message', 'Unknown error')} ({data.get('code', None)}). {self.inner_message()}")
 
     def inner_message(self):
-        inner_data = cleanup_error_data(self.data.get("data", None))
+        inner_data = self.data.get("data", None)
+        if type(inner_data) == str:
+            return inner_data
+        inner_data = cleanup_error_data(inner_data)
         if "Message" in inner_data:
             return inner_data.get("Message", None)
         return None
