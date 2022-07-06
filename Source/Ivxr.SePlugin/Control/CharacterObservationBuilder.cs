@@ -12,9 +12,9 @@ namespace Iv4xr.SePlugin.Control
 {
     public class CharacterObservationBuilder
     {
-        private readonly EntityBuilder m_entityBuilder;
+        private readonly BlockEntityBuilder m_entityBuilder;
 
-        internal CharacterObservationBuilder(EntityBuilder entityBuilder)
+        internal CharacterObservationBuilder(BlockEntityBuilder entityBuilder)
         {
             m_entityBuilder = entityBuilder;
         }
@@ -50,7 +50,7 @@ namespace Iv4xr.SePlugin.Control
                 MovementFlags = (CharacterMovementFlags)((byte)character.MovementFlags),
                 JetpackControlThrust = character.JetpackComp.GetInstanceProperty<MyEntityThrustComponent>("ThrustComp").ControlThrust.ToPlain(),
                 JetpackFinalThrust = character.JetpackComp.FinalThrust.ToPlain(),
-                CurrentWeapon = WeaponEntity(character).ToEntityOrNull(),
+                CurrentWeapon = WeaponEntity(character).ToPolymorphicEntity(),
             };
             character.ToEntity(result);
             result.Id = character.CharacterId().ToString();
@@ -83,14 +83,14 @@ namespace Iv4xr.SePlugin.Control
         {
             if (!(character.CurrentWeapon is MyEngineerToolBase wp)) return null;
             var slimBlock = wp.GetTargetBlock();
-            return slimBlock == null ? null : m_entityBuilder.CreateGridBlock(slimBlock);
+            return slimBlock == null ? null : m_entityBuilder.CreateAndFill(slimBlock);
         }
 
         private Block TargetDetectorBlock(MyCharacter character)
         {
             var detector = character.Components.Get<MyCharacterDetectorComponent>();
             return detector?.UseObject?.Owner is MyCubeBlock block
-                    ? m_entityBuilder.CreateGridBlock(block.SlimBlock)
+                    ? m_entityBuilder.CreateAndFill(block.SlimBlock)
                     : null;
         }
 

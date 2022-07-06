@@ -68,6 +68,6 @@ data class CharacterObservation(
     @SerialName("JetpackFinalThrust")
     val jetpackFinalThrust: Vec3F = Vec3F.ZERO,
     @SerialName("CurrentWeapon")
-    val currentWeapon: BaseEntity? = null,
+    val currentWeapon: ExtendedEntity? = null,
 
 ) : ExtendedEntity
