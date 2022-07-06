@@ -42,7 +42,7 @@ namespace Iv4xr.SePlugin.Control
         {
             m_gameSession = gameSession;
             m_entityBuilder = new EntityBuilder() { Log = Log };
-            m_characterBuilder = new CharacterObservationBuilder(m_entityBuilder);
+            m_characterBuilder = new CharacterObservationBuilder(m_entityBuilder.BlockEntityBuilder);
         }
 
         private MyCharacter Character => m_gameSession.Character;

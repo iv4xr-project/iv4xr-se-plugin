@@ -38,7 +38,7 @@ val json = Json {
             default { BlockOrGroupItemSerializer }
         }
         polymorphic(ExtendedEntity::class) {
-            default { BaseEntity.serializer() }
+            default { EntitySerializer }
         }
     }
 }

@@ -18,6 +18,8 @@ data class DefinitionId(
     companion object {
         const val ID_PREFIX = "MyObjectBuilder_"
         const val CUBE_BLOCK = "CubeBlock"
+        const val CUBE_GRID ="CubeGrid"
+        const val WELDER = "Welder"
         const val PHYSICAL_GUN = "PhysicalGunObject"
         const val ORE = "Ore"
         const val INGOT = "Ingot"

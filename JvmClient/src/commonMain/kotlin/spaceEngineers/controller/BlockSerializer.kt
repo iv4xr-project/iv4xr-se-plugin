@@ -6,6 +6,9 @@ import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import spaceEngineers.model.*
+import spaceEngineers.model.DefinitionId.Companion.CUBE_GRID
+import spaceEngineers.model.DefinitionId.Companion.PHYSICAL_GUN
+import spaceEngineers.model.DefinitionId.Companion.WELDER
 import spaceEngineers.util.generator.removeBuilderPrefix
 import kotlin.reflect.KClass
 
@@ -31,12 +34,32 @@ val blockMappings = mapOf<String, Map<String, KClass<*>>>(
 
 val serializerMapping = mutableMapOf<String, DeserializationStrategy<out Block>>()
 
+fun getDefinitionIdId(element: JsonElement): String? {
+    return element.jsonObject["DefinitionId"]?.jsonObject?.get("Id")?.jsonPrimitive?.content?.removeBuilderPrefix()
+}
+
 object BlockSerializer : JsonContentPolymorphicSerializer<Block>(Block::class) {
     override fun selectDeserializer(element: JsonElement): DeserializationStrategy<out Block> {
-        val id = element.jsonObject["DefinitionId"]!!.jsonObject["Id"]!!.jsonPrimitive.content.removeBuilderPrefix()
+        val id = getDefinitionIdId(element)
         return generatedSerializerMappings[id] ?: DataBlock.serializer()
     }
 }
+
+object EntitySerializer : JsonContentPolymorphicSerializer<ExtendedEntity>(ExtendedEntity::class) {
+
+    private val generatedSerializerMappings = mutableMapOf(
+        PHYSICAL_GUN to HandTool.serializer(),
+        CUBE_GRID to CubeGrid.serializer(),
+        WELDER to HandTool.serializer(),
+    )
+
+
+    override fun selectDeserializer(element: JsonElement): DeserializationStrategy<out ExtendedEntity> {
+        val id = getDefinitionIdId(element)
+        return generatedSerializerMappings[id] ?: BaseEntity.serializer()
+    }
+}
+
 
 object BlockOrGroupItemSerializer : JsonContentPolymorphicSerializer<BlockOrGroupItem>(BlockOrGroupItem::class) {
     override fun selectDeserializer(element: JsonElement): DeserializationStrategy<out BlockOrGroupItem> {

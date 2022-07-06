@@ -52,3 +52,28 @@ data class BaseEntity(
     @SerialName("DefinitionId")
     override val definitionId: DefinitionId,
 ) : ExtendedEntity
+
+
+@Serializable
+data class HandTool(
+    @SerialName("Id")
+    override val id: String,
+    @SerialName("Position")
+    override val position: Vec3F,
+    @SerialName("OrientationForward")
+    override val orientationForward: Vec3F,
+    @SerialName("OrientationUp")
+    override val orientationUp: Vec3F,
+    @SerialName("Velocity")
+    override val velocity: Vec3F,
+    @SerialName("Name")
+    override val name: String,
+    @SerialName("DisplayName")
+    override val displayName: String,
+    @SerialName("InScene")
+    override val inScene: Boolean,
+    @SerialName("DefinitionId")
+    override val definitionId: DefinitionId,
+    @SerialName("IsShooting")
+    val isShooting: Boolean,
+) : ExtendedEntity
