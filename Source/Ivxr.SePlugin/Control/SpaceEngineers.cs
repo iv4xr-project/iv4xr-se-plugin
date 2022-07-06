@@ -7,6 +7,7 @@ using Iv4xr.SpaceEngineers;
 using Iv4xr.SpaceEngineers.UI;
 using Iv4xr.SpaceEngineers.WorldModel;
 using Sandbox;
+using Sandbox.Game.Gui;
 using VRage.Game;
 using static Iv4xr.SePlugin.Communication.CallTarget;
 
@@ -72,6 +73,11 @@ namespace Iv4xr.SePlugin.Control
         public IBlocksAdmin Blocks { get; }
         public IObserverAdmin Observer { get; }
         public ITestAdmin Tests { get; }
+        public void ShowNotification(string text)
+        {
+            MyHud.Notifications.Add(new MyHudNotificationDebug(text, 5000, level: MyNotificationLevel.Important));
+        }
+
         public void UpdateDefaultInteractDistance(float distance)
         {
             MyConstants.DEFAULT_INTERACTIVE_DISTANCE = distance;
