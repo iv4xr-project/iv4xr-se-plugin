@@ -16,6 +16,7 @@ namespace Iv4xr.SpaceEngineers
         void UpdateDefaultInteractDistance(float distance);
         DebugInfo DebugInfo();
         ITestAdmin Tests { get; }
+        void ShowNotification(string text);
     }
 
     public interface IObserverAdmin
