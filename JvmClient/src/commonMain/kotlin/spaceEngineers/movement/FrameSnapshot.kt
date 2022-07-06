@@ -10,16 +10,31 @@ data class FrameSnapshot(
     val input: InputSnapshot,
 ) {
     companion object {
-        fun fromDirection(compositeDirection3d: CompositeDirection3d, movementType: CharacterMovementType): FrameSnapshot {
+        fun fromDirection(
+            compositeDirection3d: CompositeDirection3d,
+            movementType: CharacterMovementType
+        ): FrameSnapshot {
             return FrameSnapshot(
                 input = InputSnapshot(keyboard = compositeDirection3d.toKeyboardSnapshot(movementType))
             )
         }
 
-        fun fromRotationDirection(rotationDirection: RotationDirection) : FrameSnapshot {
+        fun fromRotationDirection(rotationDirection: RotationDirection): FrameSnapshot {
             return FrameSnapshot(
                 input = InputSnapshot(keyboard = rotationDirection.toKeyboardSnapshot())
             )
+        }
+
+        fun clicks(mouseButton: MouseButton, clickCount: Int = 1): List<FrameSnapshot> {
+            val mousePressed = FrameSnapshot(
+                InputSnapshot(mouse = MouseSnapshot.buttonClicked(mouseButton))
+            )
+            val mouseNotPressed = FrameSnapshot(
+                InputSnapshot(mouse = MouseSnapshot.nothingClicked())
+            )
+            return (0 until clickCount).flatMap {
+                listOf(mousePressed, mouseNotPressed, mousePressed, mouseNotPressed)
+            }
         }
     }
 }
