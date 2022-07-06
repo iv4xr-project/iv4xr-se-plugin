@@ -10,6 +10,7 @@ interface SpaceEngineersAdmin {
     fun updateDefaultInteractDistance(distance: Float)
     fun debugInfo(): DebugInfo
     val tests: TestAdmin
+    fun showNotification(text: String)
 }
 
 interface TestAdmin {
