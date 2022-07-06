@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
-using Iv4xr.PluginLib.Control;
 using Iv4xr.SpaceEngineers;
 using Iv4xr.SpaceEngineers.WorldModel;
 using Sandbox.Game.Entities;
 using Sandbox.Game.World;
 using VRage.Game.ModAPI;
+using VRage.Utils;
 
 namespace Iv4xr.SePlugin.Control
 {
@@ -40,22 +40,25 @@ namespace Iv4xr.SePlugin.Control
         }
 
         public string PlaceAt(DefinitionId blockDefinitionId, PlainVec3D position, PlainVec3D orientationForward,
-            PlainVec3D orientationUp)
+            PlainVec3D orientationUp, PlainVec3F? color = null)
         {
             Definitions.CheckDefinitionIdExists(blockDefinitionId.ToMyDefinitionId());
-            return m_blockPlacer.PlaceSingleBlock(m_session.CurrentCharacterId, blockDefinitionId, position.ToVector3(), orientationForward.ToVector3(),
-                orientationUp.ToVector3()).BlockId().ToString();
+            return m_blockPlacer.PlaceSingleBlock(m_session.CurrentCharacterId, blockDefinitionId, position.ToVector3(),
+                orientationForward.ToVector3(),
+                orientationUp.ToVector3(), color?.ToVector3() ?? MyPlayer.SelectedColor).BlockId().ToString();
         }
 
-        public string PlaceInGrid(DefinitionId blockDefinitionId, string gridId, PlainVec3I minPosition, PlainVec3I orientationForward,
-            PlainVec3I orientationUp)
+        public string PlaceInGrid(DefinitionId blockDefinitionId, string gridId, PlainVec3I minPosition,
+            PlainVec3I orientationForward,
+            PlainVec3I orientationUp, PlainVec3F? color = null)
         {
             Definitions.CheckDefinitionIdExists(blockDefinitionId.ToMyDefinitionId());
-            //var playerId = m_session.Character.GetPlayerId();
             var grid = m_observer.GetGridById(gridId);
             return m_blockPlacer.PlaceInGrid(
-                blockDefinitionId.ToMyCubeBlockDefinition().Id, grid, minPosition.ToVector3I(), 
-                orientationForward.ToVector3I(), orientationUp.ToVector3I(), MySession.Static.LocalPlayerId
+                blockDefinitionId.ToMyCubeBlockDefinition().Id, grid, minPosition.ToVector3I(),
+                orientationForward.ToVector3I(), orientationUp.ToVector3I(), MySession.Static.LocalPlayerId,
+                color?.ToVector3(),
+                MyStringHash.GetOrCompute(MyPlayer.SelectedArmorSkin)
             ).UniqueId.ToString();
         }
 

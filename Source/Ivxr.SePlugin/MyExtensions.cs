@@ -31,6 +31,17 @@ namespace Iv4xr.SePlugin
             return new PlainVec3D(vector.X, vector.Y, vector.Z);
         }
 
+        public static Color ToColor(this Vector3 vector)
+        {
+            return new Color(vector.X, vector.Y, vector.Z);
+        }
+
+        public static Vector3 RgbToHsv(this Vector3 vector)
+        {
+            return MyColorPickerConstants.HSVToHSVOffset(vector.ToColor().ColorToHSV());
+        }
+
+
         public static PlainVec3D ToPlain(this Vector3 vector)
         {
             return new PlainVec3D(vector.X, vector.Y, vector.Z);
@@ -49,6 +60,11 @@ namespace Iv4xr.SePlugin
         public static Vector3D ToVector3D(this PlainVec3D vector)
         {
             return new Vector3D(vector.X, vector.Y, vector.Z);
+        }
+
+        public static Vector3 ToVector3(this PlainVec3F vector)
+        {
+            return new Vector3(vector.X, vector.Y, vector.Z);
         }
 
         public static PlainVec3F ToPlainF(this Vector3 vector)

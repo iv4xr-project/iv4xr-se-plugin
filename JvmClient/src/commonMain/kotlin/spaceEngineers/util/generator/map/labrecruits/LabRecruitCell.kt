@@ -1,6 +1,7 @@
 package spaceEngineers.util.generator.map.labrecruits
 
 import spaceEngineers.model.DefinitionId
+import spaceEngineers.model.Vec3F
 import spaceEngineers.model.Vec3I
 import spaceEngineers.util.generator.map.BlockPlacementInformation
 import spaceEngineers.util.generator.maze.Direction
@@ -42,6 +43,8 @@ sealed class LabRecruitCell : BlockPlacementInformation {
     override fun toString(): String {
         return charRepresentation.toString()
     }
+
+    override val color: Vec3F? = null
 }
 
 

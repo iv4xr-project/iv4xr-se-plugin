@@ -5,34 +5,41 @@ import spaceEngineers.model.DefinitionId
 import spaceEngineers.model.LARGE_BLOCK_CUBE_SIDE_SIZE
 import spaceEngineers.model.Vec3F
 import spaceEngineers.model.Vec3I
+import spaceEngineers.model.extensions.toFloat
 
 class MapPlacer(
     val map: MapLayer,
     val spaceEngineers: SpaceEngineers,
-    val floorDefinitionId: DefinitionId = DefinitionId.cubeBlock("LargeHeavyBlockArmorBlock"),
+    val floorPlacer: BlockPlacementInformation = DataBlockPlacementInformation(
+        DefinitionId.cubeBlock("LargeHeavyBlockArmorBlock"),
+        orientationForward = Vec3I.FORWARD,
+        orientationUp = Vec3I.UP,
+        color = null,
+    )
 ) {
 
     private fun generateFloor(initialGridId: String? = null, z: Int = 0): String {
-        val definitionId = floorDefinitionId
         var gridId: String? = initialGridId
         for (x in 0 until map.width) {
             for (y in 0 until map.height) {
                 print(".")
                 if (gridId == null) {
                     placeAt(
-                        blockDefinitionId = definitionId,
                         position = Vec3F(x, y, z) * LARGE_BLOCK_CUBE_SIDE_SIZE,
-                        orientationForward = Vec3F.FORWARD,
-                        orientationUp = Vec3F.UP,
+                        blockDefinitionId = floorPlacer.blockId,
+                        orientationForward = floorPlacer.orientationForward.toFloat(),
+                        orientationUp = floorPlacer.orientationUp.toFloat(),
+                        color = floorPlacer.color,
                     )
                     gridId = spaceEngineers.observer.observeBlocks().grids.first().id
                 } else {
                     placeInGrid(
                         gridId = gridId,
-                        blockDefinitionId = definitionId,
-                        orientationUp = Vec3I.UP,
-                        orientationForward = Vec3I.FORWARD,
-                        minPosition = Vec3I(x, y, z)
+                        minPosition = Vec3I(x, y, z),
+                        blockDefinitionId = floorPlacer.blockId,
+                        orientationForward = floorPlacer.orientationForward,
+                        orientationUp = floorPlacer.orientationUp,
+                        color = floorPlacer.color,
                     )
                 }
             }
@@ -52,7 +59,8 @@ class MapPlacer(
                         blockDefinitionId = cell.blockId,
                         orientationUp = cell.orientationUp,
                         orientationForward = cell.orientationForward,
-                        minPosition = Vec3I(x, y, z)
+                        minPosition = Vec3I(x, y, z),
+                        color = cell.color,
                     )
                 } ?: print(" ")
 
@@ -75,9 +83,10 @@ class MapPlacer(
         blockDefinitionId: DefinitionId,
         position: Vec3F,
         orientationForward: Vec3F,
-        orientationUp: Vec3F
+        orientationUp: Vec3F,
+        color: Vec3F?,
     ) {
-        spaceEngineers.admin.blocks.placeAt(blockDefinitionId, position, orientationForward, orientationUp)
+        spaceEngineers.admin.blocks.placeAt(blockDefinitionId, position, orientationForward, orientationUp, color)
     }
 
     private fun placeInGrid(
@@ -85,7 +94,8 @@ class MapPlacer(
         blockDefinitionId: DefinitionId,
         orientationUp: Vec3I,
         orientationForward: Vec3I,
-        minPosition: Vec3I
+        minPosition: Vec3I,
+        color: Vec3F?,
     ) {
         spaceEngineers.admin.blocks.placeInGrid(
             blockDefinitionId = blockDefinitionId,
@@ -93,6 +103,7 @@ class MapPlacer(
             orientationUp = orientationUp,
             orientationForward = orientationForward,
             minPosition = minPosition,
+            color = color,
         )
     }
 }

@@ -170,9 +170,7 @@ namespace Iv4xr.SePlugin.Control
 
         public MyCubeGrid GetGridById(string gridId)
         {
-            return Grids().First(grid =>
-                    grid.EntityId.ToString() == gridId
-            );
+            return (MyCubeGrid) MyEntities.GetEntityById(long.Parse(gridId));
         }
 
         public MyCubeGrid GetGridContainingBlock(string blockId)

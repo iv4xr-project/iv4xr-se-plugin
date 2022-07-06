@@ -24,7 +24,8 @@ interface BlocksAdmin {
         blockDefinitionId: DefinitionId,
         position: Vec3F,
         orientationForward: Vec3F,
-        orientationUp: Vec3F
+        orientationUp: Vec3F,
+        color: Vec3F? = null,
     ): String
 
     fun placeInGrid(
@@ -32,7 +33,8 @@ interface BlocksAdmin {
         gridId: String,
         minPosition: Vec3I,
         orientationForward: Vec3I,
-        orientationUp: Vec3I
+        orientationUp: Vec3I,
+        color: Vec3F? = null,
     ): String
 
     fun remove(blockId: BlockId)
