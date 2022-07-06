@@ -68,7 +68,6 @@ class MapPlacer(
         generateFloor().let {
             generateLevel(it)
         }
-
     }
 
 
@@ -78,7 +77,6 @@ class MapPlacer(
         orientationForward: Vec3F,
         orientationUp: Vec3F
     ) {
-        //return
         spaceEngineers.admin.blocks.placeAt(blockDefinitionId, position, orientationForward, orientationUp)
     }
 
@@ -89,7 +87,6 @@ class MapPlacer(
         orientationForward: Vec3I,
         minPosition: Vec3I
     ) {
-        //return
         spaceEngineers.admin.blocks.placeInGrid(
             blockDefinitionId = blockDefinitionId,
             gridId = gridId,
