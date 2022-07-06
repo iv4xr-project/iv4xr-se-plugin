@@ -26,9 +26,6 @@ class Maze(val width: Int, val height: Int, val startX: Int = 2, val rnd: Random
         return data[x][y]
     }
 
-    val start = Position(startX, 1)
-    val end = Position(width - 3, height - 2)
-
     private fun carve(x: Int, y: Int) {
 
         val upx = intArrayOf(1, -1, 0, 0)
