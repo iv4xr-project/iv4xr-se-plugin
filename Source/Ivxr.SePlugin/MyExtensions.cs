@@ -14,6 +14,7 @@ using Sandbox.Game.Entities.Character;
 using Sandbox.Game.Entities.Cube;
 using Sandbox.Game.Multiplayer;
 using Sandbox.Game.Screens.Helpers;
+using Sandbox.Game.Weapons;
 using Sandbox.Game.World;
 using VRage.Game;
 using VRage.Game.Entity;
@@ -291,6 +292,7 @@ namespace Iv4xr.SePlugin
             {
                 result.Id = character.CharacterId().ToString();
             }
+
             result.Position = entity.PositionComp.GetPosition().ToPlain();
             result.OrientationForward = orientation.Forward.ToPlain();
             result.OrientationUp = orientation.Up.ToPlain();
@@ -300,6 +302,62 @@ namespace Iv4xr.SePlugin
             result.InScene = entity.InScene;
             result.DefinitionId = entity.DefinitionId?.ToDefinitionId();
             return result;
+        }
+
+        public static Entity ToPolymorphicEntity(this MyEntity entity)
+        {
+            if (entity == null)
+            {
+                return null;
+            }
+
+            if (entity is MyCharacter character)
+            {
+                return new CharacterObservationBuilder(new BlockEntityBuilder()).CreateCharacterObservation(character);
+            }
+
+            if (entity is MyCubeBlock block)
+            {
+                return new BlockEntityBuilder().CreateAndFill(block.SlimBlock);
+            }
+
+            if (entity is MyCubeGrid grid)
+            {
+                return EntityBuilder.CreateSeGrid(grid, new List<Block>());
+            }
+
+            if (entity is MyHandToolBase tool)
+            {
+                return tool.ToHandTool();
+            }
+            
+            if (entity is MyEngineerToolBase engineerTool)
+            {
+                return engineerTool.ToHandTool();
+            }
+
+
+            return entity.ToEntity();
+        }
+        
+        public static HandTool ToHandTool(this MyEngineerToolBase handToolBase)
+        {
+            var handTool = new HandTool()
+            {
+                IsShooting = handToolBase.IsShooting,
+            };
+            handToolBase.ToEntity(handTool);
+            return handTool;
+        }
+
+        public static HandTool ToHandTool(this MyHandToolBase handToolBase)
+        {
+            var handTool = new HandTool()
+            {
+                IsShooting = handToolBase.IsShooting,
+            };
+            handToolBase.ToEntity(handTool);
+            return handTool;
         }
 
         public static SessionSettings ToSessionSettings(this MyObjectBuilder_SessionSettings settings)
@@ -319,7 +377,7 @@ namespace Iv4xr.SePlugin
                 CurrentPath = session.CurrentPath,
                 IsAdminMenuEnabled = session.IsAdminMenuEnabled,
                 IsRunningExperimental = session.IsRunningExperimental,
-                Ready =  session.Ready,
+                Ready = session.Ready,
                 IsUnloading = session.IsUnloading,
                 StreamingInProgress = session.StreamingInProgress,
                 IsCopyPastingEnabled = session.IsCopyPastingEnabled,
