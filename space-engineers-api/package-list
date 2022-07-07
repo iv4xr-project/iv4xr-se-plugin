@@ -408,6 +408,7 @@ $dokka.location:spaceEngineers.controller/SpaceEngineersAdmin/character/#/Pointi
 $dokka.location:spaceEngineers.controller/SpaceEngineersAdmin/debugInfo/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-space-engineers-admin/debug-info.html
 $dokka.location:spaceEngineers.controller/SpaceEngineersAdmin/observer/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-space-engineers-admin/observer.html
 $dokka.location:spaceEngineers.controller/SpaceEngineersAdmin/setFrameLimitEnabled/#kotlin.Boolean/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-space-engineers-admin/set-frame-limit-enabled.html
+$dokka.location:spaceEngineers.controller/SpaceEngineersAdmin/showNotification/#kotlin.String/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-space-engineers-admin/show-notification.html
 $dokka.location:spaceEngineers.controller/SpaceEngineersAdmin/tests/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-space-engineers-admin/tests.html
 $dokka.location:spaceEngineers.controller/SpaceEngineersAdmin/updateDefaultInteractDistance/#kotlin.Float/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-space-engineers-admin/update-default-interact-distance.html
 $dokka.location:spaceEngineers.controller/SpaceEngineersJavaProxy.Companion///PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-space-engineers-java-proxy/-companion/index.html
