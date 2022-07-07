@@ -9,7 +9,7 @@ import spaceEngineers.controller.ContextControllerWrapper
 import spaceEngineers.controller.SocketReaderWriterException
 import spaceEngineers.controller.SpaceEngineers
 import spaceEngineers.controller.connection.ConnectionManager
-import spaceEngineers.controller.extensions.toNullIfNegative1
+import spaceEngineers.controller.extensions.toNullIfMinusOne
 import spaceEngineers.model.canUse
 import spaceEngineers.transport.jsonrpc.KotlinJsonRpcError
 import spaceEngineers.util.whileWithTimeout
@@ -48,7 +48,7 @@ class Respawner(
     ) =
         with(screens.medicals) {
             whileWithTimeout(waitTimeout) { data().medicalRooms.isEmpty() }
-            val index = data().medicalRooms.indexOfFirst { it.name == medbay }.toNullIfNegative1()
+            val index = data().medicalRooms.indexOfFirst { it.name == medbay }.toNullIfMinusOne()
             check(index != null) {
                 "Spawn point '$medbay' not found, found: ${
                     data().medicalRooms.map { it.name }.sorted()

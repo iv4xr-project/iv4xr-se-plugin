@@ -1,7 +1,7 @@
 package spaceEngineers.util.generator.map.labrecruits
 
 
-import spaceEngineers.controller.extensions.toNullIfNegative1
+import spaceEngineers.controller.extensions.toNullIfMinusOne
 import spaceEngineers.util.generator.map.BlockPlacementInformation
 import spaceEngineers.util.generator.map.MapLayer
 import spaceEngineers.util.generator.maze.Direction
@@ -19,7 +19,7 @@ class LabRecruitsMap(
             val mapStartIndex = lines.indexOfFirst { it.startsWith("|") }
             val buttonMapping = lines.subList(0, mapStartIndex)
             val mapMapping = lines.subList(mapStartIndex + 1, lines.size)
-            val secondLevelStartIndex = mapMapping.indexOfFirst { it.startsWith("|") }.toNullIfNegative1() ?: lines.size
+            val secondLevelStartIndex = mapMapping.indexOfFirst { it.startsWith("|") }.toNullIfMinusOne() ?: lines.size
             val firstLevel = lines.subList(mapStartIndex, secondLevelStartIndex)
             val map = parseMap(firstLevel)
             val flatMap = map.flatten()

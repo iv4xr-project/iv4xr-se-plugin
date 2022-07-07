@@ -2,7 +2,7 @@ package spaceEngineers.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import spaceEngineers.controller.extensions.toNullIfNegative1
+import spaceEngineers.controller.extensions.toNullIfMinusOne
 
 @Serializable
 data class Toolbar(
@@ -21,7 +21,7 @@ data class Toolbar(
     fun findLocation(blockType: String): ToolbarLocation? {
         return items.indexOfFirst {
             it?.id?.type == blockType
-        }.toNullIfNegative1()?.let {
+        }.toNullIfMinusOne()?.let {
             ToolbarLocation.fromIndex(it)
         }
     }
@@ -29,7 +29,7 @@ data class Toolbar(
     fun findLocation(definitionId: DefinitionId): ToolbarLocation? {
         return items.indexOfFirst {
             it?.id == definitionId
-        }.toNullIfNegative1()?.let {
+        }.toNullIfMinusOne()?.let {
             ToolbarLocation.fromIndex(it)
         }
     }

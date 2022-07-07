@@ -1,9 +1,5 @@
 package spaceEngineers.controller.extensions
 
-fun Int.toNullIfNegative1(): Int? {
-    return if (this == -1) {
-        null
-    } else {
-        this
-    }
+fun Int.toNullIfMinusOne(): Int? {
+    return takeIf { it > -1 }
 }
