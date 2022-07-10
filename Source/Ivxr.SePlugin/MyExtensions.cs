@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -16,6 +17,7 @@ using Sandbox.Game.Multiplayer;
 using Sandbox.Game.Screens.Helpers;
 using Sandbox.Game.Weapons;
 using Sandbox.Game.World;
+using VRage.Audio;
 using Sandbox.ModAPI.Weapons;
 using VRage.Game;
 using VRage.Game.Entity;
@@ -435,6 +437,47 @@ namespace Iv4xr.SePlugin
                 GameDefinition = session.GameDefinition.ToDefinitionId(),
                 Settings = session.Settings.ToSessionSettings(),
                 Camera = session.ToCameraController(),
+            };
+        }
+
+        public static SoundBanks ToSoundBanks(this MyCueBank cueBank)
+        {
+            var hudPools =
+                    cueBank.GetInstanceFieldOrThrow<Dictionary<MyWaveFormat, MySourceVoicePool>>("m_voiceHudPools");
+            var soundPools =
+                    cueBank.GetInstanceFieldOrThrow<Dictionary<MyWaveFormat, MySourceVoicePool>>("m_voiceSoundPools");
+            var musicPools =
+                    cueBank.GetInstanceFieldOrThrow<Dictionary<MyWaveFormat, MySourceVoicePool>>("m_voiceMusicPools");
+            var sounds = soundPools.Values.SelectMany(sourceVoicePool =>
+                    sourceVoicePool.GetInstanceFieldOrThrow<ConcurrentDictionary<MySourceVoice, byte>>("m_allVoices")
+                            .Keys);
+            var huds = hudPools.Values.SelectMany(sourceVoicePool =>
+                    sourceVoicePool.GetInstanceFieldOrThrow<ConcurrentDictionary<MySourceVoice, byte>>("m_allVoices")
+                            .Keys);
+            var music = musicPools.Values.SelectMany(sourceVoicePool =>
+                    sourceVoicePool.GetInstanceFieldOrThrow<ConcurrentDictionary<MySourceVoice, byte>>("m_allVoices")
+                            .Keys);
+
+            return new SoundBanks()
+            {
+                Sound = sounds.ToSounds(),
+                Hud = huds.ToSounds(),
+                Music = music.ToSounds(),
+            };
+        }
+
+        public static List<Sound> ToSounds(this IEnumerable<IMySourceVoice> source)
+        {
+            return source.Select(x => x.ToSound()).ToList();
+        }
+
+        public static Sound ToSound(this IMySourceVoice source)
+        {
+            return new Sound()
+            {
+                CueEnum = source.CueEnum.ToString(),
+                IsPlaying = source.IsPlaying,
+                IsPaused = source.IsPaused,
             };
         }
     }

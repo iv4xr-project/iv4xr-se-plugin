@@ -15,10 +15,15 @@ interface SpaceEngineers {
     val admin: SpaceEngineersAdmin
     val screens: Screens
     val input: Input
+    val sound: Sound
 
     companion object {
         const val DEFAULT_AGENT_ID = "se0"
     }
+}
+
+interface Sound {
+    fun playingSounds(): SoundBanks
 }
 
 interface Input {
