@@ -6,13 +6,16 @@ import java.io.File
 import java.util.zip.ZipInputStream
 
 suspend fun TestRailClient.downloadCase(
-    outputDirectory: File = File("./src/jvmTest/resources/features/testrail/"),
     caseId: Long,
+    outputDirectory: File = File("./src/jvmTest/resources/features/testrail/"),
+    overwrite: Boolean = false,
 ) {
     val case = getCase(caseId)
     //val attachmentsForCase = getAttachmentsForCase(caseId)
     val outputFile = File(outputDirectory, "C$caseId.feature")
-    outputFile.writeText(case.featureContent())
+    if (overwrite || !outputFile.exists()) {
+        outputFile.writeText(case.featureContent())
+    }
 }
 
 suspend fun TestRailClient.downloadMaps(
