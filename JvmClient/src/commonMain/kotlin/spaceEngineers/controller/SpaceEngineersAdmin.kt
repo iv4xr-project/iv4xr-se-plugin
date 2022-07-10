@@ -67,6 +67,9 @@ interface CharacterAdmin {
     fun die()
     fun mainCharacterId(): String
     fun localCharacterId(): String?
+    fun updateEnergy(energy: Float)
+    fun updateOxygen(oxygen: Float)
+    fun updateHydrogen(hydrogen: Float)
 }
 
 interface ObserverAdmin {

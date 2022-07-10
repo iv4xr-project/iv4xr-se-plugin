@@ -55,5 +55,8 @@ namespace Iv4xr.SpaceEngineers
         void Die();
         string MainCharacterId();
         string LocalCharacterId();
+        void UpdateEnergy(float energy);
+        void UpdateOxygen(float oxygen);
+        void UpdateHydrogen(float hydrogen);
     }
 }

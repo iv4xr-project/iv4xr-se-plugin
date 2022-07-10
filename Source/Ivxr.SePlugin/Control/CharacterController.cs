@@ -5,8 +5,10 @@ using Iv4xr.PluginLib.Control;
 using Iv4xr.SpaceEngineers;
 using Iv4xr.SpaceEngineers.WorldModel;
 using Sandbox.Engine.Multiplayer;
+using Sandbox.Game;
 using Sandbox.Game.Entities;
 using Sandbox.Game.Entities.Character;
+using Sandbox.Game.EntityComponents;
 using Sandbox.Game.Gui;
 using Sandbox.Game.Multiplayer;
 using Sandbox.Game.World;
@@ -57,6 +59,25 @@ namespace Iv4xr.SePlugin.Control
             var character = MySession.Static.LocalCharacter;
             return character?.CharacterId().ToString();
         }
+
+        private MyResourceSourceComponent ResourceSource => Character.SuitBattery.ResourceSource;
+
+        public void UpdateEnergy(float energy)
+        {
+            var absoluteEnergy = MyEnergyConstants.BATTERY_MAX_CAPACITY * energy;
+            ResourceSource.SetRemainingCapacityByType(MyResourceDistributorComponent.ElectricityId, absoluteEnergy);
+        }
+
+        public void UpdateOxygen(float oxygen)
+        {
+            ResourceSource.SetRemainingCapacityByType(MyResourceDistributorComponent.OxygenId, oxygen);
+        }
+
+        public void UpdateHydrogen(float hydrogen)
+        {
+            ResourceSource.SetRemainingCapacityByType(MyResourceDistributorComponent.HydrogenId, hydrogen);
+        }
+
 
         public CharacterObservation Jump(PlainVec3D movement)
         {
