@@ -20,6 +20,8 @@ data class DefinitionId(
         const val CUBE_BLOCK = "CubeBlock"
         const val CUBE_GRID ="CubeGrid"
         const val WELDER = "Welder"
+        const val ANGLE_GRINDER = "AngleGrinder"
+        const val HAND_DRILL = "HandDrill"
         const val PHYSICAL_GUN = "PhysicalGunObject"
         const val ORE = "Ore"
         const val INGOT = "Ingot"

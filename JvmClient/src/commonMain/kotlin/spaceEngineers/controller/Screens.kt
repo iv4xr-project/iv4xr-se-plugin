@@ -115,7 +115,8 @@ interface InfoTab
 
 interface InventoryTab {
     fun data(): TerminalInventoryData
-    fun transferInventoryItem(sourceInventoryId: Int, destinationInventoryId: Int, itemId: Int)
+    fun transferInventoryItemToLeft(sourceInventoryId: Int, destinationInventoryId: Int, itemId: Int)
+    fun transferInventoryItemToRight(sourceInventoryId: Int, destinationInventoryId: Int, itemId: Int)
     fun withdraw()
     fun deposit()
     fun dropSelected()

@@ -68,7 +68,7 @@ class ScreenTest : MockOrRealGameTest(forceRealGame = true, loadScenario = false
     fun transferItem() = testContext {
         val firstLeftInventory = screens.terminal.inventory.data().leftInventories.first()
         val firstItem = firstLeftInventory.items.first()
-        screens.terminal.inventory.transferInventoryItem(0, 0, firstItem.itemId)
+        screens.terminal.inventory.transferInventoryItemToRight(0, 0, firstItem.itemId)
     }
 
     @Test

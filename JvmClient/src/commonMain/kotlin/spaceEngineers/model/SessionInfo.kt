@@ -5,32 +5,44 @@ import kotlinx.serialization.Serializable
 
 
 @Serializable
+data class CameraController(
+    @SerialName("IsInFirstPersonView")
+    val isInFirstPersonView: Boolean,
+    @SerialName("ForceFirstPersonCamera")
+    val forceFirstPersonCamera: Boolean,
+    @SerialName("CameraControllerEnum")
+    val cameraControllerEnum: Int
+)
+
+@Serializable
 data class SessionInfo(
     @SerialName("Name")
-    var name: String,
+    val name: String,
     @SerialName("Description")
-    var description: String? = null,
+    val description: String? = null,
     @SerialName("CurrentPath")
-    var currentPath: String,
+    val currentPath: String,
     @SerialName("IsAdminMenuEnabled")
-    var isAdminMenuEnabled: Boolean,
+    val isAdminMenuEnabled: Boolean,
     @SerialName("IsRunningExperimental")
-    var isRunningExperimental: Boolean,
+    val isRunningExperimental: Boolean,
     @SerialName("Ready")
-    var ready: Boolean,
+    val ready: Boolean,
     @SerialName("IsUnloading")
-    var isUnloading: Boolean,
+    val isUnloading: Boolean,
     @SerialName("IsCopyPastingEnabled")
-    var isCopyPastingEnabled: Boolean,
+    val isCopyPastingEnabled: Boolean,
     @SerialName("StreamingInProgress")
-    var streamingInProgress: Boolean,
+    val streamingInProgress: Boolean,
     @SerialName("IsServer")
-    var isServer: Boolean,
+    val isServer: Boolean,
     @SerialName("IsPausable")
-    var isPausable: Boolean,
+    val isPausable: Boolean,
     @SerialName("GameDefinition")
-    var gameDefinition: DefinitionId,
+    val gameDefinition: DefinitionId,
     @SerialName("Settings")
-    var settings: SessionSettings,
+    val settings: SessionSettings,
+    @SerialName("Camera")
+    val camera: CameraController? = null,
 )
 

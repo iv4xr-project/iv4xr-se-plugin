@@ -16,8 +16,10 @@ using Sandbox.Game.Multiplayer;
 using Sandbox.Game.Screens.Helpers;
 using Sandbox.Game.Weapons;
 using Sandbox.Game.World;
+using Sandbox.ModAPI.Weapons;
 using VRage.Game;
 using VRage.Game.Entity;
+using VRage.Game.ModAPI;
 using VRage.Game.ModAPI.Ingame;
 using VRageMath;
 using File = Iv4xr.SpaceEngineers.WorldModel.Screen.File;
@@ -346,16 +348,21 @@ namespace Iv4xr.SePlugin
             {
                 return tool.ToHandTool();
             }
-            
+
             if (entity is MyEngineerToolBase engineerTool)
             {
                 return engineerTool.ToHandTool();
             }
 
+            if (entity is MyHandDrill drill)
+            {
+                return drill.ToHandTool();
+            }
+
 
             return entity.ToEntity();
         }
-        
+
         public static HandTool ToHandTool(this MyEngineerToolBase handToolBase)
         {
             var handTool = new HandTool()
@@ -363,6 +370,16 @@ namespace Iv4xr.SePlugin
                 IsShooting = handToolBase.IsShooting,
             };
             handToolBase.ToEntity(handTool);
+            return handTool;
+        }
+
+        public static HandTool ToHandTool(this IMyHandheldGunObject<MyToolBase> handToolBase)
+        {
+            var handTool = new HandTool()
+            {
+                IsShooting = handToolBase.IsShooting,
+            };
+            ((MyEntity)handToolBase).ToEntity(handTool);
             return handTool;
         }
 
@@ -384,6 +401,22 @@ namespace Iv4xr.SePlugin
                 InfiniteAmmo = settings.InfiniteAmmo,
             };
         }
+        
+        public static CameraController ToCameraController(this MySession session)
+        {
+            if (session.CameraController == null)
+            {
+                return null;
+            }
+
+            return new CameraController()
+            {
+                IsInFirstPersonView = session.CameraController.IsInFirstPersonView,
+                ForceFirstPersonCamera = session.CameraController.ForceFirstPersonCamera,
+                Entity = session.CameraController?.Entity?.ToPolymorphicEntity(),
+                CameraControllerEnum = (CameraControllerEnum)session.GetCameraControllerEnum(),
+            };
+        }
 
         public static SessionInfo ToSessionInfo(this MySession session)
         {
@@ -401,6 +434,7 @@ namespace Iv4xr.SePlugin
                 IsPausable = session.IsPausable(),
                 GameDefinition = session.GameDefinition.ToDefinitionId(),
                 Settings = session.Settings.ToSessionSettings(),
+                Camera = session.ToCameraController(),
             };
         }
     }

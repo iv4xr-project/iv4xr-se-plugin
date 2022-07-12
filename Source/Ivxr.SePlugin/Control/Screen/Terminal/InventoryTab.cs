@@ -170,11 +170,21 @@ namespace Iv4xr.SePlugin.Control.Screen.Terminal
             }
         }
 
-        public void TransferInventoryItem(int sourceInventoryId, int destinationInventoryId, int itemId)
+        public void TransferInventoryItemToRight(int sourceInventoryId, int destinationInventoryId, int itemId)
         {
             var sourceInventory = LeftInventories()[sourceInventoryId];
             var rightInventory = RightInventories();
             var destinationInventory = rightInventory[destinationInventoryId];
+            MyInventory.TransferByUser(sourceInventory, destinationInventory, (uint)itemId,
+                destinationInventory.ItemCount);
+            UntypedController.CallMethod<object>("RefreshSelectedInventoryItem", new object[] { });
+        }
+        
+        public void TransferInventoryItemToLeft(int sourceInventoryId, int destinationInventoryId, int itemId)
+        {
+            var destinationInventory = LeftInventories()[sourceInventoryId];
+            var rightInventory = RightInventories();
+            var sourceInventory = rightInventory[destinationInventoryId];
             MyInventory.TransferByUser(sourceInventory, destinationInventory, (uint)itemId,
                 destinationInventory.ItemCount);
             UntypedController.CallMethod<object>("RefreshSelectedInventoryItem", new object[] { });

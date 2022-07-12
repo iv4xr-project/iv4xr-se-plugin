@@ -138,7 +138,9 @@ namespace Iv4xr.SpaceEngineers
     public interface IInventoryTab
     {
         TerminalInventoryData Data();
-        void TransferInventoryItem(int sourceInventoryId, int destinationInventoryId, int itemId);
+        void TransferInventoryItemToRight(int sourceInventoryId, int destinationInventoryId, int itemId);
+        void TransferInventoryItemToLeft(int sourceInventoryId, int destinationInventoryId, int itemId);
+        
         void DropSelected();
         void Withdraw();
         void Deposit();

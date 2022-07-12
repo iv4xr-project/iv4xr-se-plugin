@@ -25,7 +25,7 @@ data class FrameSnapshot(
             )
         }
 
-        fun clicks(mouseButton: MouseButton, clickCount: Int = 1): List<FrameSnapshot> {
+        fun clicks(mouseButton: MouseButton = MouseButton.LEFT, clickCount: Int = 1): List<FrameSnapshot> {
             val mousePressed = FrameSnapshot(
                 InputSnapshot(mouse = MouseSnapshot.buttonClicked(mouseButton))
             )

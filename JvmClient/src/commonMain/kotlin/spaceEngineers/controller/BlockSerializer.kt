@@ -6,7 +6,9 @@ import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import spaceEngineers.model.*
+import spaceEngineers.model.DefinitionId.Companion.ANGLE_GRINDER
 import spaceEngineers.model.DefinitionId.Companion.CUBE_GRID
+import spaceEngineers.model.DefinitionId.Companion.HAND_DRILL
 import spaceEngineers.model.DefinitionId.Companion.PHYSICAL_GUN
 import spaceEngineers.model.DefinitionId.Companion.WELDER
 import spaceEngineers.util.generator.removeBuilderPrefix
@@ -51,6 +53,8 @@ object EntitySerializer : JsonContentPolymorphicSerializer<ExtendedEntity>(Exten
         PHYSICAL_GUN to HandTool.serializer(),
         CUBE_GRID to CubeGrid.serializer(),
         WELDER to HandTool.serializer(),
+        ANGLE_GRINDER to HandTool.serializer(),
+        HAND_DRILL to HandTool.serializer(),
     )
 
 

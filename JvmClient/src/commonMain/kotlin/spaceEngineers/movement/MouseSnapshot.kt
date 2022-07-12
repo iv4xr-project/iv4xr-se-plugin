@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 enum class MouseButton {
-    LEFT, RIGHT, MIDDLE, XBUTTON1, XBUTTON2;
+    NONE, LEFT, RIGHT, MIDDLE, XBUTTON1, XBUTTON2;
 }
 
 @Serializable
