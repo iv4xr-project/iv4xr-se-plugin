@@ -17,6 +17,43 @@ suspend fun SpaceEngineers.dieAndConfirm(delayMs: Long = 100L) {
     screens.messageBox.pressYes()
 }
 
+suspend fun SpaceEngineers.ensureCamera(cameraConfig: CameraConfig) {
+    val info = session.info()
+    val cameraInfo = info.camera ?: error("No camera info")
+    when (cameraConfig) {
+        CameraConfig.FIRST_PERSON -> {
+            if (!cameraInfo.isInFirstPersonView) {
+                observer.switchCamera()
+            }
+        }
+        CameraConfig.THIRD_PERSON -> {
+            if (cameraInfo.isInFirstPersonView) {
+                observer.switchCamera()
+            }
+        }
+    }
+}
+
+suspend fun ConnectionManagerUser.handleScenarioParameters(data: Map<String, String>) {
+    data["delay_after_spawn"]?.toFloatOrNull()?.let { delaySeconds ->
+        delay((delaySeconds * 1000f).toLong())
+    }
+    data["energy"]?.let {
+        admin { admin.character.updateEnergy(energy = it.toFloat()) }
+    }
+    data["hydrogen"]?.let {
+        admin { admin.character.updateHydrogen(hydrogen = it.toFloat()) }
+    }
+    data["oxygen"]?.let {
+        admin { admin.character.updateOxygen(oxygen = it.toFloat()) }
+    }
+    data["camera"]?.let { it ->
+        mainClient {
+            ensureCamera(CameraConfig.fromText(it))
+        }
+    }
+}
+
 fun ConnectionManagerUser.ensureEveryoneIsSameSession() {
     val sessionInfos = all {
         session.info()

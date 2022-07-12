@@ -46,9 +46,7 @@ class MedbayDSSetup(
         val observerMedbay = data.getValue("observer_medbay")
         val faction = data["faction"] ?: "Astronaut Movement"
         respawner.respawn(mainMedbay, observerMedbay, faction = faction)
-        data["delay_after_spawn"]?.toFloatOrNull()?.let { delaySeconds ->
-            delay((delaySeconds.toDouble() * 1000.0).toLong())
-        }
+        handleScenarioParameters(data)
     }
 
     private fun onScenario(scenarioId: String) = hideUndeclaredThrowableException {

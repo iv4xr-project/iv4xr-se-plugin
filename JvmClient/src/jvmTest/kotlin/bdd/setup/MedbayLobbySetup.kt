@@ -4,7 +4,18 @@ import kotlinx.coroutines.delay
 import spaceEngineers.controller.connection.ConnectionManager
 import spaceEngineers.controller.connection.ConnectionSetup
 import testhelp.hideUndeclaredThrowableException
+import kotlin.test.assertNotNull
 
+
+enum class CameraConfig(val text: String) {
+    FIRST_PERSON("1st person"), THIRD_PERSON("3rd person");
+
+    companion object {
+        fun fromText(text: String): CameraConfig {
+            return values().firstOrNull { it.text == text } ?: error("Don't know camera $text")
+        }
+    }
+}
 
 class MedbayLobbySetup(
     val connectionSetup: ConnectionSetup,
@@ -44,9 +55,7 @@ class MedbayLobbySetup(
         val observerMedbay = data.getValue("observer_medbay")
         val faction = data["faction"] ?: "Astronaut Movement"
         respawner.respawn(mainMedbay, observerMedbay, faction = faction)
-        data["delay_after_spawn"]?.toFloatOrNull()?.let { delaySeconds ->
-            delay((delaySeconds.toDouble() * 1000.0).toLong())
-        }
+        handleScenarioParameters(data)
     }
 
     private fun onScenario(scenarioId: String) = hideUndeclaredThrowableException {
