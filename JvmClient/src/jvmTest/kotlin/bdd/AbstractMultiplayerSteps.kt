@@ -1,55 +1,54 @@
 package bdd
 
+import bdd.repetitiveassert.RepetitiveAssertConfig
+import bdd.repetitiveassert.RepetitiveAssertTestCase
+import bdd.repetitiveassert.SimpleRepetitiveAssertTestCase
+import bdd.setup.ConnectionManagerUser
+import bdd.setup.GlobalConnectionManagerUser
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
-import spaceEngineers.controller.ContextControllerWrapper
-import spaceEngineers.controller.SpaceEngineers
 import spaceEngineers.controller.connection.ConnectionManager
+import spaceEngineers.controller.loadFromTestResources
+import testhelp.hideUndeclaredThrowableException
 
 abstract class AbstractMultiplayerSteps(
-
-) : AutoCloseable {
+    config: RepetitiveAssertConfig = RepetitiveAssertConfig(),
+    simpleRepetitiveAssertTestCase: SimpleRepetitiveAssertTestCase = SimpleRepetitiveAssertTestCase(config),
+    val connectionManagerUser: ConnectionManagerUser = GlobalConnectionManagerUser(),
+) : AutoCloseable, RepetitiveAssertTestCase by simpleRepetitiveAssertTestCase, ConnectionManagerUser by connectionManagerUser {
 
     val cm: ConnectionManager
-        get() = CM
+        get() = testSetup.connectionManager
 
     override fun close() {
         cm.close()
     }
 
-    suspend fun smallPause() {
-        delay(500)
+
+    fun ensureCharacterExists() = clients {
+        if (screens.focusedScreen() == "Medicals") {
+            try {
+                screens.medicals.selectFaction(0)
+                screens.medicals.join()
+            } catch (e: Exception) {
+
+            }
+            pause()
+            screens.medicals.selectRespawn(0)
+            delay(100)
+            screens.medicals.respawn()
+            pause()
+        }
     }
 
-    suspend fun pause() {
-        delay(5_000)
+    fun loadScenarioSinglePlayer(scenarioId: String) = mainClient {
+        session.loadFromTestResources(scenarioId)
+        screens.waitUntilTheGameLoaded()
+        smallPause()
     }
 
-    suspend fun bigPause() {
-        delay(15_000)
+    suspend fun pauseAfterAction() {
+        delay(1000)
     }
 
-    fun observers(block: suspend ContextControllerWrapper.() -> Unit) = runBlocking {
-        cm.observers(block)
-    }
-
-    fun <T> mainClient(block: suspend ContextControllerWrapper.() -> T): T = runBlocking {
-        cm.mainClient(block)
-    }
-
-    fun clients(block: suspend ContextControllerWrapper.() -> Unit) = runBlocking {
-        cm.clients(block)
-    }
-
-    fun games(block: suspend ContextControllerWrapper.() -> Unit) = runBlocking {
-        cm.games(block)
-    }
-
-    fun admin(block: suspend ContextControllerWrapper.() -> Unit) = runBlocking {
-        cm.admin(block)
-    }
-
-    companion object {
-        lateinit var CM: ConnectionManager
-    }
 }

@@ -10,6 +10,7 @@ interface SpaceEngineersAdmin {
     fun updateDefaultInteractDistance(distance: Float)
     fun debugInfo(): DebugInfo
     val tests: TestAdmin
+    fun showNotification(text: String)
 }
 
 interface TestAdmin {
@@ -23,7 +24,8 @@ interface BlocksAdmin {
         blockDefinitionId: DefinitionId,
         position: Vec3F,
         orientationForward: Vec3F,
-        orientationUp: Vec3F
+        orientationUp: Vec3F,
+        color: Vec3F? = null,
     ): String
 
     fun placeInGrid(
@@ -31,7 +33,8 @@ interface BlocksAdmin {
         gridId: String,
         minPosition: Vec3I,
         orientationForward: Vec3I,
-        orientationUp: Vec3I
+        orientationUp: Vec3I,
+        color: Vec3F? = null,
     ): String
 
     fun remove(blockId: BlockId)
@@ -61,6 +64,9 @@ interface CharacterAdmin {
 
     fun remove(id: String)
     fun showTerminal(blockId: String)
+    fun die()
+    fun mainCharacterId(): String
+    fun localCharacterId(): String?
 }
 
 interface ObserverAdmin {

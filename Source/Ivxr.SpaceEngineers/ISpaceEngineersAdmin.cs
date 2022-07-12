@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Iv4xr.SpaceEngineers.WorldModel;
 using static Iv4xr.SpaceEngineers.Role;
 using static Iv4xr.SpaceEngineers.Purpose;
@@ -16,6 +17,7 @@ namespace Iv4xr.SpaceEngineers
         void UpdateDefaultInteractDistance(float distance);
         DebugInfo DebugInfo();
         ITestAdmin Tests { get; }
+        void ShowNotification(string text);
     }
 
     public interface IObserverAdmin
@@ -29,13 +31,12 @@ namespace Iv4xr.SpaceEngineers
         void Remove(string blockId);
 
         void SetIntegrity(string blockId, float integrity);
-
+        
         string PlaceAt(DefinitionId blockDefinitionId, PlainVec3D position, PlainVec3D orientationForward,
-            PlainVec3D orientationUp);
+            PlainVec3D orientationUp, PlainVec3F? color);
 
         string PlaceInGrid(DefinitionId blockDefinitionId, string gridId, PlainVec3I minPosition,
-            PlainVec3I orientationForward,
-            PlainVec3I orientationUp);
+            PlainVec3I orientationForward, PlainVec3I orientationUp, PlainVec3F? color);
     }
 
     public interface ICharacterAdmin
@@ -51,5 +52,8 @@ namespace Iv4xr.SpaceEngineers
         void Switch(string id);
         void Remove(string id);
         void ShowTerminal(string blockId);
+        void Die();
+        string MainCharacterId();
+        string LocalCharacterId();
     }
 }

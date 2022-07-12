@@ -14,7 +14,9 @@ data class CharacterObservation(
     @SerialName("OrientationUp")
     override val orientationUp: Vec3F,
     @SerialName("Velocity")
-    val velocity: Vec3F,
+    override val velocity: Vec3F,
+    @SerialName("Gravity")
+    val gravity: Vec3F = Vec3F.ZERO,
     @SerialName("Extent")
     val extent: Vec3F,
     @SerialName("JetpackRunning")
@@ -48,5 +50,24 @@ data class CharacterObservation(
     @SerialName("BootsState")
     val bootsState: BootsState,
     @SerialName("DisplayName")
-    val displayName: String,
-) : Entity
+    override val displayName: String,
+    @SerialName("RelativeDampeningEntity")
+    val relativeDampeningEntity: BaseEntity? = null,
+    @SerialName("MovementFlags")
+    val movementFlags: CharacterMovementFlags = CharacterMovementFlags(0u),
+
+    @SerialName("Name")
+    override val name: String,
+    @SerialName("InScene")
+    override val inScene: Boolean,
+    @SerialName("DefinitionId")
+    override val definitionId: DefinitionId,
+
+    @SerialName("JetpackControlThrust")
+    val jetpackControlThrust: Vec3F = Vec3F.ZERO,
+    @SerialName("JetpackFinalThrust")
+    val jetpackFinalThrust: Vec3F = Vec3F.ZERO,
+    @SerialName("CurrentWeapon")
+    val currentWeapon: ExtendedEntity? = null,
+
+) : ExtendedEntity

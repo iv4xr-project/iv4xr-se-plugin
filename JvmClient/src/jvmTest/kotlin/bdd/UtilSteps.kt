@@ -8,9 +8,9 @@ import java.lang.Thread.sleep
 @RunWith(Cucumber::class)
 class UtilSteps : AbstractMultiplayerSteps() {
 
-    @Given("Test waits for {int} seconds.")
-    fun test_waits_for_seconds(seconds: Int) {
-        sleep(seconds * 1000L)
+    @Given("Test waits for {float} seconds.")
+    fun test_waits_for_seconds(seconds: Float) {
+        sleep((seconds * 1000f).toLong())
     }
 
 }

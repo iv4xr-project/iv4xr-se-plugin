@@ -9,8 +9,6 @@ namespace Iv4xr.SpaceEngineers.WorldModel
         public float BuildIntegrity;
         public float Integrity;
 
-        public DefinitionId DefinitionId;
-
         public PlainVec3D MinPosition;
         public PlainVec3D MaxPosition;
         public PlainVec3I Size;

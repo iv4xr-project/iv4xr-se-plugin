@@ -46,7 +46,7 @@ namespace Iv4xr.SePlugin.Control
 
         private readonly float m_blockCountWarningRatio;
 
-        private readonly BlockEntityBuilder m_blockEntityBuilder = new BlockEntityBuilder();
+        public readonly BlockEntityBuilder BlockEntityBuilder = new BlockEntityBuilder();
 
         public EntityBuilder(int blockCountTakeLimit = 10_000, float blockCountWarningRatio = 0.9f)
         {
@@ -57,18 +57,26 @@ namespace Iv4xr.SePlugin.Control
         public CubeGrid CreateSeGrid(MyCubeGrid sourceGrid, BoundingSphereD sphere, ObservationMode mode)
         {
             var seBlocks = CreateGridBLocks(FoundBlocks(sourceGrid, sphere), mode).ToList();
+            return CreateSeGrid(sourceGrid, seBlocks);
+        }
+        
+        public static CubeGrid CreateSeGrid(MyCubeGrid sourceGrid, List<Block> blocks)
+        {
             var position = sourceGrid.PositionComp.GetPosition();
             var orientationUp = sourceGrid.PositionComp.GetOrientation().Up;
             var orientationForward = sourceGrid.PositionComp.GetOrientation().Forward;
-            return new CubeGrid
+            var result =  new CubeGrid
             {
                 Id = sourceGrid.EntityId.ToString(),
                 Position = position.ToPlain(),
                 OrientationForward = orientationForward.ToPlain(),
                 OrientationUp = orientationUp.ToPlain(),
-                Blocks = seBlocks,
+                Blocks = blocks,
                 Mass = sourceGrid.Mass,
+                Parked = sourceGrid.IsParked,
             };
+            sourceGrid.ToEntity(result);
+            return result;
         }
 
         private readonly PreviousBlocksFilter m_previousBlocksFilter = new PreviousBlocksFilter();
@@ -110,7 +118,7 @@ namespace Iv4xr.SePlugin.Control
 
         public Block CreateGridBlock(MySlimBlock sourceBlock)
         {
-            return m_blockEntityBuilder.CreateAndFill(sourceBlock);
+            return BlockEntityBuilder.CreateAndFill(sourceBlock);
         }
 
     }

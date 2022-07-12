@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Iv4xr.SpaceEngineers.WorldModel;
+using Iv4xr.SpaceEngineers.WorldModel.Screen;
 
 namespace Iv4xr.SpaceEngineers
 {
@@ -17,6 +18,7 @@ namespace Iv4xr.SpaceEngineers
         ILoadGame LoadGame { get; }
         INewGame NewGame { get; }
         IGamePlay GamePlay { get; }
+        ISaveAs SaveAs { get; }
     }
 
     public interface IGamePlay
@@ -54,6 +56,9 @@ namespace Iv4xr.SpaceEngineers
         void Character();
         void ExitToWindows();
         void ExitToMainMenu();
+        void SaveAs();
+        void Save();
+        void Players();
     }
 
     public interface IMessageBox
@@ -65,10 +70,13 @@ namespace Iv4xr.SpaceEngineers
 
     public interface IMedicals
     {
-        List<MedicalRoom> MedicalRooms();
-        void Respawn(int roomIndex);
-        List<Faction> Factions();
-        void ChooseFaction(int factionIndex);
+        MedicalsData Data();
+        void SelectRespawn(int roomIndex);
+        void Respawn();
+        void SelectFaction(int factionIndex);
+        void Join();
+        void Refresh();
+        void ShowMessageOfTheDay();
     }
 
     public interface ITerminal
@@ -76,8 +84,42 @@ namespace Iv4xr.SpaceEngineers
         TerminalScreenData Data();
         void SelectTab(int index);
         IInventoryTab Inventory { get; }
+        IControlPanelTab ControlPanel { get;  }
         IProductionTab Production { get; }
+        IInfoTab Info { get;  }
+        IFactionsTab Factions { get;  }
+        ICommsTab Comms { get;  }
+        IGpsTab Gps { get;  }
         void Close();
+    }
+
+    public interface IGpsTab
+    {
+        
+    }
+
+    public interface ICommsTab
+    {
+        
+    }
+
+    public interface IFactionsTab
+    {
+        
+    }
+
+    public interface IControlPanelTab
+    {
+        TerminalControlPanelData Data();
+        void FilterBlocks(string text);
+        void EnterBlockGroup(string text);
+        void GroupSave();
+        void GroupDelete();
+    }
+
+    public interface IInfoTab
+    {
+        
     }
     
     public interface IProductionTab {
@@ -136,5 +178,13 @@ namespace Iv4xr.SpaceEngineers
 
     public interface INewGame
     {
+    }
+
+    public interface ISaveAs
+    {
+        SaveAsData Data();
+        void PressOk();
+        void PressCancel();
+        void SetName(string name);
     }
 }

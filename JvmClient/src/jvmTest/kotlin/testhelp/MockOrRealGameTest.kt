@@ -7,6 +7,7 @@ import spaceEngineers.transport.SocketReaderWriter.Companion.DEFAULT_PORT
 import spaceEngineers.transport.StringLineReaderWriter
 import spaceEngineers.transport.closeIfCloseable
 import java.io.File
+import java.lang.reflect.UndeclaredThrowableException
 
 
 abstract class MockOrRealGameTest(
@@ -49,6 +50,8 @@ abstract class MockOrRealGameTest(
             try {
                 spaceEngineers.session.loadFromTestResources(scenarioId)
                 spaceEngineers.screens.waitUntilTheGameLoaded()
+            } catch (e: UndeclaredThrowableException) {
+                throw e.cause ?: e
             } catch (e: Throwable) {
                 spaceEngineers.closeIfCloseable()
                 throw e

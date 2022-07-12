@@ -5,7 +5,6 @@ import spaceEngineers.model.Vec3F
 import spaceEngineers.model.extensions.allBlocks
 import spaceEngineers.model.extensions.blockById
 import testhelp.MockOrRealGameTest
-import testhelp.assertFloatEquals
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -26,6 +25,6 @@ class SetIntegrityTest :
         assertEquals(block.integrity, block.maxIntegrity)
         admin.blocks.setIntegrity(block.id, block.maxIntegrity * integrityPercentage)
         val observedBlock = observer.observeBlocks().blockById(block.id)
-        assertFloatEquals(observedBlock.integrity, block.maxIntegrity * integrityPercentage, diff = 0.01f)
+        assertEquals(observedBlock.integrity, block.maxIntegrity * integrityPercentage, absoluteTolerance = 0.01f)
     }
 }

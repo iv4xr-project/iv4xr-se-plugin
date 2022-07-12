@@ -2,6 +2,8 @@ package spaceEngineers.controller
 
 import spaceEngineers.model.*
 import spaceEngineers.navigation.NavGraph
+import spaceEngineers.movement.FrameSnapshot
+
 
 interface SpaceEngineers {
     val session: Session
@@ -12,10 +14,18 @@ interface SpaceEngineers {
     val blocks: Blocks
     val admin: SpaceEngineersAdmin
     val screens: Screens
+    val input: Input
 
     companion object {
         const val DEFAULT_AGENT_ID = "se0"
     }
+}
+
+interface Input {
+    fun startRecording()
+    fun stopRecording(): List<FrameSnapshot>
+    fun startPlaying(snapshots: List<FrameSnapshot>)
+    fun stopPlaying()
 }
 
 interface Session {
@@ -24,6 +34,7 @@ interface Session {
     fun disconnect()
     fun exitGame()
     fun exitToMainMenu()
+    fun info(): SessionInfo
 }
 
 interface Character {
@@ -44,12 +55,16 @@ interface Character {
         roll: Float = 0f,
         ticks: Int = 1,
     ): CharacterObservation
+    fun jump(movement: Vec3F = Vec3F.ZERO)
 
     fun turnOnJetpack(): CharacterObservation
     fun turnOffJetpack(): CharacterObservation
     fun turnOnDampeners(): CharacterObservation
+    fun turnOnRelativeDampeners(): CharacterObservation
     fun turnOffDampeners(): CharacterObservation
     fun switchHelmet(): CharacterObservation
+    fun switchParkedStatus(): Boolean
+    fun switchWalk(): Boolean
 
     fun beginUsingTool()
     fun endUsingTool()
@@ -67,11 +82,12 @@ interface Character {
 
 interface Observer {
     fun observe(): CharacterObservation
+    fun observeControlledEntity(): ExtendedEntity
     fun observeBlocks(): Observation
     fun observeNewBlocks(): Observation
     fun observeCharacters(): List<CharacterObservation>
     fun observeFloatingObjects(): List<FloatingObject>
-    fun navigationGraph(): NavGraph
+    fun navigationGraph(gridId: String): NavGraph
 
     /**
      * Creates screenshot in the game. If there's an error, no exception is thrown (swallowed by the game itself).
@@ -87,6 +103,7 @@ interface Items {
     fun equip(toolbarLocation: ToolbarLocation)
     fun setToolbarItem(definitionId: DefinitionId, toolbarLocation: ToolbarLocation)
     fun toolbar(): Toolbar
+    fun activate(toolbarLocation: ToolbarLocation)
 }
 
 interface Blocks {

@@ -23,5 +23,13 @@ fun String.toFile(): File {
 }
 
 fun Session.loadFromTestResources(scenarioId: String, scenarioDir: String = SCENARIO_DIR) {
-    loadScenario(File(scenarioDir, scenarioId).absolutePath.unixToWindowsPath())
+    val file = File(scenarioDir, scenarioId)
+    val unixPath = file.absolutePath.unixToWindowsPath()
+    check(
+        file.exists() ||
+                unixPath.toFile().exists()
+    ) {
+        "Couldn't find scenario"
+    }
+    loadScenario(unixPath)
 }

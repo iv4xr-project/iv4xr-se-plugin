@@ -3,8 +3,12 @@ package spaceEngineers.util.generator.maze
 import spaceEngineers.controller.SpaceEngineers
 import spaceEngineers.controller.SpaceEngineersJavaProxyBuilder
 import spaceEngineers.model.DefinitionId
+import spaceEngineers.model.Vec3F
+import spaceEngineers.model.Vec3I
 import spaceEngineers.model.extensions.allBlocks
-import java.lang.Exception
+import spaceEngineers.util.generator.map.BlockPlacementInformation
+import spaceEngineers.util.generator.map.DataBlockPlacementInformation
+import spaceEngineers.util.generator.map.MapPlacer
 
 fun SpaceEngineers.cleanBlocks() {
     observer.observeBlocks().allBlocks.forEach {
@@ -21,11 +25,21 @@ fun main(args: Array<String>) {
     val spaceEngineers = SpaceEngineersJavaProxyBuilder().localhost()
     spaceEngineers.cleanBlocks()
 
-    val placer = BlockMazePlacer(
-        maze = Maze(12, 25),
-        spaceEngineers = spaceEngineers,
-        bottomBlockDefinitionId = DefinitionId.cubeBlock("LargeBlockArmorBlock"),
-        wallBlockDefinitionId = DefinitionId.cubeBlock("LargeHeavyBlockArmorBlock"),
+    val blockPlacementInformation = DataBlockPlacementInformation(
+        blockId = DefinitionId.cubeBlock("LargeHeavyBlockArmorBlock"),
+        orientationForward = Vec3I.FORWARD,
+        orientationUp = Vec3I.UP,
+        color = Vec3F(0.5, 1.0, 1.0)
     )
-    placer.generateAsSingleGrid()
+
+
+    val placer = MapPlacer(
+        map = MazeMapLayer(
+            maze = Maze(12, 25),
+            blockToPlace = blockPlacementInformation,
+        ),
+        spaceEngineers = spaceEngineers,
+        floorPlacer = blockPlacementInformation,
+    )
+    placer.generate()
 }

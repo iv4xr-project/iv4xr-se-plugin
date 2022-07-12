@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Iv4xr.SpaceEngineers.Navigation;
+using Iv4xr.SpaceEngineers.UI;
 using Iv4xr.SpaceEngineers.WorldModel;
 using static Iv4xr.SpaceEngineers.Role;
 
@@ -15,6 +16,7 @@ namespace Iv4xr.SpaceEngineers
         IBlocks Blocks { get; }
         ISpaceEngineersAdmin Admin { get; }
         IScreens Screens { get; }
+        IInput Input { get; }
     }
     
     public interface ISessionController
@@ -32,16 +34,19 @@ namespace Iv4xr.SpaceEngineers
         
         [Role(Game)]
         void ExitToMainMenu();
+
+        SessionInfo Info();
     }
     
     public interface IObserver
     {
         CharacterObservation Observe();
+        Entity ObserveControlledEntity();
         Observation ObserveBlocks();
         Observation ObserveNewBlocks();
         List<CharacterObservation> ObserveCharacters();
         List<FloatingObject> ObserveFloatingObjects();
-        NavGraph NavigationGraph();
+        NavGraph NavigationGraph(string gridId);
         void SwitchCamera();
         void TakeScreenshot(string absolutePath);
     }
@@ -50,10 +55,9 @@ namespace Iv4xr.SpaceEngineers
     public interface IItems
     {
         void Equip(ToolbarLocation toolbarLocation);
-
         void SetToolbarItem(DefinitionId definitionId, ToolbarLocation toolbarLocation);
-
         Toolbar Toolbar();
+        void Activate(ToolbarLocation toolbarLocation);
     }
     
     public interface IDefinitions
@@ -68,9 +72,11 @@ namespace Iv4xr.SpaceEngineers
     public interface ICharacterController
     {
         CharacterObservation MoveAndRotate(PlainVec3D movement, PlainVec2F rotation3, float roll = 0, int ticks = 1);
+        CharacterObservation Jump(PlainVec3D movement);
         CharacterObservation TurnOnJetpack();
         CharacterObservation TurnOffJetpack();
         CharacterObservation TurnOnDampeners();
+        CharacterObservation TurnOnRelativeDampeners();
         CharacterObservation TurnOffDampeners();
         CharacterObservation SwitchHelmet();
         void BeginUsingTool();
@@ -78,6 +84,8 @@ namespace Iv4xr.SpaceEngineers
         void Use();
         void ShowTerminal();
         void ShowInventory();
+        bool SwitchParkedStatus();
+        bool SwitchWalk();
     }
 
     [Role(Game)]

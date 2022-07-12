@@ -7,7 +7,7 @@ using VRage.Plugins;
 
 namespace Iv4xr.SePlugin
 {
-    public class IvxrPlugin : IConfigurablePlugin
+    public class IvxrPlugin : IConfigurablePlugin, IHandleInputPlugin
     {
         public static IvxrPluginContext Context { get; private set; }
 
@@ -33,7 +33,12 @@ namespace Iv4xr.SePlugin
 
         public void Update()
         {
-            Context.MethodCallContext.MainThread.CallEverything();
+            Context.Update();
+        }
+
+        public void HandleInput()
+        {
+            Context.HandleInput();
         }
 
 

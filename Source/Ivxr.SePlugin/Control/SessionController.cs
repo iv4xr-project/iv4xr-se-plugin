@@ -1,5 +1,6 @@
 ﻿using Iv4xr.PluginLib;
 using Iv4xr.SpaceEngineers;
+using Iv4xr.SpaceEngineers.WorldModel;
 using Sandbox.Engine.Networking;
 using Sandbox.Game.Gui;
 using Sandbox.Game.World;
@@ -44,6 +45,11 @@ namespace Iv4xr.SePlugin.Control
             MySessionLoader.UnloadAndExitToMenu();
         }
         
+        public SessionInfo Info()
+        {
+            return MySession.Static.ToSessionInfo();
+        }
+
         void ServerResponded(object sender, MyGameServerItem serverItem)
         {
             //CloseHandlers();

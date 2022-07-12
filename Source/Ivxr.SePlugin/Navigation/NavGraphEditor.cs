@@ -12,6 +12,9 @@ namespace Iv4xr.SePlugin.Navigation
 {
     public class NavGraphEditor
     {
+        // Distance between the position of the character and the position (center) of the cube he's standing on.
+        private const double PositionOffset = 1.2475;
+        
         private class GridLocation
         {
             public GridLocation(Block block)
@@ -34,28 +37,22 @@ namespace Iv4xr.SePlugin.Navigation
         /// <summary>
         /// Calculates navigation graph based on the largest grid in the surroundings of the character. 
         /// </summary>
+        /// <param name="gridId"></param>
         /// NOTE: The graph is calculated each time from scratch, it can probably be modified to allow for incremental
         /// updates, but it would be non-trivial. (Extending the platform should be easy, removing blocks or adding
         /// obstacles less easy.
         /// <returns></returns>
-        public FatNavGraph GetGraph()
+        public FatNavGraph GetGraph(string gridId)
         {
-            var sphere = m_lowLevelObserver.GetBoundingSphere(
-                null,
-                m_lowLevelObserver.Radius * 2d);  // Get some look-ahead
-
-            var sourceGrid = m_lowLevelObserver.Grids().ToList()
-                    .OrderByDescending(g => g.BlocksCount).First();  // Get the biggest grid.
-
-            // Convert both "ends" of the orientation vector
-            var zeroInGridCoordinates = sourceGrid.WorldToGridScaledLocal(Vector3D.Zero);
-            var characterOrientationUpInGrid = sourceGrid.WorldToGridScaledLocal(
-                m_lowLevelObserver.CurrentPlayerOrientationUp()) - zeroInGridCoordinates;
+            var sourceGrid = m_lowLevelObserver.GetGridById(gridId);
             
+            // Get some look-ahead
+            var sphere = m_lowLevelObserver.GetBoundingSphere(null, m_lowLevelObserver.Radius * 3d);
+
             // TODO: offset the start position to be below the character's feet
             return CreateGraph(m_lowLevelObserver.ConvertToSeGrid(sourceGrid, sphere),
                 m_lowLevelObserver.CurrentPlayerPosition(),
-                GuessWhichSideIsUp(characterOrientationUpInGrid));
+                GuessWhichSideIsUp(sourceGrid));
         }
 
         internal FatNavGraph CreateGraph(CubeGrid grid, Vector3D start, Vector3I up)
@@ -83,7 +80,7 @@ namespace Iv4xr.SePlugin.Navigation
                 if (map.ContainsKey(currentPosition + up) || map.ContainsKey(currentPosition + 2*up))
                     continue;
 
-                var fatNode = nodeBuilder.Create(currentCube.Position);  // TODO(P): Add some position offset.
+                var fatNode = nodeBuilder.Create(currentCube.Position.ToVector3D() + PositionOffset * up);
                 map[currentPosition].Node = fatNode;
                 navGraph.Nodes.Add(fatNode);
 
@@ -144,18 +141,28 @@ namespace Iv4xr.SePlugin.Navigation
             return startBlock;
         }
 
-        /// <param name="characterOrientationUpInGrid">character orientation up converted to grid coordinates</param>
-        internal static Vector3I GuessWhichSideIsUp(Vector3D characterOrientationUpInGrid)
+        /// <param name="characterOrientationUpInGridCoords">character orientation up converted to grid coordinates</param>
+        internal static Vector3I GuessWhichSideIsUp(Vector3D characterOrientationUpInGridCoords)
         {
             var closestAngleVector = new StepVectors(Vector3I.Up).Enumerate()
-                    .Select(v => new Tuple<double, Vector3I>(characterOrientationUpInGrid.Dot((Vector3D)v), v))
+                    .Select(v => new Tuple<double, Vector3I>(characterOrientationUpInGridCoords.Dot(v), v))
                     .OrderBy(x => x.Item1)
                     .Select(pair => pair.Item2).First();
 
-            return ((characterOrientationUpInGrid + closestAngleVector).LengthSquared() >
-                (characterOrientationUpInGrid - (Vector3D)closestAngleVector).LengthSquared())
+            return ((characterOrientationUpInGridCoords + closestAngleVector).LengthSquared() >
+                (characterOrientationUpInGridCoords - closestAngleVector).LengthSquared())
                     ? closestAngleVector
                     : -closestAngleVector;
+        }
+
+        private Vector3I GuessWhichSideIsUp(MyCubeGrid sourceGrid)
+        {
+                // Convert both "ends" of the orientation vector
+                var zeroInGridCoordinates = sourceGrid.WorldToGridScaledLocal(Vector3D.Zero);
+                var characterOrientationUpInGridCoordinates = sourceGrid.WorldToGridScaledLocal(
+                    m_lowLevelObserver.CurrentPlayerOrientationUp());
+
+                return GuessWhichSideIsUp(characterOrientationUpInGridCoordinates - zeroInGridCoordinates);
         }
     }
 }

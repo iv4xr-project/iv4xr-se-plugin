@@ -2,19 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Iv4xr.PluginLib;
-using Iv4xr.SpaceEngineers.WorldModel;
 using Iv4xr.SePlugin.Config;
-using Sandbox.Game;
+using Iv4xr.SpaceEngineers.WorldModel;
 using Sandbox.Game.Entities;
 using Sandbox.Game.Entities.Character;
-using Sandbox.Game.Entities.Character.Components;
 using Sandbox.Game.Entities.Cube;
 using Sandbox.Game.Multiplayer;
-using Sandbox.Game.Weapons;
 using Sandbox.Game.World;
-using VRage.Game;
 using VRage.Game.Entity;
-using VRage.Sync;
 using VRageMath;
 
 namespace Iv4xr.SePlugin.Control
@@ -47,7 +42,7 @@ namespace Iv4xr.SePlugin.Control
         {
             m_gameSession = gameSession;
             m_entityBuilder = new EntityBuilder() { Log = Log };
-            m_characterBuilder = new CharacterObservationBuilder(m_entityBuilder);
+            m_characterBuilder = new CharacterObservationBuilder(m_entityBuilder.BlockEntityBuilder);
         }
 
         private MyCharacter Character => m_gameSession.Character;
@@ -59,6 +54,15 @@ namespace Iv4xr.SePlugin.Control
         public CharacterObservation GetCharacterObservation()
         {
             return m_characterBuilder.CreateCharacterObservation(Character);
+        }
+
+        public Entity GetEntityObservation()
+        {
+            if (MySession.Static.ControlledEntity is MyEntity ce)
+            {
+                return ce.ToEntity();
+            }
+            return MySession.Static.ControlledEntity?.Entity?.ToEntityOrNull() ?? Character.ToEntity();
         }
 
         public Observation GetNewBlocks(Vector3? position = null)
@@ -166,9 +170,7 @@ namespace Iv4xr.SePlugin.Control
 
         public MyCubeGrid GetGridById(string gridId)
         {
-            return Grids().First(grid =>
-                    grid.EntityId.ToString() == gridId
-            );
+            return (MyCubeGrid) MyEntities.GetEntityById(long.Parse(gridId));
         }
 
         public MyCubeGrid GetGridContainingBlock(string blockId)

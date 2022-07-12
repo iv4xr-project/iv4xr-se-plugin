@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Iv4xr.PluginLib;
 using Sandbox.Game.Entities.Character;
 using Sandbox.Game.Multiplayer;
 using Sandbox.Game.World;
+using VRage;
 using VRageMath;
 
 namespace Iv4xr.SePlugin.Control
@@ -19,6 +21,7 @@ namespace Iv4xr.SePlugin.Control
         long CurrentCharacterId { get; }
 
         void RemoveCharacter(long id);
+        string MainCharacterId();
     }
 
     public class GameSession : IGameSession
@@ -43,7 +46,9 @@ namespace Iv4xr.SePlugin.Control
         {
             if (GetCharacterByIdOrNull(characterId) == null)
             {
-                throw new InvalidOperationException($"Character ({characterId}) not found!");
+                throw new InvalidOperationException(
+                    $"Character ({characterId}) not found! Only found: {FoundCharacterIds()}"
+                    );
             }
         }
 
@@ -86,6 +91,11 @@ namespace Iv4xr.SePlugin.Control
             SwitchToMainCharacter();
         }
 
+        public string MainCharacterId()
+        {
+            return GetMainCharacterId().ToString();
+        }
+
         private MyCharacter GetCharacterByIdOrNull(long characterId)
         {
             //TODO: There is probably a better/faster way to get all current characters (MyCharacter instances) in the game.
@@ -95,10 +105,20 @@ namespace Iv4xr.SePlugin.Control
                     .FirstOrDefault(c => c.CharacterId() == characterId);
         }
 
+        private string FoundCharacterIds()
+        {
+            return string.Join(",", Sync.Players.GetOnlinePlayers()
+                    .Where(p => p.Character != null)
+                    .Select(p => p.Character)
+                    .Where(c => c?.GetIdentity() != null).Select(c => c.CharacterId()).ToList());
+        }
+
         private MyCharacter GetCharacterById(long characterId)
         {
             return GetCharacterByIdOrNull(characterId) ??
-                   throw new InvalidOperationException($"Character ({characterId}) not found!");
+                   throw new InvalidOperationException(
+                       $"Character ({characterId}) not found! Only found: {FoundCharacterIds()}"
+                       );
         }
 
         public MyCharacter Character
@@ -118,7 +138,7 @@ namespace Iv4xr.SePlugin.Control
 
         private void Init()
         {
-            if (!Initialized())
+            if (!Initialized() && !DebugInfoCreator.Create().IsDedicated)
             {
                 SwitchToMainCharacter();
             }
@@ -126,8 +146,18 @@ namespace Iv4xr.SePlugin.Control
 
         private long GetMainCharacterId()
         {
-            return Sync.Players
-                           .GetOnlinePlayers()
+            if (!MyVRage.Platform.SessionReady)
+            {
+                throw new InvalidOperationException("Session is not ready!");
+            }
+
+            var session = MySession.Static
+                    .ThrowIfNull("MySession.Static");
+            var players = session.Players
+                    .ThrowIfNull("Sync.Players");
+            var onlinePlayers = players.GetOnlinePlayers()
+                    .ThrowIfNull("Sync.Players.GetOnlinePlayers");
+            return onlinePlayers
                            .FirstOrDefault(p => p.IsLocalPlayer)
                            ?.Character?.CharacterId() ??
                    throw new NullReferenceException("The main character is missing!");

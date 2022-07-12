@@ -1,17 +1,31 @@
 package spaceEngineers.game.mockable
 
+import spaceEngineers.controller.extensions.navigationGraph
 import testhelp.MockOrRealGameTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class NavigationGraphTest : MockOrRealGameTest(
-    mockFile = inMockResourcesDirectory("NavigationGraphTest.txt")
+    mockFile = inMockResourcesDirectory("NavigationGraphTest.txt"),
+    forceRealGame = false,
+    loadScenario = true,
 ) {
 
     @Test
     fun nonemptyNavGraph() = testContext {
         observer.navigationGraph().let {
+            assertEquals(40, it.nodes.size)
+            assertEquals(67, it.edges.size)
+        }
+    }
+
+    @Test
+    fun getGraphByGridId() = testContext {
+        observer.navigationGraph(
+            (observer.observeBlocks().grids.maxByOrNull { grid -> grid.blocks.count() }
+                ?: error("No grid!")).id
+        ).let {
             assertEquals(40, it.nodes.size)
             assertEquals(67, it.edges.size)
         }

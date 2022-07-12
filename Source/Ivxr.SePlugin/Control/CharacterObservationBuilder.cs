@@ -1,38 +1,30 @@
-﻿using System.Linq;
-using Iv4xr.PluginLib;
+﻿using Iv4xr.PluginLib;
 using Iv4xr.SpaceEngineers.WorldModel;
-using Sandbox.Game;
 using Sandbox.Game.Entities;
 using Sandbox.Game.Entities.Character;
 using Sandbox.Game.Entities.Character.Components;
+using Sandbox.Game.GameSystems;
 using Sandbox.Game.Weapons;
 using Sandbox.Game.World;
-using VRage.Game;
 using VRage.Game.Entity;
 
 namespace Iv4xr.SePlugin.Control
 {
     public class CharacterObservationBuilder
     {
+        private readonly BlockEntityBuilder m_entityBuilder;
 
-        private readonly EntityBuilder m_entityBuilder;
-
-        internal CharacterObservationBuilder(EntityBuilder entityBuilder)
+        internal CharacterObservationBuilder(BlockEntityBuilder entityBuilder)
         {
             m_entityBuilder = entityBuilder;
         }
-        
+
         public CharacterObservation CreateCharacterObservation(MyCharacter character)
         {
             var orientation = character.PositionComp.GetOrientation();
-            return new CharacterObservation
-            { 
-                Id = character.CharacterId().ToString(),
-                DisplayName = character.DisplayName,
-                Position = character.PositionComp.GetPosition().ToPlain(), // Consider reducing allocations.
-                OrientationForward = orientation.Forward.ToPlain(),
-                OrientationUp = orientation.Up.ToPlain(),
-                Velocity = character.Physics.LinearVelocity.ToPlain(),
+            var result = new CharacterObservation
+            {
+                Gravity = character.Physics.Gravity.ToPlain(),
                 Extent = character.PositionComp.LocalAABB.Size.ToPlain(),
                 Camera = new Pose()
                 {
@@ -41,7 +33,7 @@ namespace Iv4xr.SePlugin.Control
                     OrientationUp = MySector.MainCamera.UpVector.ToPlain(),
                 },
                 JetpackRunning = character.JetpackComp.TurnedOn,
-                DampenersOn = character.JetpackComp.DampenersTurnedOn,
+                DampenersOn = character.JetpackComp.DampenersEnabled,
                 HelmetEnabled = character.OxygenComponent.HelmetEnabled,
                 Health = character.StatComp.HealthRatio,
                 Oxygen = character.GetSuitGasFillLevel(MyCharacterOxygenComponent.OxygenId),
@@ -54,16 +46,34 @@ namespace Iv4xr.SePlugin.Control
                 Movement = (CharacterMovementEnum)character.CurrentMovementState,
                 Inventory = character.GetInventory().ToInventory(),
                 BootsState = GetBootState(character),
+                RelativeDampeningEntity = character.RelativeDampeningEntity.ToEntityOrNull(),
+                MovementFlags = (CharacterMovementFlags)((byte)character.MovementFlags),
+                JetpackControlThrust = character.JetpackComp.GetInstanceProperty<MyEntityThrustComponent>("ThrustComp").ControlThrust.ToPlain(),
+                JetpackFinalThrust = character.JetpackComp.FinalThrust.ToPlain(),
+                CurrentWeapon = WeaponEntity(character).ToPolymorphicEntity(),
             };
+            character.ToEntity(result);
+            result.Id = character.CharacterId().ToString();
+            return result;
         }
-        
+
+        private MyEntity WeaponEntity(MyCharacter character)
+        {
+            if (character.CurrentWeapon is MyEntity weapon)
+            {
+                return weapon;
+            }
+
+            return null;
+        }
+
         private static BootsState GetBootState(MyCharacter character)
         {
             return character
                     .GetInstanceFieldOrThrow<object>("m_bootsState")
                     .GetInstanceFieldOrThrow<BootsState>("m_value");
         }
-        
+
         private Block TargetBlock(MyCharacter character)
         {
             return TargetWeaponBlock(character) ?? TargetDetectorBlock(character);
@@ -73,14 +83,14 @@ namespace Iv4xr.SePlugin.Control
         {
             if (!(character.CurrentWeapon is MyEngineerToolBase wp)) return null;
             var slimBlock = wp.GetTargetBlock();
-            return slimBlock == null ? null : m_entityBuilder.CreateGridBlock(slimBlock);
+            return slimBlock == null ? null : m_entityBuilder.CreateAndFill(slimBlock);
         }
 
         private Block TargetDetectorBlock(MyCharacter character)
         {
             var detector = character.Components.Get<MyCharacterDetectorComponent>();
             return detector?.UseObject?.Owner is MyCubeBlock block
-                    ? m_entityBuilder.CreateGridBlock(block.SlimBlock)
+                    ? m_entityBuilder.CreateAndFill(block.SlimBlock)
                     : null;
         }
 
@@ -89,6 +99,5 @@ namespace Iv4xr.SePlugin.Control
             var detector = character.Components.Get<MyCharacterDetectorComponent>();
             return detector?.UseObject != null ? EntityBuilder.CreateUseObject(detector.UseObject) : null;
         }
-
     }
 }

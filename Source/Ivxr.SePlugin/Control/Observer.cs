@@ -35,6 +35,11 @@ namespace Iv4xr.SePlugin.Control
             return m_lowLevelObserver.GetCharacterObservation();
         }
 
+        public Entity ObserveControlledEntity()
+        {
+            return m_lowLevelObserver.GetEntityObservation();
+        }
+
         public Observation ObserveBlocks()
         {
             return m_lowLevelObserver.GetBlocks();
@@ -55,11 +60,11 @@ namespace Iv4xr.SePlugin.Control
             return m_lowLevelObserver.ObserveFloatingObjects();
         }
 
-        public NavGraph NavigationGraph()
+        public NavGraph NavigationGraph(string gridId)
         {
             var navGraphEditor = new NavGraphEditor(m_lowLevelObserver);
 
-            return navGraphEditor.GetGraph().ToNavGraph();
+            return navGraphEditor.GetGraph(gridId).ToNavGraph();
         }
 
         public void SwitchCamera()

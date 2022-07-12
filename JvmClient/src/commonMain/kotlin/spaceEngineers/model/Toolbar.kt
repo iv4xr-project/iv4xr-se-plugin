@@ -2,6 +2,7 @@ package spaceEngineers.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import spaceEngineers.controller.extensions.toNullIfMinusOne
 
 @Serializable
 data class Toolbar(
@@ -18,12 +19,19 @@ data class Toolbar(
     }
 
     fun findLocation(blockType: String): ToolbarLocation? {
-        val itemIndex = items.indexOfFirst {
+        return items.indexOfFirst {
             it?.id?.type == blockType
+        }.toNullIfMinusOne()?.let {
+            ToolbarLocation.fromIndex(it)
         }
-        if (itemIndex < 0) {
-            return null
-        }
-        return ToolbarLocation.fromIndex(itemIndex)
     }
+
+    fun findLocation(definitionId: DefinitionId): ToolbarLocation? {
+        return items.indexOfFirst {
+            it?.id == definitionId
+        }.toNullIfMinusOne()?.let {
+            ToolbarLocation.fromIndex(it)
+        }
+    }
+
 }

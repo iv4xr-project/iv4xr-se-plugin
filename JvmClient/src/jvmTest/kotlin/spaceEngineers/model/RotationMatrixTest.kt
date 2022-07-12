@@ -1,7 +1,6 @@
 package spaceEngineers.model
 
 import spaceEngineers.model.extensions.times
-import testhelp.assertFloatEquals
 import testhelp.assertVecEquals
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -10,12 +9,12 @@ class RotationMatrixTest {
 
 
     private fun assertEquals(v1: Vec3F, v2: Vec3F, diff: Float = 0f) {
-        assertVecEquals(v1, v2, diff = diff)
+        assertVecEquals(v1, v2, absoluteTolerance = diff)
     }
 
     private fun assertEquals(m1: RotationMatrix, m2: RotationMatrix, diff: Float = 0f) {
         m1.values.forEachIndexed { index, fl ->
-            assertFloatEquals(
+            assertEquals(
                 fl,
                 m2.values[index],
                 diff,

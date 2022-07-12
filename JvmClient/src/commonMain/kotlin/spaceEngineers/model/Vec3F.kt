@@ -66,7 +66,7 @@ data class Vec3F(
 
     fun normalized(): Vec3F {
         val s = length()
-        if (s == 0f) throw ArithmeticException()
+        if (s == 0f) throw ArithmeticException("Cannot normalize zero vector!")
         return this / s
     }
 

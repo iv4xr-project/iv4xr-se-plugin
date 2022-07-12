@@ -1,6 +1,7 @@
 package spaceEngineers.controller
 
 import spaceEngineers.model.CharacterObservation
+import spaceEngineers.model.ExtendedEntity
 import spaceEngineers.model.FloatingObject
 import spaceEngineers.model.Observation
 import spaceEngineers.model.extensions.allBlocks
@@ -31,6 +32,10 @@ class ContextControllerWrapper(
             return spaceEngineers.observer.observe().apply(::addToHistory)
         }
 
+        override fun observeControlledEntity(): ExtendedEntity {
+            return spaceEngineers.observer.observeControlledEntity()
+        }
+
         override fun observeBlocks(): Observation {
             return spaceEngineers.observer.observeBlocks().apply(::addToHistory).apply {
                 context.updatePlatformOrientationUpIfNotSet(this)
@@ -51,8 +56,8 @@ class ContextControllerWrapper(
             return spaceEngineers.observer.observeFloatingObjects()
         }
 
-        override fun navigationGraph(): NavGraph {
-            return spaceEngineers.observer.navigationGraph()
+        override fun navigationGraph(gridId: String): NavGraph {
+            return spaceEngineers.observer.navigationGraph(gridId)
         }
 
         override fun takeScreenshot(absolutePath: String) {
@@ -67,5 +72,6 @@ class ContextControllerWrapper(
     override val blocks: Blocks = spaceEngineers.blocks
     override val admin: SpaceEngineersAdmin = spaceEngineers.admin
     override val screens: Screens = spaceEngineers.screens
+    override val input: Input = spaceEngineers.input
 
 }

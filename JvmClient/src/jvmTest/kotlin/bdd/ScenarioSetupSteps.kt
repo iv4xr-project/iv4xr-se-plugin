@@ -1,188 +1,82 @@
 package bdd
 
+import bdd.setup.MedbayDSSetup
+import bdd.setup.MedbayLobbySetup
+import bdd.setup.TestSetup
+import io.cucumber.datatable.DataTable
 import io.cucumber.java.After
+import io.cucumber.java.AfterAll
 import io.cucumber.java.Before
+import io.cucumber.java.BeforeAll
 import io.cucumber.java.en.Given
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withTimeout
-import kotlinx.coroutines.yield
-import kotlinx.serialization.json.Json
-import spaceEngineers.controller.connection.AppType
+import spaceEngineers.controller.SpaceEngineers
 import spaceEngineers.controller.connection.ConnectionManager
 import spaceEngineers.controller.connection.ConnectionSetup
-import spaceEngineers.controller.loadFromTestResources
-import spaceEngineers.controller.processHomeDir
-import spaceEngineers.controller.toFile
-import spaceEngineers.controller.unixToWindowsPath
-import java.io.BufferedReader
-import java.io.File
-import java.io.InputStreamReader
-import kotlin.concurrent.thread
-import kotlin.test.assertTrue
+import spaceEngineers.controller.connection.ConnectionSetup.Companion.loadConfigFromFile
+import spaceEngineers.controller.extensions.waitForScreen
+import testhelp.hideUndeclaredThrowableException
+
+
+lateinit var testSetup: TestSetup
+
+/*
+SINGLE_COMPUTER_DEDICATED_DEV_KAREL    OFFLINE_STEAM
+LOBBY_STEAM DS_STEAM
+*/
+val cfg = loadConfigFromFile("DS_STEAM.json")
+val globalCm = ConnectionManager(cfg)
+
+fun testSetupFactory(config: ConnectionSetup, connectionManager: ConnectionManager): TestSetup {
+    return if (config.ds) {
+        MedbayDSSetup(config, connectionManager)
+    } else if (config.lobby) {
+        MedbayLobbySetup(config, connectionManager)
+    } else {
+        error("Mad factory!")
+    }
+}
+
+@BeforeAll
+fun beforeAll() {
+    if (!::testSetup.isInitialized) {
+        testSetup = testSetupFactory(cfg, globalCm)
+    }
+    testSetup.beforeAll()
+}
+
+@AfterAll
+fun afterAll() {
+    testSetup.afterAll()
+    //exitToMenuAndCloseEverything()
+}
+
+@Before
+fun before() {
+    testSetup.beforeScenario()
+}
+
+@After
+fun after() {
+    testSetup.afterScenario()
+}
+
 
 class ScenarioSetupSteps : AbstractMultiplayerSteps() {
 
-    private val json: Json = Json {
-    }
-
-    val CONNECTION_SETUP_DIR = "src/jvmTest/resources/connection-setup/"
-
-    var process: Process? = null
-
-    fun loadConfigFromFile(file: File): ConnectionSetup {
-        return json.decodeFromString(ConnectionSetup.serializer(), file.readText())
-    }
-
-    fun loadConfigFromFile(name: String = "config.json"): ConnectionSetup {
-        return loadConfigFromFile(File(CONNECTION_SETUP_DIR, name))
-    }
-
-    @Before
-    fun setup() {
-        CM = ConnectionManager(loadConfigFromFile("OFFLINE_STEAM.json"))
-    }
-
-    @After
-    fun cleanup() {
-        if (cm.initiated) {
-            clients {
-                try {
-                    session.exitToMainMenu()
-                } catch (e: Throwable) {
-                    println(e.message)
-                }
-            }
-            if (cm.admin.gameProcess.type == AppType.GAME) {
-                admin {
-                    try {
-                        session.exitToMainMenu()
-                    } catch (e: Throwable) {
-                        println(e.message)
-                    }
-
-                }
-            }
-            runBlocking {
-                smallPause()
-            }
-        }
-        CM.close()
-        process?.destroyForcibly()
-
-    }
 
     @Given("Scenario used is {string}.")
-    fun scenario_used_is(scenarioId: String) = runBlocking {
-        if (cm.connectionSetup.offlineSinglePlayer) {
-            loadScenarioSinglePlayer(scenarioId)
-            //createLobbyGame(scenarioId)
-        } else if (cm.connectionSetup.admin.type == AppType.GAME) {
-            createLobbyGame(scenarioId)
-            connectToFirstFriendlyGame()
-        } else if (cm.connectionSetup.admin.type == AppType.DEDICATED) {
-            startDedicatedWithSessionAsync(scenarioId)
-            connectClientsDirectly()
-        } else {
-            error("Unknown setup")
-        }
+    fun scenario_used_is(scenarioId: String) = hideUndeclaredThrowableException {
+        //loadScenario(scenarioId)
+        ensureCharacterExists()
         observers {
             observer.observeNewBlocks()
         }
     }
 
-    private fun createLobbyGame(scenarioId: String) = mainClient {
-        screens.mainMenu.loadGame()
-        pause()
-        val data = screens.loadGame.data()
-        val index = data.files.indexOfFirst { it.fullName.contains(scenarioId) }
-        screens.loadGame.doubleClickWorld(index)
-        bigPause()
-        screens.waitUntilTheGameLoaded()
+    @Given("Scenario config:")
+    fun scenario_config(dataTable: DataTable) = hideUndeclaredThrowableException {
+        testSetup.scenarioConfig(dataTable.asMaps())
     }
 
-    private fun connectToFirstFriendlyGame() {
-        clients {
-            screens.mainMenu.joinGame()
-            smallPause()
-            screens.joinGame.selectTab(5)
-            smallPause()
-            screens.joinGame.selectGame(0)
-
-            smallPause()
-            screens.joinGame.joinWorld()
-            smallPause()
-            screens.waitUntilTheGameLoaded()
-        }
-        runBlocking {
-            pause()
-        }
-    }
-
-    private fun connectClientsDirectly() {
-        clients {
-            //TODO: if not in main menu, exit to it rather than failing
-            val process = cm.admin.gameProcess
-            screens.mainMenu.joinGame()
-            smallPause()
-            screens.joinGame.directConnect()
-            smallPause()
-            screens.serverConnect.enterAddress("${process.address}:27016")
-            smallPause()
-            screens.serverConnect.connect()
-            screens.waitUntilTheGameLoaded()
-        }
-        runBlocking {
-            bigPause()
-            bigPause()
-        }
-    }
-
-    fun loadScenarioSinglePlayer(scenarioId: String) = mainClient {
-        session.loadFromTestResources(scenarioId)
-        screens.waitUntilTheGameLoaded()
-        smallPause()
-    }
-
-
-    suspend fun startDedicatedWithSessionAsync(scenarioId: String) {
-        val scenarioDir = "src/jvmTest/resources/game-saves/".processHomeDir()
-        val scenarioPath = File(scenarioDir, scenarioId).absolutePath.unixToWindowsPath()
-        val wdFile = File(cm.connectionSetup.admin.executablePath.processHomeDir())
-        assertTrue(wdFile.exists())
-        val wd = wdFile.absolutePath
-        val executable = File("${wd}/SpaceEngineersDedicated.exe")
-        assertTrue(executable.exists())
-        val cmd = executable.absolutePath
-        val args = "-session:${scenarioPath} -console -start"
-        val fullArgs = (listOf(cmd) + args.split(" ")).toTypedArray()
-        var gameStarted = false
-        thread(start = true) {
-            process = ProcessBuilder(* fullArgs)
-                .directory(wd.toFile())
-                .redirectErrorStream(true)
-                .start()
-            process?.apply {
-                val reader = BufferedReader(InputStreamReader(this.inputStream, "UTF-8"))
-                var line: String?
-                while (reader.readLine().also { line = it } != null) {
-                    println(line)
-                    if (line?.contains("Game ready...") == true) {
-                        gameStarted = true
-                    }
-                }
-                println("EOF")
-            }
-        }
-        smallPause()
-        withTimeout(1120_000) {
-            while (!gameStarted) {
-                if (process == null || process?.isAlive == false) {
-                    throw IllegalStateException("Server process already finished")
-                }
-                yield()
-            }
-        }
-        smallPause()
-    }
 
 }

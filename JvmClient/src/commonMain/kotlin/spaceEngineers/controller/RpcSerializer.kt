@@ -1,9 +1,8 @@
 package spaceEngineers.controller
 
-import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.*
+import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import kotlinx.serialization.serializer
@@ -14,7 +13,6 @@ import spaceEngineers.transport.jsonrpc.KotlinJsonRpcRequest
 import spaceEngineers.transport.jsonrpc.KotlinJsonRpcResponse
 import kotlin.random.Random
 import kotlin.reflect.KClass
-import kotlin.reflect.KFunction
 import kotlin.reflect.KType
 import kotlin.reflect.typeOf
 
@@ -22,6 +20,7 @@ import kotlin.reflect.typeOf
 val json = Json {
     encodeDefaults = true
     ignoreUnknownKeys = true
+    allowSpecialFloatingPointValues = true
     serializersModule = SerializersModule {
         polymorphic(Block::class) {
             default { BlockSerializer }
@@ -35,20 +34,12 @@ val json = Json {
         polymorphic(PhysicalItemDefinition::class) {
             default { DataPhysicalItemDefinition.serializer() }
         }
-    }
-}
-
-data class TypedParameter<T : Any>(
-    val name: String,
-    val value: T?,
-    val type: KClass<T>,
-) {
-    @OptIn(InternalSerializationApi::class)
-    fun toJsonElementPair(): Pair<String, JsonElement?> {
-        if (value == null) {
-            return name to null
+        polymorphic(BlockOrGroupItem::class) {
+            default { BlockOrGroupItemSerializer }
         }
-        return name to json.encodeToJsonElement<T>(type.serializer(), value)
+        polymorphic(ExtendedEntity::class) {
+            default { EntitySerializer }
+        }
     }
 }
 
@@ -68,18 +59,17 @@ abstract class RpcSerializer(
                     name = parameterName,
                     value = parameter,
                     type = parameterType,
+                    ktype = typeOf<I>(),
                 )
             ),
             methodName = methodName
         )
     }
 
-    @OptIn(ExperimentalStdlibApi::class)
     inline fun <reified O : Any> processParameters(
         parameters: List<TypedParameter<*>>,
         methodName: String,
     ): O {
-        lateinit var x: KClass<KotlinJsonRpcResponse<O>>
         return callRpc<O>(
             stringLineReaderWriter,
             encodeRequest(parameters, methodName),

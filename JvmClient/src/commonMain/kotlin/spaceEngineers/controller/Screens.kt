@@ -13,6 +13,7 @@ interface Screens {
     val serverConnect: ServerConnect
     val loadGame: LoadGame
     val gamePlay: GamePlay
+    val saveAs: SaveAs
 }
 
 interface GamePlay {
@@ -52,13 +53,25 @@ interface MainMenu {
     fun character()
     fun exitToWindows()
     fun exitToMainMenu()
+    fun saveAs()
+    fun save()
+}
+
+interface SaveAs {
+    fun data(): SaveAsData
+    fun pressOk()
+    fun pressCancel()
+    fun setName(name: String)
 }
 
 interface Medicals {
-    fun medicalRooms(): List<MedicalRoom>
-    fun respawn(roomIndex: Int)
-    fun factions(): List<Faction>
-    fun chooseFaction(factionIndex: Int)
+    fun data(): MedicalsData
+    fun selectRespawn(roomIndex: Int)
+    fun respawn()
+    fun join()
+    fun selectFaction(factionIndex: Int)
+    fun refresh()
+    fun showMessageOfTheDay()
 
 }
 
@@ -67,9 +80,28 @@ interface Terminal {
     fun selectTab(index: Int)
     fun close()
 
-    val production: ProductionTab
     val inventory: InventoryTab
+    val controlPanel: ControlPanelTab
+    val production: ProductionTab
+    val info: InfoTab
+    val factions: FactionsTab
+    val comms: CommsTab
+    val gps: GpsTab
 }
+
+interface CommsTab
+
+interface GpsTab
+
+interface FactionsTab
+
+interface ControlPanelTab {
+    fun data(): TerminalControlPanelData
+    fun filterBlocks(text: String)
+    fun enterBlockGroup(text: String)
+}
+
+interface InfoTab
 
 interface InventoryTab {
     fun data(): TerminalInventoryData

@@ -8,11 +8,14 @@ import spaceEngineers.transport.closeIfCloseable
 import spaceEngineers.transport.jsonrpc.JsonRpcResponse
 import spaceEngineers.transport.jsonrpc.KotlinJsonRpcRequest
 import spaceEngineers.transport.jsonrpc.KotlinJsonRpcResponse
-import java.lang.reflect.*
+import java.lang.reflect.InvocationHandler
+import java.lang.reflect.Method
+import java.lang.reflect.Proxy
 import kotlin.random.Random
 import kotlin.reflect.*
 import kotlin.reflect.full.createType
 import kotlin.reflect.full.memberFunctions
+import kotlin.reflect.full.valueParameters
 
 
 class SpaceEngineersJavaProxy(
@@ -60,14 +63,15 @@ class SpaceEngineersJavaProxy(
             { index, parameter ->
                 val javaParameter = method.parameters[index]
                 val type = parameter.type
-                val ktype: KClass<Any> = type.kotlin as KClass<Any>
-                TypedParameter(javaParameter.name, args!![index], ktype)
+                val kclass: KClass<Any> = type.kotlin as KClass<Any>
+                val ktype = kotlinMethodDefinition.valueParameters[index].type
+                TypedParameter(javaParameter.name, args!![index], kclass, ktype)
             },
             returnType = responseReturnType
         )
     }
 
-    private fun <T: Any> createSubProxy(kls: KClass<T>, prefixName: String): T {
+    private fun <T : Any> createSubProxy(kls: KClass<T>, prefixName: String): T {
         return createSubProxy(
             agentId = agentId,
             stringLineReaderWriter = stringLineReaderWriter,
@@ -83,7 +87,6 @@ class SpaceEngineersJavaProxy(
         returnType: KType
     ): Any {
         return callRpc(
-            stringLineReaderWriter,
             encodeRequest(parameters, methodName),
             returnType,
         )
@@ -105,12 +108,13 @@ class SpaceEngineersJavaProxy(
     }
 
     fun <O : Any> callRpc(
-        rw: StringLineReaderWriter,
         encodedRequest: String,
         returnType: KType
     ): O {
-        val responseJson = rw.sendAndReceiveLine(encodedRequest)
-        return decodeAndUnwrap<O>(responseJson, returnType)
+        val responseJson = stringLineReaderWriter.sendAndReceiveLine(encodedRequest)
+        return stringLineReaderWriter.wrapExceptionWithStringLineReaderInfo {
+            decodeAndUnwrap(responseJson, returnType)
+        }
     }
 
     private fun <O : Any> decodeAndUnwrap(responseJson: String, ktype: KType): O {
@@ -138,7 +142,7 @@ class SpaceEngineersJavaProxy(
 
     companion object {
 
-        fun <T: Any> createSubProxy(
+        fun <T : Any> createSubProxy(
             agentId: String,
             stringLineReaderWriter: StringLineReaderWriter,
             implementedInterface: KClass<T>,

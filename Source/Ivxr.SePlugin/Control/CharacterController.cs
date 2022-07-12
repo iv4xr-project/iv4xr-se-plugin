@@ -4,9 +4,11 @@ using Iv4xr.PluginLib;
 using Iv4xr.PluginLib.Control;
 using Iv4xr.SpaceEngineers;
 using Iv4xr.SpaceEngineers.WorldModel;
+using Sandbox.Engine.Multiplayer;
 using Sandbox.Game.Entities;
 using Sandbox.Game.Entities.Character;
 using Sandbox.Game.Gui;
+using Sandbox.Game.Multiplayer;
 using Sandbox.Game.World;
 using VRage.Game;
 using VRage.Game.Entity.UseObject;
@@ -37,13 +39,30 @@ namespace Iv4xr.SePlugin.Control
             Character.JetpackComp.EnableDampeners(true);
             return m_observer.Observe();
         }
-        
+
+        public CharacterObservation TurnOnRelativeDampeners()
+        {
+            MyMultiplayer.RaiseStaticEvent(s => MyPlayerCollection.SetDampeningEntity, Character.Entity.EntityId);
+            return m_observer.Observe();
+        }
+
         public CharacterObservation TurnOffDampeners()
         {
             Character.JetpackComp.EnableDampeners(false);
             return m_observer.Observe();
         }
 
+        public string LocalCharacterId()
+        {
+            var character = MySession.Static.LocalCharacter;
+            return character?.CharacterId().ToString();
+        }
+
+        public CharacterObservation Jump(PlainVec3D movement)
+        {
+            Character.Jump(movement.ToVector3());
+            return m_observer.Observe();
+        }
 
         public CharacterObservation TurnOnJetpack()
         {
@@ -89,7 +108,29 @@ namespace Iv4xr.SePlugin.Control
         {
             Character.ShowInventory();
         }
-        
+
+        public bool SwitchParkedStatus()
+        {
+            var controlledEntity = MySession.Static.ControlledEntity;
+            if (!(controlledEntity is MyShipController ctrl))
+                throw new InvalidOperationException(
+                    $"Current ControlledEntity is not of type MyShipController, but {controlledEntity.GetType()}"
+                );
+            ctrl.SwitchParkedStatus();
+            return ctrl.CubeGrid.IsParked;
+        }
+
+        public bool SwitchWalk()
+        {
+            Character.SwitchWalk();
+            return Character.WantsWalk;
+        }
+
+        public string MainCharacterId()
+        {
+            return m_session.MainCharacterId();
+        }
+
         public void Use(string blockId, int functionIndex, int action)
         {
             var block = m_lowLevelObserver.GetBlockById(blockId);
@@ -99,9 +140,11 @@ namespace Iv4xr.SePlugin.Control
             obj.Use((UseActionEnum)action, Character);
         }
 
-        public CharacterObservation Create(string name, PlainVec3D position, PlainVec3D orientationForward, PlainVec3D orientationUp)
+        public CharacterObservation Create(string name, PlainVec3D position, PlainVec3D orientationForward,
+            PlainVec3D orientationUp)
         {
-            m_session.CreateCharacter(name, position.ToVector3D(), orientationForward.ToVector3D(), orientationUp.ToVector3D());
+            m_session.CreateCharacter(name, position.ToVector3D(), orientationForward.ToVector3D(),
+                orientationUp.ToVector3D());
             return m_observer.Observe();
         }
 
@@ -118,8 +161,13 @@ namespace Iv4xr.SePlugin.Control
         public void ShowTerminal(string blockId)
         {
             var block = m_lowLevelObserver.GetBlockById(blockId);
-            block.FatBlock.ThrowIfNull("Block has to be functional to show terminal");
+            block.FatBlock.ThrowIfNull("FatBlock", "Block has to be functional to show terminal");
             MyGuiScreenTerminal.Show(MyTerminalPageEnum.Inventory, Character, block.FatBlock);
+        }
+
+        public void Die()
+        {
+            Character.Die();
         }
 
         public CharacterObservation Teleport(PlainVec3D position, PlainVec3D? orientationForward,

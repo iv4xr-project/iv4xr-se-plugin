@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Iv4xr.PluginLib;
+using Iv4xr.SpaceEngineers.WorldModel.Screen;
 using Sandbox.Game;
 using Sandbox.Game.Gui;
 using Sandbox.Game.Screens.Helpers;
@@ -106,6 +107,11 @@ namespace Iv4xr.SePlugin
         {
             return screen.GetInstanceFieldOrThrow<MyGuiControlTable>(fieldName);
         }
+        
+        public static MyGuiControlTable TableOrNull(this MyGuiScreenBase screen, string fieldName)
+        {
+            return screen.GetInstanceField<MyGuiControlTable>(fieldName);
+        }
 
         public static List<MyGuiControlTable.Row> RowsAsList(this MyGuiControlTable table)
         {
@@ -138,11 +144,6 @@ namespace Iv4xr.SePlugin
         public static IEnumerable<TResult> GridItemUserDataOfType<TResult>(this MyGuiControlGrid source)
         {
             return source.Items.OfType<MyGuiGridItem>().Select(i => i.UserData).OfType<TResult>();
-        }
-
-        public static MyGuiControlTabPage ProductionTab(this MyGuiScreenTerminal terminal)
-        {
-            return terminal.GetTabs().Pages[(int)MyTerminalPageEnum.Production];
         }
 
         public static TType TabControlByName<TType>(this MyGuiControlTabPage tab, string name)
@@ -179,6 +180,16 @@ namespace Iv4xr.SePlugin
             {
                 throw new InvalidOperationException($"Control {fieldName} of type {controlBase.GetType()} is not visible!");
             }
+        }
+
+        public static GuiControlBase ToControlBase(this MyGuiControlBase controlBase)
+        {
+            return new GuiControlBase()
+            {
+                Enabled = controlBase.Enabled,
+                Visible = controlBase.Visible,
+                Name = controlBase.Name,
+            };
         }
     }
 }

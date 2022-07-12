@@ -1,9 +1,13 @@
 ﻿using Iv4xr.PluginLib;
 using Iv4xr.SePlugin.Communication;
 using Iv4xr.SePlugin.Config;
+using Iv4xr.SePlugin.Control.Screen;
+using Iv4xr.SePlugin.UI;
 using Iv4xr.SpaceEngineers;
+using Iv4xr.SpaceEngineers.UI;
 using Iv4xr.SpaceEngineers.WorldModel;
 using Sandbox;
+using Sandbox.Game.Gui;
 using VRage.Game;
 using static Iv4xr.SePlugin.Communication.CallTarget;
 
@@ -18,6 +22,7 @@ namespace Iv4xr.SePlugin.Control
         public IDefinitions Definitions { get; }
         public ISpaceEngineersAdmin Admin { get; }
         public IScreens Screens { get; }
+        public IInput Input { get; }
 
         public IBlocks Blocks { get; }
 
@@ -38,6 +43,7 @@ namespace Iv4xr.SePlugin.Control
             Blocks = blocks;
             Admin = new SpaceEngineersAdmin(characterController, blocks, new ObserverAdmin(lowLevelObserver));
             Screens = new Screens();
+            Input = RealInput.Instance;
         }
 
         public RealSpaceEngineers(
@@ -67,6 +73,11 @@ namespace Iv4xr.SePlugin.Control
         public IBlocksAdmin Blocks { get; }
         public IObserverAdmin Observer { get; }
         public ITestAdmin Tests { get; }
+        public void ShowNotification(string text)
+        {
+            MyHud.Notifications.Add(new MyHudNotificationDebug(text, 5000, level: MyNotificationLevel.Important));
+        }
+
         public void UpdateDefaultInteractDistance(float distance)
         {
             MyConstants.DEFAULT_INTERACTIVE_DISTANCE = distance;

@@ -1,6 +1,7 @@
 ﻿using System;
 using ImpromptuInterface;
 using Iv4xr.SpaceEngineers;
+using Iv4xr.SpaceEngineers.UI;
 
 namespace Iv4xr.SePlugin.Communication
 {
@@ -14,6 +15,7 @@ namespace Iv4xr.SePlugin.Communication
         public IBlocks Blocks { get; }
         public ISpaceEngineersAdmin Admin { get; }
         public IScreens Screens { get; }
+        public IInput Input { get; }
 
 
         public SynchronizedSpaceEngineers(ISpaceEngineers se, MethodCallContext methodCallContext)
@@ -30,6 +32,7 @@ namespace Iv4xr.SePlugin.Communication
             Admin = new GameLoopDynamicProxy<ISpaceEngineersAdmin>(se.Admin, methodCallContext)
                     .ActLike<ISpaceEngineersAdmin>();
             Screens = new GameLoopDynamicProxy<IScreens>(se.Screens, methodCallContext).ActLike<IScreens>();
+            Input = new GameLoopDynamicProxy<IInput>(se.Input, methodCallContext).ActLike<IInput>();
         }
     }
 }

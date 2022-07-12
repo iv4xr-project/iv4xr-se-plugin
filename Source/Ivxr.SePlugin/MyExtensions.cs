@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Iv4xr.PluginLib;
 using Iv4xr.SePlugin.Control;
 using Iv4xr.SpaceEngineers;
 using Iv4xr.SpaceEngineers.WorldModel;
+using Iv4xr.SpaceEngineers.WorldModel.Screen;
 using Sandbox.Definitions;
 using Sandbox.Game;
 using Sandbox.Game.Entities;
@@ -12,12 +14,13 @@ using Sandbox.Game.Entities.Character;
 using Sandbox.Game.Entities.Cube;
 using Sandbox.Game.Multiplayer;
 using Sandbox.Game.Screens.Helpers;
+using Sandbox.Game.Weapons;
 using Sandbox.Game.World;
 using VRage.Game;
 using VRage.Game.Entity;
 using VRage.Game.ModAPI.Ingame;
 using VRageMath;
-using File = Iv4xr.SpaceEngineers.WorldModel.File;
+using File = Iv4xr.SpaceEngineers.WorldModel.Screen.File;
 
 namespace Iv4xr.SePlugin
 {
@@ -27,6 +30,17 @@ namespace Iv4xr.SePlugin
         {
             return new PlainVec3D(vector.X, vector.Y, vector.Z);
         }
+
+        public static Color ToColor(this Vector3 vector)
+        {
+            return new Color(vector.X, vector.Y, vector.Z);
+        }
+
+        public static Vector3 RgbToHsv(this Vector3 vector)
+        {
+            return MyColorPickerConstants.HSVToHSVOffset(vector.ToColor().ColorToHSV());
+        }
+
 
         public static PlainVec3D ToPlain(this Vector3 vector)
         {
@@ -46,6 +60,11 @@ namespace Iv4xr.SePlugin
         public static Vector3D ToVector3D(this PlainVec3D vector)
         {
             return new Vector3D(vector.X, vector.Y, vector.Z);
+        }
+
+        public static Vector3 ToVector3(this PlainVec3F vector)
+        {
+            return new Vector3(vector.X, vector.Y, vector.Z);
         }
 
         public static PlainVec3F ToPlainF(this Vector3 vector)
@@ -126,6 +145,7 @@ namespace Iv4xr.SePlugin
             {
                 throw new NullReferenceException("character");
             }
+
             if (character.GetIdentity() == null)
             {
                 throw new NullReferenceException("character.identity");
@@ -133,7 +153,7 @@ namespace Iv4xr.SePlugin
 
             return character.GetIdentity().IdentityId;
         }
-        
+
         public static AmountedDefinitionId ToAmountedDefinition(this MyBlueprintDefinitionBase.Item item)
         {
             return new AmountedDefinitionId()
@@ -142,7 +162,7 @@ namespace Iv4xr.SePlugin
                 Amount = item.Amount.ToIntSafe()
             };
         }
-        
+
         public static BlueprintDefinition ToBlueprintDefinition(this MyBlueprintDefinitionBase bp)
         {
             return new BlueprintDefinition()
@@ -152,7 +172,7 @@ namespace Iv4xr.SePlugin
                 Results = bp.Results.Select(i => i.ToAmountedDefinition()).ToList(),
             };
         }
-        
+
         public static ProductionQueueItem ToProductionQueueItem(this MyProductionBlock.QueueItem bp)
         {
             return new ProductionQueueItem()
@@ -161,7 +181,7 @@ namespace Iv4xr.SePlugin
                 Blueprint = bp.Blueprint.ToBlueprintDefinition()
             };
         }
-        
+
         public static AmountedDefinitionId ToAmountedDefinition(this MyPhysicalInventoryItem i)
         {
             return new AmountedDefinitionId()
@@ -170,7 +190,7 @@ namespace Iv4xr.SePlugin
                 Id = i.GetDefinitionId().ToDefinitionId(),
             };
         }
-        
+
         public static Inventory ToInventory(this MyInventory myInventory)
         {
             return new Inventory()
@@ -184,7 +204,7 @@ namespace Iv4xr.SePlugin
                 Id = myInventory.InventoryId.m_hash,
             };
         }
-        
+
         public static InventoryItem ToInventoryItem(this MyPhysicalInventoryItem myItem)
         {
             return new InventoryItem()
@@ -204,7 +224,7 @@ namespace Iv4xr.SePlugin
                 IsDirectory = (fileInfo.Attributes & FileAttributes.Directory) != 0
             };
         }
-        
+
         public static File ToFile(this DirectoryInfo directoryInfo)
         {
             return new File()
@@ -217,16 +237,16 @@ namespace Iv4xr.SePlugin
 
         public static FloatingObject ToFloatingObject(this MyFloatingObject floatingObject)
         {
-            return new FloatingObject()
+            var result = new FloatingObject()
             {
                 Amount = (float)floatingObject.Amount.Value,
                 ItemDefinition = floatingObject.ItemDefinition.ToPhysicalItemDefinition(),
-                DisplayName = floatingObject.DisplayName,
-                EntityId = floatingObject.EntityId,
             };
+            floatingObject.ToEntity(result);
+            return result;
         }
-      
-        
+
+
         public static PhysicalItemDefinition ToPhysicalItemDefinition(this MyPhysicalItemDefinition myDefinitionBase)
         {
             var result = new PhysicalItemDefinition();
@@ -246,14 +266,14 @@ namespace Iv4xr.SePlugin
                 Name = toolbarItem.DisplayName.ToString()
             };
         }
-        
+
         public static List<Role> Roles(this DebugInfo debugInfo)
         {
             var roles = new List<Role>();
             if (debugInfo.IsDedicated ||
                 debugInfo.IsServer && debugInfo.SessionReady ||
                 !debugInfo.SessionReady && !debugInfo.IsDedicated && !debugInfo.MultiplayerActive
-            )
+               )
             {
                 roles.Add(Role.Admin);
             }
@@ -267,10 +287,121 @@ namespace Iv4xr.SePlugin
 
             return roles;
         }
-        
+
         public static bool CanDoRole(this DebugInfo debugInfo, Role role)
         {
             return debugInfo.Roles().Contains(role);
+        }
+
+        public static Entity ToEntityOrNull(this MyEntity entity, Entity newEntity = null)
+        {
+            return entity == null ? null : ToEntity(entity, newEntity);
+        }
+
+        public static Entity ToEntity(this MyEntity entity, Entity newEntity = null)
+        {
+            entity.ThrowIfNull("entity");
+            var orientation = entity.PositionComp.GetOrientation();
+            var result = newEntity ?? new Entity();
+            result.Id = entity.EntityId.ToString();
+            if (entity is MyCharacter character)
+            {
+                result.Id = character.CharacterId().ToString();
+            }
+
+            result.Position = entity.PositionComp.GetPosition().ToPlain();
+            result.OrientationForward = orientation.Forward.ToPlain();
+            result.OrientationUp = orientation.Up.ToPlain();
+            result.DisplayName = entity.DisplayName ?? entity.GetType().Name;
+            result.Name = entity.Name;
+            result.Velocity = entity.Physics?.LinearVelocity.ToPlain() ?? PlainVec3DConst.Zero;
+            result.InScene = entity.InScene;
+            result.DefinitionId = entity.DefinitionId?.ToDefinitionId();
+            return result;
+        }
+
+        public static Entity ToPolymorphicEntity(this MyEntity entity)
+        {
+            if (entity == null)
+            {
+                return null;
+            }
+
+            if (entity is MyCharacter character)
+            {
+                return new CharacterObservationBuilder(new BlockEntityBuilder()).CreateCharacterObservation(character);
+            }
+
+            if (entity is MyCubeBlock block)
+            {
+                return new BlockEntityBuilder().CreateAndFill(block.SlimBlock);
+            }
+
+            if (entity is MyCubeGrid grid)
+            {
+                return EntityBuilder.CreateSeGrid(grid, new List<Block>());
+            }
+
+            if (entity is MyHandToolBase tool)
+            {
+                return tool.ToHandTool();
+            }
+            
+            if (entity is MyEngineerToolBase engineerTool)
+            {
+                return engineerTool.ToHandTool();
+            }
+
+
+            return entity.ToEntity();
+        }
+        
+        public static HandTool ToHandTool(this MyEngineerToolBase handToolBase)
+        {
+            var handTool = new HandTool()
+            {
+                IsShooting = handToolBase.IsShooting,
+            };
+            handToolBase.ToEntity(handTool);
+            return handTool;
+        }
+
+        public static HandTool ToHandTool(this MyHandToolBase handToolBase)
+        {
+            var handTool = new HandTool()
+            {
+                IsShooting = handToolBase.IsShooting,
+            };
+            handToolBase.ToEntity(handTool);
+            return handTool;
+        }
+
+        public static SessionSettings ToSessionSettings(this MyObjectBuilder_SessionSettings settings)
+        {
+            return new SessionSettings()
+            {
+                GameMode = (GameModeEnum)settings.GameMode,
+                InfiniteAmmo = settings.InfiniteAmmo,
+            };
+        }
+
+        public static SessionInfo ToSessionInfo(this MySession session)
+        {
+            return new SessionInfo()
+            {
+                Name = session.Name,
+                CurrentPath = session.CurrentPath,
+                IsAdminMenuEnabled = session.IsAdminMenuEnabled,
+                IsRunningExperimental = session.IsRunningExperimental,
+                Ready = session.Ready,
+                IsUnloading = session.IsUnloading,
+                StreamingInProgress = session.StreamingInProgress,
+                IsCopyPastingEnabled = session.IsCopyPastingEnabled,
+                IsServer = session.IsServer,
+                IsPausable = session.IsPausable(),
+                GameDefinition = session.GameDefinition.ToDefinitionId(),
+                Settings = session.Settings.ToSessionSettings(),
+            };
         }
     }
 }

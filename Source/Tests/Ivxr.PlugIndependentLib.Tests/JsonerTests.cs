@@ -26,35 +26,6 @@ namespace Ivxr.PlugIndependentLib.Tests
         }
 
         [Fact]
-        public void ConvertsSeObservationToJson()
-        {
-            var observation = new CharacterObservation()
-            {
-                Id = "Foo",
-                Position = new PlainVec3D(1, 2, 3),
-                HelmetEnabled = true,
-                Health = (float)0.5,
-                DisplayName = "Name",
-            };
-
-            var json = m_jsoner.ToJson(observation);
-            // File.WriteAllText("observation.json", json);
-
-            Assert.Equal("{\"Velocity\":{\"X\":0.0,\"Y\":0.0,\"Z\":0.0}," +
-                         "\"Extent\":{\"X\":0.0,\"Y\":0.0,\"Z\":0.0}," +
-                         "\"Camera\":null,\"JetpackRunning\":false,\"DampenersOn\":false," +
-                         "\"HelmetEnabled\":true,\"Health\":0.5,\"Oxygen\":0.0," +
-                         "\"Hydrogen\":0.0,\"SuitEnergy\":0.0," +
-                         "\"HeadLocalXAngle\":0.0,\"HeadLocalYAngle\":0.0,\"TargetBlock\":null,\"TargetUseObject\":null," +
-                         "\"Movement\":0,\"Inventory\":null,\"BootsState\":0,\"DisplayName\":\"Name\",\"Id\":\"Foo\"," +
-                         "\"Position\":{\"X\":1.0,\"Y\":2.0,\"Z\":3.0}," +
-                         "\"OrientationForward\":{\"X\":0.0,\"Y\":0.0,\"Z\":0.0}," +
-                         "\"OrientationUp\":{\"X\":0.0,\"Y\":0.0,\"Z\":0.0}}",
-                json);
-        }
-
-
-        [Fact]
         public void JsonerKeepsDefaultValues()
         {
             const string configJson = "{\"JsonRpcPort\":3333}";

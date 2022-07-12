@@ -7,8 +7,11 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class JoinGameData(
     @SerialName("SelectedTab")
-    val selectedTab: String,
+    val selectedTab: Int,
+    @SerialName("SelectedTabName")
+    val selectedTabName: String,
     @SerialName("Games")
     val games: List<ListedGameInformation>,
-
-    )
+    @SerialName("JoinWorldButton")
+    val joinWorldButton: GuiControlBase,
+)

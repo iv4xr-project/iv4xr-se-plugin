@@ -34,6 +34,60 @@ data class AmountedDefinitionId(
     }
 }
 
+interface BlockOrGroupItem {
+    val visible: Boolean
+    val text: String
+}
+
+@Serializable
+data class BlockItem(
+    @SerialName("Visible")
+    override val visible: Boolean,
+    @SerialName("Text")
+    override val text: String,
+    @SerialName("Block")
+    val block: Block,
+) : BlockOrGroupItem
+
+@Serializable
+data class BlockGroupItem(
+    @SerialName("Visible")
+    override val visible: Boolean,
+    @SerialName("Text")
+    override val text: String,
+    @SerialName("Name")
+    val name: String,
+    @SerialName("Blocks")
+    val blocks: List<Block>,
+) : BlockOrGroupItem
+
+
+@Serializable
+data class TerminalControlPanelData(
+    @SerialName("Search")
+    val search: String,
+    @SerialName("NewGroupName")
+    val newGroupName: String,
+    @SerialName("GridBlocks")
+    val gridBlocks: List<BlockOrGroupItem>,
+    @SerialName("ToggleBlock")
+    val toggleBlock: Boolean,
+    @SerialName("ShowBlockInTerminal")
+    val showBlockInTerminal: Boolean,
+    @SerialName("ShowBLockInToolbarConfig")
+    val showBLockInToolbarConfig: Boolean,
+    @SerialName("ShowOnHUD")
+    val showOnHUD: Boolean,
+    @SerialName("Owner")
+    val owner: String,
+    @SerialName("TransferTo")
+    val transferTo: List<String>,
+    @SerialName("ShareBlock")
+    val shareBlock: List<String>,
+    @SerialName("ShareBlockSelectedIndex")
+    val shareBlockSelectedIndex: Int,
+)
+
 @Serializable
 data class TerminalInventoryData(
     @SerialName("LeftInventories")

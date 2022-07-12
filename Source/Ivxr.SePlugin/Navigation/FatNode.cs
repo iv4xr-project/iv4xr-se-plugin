@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Iv4xr.SpaceEngineers.Navigation;
 using Iv4xr.SpaceEngineers.WorldModel;
+using VRageMath;
 
 namespace Iv4xr.SePlugin.Navigation
 {
@@ -39,12 +40,17 @@ namespace Iv4xr.SePlugin.Navigation
             return m_nextId++;
         }
 
+        private FatNode Create(PlainVec3D position)
+        {
+            return new FatNode(GenerateId(), position);
+        }
+
         /// <summary>
         /// Use in a single thread only.
         /// </summary>
-        public FatNode Create(PlainVec3D position)
+        public FatNode Create(Vector3D position)
         {
-            return new FatNode(GenerateId(), position);
+            return Create(position.ToPlain());
         }
     }
 }

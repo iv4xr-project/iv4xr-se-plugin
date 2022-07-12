@@ -74,7 +74,7 @@ namespace Iv4xr.SePlugin.Communication
         public override bool TryInvokeMember(InvokeMemberBinder binder, object[] args, out object result)
         {
             var methodInfo = GetMethod(m_instance.GetType(), binder, args);
-            methodInfo.ThrowIfNull($"methodInfo {binder.Name}");
+            methodInfo.ThrowIfNull(binder.Name, $"methodInfo {binder.Name}");
             CheckRoles(methodInfo);
             CheckInterfaceRoles(binder, args);
 
@@ -87,7 +87,7 @@ namespace Iv4xr.SePlugin.Communication
         public override bool TryGetMember(GetMemberBinder binder, out object result)
         {
             var instanceProperty = m_instance.GetInstanceProperty<object>(binder.Name);
-            instanceProperty.ThrowIfNull($"Member {binder.Name} is null!");
+            instanceProperty.ThrowIfNull(binder.Name, $"Member {binder.Name} is null!");
             result = new GameLoopDynamicProxy<object>(instanceProperty, m_methodCallContext).ActLike(binder.ReturnType);
             return true;
         }

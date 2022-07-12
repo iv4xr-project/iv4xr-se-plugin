@@ -37,19 +37,27 @@ class ConnectionManager(
         connectionSetup.clients.map { connectionsById.getValue(it.createId()) }
     }
 
+    val nonMainClientGameObservers by lazy {
+        connectionSetup.nonMainClientGameObservers.map { connectionsById.getValue(it.createId()) }
+    }
+
     val games by lazy {
         connectionSetup.games.map { connectionsById.getValue(it.createId()) }
+    }
+
+    val all by lazy {
+        connectionsById.values
     }
 
     suspend fun <T> mainClient(block: suspend ContextControllerWrapper.() -> T): T {
         return block(mainClient.spaceEngineers)
     }
 
-    suspend fun admin(block: suspend ContextControllerWrapper.() -> Unit) {
-        block(admin.spaceEngineers)
+    suspend fun <T> admin(block: suspend ContextControllerWrapper.() -> T): T {
+        return block(admin.spaceEngineers)
     }
 
-    private suspend fun List<ProcessWithConnection>.parallelEach(block: suspend ContextControllerWrapper.() -> Unit) =
+    private suspend fun <T> Collection<ProcessWithConnection>.parallelEach(block: suspend ContextControllerWrapper.() -> T) =
         coroutineScope {
             this@parallelEach.map {
                 async {
@@ -58,12 +66,33 @@ class ConnectionManager(
             }.awaitAll()
         }
 
-    suspend fun clients(block: suspend ContextControllerWrapper.() -> Unit) = clients.parallelEach(block)
+    suspend fun <T> clients(block: suspend ContextControllerWrapper.() -> T) = clients.parallelEach(block)
 
-    suspend fun games(block: suspend ContextControllerWrapper.() -> Unit) = games.parallelEach(block)
+    suspend fun <T> all(block: suspend ContextControllerWrapper.() -> T) = all.parallelEach(block)
 
-    suspend fun observers(block: suspend ContextControllerWrapper.() -> Unit) = observers.parallelEach {
-        spaceEngineers.admin.character.switch(mainClientCharacterId)
+    suspend fun <T> nonMainClientGameObservers(block: suspend ContextControllerWrapper.() -> T) =
+        nonMainClientGameObservers.parallelEach(block)
+
+    suspend fun <T> games(block: suspend ContextControllerWrapper.() -> T): List<T> = games.parallelEach {
+        try {
+            spaceEngineers.admin.character.switch(spaceEngineers.admin.character.mainCharacterId())
+        } catch (e: Exception) {
+            /*  
+            We switch, but it's okay to fail - maybe sometimes we want to control the game and there is no character. 
+            Could use some refactoring to avoid this.
+            */
+        }
+        block(this)
+    }
+
+    suspend fun <T> observers(block: suspend ContextControllerWrapper.() -> T): List<T> = observers.parallelEach {
+        try {
+            mainClient.spaceEngineers.admin.character.localCharacterId()?.let {
+                spaceEngineers.admin.character.switch(it)
+            }
+        } catch (e: Exception) {
+
+        }
         block(this)
     }
 
