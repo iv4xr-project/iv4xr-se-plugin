@@ -104,6 +104,7 @@ interface Items {
     fun setToolbarItem(definitionId: DefinitionId, toolbarLocation: ToolbarLocation)
     fun toolbar(): Toolbar
     fun activate(toolbarLocation: ToolbarLocation)
+    fun unEquipWeapon()
 }
 
 interface Blocks {

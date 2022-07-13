@@ -47,6 +47,11 @@ namespace Iv4xr.SePlugin.Control
             }
         }
 
+        public void UnEquipWeapon()
+        {
+            m_session.Character.UnequipWeapon();
+        }
+
         public void Activate(ToolbarLocation toolbarLocation)
         {
             var toolbar = m_session.Character.Toolbar;

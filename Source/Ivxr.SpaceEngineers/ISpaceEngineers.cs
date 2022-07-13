@@ -55,6 +55,7 @@ namespace Iv4xr.SpaceEngineers
     public interface IItems
     {
         void Equip(ToolbarLocation toolbarLocation);
+        void UnEquipWeapon();
         void SetToolbarItem(DefinitionId definitionId, ToolbarLocation toolbarLocation);
         Toolbar Toolbar();
         void Activate(ToolbarLocation toolbarLocation);
