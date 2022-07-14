@@ -148,9 +148,15 @@ class CharacterActions : AbstractMultiplayerSteps() {
     @When("Character equips {string}.")
     fun character_equips(tool: String) = mainClient {
         val toolbarLocation = items.toolbar()
-            .let { toolbar -> toolbar.findLocation(DefinitionId.parse(tool)) ?: error("Item $tool not found in the toolbar, found: ${toolbar.items.filterNotNull().map { it.id }}") }
+            .let { toolbar ->
+                toolbar.findLocation(DefinitionId.parse(tool)) ?: error(
+                    "Item $tool not found in the toolbar, found: ${
+                        toolbar.items.filterNotNull().map { it.id }
+                    }"
+                )
+            }
         items.equip(toolbarLocation)
-        pause()
+        smallPause()
     }
 
     @When("Character turns off dampeners.")
@@ -244,7 +250,12 @@ class CharacterActions : AbstractMultiplayerSteps() {
             else -> error("No action handler for $mouseActionName, try 'clicks' or 'double-clicks'.")
         }
 
-        input.startPlaying(FrameSnapshot.clicks(mouseButton = MouseButton.valueOf(mouseButtonName.uppercase()), clickCount = clickCount))
+        input.startPlaying(
+            FrameSnapshot.clicks(
+                mouseButton = MouseButton.valueOf(mouseButtonName.uppercase()),
+                clickCount = clickCount
+            )
+        )
     }
 
     @When("Character drops {string} from the inventory.")
@@ -261,4 +272,61 @@ class CharacterActions : AbstractMultiplayerSteps() {
             dropSelected()
         }
     }
+
+    @When("Character takes {string} from target block's inventory.")
+    fun character_takes_from_target_block_s_inventory(definitionIdStr: String) = mainClient {
+        character.showInventory()
+        val definitionId = DefinitionId.parse(definitionIdStr)
+        with(screens.terminal) {
+            val data = inventory.data()
+            val itemId = data.rightInventories.first().items.firstOrNull { it.id == definitionId }?.itemId
+                ?: error("Item $definitionId not found in the right inventory. Found: ${data.rightInventories.first().items.map { it.id }}")
+            inventory.transferInventoryItemToLeft(0, 0, itemId)
+            close()
+        }
+    }
+
+    @When("Character takes {string} from target block's inventory unless he already has one.")
+    fun character_takes_from_target_block_s_inventory_unless_he_already_has_one(definitionIdStr: String) = mainClient {
+        val definitionId = DefinitionId.parse(definitionIdStr)
+        if (observer.observe().inventory.items.map { it.id }.contains(definitionId)) {
+            return@mainClient
+        }
+        character_takes_from_target_block_s_inventory(definitionIdStr)
+    }
+
+
+    @When("Character closes the terminal.")
+    fun character_closes_the_terminal() = mainClient {
+        screens.terminal.close()
+    }
+
+    @Given("Character uses control {string}.")
+    fun character_uses_control(controlName: String) {
+        character_uses_control_for_seconds(controlName, 1)
+    }
+
+    @Given("Character uses control {string} for {int} ticks.")
+    fun character_uses_control_for_seconds(controlName: String, ticks: Int) = mainClient {
+        when (controlName) {
+            "PRIMARY_TOOL_ACTION" -> {
+                input.startPlaying(FrameSnapshot.clicks())
+            }
+            "SECONDARY_TOOL_ACTION" -> {
+                input.startPlaying(FrameSnapshot.clicks(MouseButton.RIGHT))
+            }
+            else -> error("Not implemented control $controlName")
+        }
+    }
+
+    @When("Character unequips.")
+    fun character_unequips() = mainClient {
+        items.unEquipWeapon()
+    }
+
+    @When("Character aims down.")
+    fun character_aims_down() = mainClient {
+        character.moveAndRotate(rotation3 = Vec2F.ROTATE_DOWN * 10f, ticks = 240)
+    }
+
 }

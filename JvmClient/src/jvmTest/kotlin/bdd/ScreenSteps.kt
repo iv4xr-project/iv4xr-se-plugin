@@ -80,6 +80,11 @@ class ScreenSteps : AbstractMultiplayerSteps() {
         }
     }
 
+    @Then("Gameplay screen shows no ore beacons.")
+    fun gameplay_screen_shows_no_beacons() = mainClient {
+            assertEquals(0, screens.gamePlay.data().oreMarkers.size)
+    }
+
 
     @Then("Production queue contains exactly:")
     fun production_queue_contains_exactly(map: List<Map<String, String>>) = mainClient {

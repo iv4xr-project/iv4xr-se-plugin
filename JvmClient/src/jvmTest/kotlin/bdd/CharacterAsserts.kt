@@ -1,7 +1,6 @@
 package bdd
 
 import bdd.repetitiveassert.repeatUntilSuccess
-import io.cucumber.java.PendingException
 import io.cucumber.java.en.And
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
@@ -9,6 +8,7 @@ import io.cucumber.java.en.When
 import kotlinx.coroutines.delay
 import spaceEngineers.model.BootsColour
 import spaceEngineers.model.DefinitionId
+import spaceEngineers.model.HandTool
 import spaceEngineers.model.Vec3F
 import spaceEngineers.model.extensions.allBlocks
 import testhelp.*
@@ -130,7 +130,12 @@ class CharacterAsserts : AbstractMultiplayerSteps() {
     }
 
     @Then("Character inventory does not contain ore {string} anymore.")
-    fun character_inventory_does_not_contain_ore_anymore(type: String) = observers {
+    fun character_inventory_does_not_contain_ore_anymore(type: String) {
+        character_inventory_does_not_contain_ore(type = type)
+    }
+
+    @Then("Character inventory does not contain ore {string}.")
+    fun character_inventory_does_not_contain_ore(type: String) = observers {
         val definition = DefinitionId.ore(type)
         repeatUntilSuccess {
             assertTrue(observer.observe().inventory.items.none { it.id == definition })
@@ -435,5 +440,55 @@ class CharacterAsserts : AbstractMultiplayerSteps() {
         assertEquals(definitionId, observation.currentWeapon?.definitionId)
     }
 
+    @Then("Tool stays active.")
+    fun tool_stays_active() = observers {
+        repeatUntilSuccess {
+            observer.observe().currentWeapon.let { weapon ->
+                assertNotNull(weapon, "Character holds no weapon!")
+                assertTrue(weapon is HandTool, "${weapon.javaClass} ${weapon.definitionId}")
+                assertTrue(weapon.isShooting)
+            }
+        }
+    }
+
+    @Then("Tool is not active.")
+    fun tool_is_not_active() = observers {
+        repeatUntilSuccess {
+            observer.observe().currentWeapon.let { weapon ->
+                assertNotNull(weapon)
+                assertTrue(weapon is HandTool)
+                assertFalse(weapon.isShooting)
+            }
+        }
+    }
+
+    @Then("Character energy is depleted.")
+    fun character_energy_gets_depleted() = observers {
+        assertEquals(0f, observer.observe().suitEnergy, absoluteTolerance = 0.001f)
+    }
+
+    @Then("Character inventory contains item {string}.")
+    fun character_inventory_contains_item(definitionIdStr: String) = observers {
+        val definition = DefinitionId.parse(definitionIdStr)
+        repeatUntilSuccess {
+            val items = observer.observe().inventory.items
+            assertTrue(items.any { it.id == definition }, items.map { it.id }.joinToString(","))
+        }
+    }
+
+    @Then("Character inventory contains:")
+    fun character_inventory_contains(map: List<Map<String, String>>) = observers {
+        map.forEach { row ->
+            val definition = DefinitionId.parse(row.getValue("definitionId"))
+            val count = row["count"]?.toIntOrNull()
+            repeatUntilSuccess {
+                val items = observer.observe().inventory.items
+                assertTrue(items.any { it.id == definition }, items.map { it.id }.joinToString(","))
+                count?.let {
+                    assertEquals(it, items.filter { item -> item.id == definition }.sumOf { it.amount })
+                }
+            }
+        }
+    }
 
 }

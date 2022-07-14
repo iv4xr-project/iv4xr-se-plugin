@@ -1,9 +1,12 @@
 package bdd
 
+import bdd.repetitiveassert.repeatUntilSuccess
+import io.cucumber.java.PendingException
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import spaceEngineers.model.extensions.allBlocks
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 class BlockAsserts : AbstractMultiplayerSteps() {
@@ -42,5 +45,38 @@ class BlockAsserts : AbstractMultiplayerSteps() {
             observation.allBlocks
                 .none { it.definitionId.type == string }
         )
+    }
+
+    @Then("Target block integrity is less than maximum.")
+    fun target_block_integrity_is_less_than_maximum() = observers {
+        repeatUntilSuccess {
+            observer.observe().let { observation ->
+                assertNotNull(observation.targetBlock)
+                observation.targetBlock?.let { targetBlock ->
+                    assertTrue(targetBlock.integrity < targetBlock.maxIntegrity)
+                }
+            }
+        }
+    }
+
+    @Then("Target block integrity is at maximum.")
+    fun target_block_integrity_is_at_maximum() = observers {
+        repeatUntilSuccess {
+            observer.observe().let { observation ->
+                assertNotNull(observation.targetBlock)
+                observation.targetBlock?.let { targetBlock ->
+                    assertEquals(targetBlock.integrity, targetBlock.maxIntegrity)
+                }
+            }
+        }
+    }
+
+    @Then("Target block integrity is at {float}%.")
+    fun target_block_integrity_is_at(percentageIntegrity: Float) = observers {
+        repeatUntilSuccess(delayMs = 1000) {
+            val targetBlock = observer.observe().targetBlock
+            assertNotNull(targetBlock, "no target block!")
+            assertEquals(percentageIntegrity / 100f, targetBlock.integrity / targetBlock.maxIntegrity)
+        }
     }
 }
