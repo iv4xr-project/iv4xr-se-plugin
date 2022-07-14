@@ -18,3 +18,19 @@ data class Sound(
     @SerialName("CueEnum")
     val cueEnum: String,
 )
+
+@Serializable
+data class ParticleEffect(
+    @SerialName("Name")
+    val name: String,
+)
+
+@Serializable
+data class Particles(
+    @SerialName("Enabled")
+    val enabled: Boolean,
+    @SerialName("Paused")
+    val paused: Boolean,
+    @SerialName("Effects")
+    val effects: List<ParticleEffect>,
+)

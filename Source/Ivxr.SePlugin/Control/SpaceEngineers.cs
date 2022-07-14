@@ -25,7 +25,7 @@ namespace Iv4xr.SePlugin.Control
         public IInput Input { get; }
 
         public IBlocks Blocks { get; }
-        public ISound Sound { get; }
+        public IDebug Debug { get; }
 
         internal RealSpaceEngineers(GameSession gameSession, ILog log, PluginConfig config)
         {
@@ -45,7 +45,7 @@ namespace Iv4xr.SePlugin.Control
             Admin = new SpaceEngineersAdmin(characterController, blocks, new ObserverAdmin(lowLevelObserver));
             Screens = new Screens();
             Input = RealInput.Instance;
-            Sound = new SoundReader();
+            Debug = new DebugData();
         }
 
         public RealSpaceEngineers(

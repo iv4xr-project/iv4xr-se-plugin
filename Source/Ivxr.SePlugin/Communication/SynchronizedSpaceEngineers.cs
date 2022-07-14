@@ -16,7 +16,7 @@ namespace Iv4xr.SePlugin.Communication
         public ISpaceEngineersAdmin Admin { get; }
         public IScreens Screens { get; }
         public IInput Input { get; }
-        public ISound Sound { get; }
+        public IDebug Debug { get; }
 
 
         public SynchronizedSpaceEngineers(ISpaceEngineers se, MethodCallContext methodCallContext)
@@ -34,7 +34,7 @@ namespace Iv4xr.SePlugin.Communication
                     .ActLike<ISpaceEngineersAdmin>();
             Screens = new GameLoopDynamicProxy<IScreens>(se.Screens, methodCallContext).ActLike<IScreens>();
             Input = new GameLoopDynamicProxy<IInput>(se.Input, methodCallContext).ActLike<IInput>();
-            Sound = new GameLoopDynamicProxy<ISound>(se.Sound, methodCallContext).ActLike<ISound>();
+            Debug = new GameLoopDynamicProxy<IDebug>(se.Debug, methodCallContext).ActLike<IDebug>();
         }
     }
 }

@@ -17,7 +17,7 @@ namespace Iv4xr.SpaceEngineers
         ISpaceEngineersAdmin Admin { get; }
         IScreens Screens { get; }
         IInput Input { get; }
-        ISound Sound { get; }
+        IDebug Debug { get; }
     }
     
     public interface ISessionController
@@ -97,8 +97,9 @@ namespace Iv4xr.SpaceEngineers
     }
 
     [Role(Game)]
-    public interface ISound
+    public interface IDebug
     {
-        SoundBanks PlayingSounds();
+        SoundBanks Sounds();
+        Particles Particles();
     }
 }

@@ -73,6 +73,6 @@ class ContextControllerWrapper(
     override val admin: SpaceEngineersAdmin = spaceEngineers.admin
     override val screens: Screens = spaceEngineers.screens
     override val input: Input = spaceEngineers.input
-    override val sound: Sound = spaceEngineers.sound
+    override val debug: Debug = spaceEngineers.debug
 
 }

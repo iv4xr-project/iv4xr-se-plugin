@@ -481,5 +481,13 @@ namespace Iv4xr.SePlugin
                 IsPaused = source.IsPaused,
             };
         }
+
+        public static ParticleEffect ToParticleEffect(this MyParticleEffect myParticleEffect)
+        {
+            return new ParticleEffect()
+            {
+                Name = myParticleEffect.GetName(),
+            };
+        }
     }
 }
