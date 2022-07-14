@@ -7,6 +7,7 @@ using Iv4xr.SpaceEngineers.WorldModel.Screen;
 using Sandbox;
 using Sandbox.Definitions;
 using Sandbox.Game;
+using Sandbox.Game.Entities;
 using Sandbox.Game.Entities.Cube;
 using Sandbox.Game.Gui;
 using Sandbox.Game.World;
@@ -30,6 +31,16 @@ namespace Iv4xr.SePlugin.Control.Screen
             public double Distance;
         }
 
+        public void ShowToolbarConfig()
+        {
+            MyGuiSandbox.AddScreen(
+                MyGuiScreenGamePlay.ActiveGameplayScreen = MyGuiSandbox.CreateScreen(
+                    MyPerGameSettings.GUI.ToolbarConfigScreen,
+                    0,
+                    MySession.Static.ControlledEntity as MyShipController,
+                    null)
+            );
+        }
 
         //based on MyGuiScreenHudSpace.DrawOreMarkers
         private IEnumerable<PositionedOreMarker> CreateMarkers()

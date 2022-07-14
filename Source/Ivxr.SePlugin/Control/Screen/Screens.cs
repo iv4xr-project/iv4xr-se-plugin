@@ -68,6 +68,7 @@ namespace Iv4xr.SePlugin.Control.Screen
         private readonly LoadGameScreen m_loadGameScreen = new LoadGameScreen();
         private readonly GamePlayScreen m_gamePlayScreen = new GamePlayScreen();
         private readonly SaveAsScreen m_saveAsScreen = new SaveAsScreen();
+        private readonly ToolbarConfig m_toolbarConfig = new ToolbarConfig();
 
         public Screens()
         {
@@ -84,6 +85,7 @@ namespace Iv4xr.SePlugin.Control.Screen
         public INewGame NewGame => m_newGameScreen;
         public IGamePlay GamePlay => m_gamePlayScreen;
         public ISaveAs SaveAs => m_saveAsScreen;
+        public IToolbarConfig ToolbarConfig => m_toolbarConfig;
 
         [CallOn(CurrentThread)]
         public string FocusedScreen()

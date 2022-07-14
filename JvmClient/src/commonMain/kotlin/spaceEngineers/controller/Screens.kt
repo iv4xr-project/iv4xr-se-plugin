@@ -14,11 +14,21 @@ interface Screens {
     val loadGame: LoadGame
     val gamePlay: GamePlay
     val saveAs: SaveAs
+    val toolbarConfig: ToolbarConfig
+}
+
+interface ToolbarConfig {
+    fun data(): ToolbarConfigData
+    fun search(text: String)
+    fun dropGridItemToToolbar(gridLocation: Int, toolbarLocation: Int)
+    fun close()
+    fun selectCategories(categories: List<Boolean>)
 }
 
 interface GamePlay {
     fun data(): GamePlayData
     fun showMainMenu()
+    fun showToolbarConfig()
 }
 
 interface ServerConnect {

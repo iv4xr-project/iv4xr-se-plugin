@@ -19,12 +19,14 @@ namespace Iv4xr.SpaceEngineers
         INewGame NewGame { get; }
         IGamePlay GamePlay { get; }
         ISaveAs SaveAs { get; }
+        IToolbarConfig ToolbarConfig { get; }
     }
 
     public interface IGamePlay
     {
         GamePlayData Data();
         void ShowMainMenu();
+        void ShowToolbarConfig();
     }
 
     public interface IServerConnect
@@ -186,5 +188,14 @@ namespace Iv4xr.SpaceEngineers
         void PressOk();
         void PressCancel();
         void SetName(string name);
+    }
+
+    public interface IToolbarConfig
+    {
+        ToolbarConfigData Data();
+        void Close();
+        void Search(string text);
+        void DropGridItemToToolbar(int gridLocation, int toolbarLocation);
+        void SelectCategories(List<bool> categories);
     }
 }
