@@ -495,6 +495,12 @@ $dokka.location:spaceEngineers.iv4xr.goal/TacticLib/observe/#/PointingToDeclarat
 $dokka.location:spaceEngineers.iv4xr.goal/TacticLib/observeNewBlocks/#/PointingToDeclaration/space-engineers-api/spaceEngineers.iv4xr.goal/-tactic-lib/observe-new-blocks.html
 $dokka.location:spaceEngineers.iv4xr.goal/TacticLib/sleep/#kotlin.Long/PointingToDeclaration/space-engineers-api/spaceEngineers.iv4xr.goal/-tactic-lib/sleep.html
 $dokka.location:spaceEngineers.iv4xr.goal/TacticLib/startUsingTool/#/PointingToDeclaration/space-engineers-api/spaceEngineers.iv4xr.goal/-tactic-lib/start-using-tool.html
+$dokka.location:spaceEngineers.iv4xr.navigation////PointingToDeclaration/space-engineers-api/spaceEngineers.iv4xr.navigation/index.html
+$dokka.location:spaceEngineers.iv4xr.navigation/NavigableGraph///PointingToDeclaration/space-engineers-api/spaceEngineers.iv4xr.navigation/-navigable-graph/index.html
+$dokka.location:spaceEngineers.iv4xr.navigation/NavigableGraph/NavigableGraph/#spaceEngineers.navigation.NavGraph/PointingToDeclaration/space-engineers-api/spaceEngineers.iv4xr.navigation/-navigable-graph/-navigable-graph.html
+$dokka.location:spaceEngineers.iv4xr.navigation/NavigableGraph/distance/#kotlin.Int#kotlin.Int/PointingToDeclaration/space-engineers-api/spaceEngineers.iv4xr.navigation/-navigable-graph/distance.html
+$dokka.location:spaceEngineers.iv4xr.navigation/NavigableGraph/heuristic/#kotlin.Int#kotlin.Int/PointingToDeclaration/space-engineers-api/spaceEngineers.iv4xr.navigation/-navigable-graph/heuristic.html
+$dokka.location:spaceEngineers.iv4xr.navigation/NavigableGraph/neighbours/#kotlin.Int/PointingToDeclaration/space-engineers-api/spaceEngineers.iv4xr.navigation/-navigable-graph/neighbours.html
 $dokka.location:spaceEngineers.model.extensions////PointingToDeclaration/space-engineers-api/spaceEngineers.model.extensions/index.html
 $dokka.location:spaceEngineers.model.extensions//allBlocks/spaceEngineers.model.Observation#/PointingToDeclaration/space-engineers-api/spaceEngineers.model.extensions/all-blocks.html
 $dokka.location:spaceEngineers.model.extensions//blockById/spaceEngineers.controller.Observer#kotlin.String/PointingToDeclaration/space-engineers-api/spaceEngineers.model.extensions/block-by-id.html
@@ -2200,6 +2206,9 @@ $dokka.location:spaceEngineers.movement/VectorMovement/move/#spaceEngineers.move
 $dokka.location:spaceEngineers.movement/VectorMovement/rotate/#spaceEngineers.movement.RotationDirection#kotlin.Int/PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-vector-movement/rotate.html
 $dokka.location:spaceEngineers.movement/VectorMovement/spaceEngineers/#/PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-vector-movement/space-engineers.html
 $dokka.location:spaceEngineers.navigation////PointingToDeclaration/space-engineers-api/spaceEngineers.navigation/index.html
+$dokka.location:spaceEngineers.navigation//isConnectedTo/spaceEngineers.navigation.Edge#kotlin.Int/PointingToDeclaration/space-engineers-api/spaceEngineers.navigation/is-connected-to.html
+$dokka.location:spaceEngineers.navigation//otherEnd/spaceEngineers.navigation.Edge#kotlin.Int/PointingToDeclaration/space-engineers-api/spaceEngineers.navigation/other-end.html
+$dokka.location:spaceEngineers.navigation//toRichGraph/spaceEngineers.navigation.NavGraph#/PointingToDeclaration/space-engineers-api/spaceEngineers.navigation/to-rich-graph.html
 $dokka.location:spaceEngineers.navigation/Edge///PointingToDeclaration/space-engineers-api/spaceEngineers.navigation/-edge/index.html
 $dokka.location:spaceEngineers.navigation/Edge/Edge/#kotlin.Int#kotlin.Int/PointingToDeclaration/space-engineers-api/spaceEngineers.navigation/-edge/-edge.html
 $dokka.location:spaceEngineers.navigation/Edge/i/#/PointingToDeclaration/space-engineers-api/spaceEngineers.navigation/-edge/i.html
@@ -2212,6 +2221,15 @@ $dokka.location:spaceEngineers.navigation/Node///PointingToDeclaration/space-en
 $dokka.location:spaceEngineers.navigation/Node/Node/#kotlin.Int#spaceEngineers.model.Vec3F/PointingToDeclaration/space-engineers-api/spaceEngineers.navigation/-node/-node.html
 $dokka.location:spaceEngineers.navigation/Node/id/#/PointingToDeclaration/space-engineers-api/spaceEngineers.navigation/-node/id.html
 $dokka.location:spaceEngineers.navigation/Node/position/#/PointingToDeclaration/space-engineers-api/spaceEngineers.navigation/-node/position.html
+$dokka.location:spaceEngineers.navigation/RichNavGraph///PointingToDeclaration/space-engineers-api/spaceEngineers.navigation/-rich-nav-graph/index.html
+$dokka.location:spaceEngineers.navigation/RichNavGraph/RichNavGraph/#spaceEngineers.navigation.NavGraph/PointingToDeclaration/space-engineers-api/spaceEngineers.navigation/-rich-nav-graph/-rich-nav-graph.html
+$dokka.location:spaceEngineers.navigation/RichNavGraph/containsEdge/#kotlin.Int#kotlin.Int/PointingToDeclaration/space-engineers-api/spaceEngineers.navigation/-rich-nav-graph/contains-edge.html
+$dokka.location:spaceEngineers.navigation/RichNavGraph/distance/#kotlin.Int#kotlin.Int/PointingToDeclaration/space-engineers-api/spaceEngineers.navigation/-rich-nav-graph/distance.html
+$dokka.location:spaceEngineers.navigation/RichNavGraph/edgeMap/#/PointingToDeclaration/space-engineers-api/spaceEngineers.navigation/-rich-nav-graph/edge-map.html
+$dokka.location:spaceEngineers.navigation/RichNavGraph/navGraph/#/PointingToDeclaration/space-engineers-api/spaceEngineers.navigation/-rich-nav-graph/nav-graph.html
+$dokka.location:spaceEngineers.navigation/RichNavGraph/neighbours/#kotlin.Int/PointingToDeclaration/space-engineers-api/spaceEngineers.navigation/-rich-nav-graph/neighbours.html
+$dokka.location:spaceEngineers.navigation/RichNavGraph/node/#kotlin.Int/PointingToDeclaration/space-engineers-api/spaceEngineers.navigation/-rich-nav-graph/node.html
+$dokka.location:spaceEngineers.navigation/RichNavGraph/nodeMap/#/PointingToDeclaration/space-engineers-api/spaceEngineers.navigation/-rich-nav-graph/node-map.html
 $dokka.location:spaceEngineers.screenshots////PointingToDeclaration/space-engineers-api/spaceEngineers.screenshots/index.html
 $dokka.location:spaceEngineers.screenshots//main/#/PointingToDeclaration/space-engineers-api/spaceEngineers.screenshots/main.html
 $dokka.location:spaceEngineers.screenshots/NamedOrientations.BACKWARD_UP///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}space-engineers-api/spaceEngineers.screenshots/-named-orientations/-b-a-c-k-w-a-r-d_-u-p/index.html
@@ -2628,6 +2646,7 @@ spaceEngineers.controller
 spaceEngineers.controller.connection
 spaceEngineers.controller.extensions
 spaceEngineers.iv4xr.goal
+spaceEngineers.iv4xr.navigation
 spaceEngineers.model
 spaceEngineers.model.extensions
 spaceEngineers.movement
