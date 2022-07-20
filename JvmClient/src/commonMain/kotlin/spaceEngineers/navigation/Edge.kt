@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Edge (
     @SerialName("I")
-    val i: Int,
+    val i: NodeId,
     @SerialName("J")
-    val j: Int
+    val j: NodeId
 )
