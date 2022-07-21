@@ -2,26 +2,22 @@ package spaceEngineers.util.generator.python
 
 import spaceEngineers.controller.SpaceEngineers
 import java.io.File
-import kotlin.reflect.KClass
-import kotlin.reflect.KFunction
-import kotlin.reflect.KProperty1
-import kotlin.reflect.KType
-import kotlin.reflect.full.createType
-import kotlin.reflect.full.memberProperties
+import kotlin.reflect.*
 
 
 fun main() {
-    val clientGenerator = ClientGenerator(SpaceEngineers::class)
+    val types = DataStructuresGenerator().find().toSet()
+    val clientGenerator = ClientGenerator(SpaceEngineers::class, types)
 
-    File("../PythonClient/src/spaceengineers/api.py").writeText(clientGenerator.generateInterfaces())
-    val dataClassGenerator = DataClassGenerator()
-    val modelsFile = File("../PythonClient/src/spaceengineers/models.py")
-    modelsFile.writeText(
-        """from dataclasses import dataclass
+
+    val outFile = File("../PythonClient/src/spaceengineers/api.py")
+    outFile.writeText(
+        """from .models import *
 
     """.trimIndent()
     )
-    modelsFile.appendText(dataClassGenerator.generate())
+    outFile.appendText(clientGenerator.generateInterfaces())
+
 }
 
 val filteredMethods = setOf("toString", "equals", "hashCode")
@@ -35,27 +31,41 @@ val kotlinTypeToPython = mapOf(
     "Map" to "dict",
     "Boolean" to "bool",
     "List" to "list",
+    "Short" to "int",
+    "Collection" to "list",
+    "Byte" to "int",
+    "Long" to "int",
+    "Set" to "set",
 )
 
 val kotlinMethodToPython = mapOf(
     "continue" to "Continue"
 )
 
-fun KClass<*>.toPythonType(): String {
-    if (isValue) {
+
+fun KType.toPythonType(validTypes: Set<KType>): String {
+    val kclass = toKClass()!!
+    if (kclass.isValue) {
         return "object"
     }
-    if (simpleName !in kotlinTypeToPython && simpleName !in validTypes.mapNotNull { (it.classifier as KClass<*>).simpleName }) {
+    if (kclass == List::class) {
+        return "List[${this.arguments.first().type!!.toPythonType(validTypes)}]"
+    }
+    if (kclass.simpleName !in kotlinTypeToPython && kclass.simpleName !in validTypes.mapNotNull { it.toKClass()?.simpleName }) {
         return "object"
     }
-    return simpleName?.let { kotlinTypeToPython[it] ?: it } ?: error("No simple name for $this")
+    return kclass.simpleName?.let { kotlinTypeToPython[it] ?: it } ?: error("No simple name for $this")
 }
 
-fun KClass<*>.forcePythonType(): String {
-    if (isValue) {
+fun KType.toPythonTypeOrKeep(validTypes: Set<KType>): String {
+    val kclass = toKClass()!!
+    if (kclass.isValue) {
         return "object"
     }
-    return simpleName?.let { kotlinTypeToPython[it] ?: it } ?: error("No simple name for $this")
+    if (kclass == List::class) {
+        return "List[${this.arguments.first().type!!.toPythonType(validTypes)}]"
+    }
+    return kclass.simpleName?.let { kotlinTypeToPython[it] ?: it } ?: error("No simple name for $this")
 }
 
 fun String.firstUppercase(): String {
@@ -69,7 +79,7 @@ fun String.toPythonMethod(): String {
 
 const val TAB = "    "
 
-class ClientGenerator(val iface: KClass<*>) {
+class ClientGenerator(val iface: KClass<*>, val types: Set<KType>) {
 
     fun generateInterfaces(): String {
         return generateInterface(iface).joinToString("\n")
@@ -81,7 +91,7 @@ class ClientGenerator(val iface: KClass<*>) {
 class ${kclass.simpleName}(object):
 """
         val properties = kclass.members.filterIsInstance<KProperty1<*, *>>().map {
-            """${it.name.firstUppercase()}: ${(it.returnType.classifier as KClass<*>).forcePythonType()}"""
+            """${it.name.firstUppercase()}: ${(it.returnType).toPythonTypeOrKeep(validTypes = types)}"""
         }
 
         val functions = kclass.members.filterIsInstance<KFunction<*>>().filter { it.name !in filteredMethods }.map {
@@ -108,7 +118,7 @@ class ${kclass.simpleName}(object):
         if (it.returnType.classifier == Unit::class) {
             return ""
         }
-        return " -> ${(it.returnType.classifier as KClass<*>).forcePythonType()}"
+        return " -> ${(it.returnType).toPythonType(types)}"
     }
 
     fun printParameters(func: KFunction<*>): String {
@@ -120,63 +130,7 @@ class ${kclass.simpleName}(object):
             return ""
         }
         return parameters.joinToString(prefix = ", ", separator = ", ") {
-            "${it.name}: ${(it.type.classifier as KClass<*>).toPythonType()}"
+            "${it.name}: ${it.type.toPythonType(types)}"
         }
-    }
-}
-
-val validTypes = mutableSetOf<KType>()
-
-class DataClassGenerator(
-
-) {
-
-    val finishedTypes = mutableSetOf<KType>(
-        Int::class.createType(),
-        Float::class.createType(),
-        String::class.createType(),
-        Boolean::class.createType(),
-        Unit::class.createType(),
-        String::class.createType(nullable = true)
-    )
-
-
-    fun generate(): String {
-        return generate(SpaceEngineers::class).joinToString("\n\n")
-    }
-
-    fun generate(kclass: KClass<*>): List<String> {
-        val functionParameters: Set<KType> =
-            kclass.members.filterIsInstance<KFunction<*>>().filter { it.name !in filteredMethods }.flatMap {
-                functionKTypes(it)
-            }.toSet()
-        val returnTypes: List<String> = kclass.members.filterIsInstance<KProperty1<*, *>>().flatMap {
-            generate(it.returnType.classifier as KClass<*>)
-        }
-        return returnTypes + functionParameters.map { validTypes.add(it); finishedTypes.add(it); it }
-            .map { generateDataClass(it) }
-    }
-
-    fun generateDataClass(ktype: KType): String {
-        val klass = ktype.classifier as KClass<*>
-        var result = """@dataclass
-class ${klass.simpleName}:
-"""
-        result += klass.memberProperties.filter { it.name != "dimensions" }.joinToString("\n") {
-            """$TAB${it.name.firstUppercase()}: ${(it.returnType.classifier as KClass<*>).toPythonType()}"""
-        }
-        return result
-    }
-
-    private fun functionKTypes(kFunction: KFunction<*>): Set<KType> {
-        return (kFunction.parameters.map { it.type } + kFunction.returnType).filter {
-            !it.isMarkedNullable && it !in finishedTypes
-        }.mapNotNull {
-            val klass = (it.classifier as KClass<*>); if (klass.isData) {
-            it
-        } else {
-            null
-        }
-        }.toSet()
     }
 }

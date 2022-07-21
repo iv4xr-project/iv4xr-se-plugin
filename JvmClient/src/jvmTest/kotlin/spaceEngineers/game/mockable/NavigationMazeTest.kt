@@ -7,6 +7,8 @@ import spaceEngineers.controller.extensions.navigationGraph
 import spaceEngineers.model.Vec3F
 import spaceEngineers.model.extensions.normalizeAsWalk
 import spaceEngineers.navigation.Edge
+import spaceEngineers.navigation.isConnectedTo
+import spaceEngineers.navigation.otherEnd
 import testhelp.MockOrRealGameTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -26,14 +28,6 @@ class NavigationMazeTest : MockOrRealGameTest(
         }
     }
 
-    private fun Edge.otherEnd(id: Int): Int {
-        return when(id) {
-            i -> j
-            j -> i
-            else -> error("The edge doesn't contain id $id.")
-        }
-    }
-
     @Test
     fun goToNextNode() = testContext {
         val navGraph = observer.navigationGraph()
@@ -43,7 +37,7 @@ class NavigationMazeTest : MockOrRealGameTest(
             ?: error("Nearest node not found")
         assertEquals(0, nearestNode.id)
 
-        val edge = navGraph.edges.find { it.i == nearestNode.id || it.j == nearestNode.id } ?: error("No edge found")
+        val edge = navGraph.edges.find { it.isConnectedTo(nearestNode.id) } ?: error("No edge found")
         val nextNode = navGraph.nodes.find { it.id == edge.otherEnd(nearestNode.id) } ?: error("Invalid edge!")
 
         println("My position    : ${me.position}")
