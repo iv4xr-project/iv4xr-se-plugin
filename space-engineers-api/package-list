@@ -243,6 +243,7 @@ $dokka.location:spaceEngineers.controller/FactionsTab///PointingToDeclaration/s
 $dokka.location:spaceEngineers.controller/GamePlay///PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-game-play/index.html
 $dokka.location:spaceEngineers.controller/GamePlay/data/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-game-play/data.html
 $dokka.location:spaceEngineers.controller/GamePlay/showMainMenu/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-game-play/show-main-menu.html
+$dokka.location:spaceEngineers.controller/GamePlay/showToolbarConfig/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-game-play/show-toolbar-config.html
 $dokka.location:spaceEngineers.controller/GpsTab///PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-gps-tab/index.html
 $dokka.location:spaceEngineers.controller/InfoTab///PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-info-tab/index.html
 $dokka.location:spaceEngineers.controller/Input///PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-input/index.html
@@ -375,6 +376,7 @@ $dokka.location:spaceEngineers.controller/Screens/messageBox/#/PointingToDeclara
 $dokka.location:spaceEngineers.controller/Screens/saveAs/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-screens/save-as.html
 $dokka.location:spaceEngineers.controller/Screens/serverConnect/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-screens/server-connect.html
 $dokka.location:spaceEngineers.controller/Screens/terminal/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-screens/terminal.html
+$dokka.location:spaceEngineers.controller/Screens/toolbarConfig/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-screens/toolbar-config.html
 $dokka.location:spaceEngineers.controller/Screens/waitUntilTheGameLoaded/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-screens/wait-until-the-game-loaded.html
 $dokka.location:spaceEngineers.controller/ServerConnect///PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-server-connect/index.html
 $dokka.location:spaceEngineers.controller/ServerConnect/connect/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-server-connect/connect.html
@@ -467,6 +469,12 @@ $dokka.location:spaceEngineers.controller/TestAdmin///PointingToDeclaration/spa
 $dokka.location:spaceEngineers.controller/TestAdmin/adminOnly/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-test-admin/admin-only.html
 $dokka.location:spaceEngineers.controller/TestAdmin/gameOnly/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-test-admin/game-only.html
 $dokka.location:spaceEngineers.controller/TestAdmin/observerOnly/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-test-admin/observer-only.html
+$dokka.location:spaceEngineers.controller/ToolbarConfig///PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-toolbar-config/index.html
+$dokka.location:spaceEngineers.controller/ToolbarConfig/close/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-toolbar-config/close.html
+$dokka.location:spaceEngineers.controller/ToolbarConfig/data/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-toolbar-config/data.html
+$dokka.location:spaceEngineers.controller/ToolbarConfig/dropGridItemToToolbar/#kotlin.Int#kotlin.Int/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-toolbar-config/drop-grid-item-to-toolbar.html
+$dokka.location:spaceEngineers.controller/ToolbarConfig/search/#kotlin.String/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-toolbar-config/search.html
+$dokka.location:spaceEngineers.controller/ToolbarConfig/selectCategories/#kotlin.collections.List[kotlin.Boolean]/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-toolbar-config/select-categories.html
 $dokka.location:spaceEngineers.controller/TypedParameter///PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-typed-parameter/index.html
 $dokka.location:spaceEngineers.controller/TypedParameter/TypedParameter/#kotlin.String#TypeParam(bounds=[kotlin.Any])?#kotlin.reflect.KClass[TypeParam(bounds=[kotlin.Any])]#kotlin.reflect.KType/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-typed-parameter/-typed-parameter.html
 $dokka.location:spaceEngineers.controller/TypedParameter/ktype/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-typed-parameter/ktype.html
@@ -1990,6 +1998,12 @@ $dokka.location:spaceEngineers.model/Toolbar/get/#spaceEngineers.model.ToolbarLo
 $dokka.location:spaceEngineers.model/Toolbar/items/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-toolbar/items.html
 $dokka.location:spaceEngineers.model/Toolbar/pageCount/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-toolbar/page-count.html
 $dokka.location:spaceEngineers.model/Toolbar/slotCount/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-toolbar/slot-count.html
+$dokka.location:spaceEngineers.model/ToolbarConfigData///PointingToDeclaration/space-engineers-api/spaceEngineers.model/-toolbar-config-data/index.html
+$dokka.location:spaceEngineers.model/ToolbarConfigData/ToolbarConfigData/#kotlin.String#kotlin.collections.List[spaceEngineers.model.DefinitionId?]#kotlin.collections.List[kotlin.String]#kotlin.collections.List[kotlin.String]/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-toolbar-config-data/-toolbar-config-data.html
+$dokka.location:spaceEngineers.model/ToolbarConfigData/categories/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-toolbar-config-data/categories.html
+$dokka.location:spaceEngineers.model/ToolbarConfigData/gridItems/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-toolbar-config-data/grid-items.html
+$dokka.location:spaceEngineers.model/ToolbarConfigData/searchText/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-toolbar-config-data/search-text.html
+$dokka.location:spaceEngineers.model/ToolbarConfigData/selectedCategories/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-toolbar-config-data/selected-categories.html
 $dokka.location:spaceEngineers.model/ToolbarItem///PointingToDeclaration/space-engineers-api/spaceEngineers.model/-toolbar-item/index.html
 $dokka.location:spaceEngineers.model/ToolbarItem/ToolbarItem/#spaceEngineers.model.DefinitionId#kotlin.String/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-toolbar-item/-toolbar-item.html
 $dokka.location:spaceEngineers.model/ToolbarItem/id/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-toolbar-item/id.html
