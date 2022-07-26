@@ -17,11 +17,13 @@ class TestRailClient(
     val authentication: BasicAuthCredentials,
     val client: HttpClient = HttpClient() {
         install(ContentNegotiation) {
-            json(Json {
-                prettyPrint = true
-                isLenient = true
-                ignoreUnknownKeys = true
-            })
+            json(
+                Json {
+                    prettyPrint = true
+                    isLenient = true
+                    ignoreUnknownKeys = true
+                },
+            )
         }
         install(Auth) {
             basic {
@@ -62,11 +64,20 @@ class TestRailClient(
         return get("get_sections/$projectId&suite_id=$suiteId")
     }
 
+    suspend fun getSectionsStr(projectId: Long, suiteId: Long): String {
+        return get("get_sections/$projectId&suite_id=$suiteId")
+    }
+
     suspend fun getAttachmentsForSuite(suiteId: Long): String {
         return get("get_attachments_for_suite/$suiteId")
     }
 
     suspend fun getSuite(suiteId: Long): Suite {
         return get("get_suite/$suiteId")
+    }
+
+    companion object {
+        const val SE_PROJECT_ID = 3L
+        const val SE_SUITE_ID = 225L
     }
 }
