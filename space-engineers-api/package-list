@@ -231,6 +231,7 @@ $dokka.location:spaceEngineers.controller/ContextControllerWrapper/items/#/Point
 $dokka.location:spaceEngineers.controller/ContextControllerWrapper/observer/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-context-controller-wrapper/observer.html
 $dokka.location:spaceEngineers.controller/ContextControllerWrapper/screens/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-context-controller-wrapper/screens.html
 $dokka.location:spaceEngineers.controller/ContextControllerWrapper/session/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-context-controller-wrapper/session.html
+$dokka.location:spaceEngineers.controller/ContextControllerWrapper/sound/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-context-controller-wrapper/sound.html
 $dokka.location:spaceEngineers.controller/ContextControllerWrapper/spaceEngineers/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-context-controller-wrapper/space-engineers.html
 $dokka.location:spaceEngineers.controller/ControlPanelTab///PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-control-panel-tab/index.html
 $dokka.location:spaceEngineers.controller/ControlPanelTab/data/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-control-panel-tab/data.html
@@ -397,6 +398,8 @@ $dokka.location:spaceEngineers.controller/Session/info/#/PointingToDeclaration/
 $dokka.location:spaceEngineers.controller/Session/loadScenario/#kotlin.String/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-session/load-scenario.html
 $dokka.location:spaceEngineers.controller/SocketReaderWriterException///PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-socket-reader-writer-exception/index.html
 $dokka.location:spaceEngineers.controller/SocketReaderWriterException/SocketReaderWriterException/#spaceEngineers.transport.jsonrpc.KotlinJsonRpcError#kotlin.String/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-socket-reader-writer-exception/-socket-reader-writer-exception.html
+$dokka.location:spaceEngineers.controller/Sound///PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-sound/index.html
+$dokka.location:spaceEngineers.controller/Sound/playingSounds/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-sound/playing-sounds.html
 $dokka.location:spaceEngineers.controller/SpaceEngineers.Companion///PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-space-engineers/-companion/index.html
 $dokka.location:spaceEngineers.controller/SpaceEngineers.Companion/DEFAULT_AGENT_ID/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-space-engineers/-companion/-d-e-f-a-u-l-t_-a-g-e-n-t_-i-d.html
 $dokka.location:spaceEngineers.controller/SpaceEngineers///PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-space-engineers/index.html
@@ -409,6 +412,7 @@ $dokka.location:spaceEngineers.controller/SpaceEngineers/items/#/PointingToDecla
 $dokka.location:spaceEngineers.controller/SpaceEngineers/observer/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-space-engineers/observer.html
 $dokka.location:spaceEngineers.controller/SpaceEngineers/screens/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-space-engineers/screens.html
 $dokka.location:spaceEngineers.controller/SpaceEngineers/session/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-space-engineers/session.html
+$dokka.location:spaceEngineers.controller/SpaceEngineers/sound/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-space-engineers/sound.html
 $dokka.location:spaceEngineers.controller/SpaceEngineersAdmin///PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-space-engineers-admin/index.html
 $dokka.location:spaceEngineers.controller/SpaceEngineersAdmin/blocks/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-space-engineers-admin/blocks.html
 $dokka.location:spaceEngineers.controller/SpaceEngineersAdmin/character/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-space-engineers-admin/character.html
@@ -1966,6 +1970,14 @@ $dokka.location:spaceEngineers.model/ShipControllerDefinition/enableBuilderCockp
 $dokka.location:spaceEngineers.model/ShipControllerDefinition/enableFirstPerson/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-ship-controller-definition/enable-first-person.html
 $dokka.location:spaceEngineers.model/ShipControllerDefinition/enableShipControl/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-ship-controller-definition/enable-ship-control.html
 $dokka.location:spaceEngineers.model/ShipControllerDefinition/isDefault3rdView/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-ship-controller-definition/is-default3rd-view.html
+$dokka.location:spaceEngineers.model/Sound///PointingToDeclaration/space-engineers-api/spaceEngineers.model/-sound/index.html
+$dokka.location:spaceEngineers.model/Sound/Sound/#kotlin.Boolean#kotlin.Boolean#kotlin.String/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-sound/-sound.html
+$dokka.location:spaceEngineers.model/Sound/cueEnum/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-sound/cue-enum.html
+$dokka.location:spaceEngineers.model/Sound/isPaused/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-sound/is-paused.html
+$dokka.location:spaceEngineers.model/Sound/isPlaying/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-sound/is-playing.html
+$dokka.location:spaceEngineers.model/SoundBanks///PointingToDeclaration/space-engineers-api/spaceEngineers.model/-sound-banks/index.html
+$dokka.location:spaceEngineers.model/SoundBanks/SoundBanks/#kotlin.collections.List[spaceEngineers.model.Sound]/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-sound-banks/-sound-banks.html
+$dokka.location:spaceEngineers.model/SoundBanks/sound/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-sound-banks/sound.html
 $dokka.location:spaceEngineers.model/SoundBlockDefinition///PointingToDeclaration/space-engineers-api/spaceEngineers.model/-sound-block-definition/index.html
 $dokka.location:spaceEngineers.model/SoundBlockDefinition/emitterNumber/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-sound-block-definition/emitter-number.html
 $dokka.location:spaceEngineers.model/SoundBlockDefinition/loopUpdateThreshold/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-sound-block-definition/loop-update-threshold.html
