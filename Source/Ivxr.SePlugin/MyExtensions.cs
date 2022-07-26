@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Concurrent;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -18,10 +18,8 @@ using Sandbox.Game.Screens.Helpers;
 using Sandbox.Game.Weapons;
 using Sandbox.Game.World;
 using VRage.Audio;
-using Sandbox.ModAPI.Weapons;
 using VRage.Game;
 using VRage.Game.Entity;
-using VRage.Game.ModAPI;
 using VRage.Game.ModAPI.Ingame;
 using VRageMath;
 using File = Iv4xr.SpaceEngineers.WorldModel.Screen.File;
@@ -440,24 +438,27 @@ namespace Iv4xr.SePlugin
             };
         }
 
+        private static IEnumerable<IMySourceVoice> GetSourceVoice(IEnumerable<object> collection)
+        {
+            return collection.SelectMany(
+                sourceVoicePool =>
+                {
+                    var allVoices = (IDictionary)sourceVoicePool.GetInstanceFieldOrThrow<object>("m_allVoices");
+                    return allVoices.Keys.Cast<IMySourceVoice>();
+                });
+        }
+
         public static SoundBanks ToSoundBanks(this MyCueBank cueBank)
         {
             var hudPools =
-                    cueBank.GetInstanceFieldOrThrow<Dictionary<MyWaveFormat, MySourceVoicePool>>("m_voiceHudPools");
+                    cueBank.GetInstanceFieldOrThrow<IDictionary>("m_voiceHudPools").Values.Cast<object>();
             var soundPools =
-                    cueBank.GetInstanceFieldOrThrow<Dictionary<MyWaveFormat, MySourceVoicePool>>("m_voiceSoundPools");
+                    cueBank.GetInstanceFieldOrThrow<IDictionary>("m_voiceSoundPools").Values.Cast<object>();
             var musicPools =
-                    cueBank.GetInstanceFieldOrThrow<Dictionary<MyWaveFormat, MySourceVoicePool>>("m_voiceMusicPools");
-            var sounds = soundPools.Values.SelectMany(sourceVoicePool =>
-                    sourceVoicePool.GetInstanceFieldOrThrow<ConcurrentDictionary<MySourceVoice, byte>>("m_allVoices")
-                            .Keys);
-            var huds = hudPools.Values.SelectMany(sourceVoicePool =>
-                    sourceVoicePool.GetInstanceFieldOrThrow<ConcurrentDictionary<MySourceVoice, byte>>("m_allVoices")
-                            .Keys);
-            var music = musicPools.Values.SelectMany(sourceVoicePool =>
-                    sourceVoicePool.GetInstanceFieldOrThrow<ConcurrentDictionary<MySourceVoice, byte>>("m_allVoices")
-                            .Keys);
-
+                    cueBank.GetInstanceFieldOrThrow<IDictionary>("m_voiceMusicPools").Values.Cast<object>();
+            var sounds = GetSourceVoice(soundPools);
+            var huds = GetSourceVoice(hudPools);
+            var music = GetSourceVoice(musicPools);
             return new SoundBanks()
             {
                 Sound = sounds.ToSounds(),
