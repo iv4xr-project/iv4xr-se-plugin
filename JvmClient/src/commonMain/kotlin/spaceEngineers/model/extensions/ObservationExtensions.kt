@@ -1,10 +1,19 @@
 package spaceEngineers.model.extensions
 
 import spaceEngineers.controller.Observer
-import spaceEngineers.model.Block
-import spaceEngineers.model.BlockId
-import spaceEngineers.model.CubeGrid
-import spaceEngineers.model.Observation
+import spaceEngineers.model.*
+
+fun Observation.blocksByCustomName(customName: String): List<TerminalBlock> {
+    return allBlocks.filterIsInstance<TerminalBlock>().filter { it.customName == customName }
+}
+
+fun Observation.blockByCustomName(customName: String): TerminalBlock {
+    val blocks = allBlocks
+    return blocks.filterIsInstance<TerminalBlock>().firstOrNull { it.customName == customName } ?: error(
+            "Block with name $customName not found, found only ${
+                blocks.filterIsInstance<spaceEngineers.model.TerminalBlock>().map { it.customName }
+            }")
+}
 
 val Observation.allBlocks: List<Block>
     get() {

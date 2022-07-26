@@ -1,5 +1,6 @@
 package bdd
 
+import bdd.repetitiveassert.repeatUntilSuccess
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
@@ -76,13 +77,18 @@ class ScreenSteps : AbstractMultiplayerSteps() {
     fun gameplay_screen_shows_beacons_for(map: List<Map<String, String>>) = mainClient {
         map.forEach {
             val oreName = it.getValue("ore")
-            assertTrue(screens.gamePlay.data().oreMarkers.any { it.text == oreName })
+            repeatUntilSuccess {
+                assertTrue(
+                    screens.gamePlay.data().oreMarkers.any { it.text == oreName },
+                    "Doesn't show beacon for $oreName"
+                )
+            }
         }
     }
 
     @Then("Gameplay screen shows no ore beacons.")
     fun gameplay_screen_shows_no_beacons() = mainClient {
-            assertEquals(0, screens.gamePlay.data().oreMarkers.size)
+        assertEquals(0, screens.gamePlay.data().oreMarkers.size)
     }
 
 
@@ -175,7 +181,7 @@ class ScreenSteps : AbstractMultiplayerSteps() {
         character.beginUsingTool()
 
         withTimeout(20000) {
-            while (observer.observe().targetBlock?.let { it.integrity < it.maxIntegrity} == true ) {
+            while (observer.observe().targetBlock?.let { it.integrity < it.maxIntegrity } == true) {
                 yield()
             }
         }

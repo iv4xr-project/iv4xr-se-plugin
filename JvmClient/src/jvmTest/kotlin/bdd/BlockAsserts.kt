@@ -1,10 +1,13 @@
 package bdd
 
 import bdd.repetitiveassert.repeatUntilSuccess
-import io.cucumber.java.PendingException
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
+import spaceEngineers.model.Block
 import spaceEngineers.model.extensions.allBlocks
+import spaceEngineers.model.extensions.blockByCustomName
+import spaceEngineers.model.extensions.blocksByCustomName
+import testhelp.assertLessThan
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
@@ -50,24 +53,14 @@ class BlockAsserts : AbstractMultiplayerSteps() {
     @Then("Target block integrity is less than maximum.")
     fun target_block_integrity_is_less_than_maximum() = observers {
         repeatUntilSuccess {
-            observer.observe().let { observation ->
-                assertNotNull(observation.targetBlock)
-                observation.targetBlock?.let { targetBlock ->
-                    assertTrue(targetBlock.integrity < targetBlock.maxIntegrity)
-                }
-            }
+            checkBlockIntegrityLessThanMaximum(observer.observe().targetBlock)
         }
     }
 
     @Then("Target block integrity is at maximum.")
     fun target_block_integrity_is_at_maximum() = observers {
         repeatUntilSuccess {
-            observer.observe().let { observation ->
-                assertNotNull(observation.targetBlock)
-                observation.targetBlock?.let { targetBlock ->
-                    assertEquals(targetBlock.integrity, targetBlock.maxIntegrity)
-                }
-            }
+            checkBlockIntegrityAtMaximum(observer.observe().targetBlock)
         }
     }
 
@@ -76,7 +69,35 @@ class BlockAsserts : AbstractMultiplayerSteps() {
         repeatUntilSuccess(delayMs = 1000) {
             val targetBlock = observer.observe().targetBlock
             assertNotNull(targetBlock, "no target block!")
-            assertEquals(percentageIntegrity / 100f, targetBlock.integrity / targetBlock.maxIntegrity)
+            assertEquals(percentageIntegrity / 100f, targetBlock.integrity / targetBlock.maxIntegrity, 0.0001f)
         }
+    }
+
+    @Then("Block {string} integrity is less than maximum.")
+    fun block_integrity_is_less_than_maximum(blockName: String) = observers {
+        repeatUntilSuccess(delayMs = 1000) {
+            val blockObservation = observer.observeBlocks()
+            val targetBlock = blockObservation.blockByCustomName(customName = blockName)
+            checkBlockIntegrityLessThanMaximum(targetBlock)
+        }
+    }
+
+    @Then("Block {string} integrity is at maximum.")
+    fun block_integrity_is_at_maximum(customName: String) = observers {
+        repeatUntilSuccess {
+            checkBlockIntegrityAtMaximum(
+                observer.observeBlocks().blocksByCustomName(customName).firstOrNull()
+            )
+        }
+    }
+
+    private fun checkBlockIntegrityAtMaximum(block: Block?) {
+        assertNotNull(block, "Block not found!")
+        assertEquals(block.integrity, block.maxIntegrity)
+    }
+
+    private fun checkBlockIntegrityLessThanMaximum(block: Block?) {
+        assertNotNull(block, "Block not found!")
+        assertLessThan(block.integrity, block.maxIntegrity)
     }
 }

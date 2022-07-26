@@ -1,6 +1,7 @@
 package bdd
 
 import bdd.repetitiveassert.repeatUntilSuccess
+import io.cucumber.java.PendingException
 import io.cucumber.java.en.And
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
@@ -491,4 +492,40 @@ class CharacterAsserts : AbstractMultiplayerSteps() {
         }
     }
 
+    @Then("Character model plays the {string} animation in the Cockpit.")
+    fun character_model_plays_the_animation_in_the_cockpit(animationName: String) = observers {
+        repeatUntilSuccess {
+            debug.characterAnimations().animationsPerLayer.values.any {
+                it.contains(animationName)
+            }
+        }
+    }
+
+    @Then("Character model plays the {string} animation.")
+    fun character_model_plays_the_animation(animationName: String) = observers {
+        repeatUntilSuccess {
+            debug.characterAnimations().animationsPerLayer.values.any {
+                it.contains(animationName)
+            }
+        }
+    }
+
+    @When("Layer {string} is not in {string} stance.")
+    fun character_is_not_in_idle_stance(layer: String, stance: String) = observers {
+        println(debug.characterAnimations())
+        assertNotEquals(
+            "$layer/$stance",
+            debug.characterAnimations().animationsPerLayer.getValue(layer)
+        )
+    }
+
+    @Then("Layer {string} is in {string} stance.")
+    fun character_is_in_stance(layer: String, stance: String) = observers {
+        assertEquals(
+            "$layer/$stance",
+            debug.characterAnimations().animationsPerLayer.getValue(layer)
+        )
+    }
+
+    //camera
 }

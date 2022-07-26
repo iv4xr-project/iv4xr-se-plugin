@@ -33,7 +33,21 @@ data class FrameSnapshot(
                 InputSnapshot(mouse = MouseSnapshot.nothingClicked())
             )
             return (0 until clickCount).flatMap {
-                listOf(mousePressed, mouseNotPressed, mousePressed, mouseNotPressed)
+                listOf(mouseNotPressed, mousePressed, mouseNotPressed)
+            }
+        }
+
+        fun shoots(mouseButton: MouseButton = MouseButton.LEFT, clickCount: Int = 5): List<FrameSnapshot> {
+            val mousePressed = FrameSnapshot(
+                InputSnapshot(
+                    mouse = MouseSnapshot.buttonClicked(mouseButton),
+                    keyboard = KeyboardSnapshot(
+                        pressedKeys = listOf(1, 183),
+                    )
+                ),
+            )
+            return (0 until clickCount).flatMap {
+                listOf(mousePressed)
             }
         }
     }

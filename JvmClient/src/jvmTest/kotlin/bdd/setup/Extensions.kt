@@ -81,6 +81,12 @@ fun ConnectionManagerUser.prepareCharacter() {
                 dieAndConfirm()
                 waitForMedicalScreen()
             }
+            "CubeBuilder" -> {
+                screens.toolbarConfig.close()
+                delay(50)
+                dieAndConfirm()
+                waitForMedicalScreen()
+            }
             else -> {
                 error("Don't know what to do with screen $focusedScreen")
             }

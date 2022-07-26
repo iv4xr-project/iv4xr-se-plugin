@@ -14,6 +14,7 @@ import spaceEngineers.controller.extensions.toNullIfMinusOne
 import spaceEngineers.controller.extensions.torchBackToMax
 import spaceEngineers.model.*
 import spaceEngineers.model.CharacterMovement
+import spaceEngineers.model.DefinitionId.Companion.ID_PREFIX
 import spaceEngineers.model.extensions.allBlocks
 import spaceEngineers.model.extensions.normalizeAsRun
 import spaceEngineers.movement.*
@@ -222,11 +223,19 @@ class CharacterActions : AbstractMultiplayerSteps() {
     fun uses_item_from_toolbar(indexStarting1: Int) = mainClient {
         //TODO: more robust, don't send keys
         //items.activate(ToolbarLocation(page = 0, slot = indexStarting1 - 1))
+        delay(500)
+        val chr = when (indexStarting1) {
+            1 -> '+'
+            2 -> 'ě'
+            3 -> 'š'
+            4 -> 'č'
+            else -> error("no char for index $indexStarting1")
+        }
         this.input.startPlaying(
             listOf(
                 FrameSnapshot(
                     InputSnapshot(
-                        keyboard = KeyboardSnapshot(pressedKeys = listOf(49), text = listOf('+'))
+                        keyboard = KeyboardSnapshot(pressedKeys = listOf(49), text = listOf(chr))
                     )
                 )
             )
@@ -255,6 +264,13 @@ class CharacterActions : AbstractMultiplayerSteps() {
                 mouseButton = MouseButton.valueOf(mouseButtonName.uppercase()),
                 clickCount = clickCount
             )
+        )
+    }
+
+    @Given("Character shoots.")
+    fun character_shoots() = mainClient {
+        input.startPlaying(
+            FrameSnapshot.shoots()
         )
     }
 
@@ -328,5 +344,57 @@ class CharacterActions : AbstractMultiplayerSteps() {
     fun character_aims_down() = mainClient {
         character.moveAndRotate(rotation3 = Vec2F.ROTATE_DOWN * 10f, ticks = 240)
     }
+
+    @When("Character begins using tool.")
+    fun character_starts_using_tool() = mainClient {
+        character.beginUsingTool()
+    }
+
+    @When("Character ends using tool.")
+    fun character_ends_using_tool() = mainClient {
+        character.endUsingTool()
+    }
+
+    @When("Character opens toolbar config.")
+    fun character_opens_toolbar_config() = mainClient {
+        screens.gamePlay.showToolbarConfig()
+    }
+
+    @When("Character selects {string} category.")
+    fun character_selects_category(category: String) = mainClient {
+        with(screens.toolbarConfig) {
+            val data = data()
+            val categoryIndex = data.categories.indexOf(category).toNullIfMinusOne()
+                ?: error("Missing category $category, possible: ${data.categories}")
+            delay(50)
+            selectCategory(categoryIndex)
+        }
+        delay(50)
+
+    }
+
+    @When("Drags any Emote to the toolbar's slot {int}.")
+    fun drags_any_emote_to_the_toolbar_s_slot(slotIndexStarting1: Int) = mainClient {
+        with(screens.toolbarConfig) {
+            val data = data()
+            println(data)
+            //println(data.gridItems.filterNotNull())
+            val emoteDefinitions = setOf("${ID_PREFIX}EmoteDefinition", "${ID_PREFIX}AnimationDefinition")
+            val emotes = data.gridItems.filterNotNull().filter { it.id in emoteDefinitions }
+            val randomEmote = emotes.random()
+            val randomEmoteIndex =
+                data.gridItems.indexOf(randomEmote).toNullIfMinusOne() ?: error("Random emote not found $randomEmote")
+            dropGridItemToToolbar(randomEmoteIndex, slotIndexStarting1 - 1)
+        }
+    }
+
+
+    @When("Character closes the toolbar config screen.")
+    fun character_closes_the_toolbar_config_screen() = mainClient {
+        screens.toolbarConfig.close()
+        delay(500)
+    }
+
+    //  MySession.Static.LocalCharacter.AnimationController.Controller.GetLayerByName("Body").CurrentNode.Name !!!!!!
 
 }

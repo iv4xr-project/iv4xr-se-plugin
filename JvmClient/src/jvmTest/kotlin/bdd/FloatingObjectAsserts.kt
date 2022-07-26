@@ -9,7 +9,11 @@ class FloatingObjectAsserts : AbstractMultiplayerSteps() {
     @Then("There is floating ore {string} in space around.")
     fun there_is_floating_ore_in_space_around(type: String) = observers {
         val definition = DefinitionId.ore(type)
-        assertTrue(observer.observeFloatingObjects().any { it.itemDefinition.definitionId == definition })
+        val floatingObjects = observer.observeFloatingObjects()
+        assertTrue(
+            floatingObjects.any { it.itemDefinition.definitionId == definition },
+            "There are only floating objects: ${floatingObjects.map { it.itemDefinition.definitionId }} "
+        )
     }
 
     @Then("There is floating ingot {string} in space around.")
