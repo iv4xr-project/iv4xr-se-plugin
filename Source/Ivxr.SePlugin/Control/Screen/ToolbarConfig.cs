@@ -4,6 +4,7 @@ using System.Linq;
 using Iv4xr.PluginLib;
 using Iv4xr.SpaceEngineers;
 using Iv4xr.SpaceEngineers.WorldModel.Screen;
+using Sandbox.Game.Entities.Cube;
 using Sandbox.Game.Gui;
 using Sandbox.Game.Screens.Helpers;
 using Sandbox.Graphics.GUI;
@@ -28,7 +29,7 @@ namespace Iv4xr.SePlugin.Control.Screen
             };
         }
 
-        public MyDefinitionBase FromToolbarItem(MyToolbarItem toolbarItem)
+        public MyDefinitionId? FromToolbarItem(MyToolbarItem toolbarItem)
         {
             if (toolbarItem == null)
             {
@@ -36,7 +37,11 @@ namespace Iv4xr.SePlugin.Control.Screen
             }
             if (toolbarItem is MyToolbarItemDefinition mtid)
             {
-                return mtid.Definition;
+                return mtid.Definition.Id;
+            }
+            if (toolbarItem is MyToolbarItemTerminalBlock titb)
+            {
+                return titb.GetInstanceFieldOrThrow<MyTerminalBlock>("m_block").DefinitionId;
             }
 
             throw new InvalidOperationException($"Don't know what to do with class {toolbarItem.GetType()}");
@@ -57,9 +62,11 @@ namespace Iv4xr.SePlugin.Control.Screen
             Screen.EnterSearchText("m_searchBox", text);
         }
 
-        public void SelectCategories(List<bool> categories)
+        public void SelectCategory(int index)
         {
-            Screen.GetInstanceFieldOrThrow<MyGuiControlListbox>("m_categoriesListbox").ChangeSelection(categories);
+            var listbox = Screen.GetInstanceFieldOrThrow<MyGuiControlListbox>("m_categoriesListbox");
+            listbox.FocusedItem = listbox.Items[index];
+            listbox.CallMethod<object>("SelectFocusedItem", new object[] { true });
         }
 
         public void DropGridItemToToolbar(int gridLocation, int toolbarLocation)

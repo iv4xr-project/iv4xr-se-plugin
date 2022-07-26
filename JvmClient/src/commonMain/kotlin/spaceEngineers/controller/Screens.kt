@@ -22,7 +22,7 @@ interface ToolbarConfig {
     fun search(text: String)
     fun dropGridItemToToolbar(gridLocation: Int, toolbarLocation: Int)
     fun close()
-    fun selectCategories(categories: List<Boolean>)
+    fun selectCategory(index: Int)
 }
 
 interface GamePlay {

@@ -198,6 +198,6 @@ namespace Iv4xr.SpaceEngineers
         void Close();
         void Search(string text);
         void DropGridItemToToolbar(int gridLocation, int toolbarLocation);
-        void SelectCategories(List<bool> categories);
+        void SelectCategory(int index);
     }
 }
