@@ -25,6 +25,7 @@ interface SpaceEngineers {
 interface Debug {
     fun sounds(): SoundBanks
     fun particles(): Particles
+    fun characterAnimations(): CharacterAnimations
 }
 
 interface Input {

@@ -101,5 +101,6 @@ namespace Iv4xr.SpaceEngineers
     {
         SoundBanks Sounds();
         Particles Particles();
+        CharacterAnimations CharacterAnimations();
     }
 }
