@@ -16,8 +16,8 @@ namespace Iv4xr.SePlugin.Control
         {
             if (!(MyAudio.Static is MyXAudio2 audio))
                 throw new InvalidOperationException("Cannot get audio info for this implementation");
-            var cueBank = audio.GetInstanceFieldOrThrow<MyCueBank>("m_cueBank");
-            return cueBank.ToSoundBanks();
+            var cueBank = audio.GetInstanceField<MyCueBank>("m_cueBank");
+            return cueBank.ThrowIfNull("m_cueBank", "The game sound is not initialized").ToSoundBanks();
         }
 
         public Particles Particles()
