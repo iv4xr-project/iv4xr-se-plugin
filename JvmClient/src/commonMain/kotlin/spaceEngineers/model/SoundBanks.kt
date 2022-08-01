@@ -23,6 +23,8 @@ data class Sound(
 data class ParticleEffect(
     @SerialName("Name")
     val name: String,
+    @SerialName("Position")
+    val position: Vec3F,
 )
 
 @Serializable
