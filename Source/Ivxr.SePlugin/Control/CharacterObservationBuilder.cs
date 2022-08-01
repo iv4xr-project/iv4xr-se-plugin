@@ -21,7 +21,6 @@ namespace Iv4xr.SePlugin.Control
 
         public CharacterObservation CreateCharacterObservation(MyCharacter character)
         {
-            var orientation = character.PositionComp.GetOrientation();
             var result = new CharacterObservation
             {
                 Gravity = character.Physics.Gravity.ToPlain(),
