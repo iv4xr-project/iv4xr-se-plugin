@@ -487,6 +487,7 @@ namespace Iv4xr.SePlugin
             return new ParticleEffect()
             {
                 Name = myParticleEffect.GetName(),
+                Position = myParticleEffect.WorldMatrix.Translation.ToPlain(),
             };
         }
     }
