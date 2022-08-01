@@ -397,4 +397,17 @@ class CharacterActions : AbstractMultiplayerSteps() {
 
     //  MySession.Static.LocalCharacter.AnimationController.Controller.GetLayerByName("Body").CurrentNode.Name !!!!!!
 
+    @When("Character uses for {int} ticks.")
+    fun character_uses_for(ticks: Int) = mainClient {
+        this.input.startPlaying(
+            List(ticks) {
+                FrameSnapshot(
+                    InputSnapshot(
+                        keyboard = KeyboardSnapshot(pressedKeys = listOf(70), text = listOf('F'))
+                    )
+                )
+            }
+        )
+    }
+
 }

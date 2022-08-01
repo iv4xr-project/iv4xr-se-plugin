@@ -91,13 +91,26 @@ class BlockAsserts : AbstractMultiplayerSteps() {
         }
     }
 
+    @Then("All blocks less than {int} meters away from {string} have maximum integrity.")
+    fun all_blocks_less_than_meters_away_from_have_maximum_integrity(distance: Int, customName: String) = observers {
+        observer.observeBlocks().let { blockObservation ->
+            val mainBlock = blockObservation.blockByCustomName(customName)
+            blockObservation.allBlocks.filter {
+                it.id != mainBlock.id &&
+                        it.position.distanceTo(mainBlock.position) <= distance
+            }.forEach {
+                checkBlockIntegrityAtMaximum(it)
+            }
+        }
+    }
+
     private fun checkBlockIntegrityAtMaximum(block: Block?) {
         assertNotNull(block, "Block not found!")
-        assertEquals(block.integrity, block.maxIntegrity)
+        assertEquals(block.integrity, block.maxIntegrity, "Not maximum for block $block")
     }
 
     private fun checkBlockIntegrityLessThanMaximum(block: Block?) {
         assertNotNull(block, "Block not found!")
-        assertLessThan(block.integrity, block.maxIntegrity)
+        assertLessThan(block.integrity, block.maxIntegrity, "Not less than maximum for block $block")
     }
 }
