@@ -36,7 +36,10 @@ class DebugAsserts : AbstractMultiplayerSteps() {
 
     @Then("Particle effect {string} is being played.")
     fun particle_is_being_played(particleNames: String) = mainClient {
-        val particles = debug.particles().effects
+        val position = observer.observe().position
+
+        val originalParticles = debug.particles().effects
+        val particles = originalParticles.filter { it.position.distanceTo(position) < 4f }
         if (particleNames == "-") {
             assertTrue(
                 particles.isEmpty(),

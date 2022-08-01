@@ -512,7 +512,6 @@ class CharacterAsserts : AbstractMultiplayerSteps() {
 
     @When("Layer {string} is not in {string} stance.")
     fun character_is_not_in_idle_stance(layer: String, stance: String) = observers {
-        println(debug.characterAnimations())
         assertNotEquals(
             "$layer/$stance",
             debug.characterAnimations().animationsPerLayer.getValue(layer)
