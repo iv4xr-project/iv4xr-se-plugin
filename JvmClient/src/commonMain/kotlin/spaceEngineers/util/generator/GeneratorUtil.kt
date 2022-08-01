@@ -19,6 +19,7 @@ val typeMapping = mapOf(
     "Boolean" to "bool",
     "Double" to "double",
     "Int" to "int",
+    "String" to "string",
 )
 
 fun mapToCsType(type: String): String {

@@ -6,6 +6,7 @@ interface TerminalBlock: Block  {
     val showInInventory: Boolean
     val showInTerminal: Boolean
     val showOnHUD: Boolean
+    val customName: String
 }
 
 interface FunctionalBlock: TerminalBlock  {

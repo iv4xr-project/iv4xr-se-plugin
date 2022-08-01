@@ -19,6 +19,7 @@ val blockMappings = mapOf<String, Map<String, KClass<*>>>(
         "ShowInInventory" to Boolean::class,
         "ShowInTerminal" to Boolean::class,
         "ShowOnHUD" to Boolean::class,
+        "CustomName" to String::class,
     ),
     "FunctionalBlock" to mapOf(
         "Enabled" to Boolean::class

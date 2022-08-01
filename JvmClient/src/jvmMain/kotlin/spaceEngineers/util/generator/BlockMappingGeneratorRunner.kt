@@ -71,11 +71,11 @@ namespace Iv4xr.SpaceEngineers.WorldModel
     """.trim()
     )
 
-    blockMappings.map { it ->
-        val parents = getBlockParentsById(it.key, parentMappings)
-        it.key to BlockMappingGenerator(
-            fields = it.value,
-            cls = it.key,
+    blockMappings.map { blockMapping ->
+        val parents = getBlockParentsById(blockMapping.key, parentMappings)
+        blockMapping.key to BlockMappingGenerator(
+            fields = blockMapping.value,
+            cls = blockMapping.key,
             parents = parents,
             overriddenFields = getOverriddenFields(parents, blockMappings),
             commonFields = commonBlockFields,

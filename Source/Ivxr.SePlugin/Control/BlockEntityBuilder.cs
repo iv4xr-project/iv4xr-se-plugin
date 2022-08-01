@@ -75,6 +75,7 @@ namespace Iv4xr.SePlugin.Control
                 terminalBlock.ShowInInventory = myTerminalBlock.ShowInInventory;
                 terminalBlock.ShowInTerminal = myTerminalBlock.ShowInTerminal;
                 terminalBlock.ShowOnHUD = myTerminalBlock.ShowOnHUD;
+                terminalBlock.CustomName = myTerminalBlock.CustomName.ToString();
             }
 
             if (sourceBlock.FatBlock is MyDoorBase myDoorBase && block is DoorBase doorBase)
