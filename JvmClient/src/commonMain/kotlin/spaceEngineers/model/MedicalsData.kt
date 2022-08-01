@@ -10,15 +10,15 @@ data class MedicalsData(
     @SerialName("Factions")
     val factions: List<Faction>,
     @SerialName("ShowFactions")
-    var showFactions: Boolean,
+    val showFactions: Boolean,
     @SerialName("ShowMotD")
-    var showMotD: Boolean,
+    val showMotD: Boolean,
     @SerialName("IsMotdOpen")
-    var isMotdOpen: Boolean,
+    val isMotdOpen: Boolean,
     @SerialName("Paused")
-    var paused: Boolean,
+    val paused: Boolean,
     @SerialName("IsMultiplayerReady")
-    var isMultiplayerReady: Boolean,
+    val isMultiplayerReady: Boolean,
     @SerialName("RespawnButton")
     val respawnButton: GuiControlBase?,
 )
