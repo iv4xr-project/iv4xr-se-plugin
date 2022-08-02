@@ -2270,6 +2270,13 @@ $dokka.location:spaceEngineers.navigation////PointingToDeclaration/space-engine
 $dokka.location:spaceEngineers.navigation//isConnectedTo/spaceEngineers.navigation.Edge#kotlin.Int/PointingToDeclaration/space-engineers-api/spaceEngineers.navigation/is-connected-to.html
 $dokka.location:spaceEngineers.navigation//otherEnd/spaceEngineers.navigation.Edge#kotlin.Int/PointingToDeclaration/space-engineers-api/spaceEngineers.navigation/other-end.html
 $dokka.location:spaceEngineers.navigation//toRichGraph/spaceEngineers.navigation.NavGraph#/PointingToDeclaration/space-engineers-api/spaceEngineers.navigation/to-rich-graph.html
+$dokka.location:spaceEngineers.navigation/CharacterNavigation.Companion///PointingToDeclaration/space-engineers-api/spaceEngineers.navigation/-character-navigation/-companion/index.html
+$dokka.location:spaceEngineers.navigation/CharacterNavigation.Companion/DELAY_PER_TICKS_MS/#/PointingToDeclaration/space-engineers-api/spaceEngineers.navigation/-character-navigation/-companion/-d-e-l-a-y_-p-e-r_-t-i-c-k-s_-m-s.html
+$dokka.location:spaceEngineers.navigation/CharacterNavigation///PointingToDeclaration/space-engineers-api/spaceEngineers.navigation/-character-navigation/index.html
+$dokka.location:spaceEngineers.navigation/CharacterNavigation/CharacterNavigation/#spaceEngineers.controller.SpaceEngineers#spaceEngineers.movement.CharacterMovement/PointingToDeclaration/space-engineers-api/spaceEngineers.navigation/-character-navigation/-character-navigation.html
+$dokka.location:spaceEngineers.navigation/CharacterNavigation/moveInLine/#spaceEngineers.model.Vec3F#spaceEngineers.model.CharacterMovementType#kotlin.time.Duration/PointingToDeclaration/space-engineers-api/spaceEngineers.navigation/-character-navigation/move-in-line.html
+$dokka.location:spaceEngineers.navigation/CharacterNavigation/movement/#/PointingToDeclaration/space-engineers-api/spaceEngineers.navigation/-character-navigation/movement.html
+$dokka.location:spaceEngineers.navigation/CharacterNavigation/spaceEngineers/#/PointingToDeclaration/space-engineers-api/spaceEngineers.navigation/-character-navigation/space-engineers.html
 $dokka.location:spaceEngineers.navigation/Edge///PointingToDeclaration/space-engineers-api/spaceEngineers.navigation/-edge/index.html
 $dokka.location:spaceEngineers.navigation/Edge/Edge/#kotlin.Int#kotlin.Int/PointingToDeclaration/space-engineers-api/spaceEngineers.navigation/-edge/-edge.html
 $dokka.location:spaceEngineers.navigation/Edge/i/#/PointingToDeclaration/space-engineers-api/spaceEngineers.navigation/-edge/i.html
@@ -2278,6 +2285,8 @@ $dokka.location:spaceEngineers.navigation/NavGraph///PointingToDeclaration/spac
 $dokka.location:spaceEngineers.navigation/NavGraph/NavGraph/#kotlin.collections.List[spaceEngineers.navigation.Node]#kotlin.collections.List[spaceEngineers.navigation.Edge]/PointingToDeclaration/space-engineers-api/spaceEngineers.navigation/-nav-graph/-nav-graph.html
 $dokka.location:spaceEngineers.navigation/NavGraph/edges/#/PointingToDeclaration/space-engineers-api/spaceEngineers.navigation/-nav-graph/edges.html
 $dokka.location:spaceEngineers.navigation/NavGraph/nodes/#/PointingToDeclaration/space-engineers-api/spaceEngineers.navigation/-nav-graph/nodes.html
+$dokka.location:spaceEngineers.navigation/Navigation///PointingToDeclaration/space-engineers-api/spaceEngineers.navigation/-navigation/index.html
+$dokka.location:spaceEngineers.navigation/Navigation/moveInLine/#spaceEngineers.model.Vec3F#spaceEngineers.model.CharacterMovementType#kotlin.time.Duration/PointingToDeclaration/space-engineers-api/spaceEngineers.navigation/-navigation/move-in-line.html
 $dokka.location:spaceEngineers.navigation/Node///PointingToDeclaration/space-engineers-api/spaceEngineers.navigation/-node/index.html
 $dokka.location:spaceEngineers.navigation/Node/Node/#kotlin.Int#spaceEngineers.model.Vec3F/PointingToDeclaration/space-engineers-api/spaceEngineers.navigation/-node/-node.html
 $dokka.location:spaceEngineers.navigation/Node/id/#/PointingToDeclaration/space-engineers-api/spaceEngineers.navigation/-node/id.html
