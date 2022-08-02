@@ -3,7 +3,7 @@
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
         <RootNamespace>Iv4xr.SpaceEngineers</RootNamespace>
-        <AssemblyVersion>0.7.0</AssemblyVersion>
+        <AssemblyVersion>0.8.0</AssemblyVersion>
         <FileVersion></FileVersion>
     </PropertyGroup>
 
