@@ -4,6 +4,7 @@ import eu.iv4xr.framework.extensions.pathfinding.AStar
 import spaceEngineers.controller.SpaceEngineers
 import spaceEngineers.controller.extensions.navigationGraph
 import spaceEngineers.iv4xr.navigation.NavigableGraph
+import spaceEngineers.model.extensions.largestGrid
 import spaceEngineers.navigation.CharacterNavigation
 import spaceEngineers.navigation.NodeId
 import testhelp.MockOrRealGameTest
@@ -17,18 +18,17 @@ import kotlin.time.Duration.Companion.seconds
 class NavigationTest : MockOrRealGameTest(
     scenarioId = "amaze",
     //forceRealGame = true,
-    //loadScenario = true,
+    //loadScenario = false
 ) {
 
     @Ignore("This test is very slow.")
     @Test
     fun navigateMaze() = testContext {
-        delay(timeMillis = 500)
-        val graph = observer.navigationGraph()
+        val graph = observer.navigationGraph(observer.observeBlocks().largestGrid().id)
         assertGreaterThan(graph.nodes.size, 70)
 
         val navigableGraph = NavigableGraph(graph)
-        val targetNode = navigableGraph.node(nodeId = 50)
+        val targetNode = navigableGraph.node(nodeId = 20)
         val path = getPath(navigableGraph, targetNode.id)
         assertGreaterThan(path.size, 10)
 
