@@ -26,7 +26,7 @@ class CharacterActions : AbstractMultiplayerSteps() {
     @When("Character grinds to {double} integrity.")
     fun character_grinds_to_integrity(integrity: Double) = mainClient {
         val percentage = integrity / blockToGrind().maxIntegrity * 100.0
-        grindDownToPercentage(percentage)
+        contextControllerWrapper.grindDownToPercentage(percentage)
     }
 
     private fun blockToGrind(): Block = mainClient {
@@ -36,7 +36,7 @@ class CharacterActions : AbstractMultiplayerSteps() {
 
     @When("Character grinds to {double}% integrity.")
     fun character_grinds_until_to_integrity_percentage(percentage: Double) = mainClient {
-        grindDownToPercentage(percentage)
+        contextControllerWrapper.grindDownToPercentage(percentage)
     }
 
 
@@ -106,7 +106,7 @@ class CharacterActions : AbstractMultiplayerSteps() {
             toolbar.findLocation(blockType) ?: error("cannot find $blockType in toolbar")
         val definitionId =
             toolbar.items.first { it?.id?.type == blockType }?.id ?: error("Cannot find $blockType in toolbar")
-        items.setToolbarItem(definitionId, toolbarLocation);
+        items.setToolbarItem(definitionId, toolbarLocation)
         items.equip(toolbarLocation)
         delay(150)
         blocks.place()
@@ -138,7 +138,7 @@ class CharacterActions : AbstractMultiplayerSteps() {
 
     @When("Character torches block back up to max integrity.")
     fun character_torches_block_back_up_to_max_integrity() = mainClient {
-        torchBackToMax(context.lastNewBlock!!)
+        contextControllerWrapper.torchBackToMax(context.lastNewBlock!!)
     }
 
     @Given("Toolbar has mapping:")

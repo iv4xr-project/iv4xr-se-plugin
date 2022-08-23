@@ -113,7 +113,7 @@ data class ConnectionSetup(
         val CONNECTION_SETUP_DIR = "src/jvmTest/resources/connection-setup/"
 
         fun loadConfigFromFile(file: File): ConnectionSetup {
-            return json.decodeFromString(ConnectionSetup.serializer(), file.readText())
+            return json.decodeFromString(serializer(), file.readText())
         }
 
         fun loadConfigFromFile(name: String = "config.json"): ConnectionSetup {

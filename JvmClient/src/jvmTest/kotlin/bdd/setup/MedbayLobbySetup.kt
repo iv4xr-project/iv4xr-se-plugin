@@ -1,10 +1,10 @@
 package bdd.setup
 
-import kotlinx.coroutines.delay
+import io.cucumber.java.Scenario
+import kotlinx.coroutines.runBlocking
 import spaceEngineers.controller.connection.ConnectionManager
 import spaceEngineers.controller.connection.ConnectionSetup
 import testhelp.hideUndeclaredThrowableException
-import kotlin.test.assertNotNull
 
 
 enum class CameraConfig(val text: String) {
@@ -28,11 +28,12 @@ class MedbayLobbySetup(
 
     }
 
-    override fun beforeScenario() {
+    override fun beforeScenario(scenario: Scenario) {
 
     }
 
-    override fun afterScenario() {
+    override fun afterScenario(scenario: Scenario) = runBlocking {
+        connectionManager.processScreenshots(scenario)
     }
 
     override fun afterAll() {

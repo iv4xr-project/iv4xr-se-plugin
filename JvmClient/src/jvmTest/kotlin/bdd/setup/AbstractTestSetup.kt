@@ -3,18 +3,15 @@ package bdd.setup
 import bdd.repetitiveassert.RepetitiveAssertConfig
 import bdd.repetitiveassert.RepetitiveAssertTestCase
 import bdd.repetitiveassert.SimpleRepetitiveAssertTestCase
-import kotlinx.coroutines.delay
-import spaceEngineers.controller.ContextControllerWrapper
-import spaceEngineers.controller.connection.AppType
+import io.cucumber.java.Scenario
 import spaceEngineers.controller.connection.ConnectionManager
-import testhelp.hideUndeclaredThrowableException
 
 interface TestSetup {
     val connectionManager: ConnectionManager
 
     fun beforeAll()
-    fun beforeScenario()
-    fun afterScenario()
+    fun beforeScenario(scenario: Scenario)
+    fun afterScenario(scenario: Scenario)
     fun afterAll()
 
 
