@@ -55,7 +55,7 @@ class ScreenshotSteps : AbstractMultiplayerSteps() {
                 definitions.blockDefinitions().first { it.definitionId.type == block.definitionId.type }
             meta.buildProgressModels.reversed().forEach { seBuildProgressModel ->
                 delay(500)
-                grindDownToPercentage((seBuildProgressModel.buildRatioUpperBound).toDouble() * 100.0 - percentage)
+                contextControllerWrapper.grindDownToPercentage((seBuildProgressModel.buildRatioUpperBound).toDouble() * 100.0 - percentage)
                 delay(500)
                 items.equip(ToolbarLocation(9, 0))
                 delay(500)
@@ -76,7 +76,7 @@ class ScreenshotSteps : AbstractMultiplayerSteps() {
                 definitions.blockDefinitions().first { it.definitionId.type == block.definitionId.type }
             definition.buildProgressModels.forEach { seBuildProgressModel ->
                 Thread.sleep(500)
-                torchUpToPercentage((seBuildProgressModel.buildRatioUpperBound).toDouble() * 100.0 + percentage)
+                contextControllerWrapper.torchUpToPercentage((seBuildProgressModel.buildRatioUpperBound).toDouble() * 100.0 + percentage)
                 Thread.sleep(500)
                 items.equip(ToolbarLocation(9, 0))
                 Thread.sleep(500)

@@ -33,7 +33,7 @@ class Respawner(
         delay(100)
     }
 
-    private suspend fun ContextControllerWrapper.checkFactionAndRespawn(
+    private suspend fun SpaceEngineers.checkFactionAndRespawn(
         faction: String,
         observerMedbay: String
     ) {

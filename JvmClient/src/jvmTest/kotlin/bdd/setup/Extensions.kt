@@ -1,9 +1,13 @@
 package bdd.setup
 
+import io.cucumber.java.Scenario
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import spaceEngineers.controller.SpaceEngineers
 import spaceEngineers.controller.connection.AppType
+import spaceEngineers.controller.connection.ConnectionManager
+import spaceEngineers.controller.connection.ProcessWithConnection
+import spaceEngineers.controller.connection.ScreenshotMode
 import spaceEngineers.controller.extensions.waitForScreen
 import spaceEngineers.model.canUse
 import spaceEngineers.util.whileWithTimeout
@@ -185,4 +189,25 @@ suspend fun SpaceEngineers.waitForServerConnectScreen() {
 
 suspend fun SpaceEngineers.waitForGameplay() {
     screens.waitForScreen(timeoutMs = 60_001, screenName = "GamePlay")
+}
+
+fun shouldTakeScreenshot(scenario: Scenario, screenshotMode: ScreenshotMode): Boolean {
+    return when (screenshotMode) {
+        ScreenshotMode.NEVER -> false
+        ScreenshotMode.ON_FAILURE -> scenario.isFailed
+        ScreenshotMode.ALWAYS -> true
+    }
+}
+
+suspend fun ConnectionManager.processScreenshots(scenario: Scenario) {
+    if (!shouldTakeScreenshot(scenario, config.screenshotMode)) {
+        return
+    }
+    games {
+        processScreenshot(scenario)
+    }
+}
+
+suspend fun ProcessWithConnection.processScreenshot(scenario: Scenario) {
+
 }

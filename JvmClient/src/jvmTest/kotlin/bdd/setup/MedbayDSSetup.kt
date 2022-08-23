@@ -1,10 +1,12 @@
 package bdd.setup
 
-import kotlinx.coroutines.delay
+import io.cucumber.java.Scenario
+import kotlinx.coroutines.runBlocking
 import spaceEngineers.controller.connection.ConnectionManager
 import spaceEngineers.controller.connection.ConnectionSetup
 import spaceEngineers.util.whileWithTimeout
 import testhelp.hideUndeclaredThrowableException
+import java.io.File
 
 
 class MedbayDSSetup(
@@ -18,11 +20,12 @@ class MedbayDSSetup(
 
     }
 
-    override fun beforeScenario() {
+    override fun beforeScenario(scenario: Scenario) {
 
     }
 
-    override fun afterScenario() {
+    override fun afterScenario(scenario: Scenario) = runBlocking {
+        connectionManager.processScreenshots(scenario)
     }
 
     override fun afterAll() {

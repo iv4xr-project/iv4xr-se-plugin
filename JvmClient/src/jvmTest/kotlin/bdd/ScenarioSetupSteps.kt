@@ -4,16 +4,12 @@ import bdd.setup.MedbayDSSetup
 import bdd.setup.MedbayLobbySetup
 import bdd.setup.TestSetup
 import io.cucumber.datatable.DataTable
-import io.cucumber.java.After
-import io.cucumber.java.AfterAll
-import io.cucumber.java.Before
-import io.cucumber.java.BeforeAll
+import io.cucumber.java.*
 import io.cucumber.java.en.Given
-import spaceEngineers.controller.SpaceEngineers
+import spaceEngineers.controller.connection.Config
 import spaceEngineers.controller.connection.ConnectionManager
 import spaceEngineers.controller.connection.ConnectionSetup
 import spaceEngineers.controller.connection.ConnectionSetup.Companion.loadConfigFromFile
-import spaceEngineers.controller.extensions.waitForScreen
 import testhelp.hideUndeclaredThrowableException
 
 
@@ -23,8 +19,9 @@ lateinit var testSetup: TestSetup
 SINGLE_COMPUTER_DEDICATED_DEV_KAREL    OFFLINE_STEAM
 LOBBY_STEAM DS_STEAM
 */
-val cfg = loadConfigFromFile("DS_STEAM.json")
-val globalCm = ConnectionManager(cfg)
+val bddRunConfig = Config.fromPropsOrEnv()
+val cfg = loadConfigFromFile("OFFLINE_STEAM.json")
+val globalCm = ConnectionManager(config = bddRunConfig, connectionSetup = cfg)
 
 fun testSetupFactory(config: ConnectionSetup, connectionManager: ConnectionManager): TestSetup {
     return if (config.ds) {
@@ -51,13 +48,13 @@ fun afterAll() {
 }
 
 @Before
-fun before() {
-    testSetup.beforeScenario()
+fun before(scenario: Scenario) {
+    testSetup.beforeScenario(scenario)
 }
 
 @After
-fun after() {
-    testSetup.afterScenario()
+fun after(scenario: Scenario) {
+    testSetup.afterScenario(scenario)
 }
 
 
