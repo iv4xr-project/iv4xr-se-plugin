@@ -8,11 +8,12 @@ import testhelp.assertLessThan
 import kotlin.test.Test
 
 
-class NavigationTest : MockOrRealGameTest(
-    //forceRealGame = true
+class NavigatorTest : MockOrRealGameTest(
+    //forceRealGame = true,
+    //loadScenario = false,
 ) {
     @Test
-    fun navigateToLocation() = testContext {
+    fun moveInLine() = testContext {
         val navGraph = observer.navigationGraph()
         assertGreaterThan(navGraph.nodes.size, 30)
 

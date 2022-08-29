@@ -2,7 +2,6 @@ package spaceEngineers.iv4xr
 
 import eu.iv4xr.framework.extensions.pathfinding.AStar
 import spaceEngineers.controller.SpaceEngineers
-import spaceEngineers.controller.extensions.navigationGraph
 import spaceEngineers.iv4xr.navigation.NavigableGraph
 import spaceEngineers.model.extensions.largestGrid
 import spaceEngineers.navigation.CharacterNavigation
@@ -10,18 +9,17 @@ import spaceEngineers.navigation.NodeId
 import testhelp.MockOrRealGameTest
 import testhelp.assertGreaterThan
 import testhelp.assertLessThan
-import java.util.ArrayList
 import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.time.Duration.Companion.seconds
 
-class NavigationTest : MockOrRealGameTest(
+class MockableNavigationTest : MockOrRealGameTest(
     scenarioId = "amaze",
     //forceRealGame = true,
     //loadScenario = false
 ) {
 
-    @Ignore("This test is very slow.")
+    //@Ignore("This test is quite slow.")
     @Test
     fun navigateMaze() = testContext {
         val graph = observer.navigationGraph(observer.observeBlocks().largestGrid().id)
