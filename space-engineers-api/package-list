@@ -520,6 +520,7 @@ $dokka.location:spaceEngineers.iv4xr.navigation/NavigableGraph/NavigableGraph/#s
 $dokka.location:spaceEngineers.iv4xr.navigation/NavigableGraph/distance/#kotlin.Int#kotlin.Int/PointingToDeclaration/space-engineers-api/spaceEngineers.iv4xr.navigation/-navigable-graph/distance.html
 $dokka.location:spaceEngineers.iv4xr.navigation/NavigableGraph/heuristic/#kotlin.Int#kotlin.Int/PointingToDeclaration/space-engineers-api/spaceEngineers.iv4xr.navigation/-navigable-graph/heuristic.html
 $dokka.location:spaceEngineers.iv4xr.navigation/NavigableGraph/neighbours/#kotlin.Int/PointingToDeclaration/space-engineers-api/spaceEngineers.iv4xr.navigation/-navigable-graph/neighbours.html
+$dokka.location:spaceEngineers.iv4xr.navigation/NavigableGraph/node/#kotlin.Int/PointingToDeclaration/space-engineers-api/spaceEngineers.iv4xr.navigation/-navigable-graph/node.html
 $dokka.location:spaceEngineers.model.extensions////PointingToDeclaration/space-engineers-api/spaceEngineers.model.extensions/index.html
 $dokka.location:spaceEngineers.model.extensions//allBlocks/spaceEngineers.model.Observation#/PointingToDeclaration/space-engineers-api/spaceEngineers.model.extensions/all-blocks.html
 $dokka.location:spaceEngineers.model.extensions//blockByCustomName/spaceEngineers.model.Observation#kotlin.String/PointingToDeclaration/space-engineers-api/spaceEngineers.model.extensions/block-by-custom-name.html
@@ -530,6 +531,7 @@ $dokka.location:spaceEngineers.model.extensions//centerPosition/spaceEngineers.m
 $dokka.location:spaceEngineers.model.extensions//crossProduct/spaceEngineers.model.NumberVec3[kotlin.Float]#spaceEngineers.model.NumberVec3[kotlin.Float]/PointingToDeclaration/space-engineers-api/spaceEngineers.model.extensions/cross-product.html
 $dokka.location:spaceEngineers.model.extensions//heaviestGrid/spaceEngineers.model.Observation#/PointingToDeclaration/space-engineers-api/spaceEngineers.model.extensions/heaviest-grid.html
 $dokka.location:spaceEngineers.model.extensions//isSidePoint/spaceEngineers.model.MountPoint#/PointingToDeclaration/space-engineers-api/spaceEngineers.model.extensions/is-side-point.html
+$dokka.location:spaceEngineers.model.extensions//largestGrid/spaceEngineers.model.Observation#/PointingToDeclaration/space-engineers-api/spaceEngineers.model.extensions/largest-grid.html
 $dokka.location:spaceEngineers.model.extensions//mountPointToRealWorldPosition/spaceEngineers.model.Block#spaceEngineers.model.MountPoint#spaceEngineers.model.BlockDefinition#kotlin.Float/PointingToDeclaration/space-engineers-api/spaceEngineers.model.extensions/mount-point-to-real-world-position.html
 $dokka.location:spaceEngineers.model.extensions//normalizeAsMovement/spaceEngineers.model.Vec3F#spaceEngineers.model.CharacterMovementType/PointingToDeclaration/space-engineers-api/spaceEngineers.model.extensions/normalize-as-movement.html
 $dokka.location:spaceEngineers.model.extensions//normalizeAsRun/spaceEngineers.model.Vec3F#/PointingToDeclaration/space-engineers-api/spaceEngineers.model.extensions/normalize-as-run.html
