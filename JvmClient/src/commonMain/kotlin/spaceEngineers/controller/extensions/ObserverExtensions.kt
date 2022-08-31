@@ -3,6 +3,7 @@ package spaceEngineers.controller.extensions
 import spaceEngineers.controller.Observer
 import spaceEngineers.model.Vec3F
 import spaceEngineers.model.extensions.heaviestGrid
+import spaceEngineers.model.extensions.largestGrid
 import spaceEngineers.navigation.NavGraph
 
 fun Observer.distanceTo(position: Vec3F): Float {
@@ -11,5 +12,5 @@ fun Observer.distanceTo(position: Vec3F): Float {
 }
 
 fun Observer.navigationGraph(): NavGraph {
-    return navigationGraph(observeBlocks().heaviestGrid().id)
+    return navigationGraph(observeBlocks().largestGrid().id)
 }

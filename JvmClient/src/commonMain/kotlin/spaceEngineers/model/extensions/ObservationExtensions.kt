@@ -25,7 +25,15 @@ fun Observation.blockById(blockId: BlockId): Block {
 }
 
 fun Observation.heaviestGrid(): CubeGrid {
-    return grids.maxByOrNull { grid -> grid.mass } ?: error("No grid found!")
+    val heaviestGrid = grids.maxByOrNull { grid -> grid.mass }
+        ?: error("No grid found!")
+    if (heaviestGrid.mass <= 0.0f)
+        error("The heaviest grid has zero (or negative) mass!")
+    return heaviestGrid
+}
+
+fun Observation.largestGrid(): CubeGrid {
+    return grids.maxByOrNull { grid -> grid.blocks.size } ?: error("No grid found!")
 }
 
 fun Observer.blockById(blockId: BlockId): Block {
