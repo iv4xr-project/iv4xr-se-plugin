@@ -10,7 +10,7 @@ import kotlin.test.Test
 
 class NavigatorTest : MockOrRealGameTest(
     //forceRealGame = true,
-    //loadScenario = false,
+    loadScenario = false,  // TODO: The mock file was recorder with loadScenario = false (the scenario lacks gravity, he can't walk)
 ) {
     @Test
     fun moveInLine() = testContext {
