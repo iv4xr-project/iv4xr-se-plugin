@@ -10,6 +10,7 @@ using Sandbox.Game.Gui;
 using Sandbox.Game.Screens.Helpers;
 using Sandbox.Graphics.GUI;
 using VRage.FileSystem;
+using VRageMath;
 
 namespace Iv4xr.SePlugin.Control
 {
@@ -74,12 +75,8 @@ namespace Iv4xr.SePlugin.Control
 
         public void TakeScreenshot(string absolutePath)
         {
-            // Stolen from se/Sources/TestingToolPlugin/MyTestingToolPlugin.cs
-            MyAsyncSaving.Start(null, Path.Combine(MyFileSystem.SavesPath, "..", "iv4XRtempsave"));
-            MyGuiSandbox.TakeScreenshot(
-                MySandboxGame.ScreenSize.X, MySandboxGame.ScreenSize.Y,
-                absolutePath, true, false
-            );
+            VRageRender.MyRenderProxy.TakeScreenshot(new Vector2(MySandboxGame.Config.ScreenshotSizeMultiplier),
+                absolutePath, false, false, true);
         }
     }
 }
