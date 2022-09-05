@@ -2,7 +2,9 @@ package testrail
 
 import io.ktor.client.plugins.auth.providers.*
 import io.ktor.http.*
+import org.apache.commons.lang3.StringUtils
 import spaceEngineers.util.extractTo
+import spaceEngineers.util.nonWhitespaceEquals
 import testrail.model.Case
 import testrail.model.Section
 import java.io.ByteArrayInputStream
@@ -13,11 +15,11 @@ import java.util.zip.ZipInputStream
 suspend fun downloadEverything(
     username: String,
     password: String,
-    sectionId: Long = 50008,
+    sectionIds: List<Long> = listOf(49388, 50008),
     projectId: Long = TestRailClient.SE_PROJECT_ID,
     suiteId: Long = TestRailClient.SE_SUITE_ID,
-    testCaseDirectory: File = File("./src/jvmTest/resources/features/testrail-2/"),
-    mapDirectory: File = File("./src/jvmTest/resources/game-saves"),
+    testCaseDirectory: File = File("./src/jvmTest/resources/testrail/features/"),
+    mapDirectory: File = File("./src/jvmTest/resources/testrail/maps"),
 ) {
     val testRailClient = TestRailClient(
         baseUrl = Url("https://keenqa.testrail.io/"),
@@ -25,13 +27,15 @@ suspend fun downloadEverything(
     )
     val sectionHelper = testRailClient.sectionHelper()
 
-    testRailClient.downloadSection(
-        suiteId = suiteId,
-        projectId = projectId,
-        sectionId = sectionId,
-        sectionHelper = sectionHelper,
-        testCaseDirectory = testCaseDirectory
-    )
+    sectionIds.forEach { sectionId ->
+        testRailClient.downloadSection(
+            suiteId = suiteId,
+            projectId = projectId,
+            sectionId = sectionId,
+            sectionHelper = sectionHelper,
+            testCaseDirectory = testCaseDirectory
+        )
+    }
     testRailClient.downloadMaps(suiteId = suiteId, destination = mapDirectory)
 }
 
@@ -64,6 +68,9 @@ suspend fun TestRailClient.downloadSection(
         .filter {
             it.tags().none { tag -> tag in excludingTags } &&
                     it.section_id in sectionChildrenIds
+        }
+        .filter {
+            it.custom_preconds != null
         }
         .forEach { case ->
             case.save(

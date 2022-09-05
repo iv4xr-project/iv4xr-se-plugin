@@ -12,6 +12,10 @@ ${custom_preconds?.convertTables()}
 """.trimIndent()
 }
 
+fun Case.relativeUrl(): String {
+    return "index.php?/cases/view/$id"
+}
+
 val TAGS_REGEX = "\\[([^]]*)]".toRegex()
 
 fun Case.formattedTags(): String {

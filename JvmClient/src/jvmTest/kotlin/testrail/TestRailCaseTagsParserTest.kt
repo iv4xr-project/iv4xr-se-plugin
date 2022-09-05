@@ -36,5 +36,19 @@ class TestRailCaseTagsParserTest {
 
     }
 
+    @Test
+    fun upperCase() {
+        assertEquals(listOf("Creative"), parseTags("[Creative]"))
+    }
+
+    @Test
+    fun special() {
+        assertEquals(listOf("$^˘°"), parseTags("[$^˘°]"))
+    }
+
+    fun creative() {
+
+        assertEquals(listOf("Creative"), parseTags("[Creative] Can be used for action freely when in Creative"))
+    }
 
 }
