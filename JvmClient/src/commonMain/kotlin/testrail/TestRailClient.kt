@@ -33,6 +33,10 @@ class TestRailClient(
     },
 ) {
 
+    fun Case.url(): String {
+        return baseUrl.toString() + this.relativeUrl()
+    }
+
     suspend inline fun <reified T> get(path: String): T {
         return client.get(baseUrl.toString() + API_PREFIX + path) {
         }.body<T>()
