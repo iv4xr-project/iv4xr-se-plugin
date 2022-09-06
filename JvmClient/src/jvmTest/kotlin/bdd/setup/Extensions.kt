@@ -1,23 +1,32 @@
 package bdd.setup
 
 import io.cucumber.java.Scenario
+import io.cucumber.plugin.event.Status
+import io.cucumber.plugin.event.TestCaseFinished
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import spaceEngineers.controller.SpaceEngineers
 import spaceEngineers.controller.connection.AppType
-import spaceEngineers.controller.connection.ConnectionManager
-import spaceEngineers.controller.connection.ProcessWithConnection
 import spaceEngineers.controller.connection.ScreenshotMode
+import spaceEngineers.controller.extensions.typedFocusedScreen
 import spaceEngineers.controller.extensions.waitForScreen
+import spaceEngineers.model.ScreenName.Companion.CubeBuilder
+import spaceEngineers.model.ScreenName.Companion.GamePlay
+import spaceEngineers.model.ScreenName.Companion.JoinGame
+import spaceEngineers.model.ScreenName.Companion.MainMenu
+import spaceEngineers.model.ScreenName.Companion.Medicals
+import spaceEngineers.model.ScreenName.Companion.MessageBox
+import spaceEngineers.model.ScreenName.Companion.ServerConnect
+import spaceEngineers.model.ScreenName.Companion.Terminal
 import spaceEngineers.model.canUse
 import spaceEngineers.util.whileWithTimeout
-import kotlin.test.assertEquals
 
 suspend fun SpaceEngineers.dieAndConfirm(delayMs: Long = 100L) {
+    //TODO: die only if not dead
     admin.character.die()
     delay(delayMs)
-    val fs = screens.focusedScreen()
-    check(fs == "MessageBox") { fs }
+    val fs = screens.typedFocusedScreen()
+    check(fs == MessageBox) { fs }
     screens.messageBox.pressYes()
 }
 
@@ -58,34 +67,30 @@ suspend fun ConnectionManagerUser.handleScenarioParameters(data: Map<String, Str
     }
 }
 
-fun ConnectionManagerUser.ensureEveryoneIsSameSession() {
-    val sessionInfos = all {
-        session.info()
-    }
-    assertEquals(sessionInfos.distinctBy { it.name }.size, 1)
-    assertEquals(sessionInfos.distinctBy { it.settings }.size, 1)
-}
-
 fun ConnectionManagerUser.prepareCharacter() {
     //TODO: ensure we are in the correct scenario
     games {
-        when (val focusedScreen = screens.focusedScreen()) {
-            "GamePlay" -> {
-                dieAndConfirm()
+        when (val focusedScreen = screens.typedFocusedScreen()) {
+            GamePlay -> {
+                try {
+                    dieAndConfirm()
+                } catch (e: Exception) {
+
+                }
                 waitForMedicalScreen()
             }
-            "Medicals" -> {
+            Medicals -> {
             }
-            "MainMenu" -> {
+            MainMenu -> {
                 //connectClientsDirectly()
             }
-            "Terminal" -> {
+            Terminal -> {
                 screens.terminal.close()
                 delay(50)
                 dieAndConfirm()
                 waitForMedicalScreen()
             }
-            "CubeBuilder" -> {
+            CubeBuilder -> {
                 screens.toolbarConfig.close()
                 delay(50)
                 dieAndConfirm()
@@ -116,7 +121,6 @@ fun ConnectionManagerUser.connectClientsDirectly(waitForMedical: Boolean = true)
     }
     pause()
 }
-
 
 fun ConnectionManagerUser.exitToMainMenu(onException: (Throwable) -> Unit = { println(it) }) {
     clients {
@@ -175,20 +179,20 @@ fun ConnectionManagerUser.connectToFirstFriendlyGame() {
 }
 
 suspend fun SpaceEngineers.waitForMedicalScreen() {
-    screens.waitForScreen(timeoutMs = 40_321, screenName = "Medicals")
+    screens.waitForScreen(timeoutMs = 40_321, screenName = Medicals)
 }
 
 suspend fun SpaceEngineers.waitForJoinGameScreen() {
-    screens.waitForScreen(timeoutMs = 40_322, screenName = "JoinGame")
+    screens.waitForScreen(timeoutMs = 40_322, screenName = JoinGame)
 }
 
 suspend fun SpaceEngineers.waitForServerConnectScreen() {
-    screens.waitForScreen(timeoutMs = 40_323, screenName = "ServerConnect")
+    screens.waitForScreen(timeoutMs = 40_323, screenName = ServerConnect)
 }
 
 
 suspend fun SpaceEngineers.waitForGameplay() {
-    screens.waitForScreen(timeoutMs = 60_001, screenName = "GamePlay")
+    screens.waitForScreen(timeoutMs = 60_001, screenName = GamePlay)
 }
 
 fun shouldTakeScreenshot(scenario: Scenario, screenshotMode: ScreenshotMode): Boolean {
@@ -199,15 +203,11 @@ fun shouldTakeScreenshot(scenario: Scenario, screenshotMode: ScreenshotMode): Bo
     }
 }
 
-suspend fun ConnectionManager.processScreenshots(scenario: Scenario) {
-    if (!shouldTakeScreenshot(scenario, config.screenshotMode)) {
-        return
-    }
-    games {
-        processScreenshot(scenario)
+fun shouldTakeScreenshot(scenario: TestCaseFinished, screenshotMode: ScreenshotMode): Boolean {
+    return when (screenshotMode) {
+        ScreenshotMode.NEVER -> false
+        ScreenshotMode.ON_FAILURE -> scenario.result.status == Status.FAILED
+        ScreenshotMode.ALWAYS -> true
     }
 }
 
-suspend fun ProcessWithConnection.processScreenshot(scenario: Scenario) {
-
-}

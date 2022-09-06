@@ -134,6 +134,7 @@ class CharacterActions : AbstractMultiplayerSteps() {
         } else if (itemName.contains("AngleGrinder")) {
             context.grinderLocation = location
         }
+        delay(200)
     }
 
     @When("Character torches block back up to max integrity.")
@@ -237,7 +238,8 @@ class CharacterActions : AbstractMultiplayerSteps() {
                     InputSnapshot(
                         keyboard = KeyboardSnapshot(pressedKeys = listOf(49), text = listOf(chr))
                     )
-                )
+                ),
+                FrameSnapshot(InputSnapshot(keyboard = KeyboardSnapshot()))
             )
         )
     }
@@ -305,8 +307,11 @@ class CharacterActions : AbstractMultiplayerSteps() {
     @When("Character takes {string} from target block's inventory unless he already has one.")
     fun character_takes_from_target_block_s_inventory_unless_he_already_has_one(definitionIdStr: String) = mainClient {
         val definitionId = DefinitionId.parse(definitionIdStr)
-        if (observer.observe().inventory.items.map { it.id }.contains(definitionId)) {
-            return@mainClient
+        repeat(3) {
+            if (observer.observe().inventory.items.map { it.id }.contains(definitionId)) {
+                return@mainClient
+            }
+            smallPause()
         }
         character_takes_from_target_block_s_inventory(definitionIdStr)
     }
@@ -377,8 +382,6 @@ class CharacterActions : AbstractMultiplayerSteps() {
     fun drags_any_emote_to_the_toolbar_s_slot(slotIndexStarting1: Int) = mainClient {
         with(screens.toolbarConfig) {
             val data = data()
-            println(data)
-            //println(data.gridItems.filterNotNull())
             val emoteDefinitions = setOf("${ID_PREFIX}EmoteDefinition", "${ID_PREFIX}AnimationDefinition")
             val emotes = data.gridItems.filterNotNull().filter { it.id in emoteDefinitions }
             val randomEmote = emotes.random()

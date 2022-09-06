@@ -6,7 +6,9 @@ import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import kotlinx.coroutines.withTimeout
 import kotlinx.coroutines.yield
+import spaceEngineers.controller.extensions.typedFocusedScreen
 import spaceEngineers.model.*
+import spaceEngineers.model.ScreenName.Companion.Terminal
 import spaceEngineers.model.extensions.allBlocks
 import java.lang.Thread.sleep
 import kotlin.test.assertEquals
@@ -77,7 +79,7 @@ class ScreenSteps : AbstractMultiplayerSteps() {
     fun gameplay_screen_shows_beacons_for(map: List<Map<String, String>>) = mainClient {
         map.forEach {
             val oreName = it.getValue("ore")
-            repeatUntilSuccess {
+            repeatUntilSuccess(repeats = 15) {
                 assertTrue(
                     screens.gamePlay.data().oreMarkers.any { it.text == oreName },
                     "Doesn't show beacon for $oreName"
@@ -88,7 +90,9 @@ class ScreenSteps : AbstractMultiplayerSteps() {
 
     @Then("Gameplay screen shows no ore beacons.")
     fun gameplay_screen_shows_no_beacons() = mainClient {
-        assertEquals(0, screens.gamePlay.data().oreMarkers.size)
+        repeatUntilSuccess {
+            assertEquals(0, screens.gamePlay.data().oreMarkers.size)
+        }
     }
 
 
@@ -104,7 +108,7 @@ class ScreenSteps : AbstractMultiplayerSteps() {
 
     @Given("Character inventory contains ingot {string}.")
     fun character_inventory_contains(type: String) = mainClient {
-        if (screens.focusedScreen() != "TerminalScreen") {
+        if (screens.typedFocusedScreen() != Terminal) {
             character.showInventory()
         }
         val definition = DefinitionId.create("Ingot", type)
@@ -128,7 +132,7 @@ class ScreenSteps : AbstractMultiplayerSteps() {
 
     @Given("Character inventory contains ore {string}.")
     fun character_inventory_contains_ore(type: String) = mainClient {
-        if (screens.focusedScreen() != "TerminalScreen") {
+        if (screens.typedFocusedScreen() != Terminal) {
             character.showInventory()
         }
         val definition = DefinitionId.create("Ore", type)

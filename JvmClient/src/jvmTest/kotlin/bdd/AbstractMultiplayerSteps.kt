@@ -8,7 +8,9 @@ import bdd.setup.GlobalConnectionManagerUser
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import spaceEngineers.controller.connection.ConnectionManager
+import spaceEngineers.controller.extensions.typedFocusedScreen
 import spaceEngineers.controller.loadFromTestResources
+import spaceEngineers.model.ScreenName.Companion.Medicals
 import testhelp.hideUndeclaredThrowableException
 
 abstract class AbstractMultiplayerSteps(
@@ -26,7 +28,7 @@ abstract class AbstractMultiplayerSteps(
 
 
     fun ensureCharacterExists() = clients {
-        if (screens.focusedScreen() == "Medicals") {
+        if (screens.typedFocusedScreen() == Medicals) {
             try {
                 screens.medicals.selectFaction(0)
                 screens.medicals.join()

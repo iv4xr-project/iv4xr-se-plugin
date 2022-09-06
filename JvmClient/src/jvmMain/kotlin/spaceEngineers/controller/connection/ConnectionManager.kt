@@ -92,7 +92,7 @@ class ConnectionManager(
                 spaceEngineers.admin.character.switch(it)
             }
         } catch (e: Exception) {
-
+            println("E: ${e.message}")
         }
         block(this)
     }

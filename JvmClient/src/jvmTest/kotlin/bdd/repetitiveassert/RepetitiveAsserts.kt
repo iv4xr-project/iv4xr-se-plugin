@@ -8,6 +8,13 @@ suspend fun repeatUntilSuccess(
     swallowedExceptionTypes: Set<KClass<out Throwable>> = setOf<KClass<out Throwable>>(
         AssertionError::class,
     ),
+    onException: (Throwable) -> Unit = { e ->
+        val message = e.cause?.let {
+            e.message + ": " + it.message
+        } ?: e.message
+        println(e.message)
+        println(message)
+    },
     assertBlock: suspend AssertBlockContext.() -> Unit
 ) {
 
@@ -18,8 +25,7 @@ suspend fun repeatUntilSuccess(
             return
         } catch (e: Throwable) {
             if (e::class in swallowedExceptionTypes) {
-                //swallow
-                println(e.message + ": " + e.cause?.message)
+                onException(e)
             } else {
                 throw e
             }

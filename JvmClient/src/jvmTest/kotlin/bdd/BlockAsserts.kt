@@ -18,14 +18,14 @@ class BlockAsserts : AbstractMultiplayerSteps() {
     @Then("Observed grid mass is {double}.")
     fun observed_grid_mass_is(mass: Double) = observers {
         val massByType = definitions.blockDefinitions().associate {
-            it.definitionId to it.mass
+            it.definitionId to it.mass.toDouble()
         }
         assertTrue(
             observer.observeBlocks().grids.any { it.mass == mass.toFloat() },
             "Haven't found any grids with mass $mass, found: ${
                 observer.observeBlocks().grids.associate {
                     it.id to "mass: ${it.mass} blocks: ${it.blocks.size}, sum: ${
-                        it.blocks.map { massByType[it.definitionId]!! }.sum()
+                        it.blocks.sumOf { massByType[it.definitionId]!! }
                     }"
                 }
             }."
