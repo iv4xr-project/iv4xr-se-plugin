@@ -50,8 +50,9 @@ $dokka.location:spaceEngineers.controller.connection/Config.Companion/fromEnv/#/
 $dokka.location:spaceEngineers.controller.connection/Config.Companion/fromProps/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller.connection/-config/-companion/from-props.html
 $dokka.location:spaceEngineers.controller.connection/Config.Companion/fromPropsOrEnv/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller.connection/-config/-companion/from-props-or-env.html
 $dokka.location:spaceEngineers.controller.connection/Config///PointingToDeclaration/space-engineers-api/spaceEngineers.controller.connection/-config/index.html
-$dokka.location:spaceEngineers.controller.connection/Config/Config/#kotlin.String#java.io.File#spaceEngineers.controller.connection.ScreenshotMode/PointingToDeclaration/space-engineers-api/spaceEngineers.controller.connection/-config/-config.html
+$dokka.location:spaceEngineers.controller.connection/Config/Config/#kotlin.String#java.io.File#spaceEngineers.controller.connection.ScreenshotMode#spaceEngineers.controller.connection.ExitMode/PointingToDeclaration/space-engineers-api/spaceEngineers.controller.connection/-config/-config.html
 $dokka.location:spaceEngineers.controller.connection/Config/connectionSetupName/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller.connection/-config/connection-setup-name.html
+$dokka.location:spaceEngineers.controller.connection/Config/exitMode/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller.connection/-config/exit-mode.html
 $dokka.location:spaceEngineers.controller.connection/Config/outputDirectory/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller.connection/-config/output-directory.html
 $dokka.location:spaceEngineers.controller.connection/Config/screenshotMode/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller.connection/-config/screenshot-mode.html
 $dokka.location:spaceEngineers.controller.connection/ConnectionManager///PointingToDeclaration/space-engineers-api/spaceEngineers.controller.connection/-connection-manager/index.html
@@ -131,6 +132,10 @@ $dokka.location:spaceEngineers.controller.connection/ConnectionSetupBuilder/loca
 $dokka.location:spaceEngineers.controller.connection/ConnectionSetupBuilder/mainClient/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller.connection/-connection-setup-builder/main-client.html
 $dokka.location:spaceEngineers.controller.connection/ConnectionSetupBuilder/server/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller.connection/-connection-setup-builder/server.html
 $dokka.location:spaceEngineers.controller.connection/ConnectionSetupBuilder/setServer/#spaceEngineers.controller.connection.AppType#kotlin.String/PointingToDeclaration/space-engineers-api/spaceEngineers.controller.connection/-connection-setup-builder/set-server.html
+$dokka.location:spaceEngineers.controller.connection/ExitMode.AFTER_EACH_SCENARIO///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}space-engineers-api/spaceEngineers.controller.connection/-exit-mode/-a-f-t-e-r_-e-a-c-h_-s-c-e-n-a-r-i-o/index.html
+$dokka.location:spaceEngineers.controller.connection/ExitMode.AFTER_LAST_SCENARIO///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}space-engineers-api/spaceEngineers.controller.connection/-exit-mode/-a-f-t-e-r_-l-a-s-t_-s-c-e-n-a-r-i-o/index.html
+$dokka.location:spaceEngineers.controller.connection/ExitMode.NEVER///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}space-engineers-api/spaceEngineers.controller.connection/-exit-mode/-n-e-v-e-r/index.html
+$dokka.location:spaceEngineers.controller.connection/ExitMode///PointingToDeclaration/space-engineers-api/spaceEngineers.controller.connection/-exit-mode/index.html
 $dokka.location:spaceEngineers.controller.connection/GameProcess///PointingToDeclaration/space-engineers-api/spaceEngineers.controller.connection/-game-process/index.html
 $dokka.location:spaceEngineers.controller.connection/GameProcess/GameProcess/#kotlin.String#kotlin.UShort#spaceEngineers.controller.connection.AppType#kotlin.collections.List[spaceEngineers.controller.connection.Role]#kotlin.String#kotlin.String#spaceEngineers.controller.connection.GameVersion/PointingToDeclaration/space-engineers-api/spaceEngineers.controller.connection/-game-process/-game-process.html
 $dokka.location:spaceEngineers.controller.connection/GameProcess/address/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller.connection/-game-process/address.html
@@ -180,7 +185,8 @@ $dokka.location:spaceEngineers.controller.extensions//torchBackToMax/spaceEngine
 $dokka.location:spaceEngineers.controller.extensions//torchBackToPercentage/spaceEngineers.controller.ContextControllerWrapper#spaceEngineers.model.Block#kotlin.Double/PointingToDeclaration/space-engineers-api/spaceEngineers.controller.extensions/torch-back-to-percentage.html
 $dokka.location:spaceEngineers.controller.extensions//torchUpToPercentage/spaceEngineers.controller.ContextControllerWrapper#kotlin.Double/PointingToDeclaration/space-engineers-api/spaceEngineers.controller.extensions/torch-up-to-percentage.html
 $dokka.location:spaceEngineers.controller.extensions//torchUpToPercentage/spaceEngineers.controller.SpaceEngineers#spaceEngineers.model.Block#kotlin.Double#spaceEngineers.model.ToolbarLocation/PointingToDeclaration/space-engineers-api/spaceEngineers.controller.extensions/torch-up-to-percentage.html
-$dokka.location:spaceEngineers.controller.extensions//waitForScreen/spaceEngineers.controller.Screens#kotlin.Long#kotlin.Long#kotlin.String/PointingToDeclaration/space-engineers-api/spaceEngineers.controller.extensions/wait-for-screen.html
+$dokka.location:spaceEngineers.controller.extensions//typedFocusedScreen/spaceEngineers.controller.Screens#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller.extensions/typed-focused-screen.html
+$dokka.location:spaceEngineers.controller.extensions//waitForScreen/spaceEngineers.controller.Screens#kotlin.Long#kotlin.Long#spaceEngineers.model.ScreenName/PointingToDeclaration/space-engineers-api/spaceEngineers.controller.extensions/wait-for-screen.html
 $dokka.location:spaceEngineers.controller////PointingToDeclaration/space-engineers-api/spaceEngineers.controller/index.html
 $dokka.location:spaceEngineers.controller//SCENARIO_DIR/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-s-c-e-n-a-r-i-o_-d-i-r.html
 $dokka.location:spaceEngineers.controller//blockDefinitionMappings/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/block-definition-mappings.html
@@ -572,6 +578,8 @@ $dokka.location:spaceEngineers.model//SMALL_BLOCK_CUBE_SIDE_SIZE/#/PointingToDec
 $dokka.location:spaceEngineers.model//canUse/spaceEngineers.model.GuiControlBase?#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/can-use.html
 $dokka.location:spaceEngineers.model//generatedBlockDefinitionSerializerMappings/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/generated-block-definition-serializer-mappings.html
 $dokka.location:spaceEngineers.model//generatedSerializerMappings/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/generated-serializer-mappings.html
+$dokka.location:spaceEngineers.model//toScreenName/kotlin.String#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/to-screen-name.html
+$dokka.location:spaceEngineers.model//toScreenName/kotlin.reflect.KClass[*]#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/to-screen-name.html
 $dokka.location:spaceEngineers.model/AdvancedDoorDefinition///PointingToDeclaration/space-engineers-api/spaceEngineers.model/-advanced-door-definition/index.html
 $dokka.location:spaceEngineers.model/AdvancedDoorDefinition/powerConsumptionIdle/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-advanced-door-definition/power-consumption-idle.html
 $dokka.location:spaceEngineers.model/AdvancedDoorDefinition/powerConsumptionMoving/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-advanced-door-definition/power-consumption-moving.html
@@ -1981,6 +1989,24 @@ $dokka.location:spaceEngineers.model/RotationMatrix/values/#/PointingToDeclarati
 $dokka.location:spaceEngineers.model/SaveAsData///PointingToDeclaration/space-engineers-api/spaceEngineers.model/-save-as-data/index.html
 $dokka.location:spaceEngineers.model/SaveAsData/SaveAsData/#kotlin.String/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-save-as-data/-save-as-data.html
 $dokka.location:spaceEngineers.model/SaveAsData/name/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-save-as-data/name.html
+$dokka.location:spaceEngineers.model/ScreenName.Companion///PointingToDeclaration/space-engineers-api/spaceEngineers.model/-screen-name/-companion/index.html
+$dokka.location:spaceEngineers.model/ScreenName.Companion/CubeBuilder/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-screen-name/-companion/-cube-builder.html
+$dokka.location:spaceEngineers.model/ScreenName.Companion/GamePlay/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-screen-name/-companion/-game-play.html
+$dokka.location:spaceEngineers.model/ScreenName.Companion/JoinGame/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-screen-name/-companion/-join-game.html
+$dokka.location:spaceEngineers.model/ScreenName.Companion/Loading/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-screen-name/-companion/-loading.html
+$dokka.location:spaceEngineers.model/ScreenName.Companion/MainMenu/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-screen-name/-companion/-main-menu.html
+$dokka.location:spaceEngineers.model/ScreenName.Companion/Medicals/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-screen-name/-companion/-medicals.html
+$dokka.location:spaceEngineers.model/ScreenName.Companion/MessageBox/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-screen-name/-companion/-message-box.html
+$dokka.location:spaceEngineers.model/ScreenName.Companion/Progress/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-screen-name/-companion/-progress.html
+$dokka.location:spaceEngineers.model/ScreenName.Companion/ServerConnect/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-screen-name/-companion/-server-connect.html
+$dokka.location:spaceEngineers.model/ScreenName.Companion/Terminal/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-screen-name/-companion/-terminal.html
+$dokka.location:spaceEngineers.model/ScreenName///PointingToDeclaration/space-engineers-api/spaceEngineers.model/-screen-name/index.html
+$dokka.location:spaceEngineers.model/ScreenName/ScreenName/#kotlin.String/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-screen-name/-screen-name.html
+$dokka.location:spaceEngineers.model/ScreenName/name/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-screen-name/name.html
+$dokka.location:spaceEngineers.model/ScreenNameSerializer///PointingToDeclaration/space-engineers-api/spaceEngineers.model/-screen-name-serializer/index.html
+$dokka.location:spaceEngineers.model/ScreenNameSerializer/descriptor/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-screen-name-serializer/descriptor.html
+$dokka.location:spaceEngineers.model/ScreenNameSerializer/deserialize/#kotlinx.serialization.encoding.Decoder/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-screen-name-serializer/deserialize.html
+$dokka.location:spaceEngineers.model/ScreenNameSerializer/serialize/#kotlinx.serialization.encoding.Encoder#spaceEngineers.model.ScreenName/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-screen-name-serializer/serialize.html
 $dokka.location:spaceEngineers.model/ServerConnectData///PointingToDeclaration/space-engineers-api/spaceEngineers.model/-server-connect-data/index.html
 $dokka.location:spaceEngineers.model/ServerConnectData/ServerConnectData/#kotlin.String#kotlin.Boolean/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-server-connect-data/-server-connect-data.html
 $dokka.location:spaceEngineers.model/ServerConnectData/addServerToFavorites/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-server-connect-data/add-server-to-favorites.html
@@ -2658,6 +2684,8 @@ $dokka.location:spaceEngineers.util.generator/BlockMappingGenerator/overriddenFi
 $dokka.location:spaceEngineers.util.generator/BlockMappingGenerator/parents/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator/-block-mapping-generator/parents.html
 $dokka.location:spaceEngineers.util////PointingToDeclaration/space-engineers-api/spaceEngineers.util/index.html
 $dokka.location:spaceEngineers.util//extractTo/java.util.zip.ZipInputStream#java.io.File/PointingToDeclaration/space-engineers-api/spaceEngineers.util/extract-to.html
+$dokka.location:spaceEngineers.util//nonWhitespaceEquals/kotlin.String#kotlin.String/PointingToDeclaration/space-engineers-api/spaceEngineers.util/non-whitespace-equals.html
+$dokka.location:spaceEngineers.util//stripWhitespace/kotlin.String#/PointingToDeclaration/space-engineers-api/spaceEngineers.util/strip-whitespace.html
 $dokka.location:spaceEngineers.util//whileWithTimeout/#kotlin.Long#kotlin.Long#kotlin.Function0[kotlin.Boolean]/PointingToDeclaration/space-engineers-api/spaceEngineers.util/while-with-timeout.html
 $dokka.location:testrail.model////PointingToDeclaration/space-engineers-api/testrail.model/index.html
 $dokka.location:testrail.model/Attachment///PointingToDeclaration/space-engineers-api/testrail.model/-attachment/index.html
@@ -2716,12 +2744,13 @@ $dokka.location:testrail////PointingToDeclaration/space-engineers-api/testrail/
 $dokka.location:testrail//TAGS_REGEX/#/PointingToDeclaration/space-engineers-api/testrail/-t-a-g-s_-r-e-g-e-x.html
 $dokka.location:testrail//convertTables/kotlin.String#/PointingToDeclaration/space-engineers-api/testrail/convert-tables.html
 $dokka.location:testrail//downloadCase/testrail.TestRailClient#kotlin.Long#testrail.SectionHelper#java.io.File#kotlin.Boolean#kotlin.collections.Set[kotlin.Long]#kotlin.Function1[testrail.model.Section,kotlin.String]/PointingToDeclaration/space-engineers-api/testrail/download-case.html
-$dokka.location:testrail//downloadEverything/#kotlin.String#kotlin.String#kotlin.Long#kotlin.Long#kotlin.Long#java.io.File#java.io.File/PointingToDeclaration/space-engineers-api/testrail/download-everything.html
+$dokka.location:testrail//downloadEverything/#kotlin.String#kotlin.String#kotlin.collections.List[kotlin.Long]#kotlin.Long#kotlin.Long#java.io.File#java.io.File/PointingToDeclaration/space-engineers-api/testrail/download-everything.html
 $dokka.location:testrail//downloadMaps/testrail.TestRailClient#kotlin.Long#java.io.File/PointingToDeclaration/space-engineers-api/testrail/download-maps.html
 $dokka.location:testrail//downloadSection/testrail.TestRailClient#kotlin.Long#kotlin.Long#kotlin.Long#testrail.SectionHelper#kotlin.collections.Set[kotlin.String]#java.io.File/PointingToDeclaration/space-engineers-api/testrail/download-section.html
 $dokka.location:testrail//featureContent/testrail.model.Case#/PointingToDeclaration/space-engineers-api/testrail/feature-content.html
 $dokka.location:testrail//formattedTags/testrail.model.Case#/PointingToDeclaration/space-engineers-api/testrail/formatted-tags.html
 $dokka.location:testrail//parseTags/#kotlin.String/PointingToDeclaration/space-engineers-api/testrail/parse-tags.html
+$dokka.location:testrail//relativeUrl/testrail.model.Case#/PointingToDeclaration/space-engineers-api/testrail/relative-url.html
 $dokka.location:testrail//save/testrail.model.Case#testrail.SectionHelper#java.io.File#kotlin.Boolean#kotlin.collections.Set[kotlin.Long]#kotlin.Function1[testrail.model.Section,kotlin.String]/PointingToDeclaration/space-engineers-api/testrail/save.html
 $dokka.location:testrail//sectionHelper/testrail.TestRailClient#kotlin.Long#kotlin.Long/PointingToDeclaration/space-engineers-api/testrail/section-helper.html
 $dokka.location:testrail//tags/testrail.model.Case#/PointingToDeclaration/space-engineers-api/testrail/tags.html
@@ -2753,6 +2782,7 @@ $dokka.location:testrail/TestRailClient/getCases/#kotlin.Long#kotlin.Long/Pointi
 $dokka.location:testrail/TestRailClient/getSections/#kotlin.Long#kotlin.Long/PointingToDeclaration/space-engineers-api/testrail/-test-rail-client/get-sections.html
 $dokka.location:testrail/TestRailClient/getSectionsStr/#kotlin.Long#kotlin.Long/PointingToDeclaration/space-engineers-api/testrail/-test-rail-client/get-sections-str.html
 $dokka.location:testrail/TestRailClient/getSuite/#kotlin.Long/PointingToDeclaration/space-engineers-api/testrail/-test-rail-client/get-suite.html
+$dokka.location:testrail/TestRailClient/url/testrail.model.Case#/PointingToDeclaration/space-engineers-api/testrail/-test-rail-client/url.html
 environments
 spaceEngineers.controller
 spaceEngineers.controller.connection
