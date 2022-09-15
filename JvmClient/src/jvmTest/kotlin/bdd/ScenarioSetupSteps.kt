@@ -19,8 +19,10 @@ lateinit var testSetup: TestSetup
 SINGLE_COMPUTER_DEDICATED_DEV_KAREL    OFFLINE_STEAM
 LOBBY_STEAM DS_STEAM
 */
-val bddRunConfig = Config.fromPropsOrEnv()
-val cfg = loadConfigFromFile("OFFLINE_STEAM.json")
+
+val fileName = "SINGLE_COMPUTER_DEDICATED_DEV_KAREL.json"
+val cfg = loadConfigFromFile(fileName)
+val bddRunConfig = Config.fromPropsOrEnv().copy(connectionSetupName = fileName)
 val globalCm = ConnectionManager(config = bddRunConfig, connectionSetup = cfg)
 
 fun testSetupFactory(config: ConnectionSetup, connectionManager: ConnectionManager): TestSetup {

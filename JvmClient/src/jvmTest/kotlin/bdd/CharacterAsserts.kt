@@ -410,7 +410,7 @@ class CharacterAsserts : AbstractMultiplayerSteps() {
     }
 
     @Then("Item {string} is removed from the inventory.")
-    fun item_is_removed_from_the_inventory(definitionIdStr: String) = observers {
+    fun item_is_removed_from_the_inventory(definitionIdStr: String) = mainClient {
         val definitionId = DefinitionId.parse(definitionIdStr)
         observer.observe().inventory.items.firstOrNull { it.id == definitionId }.let {
             assertNull(it, "Item is not supposed to be in the inventory: ${it?.id}")
@@ -434,11 +434,13 @@ class CharacterAsserts : AbstractMultiplayerSteps() {
     }
 
     @Then("Character holds {string}.")
-    fun character_holds(definitionIdStr: String) = mainClient {
+    fun character_holds(definitionIdStr: String) = observers {
         val definitionId = DefinitionId.parse(definitionIdStr)
-        val observation = observer.observe()
-        assertNotNull(observation.currentWeapon, "No weapon equipped at all")
-        assertEquals(definitionId, observation.currentWeapon?.definitionId)
+        repeatUntilSuccess {
+            val observation = observer.observe()
+            assertNotNull(observation.currentWeapon, "No weapon equipped at all")
+            assertEquals(definitionId, observation.currentWeapon?.definitionId)
+        }
     }
 
     @Then("Tool stays active.")
@@ -479,14 +481,23 @@ class CharacterAsserts : AbstractMultiplayerSteps() {
 
     @Then("Character inventory contains:")
     fun character_inventory_contains(map: List<Map<String, String>>) = observers {
-        map.forEach { row ->
-            val definition = DefinitionId.parse(row.getValue("definitionId"))
-            val count = row["count"]?.toIntOrNull()
-            repeatUntilSuccess {
-                val items = observer.observe().inventory.items
-                assertTrue(items.any { it.id == definition }, items.map { it.id }.joinToString(","))
-                count?.let {
-                    assertEquals(it, items.filter { item -> item.id == definition }.sumOf { it.amount })
+        repeatUntilSuccess {
+            map.forEach { row ->
+                val definition = DefinitionId.parse(row.getValue("definitionId"))
+                val count = row["count"]?.toIntOrNull()
+                repeatUntilSuccess {
+                    val items = observer.observe().inventory.items
+                    assertTrue(
+                        items.any { it.id == definition },
+                        "Should contain $definition, but only contains: " + items.map { it.id }.joinToString(",")
+                    )
+                    count?.let { c ->
+                        assertEquals(
+                            c,
+                            items.filter { item -> item.id == definition }.sumOf { it.amount },
+                            "Should contain $c of $definition"
+                        )
+                    }
                 }
             }
         }

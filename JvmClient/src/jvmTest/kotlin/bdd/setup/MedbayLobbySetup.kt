@@ -4,7 +4,18 @@ import io.cucumber.java.Scenario
 import kotlinx.coroutines.runBlocking
 import spaceEngineers.controller.connection.ConnectionManager
 import spaceEngineers.controller.connection.ConnectionSetup
+import spaceEngineers.controller.connection.ExitMode
+import spaceEngineers.controller.extensions.typedFocusedScreen
+import spaceEngineers.model.ScreenName.Companion.CubeBuilder
+import spaceEngineers.model.ScreenName.Companion.GamePlay
+import spaceEngineers.model.ScreenName.Companion.Loading
+import spaceEngineers.model.ScreenName.Companion.MainMenu
+import spaceEngineers.model.ScreenName.Companion.Medicals
+import spaceEngineers.model.ScreenName.Companion.Progress
+import spaceEngineers.model.ScreenName.Companion.Terminal
+import spaceEngineers.util.whileWithTimeout
 import testhelp.hideUndeclaredThrowableException
+import java.lang.Thread.sleep
 
 
 enum class CameraConfig(val text: String) {
@@ -23,6 +34,7 @@ class MedbayLobbySetup(
     val realConnectionManagerUser: RealConnectionManagerUser = RealConnectionManagerUser(cm)
 ) : AbstractTestSetup(), ConnectionManagerUser by realConnectionManagerUser {
 
+    //val reporter = Reporter(connectionManager = cm)
 
     override fun beforeAll() {
 
@@ -33,11 +45,14 @@ class MedbayLobbySetup(
     }
 
     override fun afterScenario(scenario: Scenario) = runBlocking {
-        connectionManager.processScreenshots(scenario)
+
     }
 
     override fun afterAll() {
-        //exitToMainMenu()
+        if (connectionManager.config.exitMode == ExitMode.AFTER_LAST_SCENARIO) {
+            sleep(500)
+            exitToMainMenu()
+        }
         connectionManager.close()
     }
 
@@ -61,14 +76,31 @@ class MedbayLobbySetup(
 
     private fun onScenario(scenarioId: String) = hideUndeclaredThrowableException {
         mainClient {
-            if (screens.focusedScreen() == "MainMenu") {
-                createLobbyGame(scenarioId)
-                connectToFirstFriendlyGame()
+            screens.focusedScreen()
+            when (val focusedScreen = screens.typedFocusedScreen()) {
+                MainMenu -> {
+                    createLobbyGame(scenarioId)
+                    connectToFirstFriendlyGame()
+                }
+                Loading -> {
+                    whileWithTimeout(20_000L) { screens.typedFocusedScreen() != Loading }
+                    pause()
+                }
+                Progress -> {
+                    whileWithTimeout(20_000L) { screens.typedFocusedScreen() != Progress }
+                    pause()
+                }
+                GamePlay, Terminal, Medicals -> {
+
+                }
+                CubeBuilder -> {
+                    screens.toolbarConfig.close()
+                }
+                else -> {
+                    error("Don't know what to do with screen $focusedScreen")
+                }
             }
         }
-        ensureEveryoneIsSameSession()
         prepareCharacter()
     }
-
-
 }
