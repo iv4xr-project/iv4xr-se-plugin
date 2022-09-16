@@ -67,41 +67,7 @@ suspend fun ConnectionManagerUser.handleScenarioParameters(data: Map<String, Str
     }
 }
 
-fun ConnectionManagerUser.prepareCharacter() {
-    //TODO: ensure we are in the correct scenario
-    games {
-        when (val focusedScreen = screens.typedFocusedScreen()) {
-            GamePlay -> {
-                try {
-                    dieAndConfirm()
-                } catch (e: Exception) {
 
-                }
-                waitForMedicalScreen()
-            }
-            Medicals -> {
-            }
-            MainMenu -> {
-                //connectClientsDirectly()
-            }
-            Terminal -> {
-                screens.terminal.close()
-                delay(50)
-                dieAndConfirm()
-                waitForMedicalScreen()
-            }
-            CubeBuilder -> {
-                screens.toolbarConfig.close()
-                delay(50)
-                dieAndConfirm()
-                waitForMedicalScreen()
-            }
-            else -> {
-                error("Don't know what to do with screen $focusedScreen")
-            }
-        }
-    }
-}
 
 
 fun ConnectionManagerUser.connectClientsDirectly(waitForMedical: Boolean = true) = runBlocking {

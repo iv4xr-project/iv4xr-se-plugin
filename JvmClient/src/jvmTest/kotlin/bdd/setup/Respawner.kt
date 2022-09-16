@@ -5,14 +5,14 @@ import bdd.repetitiveassert.RepetitiveAssertTestCase
 import bdd.repetitiveassert.SimpleRepetitiveAssertTestCase
 import bdd.repetitiveassert.repeatUntilSuccess
 import kotlinx.coroutines.delay
-import spaceEngineers.controller.ContextControllerWrapper
 import spaceEngineers.controller.SocketReaderWriterException
 import spaceEngineers.controller.SpaceEngineers
 import spaceEngineers.controller.connection.ConnectionManager
+import spaceEngineers.controller.connection.ProcessWithConnection
 import spaceEngineers.controller.extensions.toNullIfMinusOne
 import spaceEngineers.controller.extensions.typedFocusedScreen
+import spaceEngineers.model.ScreenName
 import spaceEngineers.model.ScreenName.Companion.Medicals
-import spaceEngineers.model.canUse
 import spaceEngineers.transport.jsonrpc.KotlinJsonRpcError
 import spaceEngineers.util.whileWithTimeout
 
@@ -21,14 +21,62 @@ class Respawner(
     val realConnectionManagerUser: RealConnectionManagerUser = RealConnectionManagerUser(connectionManager),
     config: RepetitiveAssertConfig = RepetitiveAssertConfig(),
     simpleRepetitiveAssertTestCase: SimpleRepetitiveAssertTestCase = SimpleRepetitiveAssertTestCase(config),
+    val killClient: Boolean = false,
 ) : RepetitiveAssertTestCase by simpleRepetitiveAssertTestCase, ConnectionManagerUser by realConnectionManagerUser {
 
+    suspend fun ProcessWithConnection.killIfNeeded() {
+        if (gameProcess.isMainClient() || killClient) {
+            delay(50)
+            kotlin.runCatching {
+                dieAndConfirm()
+            }
+            waitForMedicalScreen()
+        }
+    }
+
+    private fun ConnectionManagerUser.prepareCharacter() {
+        //TODO: ensure we are in the correct scenario
+        games {
+            when (val focusedScreen = screens.typedFocusedScreen()) {
+                ScreenName.GamePlay -> {
+                    killIfNeeded()
+                }
+
+                Medicals -> {
+                }
+
+                ScreenName.MainMenu -> {
+                    //connectClientsDirectly()
+                }
+
+                ScreenName.Terminal -> {
+                    screens.terminal.close()
+                    killIfNeeded()
+                }
+                ScreenName.Loading -> {
+                    waitForMedicalScreen()
+                }
+
+                ScreenName.CubeBuilder -> {
+                    screens.toolbarConfig.close()
+                    killIfNeeded()
+                }
+
+                else -> {
+                    error("Don't know what to do with screen $focusedScreen")
+                }
+            }
+        }
+    }
 
     suspend fun respawn(mainMedbay: String, observerMedbay: String, faction: String) {
+        prepareCharacter()
         nonMainClientGameObservers {
-            checkFaction(faction)
-            delay(2500)
-            respawn(observerMedbay)
+            if (screens.typedFocusedScreen() == Medicals) {
+                checkFaction(faction)
+                delay(2500)
+                respawn(observerMedbay)
+            }
         }
         mainClient {
             checkFaction(faction)

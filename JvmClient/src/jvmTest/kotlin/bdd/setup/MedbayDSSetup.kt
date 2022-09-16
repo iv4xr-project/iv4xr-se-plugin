@@ -12,6 +12,7 @@ import spaceEngineers.model.ScreenName.Companion.GamePlay
 import spaceEngineers.model.ScreenName.Companion.Loading
 import spaceEngineers.model.ScreenName.Companion.MainMenu
 import spaceEngineers.model.ScreenName.Companion.Medicals
+import spaceEngineers.model.ScreenName.Companion.MessageBox
 import spaceEngineers.model.ScreenName.Companion.Progress
 import spaceEngineers.model.ScreenName.Companion.Terminal
 import spaceEngineers.util.whileWithTimeout
@@ -85,6 +86,12 @@ class MedbayDSSetup(
                 GamePlay, Terminal, Medicals -> {
 
                 }
+                MessageBox -> {
+                    val message = screens.messageBox.data()
+                    when(message.caption) {
+                        else -> error("Don't know what to do with MessageBox with caption ${message.caption}, text ${message.text} and type ${message.buttonType}")
+                    }
+                }
                 CubeBuilder -> {
                     screens.toolbarConfig.close()
                 }
@@ -93,6 +100,5 @@ class MedbayDSSetup(
                 }
             }
         }
-        prepareCharacter()
     }
 }

@@ -17,4 +17,8 @@ data class GameProcess(
         return "$type($roles)@$address:$pluginPort"
     }
 
+    fun isMainClient(): Boolean {
+        return Role.MAIN_CLIENT in roles
+    }
+
 }
