@@ -6,6 +6,7 @@ import spaceEngineers.controller.connection.ConnectionManager
 import spaceEngineers.controller.connection.ConnectionSetup
 import spaceEngineers.controller.connection.ExitMode
 import spaceEngineers.controller.extensions.typedFocusedScreen
+import spaceEngineers.model.ScreenName
 import spaceEngineers.model.ScreenName.Companion.CubeBuilder
 import spaceEngineers.model.ScreenName.Companion.GamePlay
 import spaceEngineers.model.ScreenName.Companion.Loading
@@ -93,6 +94,12 @@ class MedbayLobbySetup(
                 GamePlay, Terminal, Medicals -> {
 
                 }
+                ScreenName.MessageBox -> {
+                    val message = screens.messageBox.data()
+                    when (message.caption) {
+                        else -> error("Don't know what to do with MessageBox with caption ${message.caption}, text ${message.text} and type ${message.buttonType}")
+                    }
+                }
                 CubeBuilder -> {
                     screens.toolbarConfig.close()
                 }
@@ -101,6 +108,5 @@ class MedbayLobbySetup(
                 }
             }
         }
-        prepareCharacter()
     }
 }
