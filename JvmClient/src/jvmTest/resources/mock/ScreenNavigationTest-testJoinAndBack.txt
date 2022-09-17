@@ -1,0 +1,13 @@
+{"jsonrpc":"2.0","result":"MainMenu","id":9158308453012297252}
+{"jsonrpc":"2.0","result":"MainMenu","id":-6640390398499278577}
+{"jsonrpc":"2.0","result":"MainMenu","id":-6671601840652764489}
+{"jsonrpc":"2.0","result":null,"id":-9177526775772805529}
+{"jsonrpc":"2.0","result":"MainMenu","id":4314465211340329103}
+{"jsonrpc":"2.0","result":"JoinGame","id":1866860662079161787}
+{"jsonrpc":"2.0","result":"JoinGame","id":-8527951342415574334}
+{"jsonrpc":"2.0","result":"JoinGame","id":3922803624010569489}
+{"jsonrpc":"2.0","result":"JoinGame","id":-7736180583465760388}
+{"jsonrpc":"2.0","result":null,"id":6690717117500597303}
+{"jsonrpc":"2.0","result":"JoinGame","id":4739957941020617786}
+{"jsonrpc":"2.0","result":"MainMenu","id":-6812871362403821397}
+{"jsonrpc":"2.0","result":"MainMenu","id":-2936735845789768582}

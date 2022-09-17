@@ -12,9 +12,14 @@ interface Screens {
     val joinGame: JoinGame
     val serverConnect: ServerConnect
     val loadGame: LoadGame
+    val newGame: NewGame
     val gamePlay: GamePlay
     val saveAs: SaveAs
     val toolbarConfig: ToolbarConfig
+}
+
+interface NewGame {
+    fun close()
 }
 
 interface ToolbarConfig {
@@ -32,6 +37,7 @@ interface GamePlay {
 }
 
 interface ServerConnect {
+    fun close()
     fun data(): ServerConnectData
     fun connect()
     fun enterAddress(address: String)
@@ -39,6 +45,7 @@ interface ServerConnect {
 }
 
 interface JoinGame {
+    fun close()
     fun directConnect()
     fun joinWorld()
     fun refresh()
@@ -55,6 +62,7 @@ interface MessageBox {
 }
 
 interface MainMenu {
+    fun data(): MainMenuData
     fun `continue`()
     fun newGame()
     fun loadGame()
@@ -154,6 +162,7 @@ interface InventorySide {
 }
 
 interface LoadGame {
+    fun close()
     fun data(): LoadGameData
     fun filter(text: String)
     fun doubleClickWorld(index: Int)

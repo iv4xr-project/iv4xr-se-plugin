@@ -35,6 +35,7 @@ namespace Iv4xr.SpaceEngineers
         void Connect();
         void EnterAddress(string address);
         void ToggleAddServerToFavorites();
+        void Close();
     }
     
     public interface IJoinGame
@@ -46,10 +47,12 @@ namespace Iv4xr.SpaceEngineers
         void SelectTab(int index);
         void SelectGame(int index);
         JoinGameData Data();
+        void Close();
     }
 
     public interface IMainMenu
     {
+        MainMenuData Data();
         void Continue();
         void NewGame();
         void LoadGame();
@@ -178,10 +181,12 @@ namespace Iv4xr.SpaceEngineers
         void Delete();
         void Save();
         void Publish();
+        void Close();
     }
 
     public interface INewGame
     {
+        void Close();
     }
 
     public interface ISaveAs

@@ -1,0 +1,13 @@
+{"jsonrpc":"2.0","result":"MainMenu","id":5236089413502721095}
+{"jsonrpc":"2.0","result":"MainMenu","id":5968602126425646700}
+{"jsonrpc":"2.0","result":"MainMenu","id":2099970727005855422}
+{"jsonrpc":"2.0","result":null,"id":-195169243842817212}
+{"jsonrpc":"2.0","result":"ProgressAsync","id":-7961925147945817654}
+{"jsonrpc":"2.0","result":"LoadSandbox","id":-2804940847973288087}
+{"jsonrpc":"2.0","result":"LoadSandbox","id":5487198256465353146}
+{"jsonrpc":"2.0","result":"LoadSandbox","id":-4574969099297867846}
+{"jsonrpc":"2.0","result":"LoadSandbox","id":-2861220232675969951}
+{"jsonrpc":"2.0","result":null,"id":-1818022669629794455}
+{"jsonrpc":"2.0","result":"LoadSandbox","id":-6749691271649956995}
+{"jsonrpc":"2.0","result":"MainMenu","id":-1771191786177665323}
+{"jsonrpc":"2.0","result":"MainMenu","id":3186261225384978905}

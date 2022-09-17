@@ -6,6 +6,10 @@ namespace Iv4xr.SePlugin.Control.Screen
 {
     public class ServerConnectScreen : AbstractScreen<MyGuiScreenServerConnect, ServerConnectData>, IServerConnect
     {
+        public ServerConnectScreen() : base(ScreenCloseType.Normal)
+        {
+        }
+        
         public override ServerConnectData Data()
         {
             return new ServerConnectData()

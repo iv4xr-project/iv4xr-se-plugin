@@ -1,0 +1,13 @@
+{"jsonrpc":"2.0","result":"MainMenu","id":6427927007225176934}
+{"jsonrpc":"2.0","result":"MainMenu","id":-1705449330322530763}
+{"jsonrpc":"2.0","result":"MainMenu","id":-5323192329478061448}
+{"jsonrpc":"2.0","result":null,"id":7881638290815046467}
+{"jsonrpc":"2.0","result":"MainMenu","id":-62633323627900646}
+{"jsonrpc":"2.0","result":"NewGame","id":6445613048386675533}
+{"jsonrpc":"2.0","result":"NewGame","id":-3071123810234858810}
+{"jsonrpc":"2.0","result":"NewGame","id":2485360911497104585}
+{"jsonrpc":"2.0","result":"NewGame","id":-5226879475032559942}
+{"jsonrpc":"2.0","result":null,"id":-8140614056457081245}
+{"jsonrpc":"2.0","result":"NewGame","id":-1468334060431854046}
+{"jsonrpc":"2.0","result":"MainMenu","id":8657384824828861168}
+{"jsonrpc":"2.0","result":"MainMenu","id":-5537020423105956155}
