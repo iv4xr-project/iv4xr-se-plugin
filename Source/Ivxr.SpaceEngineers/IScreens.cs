@@ -7,7 +7,6 @@ namespace Iv4xr.SpaceEngineers
     [Role(Role.Game)]
     public interface IScreens
     {
-        string FocusedScreen();
         void WaitUntilTheGameLoaded();
         IMedicals Medicals { get; }
         ITerminal Terminal { get; }
@@ -20,6 +19,15 @@ namespace Iv4xr.SpaceEngineers
         IGamePlay GamePlay { get; }
         ISaveAs SaveAs { get; }
         IToolbarConfig ToolbarConfig { get; }
+        ILoading Loading { get; }
+        IFocusedScreen FocusedScreen { get; }
+    }
+
+    public interface IFocusedScreen
+    {
+        BaseScreenData Data();
+        void CloseScreenNow();
+        void CloseScreen();
     }
 
     public interface IGamePlay
@@ -37,7 +45,7 @@ namespace Iv4xr.SpaceEngineers
         void ToggleAddServerToFavorites();
         void Close();
     }
-    
+
     public interface IJoinGame
     {
         void DirectConnect();
@@ -89,28 +97,25 @@ namespace Iv4xr.SpaceEngineers
         TerminalScreenData Data();
         void SelectTab(int index);
         IInventoryTab Inventory { get; }
-        IControlPanelTab ControlPanel { get;  }
+        IControlPanelTab ControlPanel { get; }
         IProductionTab Production { get; }
-        IInfoTab Info { get;  }
-        IFactionsTab Factions { get;  }
-        ICommsTab Comms { get;  }
-        IGpsTab Gps { get;  }
+        IInfoTab Info { get; }
+        IFactionsTab Factions { get; }
+        ICommsTab Comms { get; }
+        IGpsTab Gps { get; }
         void Close();
     }
 
     public interface IGpsTab
     {
-        
     }
 
     public interface ICommsTab
     {
-        
     }
 
     public interface IFactionsTab
     {
-        
     }
 
     public interface IControlPanelTab
@@ -124,10 +129,10 @@ namespace Iv4xr.SpaceEngineers
 
     public interface IInfoTab
     {
-        
     }
-    
-    public interface IProductionTab {
+
+    public interface IProductionTab
+    {
         TerminalProductionData Data();
         void ToggleProductionRepeatMode();
         void ToggleProductionCooperativeMode();
@@ -143,7 +148,7 @@ namespace Iv4xr.SpaceEngineers
         TerminalInventoryData Data();
         void TransferInventoryItemToRight(int sourceInventoryId, int destinationInventoryId, int itemId);
         void TransferInventoryItemToLeft(int sourceInventoryId, int destinationInventoryId, int itemId);
-        
+
         void DropSelected();
         void Withdraw();
         void Deposit();
@@ -187,6 +192,11 @@ namespace Iv4xr.SpaceEngineers
     public interface INewGame
     {
         void Close();
+    }
+
+    public interface ILoading
+    {
+        LoadingData Data();
     }
 
     public interface ISaveAs

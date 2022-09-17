@@ -24,5 +24,5 @@ suspend fun Screens.waitForScreen(
 }
 
 fun Screens.typedFocusedScreen(): ScreenName {
-    return focusedScreen().toScreenName()
+    return focusedScreen.data().name.toScreenName()
 }

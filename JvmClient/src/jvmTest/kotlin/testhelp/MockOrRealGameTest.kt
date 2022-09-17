@@ -15,7 +15,7 @@ abstract class MockOrRealGameTest(
     private val agentId: String = TEST_AGENT,
     private val forceRealGame: Boolean = false,
     private val forceWrite: Boolean = false,
-    private val scenarioId: String = SIMPLE_PLACE_GRIND_TORCH,
+    protected val scenarioId: String = SIMPLE_PLACE_GRIND_TORCH,
     private val loadScenario: Boolean = true,
     private val port: Int = DEFAULT_PORT,
     private val spaceEngineersBuilder: JsonRpcSpaceEngineersBuilder = SpaceEngineersJavaProxyBuilder()

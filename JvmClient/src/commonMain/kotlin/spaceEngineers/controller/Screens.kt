@@ -2,8 +2,12 @@ package spaceEngineers.controller
 
 import spaceEngineers.model.*
 
+fun Screens.focusedScreen(): String {
+    return focusedScreen.data().name
+}
+
 interface Screens {
-    fun focusedScreen(): String
+    val focusedScreen: FocusedScreen
     fun waitUntilTheGameLoaded()
     val medicals: Medicals
     val terminal: Terminal
@@ -16,6 +20,17 @@ interface Screens {
     val gamePlay: GamePlay
     val saveAs: SaveAs
     val toolbarConfig: ToolbarConfig
+    val loading: Loading
+}
+
+interface FocusedScreen {
+    fun data(): BaseScreenData
+    fun closeScreenNow()
+    fun closeScreen()
+}
+
+interface Loading {
+    fun data(): LoadingData
 }
 
 interface NewGame {
