@@ -77,7 +77,6 @@ class MedbayLobbySetup(
 
     private fun onScenario(scenarioId: String) = hideUndeclaredThrowableException {
         mainClient {
-            screens.focusedScreen()
             when (val focusedScreen = screens.typedFocusedScreen()) {
                 MainMenu -> {
                     createLobbyGame(scenarioId)
