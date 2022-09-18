@@ -5,5 +5,8 @@ namespace Iv4xr.SePlugin.Control.Screen
 {
     public class NewGameScreen : AbstractScreen<MyGuiScreenNewGame, object>, INewGame
     {
+        public NewGameScreen() : base(ScreenCloseType.Normal)
+        {
+        }
     }
 }

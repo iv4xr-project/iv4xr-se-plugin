@@ -11,6 +11,10 @@ namespace Iv4xr.SePlugin.Control.Screen
 {
     public class LoadGameScreen : AbstractScreen<MyGuiScreenLoadSandbox, LoadGameData>, ILoadGame
     {
+        public LoadGameScreen() : base(ScreenCloseType.Normal)
+        {
+        }
+        
         private MyGuiControlSaveBrowser Browser =>
                 Screen.GetInstanceFieldOrThrow<MyGuiControlSaveBrowser>("m_saveBrowser");
 
