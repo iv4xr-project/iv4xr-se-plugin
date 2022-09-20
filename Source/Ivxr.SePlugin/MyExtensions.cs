@@ -420,6 +420,10 @@ namespace Iv4xr.SePlugin
 
         public static SessionInfo ToSessionInfo(this MySession session)
         {
+            if (session == null)
+            {
+                return null;
+            }
             return new SessionInfo()
             {
                 Name = session.Name,

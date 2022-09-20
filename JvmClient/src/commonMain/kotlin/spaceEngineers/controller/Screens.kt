@@ -2,9 +2,6 @@ package spaceEngineers.controller
 
 import spaceEngineers.model.*
 
-fun Screens.focusedScreen(): String {
-    return focusedScreen.data().name
-}
 
 interface Screens {
     val focusedScreen: FocusedScreen

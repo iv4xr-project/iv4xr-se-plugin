@@ -145,20 +145,19 @@ fun ConnectionManagerUser.connectToFirstFriendlyGame() {
 }
 
 suspend fun SpaceEngineers.waitForMedicalScreen() {
-    screens.waitForScreen(timeoutMs = 40_321, screenName = Medicals)
+    screens.waitForScreen(timeout = 40_321.milliseconds, screenName = Medicals)
 }
 
 suspend fun SpaceEngineers.waitForJoinGameScreen() {
-    screens.waitForScreen(timeoutMs = 40_322, screenName = JoinGame)
+    screens.waitForScreen(timeout = 40_322.milliseconds, screenName = JoinGame)
 }
 
 suspend fun SpaceEngineers.waitForServerConnectScreen() {
-    screens.waitForScreen(timeoutMs = 40_323, screenName = ServerConnect)
+    screens.waitForScreen(timeout = 40_323.milliseconds, screenName = ServerConnect)
 }
 
-
 suspend fun SpaceEngineers.waitForGameplay() {
-    screens.waitForScreen(timeoutMs = 60_001, screenName = GamePlay)
+    screens.waitForScreen(timeout = 60_001.milliseconds, screenName = GamePlay)
 }
 
 fun shouldTakeScreenshot(scenario: Scenario, screenshotMode: ScreenshotMode): Boolean {

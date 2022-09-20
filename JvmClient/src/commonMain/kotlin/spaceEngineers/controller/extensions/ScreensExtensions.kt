@@ -7,11 +7,6 @@ import spaceEngineers.util.whileWithTimeout
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 
-suspend fun Screens.waitForScreen(timeoutMs: Long = 60_000, singleDelay: Long = 500, screenName: ScreenName) {
-    whileWithTimeout(timeoutMs, singleDelay) {
-        typedFocusedScreen() != screenName
-    }
-}
 
 suspend fun Screens.waitForScreen(
     timeout: Duration = 60_000.milliseconds,
@@ -19,10 +14,22 @@ suspend fun Screens.waitForScreen(
     screenName: ScreenName
 ) {
     whileWithTimeout(timeout, retryInterval) {
-        typedFocusedScreen() != screenName
+        focusedScreen.data().run {
+            !(typedName == screenName && isLoaded)
+        }
+    }
+}
+
+suspend fun Screens.waitForScreenFinish(
+    timeout: Duration = 60_000.milliseconds,
+    retryInterval: Duration = 500.milliseconds,
+    screenName: ScreenName
+) {
+    whileWithTimeout(timeout, retryInterval) {
+        focusedScreen.data().typedName == screenName
     }
 }
 
 fun Screens.typedFocusedScreen(): ScreenName {
-    return focusedScreen.data().name.toScreenName()
+    return focusedScreen.data().typedName
 }

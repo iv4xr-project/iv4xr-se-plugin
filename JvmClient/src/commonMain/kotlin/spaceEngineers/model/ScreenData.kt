@@ -29,4 +29,7 @@ data class BaseScreenData(
     override val visible: Boolean,
     @SerialName("CloseButtonEnabled")
     override val closeButtonEnabled: Boolean,
-) : ScreenData
+) : ScreenData {
+    val typedName: ScreenName
+        get() = name.toScreenName()
+}
