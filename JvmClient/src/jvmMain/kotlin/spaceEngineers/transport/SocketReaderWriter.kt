@@ -12,31 +12,13 @@ import java.net.Socket
 import java.nio.charset.StandardCharsets
 
 
-fun Any?.closeIfCloseable() {
-    this?.let {
-        if (it is AutoCloseable) {
-            it.close()
-        }
-    }
-}
-
-fun SpaceEngineers?.closeIfCloseable() {
-    this?.let {
-        if (it is ContextControllerWrapper) {
-            it.spaceEngineers.closeIfCloseable()
-        }
-        if (it is AutoCloseable) {
-            it.close()
-        }
-    }
-}
-
 class SocketReaderWriter @JvmOverloads constructor(
-    host: String = DEFAULT_HOSTNAME,
-    port: Int = DEFAULT_PORT,
-    maxWaitTimeMs: Int = 120_000,
-    socketConnectionTimeoutMs: Int = 4_000,
-    socketDataTimeoutMs: Int = 120_000
+    val host: String = DEFAULT_HOSTNAME,
+    val port: Int = DEFAULT_PORT,
+    val maxWaitTimeMs: Int = 120_000,
+    val socketConnectionTimeoutMs: Int = 4_000,
+    val socketDataTimeoutMs: Int = 120_000,
+    connectOnCreate: Boolean = true,
 ) : AutoCloseable, StringLineReaderWriter {
 
     lateinit var socket: Socket
@@ -46,6 +28,13 @@ class SocketReaderWriter @JvmOverloads constructor(
     val address: String = "$host:$port"
 
     init {
+        if (connectOnCreate) {
+            connect()
+        }
+    }
+
+    fun connect(
+    ) {
         val startTime = System.nanoTime()
         var connected = false
         var exception: IOException? = null

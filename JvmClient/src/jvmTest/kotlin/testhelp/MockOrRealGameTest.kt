@@ -1,11 +1,8 @@
 package testhelp
 
 import spaceEngineers.controller.*
-import spaceEngineers.transport.GsonResponseAppendToFileReaderWriter
-import spaceEngineers.transport.SocketReaderWriter
+import spaceEngineers.transport.*
 import spaceEngineers.transport.SocketReaderWriter.Companion.DEFAULT_PORT
-import spaceEngineers.transport.StringLineReaderWriter
-import spaceEngineers.transport.closeIfCloseable
 import java.io.File
 import java.lang.reflect.UndeclaredThrowableException
 
@@ -88,7 +85,7 @@ abstract class MockOrRealGameTest(
     }
 
     private fun readerWriter(
-        file: File, rw: SocketReaderWriter = SocketReaderWriter(
+        file: File, rw: StringLineReaderWriter = ReconnectingSocketReaderWriter(
             port = port
         )
     ): StringLineReaderWriter {
