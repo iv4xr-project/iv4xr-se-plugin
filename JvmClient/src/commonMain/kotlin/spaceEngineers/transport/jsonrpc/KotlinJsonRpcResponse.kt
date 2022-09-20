@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class KotlinJsonRpcResponse<T : Any>(
+data class KotlinJsonRpcResponse<T : Any?>(
     @SerialName("id")
     override val id: Long? = null,
     @SerialName("jsonrpc")
@@ -13,4 +13,4 @@ data class KotlinJsonRpcResponse<T : Any>(
     override val result: T? = null,
     @SerialName("error")
     override val error: KotlinJsonRpcError? = null
-): JsonRpcResponse<T>
+) : JsonRpcResponse<T>

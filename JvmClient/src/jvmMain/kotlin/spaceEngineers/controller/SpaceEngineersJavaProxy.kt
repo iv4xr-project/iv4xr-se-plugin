@@ -8,6 +8,7 @@ import spaceEngineers.transport.closeIfCloseable
 import spaceEngineers.transport.jsonrpc.JsonRpcResponse
 import spaceEngineers.transport.jsonrpc.KotlinJsonRpcRequest
 import spaceEngineers.transport.jsonrpc.KotlinJsonRpcResponse
+import spaceEngineers.transport.jsonrpc.resultOrThrow
 import java.lang.reflect.InvocationHandler
 import java.lang.reflect.Method
 import java.lang.reflect.Proxy
@@ -85,7 +86,7 @@ class SpaceEngineersJavaProxy(
         parameters: List<TypedParameter<*>>,
         methodName: String,
         returnType: KType
-    ): Any {
+    ): Any? {
         return callRpc(
             encodeRequest(parameters, methodName),
             returnType,
@@ -107,33 +108,25 @@ class SpaceEngineersJavaProxy(
         ))
     }
 
-    fun <O : Any> callRpc(
+    private inline fun <reified O : Any?> callRpc(
         encodedRequest: String,
         returnType: KType
-    ): O {
+    ): O? {
         val responseJson = stringLineReaderWriter.sendAndReceiveLine(encodedRequest)
         return stringLineReaderWriter.wrapExceptionWithStringLineReaderInfo {
             decodeAndUnwrap(responseJson, returnType)
         }
     }
 
-    private fun <O : Any> decodeAndUnwrap(responseJson: String, ktype: KType): O {
-        val response = decodeResponse<O>(responseJson, ktype)
-        return unwrap(response)
+    private inline fun <reified O : Any?> decodeAndUnwrap(responseJson: String, ktype: KType): O? {
+        return decodeResponse<O?>(responseJson, ktype).resultOrThrow()
     }
 
-    private fun <O : Any> decodeResponse(responseJson: String, ktype: KType): JsonRpcResponse<O> {
+    private fun <O : Any?> decodeResponse(responseJson: String, ktype: KType): JsonRpcResponse<O> {
         return json.decodeFromString<KotlinJsonRpcResponse<O>>(
             serializer(ktype) as KSerializer<KotlinJsonRpcResponse<O>>,
             responseJson
         )
-    }
-
-    private fun <O : Any> unwrap(response: JsonRpcResponse<O>): O {
-        response.error?.let {
-            throw it as Exception
-        }
-        return response.result ?: Unit as O
     }
 
     private fun Method.isGetter(): Boolean {
