@@ -193,8 +193,9 @@ class CharacterActions : AbstractMultiplayerSteps() {
                 //TODO: remove pause, wait until the game is in main menu
                 pause()
                 createLobbyGame(scenarioId, filterSaved = false)
+            }
+            nonMainClientGameObservers {
                 connectToFirstFriendlyGame()
-
             }
         }
     }
@@ -290,7 +291,7 @@ class CharacterActions : AbstractMultiplayerSteps() {
             left.selectItem(itemIndex)
             dropSelected()
             smallPause()
-            close()
+            screens.terminal.close()
             smallPause()
         }
     }
@@ -305,7 +306,7 @@ class CharacterActions : AbstractMultiplayerSteps() {
             val itemId = data.rightInventories.first().items.firstOrNull { it.id == definitionId }?.itemId
                 ?: error("Item $definitionId not found in the right inventory. Found: ${data.rightInventories.first().items.map { it.id }}")
             inventory.transferInventoryItemToLeft(0, 0, itemId)
-            close()
+            screens.terminal.close()
             smallPause()
         }
     }
