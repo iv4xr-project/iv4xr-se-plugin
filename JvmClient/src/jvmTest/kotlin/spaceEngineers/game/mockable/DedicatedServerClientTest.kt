@@ -8,7 +8,7 @@ import kotlin.test.Test
 
 
 @Ignore
-class DedicatedServerClientTest : MockOrRealGameTest(loadScenario = false, forceRealGame = true, port = 3334) {
+class DedicatedServerClientTest : MockOrRealGameTest(loadScenario = false, forceRealGame = true, port = 3334u) {
 
     @Test
     fun connect() = testContext {

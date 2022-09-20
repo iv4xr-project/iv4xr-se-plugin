@@ -8,7 +8,7 @@ import kotlin.test.Test
 
 
 @Ignore
-class DedicatedServerObservationTest : MockOrRealGameTest(loadScenario = true, forceRealGame = true, port = 3333) {
+class DedicatedServerObservationTest : MockOrRealGameTest(loadScenario = true, forceRealGame = true, port = 3333u) {
 
     @Test
     fun testLoad() = testContext {

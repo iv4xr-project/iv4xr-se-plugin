@@ -1,23 +1,28 @@
 package spaceEngineers.transport
 
 import spaceEngineers.transport.SocketReaderWriter.Companion.DEFAULT_HOSTNAME
+import spaceEngineers.transport.SocketReaderWriter.Companion.DEFAULT_MAX_WAIT_TIME
 import spaceEngineers.transport.SocketReaderWriter.Companion.DEFAULT_PORT
+import spaceEngineers.transport.SocketReaderWriter.Companion.DEFAULT_SOCKET_CONNECTION_TIMEOUT
+import spaceEngineers.transport.SocketReaderWriter.Companion.DEFAULT_SOCKET_DATA_TIMEOUT
 import java.io.IOException
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
 
 
-class ReconnectingSocketReaderWriter @JvmOverloads constructor(
+class ReconnectingSocketReaderWriter(
     val host: String = DEFAULT_HOSTNAME,
-    val port: Int = DEFAULT_PORT,
-    val maxWaitTimeMs: Int = 120_000,
-    val socketConnectionTimeoutMs: Int = 4_000,
-    val socketDataTimeoutMs: Int = 120_000,
-    val maxRetries: Int = 3,
+    val port: UShort = DEFAULT_PORT,
+    val maxWaitTime: Duration = DEFAULT_MAX_WAIT_TIME,
+    val socketConnectionTimeout: Duration = DEFAULT_SOCKET_CONNECTION_TIMEOUT,
+    val socketDataTimeout: Duration = DEFAULT_SOCKET_DATA_TIMEOUT,
+    val maxRetries: Int = DEFAULT_MAX_RETRIES,
 ) : AutoCloseable, StringLineReaderWriter {
 
     var socketReaderWriter: SocketReaderWriter = connect()
 
     private fun connect(): SocketReaderWriter {
-        return SocketReaderWriter(host, port, maxWaitTimeMs, socketConnectionTimeoutMs, socketDataTimeoutMs)
+        return SocketReaderWriter(host, port, maxWaitTime, socketConnectionTimeout, socketDataTimeout)
     }
 
     private fun reconnect() {
@@ -41,6 +46,27 @@ class ReconnectingSocketReaderWriter @JvmOverloads constructor(
 
     override fun close() {
         socketReaderWriter.close()
+    }
+
+    companion object {
+        const val DEFAULT_MAX_RETRIES = 3
+
+        @JvmOverloads
+        fun createUsingLongDurations(
+            host: String = DEFAULT_HOSTNAME,
+            port: Int = DEFAULT_PORT.toInt(),
+            maxWaitTimeMs: Int = DEFAULT_MAX_WAIT_TIME.inWholeMilliseconds.toInt(),
+            socketConnectionTimeoutMs: Int = DEFAULT_SOCKET_CONNECTION_TIMEOUT.inWholeMilliseconds.toInt(),
+            socketDataTimeoutMs: Int = DEFAULT_SOCKET_DATA_TIMEOUT.inWholeMilliseconds.toInt(),
+            maxRetries: Int = DEFAULT_MAX_RETRIES,
+        ) = ReconnectingSocketReaderWriter(
+            host = host,
+            port = port.toUShort(),
+            maxWaitTime = maxWaitTimeMs.milliseconds,
+            socketConnectionTimeout = socketConnectionTimeoutMs.milliseconds,
+            socketDataTimeout = socketDataTimeoutMs.milliseconds,
+            maxRetries = maxRetries,
+        )
     }
 
 }

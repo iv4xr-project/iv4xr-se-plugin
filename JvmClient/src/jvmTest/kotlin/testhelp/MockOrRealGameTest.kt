@@ -14,7 +14,7 @@ abstract class MockOrRealGameTest(
     private val forceWrite: Boolean = false,
     protected val scenarioId: String = SIMPLE_PLACE_GRIND_TORCH,
     private val loadScenario: Boolean = true,
-    private val port: Int = DEFAULT_PORT,
+    private val port: UShort = DEFAULT_PORT,
     private val spaceEngineersBuilder: JsonRpcSpaceEngineersBuilder = SpaceEngineersJavaProxyBuilder()
 ) {
 

@@ -108,7 +108,7 @@ class ConnectionManager(
                 agentId = gameProcess.createId(),
                 stringLineReaderWriter = ReconnectingSocketReaderWriter(
                     host = gameProcess.address,
-                    port = gameProcess.pluginPort.toInt()
+                    port = gameProcess.pluginPort
                 )
             )
         ).apply {
