@@ -143,6 +143,7 @@ $dokka.location:spaceEngineers.controller.connection/GameProcess/configPath/#/Po
 $dokka.location:spaceEngineers.controller.connection/GameProcess/createId/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller.connection/-game-process/create-id.html
 $dokka.location:spaceEngineers.controller.connection/GameProcess/executablePath/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller.connection/-game-process/executable-path.html
 $dokka.location:spaceEngineers.controller.connection/GameProcess/gameVersion/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller.connection/-game-process/game-version.html
+$dokka.location:spaceEngineers.controller.connection/GameProcess/isMainClient/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller.connection/-game-process/is-main-client.html
 $dokka.location:spaceEngineers.controller.connection/GameProcess/pluginPort/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller.connection/-game-process/plugin-port.html
 $dokka.location:spaceEngineers.controller.connection/GameProcess/roles/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller.connection/-game-process/roles.html
 $dokka.location:spaceEngineers.controller.connection/GameProcess/type/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller.connection/-game-process/type.html
