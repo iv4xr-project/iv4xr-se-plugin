@@ -8,6 +8,7 @@ import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 import spaceEngineers.controller.extensions.blockingMoveForwardByDistance
 import spaceEngineers.controller.extensions.grindDownToPercentage
 import spaceEngineers.controller.extensions.toNullIfMinusOne
@@ -177,6 +178,12 @@ class CharacterActions : AbstractMultiplayerSteps() {
         if (cs.ds) {
             exitToMainMenu()
             connectClientsDirectly(waitForMedical = false)
+            games {
+                screens.waitUntilTheGameLoaded()
+            }
+            runBlocking {
+                pause()
+            }
         } else if (cs.lobby) {
             mainClient {
                 screens.gamePlay.showMainMenu()
@@ -196,6 +203,12 @@ class CharacterActions : AbstractMultiplayerSteps() {
             }
             nonMainClientGameObservers {
                 connectToFirstFriendlyGame()
+            }
+            games {
+                screens.waitUntilTheGameLoaded()
+            }
+            runBlocking {
+                pause()
             }
         }
     }

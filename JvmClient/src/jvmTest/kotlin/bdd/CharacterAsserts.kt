@@ -7,10 +7,8 @@ import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import kotlinx.coroutines.delay
-import spaceEngineers.model.BootsColour
-import spaceEngineers.model.DefinitionId
-import spaceEngineers.model.HandTool
-import spaceEngineers.model.Vec3F
+import spaceEngineers.controller.extensions.typedFocusedScreen
+import spaceEngineers.model.*
 import spaceEngineers.model.extensions.allBlocks
 import testhelp.*
 import java.lang.Thread.sleep
@@ -35,7 +33,7 @@ class CharacterAsserts : AbstractMultiplayerSteps() {
         val bootsColour = BootsColour.valueOf(colourName.uppercase())
         repeatUntilSuccess {
             observer.observe().bootsState.let { bootState ->
-                assertTrue(bootState.isColour(bootsColour), message = "BootState is $bootState")
+                assertTrue(bootState.isColour(bootsColour), message = "BootState is $bootState, not $bootsColour")
             }
         }
     }
@@ -44,7 +42,7 @@ class CharacterAsserts : AbstractMultiplayerSteps() {
     fun character_boots_are_green() = observers {
         repeatUntilSuccess {
             observer.observe().bootsState.let { bootState ->
-                assertTrue(bootState.isGreen(), message = "BootState is $bootState")
+                assertTrue(bootState.isGreen(), message = "BootState is $bootState, not green")
             }
         }
     }
@@ -53,7 +51,7 @@ class CharacterAsserts : AbstractMultiplayerSteps() {
     fun character_boots_are_yellow() = observers {
         repeatUntilSuccess {
             observer.observe().bootsState.let { bootState ->
-                assertTrue(bootState.isYellow(), message = "BootState is $bootState")
+                assertTrue(bootState.isYellow(), message = "BootState is $bootState, not yellow")
             }
         }
     }
@@ -62,7 +60,7 @@ class CharacterAsserts : AbstractMultiplayerSteps() {
     fun character_boots_are_white() = observers {
         repeatUntilSuccess {
             observer.observe().bootsState.let { bootState ->
-                assertTrue(bootState.isWhite(), message = "BootState is $bootState")
+                assertTrue(bootState.isWhite(), message = "BootState is $bootState, not white")
             }
         }
     }
@@ -545,5 +543,25 @@ class CharacterAsserts : AbstractMultiplayerSteps() {
         )
     }
 
-    //camera
+    @Given("Character inventory contains ore {string}.")
+    fun character_inventory_contains_ore(type: String) = mainClient {
+        if (screens.typedFocusedScreen() != ScreenName.Terminal) {
+            character.showInventory()
+        }
+        val definition = DefinitionId.create("Ore", type)
+        repeatUntilSuccess {
+            assertTrue(observer.observe().inventory.items.any { it.id == definition })
+        }
+    }
+
+    @Given("Character inventory contains ingot {string}.")
+    fun character_inventory_contains(type: String) = mainClient {
+        if (screens.typedFocusedScreen() != ScreenName.Terminal) {
+            character.showInventory()
+        }
+        val definition = DefinitionId.create("Ingot", type)
+        repeatUntilSuccess {
+            assertTrue(observer.observe().inventory.items.any { it.id == definition })
+        }
+    }
 }
