@@ -70,11 +70,6 @@ class ScreenSteps : AbstractMultiplayerSteps() {
         pause()
     }
 
-    @Then("Gameplay screen shows {string} beacon.")
-    fun gameplay_screen_shows_beacon(oreName: String) = mainClient {
-        assertTrue(screens.gamePlay.data().oreMarkers.any { it.text == oreName })
-    }
-
     @Then("Gameplay screen shows beacons for:")
     fun gameplay_screen_shows_beacons_for(map: List<Map<String, String>>) = mainClient {
         map.forEach {
@@ -95,7 +90,6 @@ class ScreenSteps : AbstractMultiplayerSteps() {
         }
     }
 
-
     @Then("Production queue contains exactly:")
     fun production_queue_contains_exactly(map: List<Map<String, String>>) = mainClient {
         val productionQueue = screens.terminal.production.data().productionQueue
@@ -104,15 +98,6 @@ class ScreenSteps : AbstractMultiplayerSteps() {
             assertEquals(pqi.blueprint.displayName, row["name"])
             assertEquals(pqi.amount, row["count"]?.toInt())
         }
-    }
-
-    @Given("Character inventory contains ingot {string}.")
-    fun character_inventory_contains(type: String) = mainClient {
-        if (screens.typedFocusedScreen() != Terminal) {
-            character.showInventory()
-        }
-        val definition = DefinitionId.create("Ingot", type)
-        assertTrue(observer.observe().inventory.items.any { it.id == definition })
     }
 
     @When("Character selects inventory ingot {string} and drops.")
@@ -128,15 +113,6 @@ class ScreenSteps : AbstractMultiplayerSteps() {
             smallPause()
             dropSelected()
         }
-    }
-
-    @Given("Character inventory contains ore {string}.")
-    fun character_inventory_contains_ore(type: String) = mainClient {
-        if (screens.typedFocusedScreen() != Terminal) {
-            character.showInventory()
-        }
-        val definition = DefinitionId.create("Ore", type)
-        assertTrue(observer.observe().inventory.items.any { it.id == definition })
     }
 
     @When("Character selects inventory ore {string} and drops.")

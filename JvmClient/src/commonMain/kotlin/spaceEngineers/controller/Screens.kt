@@ -21,7 +21,7 @@ interface Screens {
 }
 
 interface FocusedScreen {
-    fun data(): BaseScreenData
+    fun data(): BaseScreenData?
     fun closeScreenNow()
     fun closeScreen()
 }

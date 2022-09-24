@@ -135,7 +135,7 @@ class ScreenNavigation(
     private val transitionsByEdgeId = transitions.associateBy { it.edgeId }
 
     suspend fun navigateTo(screenName: ScreenName) {
-        val currentScreen = spaceEngineers.screens.typedFocusedScreen()
+        val currentScreen = spaceEngineers.screens.typedFocusedScreen() ?: error("No focused screen")
         if (currentScreen == screenName) {
             return
         }

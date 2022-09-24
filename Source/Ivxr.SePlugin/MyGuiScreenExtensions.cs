@@ -127,6 +127,10 @@ namespace Iv4xr.SePlugin
 
         public static T LoadScreenData<T>(this MyGuiScreenBase screen, T data) where T : BaseScreenData
         {
+            if (screen == null)
+            {
+                return null;
+            }
             screen.ThrowIfNull("screen", "Cannot load screen data of null");
             data.Name = screen.DisplayName();
             data.IsLoaded = screen.IsLoaded;

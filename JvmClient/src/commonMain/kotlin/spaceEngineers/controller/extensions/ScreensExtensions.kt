@@ -14,9 +14,9 @@ suspend fun Screens.waitForScreen(
     screenName: ScreenName
 ) {
     whileWithTimeout(timeout, retryInterval) {
-        focusedScreen.data().run {
+        focusedScreen.data()?.run {
             !(typedName == screenName && isLoaded)
-        }
+        } ?: true
     }
 }
 
@@ -26,10 +26,10 @@ suspend fun Screens.waitForScreenFinish(
     screenName: ScreenName
 ) {
     whileWithTimeout(timeout, retryInterval) {
-        focusedScreen.data().typedName == screenName
+        focusedScreen.data()?.typedName == screenName
     }
 }
 
 fun Screens.typedFocusedScreen(): ScreenName {
-    return focusedScreen.data().typedName
+    return focusedScreen.data()?.typedName ?: error("No focused screen!")
 }

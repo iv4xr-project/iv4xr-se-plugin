@@ -98,17 +98,6 @@ namespace Iv4xr.SePlugin.Control.Screen
         public ILoading Loading => m_loadingScreen;
         public IFocusedScreen FocusedScreen => m_focusedScreen;
 
-        private MyGuiScreenBase ScreenWithFocus()
-        {
-            return MyScreenManager.GetScreenWithFocus()
-                    .ThrowIfNull("ScreenWithFocus", "There is currently not screen with focus");
-        }
-
-        public BaseScreenData FocusedScreenData()
-        {
-            return ScreenWithFocus().LoadScreenData(new BaseScreenData());
-        }
-        
         [CallOn(CurrentThread)]
         public void WaitUntilTheGameLoaded()
         {
