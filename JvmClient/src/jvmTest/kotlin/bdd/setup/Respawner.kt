@@ -15,6 +15,7 @@ import spaceEngineers.model.ScreenName
 import spaceEngineers.model.ScreenName.Companion.Medicals
 import spaceEngineers.transport.jsonrpc.KotlinJsonRpcError
 import spaceEngineers.util.whileWithTimeout
+import kotlin.time.Duration.Companion.milliseconds
 
 class Respawner(
     override val connectionManager: ConnectionManager,
@@ -62,6 +63,13 @@ class Respawner(
                     killIfNeeded()
                 }
 
+                ScreenName.MessageBox -> {
+                    val message = screens.messageBox.data()
+                    when (message.caption) {
+                        else -> error("Don't know what to do with MessageBox with caption ${message.caption}, text ${message.text} and type ${message.buttonType}")
+                    }
+                }
+
                 else -> {
                     error("Don't know what to do with screen $focusedScreen")
                 }
@@ -98,7 +106,7 @@ class Respawner(
             swallowedExceptionTypes = setOf(SocketReaderWriterException::class, KotlinJsonRpcError::class)
         ) {
             with(screens.medicals) {
-                whileWithTimeout(waitTimeout) { data().medicalRooms.isEmpty() }
+                whileWithTimeout(waitTimeout.milliseconds) { data().medicalRooms.isEmpty() }
                 val index = data().medicalRooms.indexOfFirst { it.name == medbay }.toNullIfMinusOne()
                 check(index != null) {
                     "Spawn point '$medbay' not found, found: ${

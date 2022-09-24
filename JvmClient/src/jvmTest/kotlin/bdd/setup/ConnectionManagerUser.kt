@@ -5,9 +5,40 @@ import kotlinx.coroutines.delay
 import spaceEngineers.controller.connection.ConnectionManager
 import spaceEngineers.controller.connection.ProcessWithConnection
 import testhelp.hideUndeclaredThrowableException
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
+
+interface Pauseable {
+    suspend fun smallPause()
+
+    suspend fun pause()
+
+    suspend fun bigPause()
+
+}
+
+class DefaultPauseable(
+    private val smallPauseDuration: Duration = 500.milliseconds,
+    private val pauseDuration: Duration = 5.seconds,
+    private val bigPauseDuration: Duration = 15.seconds,
+) : Pauseable {
+    override suspend fun smallPause() {
+        delay(smallPauseDuration)
+    }
+
+    override suspend fun pause() {
+        delay(pauseDuration)
+    }
+
+    override suspend fun bigPause() {
+        delay(bigPauseDuration)
+    }
+
+}
 
 
-interface ConnectionManagerUser {
+interface ConnectionManagerUser: Pauseable {
     val connectionManager: ConnectionManager
     fun <T> observers(block: suspend ProcessWithConnection.() -> T): List<T>
     fun <T> mainClient(block: suspend ProcessWithConnection.() -> T): T
@@ -17,14 +48,11 @@ interface ConnectionManagerUser {
     fun <T> games(block: suspend ProcessWithConnection.() -> T): List<T>
     fun <T> admin(block: suspend ProcessWithConnection.() -> T): T
 
-    suspend fun smallPause()
 
-    suspend fun pause()
-
-    suspend fun bigPause()
 }
 
-class GlobalConnectionManagerUser() : ConnectionManagerUser {
+class GlobalConnectionManagerUser(pauseable: Pauseable = DefaultPauseable()) : ConnectionManagerUser,
+    Pauseable by pauseable {
 
     override val connectionManager: ConnectionManager
         get() = globalCm
@@ -73,7 +101,10 @@ class GlobalConnectionManagerUser() : ConnectionManagerUser {
 }
 
 
-class RealConnectionManagerUser(override val connectionManager: ConnectionManager) : ConnectionManagerUser {
+class RealConnectionManagerUser(
+    override val connectionManager: ConnectionManager,
+    pauseable: Pauseable = DefaultPauseable()
+) : ConnectionManagerUser, Pauseable by pauseable {
 
     override fun <T> observers(block: suspend ProcessWithConnection.() -> T) =
         hideUndeclaredThrowableException {
@@ -105,16 +136,5 @@ class RealConnectionManagerUser(override val connectionManager: ConnectionManage
         connectionManager.admin(block)
     }
 
-    override suspend fun smallPause() {
-        delay(500)
-    }
-
-    override suspend fun pause() {
-        delay(5_000)
-    }
-
-    override suspend fun bigPause() {
-        delay(15_000)
-    }
 }
 

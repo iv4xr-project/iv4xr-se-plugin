@@ -16,12 +16,3 @@ suspend fun whileWithTimeout(
         }
     }
 }
-
-@Deprecated("Use method that passes kotlin.time.Duration")
-suspend fun whileWithTimeout(timeout: Long, waitDelay: Long = 100L, condition: () -> Boolean) {
-    withTimeout(timeout) {
-        while (condition()) {
-            delay(waitDelay)
-        }
-    }
-}

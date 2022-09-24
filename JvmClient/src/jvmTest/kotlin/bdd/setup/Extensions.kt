@@ -5,21 +5,28 @@ import io.cucumber.plugin.event.Status
 import io.cucumber.plugin.event.TestCaseFinished
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
+import spaceEngineers.controller.ExtendedSpaceEngineers
 import spaceEngineers.controller.SpaceEngineers
 import spaceEngineers.controller.connection.AppType
 import spaceEngineers.controller.connection.ScreenshotMode
 import spaceEngineers.controller.extensions.typedFocusedScreen
 import spaceEngineers.controller.extensions.waitForScreen
+import spaceEngineers.controller.extensions.waitForScreenFinish
+import spaceEngineers.model.*
 import spaceEngineers.model.ScreenName.Companion.CubeBuilder
 import spaceEngineers.model.ScreenName.Companion.GamePlay
 import spaceEngineers.model.ScreenName.Companion.JoinGame
+import spaceEngineers.model.ScreenName.Companion.Loading
 import spaceEngineers.model.ScreenName.Companion.MainMenu
 import spaceEngineers.model.ScreenName.Companion.Medicals
 import spaceEngineers.model.ScreenName.Companion.MessageBox
+import spaceEngineers.model.ScreenName.Companion.Progress
+import spaceEngineers.model.ScreenName.Companion.SaveAs
 import spaceEngineers.model.ScreenName.Companion.ServerConnect
 import spaceEngineers.model.ScreenName.Companion.Terminal
-import spaceEngineers.model.canUse
-import spaceEngineers.util.whileWithTimeout
+import spaceEngineers.model.ScreenName.Companion.ToolbarConfig
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
 
 suspend fun SpaceEngineers.dieAndConfirm(delayMs: Long = 100L) {
     //TODO: die only if not dead
@@ -32,13 +39,14 @@ suspend fun SpaceEngineers.dieAndConfirm(delayMs: Long = 100L) {
 
 suspend fun SpaceEngineers.ensureCamera(cameraConfig: CameraConfig) {
     val info = session.info()
-    val cameraInfo = info.camera ?: error("No camera info")
+    val cameraInfo = info?.camera ?: error("No camera info")
     when (cameraConfig) {
         CameraConfig.FIRST_PERSON -> {
             if (!cameraInfo.isInFirstPersonView) {
                 observer.switchCamera()
             }
         }
+
         CameraConfig.THIRD_PERSON -> {
             if (cameraInfo.isInFirstPersonView) {
                 observer.switchCamera()
@@ -47,40 +55,70 @@ suspend fun SpaceEngineers.ensureCamera(cameraConfig: CameraConfig) {
     }
 }
 
+suspend fun ConnectionManagerUser.handleScenarioParameter(key: String, value: String) =
+    when (key) {
+        "delay_after_spawn" -> delay((value.toFloat() * 1000f).toLong())
+        "energy" -> admin { admin.character.updateEnergy(energy = value.toFloat()) }
+        "hydrogen" -> admin { admin.character.updateHydrogen(hydrogen = value.toFloat()) }
+        "oxygen" -> admin { admin.character.updateOxygen(oxygen = value.toFloat()) }
+        "camera" -> mainClient { ensureCamera(CameraConfig.fromText(value)) }
+        else -> println("Warning, unknown settings: $key - $value")
+    }
+
 suspend fun ConnectionManagerUser.handleScenarioParameters(data: Map<String, String>) {
-    data["delay_after_spawn"]?.toFloatOrNull()?.let { delaySeconds ->
-        delay((delaySeconds * 1000f).toLong())
-    }
-    data["energy"]?.let {
-        admin { admin.character.updateEnergy(energy = it.toFloat()) }
-    }
-    data["hydrogen"]?.let {
-        admin { admin.character.updateHydrogen(hydrogen = it.toFloat()) }
-    }
-    data["oxygen"]?.let {
-        admin { admin.character.updateOxygen(oxygen = it.toFloat()) }
-    }
-    data["camera"]?.let { it ->
-        mainClient {
-            ensureCamera(CameraConfig.fromText(it))
+    val alreadyHandledParameters = setOf("faction", "scenario", "main_client_medbay", "observer_medbay")
+    data.filter { it.key !in alreadyHandledParameters }
+        .forEach { (key, value) ->
+            handleScenarioParameter(key, value)
+        }
+}
+
+suspend fun ExtendedSpaceEngineers.getToMedicalScreen() {
+    when (val focusedScreen = screens.typedFocusedScreen()) {
+        Medicals -> {}
+        Terminal, ToolbarConfig, SaveAs, CubeBuilder -> {
+            extensions.screen.navigation.navigateTo(GamePlay)
+            dieAndConfirm()
+        }
+
+        GamePlay -> {
+            dieAndConfirm()
+        }
+
+        MainMenu -> {
+            val data = screens.mainMenu.data()
+            if (data.type == MainMenuData.MAIN) {
+                //TODO: connect to the game
+            } else {
+                extensions.screen.navigation.navigateTo(GamePlay)
+            }
+        }
+
+        MessageBox -> {
+            val message = screens.messageBox.data()
+            when (message.caption) {
+                else -> error("Don't know what to do with MessageBox with caption ${message.caption}, text ${message.text} and type ${message.buttonType}")
+            }
+        }
+
+        Loading -> {
+            screens.waitForScreenFinish(20.seconds, screenName = Loading)
+        }
+
+        Progress -> {
+            screens.waitForScreenFinish(20.seconds, screenName = Progress)
+        }
+
+        else -> {
+            error("Don't know what to do with screen $focusedScreen")
         }
     }
 }
 
 
-
-
 fun ConnectionManagerUser.connectClientsDirectly(waitForMedical: Boolean = true) = runBlocking {
     clients {
-        //TODO: if not in main menu, exit to it rather than failing
-        val process = connectionManager.admin.gameProcess
-        screens.mainMenu.joinGame()
-        waitForJoinGameScreen()
-        screens.joinGame.directConnect()
-        waitForServerConnectScreen()
-        screens.serverConnect.enterAddress("${process.address}:27016")
-        screens.serverConnect.connect()
-        screens.waitUntilTheGameLoaded()
+        connectDirectly(connectionManager.admin.gameProcess.address)
         if (waitForMedical) {
             waitForMedicalScreen()
         }
@@ -108,42 +146,6 @@ fun ConnectionManagerUser.exitToMainMenu(onException: (Throwable) -> Unit = { pr
 }
 
 
-fun ConnectionManagerUser.createLobbyGame(scenarioId: String, filterSaved: Boolean = true) = admin {
-    screens.mainMenu.loadGame()
-    pause()
-    val data = screens.loadGame.data()
-    val filtered = data.files.filter { it.name == scenarioId && (!it.fullName.contains("-saved") || !filterSaved) }
-    check(filtered.size < 2) { "Multiple non '-saved' files with same name: $filtered" }
-    val index = data.files.indexOfFirst { it.name == scenarioId && (!it.fullName.contains("-saved") || !filterSaved) }
-    check(index > -1) {
-        "Scenario $scenarioId not found in the list, found: ${data.files.map { it.name }.sorted()}"
-    }
-    screens.loadGame.doubleClickWorld(index)
-    bigPause()
-    screens.waitUntilTheGameLoaded()
-}
-
-fun ConnectionManagerUser.connectToFirstFriendlyGame() {
-    clients {
-        screens.mainMenu.joinGame()
-        waitForJoinGameScreen()
-        with(screens.joinGame) {
-            selectTab(5)
-            whileWithTimeout {
-                data().selectedTab != 5 || data().games.isEmpty()
-            }
-            selectGame(0)
-            whileWithTimeout { !data().joinWorldButton.canUse }
-            joinWorld()
-        }
-        smallPause()
-        screens.waitUntilTheGameLoaded()
-    }
-    runBlocking {
-        pause()
-    }
-}
-
 suspend fun SpaceEngineers.waitForMedicalScreen() {
     screens.waitForScreen(timeout = 40_321.milliseconds, screenName = Medicals)
 }
@@ -161,18 +163,23 @@ suspend fun SpaceEngineers.waitForGameplay() {
 }
 
 fun shouldTakeScreenshot(scenario: Scenario, screenshotMode: ScreenshotMode): Boolean {
-    return when (screenshotMode) {
-        ScreenshotMode.NEVER -> false
-        ScreenshotMode.ON_FAILURE -> scenario.isFailed
-        ScreenshotMode.ALWAYS -> true
-    }
+    return shouldTakeScreenshot(
+        scenarioFailed = scenario.isFailed,
+        screenshotMode = screenshotMode,
+    )
 }
 
 fun shouldTakeScreenshot(scenario: TestCaseFinished, screenshotMode: ScreenshotMode): Boolean {
+    return shouldTakeScreenshot(
+        scenarioFailed = scenario.result.status == Status.FAILED,
+        screenshotMode = screenshotMode,
+    )
+}
+
+fun shouldTakeScreenshot(scenarioFailed: Boolean, screenshotMode: ScreenshotMode): Boolean {
     return when (screenshotMode) {
         ScreenshotMode.NEVER -> false
-        ScreenshotMode.ON_FAILURE -> scenario.result.status == Status.FAILED
+        ScreenshotMode.ON_FAILURE -> scenarioFailed
         ScreenshotMode.ALWAYS -> true
     }
 }
-
