@@ -11,6 +11,10 @@ namespace Iv4xr.SePlugin.Control.Screen
 {
     public class JoinGameScreen : AbstractScreen<MyGuiScreenJoinGame, JoinGameData>, IJoinGame
     {
+        public JoinGameScreen() : base(ScreenCloseType.Normal)
+        {
+        }
+
         public void DirectConnect()
         {
             Screen.ClickButton("m_directConnectButton");

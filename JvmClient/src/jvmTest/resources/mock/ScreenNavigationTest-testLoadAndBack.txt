@@ -1,0 +1,13 @@
+{"jsonrpc":"2.0","result":{"Name":"MainMenu","IsLoaded":true,"IsOpened":true,"SkipTransition":false,"Cancelled":false,"Visible":true,"CloseButtonEnabled":false},"id":-2723788384737514134}
+{"jsonrpc":"2.0","result":{"Name":"MainMenu","IsLoaded":true,"IsOpened":true,"SkipTransition":false,"Cancelled":false,"Visible":true,"CloseButtonEnabled":false},"id":4239876078513019371}
+{"jsonrpc":"2.0","result":{"Name":"MainMenu","IsLoaded":true,"IsOpened":true,"SkipTransition":false,"Cancelled":false,"Visible":true,"CloseButtonEnabled":false},"id":6599340880760667147}
+{"jsonrpc":"2.0","result":null,"id":-2918255979205699976}
+{"jsonrpc":"2.0","result":{"Name":"ProgressAsync","IsLoaded":true,"IsOpened":true,"SkipTransition":false,"Cancelled":false,"Visible":true,"CloseButtonEnabled":false},"id":-1317924115949660481}
+{"jsonrpc":"2.0","result":{"Name":"LoadSandbox","IsLoaded":true,"IsOpened":true,"SkipTransition":false,"Cancelled":false,"Visible":true,"CloseButtonEnabled":true},"id":405484681579210845}
+{"jsonrpc":"2.0","result":{"Name":"LoadSandbox","IsLoaded":true,"IsOpened":true,"SkipTransition":false,"Cancelled":false,"Visible":true,"CloseButtonEnabled":true},"id":2635574959605446958}
+{"jsonrpc":"2.0","result":{"Name":"LoadSandbox","IsLoaded":true,"IsOpened":true,"SkipTransition":false,"Cancelled":false,"Visible":true,"CloseButtonEnabled":true},"id":-7085109579666082822}
+{"jsonrpc":"2.0","result":{"Name":"LoadSandbox","IsLoaded":true,"IsOpened":true,"SkipTransition":false,"Cancelled":false,"Visible":true,"CloseButtonEnabled":true},"id":6853923743342677278}
+{"jsonrpc":"2.0","result":null,"id":-3526061142196458331}
+{"jsonrpc":"2.0","result":{"Name":"LoadSandbox","IsLoaded":true,"IsOpened":false,"SkipTransition":false,"Cancelled":false,"Visible":true,"CloseButtonEnabled":true},"id":1906610336518244669}
+{"jsonrpc":"2.0","result":{"Name":"MainMenu","IsLoaded":true,"IsOpened":true,"SkipTransition":false,"Cancelled":false,"Visible":true,"CloseButtonEnabled":false},"id":-8484062752170129402}
+{"jsonrpc":"2.0","result":{"Name":"MainMenu","IsLoaded":true,"IsOpened":true,"SkipTransition":false,"Cancelled":false,"Visible":true,"CloseButtonEnabled":false},"id":5879313356361873143}

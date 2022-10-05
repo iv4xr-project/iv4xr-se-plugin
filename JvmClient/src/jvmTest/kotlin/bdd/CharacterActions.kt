@@ -8,6 +8,7 @@ import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 import spaceEngineers.controller.extensions.blockingMoveForwardByDistance
 import spaceEngineers.controller.extensions.grindDownToPercentage
 import spaceEngineers.controller.extensions.toNullIfMinusOne
@@ -177,6 +178,12 @@ class CharacterActions : AbstractMultiplayerSteps() {
         if (cs.ds) {
             exitToMainMenu()
             connectClientsDirectly(waitForMedical = false)
+            games {
+                screens.waitUntilTheGameLoaded()
+            }
+            runBlocking {
+                pause()
+            }
         } else if (cs.lobby) {
             mainClient {
                 screens.gamePlay.showMainMenu()
@@ -193,8 +200,15 @@ class CharacterActions : AbstractMultiplayerSteps() {
                 //TODO: remove pause, wait until the game is in main menu
                 pause()
                 createLobbyGame(scenarioId, filterSaved = false)
+            }
+            nonMainClientGameObservers {
                 connectToFirstFriendlyGame()
-
+            }
+            games {
+                screens.waitUntilTheGameLoaded()
+            }
+            runBlocking {
+                pause()
             }
         }
     }
@@ -282,25 +296,31 @@ class CharacterActions : AbstractMultiplayerSteps() {
         observer.observe().inventory.items.indexOfFirst { it.id == definitionId }.toNullIfMinusOne()
             ?: error("Item $definitionId not found in inventory")
         character.showInventory()
+        smallPause()
         with(screens.terminal.inventory) {
             val firstLeftInventory = this.data().leftInventories.first()
             val itemIndex = firstLeftInventory.items.indexOfFirst { it.id == definitionId }.toNullIfMinusOne()
                 ?: error("Item $definitionId not found in inventory (2)")
             left.selectItem(itemIndex)
             dropSelected()
+            smallPause()
+            screens.terminal.close()
+            smallPause()
         }
     }
 
     @When("Character takes {string} from target block's inventory.")
     fun character_takes_from_target_block_s_inventory(definitionIdStr: String) = mainClient {
-        character.showInventory()
         val definitionId = DefinitionId.parse(definitionIdStr)
+        character.showInventory()
+        smallPause()
         with(screens.terminal) {
             val data = inventory.data()
             val itemId = data.rightInventories.first().items.firstOrNull { it.id == definitionId }?.itemId
                 ?: error("Item $definitionId not found in the right inventory. Found: ${data.rightInventories.first().items.map { it.id }}")
             inventory.transferInventoryItemToLeft(0, 0, itemId)
-            close()
+            screens.terminal.close()
+            smallPause()
         }
     }
 

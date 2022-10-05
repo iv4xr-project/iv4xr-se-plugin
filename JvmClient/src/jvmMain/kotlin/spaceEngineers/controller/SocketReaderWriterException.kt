@@ -5,7 +5,7 @@ import spaceEngineers.transport.StringLineReaderWrapper
 import spaceEngineers.transport.StringLineReaderWriter
 import spaceEngineers.transport.jsonrpc.KotlinJsonRpcError
 
-fun <O : Any> StringLineReaderWriter.wrapExceptionWithStringLineReaderInfo(
+fun <O : Any?> StringLineReaderWriter.wrapExceptionWithStringLineReaderInfo(
     block: () -> O
 ): O {
     return try {

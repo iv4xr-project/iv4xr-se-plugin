@@ -33,7 +33,7 @@ class ScreenTest : MockOrRealGameTest(forceRealGame = true, loadScenario = false
 
     @Test
     fun focusedScreen() = testContext {
-        println(screens.focusedScreen())
+        println(screens.focusedScreen.data()?.name)
     }
 
     @Test

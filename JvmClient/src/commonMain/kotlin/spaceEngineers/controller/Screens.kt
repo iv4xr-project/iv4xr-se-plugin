@@ -2,8 +2,9 @@ package spaceEngineers.controller
 
 import spaceEngineers.model.*
 
+
 interface Screens {
-    fun focusedScreen(): String
+    val focusedScreen: FocusedScreen
     fun waitUntilTheGameLoaded()
     val medicals: Medicals
     val terminal: Terminal
@@ -12,9 +13,25 @@ interface Screens {
     val joinGame: JoinGame
     val serverConnect: ServerConnect
     val loadGame: LoadGame
+    val newGame: NewGame
     val gamePlay: GamePlay
     val saveAs: SaveAs
     val toolbarConfig: ToolbarConfig
+    val loading: Loading
+}
+
+interface FocusedScreen {
+    fun data(): BaseScreenData?
+    fun closeScreenNow()
+    fun closeScreen()
+}
+
+interface Loading {
+    fun data(): LoadingData
+}
+
+interface NewGame {
+    fun close()
 }
 
 interface ToolbarConfig {
@@ -32,6 +49,7 @@ interface GamePlay {
 }
 
 interface ServerConnect {
+    fun close()
     fun data(): ServerConnectData
     fun connect()
     fun enterAddress(address: String)
@@ -39,6 +57,7 @@ interface ServerConnect {
 }
 
 interface JoinGame {
+    fun close()
     fun directConnect()
     fun joinWorld()
     fun refresh()
@@ -55,6 +74,7 @@ interface MessageBox {
 }
 
 interface MainMenu {
+    fun data(): MainMenuData
     fun `continue`()
     fun newGame()
     fun loadGame()
@@ -154,6 +174,7 @@ interface InventorySide {
 }
 
 interface LoadGame {
+    fun close()
     fun data(): LoadGameData
     fun filter(text: String)
     fun doubleClickWorld(index: Int)

@@ -2,6 +2,7 @@ package spaceEngineers.controller.connection
 
 import kotlinx.coroutines.*
 import spaceEngineers.controller.*
+import spaceEngineers.transport.ReconnectingSocketReaderWriter
 import spaceEngineers.transport.SocketReaderWriter
 import spaceEngineers.transport.closeIfCloseable
 
@@ -105,9 +106,9 @@ class ConnectionManager(
         return ContextControllerWrapper(
             spaceEngineers = factory.fromStringLineReaderWriter(
                 agentId = gameProcess.createId(),
-                stringLineReaderWriter = SocketReaderWriter(
+                stringLineReaderWriter = ReconnectingSocketReaderWriter(
                     host = gameProcess.address,
-                    port = gameProcess.pluginPort.toInt()
+                    port = gameProcess.pluginPort
                 )
             )
         ).apply {

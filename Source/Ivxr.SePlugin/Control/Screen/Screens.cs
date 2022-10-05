@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Threading;
+using Iv4xr.PluginLib;
 using Iv4xr.SePlugin.Communication;
 using Iv4xr.SePlugin.Control.Screen.Terminal;
 using Iv4xr.SpaceEngineers;
+using Iv4xr.SpaceEngineers.WorldModel.Screen;
 using Sandbox.Game.Gui;
 using Sandbox.Graphics.GUI;
 using VRage;
@@ -19,6 +21,11 @@ namespace Iv4xr.SePlugin.Control.Screen
             None,
             Now,
             Normal,
+        }
+
+        protected T LoadScreenData<T>(T data) where T : BaseScreenData
+        {
+            return Screen.LoadScreenData(data);
         }
 
         protected TScreen Screen => MyGuiScreenExtensions.EnsureFocusedScreen<TScreen>();
@@ -69,6 +76,8 @@ namespace Iv4xr.SePlugin.Control.Screen
         private readonly GamePlayScreen m_gamePlayScreen = new GamePlayScreen();
         private readonly SaveAsScreen m_saveAsScreen = new SaveAsScreen();
         private readonly ToolbarConfig m_toolbarConfig = new ToolbarConfig();
+        private readonly LoadingScreen m_loadingScreen = new LoadingScreen();
+        private readonly FocusedScreen m_focusedScreen = new FocusedScreen();
 
         public Screens()
         {
@@ -86,12 +95,8 @@ namespace Iv4xr.SePlugin.Control.Screen
         public IGamePlay GamePlay => m_gamePlayScreen;
         public ISaveAs SaveAs => m_saveAsScreen;
         public IToolbarConfig ToolbarConfig => m_toolbarConfig;
-
-        [CallOn(CurrentThread)]
-        public string FocusedScreen()
-        {
-            return MyScreenManager.GetScreenWithFocus().DisplayName();
-        }
+        public ILoading Loading => m_loadingScreen;
+        public IFocusedScreen FocusedScreen => m_focusedScreen;
 
         [CallOn(CurrentThread)]
         public void WaitUntilTheGameLoaded()

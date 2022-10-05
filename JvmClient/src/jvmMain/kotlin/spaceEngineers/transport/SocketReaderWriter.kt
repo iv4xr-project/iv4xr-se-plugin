@@ -3,65 +3,54 @@ package spaceEngineers.transport
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import spaceEngineers.controller.ContextControllerWrapper
-import spaceEngineers.controller.SpaceEngineers
 import java.io.*
 import java.lang.reflect.Modifier
 import java.net.InetSocketAddress
 import java.net.Socket
 import java.nio.charset.StandardCharsets
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.nanoseconds
+import kotlin.time.Duration.Companion.seconds
 
 
-fun Any?.closeIfCloseable() {
-    this?.let {
-        if (it is AutoCloseable) {
-            it.close()
-        }
-    }
-}
-
-fun SpaceEngineers?.closeIfCloseable() {
-    this?.let {
-        if (it is ContextControllerWrapper) {
-            it.spaceEngineers.closeIfCloseable()
-        }
-        if (it is AutoCloseable) {
-            it.close()
-        }
-    }
-}
-
-class SocketReaderWriter @JvmOverloads constructor(
-    host: String = DEFAULT_HOSTNAME,
-    port: Int = DEFAULT_PORT,
-    maxWaitTimeMs: Int = 120_000,
-    socketConnectionTimeoutMs: Int = 4_000,
-    socketDataTimeoutMs: Int = 120_000
+class SocketReaderWriter(
+    val host: String = DEFAULT_HOSTNAME,
+    val port: UShort = DEFAULT_PORT,
+    val maxWaitTime: Duration = DEFAULT_MAX_WAIT_TIME,
+    val socketConnectionTimeout: Duration = DEFAULT_SOCKET_CONNECTION_TIMEOUT,
+    val socketDataTimeout: Duration = DEFAULT_SOCKET_DATA_TIMEOUT,
 ) : AutoCloseable, StringLineReaderWriter {
 
     lateinit var socket: Socket
     lateinit var reader: BufferedReader
     lateinit var writer: PrintWriter
 
-    val address: String = "$host:$port"
+    val address: String
+        get() = "$host:$port"
 
     init {
+        connect()
+    }
+
+    private fun connect(
+    ) {
         val startTime = System.nanoTime()
         var connected = false
-        var exception: IOException? = null
-        while (!connected && millisElapsed(startTime) < maxWaitTimeMs) {
+        var lastException: IOException? = null
+        while (!connected && millisElapsed(startTime) < maxWaitTime) {
             try {
                 socket = Socket()
-                socket.soTimeout = socketDataTimeoutMs
-                socket.connect(InetSocketAddress(host, port), socketConnectionTimeoutMs)
+                socket.soTimeout = socketDataTimeout.inWholeMilliseconds.toInt()
+                socket.connect(InetSocketAddress(host, port.toInt()), socketConnectionTimeout.inWholeMilliseconds.toInt())
                 reader = BufferedReader(InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8))
                 writer = PrintWriter(OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8), true)
                 connected = true
             } catch (ignored: IOException) {
-                exception = ignored
+                lastException = ignored
             }
         }
-        exception?.let {
+        lastException?.let {
             if (!connected) {
                 close()
                 throw it
@@ -87,17 +76,20 @@ class SocketReaderWriter @JvmOverloads constructor(
     }
 
     companion object {
-        const val DEFAULT_HOSTNAME = "localhost"
 
-        const val DEFAULT_PORT = 3333
+        const val DEFAULT_HOSTNAME = "localhost"
+        const val DEFAULT_PORT: UShort = 3333u
+        val DEFAULT_MAX_WAIT_TIME = 120.seconds
+        val DEFAULT_SOCKET_CONNECTION_TIMEOUT = 4.seconds
+        val DEFAULT_SOCKET_DATA_TIMEOUT = 120.seconds
 
         val SPACE_ENG_GSON: Gson = GsonBuilder()
             .setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)
             .excludeFieldsWithModifiers(Modifier.STATIC, Modifier.TRANSIENT)
             .create()
 
-        private fun millisElapsed(startTimeNano: Long): Float {
-            return (System.nanoTime() - startTimeNano) / 1000000f
+        private fun millisElapsed(startTimeNano: Long): Duration {
+            return (System.nanoTime() - startTimeNano).nanoseconds
         }
 
         fun closeSafely(closeable: Closeable?) {
@@ -107,6 +99,22 @@ class SocketReaderWriter @JvmOverloads constructor(
                 //at this point we don't care, just cleanup
             }
         }
+
+        //ensure this class can be created from Java
+        @JvmOverloads
+        fun createUsingLongDurations(
+            host: String = DEFAULT_HOSTNAME,
+            port: Int = DEFAULT_PORT.toInt(),
+            maxWaitTimeMs: Int = DEFAULT_MAX_WAIT_TIME.inWholeMilliseconds.toInt(),
+            socketConnectionTimeoutMs: Int = DEFAULT_SOCKET_CONNECTION_TIMEOUT.inWholeMilliseconds.toInt(),
+            socketDataTimeoutMs: Int = DEFAULT_SOCKET_DATA_TIMEOUT.inWholeMilliseconds.toInt(),
+        ) = SocketReaderWriter(
+            host = host,
+            port = port.toUShort(),
+            maxWaitTime = maxWaitTimeMs.milliseconds,
+            socketConnectionTimeout = socketConnectionTimeoutMs.milliseconds,
+            socketDataTimeout = socketDataTimeoutMs.milliseconds,
+        )
     }
 
 }

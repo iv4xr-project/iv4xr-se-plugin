@@ -1,11 +1,8 @@
 package testhelp
 
 import spaceEngineers.controller.*
-import spaceEngineers.transport.GsonResponseAppendToFileReaderWriter
-import spaceEngineers.transport.SocketReaderWriter
+import spaceEngineers.transport.*
 import spaceEngineers.transport.SocketReaderWriter.Companion.DEFAULT_PORT
-import spaceEngineers.transport.StringLineReaderWriter
-import spaceEngineers.transport.closeIfCloseable
 import java.io.File
 import java.lang.reflect.UndeclaredThrowableException
 
@@ -15,9 +12,9 @@ abstract class MockOrRealGameTest(
     private val agentId: String = TEST_AGENT,
     private val forceRealGame: Boolean = false,
     private val forceWrite: Boolean = false,
-    private val scenarioId: String = SIMPLE_PLACE_GRIND_TORCH,
+    protected val scenarioId: String = SIMPLE_PLACE_GRIND_TORCH,
     private val loadScenario: Boolean = true,
-    private val port: Int = DEFAULT_PORT,
+    private val port: UShort = DEFAULT_PORT,
     private val spaceEngineersBuilder: JsonRpcSpaceEngineersBuilder = SpaceEngineersJavaProxyBuilder()
 ) {
 
@@ -88,7 +85,7 @@ abstract class MockOrRealGameTest(
     }
 
     private fun readerWriter(
-        file: File, rw: SocketReaderWriter = SocketReaderWriter(
+        file: File, rw: StringLineReaderWriter = ReconnectingSocketReaderWriter(
             port = port
         )
     ): StringLineReaderWriter {

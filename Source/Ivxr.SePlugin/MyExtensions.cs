@@ -318,7 +318,15 @@ namespace Iv4xr.SePlugin
             result.Name = entity.Name;
             result.Velocity = entity.Physics?.LinearVelocity.ToPlain() ?? PlainVec3DConst.Zero;
             result.InScene = entity.InScene;
-            result.DefinitionId = entity.DefinitionId?.ToDefinitionId();
+            result.DefinitionId = entity.DefinitionId?.ToDefinitionId() ?? new DefinitionId()
+            {
+                Id = entity.ToString(),
+                Type = entity.GetType().ToString(),
+            };
+            if (entity is MyCockpit cockpit)
+            {
+                result.DefinitionId = cockpit.BlockDefinition.Id.ToDefinitionId();
+            }
             return result;
         }
 
@@ -420,6 +428,10 @@ namespace Iv4xr.SePlugin
 
         public static SessionInfo ToSessionInfo(this MySession session)
         {
+            if (session == null)
+            {
+                return null;
+            }
             return new SessionInfo()
             {
                 Name = session.Name,

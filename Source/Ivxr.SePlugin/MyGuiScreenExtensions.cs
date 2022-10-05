@@ -125,6 +125,23 @@ namespace Iv4xr.SePlugin
             return list;
         }
 
+        public static T LoadScreenData<T>(this MyGuiScreenBase screen, T data) where T : BaseScreenData
+        {
+            if (screen == null)
+            {
+                return null;
+            }
+            screen.ThrowIfNull("screen", "Cannot load screen data of null");
+            data.Name = screen.DisplayName();
+            data.IsLoaded = screen.IsLoaded;
+            data.IsOpened = screen.IsOpened;
+            data.SkipTransition = screen.SkipTransition;
+            data.Cancelled = screen.Cancelled;
+            data.Visible= screen.Visible;
+            data.CloseButtonEnabled = screen.CloseButtonEnabled;
+            return data;
+        }
+
         public static string DisplayName(this MyGuiScreenBase screen)
         {
             return screen.GetType().Name

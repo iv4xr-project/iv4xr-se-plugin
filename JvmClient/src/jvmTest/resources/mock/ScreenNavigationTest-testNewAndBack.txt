@@ -1,0 +1,12 @@
+{"jsonrpc":"2.0","result":{"Name":"MainMenu","IsLoaded":true,"IsOpened":true,"SkipTransition":false,"Cancelled":false,"Visible":true,"CloseButtonEnabled":false},"id":-181739989518833940}
+{"jsonrpc":"2.0","result":{"Name":"MainMenu","IsLoaded":true,"IsOpened":true,"SkipTransition":false,"Cancelled":false,"Visible":true,"CloseButtonEnabled":false},"id":-6461314619094754040}
+{"jsonrpc":"2.0","result":{"Name":"MainMenu","IsLoaded":true,"IsOpened":true,"SkipTransition":false,"Cancelled":false,"Visible":true,"CloseButtonEnabled":false},"id":2843192990492249527}
+{"jsonrpc":"2.0","result":null,"id":-330547122465246840}
+{"jsonrpc":"2.0","result":{"Name":"NewGame","IsLoaded":true,"IsOpened":true,"SkipTransition":false,"Cancelled":false,"Visible":true,"CloseButtonEnabled":true},"id":1681847937585908521}
+{"jsonrpc":"2.0","result":{"Name":"NewGame","IsLoaded":true,"IsOpened":true,"SkipTransition":false,"Cancelled":false,"Visible":true,"CloseButtonEnabled":true},"id":-4247412041924130296}
+{"jsonrpc":"2.0","result":{"Name":"NewGame","IsLoaded":true,"IsOpened":true,"SkipTransition":false,"Cancelled":false,"Visible":true,"CloseButtonEnabled":true},"id":2800864218922463635}
+{"jsonrpc":"2.0","result":{"Name":"NewGame","IsLoaded":true,"IsOpened":true,"SkipTransition":false,"Cancelled":false,"Visible":true,"CloseButtonEnabled":true},"id":4468816698404381624}
+{"jsonrpc":"2.0","result":null,"id":-3770134135840731883}
+{"jsonrpc":"2.0","result":{"Name":"NewGame","IsLoaded":true,"IsOpened":false,"SkipTransition":false,"Cancelled":false,"Visible":true,"CloseButtonEnabled":true},"id":-1775822929713737788}
+{"jsonrpc":"2.0","result":{"Name":"MainMenu","IsLoaded":true,"IsOpened":true,"SkipTransition":false,"Cancelled":false,"Visible":true,"CloseButtonEnabled":false},"id":-6261219557082772563}
+{"jsonrpc":"2.0","result":{"Name":"MainMenu","IsLoaded":true,"IsOpened":true,"SkipTransition":false,"Cancelled":false,"Visible":true,"CloseButtonEnabled":false},"id":-6663520612289371793}
