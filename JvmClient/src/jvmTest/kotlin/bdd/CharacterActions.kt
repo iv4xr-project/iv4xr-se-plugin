@@ -65,15 +65,26 @@ class CharacterActions : AbstractMultiplayerSteps() {
     @When("Character moves {string} for {int} ticks using {string}.")
     fun character_moves_for_ticks_using(direction: String, ticks: Int, movement: String) = mainClient {
         val movementType = if (movement == "crouch") {
-            assertEquals(CharacterMovement.standing, observer.observe().movement.value.toInt())
+            val expectedStandingMovementValue = observer.observe().movement.value.toInt()
+            assertEquals(
+                expectedStandingMovementValue,
+                CharacterMovement.standing,
+                message = "Character is not standing (${CharacterMovement.standing}), the state is : (${expectedStandingMovementValue})",
+            )
+
             character.moveAndRotate(Vec3F.DOWN, ticks = 0)
             delay(50)
-            assertEquals(CharacterMovement.crouching, observer.observe().movement.value.toInt())
+            val expectedCrouchMovementValue = observer.observe().movement.value.toInt()
+            assertEquals(
+                expectedCrouchMovementValue,
+                CharacterMovement.crouching,
+                message = "Character is not crouching (${CharacterMovement.crouching}), the state is : (${expectedCrouchMovementValue})",
+            )
             CharacterMovementType.WALK
         } else {
             CharacterMovementType.valueOf(movement.uppercase())
         }
-        val movementWrapper = ReplayMovement(this)
+        val movementWrapper = VectorMovement(this)
         movementWrapper.move(
             CompositeDirection3d.directionFromString(direction),
             movementType = movementType,
@@ -269,9 +280,11 @@ class CharacterActions : AbstractMultiplayerSteps() {
             "clicks" -> {
                 1
             }
+
             "double-clicks" -> {
                 2
             }
+
             else -> error("No action handler for $mouseActionName, try 'clicks' or 'double-clicks'.")
         }
 
@@ -353,9 +366,11 @@ class CharacterActions : AbstractMultiplayerSteps() {
             "PRIMARY_TOOL_ACTION" -> {
                 input.startPlaying(FrameSnapshot.clicks())
             }
+
             "SECONDARY_TOOL_ACTION" -> {
                 input.startPlaying(FrameSnapshot.clicks(MouseButton.RIGHT))
             }
+
             else -> error("Not implemented control $controlName")
         }
     }
