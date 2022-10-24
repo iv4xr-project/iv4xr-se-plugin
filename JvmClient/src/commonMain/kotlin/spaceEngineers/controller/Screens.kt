@@ -131,7 +131,13 @@ interface ControlPanelTab {
     fun enterBlockGroup(text: String)
 }
 
-interface InfoTab
+interface InfoTab {
+    fun data(): TerminalInfoData
+    fun convertToShip()
+    fun convertToStation()
+    fun enterGridName(name: String)
+    fun renameGrid()
+}
 
 interface InventoryTab {
     fun data(): TerminalInventoryData

@@ -129,6 +129,11 @@ namespace Iv4xr.SpaceEngineers
 
     public interface IInfoTab
     {
+        TerminalInfoData Data();
+        void ConvertToShip();
+        void ConvertToStation();
+        void EnterGridName(string name);
+        void RenameGrid();
     }
 
     public interface IProductionTab

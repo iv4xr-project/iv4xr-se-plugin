@@ -186,7 +186,7 @@ namespace Iv4xr.SePlugin
             return list;
         }
 
-        private static void ThrowIfCantUse(this MyGuiControlBase controlBase, string fieldName)
+        public static void ThrowIfCantUse(this MyGuiControlBase controlBase, string fieldName)
         {
             if (!controlBase.Enabled)
             {

@@ -96,6 +96,24 @@ data class TerminalInventoryData(
     val rightInventories: List<Inventory>,
 )
 
+@Serializable
+data class TerminalInfoData(
+    @SerialName("GridInfo")
+    val gridInfo: String,
+    @SerialName("GridName")
+    val gridName: String,
+    @SerialName("ShowCenterOfMass")
+    val showCenterOfMass: Boolean,
+    @SerialName("ShowGravityRange")
+    val showGravityRange: Boolean,
+    @SerialName("ShowSensorsFieldRange")
+    val showSensorsFieldRange: Boolean,
+    @SerialName("ShowAntennaRange")
+    val showAntennaRange: Boolean,
+    @SerialName("ShowGridPivot")
+    val showGridPivot: Boolean,
+)
+
 
 @Serializable
 data class TerminalProductionData(
