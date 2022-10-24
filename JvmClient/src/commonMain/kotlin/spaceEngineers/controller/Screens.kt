@@ -137,6 +137,14 @@ interface InfoTab {
     fun convertToStation()
     fun enterGridName(name: String)
     fun renameGrid()
+    fun setShowCenterOfMassEnabled(enabled: Boolean)
+    fun setShowGravityRangeEnabled(enabled: Boolean)
+    fun setShowSensorsFieldRangeEnabled(enabled: Boolean)
+    fun setShowAntennaRangeEnabled(enabled: Boolean)
+    fun setShowGridPivotEnabled(enabled: Boolean)
+    fun setFriendlyAntennaRange(value: Float)
+    fun setEnemyAntennaRange(value: Float)
+    fun setOwnedAntennaRange(value: Float)
 }
 
 interface InventoryTab {

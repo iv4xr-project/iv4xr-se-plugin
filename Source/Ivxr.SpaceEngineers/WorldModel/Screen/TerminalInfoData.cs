@@ -9,5 +9,8 @@
         public bool ShowSensorsFieldRange;
         public bool ShowAntennaRange;
         public bool ShowGridPivot;
+        public SliderData FriendlyAntennaRange;
+        public SliderData EnemyAntennaRange;
+        public SliderData OwnedAntennaRange;
     }
 }

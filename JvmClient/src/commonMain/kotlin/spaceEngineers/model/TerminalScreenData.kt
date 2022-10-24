@@ -112,6 +112,22 @@ data class TerminalInfoData(
     val showAntennaRange: Boolean,
     @SerialName("ShowGridPivot")
     val showGridPivot: Boolean,
+    @SerialName("FriendlyAntennaRange")
+    val friendlyAntennaRange: SliderData,
+    @SerialName("EnemyAntennaRange")
+    val enemyAntennaRange: SliderData,
+    @SerialName("OwnedAntennaRange")
+    val ownedAntennaRange: SliderData,
+)
+
+@Serializable
+data class SliderData(
+    @SerialName("MinValue")
+    val minValue: Float,
+    @SerialName("MaxValue")
+    val maxValue: Float,
+    @SerialName("Value")
+    val value: Float,
 )
 
 

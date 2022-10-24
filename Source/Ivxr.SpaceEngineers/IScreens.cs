@@ -134,6 +134,14 @@ namespace Iv4xr.SpaceEngineers
         void ConvertToStation();
         void EnterGridName(string name);
         void RenameGrid();
+        void SetShowCenterOfMassEnabled(bool enabled);
+        void SetShowGravityRangeEnabled(bool enabled);
+        void SetShowSensorsFieldRangeEnabled(bool enabled);
+        void SetShowAntennaRangeEnabled(bool enabled);
+        void SetShowGridPivotEnabled(bool enabled);
+        void SetFriendlyAntennaRange(float value);
+        void SetEnemyAntennaRange(float value);
+        void SetOwnedAntennaRange(float value);
     }
 
     public interface IProductionTab

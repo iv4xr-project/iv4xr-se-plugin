@@ -48,6 +48,52 @@ namespace Iv4xr.SePlugin.Control.Screen.Terminal
             return (MyGuiControlCheckbox)InfoPage.GetControlByName(name);
         }
 
+        public void SetShowCenterOfMassEnabled(bool enabled)
+        {
+            CheckBoxByName("CenterBtn").IsChecked = enabled;
+        }
+
+        public void SetShowGravityRangeEnabled(bool enabled)
+        {
+            CheckBoxByName("ShowGravityGizmo").IsChecked = enabled;
+        }
+
+        public void SetShowSensorsFieldRangeEnabled(bool enabled)
+        {
+            CheckBoxByName("ShowSenzorGizmo").IsChecked = enabled;
+        }
+
+        public void SetShowAntennaRangeEnabled(bool enabled)
+        {
+            CheckBoxByName("ShowAntenaGizmo").IsChecked = enabled;
+        }
+
+        public void SetShowGridPivotEnabled(bool enabled)
+        {
+            CheckBoxByName("PivotBtn").IsChecked = enabled;
+        }
+
+        private MyGuiControlSlider SliderByName(string name)
+        {
+            return (MyGuiControlSlider)InfoPage.GetControlByName(name);
+        }
+
+        public void SetFriendlyAntennaRange(float value)
+        {
+            SliderByName("FriendAntennaRange").Value = value;
+        }
+        
+        public void SetEnemyAntennaRange(float value)
+        {
+            SliderByName("EnemyAntennaRange").Value = value;
+        }
+
+        public void SetOwnedAntennaRange(float value)
+        {
+            SliderByName("OwnedAntennaRange").Value = value;
+        }
+
+
         public override TerminalInfoData Data()
         {
             MyGuiControlList list = (MyGuiControlList)InfoPage.Controls.GetControlByName("InfoList");
@@ -61,6 +107,9 @@ namespace Iv4xr.SePlugin.Control.Screen.Terminal
                 ShowSensorsFieldRange = CheckBoxByName("ShowSenzorGizmo").IsChecked,
                 ShowAntennaRange = CheckBoxByName("ShowAntenaGizmo").IsChecked,
                 ShowGridPivot = CheckBoxByName("PivotBtn").IsChecked,
+                FriendlyAntennaRange = SliderByName("FriendAntennaRange").ToData(),
+                EnemyAntennaRange = SliderByName("EnemyAntennaRange").ToData(),
+                OwnedAntennaRange = SliderByName("OwnedAntennaRange").ToData(),
             };
         }
 
