@@ -16,9 +16,7 @@ import kotlin.test.assertEquals
 import kotlin.test.fail
 
 class NavigationMazeTest : MockOrRealGameTest(
-    scenarioId = "amaze",
-    forceRealGame = true,
-    loadScenario = true,
+    scenarioId = "amaze-20x20",
 ) {
     @Test
     fun nonemptyNavGraph() = testContext {
@@ -36,7 +34,7 @@ class NavigationMazeTest : MockOrRealGameTest(
 
         val nearestNode = navGraph.nodes.minByOrNull { it.data.distanceTo(me.position) }
             ?: error("Nearest node not found")
-        println()
+
         val nearestBlock = observer.observeBlocks().blockById(nearestNode.id)
         assertEquals(Vec3F(x=5.0, y=2.5, z=0.0), nearestBlock.position)
 

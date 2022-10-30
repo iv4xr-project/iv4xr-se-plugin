@@ -8,8 +8,6 @@ import kotlin.test.assertTrue
 
 class NavigationGraphTest : MockOrRealGameTest(
     mockFile = inMockResourcesDirectory("NavigationGraphTest.txt"),
-    forceRealGame = true,
-    loadScenario = true,
 ) {
 
     @Test

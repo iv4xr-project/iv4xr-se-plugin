@@ -1,14 +1,15 @@
 package spaceEngineers.game.mockable
 
-import spaceEngineers.controller.extensions.blockDefinitionByType
 import spaceEngineers.model.DefinitionId
-import spaceEngineers.model.Vec3F
 import testhelp.MockOrRealGameTest
 import java.lang.Thread.sleep
-import kotlin.test.*
+import kotlin.test.Ignore
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 
-//@Ignore
+@Ignore
 class ScreenTest : MockOrRealGameTest(forceRealGame = true, loadScenario = false, scenarioId = "automation-se") {
 
 

@@ -46,7 +46,7 @@ interface ExtendedSpaceEngineers : SpaceEngineers {
 }
 
 class DataExtendedSpaceEngineers(
-    private val spaceEngineers: SpaceEngineers,
+    val spaceEngineers: SpaceEngineers,
     pathFinder: PathFinder<BlockId, Vec3F, String, String>,
     override val extensions: SpaceEngineersExtensions = SpaceEngineersExtensions(spaceEngineers, pathFinder)
 ) : SpaceEngineers by spaceEngineers, ExtendedSpaceEngineers {

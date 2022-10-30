@@ -18,8 +18,6 @@ import kotlin.time.Duration.Companion.seconds
 
 class MockableNavigationTest : MockOrRealGameTest(
     scenarioId = "amaze-20x20",
-    forceRealGame = true,
-    //loadScenario = false
 ) {
 
     //@Ignore("This test is quite slow.")
@@ -63,7 +61,6 @@ class MockableNavigationTest : MockOrRealGameTest(
         val extra = DataExtendedSpaceEngineers(spaceEngineers = this, pathFinder = Iv4XRAStarPathFinder())
         extra.extensions.character.navigation.navigateToBlock(
             target.id,
-            gridId = observer.observeBlocks().grids.first { it.blocks.any { it.id == target.id } }.id,
         )
     }
 
