@@ -1,11 +1,16 @@
 package spaceEngineers.controller.connection
 
 import spaceEngineers.controller.*
+import spaceEngineers.iv4xr.navigation.Iv4XRAStarPathFinder
+import spaceEngineers.model.BlockId
+import spaceEngineers.model.Vec3F
+import spaceEngineers.navigation.PathFinder
 
 data class ProcessWithConnection(
     val spaceEngineers: ContextControllerWrapper,
     val gameProcess: GameProcess,
-) : ExtendedSpaceEngineers by DataExtendedSpaceEngineers(spaceEngineers) {
+    val pathFinder: PathFinder<BlockId, Vec3F, String, String> = Iv4XRAStarPathFinder(),
+) : ExtendedSpaceEngineers by spaceEngineers.extend(pathFinder) {
 
     val context = spaceEngineers.context
     val contextControllerWrapper = spaceEngineers

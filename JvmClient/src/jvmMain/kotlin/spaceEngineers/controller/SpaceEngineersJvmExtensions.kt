@@ -1,5 +1,9 @@
 package spaceEngineers.controller
 
+import spaceEngineers.iv4xr.navigation.Iv4XRAStarPathFinder
+import spaceEngineers.model.BlockId
+import spaceEngineers.model.Vec3F
+import spaceEngineers.navigation.PathFinder
 import java.io.File
 
 val SCENARIO_DIR = "src/jvmTest/resources/game-saves/"
@@ -32,4 +36,11 @@ fun Session.loadFromTestResources(scenarioId: String, scenarioDir: String = SCEN
         "Couldn't find scenario"
     }
     loadScenario(unixPath)
+}
+
+fun SpaceEngineers.extend(pathFinder: PathFinder<BlockId, Vec3F, String, String> = Iv4XRAStarPathFinder()): ExtendedSpaceEngineers {
+    if (this is ExtendedSpaceEngineers) {
+        return this
+    }
+    return DataExtendedSpaceEngineers(this, pathFinder = pathFinder)
 }

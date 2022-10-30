@@ -1,8 +1,11 @@
 package spaceEngineers.controller
 
+import spaceEngineers.model.BlockId
+import spaceEngineers.model.Vec3F
 import spaceEngineers.movement.ReplayMovement
 import spaceEngineers.movement.VectorMovement
 import spaceEngineers.navigation.CharacterNavigation
+import spaceEngineers.navigation.PathFinder
 import spaceEngineers.navigation.ScreenNavigation
 
 
@@ -11,8 +14,8 @@ data class CharacterExtensions(
     val replayMovement: ReplayMovement,
     val vectorMovement: VectorMovement,
 ) {
-    constructor(spaceEngineers: SpaceEngineers) : this(
-        navigation = CharacterNavigation(spaceEngineers),
+    constructor(spaceEngineers: SpaceEngineers, pathFinder: PathFinder<BlockId, Vec3F, String, String>) : this(
+        navigation = CharacterNavigation(spaceEngineers, pathFinder = pathFinder),
         vectorMovement = VectorMovement(spaceEngineers),
         replayMovement = ReplayMovement(spaceEngineers),
     )
@@ -31,20 +34,21 @@ data class SpaceEngineersExtensions(
     val screen: ScreenExtensions,
 ) {
 
-    constructor(spaceEngineers: SpaceEngineers) : this(
-        character = CharacterExtensions(spaceEngineers),
+    constructor(spaceEngineers: SpaceEngineers, pathFinder: PathFinder<BlockId, Vec3F, String, String>) : this(
+        character = CharacterExtensions(spaceEngineers, pathFinder = pathFinder),
         screen = ScreenExtensions(spaceEngineers),
     )
 
 }
 
-interface ExtendedSpaceEngineers: SpaceEngineers {
+interface ExtendedSpaceEngineers : SpaceEngineers {
     val extensions: SpaceEngineersExtensions
 }
 
 class DataExtendedSpaceEngineers(
     private val spaceEngineers: SpaceEngineers,
-    override val extensions: SpaceEngineersExtensions = SpaceEngineersExtensions(spaceEngineers)
+    pathFinder: PathFinder<BlockId, Vec3F, String, String>,
+    override val extensions: SpaceEngineersExtensions = SpaceEngineersExtensions(spaceEngineers, pathFinder)
 ) : SpaceEngineers by spaceEngineers, ExtendedSpaceEngineers {
 
 }

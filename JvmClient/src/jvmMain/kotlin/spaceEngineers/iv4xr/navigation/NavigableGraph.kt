@@ -1,9 +1,43 @@
 package spaceEngineers.iv4xr.navigation
 
+import eu.iv4xr.framework.extensions.pathfinding.AStar
 import eu.iv4xr.framework.extensions.pathfinding.Navigatable
+import spaceEngineers.graph.DataNode
+import spaceEngineers.graph.DirectedGraph
+import spaceEngineers.model.BlockId
+import spaceEngineers.model.Vec3F
 import spaceEngineers.navigation.NavGraph
 import spaceEngineers.navigation.NodeId
+import spaceEngineers.navigation.PathFinder
 import spaceEngineers.navigation.RichNavGraph
+
+
+class Iv4XRAStarPathFinder : PathFinder<BlockId, Vec3F, String, String> {
+
+    private fun DirectedGraph<BlockId, Vec3F, String, String>.toNavGraph(): NavGraph {
+        return NavGraph(
+            nodes = this.nodes.map { it as DataNode },
+            edges = this.edges,
+        )
+    }
+
+
+    private fun DirectedGraph<BlockId, Vec3F, String, String>.asNavigatable(): Navigatable<NodeId> {
+        return NavigableGraph(
+            this.toNavGraph(),
+        )
+    }
+
+    override fun findPath(
+        navigableGraph: DirectedGraph<BlockId, Vec3F, String, String>,
+        targetNodeId: BlockId,
+        startNodeId: BlockId
+    ): List<BlockId> {
+        val pathfinder = AStar<BlockId>()
+        return pathfinder.findPath(navigableGraph.asNavigatable(), startNodeId, targetNodeId)
+
+    }
+}
 
 class NavigableGraph(navGraph: NavGraph) : Navigatable<NodeId> {
     private val richNavGraph = RichNavGraph(navGraph)

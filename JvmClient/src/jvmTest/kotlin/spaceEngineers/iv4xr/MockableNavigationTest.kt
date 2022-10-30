@@ -1,7 +1,9 @@
 package spaceEngineers.iv4xr
 
 import eu.iv4xr.framework.extensions.pathfinding.AStar
+import spaceEngineers.controller.DataExtendedSpaceEngineers
 import spaceEngineers.controller.SpaceEngineers
+import spaceEngineers.iv4xr.navigation.Iv4XRAStarPathFinder
 import spaceEngineers.iv4xr.navigation.NavigableGraph
 import spaceEngineers.model.TerminalBlock
 import spaceEngineers.model.extensions.allBlocks
@@ -36,23 +38,33 @@ class MockableNavigationTest : MockOrRealGameTest(
         val target =
             allBlocks.filterIsInstance<TerminalBlock>().map { println(it.customName); it }
                 .firstOrNull { it.customName == "MazeTarget" } ?: error("Target not found!")
-        val targetNode = graph.nodes.minByOrNull { it.data.distanceTo(target.position) } ?: error("Target not found in the graph")
+        val targetNode =
+            graph.nodes.minByOrNull { it.data.distanceTo(target.position) } ?: error("Target not found in the graph")
         //TODO:
-        val startNode = allBlocks.minByOrNull { it.position.distanceTo(blockObservation.character.position) } ?: error("No nodes found!")
-        println(targetNode)
-        println()
-        println(startNode)
-        println(allBlocks.map { it.id }.sorted())
-        println(graph.nodes.map { it.id }.sorted())
+        val startNode = allBlocks.minByOrNull { it.position.distanceTo(blockObservation.character.position) }
+            ?: error("No nodes found!")
         val path = getPath(navigableGraph, targetNode.id, startNode.id)
         assertGreaterThan(path.size, 10)
 
-        val navigator = CharacterNavigation(this)
+        val navigator = CharacterNavigation(this, pathFinder = Iv4XRAStarPathFinder())
         for (nodeId in path) {
             navigator.moveInLine(navigableGraph.node(nodeId).data, timeout = 5.seconds)
         }
 
         assertLessThan(observer.observe().position.distanceTo(targetNode.data), 0.7f)
+    }
+
+    @Test
+    fun navigateMaze2() = testContext {
+        val target = observer.observeBlocks().allBlocks
+            .filterIsInstance<TerminalBlock>().map { println(it.customName); it }
+            .firstOrNull { it.customName == "MazeTarget" } ?: error("Target not found!")
+
+        val extra = DataExtendedSpaceEngineers(spaceEngineers = this, pathFinder = Iv4XRAStarPathFinder())
+        extra.extensions.character.navigation.navigateToBlock(
+            target.id,
+            gridId = observer.observeBlocks().grids.first { it.blocks.any { it.id == target.id } }.id,
+        )
     }
 
     private fun SpaceEngineers.getPath(

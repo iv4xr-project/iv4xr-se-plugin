@@ -1,6 +1,7 @@
 package spaceEngineers.game.mockable
 
 import spaceEngineers.controller.extensions.navigationGraph
+import spaceEngineers.iv4xr.navigation.Iv4XRAStarPathFinder
 import spaceEngineers.navigation.CharacterNavigation
 import testhelp.MockOrRealGameTest
 import testhelp.assertGreaterThan
@@ -18,7 +19,7 @@ class NavigatorTest : MockOrRealGameTest(
         assertGreaterThan(navGraph.nodes.size, 30)
 
         val targetLocation = navGraph.nodes[25].data
-        val navigator = CharacterNavigation(this)
+        val navigator = CharacterNavigation(this, pathFinder = Iv4XRAStarPathFinder())
 
         navigator.moveInLine(targetLocation)
         assertLessThan(lower = observer.observe().position.distanceTo(targetLocation), higher = 0.6f)
