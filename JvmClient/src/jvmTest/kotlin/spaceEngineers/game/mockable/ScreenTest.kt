@@ -1,11 +1,9 @@
 package spaceEngineers.game.mockable
 
-import spaceEngineers.controller.extensions.blockDefinitionByType
 import spaceEngineers.model.DefinitionId
-import spaceEngineers.model.Vec3F
-import kotlin.test.Ignore
 import testhelp.MockOrRealGameTest
 import java.lang.Thread.sleep
+import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue

@@ -5,6 +5,7 @@ import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import spaceEngineers.controller.*
+import spaceEngineers.iv4xr.navigation.Iv4XRAStarPathFinder
 import spaceEngineers.transport.closeIfCloseable
 import spaceEngineers.transport.jsonrpc.KotlinJsonRpcError
 import java.lang.reflect.UndeclaredThrowableException
@@ -77,10 +78,13 @@ fun <R> hideUndeclaredThrowableException(block: suspend () -> R) = runBlocking {
 
 fun spaceEngineersSuspend(
     agentId: String = TEST_AGENT,
-    spaceEngineers: SpaceEngineers = ContextControllerWrapper(
-        spaceEngineers = JvmSpaceEngineersBuilder.default().localhost(agentId)
+    spaceEngineers: ExtendedSpaceEngineers = DataExtendedSpaceEngineers(
+        ContextControllerWrapper(
+            spaceEngineers = JvmSpaceEngineersBuilder.default().localhost(agentId)
+        ),
+        pathFinder = Iv4XRAStarPathFinder(),
     ),
-    block: suspend SpaceEngineers.() -> Unit
+    block: suspend ExtendedSpaceEngineers.() -> Unit
 ) {
     try {
         runBlocking {

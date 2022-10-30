@@ -113,8 +113,8 @@ fun ScreenName.toNode(): spaceEngineers.graph.Node<ScreenName, Unit> {
     return DataNode(this, Unit)
 }
 
-fun ScreenTransition.toDirectedEdge(): DirectedEdge<String, ScreenName, ScreenTransition> {
-    return DirectedEdge(from, to, edgeId, this)
+fun ScreenTransition.toDirectedEdge(): DataEdge<String, ScreenName, ScreenTransition> {
+    return DataEdge(from, to, edgeId, this)
 }
 
 

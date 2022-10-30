@@ -10,11 +10,11 @@ namespace Iv4xr.SePlugin
     public class IvxrPluginConfiguration : IPluginConfiguration
     {
         [Category("Network")] 
-        public string Hostname = PluginConfigDefaults.HOSTNAME;
+        public readonly string Hostname;
         [Category("Network")]
-        public int Port = PluginConfigDefaults.PORT;
+        public readonly int Port;
         [Category("Observation")] 
-        public double ObservationRadius = PluginConfigDefaults.RADIUS;
+        public readonly double ObservationRadius;
 
         private readonly ILog m_log;
 

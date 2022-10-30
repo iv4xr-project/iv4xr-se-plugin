@@ -1,8 +1,11 @@
 package testhelp
 
 import spaceEngineers.controller.*
-import spaceEngineers.transport.*
+import spaceEngineers.transport.GsonResponseAppendToFileReaderWriter
+import spaceEngineers.transport.ReconnectingSocketReaderWriter
 import spaceEngineers.transport.SocketReaderWriter.Companion.DEFAULT_PORT
+import spaceEngineers.transport.StringLineReaderWriter
+import spaceEngineers.transport.closeIfCloseable
 import java.io.File
 import java.lang.reflect.UndeclaredThrowableException
 
@@ -39,7 +42,7 @@ abstract class MockOrRealGameTest(
         scenarioId: String = this.scenarioId,
         file: File = mockFile ?: inMockResourcesDirectory("${this::class.simpleName}-${getTestMethodName()}.txt"),
         spaceEngineersBuilder: JsonRpcSpaceEngineersBuilder = this.spaceEngineersBuilder,
-        block: suspend SpaceEngineers.() -> Unit
+        block: suspend ExtendedSpaceEngineers.() -> Unit
     ) {
         val spaceEngineers = getSpaceEngineers(forceRealGame, file, spaceEngineersBuilder)
         useRealGame = useRealGame(forceRealGame, file)
@@ -71,12 +74,12 @@ abstract class MockOrRealGameTest(
         forceRealGame: Boolean,
         file: File,
         builder: JsonRpcSpaceEngineersBuilder
-    ): SpaceEngineers {
+    ): ExtendedSpaceEngineers {
         return if (useRealGame(forceRealGame, file)) {
             builder.fromStringLineReaderWriter(agentId, readerWriter(file))
         } else {
             builder.mock(agentId, file)
-        }
+        }.extend()
     }
 
     private fun getTestMethodName(index: Int = 4): String {

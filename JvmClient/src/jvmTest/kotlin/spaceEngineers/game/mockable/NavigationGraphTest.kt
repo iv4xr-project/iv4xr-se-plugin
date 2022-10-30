@@ -8,8 +8,6 @@ import kotlin.test.assertTrue
 
 class NavigationGraphTest : MockOrRealGameTest(
     mockFile = inMockResourcesDirectory("NavigationGraphTest.txt"),
-    forceRealGame = false,
-    loadScenario = true,
 ) {
 
     @Test
@@ -39,9 +37,9 @@ class NavigationGraphTest : MockOrRealGameTest(
         assertTrue { minId < maxId }
 
         navGraph.edges.forEach {
-            assertTrue { it.i < it.j }
-            assertTrue { it.i >= minId }
-            assertTrue { it.j <= maxId }
+            assertTrue { it.from < it.to }
+            assertTrue { it.from >= minId }
+            assertTrue { it.to <= maxId }
         }
     }
 }
