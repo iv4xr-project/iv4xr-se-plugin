@@ -17,7 +17,7 @@ class NavigatorTest : MockOrRealGameTest(
         val navGraph = observer.navigationGraph()
         assertGreaterThan(navGraph.nodes.size, 30)
 
-        val targetLocation = navGraph.nodes[25].position
+        val targetLocation = navGraph.nodes[25].data
         val navigator = CharacterNavigation(this)
 
         navigator.moveInLine(targetLocation)

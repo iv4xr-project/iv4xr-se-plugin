@@ -56,3 +56,5 @@
 
 #testing saves backup
 /src/jvmTest/resources/game-saves/**/Backup/
+./reports/
+/reports/

@@ -65,7 +65,6 @@ namespace Iv4xr.SePlugin.Navigation
 
             var steps = new StepVectors(up);
             var cubeQueue = new Queue<Block>();
-            var nodeBuilder = new FatNodeBuilder();
             
             cubeQueue.Enqueue(startBlock);
 
@@ -80,7 +79,8 @@ namespace Iv4xr.SePlugin.Navigation
                 if (map.ContainsKey(currentPosition + up) || map.ContainsKey(currentPosition + 2*up))
                     continue;
 
-                var fatNode = nodeBuilder.Create(currentCube.Position.ToVector3D() + PositionOffset * up);
+                //var fatNode = nodeBuilder.Create(currentCube.Position.ToVector3D() + PositionOffset * up);
+                var fatNode = new FatNode(  currentCube.Id, (currentCube.Position.ToVector3D() + PositionOffset * up).ToPlain());
                 map[currentPosition].Node = fatNode;
                 navGraph.Nodes.Add(fatNode);
 

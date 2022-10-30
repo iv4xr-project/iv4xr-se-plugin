@@ -29,7 +29,7 @@ class RichNavGraph (
     }
 
     fun distance(from: NodeId, to: NodeId): Float {
-        return node(from).position.distanceTo(node(to).position)
+        return node(from).data.distanceTo(node(to).data)
     }
 }
 

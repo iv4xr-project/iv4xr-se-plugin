@@ -3,19 +3,20 @@ package spaceEngineers.iv4xr
 import eu.iv4xr.framework.extensions.pathfinding.AStar
 import spaceEngineers.controller.SpaceEngineers
 import spaceEngineers.iv4xr.navigation.NavigableGraph
+import spaceEngineers.model.TerminalBlock
+import spaceEngineers.model.extensions.allBlocks
 import spaceEngineers.model.extensions.largestGrid
 import spaceEngineers.navigation.CharacterNavigation
 import spaceEngineers.navigation.NodeId
 import testhelp.MockOrRealGameTest
 import testhelp.assertGreaterThan
 import testhelp.assertLessThan
-import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.time.Duration.Companion.seconds
 
 class MockableNavigationTest : MockOrRealGameTest(
-    scenarioId = "amaze",
-    //forceRealGame = true,
+    scenarioId = "amaze-20x20",
+    forceRealGame = true,
     //loadScenario = false
 ) {
 
@@ -26,22 +27,38 @@ class MockableNavigationTest : MockOrRealGameTest(
         assertGreaterThan(graph.nodes.size, 70)
 
         val navigableGraph = NavigableGraph(graph)
-        val targetNode = navigableGraph.node(nodeId = 20)
-        val path = getPath(navigableGraph, targetNode.id)
+        //TODO:
+        //val targetNode = navigableGraph.node(nodeId = 20.toString())
+
+        val blockObservation = observer.observeBlocks()
+        val allBlocks = blockObservation.allBlocks
+
+        val target =
+            allBlocks.filterIsInstance<TerminalBlock>().map { println(it.customName); it }
+                .firstOrNull { it.customName == "MazeTarget" } ?: error("Target not found!")
+        val targetNode = graph.nodes.minByOrNull { it.data.distanceTo(target.position) } ?: error("Target not found in the graph")
+        //TODO:
+        val startNode = allBlocks.minByOrNull { it.position.distanceTo(blockObservation.character.position) } ?: error("No nodes found!")
+        println(targetNode)
+        println()
+        println(startNode)
+        println(allBlocks.map { it.id }.sorted())
+        println(graph.nodes.map { it.id }.sorted())
+        val path = getPath(navigableGraph, targetNode.id, startNode.id)
         assertGreaterThan(path.size, 10)
 
         val navigator = CharacterNavigation(this)
         for (nodeId in path) {
-            navigator.moveInLine(navigableGraph.node(nodeId).position, timeout = 5.seconds)
+            navigator.moveInLine(navigableGraph.node(nodeId).data, timeout = 5.seconds)
         }
 
-        assertLessThan(observer.observe().position.distanceTo(targetNode.position), 0.7f)
+        assertLessThan(observer.observe().position.distanceTo(targetNode.data), 0.7f)
     }
 
     private fun SpaceEngineers.getPath(
         navigableGraph: NavigableGraph,
-        targetNodeId: Int,
-        startNodeId: Int = 0  // Should be 0 if the nav graph was generated at the current character position.
+        targetNodeId: NodeId,
+        startNodeId: NodeId,  // Should be 0 if the nav graph was generated at the current character position.
     ): List<NodeId> {
         val pathfinder = AStar<NodeId>()
         return pathfinder.findPath(navigableGraph, startNodeId, targetNodeId)
