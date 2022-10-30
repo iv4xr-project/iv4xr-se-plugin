@@ -131,7 +131,21 @@ interface ControlPanelTab {
     fun enterBlockGroup(text: String)
 }
 
-interface InfoTab
+interface InfoTab {
+    fun data(): TerminalInfoData
+    fun convertToShip()
+    fun convertToStation()
+    fun enterGridName(name: String)
+    fun renameGrid()
+    fun setShowCenterOfMassEnabled(enabled: Boolean)
+    fun setShowGravityRangeEnabled(enabled: Boolean)
+    fun setShowSensorsFieldRangeEnabled(enabled: Boolean)
+    fun setShowAntennaRangeEnabled(enabled: Boolean)
+    fun setShowGridPivotEnabled(enabled: Boolean)
+    fun setFriendlyAntennaRange(value: Float)
+    fun setEnemyAntennaRange(value: Float)
+    fun setOwnedAntennaRange(value: Float)
+}
 
 interface InventoryTab {
     fun data(): TerminalInventoryData

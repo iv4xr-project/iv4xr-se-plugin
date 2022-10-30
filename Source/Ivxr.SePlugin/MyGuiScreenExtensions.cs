@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Iv4xr.PluginLib;
+using Iv4xr.SpaceEngineers.WorldModel;
 using Iv4xr.SpaceEngineers.WorldModel.Screen;
 using Sandbox.Game;
 using Sandbox.Game.Gui;
@@ -186,7 +187,7 @@ namespace Iv4xr.SePlugin
             return list;
         }
 
-        private static void ThrowIfCantUse(this MyGuiControlBase controlBase, string fieldName)
+        public static void ThrowIfCantUse(this MyGuiControlBase controlBase, string fieldName)
         {
             if (!controlBase.Enabled)
             {
@@ -206,6 +207,16 @@ namespace Iv4xr.SePlugin
                 Enabled = controlBase.Enabled,
                 Visible = controlBase.Visible,
                 Name = controlBase.Name,
+            };
+        }
+
+        public static SliderData ToData(this MyGuiControlSlider slider)
+        {
+            return new SliderData()
+            {
+                Value = slider.Value,
+                MinValue = slider.MinValue,
+                MaxValue = slider.MaxValue,
             };
         }
     }
