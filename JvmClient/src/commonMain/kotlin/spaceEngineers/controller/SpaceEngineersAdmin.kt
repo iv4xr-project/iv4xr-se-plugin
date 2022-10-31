@@ -39,6 +39,7 @@ interface BlocksAdmin {
 
     fun remove(blockId: BlockId)
     fun setIntegrity(blockId: BlockId, integrity: Float)
+    fun setCustomName(blockId: BlockId, customName: String)
 }
 
 interface CharacterAdmin {

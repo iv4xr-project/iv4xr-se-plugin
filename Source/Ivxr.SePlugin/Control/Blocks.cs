@@ -4,6 +4,7 @@ using System.Reflection;
 using Iv4xr.SpaceEngineers;
 using Iv4xr.SpaceEngineers.WorldModel;
 using Sandbox.Game.Entities;
+using Sandbox.Game.Entities.Cube;
 using Sandbox.Game.World;
 using VRage.Game.ModAPI;
 using VRage.Utils;
@@ -25,11 +26,7 @@ namespace Iv4xr.SePlugin.Control
 
         public void SetIntegrity(string blockId, float integrity)
         {
-            var grid = m_observer.GetGridContainingBlock(blockId);
-            if (grid == null) throw new ArgumentException("Block with id not found");
-            
-            var block = m_observer.GetBlocksOf(grid).FirstOrDefault(b => b.BlockId().ToString() == blockId);
-            if (block == null) throw new ArgumentException("Block with id not found");
+            var block = m_observer.GetBlockById(blockId);
             
             var method = block.ComponentStack.GetType().GetMethod("SetIntegrity",
                 BindingFlags.NonPublic | BindingFlags.Instance);
@@ -37,6 +34,22 @@ namespace Iv4xr.SePlugin.Control
             
             method.Invoke(block.ComponentStack, new object[] {integrity, integrity});
             block.UpdateVisual();
+        }
+        
+        
+        public void SetCustomName(string blockId, string customName)
+        {
+            var block = m_observer.GetBlockById(blockId);
+            switch (block.FatBlock)
+            {
+                case null:
+                    throw new ArgumentException($"Block {blockId} is not Functional");
+                case MyTerminalBlock terminalBlock:
+                    // DisplayNameText is backed by CustomName, but CustomName setter is private, this is simpler.
+                    terminalBlock.DisplayNameText = customName;
+                    return;
+            }
+            throw new ArgumentException($"Block {blockId} is not Terminal block and doesn't have CustomName");
         }
 
         public string PlaceAt(DefinitionId blockDefinitionId, PlainVec3D position, PlainVec3D orientationForward,

@@ -31,6 +31,7 @@ namespace Iv4xr.SpaceEngineers
         void Remove(string blockId);
 
         void SetIntegrity(string blockId, float integrity);
+        void SetCustomName(string blockId, string customName);
         
         string PlaceAt(DefinitionId blockDefinitionId, PlainVec3D position, PlainVec3D orientationForward,
             PlainVec3D orientationUp, PlainVec3F? color);
