@@ -39,6 +39,10 @@ fun Vec3I.toFloat(): Vec3F {
     return Vec3F(x, y, z)
 }
 
+fun Vec3F.toInt(): Vec3I {
+    return Vec3I(x, y, z)
+}
+
 public inline fun Iterable<Vec3F>.sum(): Vec3F {
     var sum = Vec3F.ZERO
     for (element in this) {

@@ -19,7 +19,7 @@ data class DefinitionId(
         const val ID_PREFIX = "MyObjectBuilder_"
         const val CUBE_BLOCK = "CubeBlock"
         const val BUTTON_PANEL = "ButtonPanel"
-        const val CUBE_GRID ="CubeGrid"
+        const val CUBE_GRID = "CubeGrid"
         const val WELDER = "Welder"
         const val ANGLE_GRINDER = "AngleGrinder"
         const val HAND_DRILL = "HandDrill"
@@ -28,6 +28,8 @@ data class DefinitionId(
         const val INGOT = "Ingot"
         const val DOOR = "AirtightSlideDoor"
         const val REACTOR = "Reactor"
+        const val GRAVITY_GENERATOR = "GravityGenerator"
+        const val MEDICAL_ROOM = "MedicalRoom"
 
         fun door(type: String): DefinitionId {
             return create(DOOR, type)
@@ -45,6 +47,9 @@ data class DefinitionId(
             return create(BUTTON_PANEL, type)
         }
 
+        fun medicalRoom(type: String): DefinitionId {
+            return create(MEDICAL_ROOM, type)
+        }
 
         fun physicalGun(type: String): DefinitionId {
             return create(PHYSICAL_GUN, type)
@@ -72,6 +77,10 @@ data class DefinitionId(
                 return DefinitionId(id, type)
             }
             return DefinitionId("$ID_PREFIX$id", type)
+        }
+
+        fun gravityGenerator(type: String): DefinitionId {
+            return create(GRAVITY_GENERATOR, type)
         }
     }
 }

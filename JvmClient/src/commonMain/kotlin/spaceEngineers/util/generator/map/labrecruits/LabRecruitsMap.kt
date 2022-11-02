@@ -14,6 +14,30 @@ class LabRecruitsMap(
     val doors: Map<DoorId, Door>,
     val buttons: Map<ButtonId, Button>,
 ) : MapLayer {
+    override fun get(x: Int, y: Int): BlockPlacementInformation? {
+        return cells[x][y]
+    }
+
+    fun placeGenerator() {
+        placeCustomBlock(Generator)
+    }
+
+    fun placeGravityGenerator() {
+        placeCustomBlock(GravityGenerator)
+    }
+
+    fun placeCustomBlock(cell: LabRecruitCell, replacedCell: LabRecruitCell = Wall) {
+        for (x in 0 until width) {
+            for (y in 0 until height) {
+                if (cells[x][y] == replacedCell) {
+                    cells[x][y] = cell
+                    return
+                }
+            }
+        }
+
+    }
+
     companion object {
         fun fromLines(lines: List<String>): LabRecruitsMap {
             val mapStartIndex = lines.indexOfFirst { it.startsWith("|") }
@@ -26,7 +50,7 @@ class LabRecruitsMap(
             val doors = flatMap.filterIsInstance<Door>().associateBy { it.id }
             val buttons = flatMap.filterIsInstance<Button>().associateBy { it.id }
             val mappings = parseMapping(buttonMapping, door = doors, buttons = buttons)
-            return LabRecruitsMap(map, mappings = mappings, doors = doors, buttons = buttons)
+            return LabRecruitsMap(cells = map, mappings = mappings, doors = doors, buttons = buttons)
         }
 
         private fun parseMapping(
@@ -52,9 +76,5 @@ class LabRecruitsMap(
             }
         }
 
-    }
-
-    override fun get(x: Int, y: Int): BlockPlacementInformation? {
-        return cells[x][y]
     }
 }
