@@ -17,7 +17,7 @@ fun cellFromText(text: String): LabRecruitCell? {
         else -> if (text.matches(BUTTON_REGEX)) {
             Button(BUTTON_REGEX.replace(text, "$1"))
         } else if (text.matches(AGENT_REGEX)) {
-            Agent(BUTTON_REGEX.replace(text, "$1"))
+            Agent(AGENT_REGEX.replace(text, "$1"))
         } else if (text.matches(DOOR_REGEX)) {
             Door(DOOR_REGEX.replace(text, "$2"), DOOR_REGEX.replace(text, "$1").toDirection())
         } else {
@@ -36,7 +36,6 @@ fun String.toDirection(): Direction {
 
 sealed class LabRecruitCell : BlockPlacementInformation {
     abstract val regex: Regex
-    abstract fun fromText(text: String): LabRecruitCell
     open val charRepresentation: Char = this::class.simpleName?.first() ?: '?'
     override val orientationForward: Vec3I = Vec3I.UP
     override val orientationUp: Vec3I = Vec3I.BACKWARD
@@ -45,13 +44,14 @@ sealed class LabRecruitCell : BlockPlacementInformation {
     }
 
     override val color: Vec3F? = null
+    override val offset: Vec3I = Vec3I.ZERO
 }
 
 
 object Wall : LabRecruitCell() {
     override val regex: Regex = "\\|?w".toRegex()
-    override fun fromText(text: String): LabRecruitCell = Wall
     override val blockId: DefinitionId = DefinitionId.cubeBlock("LargeHeavyBlockArmorBlock")
+    override val customName: String? = null
 }
 
 val BUTTON_REGEX = "f:b\\^(.*)".toRegex()
@@ -60,35 +60,42 @@ val DOOR_REGEX = "f:d>([nwes])\\^(.*)".toRegex()
 
 object Floor : LabRecruitCell() {
     override val regex: Regex = "\\|?f".toRegex()
-    override fun fromText(text: String): LabRecruitCell = Floor
     override val charRepresentation: Char = ' '
     override val blockId: DefinitionId = DefinitionId.cubeBlock("LargeHeavyBlockArmorBlock")
+    override val customName: String? = null
+}
+
+object Generator : LabRecruitCell() {
+    override val regex: Regex = "\\|?g".toRegex()
+    override val blockId: DefinitionId = DefinitionId.reactor("LargeBlockSmallGenerator")
+    override val customName: String = blockId.id
+
+}
+
+object GravityGenerator : LabRecruitCell() {
+    override val regex: Regex = "\\|?G".toRegex()
+    override val blockId: DefinitionId = DefinitionId.gravityGenerator("")
+    override val customName: String = blockId.id
+
 }
 
 data class Button(val id: ButtonId) : LabRecruitCell() {
     override val regex: Regex = BUTTON_REGEX
-    override fun fromText(text: String): LabRecruitCell {
-        return Button(regex.replace(text, "$1"))
-    }
-
-    override val blockId: DefinitionId = DefinitionId.reactor("LargeBlockSmallGenerator")
+    override val blockId: DefinitionId = DefinitionId.buttonPanel("LargeSciFiButtonTerminal")
+    override val customName: String = id
 }
 
 data class Agent(val id: AgentId) : LabRecruitCell() {
     override val regex: Regex = AGENT_REGEX
-    override fun fromText(text: String): LabRecruitCell {
-        return Agent(regex.replace(text, "$1"))
-    }
-
-    override val blockId: DefinitionId = DefinitionId.reactor("LargeBlockSmallGenerator")
+    override val blockId: DefinitionId = DefinitionId.medicalRoom("LargeMedicalRoom")
+    override val customName: String = id
+    override val orientationForward: Vec3I = Vec3I.RIGHT
+    override val orientationUp: Vec3I = Vec3I.BACKWARD
+    override val offset: Vec3I = Vec3I(- 1, 0, 1)
 }
 
 data class Door(val id: DoorId, val orientation: Direction) : LabRecruitCell() {
     override val regex: Regex = DOOR_REGEX
-    override fun fromText(text: String): LabRecruitCell {
-        return Door(regex.replace(text, "$2"), regex.replace(text, "$1").toDirection())
-    }
-
     override val orientationForward: Vec3I
         get() = when (orientation) {
             Direction.RIGHT -> Vec3I.RIGHT
@@ -97,4 +104,5 @@ data class Door(val id: DoorId, val orientation: Direction) : LabRecruitCell() {
             Direction.DOWN -> Vec3I.UP
         }
     override val blockId: DefinitionId = DefinitionId.door("LargeBlockSlideDoor")
+    override val customName: String = id
 }

@@ -129,6 +129,8 @@ interface ControlPanelTab {
     fun data(): TerminalControlPanelData
     fun filterBlocks(text: String)
     fun enterBlockGroup(text: String)
+    fun groupSave()
+    fun groupDelete()
 }
 
 interface InfoTab {

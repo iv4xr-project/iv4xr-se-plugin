@@ -7,6 +7,7 @@ import spaceEngineers.controller.ContextControllerWrapper
 import spaceEngineers.controller.SpaceEngineers
 import spaceEngineers.model.Block
 import spaceEngineers.model.ToolbarLocation
+import spaceEngineers.model.extensions.allBlocks
 import spaceEngineers.model.extensions.blockById
 
 
@@ -72,3 +73,8 @@ suspend fun SpaceEngineers.torchUpToPercentage(block: Block, percentage: Double,
         checkBlockIntegrity = { block_, integrity -> block_.integrity < integrity }
     )
 }
+
+fun SpaceEngineers.removeAllBlocks() =
+    observer.observeBlocks().allBlocks.forEach {
+        admin.blocks.remove(it.id)
+    }
