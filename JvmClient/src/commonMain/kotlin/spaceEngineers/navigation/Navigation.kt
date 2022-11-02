@@ -67,6 +67,10 @@ class CharacterNavigation(
 
         val richNavGraph = RichNavGraph(graph)
 
+        if (graph.nodes.isEmpty()) {
+            error("Graph is empty!")
+        }
+
         val targetNode = graph.nodes
             .minByOrNull { it.data.distanceTo(target.position) } ?: error("Target not found in the graph")
 
