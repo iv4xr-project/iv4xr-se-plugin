@@ -37,8 +37,8 @@ fun String.toDirection(): Direction {
 sealed class LabRecruitCell : BlockPlacementInformation {
     abstract val regex: Regex
     open val charRepresentation: Char = this::class.simpleName?.first() ?: '?'
-    override val orientationForward: Vec3I = Vec3I.UP
-    override val orientationUp: Vec3I = Vec3I.BACKWARD
+    override val orientationForward: Vec3I = Vec3I.FORWARD
+    override val orientationUp: Vec3I = Vec3I.UP
     override fun toString(): String {
         return charRepresentation.toString()
     }
@@ -83,15 +83,16 @@ data class Button(val id: ButtonId) : LabRecruitCell() {
     override val regex: Regex = BUTTON_REGEX
     override val blockId: DefinitionId = DefinitionId.buttonPanel("LargeSciFiButtonTerminal")
     override val customName: String = id
+    override val orientationForward: Vec3I = Vec3I.BACKWARD
 }
 
 data class Agent(val id: AgentId) : LabRecruitCell() {
     override val regex: Regex = AGENT_REGEX
     override val blockId: DefinitionId = DefinitionId.medicalRoom("LargeMedicalRoom")
     override val customName: String = id
-    override val orientationForward: Vec3I = Vec3I.RIGHT
-    override val orientationUp: Vec3I = Vec3I.BACKWARD
-    override val offset: Vec3I = Vec3I(- 1, 0, 1)
+    override val orientationForward: Vec3I = Vec3I.FORWARD
+    override val orientationUp: Vec3I = Vec3I.UP
+    override val offset: Vec3I = Vec3I(- 1, 1, 0)
 }
 
 data class Door(val id: DoorId, val orientation: Direction) : LabRecruitCell() {
@@ -99,9 +100,9 @@ data class Door(val id: DoorId, val orientation: Direction) : LabRecruitCell() {
     override val orientationForward: Vec3I
         get() = when (orientation) {
             Direction.RIGHT -> Vec3I.RIGHT
-            Direction.LEFT -> Vec3I.LEFT
-            Direction.UP -> Vec3I.UP
-            Direction.DOWN -> Vec3I.UP
+            Direction.LEFT -> Vec3I.RIGHT
+            Direction.UP -> Vec3I.FORWARD
+            Direction.DOWN -> Vec3I.BACKWARD
         }
     override val blockId: DefinitionId = DefinitionId.door("LargeBlockSlideDoor")
     override val customName: String = id

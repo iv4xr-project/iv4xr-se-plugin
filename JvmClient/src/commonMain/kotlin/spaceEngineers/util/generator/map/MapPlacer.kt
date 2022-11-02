@@ -6,10 +6,6 @@ import spaceEngineers.model.LARGE_BLOCK_CUBE_SIDE_SIZE
 import spaceEngineers.model.Vec3F
 import spaceEngineers.model.Vec3I
 import spaceEngineers.model.extensions.toFloat
-import spaceEngineers.model.extensions.toInt
-import spaceEngineers.movement.BasicDirection3d
-import spaceEngineers.util.generator.map.labrecruits.Agent
-import kotlin.system.exitProcess
 
 class MapPlacer(
     val map: MapLayer,
@@ -22,14 +18,15 @@ class MapPlacer(
     )
 ) {
 
-    private fun generateFloor(initialGridId: String? = null, z: Int = 0): String {
-        var gridId: String? = initialGridId
+    private fun generateFloor(offset: Vec3F, level: Int = 0): String {
+        var gridId: String? = null
         for (x in 0 until map.width) {
-            for (y in 0 until map.height) {
+            for (z in 0 until map.height) {
                 print(".")
+                val position = Vec3I(x, level, z)
                 if (gridId == null) {
                     placeAt(
-                        position = Vec3F(x, y, z) * LARGE_BLOCK_CUBE_SIDE_SIZE,
+                        position = position * LARGE_BLOCK_CUBE_SIDE_SIZE + offset,
                         blockDefinitionId = floorPlacer.blockId,
                         orientationForward = floorPlacer.orientationForward.toFloat(),
                         orientationUp = floorPlacer.orientationUp.toFloat(),
@@ -37,7 +34,7 @@ class MapPlacer(
                     )
                     gridId = spaceEngineers.observer.observeBlocks().grids.first().id
                 } else {
-                    processCell(floorPlacer, gridId, Vec3I(x, y, z))
+                    processCell(floorPlacer, gridId, position)
                 }
             }
             println(" $x")
@@ -45,12 +42,12 @@ class MapPlacer(
         return gridId ?: error("No grid id?!")
     }
 
-    private fun generateLevel(gridId: String, z: Int = 1) {
+    private fun generateLevel(gridId: String, level: Int = 1) {
         for (x in 0 until map.width) {
-            for (y in 0 until map.height) {
-                map[x, y]?.also { cell ->
-                    processCell(cell, gridId, Vec3I(x, y, z))
+            for (z in 0 until map.height) {
+                map[x, z]?.also { cell ->
                     print(cell.javaClass.simpleName.first())
+                    processCell(cell, gridId, Vec3I(x, level, z))
                 } ?: print(" ")
             }
             println(" $x")
@@ -72,11 +69,9 @@ class MapPlacer(
 
     }
 
-    fun generate(): String {
-        spaceEngineers.admin.character.teleport(
-            Vec3F(10, 10, 10)
-        )
-        val gridId = generateFloor()
+    fun generate(offset: Vec3F = Vec3F.ZERO, teleportPosition: Vec3F = offset + Vec3F(10, 10, 10)): String {
+        spaceEngineers.admin.character.teleport(teleportPosition)
+        val gridId = generateFloor(offset = offset)
         generateLevel(gridId)
         return gridId
     }
