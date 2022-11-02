@@ -18,6 +18,7 @@ data class DefinitionId(
     companion object {
         const val ID_PREFIX = "MyObjectBuilder_"
         const val CUBE_BLOCK = "CubeBlock"
+        const val BUTTON_PANEL = "ButtonPanel"
         const val CUBE_GRID ="CubeGrid"
         const val WELDER = "Welder"
         const val ANGLE_GRINDER = "AngleGrinder"
@@ -39,6 +40,11 @@ data class DefinitionId(
         fun cubeBlock(type: String): DefinitionId {
             return create(CUBE_BLOCK, type)
         }
+
+        fun buttonPanel(type: String): DefinitionId {
+            return create(BUTTON_PANEL, type)
+        }
+
 
         fun physicalGun(type: String): DefinitionId {
             return create(PHYSICAL_GUN, type)

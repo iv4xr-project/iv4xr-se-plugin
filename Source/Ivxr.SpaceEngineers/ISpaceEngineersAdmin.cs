@@ -33,7 +33,9 @@ namespace Iv4xr.SpaceEngineers
         void SetIntegrity(string blockId, float integrity);
         void SetCustomName(string blockId, string customName);
         void CreateOrUpdateGroup(string name, string gridId, List<string> blockIds);
-        
+        void MapButtonToBlock(string buttonBlockId, int buttonIndex, string action, string targetId);
+        void MapButtonToGroup(string buttonBlockId, int buttonIndex, string action, string groupName);
+
         string PlaceAt(DefinitionId blockDefinitionId, PlainVec3D position, PlainVec3D orientationForward,
             PlainVec3D orientationUp, PlainVec3F? color);
 
