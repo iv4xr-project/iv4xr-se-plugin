@@ -5,10 +5,13 @@ using System.Reflection;
 using Iv4xr.PluginLib;
 using Iv4xr.SpaceEngineers;
 using Iv4xr.SpaceEngineers.WorldModel;
+using Sandbox.Common.ObjectBuilders;
 using Sandbox.Game.Entities;
 using Sandbox.Game.Entities.Cube;
 using Sandbox.Game.GameSystems;
+using Sandbox.Game.Screens.Helpers;
 using Sandbox.Game.World;
+using SpaceEngineers.Game.Entities.Blocks;
 using VRage.Game.ModAPI;
 using VRage.Utils;
 
@@ -68,6 +71,48 @@ namespace Iv4xr.SePlugin.Control
             blockIds.Select(blockId => m_observer.GetBlockById(blockId).FatBlock as MyTerminalBlock)
                     .ForEach(terminalBlock => blocks.Add(terminalBlock));
             terminalSystem.AddUpdateGroup(group, true, true);
+        }
+
+        public void MapButtonToBlock(string buttonBlockId, int buttonIndex, string action, string targetId)
+        {
+            MapAction(buttonBlockId, buttonIndex, new MyObjectBuilder_ToolbarItemTerminalBlock
+            {
+                _Action = action,
+                BlockEntityId = m_observer.GetBlockById(targetId).FatBlock.EntityId
+            });
+        }
+
+        public void MapButtonToGroup(string buttonBlockId, int buttonIndex, string action, string groupName)
+        {
+            var block = m_observer.GetBlockById(buttonBlockId);
+            MapAction(buttonBlockId, buttonIndex, new MyObjectBuilder_ToolbarItemTerminalGroup
+            {
+                _Action = action,
+                GroupName = groupName,
+                BlockEntityId = ((MyButtonPanel)block.FatBlock).EntityId
+            });
+        }
+
+        private void MapAction(string buttonBlockId, int buttonIndex,
+            MyObjectBuilder_ToolbarItemTerminal data)
+        {
+            data._Action.ThrowIfNull("_Action", "Action must be set!");
+            var block = m_observer.GetBlockById(buttonBlockId);
+            var item = MyToolbarItemFactory.CreateToolbarItem(data);
+            if (block.FatBlock is MyButtonPanel buttonPanel)
+            {
+                if (buttonIndex >= buttonPanel.Toolbar.ItemCount || buttonIndex < 0)
+                {
+                    throw new IndexOutOfRangeException(
+                        $"Invalid buttonIndex {buttonIndex}, can be between 0 and {buttonPanel.Toolbar.ItemCount}");
+                }
+
+                buttonPanel.Toolbar.SetItemAtIndex(buttonIndex, item);
+            }
+            else
+            {
+                throw new InvalidOperationException($"block {buttonBlockId} is not ButtonPanel");
+            }
         }
 
         public string PlaceAt(DefinitionId blockDefinitionId, PlainVec3D position, PlainVec3D orientationForward,
