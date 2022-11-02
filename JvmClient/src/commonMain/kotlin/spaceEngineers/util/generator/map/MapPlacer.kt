@@ -6,12 +6,13 @@ import spaceEngineers.model.LARGE_BLOCK_CUBE_SIDE_SIZE
 import spaceEngineers.model.Vec3F
 import spaceEngineers.model.Vec3I
 import spaceEngineers.model.extensions.toFloat
+import spaceEngineers.model.typing.DefinitionIds.CubeBlock.LargeHeavyBlockArmorBlock
 
 class MapPlacer(
     val map: MapLayer,
     val spaceEngineers: SpaceEngineers,
     val floorPlacer: BlockPlacementInformation = DataBlockPlacementInformation(
-        blockId = DefinitionId.cubeBlock("LargeHeavyBlockArmorBlock"),
+        blockId = LargeHeavyBlockArmorBlock,
         orientationForward = Vec3I.FORWARD,
         orientationUp = Vec3I.UP,
         color = null,
