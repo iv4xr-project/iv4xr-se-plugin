@@ -3,6 +3,12 @@ package spaceEngineers.util.generator.map.labrecruits
 import spaceEngineers.model.DefinitionId
 import spaceEngineers.model.Vec3F
 import spaceEngineers.model.Vec3I
+import spaceEngineers.model.typing.DefinitionIds
+import spaceEngineers.model.typing.DefinitionIds.AirtightSlideDoor.LargeBlockSlideDoor
+import spaceEngineers.model.typing.DefinitionIds.ButtonPanel.LargeSciFiButtonTerminal
+import spaceEngineers.model.typing.DefinitionIds.CubeBlock.LargeHeavyBlockArmorBlock
+import spaceEngineers.model.typing.DefinitionIds.MedicalRoom.LargeMedicalRoom
+import spaceEngineers.model.typing.DefinitionIds.Reactor.LargeBlockSmallGenerator
 import spaceEngineers.util.generator.map.BlockPlacementInformation
 import spaceEngineers.util.generator.maze.Direction
 
@@ -50,7 +56,7 @@ sealed class LabRecruitCell : BlockPlacementInformation {
 
 object Wall : LabRecruitCell() {
     override val regex: Regex = "\\|?w".toRegex()
-    override val blockId: DefinitionId = DefinitionId.cubeBlock("LargeHeavyBlockArmorBlock")
+    override val blockId: DefinitionId = LargeHeavyBlockArmorBlock
     override val customName: String? = null
 }
 
@@ -61,38 +67,38 @@ val DOOR_REGEX = "f:d>([nwes])\\^(.*)".toRegex()
 object Floor : LabRecruitCell() {
     override val regex: Regex = "\\|?f".toRegex()
     override val charRepresentation: Char = ' '
-    override val blockId: DefinitionId = DefinitionId.cubeBlock("LargeHeavyBlockArmorBlock")
+    override val blockId: DefinitionId = LargeHeavyBlockArmorBlock
     override val customName: String? = null
 }
 
 object Generator : LabRecruitCell() {
     override val regex: Regex = "\\|?g".toRegex()
-    override val blockId: DefinitionId = DefinitionId.reactor("LargeBlockSmallGenerator")
+    override val blockId: DefinitionId = LargeBlockSmallGenerator
     override val customName: String = blockId.id
 
 }
 
 object GravityGenerator : LabRecruitCell() {
     override val regex: Regex = "\\|?G".toRegex()
-    override val blockId: DefinitionId = DefinitionId.gravityGenerator("")
+    override val blockId: DefinitionId = DefinitionIds.GravityGenerator.EMPTY
     override val customName: String = blockId.id
 
 }
 
 data class Button(val id: ButtonId) : LabRecruitCell() {
     override val regex: Regex = BUTTON_REGEX
-    override val blockId: DefinitionId = DefinitionId.buttonPanel("LargeSciFiButtonTerminal")
+    override val blockId: DefinitionId = LargeSciFiButtonTerminal
     override val customName: String = id
     override val orientationForward: Vec3I = Vec3I.BACKWARD
 }
 
 data class Agent(val id: AgentId) : LabRecruitCell() {
     override val regex: Regex = AGENT_REGEX
-    override val blockId: DefinitionId = DefinitionId.medicalRoom("LargeMedicalRoom")
+    override val blockId: DefinitionId = LargeMedicalRoom
     override val customName: String = id
     override val orientationForward: Vec3I = Vec3I.FORWARD
     override val orientationUp: Vec3I = Vec3I.UP
-    override val offset: Vec3I = Vec3I(- 1, 1, 0)
+    override val offset: Vec3I = Vec3I(-1, 1, 0)
 }
 
 data class Door(val id: DoorId, val orientation: Direction) : LabRecruitCell() {
@@ -104,6 +110,6 @@ data class Door(val id: DoorId, val orientation: Direction) : LabRecruitCell() {
             Direction.UP -> Vec3I.FORWARD
             Direction.DOWN -> Vec3I.BACKWARD
         }
-    override val blockId: DefinitionId = DefinitionId.door("LargeBlockSlideDoor")
+    override val blockId: DefinitionId = LargeBlockSlideDoor
     override val customName: String = id
 }
