@@ -19,11 +19,11 @@ class LabRecruitsController(
     }
 
 
-    fun buttonBlockById(buttonId: String): TerminalBlock = seSync {
+    fun buttonBlockById(buttonId: String) = seSync {
         observer.observeBlocks().blockByCustomName(buttonId)
     }
 
-    fun doorBlockById(doorId: String): TerminalBlock = seSync {
+    fun doorBlockById(doorId: String) = seSync {
         observer.observeBlocks().blockByCustomName(doorId) as DoorBase
     }
 
@@ -46,10 +46,7 @@ class LabRecruitsController(
         if (distanceToButton > maximumButtonReachDistance) {
             error("Too far from the button ${buttonId}, distance: $distanceToButton, maximum: $maximumButtonReachDistance")
         }
-        val useObject = button.useObjects.firstOrNull() { it.name == "MyUseObjectPanelButton" }
-            ?: error("No 'MyUseObjectPanelButton' use object found for button ${buttonId} (${button.id} - ${button.useObjects} )")
-        val index = button.useObjects.indexOf(useObject)
-        admin.character.use(buttonBlockById(buttonId).id, index, useObject.primaryAction)
+        extensions.blocks.useObject.pressButton(button)
     }
 
 }
