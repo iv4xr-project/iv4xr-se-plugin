@@ -1,5 +1,7 @@
 package spaceEngineers.controller
 
+import spaceEngineers.controller.proxy.BatchProcessableSpaceEngineers
+import spaceEngineers.controller.proxy.SpaceEngineersBatchJavaProxy
 import spaceEngineers.transport.AlwaysReturnSameLineReaderWriter
 import spaceEngineers.transport.PresetLinesReaderWriter
 import spaceEngineers.transport.SocketReaderWriter
@@ -8,7 +10,7 @@ import java.io.File
 
 class SpaceEngineersJavaProxyBuilder : JsonRpcSpaceEngineersBuilder {
 
-    override fun localhost(agentId: String): SpaceEngineers {
+    override fun localhost(agentId: String): BatchProcessableSpaceEngineers {
         return fromStringLineReaderWriter(
             agentId = agentId,
             stringLineReaderWriter = SocketReaderWriter()
@@ -42,7 +44,7 @@ class SpaceEngineersJavaProxyBuilder : JsonRpcSpaceEngineersBuilder {
     override fun fromStringLineReaderWriter(
         agentId: String,
         stringLineReaderWriter: StringLineReaderWriter
-    ): SpaceEngineers {
-        return SpaceEngineersJavaProxy.fromStringLineReaderWriter(agentId, stringLineReaderWriter)
+    ): BatchProcessableSpaceEngineers {
+        return SpaceEngineersBatchJavaProxy.fromStringLineReaderWriter(agentId, stringLineReaderWriter)
     }
 }
