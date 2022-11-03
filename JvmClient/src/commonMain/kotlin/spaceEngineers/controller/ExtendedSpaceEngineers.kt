@@ -1,5 +1,6 @@
 package spaceEngineers.controller
 
+import spaceEngineers.controller.useobject.UseObjectExtensions
 import spaceEngineers.model.BlockId
 import spaceEngineers.model.Vec3F
 import spaceEngineers.movement.ReplayMovement
@@ -21,6 +22,10 @@ data class CharacterExtensions(
     )
 }
 
+data class BlockExtensions(
+    val useObject: UseObjectExtensions,
+)
+
 data class ScreenExtensions(
     val navigation: ScreenNavigation,
 ) {
@@ -32,11 +37,13 @@ data class ScreenExtensions(
 data class SpaceEngineersExtensions(
     val character: CharacterExtensions,
     val screen: ScreenExtensions,
+    val blocks: BlockExtensions,
 ) {
 
     constructor(spaceEngineers: SpaceEngineers, pathFinder: PathFinder<BlockId, Vec3F, String, String>) : this(
         character = CharacterExtensions(spaceEngineers, pathFinder = pathFinder),
         screen = ScreenExtensions(spaceEngineers),
+        blocks = BlockExtensions(useObject = UseObjectExtensions(spaceEngineers)),
     )
 
 }
