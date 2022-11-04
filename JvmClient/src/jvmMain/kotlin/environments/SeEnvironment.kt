@@ -9,7 +9,6 @@ import spaceEngineers.controller.SpaceEngineersTestContext
 import spaceEngineers.controller.extensions.moveForward
 import spaceEngineers.model.*
 import spaceEngineers.model.extensions.centerPosition
-import spaceEngineers.transport.closeIfCloseable
 import java.io.File
 import java.lang.Thread.sleep
 
@@ -133,6 +132,6 @@ class SeEnvironment(
     }
 
     override fun close() {
-        controller.closeIfCloseable()
+        controller.close()
     }
 }

@@ -6,7 +6,6 @@ import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import spaceEngineers.controller.*
 import spaceEngineers.iv4xr.navigation.Iv4XRAStarPathFinder
-import spaceEngineers.transport.closeIfCloseable
 import spaceEngineers.transport.jsonrpc.KotlinJsonRpcError
 import java.lang.reflect.UndeclaredThrowableException
 
@@ -64,7 +63,7 @@ fun spaceEngineersSimplePlaceGrindTorchSuspend(
             block(spaceEngineers)
         }
     } finally {
-        spaceEngineers.closeIfCloseable()
+        spaceEngineers.close()
     }
 }
 
@@ -94,7 +93,7 @@ fun spaceEngineersSuspend(
         e.remoteException?.stacktrace?.let(::println)
         throw e
     } finally {
-        spaceEngineers.closeIfCloseable()
+        spaceEngineers.close()
     }
 }
 
@@ -110,6 +109,6 @@ fun spaceEngineers(
             block(spaceEngineers)
         }
     } finally {
-        spaceEngineers.closeIfCloseable()
+        spaceEngineers.close()
     }
 }

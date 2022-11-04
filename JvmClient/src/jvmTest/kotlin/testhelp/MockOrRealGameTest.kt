@@ -5,7 +5,6 @@ import spaceEngineers.transport.GsonResponseAppendToFileReaderWriter
 import spaceEngineers.transport.ReconnectingSocketReaderWriter
 import spaceEngineers.transport.SocketReaderWriter.Companion.DEFAULT_PORT
 import spaceEngineers.transport.StringLineReaderWriter
-import spaceEngineers.transport.closeIfCloseable
 import java.io.File
 import java.lang.reflect.UndeclaredThrowableException
 
@@ -53,7 +52,7 @@ abstract class MockOrRealGameTest(
             } catch (e: UndeclaredThrowableException) {
                 throw e.cause ?: e
             } catch (e: Throwable) {
-                spaceEngineers.closeIfCloseable()
+                spaceEngineers.close()
                 throw e
             }
         }

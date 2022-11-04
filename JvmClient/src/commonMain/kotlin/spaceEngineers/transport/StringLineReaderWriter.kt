@@ -1,6 +1,6 @@
 package spaceEngineers.transport
 
-interface StringLineReaderWriter {
+interface StringLineReaderWriter: Closeable {
     fun sendAndReceiveLine(line: String): String
 }
 

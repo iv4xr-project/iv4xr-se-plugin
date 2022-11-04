@@ -6,8 +6,7 @@ class GsonResponseAppendToFileReaderWriter(
     override val rw: StringLineReaderWriter,
     val file: File,
     clearFile: Boolean = false
-) : StringLineReaderWrapper,
-    AutoCloseable {
+) : StringLineReaderWrapper, Closeable by rw{
 
     init {
         if (clearFile) {
@@ -21,9 +20,4 @@ class GsonResponseAppendToFileReaderWriter(
             file.appendText(responseLine + "\n")
         }
     }
-
-    override fun close() {
-        rw.closeIfCloseable()
-    }
-
 }
