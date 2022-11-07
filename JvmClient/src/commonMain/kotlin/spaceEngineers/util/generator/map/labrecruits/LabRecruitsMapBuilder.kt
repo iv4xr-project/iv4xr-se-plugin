@@ -9,15 +9,16 @@ import spaceEngineers.model.extensions.blockByCustomName
 import spaceEngineers.util.generator.map.MapPlacer
 import java.lang.Thread.sleep
 
-class LabRecruitsMapBuilder(val map: LabRecruitsMap, val spaceEngineers: ExtendedSpaceEngineers) {
+class LabRecruitsMapBuilder(
+    val map: LabRecruitsMap, val spaceEngineers: ExtendedSpaceEngineers,
+    val mapPlacer: MapPlacer = MapPlacer(map, spaceEngineers = spaceEngineers)
+) {
 
 
     fun generate() {
         map.placeGenerator()
         map.placeGravityGenerator()
-        spaceEngineers.removeAllBlocks()
-        val labRecruitsMapPlacer = MapPlacer(map, spaceEngineers = spaceEngineers)
-        val gridId = labRecruitsMapPlacer.generate()
+        val gridId = mapPlacer.generate()
         createGroups(gridId, map)
         mapButtons(map)
         sleep(50)
@@ -33,25 +34,18 @@ class LabRecruitsMapBuilder(val map: LabRecruitsMap, val spaceEngineers: Extende
     }
 
     private fun createGroups(gridId: String, map: LabRecruitsMap) = se {
-        val blockIdsByCustomName = observer.observeBlocks().allBlocks.filterIsInstance<TerminalBlock>().associate {
-            it.customName to it.id
-        }
         map.mappings.forEach { (button, doors) ->
             admin.blocks.createOrUpdateGroup(
                 "group-${button.id}",
                 gridId,
-                doors.map { blockIdsByCustomName.getValue(it.id) })
+                doors.map { mapPlacer.blockIdsToCustomNames.getValue(it.id) })
         }
     }
 
     private fun mapButtons(map: LabRecruitsMap) = se {
-        val blockIdsByCustomName = observer.observeBlocks().allBlocks.filterIsInstance<TerminalBlock>().associate {
-            it.customName to it.id
-        }
-
-        map.buttons.values.forEach { button ->
+        map.mappings.keys.forEach { button ->
             admin.blocks.mapButtonToGroup(
-                buttonBlockId = blockIdsByCustomName.getValue(button.id),
+                buttonBlockId = mapPlacer.blockIdsToCustomNames.getValue(button.id),
                 buttonIndex = 0,
                 action = "Open",
                 groupName = "group-${button.id}"

@@ -9,10 +9,17 @@ import java.io.File
 
 
 fun main() {
-    val se = SpaceEngineersJavaProxyBuilder().localhost().extend()
+    val text = File("./src/jvmTest/resources/labrecruits/maps/large_1928672215.csv").readText()
+    val labRecruitsMap = LabRecruitsMap.fromString(text).toSimplified()
+    val batch = SpaceEngineersJavaProxyBuilder().localhost()
+    val se = batch.extend()
     se.removeAllBlocks()
 
-    val lines = File("./src/jvmMain/resources/LabRecruits_level_small.csv").readLines()
-    val labRecruitsMap = LabRecruitsMap.fromLines(lines)
-    LabRecruitsMapBuilder(labRecruitsMap, se).generate()
+    val mapPlacer = MapPlacer(labRecruitsMap, spaceEngineers = se, batchCallable = null)
+
+    LabRecruitsMapBuilder(
+        labRecruitsMap,
+        se,
+        mapPlacer,
+    ).generate()
 }

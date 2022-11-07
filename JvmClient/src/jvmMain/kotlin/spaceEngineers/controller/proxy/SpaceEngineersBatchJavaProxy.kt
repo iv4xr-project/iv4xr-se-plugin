@@ -2,6 +2,7 @@ package spaceEngineers.controller.proxy
 
 import spaceEngineers.controller.SpaceEngineers
 import spaceEngineers.controller.TypedParameter
+import spaceEngineers.transport.Closeable
 import spaceEngineers.transport.StringLineReaderWriter
 import spaceEngineers.transport.jsonrpc.KotlinJsonRpcRequest
 import spaceEngineers.transport.jsonrpc.KotlinJsonRpcResponse
@@ -25,7 +26,7 @@ class SpaceEngineersBatchJavaProxy(
     val memberFunctions: List<KFunction<*>> = implementedInterface.memberFunctions.toList(),
     val subInterfacesByName: MutableMap<String, Any>,
     val rpcCaller: JsonRpcCaller,
-) : InvocationHandler {
+) : InvocationHandler, Closeable by rpcCaller {
 
     val dottedPrefix = if (prefixName.isEmpty()) {
         ""
@@ -43,7 +44,7 @@ class SpaceEngineersBatchJavaProxy(
                 createSubProxy(memberDefinition.returnType.classifier as KClass<*>, dottedPrefix + name)
             }
         } else if (method.name == "close" && implementedInterface == SpaceEngineers::class) {
-            rpcCaller.close()
+            close()
             return null
         }
 
@@ -130,7 +131,6 @@ class SpaceEngineersBatchJavaProxy(
                     )
                 ),
                 rpcCaller = jsonRpcCaller,
-                handler = proxyHandler,
             )
         }
 

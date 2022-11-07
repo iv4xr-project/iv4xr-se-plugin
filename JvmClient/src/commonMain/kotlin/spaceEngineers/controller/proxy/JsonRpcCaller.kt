@@ -3,35 +3,30 @@ package spaceEngineers.controller.proxy
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.serializer
 import spaceEngineers.controller.json
-import spaceEngineers.controller.wrapExceptionWithStringLineReaderInfo
+import spaceEngineers.transport.Closeable
 import spaceEngineers.transport.StringLineReaderWriter
-import spaceEngineers.transport.closeIfCloseable
 import spaceEngineers.transport.jsonrpc.KotlinJsonRpcRequest
 import spaceEngineers.transport.jsonrpc.KotlinJsonRpcResponse
 import spaceEngineers.transport.jsonrpc.resultOrThrow
 import kotlin.reflect.KType
 
 class JsonRpcCaller(
-    private val stringLineReaderWriter: StringLineReaderWriter,
+    val stringLineReaderWriter: StringLineReaderWriter,
     val callQueue: MutableList<RequestWithReturnType> = mutableListOf(),
-    initialCallDirectly: Boolean = true,
-) : AutoCloseable {
+) : BatchCallable, Closeable by stringLineReaderWriter {
 
+    override fun <T> execute(block: () -> T): T {
+        callDirectly = false
+        return block().apply {
+            execute()
+            callDirectly = true
+        }
+    }
 
-    private var _callDirectly: Boolean = initialCallDirectly
-    var callDirectly: Boolean
-        get() {
-            return _callDirectly
-        }
-        set(value) {
-            if (value && !_callDirectly) {
-                error("calls in queue, callMultiple first")
-            }
-            _callDirectly = value
-        }
+    private var callDirectly: Boolean = true
 
     fun call(
         request: KotlinJsonRpcRequest,
@@ -44,13 +39,13 @@ class JsonRpcCaller(
             )
         } else {
             callQueue.add(
-                RequestWithReturnType(request = request, returnType = returnType)
+                spaceEngineers.controller.proxy.RequestWithReturnType(request = request, returnType = returnType)
             )
             null
         }
     }
 
-    private fun callDirectly(
+    fun callDirectly(
         request: KotlinJsonRpcRequest,
         returnType: KType,
     ): Any? {
@@ -60,7 +55,7 @@ class JsonRpcCaller(
         )
     }
 
-    fun callMultiple(): List<Result<*>> {
+    private fun execute(): List<Result<*>> {
         if (callQueue.isEmpty()) {
             return emptyList()
         }
@@ -72,8 +67,13 @@ class JsonRpcCaller(
         val encodedRequest = json.encodeToString(callQueue.map { it.request })
         callQueue.clear()
         val responseJson = stringLineReaderWriter.sendAndReceiveLine(encodedRequest)
-        return json.decodeFromString<List<KotlinJsonRpcResponse<JsonObject?>>>(responseJson).map {
-            it.asResult()
+        // TODO: by the specs, the order of results is not guaranteed and should be paired by id
+        return try {
+            json.decodeFromString<List<KotlinJsonRpcResponse<JsonElement?>>>(responseJson).map {
+                it.asResult()
+            }
+        } catch (e: Exception) {
+            throw e
         }
     }
 
@@ -82,9 +82,7 @@ class JsonRpcCaller(
         returnType: KType
     ): O? {
         val responseJson = stringLineReaderWriter.sendAndReceiveLine(encodedRequest)
-        return stringLineReaderWriter.wrapExceptionWithStringLineReaderInfo {
-            decodeAndUnwrap(responseJson, returnType)
-        }
+        return decodeAndUnwrap(responseJson, returnType)
     }
 
     private fun <O : Any?> decodeAndUnwrap(responseJson: String, ktype: KType): O? {
@@ -98,7 +96,4 @@ class JsonRpcCaller(
         )
     }
 
-    override fun close() {
-        stringLineReaderWriter.closeIfCloseable()
-    }
 }
