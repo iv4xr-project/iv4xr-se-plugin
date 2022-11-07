@@ -90,7 +90,7 @@ namespace Iv4xr.SePlugin.Control
             var newIds = blockIds2.Except(blockIds);
             if (newIds.IsEmpty)
             {
-                throw new InvalidOperationException("Couldn't build the block");
+                throw new InvalidOperationException($"Couldn't place the block {blockDefinitionId} at {min} to grid {currentGrid.EntityId}.");
             }
 
             if (newIds.Count > 1)
