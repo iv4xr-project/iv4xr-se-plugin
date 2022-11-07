@@ -27,8 +27,6 @@ fun main(args: Array<String>) {
 
     val blockPlacementInformation = DataBlockPlacementInformation(
         blockId = DefinitionId.cubeBlock("LargeHeavyBlockArmorBlock"),
-        orientationForward = Vec3I.FORWARD,
-        orientationUp = Vec3I.UP,
         color = Vec3F(0.5, 1.0, 1.0)
     )
 

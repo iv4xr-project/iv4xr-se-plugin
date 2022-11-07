@@ -104,5 +104,9 @@ data class Vec3F(
 
         val ONE = Vec3F(1, 1, 1)
         val ZERO = Vec3F(0f, 0f, 0f)
+
+        val RED = Vec3F(1, 0, 0)
+        val GREEN = Vec3F(0, 1, 0)
+        val BLUE = Vec3F(0, 0, 1)
     }
 }

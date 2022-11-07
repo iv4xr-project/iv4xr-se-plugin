@@ -18,16 +18,25 @@ class JavaFriendlyNavigation @JvmOverloads constructor(
     fun moveInLine(
         targetLocation: Vec3F,
         movementType: CharacterMovementType = CharacterMovementType.RUN,
+        distanceTolerance: Float = 1.2f,
         timeout: Duration = 20.seconds,
     ): CompletableFuture<Unit> {
-        return scope.future { navigation.moveInLine(targetLocation, movementType, timeout) }
+        return scope.future {
+            navigation.moveInLine(
+                targetLocation,
+                movementType,
+                distanceTolerance = distanceTolerance,
+                timeout = timeout
+            )
+        }
     }
 
     fun navigateToBlock(
         id: BlockId,
         movementType: CharacterMovementType = CharacterMovementType.RUN,
+        distanceTolerance: Float = 1.2f,
         timeout: Duration = 120.seconds,
     ): CompletableFuture<Unit> {
-        return scope.future { navigation.navigateToBlock(id, movementType, timeout) }
+        return scope.future { navigation.navigateToBlock(id, movementType, distanceTolerance = distanceTolerance, timeout = timeout) }
     }
 }

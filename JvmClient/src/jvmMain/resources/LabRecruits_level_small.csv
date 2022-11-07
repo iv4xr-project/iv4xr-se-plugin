@@ -1,8 +1,6 @@
-b0,door0,door1,door3,door8,door9,door12
-b4,door13
-b12,door2
-|w,w,w,w,w,w,w,w
-w,f,f:d>w^door9,f,f,f,f,w
-w,w,w,w,w,w,f:d>n^door9,w
-w,f,f,f,f,f,f,w
-w,w,w,w,w,w,w,w
+b0,door0
+|w,w,w,w,w,w,w,w,w
+w,w,f,f:d>w^door1,f,f,f,f,w
+w,w,w,w,w,w,w,f:d>n^door0,w
+w,f:a^Agent1,f:b^b0,f,f,f,f,f,w
+w,w,w,w,w,w,w,w,w

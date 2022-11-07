@@ -62,6 +62,7 @@ namespace Iv4xr.SePlugin.Control
             {
                 return ce.ToEntity();
             }
+
             return MySession.Static.ControlledEntity?.Entity?.ToEntityOrNull() ?? Character.ToEntity();
         }
 
@@ -170,7 +171,13 @@ namespace Iv4xr.SePlugin.Control
 
         public MyCubeGrid GetGridById(string gridId)
         {
-            return (MyCubeGrid) MyEntities.GetEntityById(long.Parse(gridId));
+            var grid = (MyCubeGrid)MyEntities.GetEntityById(long.Parse(gridId));
+            if (grid == null)
+            {
+                throw new ArgumentException($"Grid by id {grid} not found");
+            }
+
+            return grid;
         }
 
         public MyCubeGrid GetGridContainingBlock(string blockId)
@@ -195,7 +202,7 @@ namespace Iv4xr.SePlugin.Control
             var block = GetBlockByIdOrNull(blockId);
             if (block == null)
             {
-                throw new ArgumentException("block not found");
+                throw new ArgumentException($"Block by id {blockId} not found");
             }
 
             return block;

@@ -1,10 +1,12 @@
 package spaceEngineers.controller.connection
 
-import kotlinx.coroutines.*
-import spaceEngineers.controller.*
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
+import spaceEngineers.controller.ContextControllerWrapper
+import spaceEngineers.controller.JsonRpcSpaceEngineersBuilder
+import spaceEngineers.controller.JvmSpaceEngineersBuilder
 import spaceEngineers.transport.ReconnectingSocketReaderWriter
-import spaceEngineers.transport.SocketReaderWriter
-import spaceEngineers.transport.closeIfCloseable
 
 class ConnectionManager(
     val config: Config,
@@ -118,7 +120,7 @@ class ConnectionManager(
 
     override fun close() {
         if (initiated) {
-            connectionsById.values.forEach { it.spaceEngineers.closeIfCloseable() }
+            connectionsById.values.forEach { it.spaceEngineers.close() }
         }
     }
 

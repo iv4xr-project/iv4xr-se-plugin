@@ -11,7 +11,7 @@ fun Observation.blockByCustomName(customName: String): TerminalBlock {
     val blocks = allBlocks
     return blocks.filterIsInstance<TerminalBlock>().firstOrNull { it.customName == customName } ?: error(
             "Block with name $customName not found, found only ${
-                blocks.filterIsInstance<spaceEngineers.model.TerminalBlock>().map { it.customName }
+                blocks.filterIsInstance<TerminalBlock>().map { it.customName }.sorted()
             }")
 }
 
@@ -21,7 +21,7 @@ val Observation.allBlocks: List<Block>
     }
 
 fun Observation.blockById(blockId: BlockId): Block {
-    return allBlocks.first { it.id == blockId }
+    return allBlocks.firstOrNull { it.id == blockId } ?: error("Block by id $blockId not found!")
 }
 
 fun Observation.heaviestGrid(): CubeGrid {

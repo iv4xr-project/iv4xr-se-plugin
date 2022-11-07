@@ -39,6 +39,10 @@ interface BlocksAdmin {
 
     fun remove(blockId: BlockId)
     fun setIntegrity(blockId: BlockId, integrity: Float)
+    fun setCustomName(blockId: BlockId, customName: String)
+    fun createOrUpdateGroup(name: String, gridId: String, blockIds: List<String>)
+    fun mapButtonToBlock(buttonBlockId: String, buttonIndex: Int, action: String, targetId: String)
+    fun mapButtonToGroup(buttonBlockId: String, buttonIndex: Int, action: String, groupName: String)
 }
 
 interface CharacterAdmin {

@@ -3,9 +3,10 @@ package spaceEngineers.controller
 import spaceEngineers.model.*
 import spaceEngineers.navigation.NavGraph
 import spaceEngineers.movement.FrameSnapshot
+import spaceEngineers.transport.Closeable
 
 
-interface SpaceEngineers {
+interface SpaceEngineers: Closeable {
     val session: Session
     val character: Character
     val items: Items

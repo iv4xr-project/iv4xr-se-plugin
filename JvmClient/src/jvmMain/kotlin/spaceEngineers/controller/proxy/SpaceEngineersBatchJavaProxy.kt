@@ -1,32 +1,32 @@
-package spaceEngineers.controller
+package spaceEngineers.controller.proxy
 
-import kotlinx.serialization.KSerializer
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.serializer
+import spaceEngineers.controller.SpaceEngineers
+import spaceEngineers.controller.TypedParameter
+import spaceEngineers.transport.Closeable
 import spaceEngineers.transport.StringLineReaderWriter
-import spaceEngineers.transport.closeIfCloseable
-import spaceEngineers.transport.jsonrpc.JsonRpcResponse
 import spaceEngineers.transport.jsonrpc.KotlinJsonRpcRequest
 import spaceEngineers.transport.jsonrpc.KotlinJsonRpcResponse
-import spaceEngineers.transport.jsonrpc.resultOrThrow
 import java.lang.reflect.InvocationHandler
 import java.lang.reflect.Method
 import java.lang.reflect.Proxy
 import kotlin.random.Random
-import kotlin.reflect.*
+import kotlin.reflect.KClass
+import kotlin.reflect.KFunction
+import kotlin.reflect.KTypeProjection
+import kotlin.reflect.KVariance
 import kotlin.reflect.full.createType
 import kotlin.reflect.full.memberFunctions
 import kotlin.reflect.full.valueParameters
 
 
-class SpaceEngineersJavaProxy(
+class SpaceEngineersBatchJavaProxy(
     val agentId: String,
-    val stringLineReaderWriter: StringLineReaderWriter,
     val implementedInterface: KClass<*>,
     val prefixName: String = implementedInterface.simpleName!!,
     val memberFunctions: List<KFunction<*>> = implementedInterface.memberFunctions.toList(),
     val subInterfacesByName: MutableMap<String, Any>,
-) : InvocationHandler {
+    val rpcCaller: JsonRpcCaller,
+) : InvocationHandler, Closeable by rpcCaller {
 
     val dottedPrefix = if (prefixName.isEmpty()) {
         ""
@@ -44,7 +44,7 @@ class SpaceEngineersJavaProxy(
                 createSubProxy(memberDefinition.returnType.classifier as KClass<*>, dottedPrefix + name)
             }
         } else if (method.name == "close" && implementedInterface == SpaceEngineers::class) {
-            stringLineReaderWriter.closeIfCloseable()
+            close()
             return null
         }
 
@@ -54,8 +54,7 @@ class SpaceEngineersJavaProxy(
         val kotlinReturnType = kotlinMethodDefinition.returnType
         val returnTypeProjection = KTypeProjection(KVariance.INVARIANT, kotlinReturnType)
         val responseReturnType = KotlinJsonRpcResponse::class.createType(arguments = listOf(returnTypeProjection))
-
-        return processParameters(
+        val request = createRequest(
             methodName = "$dottedPrefix${
                 method.name.replaceFirstChar
                 { it.uppercase() }
@@ -68,28 +67,21 @@ class SpaceEngineersJavaProxy(
                 val ktype = kotlinMethodDefinition.valueParameters[index].type
                 TypedParameter(javaParameter.name, args!![index], kclass, ktype)
             },
+        )
+        return rpcCaller.call(
+            request = request,
             returnType = responseReturnType
         )
     }
 
-    private fun <T : Any> createSubProxy(kls: KClass<T>, prefixName: String): T {
-        return createSubProxy(
-            agentId = agentId,
-            stringLineReaderWriter = stringLineReaderWriter,
-            implementedInterface = kls,
-            prefixName = prefixName,
-            subInterfacesByName = subInterfacesByName,
-        )
-    }
-
-    private fun processParameters(
+    private fun createRequest(
         parameters: List<TypedParameter<*>>,
         methodName: String,
-        returnType: KType
-    ): Any? {
-        return callRpc(
-            encodeRequest(parameters, methodName),
-            returnType,
+    ): KotlinJsonRpcRequest {
+        return KotlinJsonRpcRequest(
+            id = nextRequestId(),
+            method = methodName,
+            params = parameters.associate { it.toJsonElementPair() }
         )
     }
 
@@ -97,37 +89,16 @@ class SpaceEngineersJavaProxy(
         return Random.nextLong()
     }
 
-    private fun encodeRequest(
-        parameters: List<TypedParameter<*>>,
-        methodName: String
-    ): String {
-        return json.encodeToString(KotlinJsonRpcRequest(
-            id = nextRequestId(),
-            method = methodName,
-            params = parameters.associate { it.toJsonElementPair() }
-        ))
-    }
-
-    private inline fun <reified O : Any?> callRpc(
-        encodedRequest: String,
-        returnType: KType
-    ): O? {
-        val responseJson = stringLineReaderWriter.sendAndReceiveLine(encodedRequest)
-        return stringLineReaderWriter.wrapExceptionWithStringLineReaderInfo {
-            decodeAndUnwrap(responseJson, returnType)
-        }
-    }
-
-    private inline fun <reified O : Any?> decodeAndUnwrap(responseJson: String, ktype: KType): O? {
-        return decodeResponse<O?>(responseJson, ktype).resultOrThrow()
-    }
-
-    private fun <O : Any?> decodeResponse(responseJson: String, ktype: KType): JsonRpcResponse<O> {
-        return json.decodeFromString<KotlinJsonRpcResponse<O>>(
-            serializer(ktype) as KSerializer<KotlinJsonRpcResponse<O>>,
-            responseJson
+    private fun <T : Any> createSubProxy(kls: KClass<T>, prefixName: String): T {
+        return createSubProxy(
+            agentId = agentId,
+            implementedInterface = kls,
+            prefixName = prefixName,
+            subInterfacesByName = subInterfacesByName,
+            batchController = rpcCaller,
         )
     }
+
 
     private fun Method.isGetter(): Boolean {
         return name.startsWith("get")
@@ -135,20 +106,48 @@ class SpaceEngineersJavaProxy(
 
     companion object {
 
-        fun <T : Any> createSubProxy(
+        fun createSeSubProxy(
             agentId: String,
-            stringLineReaderWriter: StringLineReaderWriter,
-            implementedInterface: KClass<T>,
+            jsonRpcCaller: JsonRpcCaller,
+            implementedInterface: KClass<SpaceEngineers>,
             prefixName: String,
             subInterfacesByName: MutableMap<String, Any>,
-        ): T {
+        ): BatchProcessableSpaceEngineers {
             val cls = implementedInterface.javaObjectType
-            val proxyHandler = SpaceEngineersJavaProxy(
+            val proxyHandler = SpaceEngineersBatchJavaProxy(
                 agentId,
-                stringLineReaderWriter,
                 implementedInterface = implementedInterface,
                 prefixName = prefixName,
                 subInterfacesByName = subInterfacesByName,
+                rpcCaller = jsonRpcCaller,
+            )
+
+            return BatchProcessableSpaceEngineers(
+                cls.cast(
+                    Proxy.newProxyInstance(
+                        cls.classLoader,
+                        arrayOf<Class<*>>(cls, AutoCloseable::class.java),
+                        proxyHandler,
+                    )
+                ),
+                rpcCaller = jsonRpcCaller,
+            )
+        }
+
+        private fun <T : Any> createSubProxy(
+            agentId: String,
+            implementedInterface: KClass<T>,
+            prefixName: String,
+            subInterfacesByName: MutableMap<String, Any>,
+            batchController: JsonRpcCaller,
+        ): T {
+            val cls = implementedInterface.javaObjectType
+            val proxyHandler = SpaceEngineersBatchJavaProxy(
+                agentId,
+                implementedInterface = implementedInterface,
+                prefixName = prefixName,
+                subInterfacesByName = subInterfacesByName,
+                rpcCaller = batchController,
             )
 
             return cls.cast(
@@ -163,10 +162,10 @@ class SpaceEngineersJavaProxy(
         fun fromStringLineReaderWriter(
             agentId: String,
             stringLineReaderWriter: StringLineReaderWriter
-        ): SpaceEngineers {
-            return createSubProxy(
+        ): BatchProcessableSpaceEngineers {
+            return createSeSubProxy(
                 agentId = agentId,
-                stringLineReaderWriter = stringLineReaderWriter,
+                jsonRpcCaller = JsonRpcCaller(stringLineReaderWriter = stringLineReaderWriter),
                 implementedInterface = SpaceEngineers::class,
                 prefixName = "",
                 subInterfacesByName = mutableMapOf(),
