@@ -19,39 +19,12 @@ The project includes a full-featured [client in Kotlin](https://github.com/iv4xr
 It's not necessary to build anything to try out this plugin. This section describes how to do it.
 
 1. Obtain the binary release of Space Engineers (buy it on Steam or get a key). Install the game.
-2. Obtain a binary release of **the plugin**. Look for [releases](https://github.com/iv4xr-project/iv4xr-se-plugin/releases) in this repository and for Assets of the chosen release. Download all the DLL libraries.
-   1. If you want the latest changes or you'd like to edit the code, you can also build it from the sources (even if you don't have Space Engineers source code), see the section **How to build** below.
-3. IMPORTANT: Make sure Windows is OK to run the libraries. **Windows (10+) blocks "randomly" downloaded libraries.** To unblock them, right-click each of them and open file properties. Look for Security section on the bottom part of the General tab. You might see a message: "*This file came from another computer and might be blocked...*". If so, check the `Unblock` checkbox.
-   (If you skip this step, the game will probably crash with a message: `System.NotSupportedException`: *An attempt was made to load an assembly from a network location...*)
-4. Obtain other libraries as described in the section **3rd Party Dependencies** below.
-5. Put the plugin libraries (and its dependencies) into the folder with the game binaries. A common location is `C:\Program Files (x86)\Steam\steamapps\common\SpaceEngineers\Bin64`.
-   Tip: It's you can put the libraries into a subfolder (such as `ivxr-debug`). Or, it can be a symbolic link to the build folder of the plugin project. In that case, you must prefix the name of each library with `ivxr-debug\` in the following step. 
-6. Right-click on the game title in the Steam library list and open its properties window. Click on the **Set launch options...** button. Add the option `-plugin` followed by the location of the main plugin library. Library dependencies will be loaded automatically – just make sure they are in the same folder or some other searched location. The resulting options line should look something like this: `-plugin Ivxr.SePlugin.dll`.
-7. Run the game. (If the game crashes, make sure you've seen step 3.)
-8. If the plugin works correctly, a TCP/IP server is listening for JSON-RPC calls on a fixed port number. (See the config file in user's AppData folder `~\AppData\Roaming\SpaceEngineers\ivxr-plugin.config` for the current port number; the default is 3333).
-   Another sign of life is a log file present in the same folder.
+2. Download plugin and 3rd party libraries by running `copy-latest-libraries.bat` file (it downloads the dll files directly from github latest release and copies them into your Space Engieners game in Program Files as long as the game is in it's typical location).
+3. Right-click on the game title in the Steam library list and open its properties window. Click on the **Set launch options...** button. Add the option `-plugin` followed by the location of the main plugin library. Library dependencies will be loaded automatically – just make sure they are in the same folder or some other searched location. The resulting options line should look something like this: `-plugin Ivxr.SePlugin.dll`.
+4. Run the game. If the game crashes, take a look at the "Manually downloading" section and try to "unlock" the libraries if necessary.
+5. If the plugin works correctly, a TCP/IP server is listening for JSON-RPC calls on a fixed port number. (See the config file in user's AppData folder `~\AppData\Roaming\SpaceEngineers\ivxr-plugin.config` for the current port number; the default is 3333).
+   Another sign of life is the log file "ivxr-plugin_xxxxx.log present in the same folder.
 
-#### *3rd Party Dependencies*
-
-Apart from the game libraries, the plugin requires three additional libraries to run:
-
-* `AustinHarris.JsonRpc.dll`, which in turn requires:
-* `Newtonsoft.Json.dll`
-* `ImpromptuInterface.dll`
-
-There are many ways how to obtain the libraries. For convenience we provide them as special releases in this repository. _They are **not** part of the official releases_ because – among other things – they may have different licenses. Look for "3rd Party Library Dependencies" among releases.
-
-Another way how to get the libraries is the following:
-
-* Check-out the [JSON-RPC.NET master branch on GitHub](https://github.com/Astn/JSON-RPC.NET).
-  * *Side note: The binary releases are not updated (compared to NuGet packages), but the the last [release v1.1.74](https://github.com/Astn/JSON-RPC.NET/releases/tag/v1.1.74) works as well. You can try it if the master branch does not.* 
-* Build the solution including the test project (tested with Visual Studio 2019).
-* You will find the `AustinHarris.JsonRpc.dll` library in this path:
-  `Json-Rpc\bin\Debug\netstandard2.0`
-* And the `Newtonsoft.Json.dll` library in this path:
-  `AustinHarris.JsonRpcTestN\bin\Debug\netcoreapp3.0`
-
-Note: If you build the project from the sources as described in the section **How to Build**, the libraries are downloaded via NuGet packages.
 
 ## Protocol and API
 
@@ -149,3 +122,44 @@ There's a VS solution file `SpaceEngineers_ivxr.sln` in this repository (in the 
     * `se` – a checkout of a Space Engineers branch (presumably from it's Subversion repository)
 
 Before starting the build of the solution, make sure a correct build configuration is selected. Either **Debug** or **Release** configuration and the **x64** platform.
+
+
+### Manually putting dll libraries into the game
+
+It was necessary to put dll libraries manually into the game. Now that part has been replaced by the "copy-latest-libraries" script, this is not necessary, however if you prefer to do this yourself or just get more information about the process, here is it.
+
+All the dependencies need to be put into the folder with the game binaries. A common location is `C:\Program Files (x86)\Steam\steamapps\common\SpaceEngineers\Bin64`.
+   Tip: It's you can put the libraries into a subfolder (such as `ivxr-debug`). Or, it can be a symbolic link to the build folder of the plugin project. In that case, you must prefix the name of each library with `ivxr-debug\` in the following step. 
+   
+   
+#### Manually downloading and setting binary dependencies
+
+Obtain a binary release of **the plugin**. Look for [releases](https://github.com/iv4xr-project/iv4xr-se-plugin/releases) in this repository and for Assets of the chosen release. Download all the DLL libraries.
+   1. If you want the latest changes or you'd like to edit the code, you can also build it from the sources (even if you don't have Space Engineers source code), see the section **How to build** above.
+IMPORTANT: Make sure Windows is OK to run the libraries. **Windows (10+) blocks "randomly" downloaded libraries.** To unblock them, right-click each of them and open file properties. Look for Security section on the bottom part of the General tab. You might see a message: "*This file came from another computer and might be blocked...*". If so, check the `Unblock` checkbox.
+   (If you skip this step, the game will probably crash with a message: `System.NotSupportedException`: *An attempt was made to load an assembly from a network location...*)
+
+#### *3rd Party Dependencies*
+
+Apart from the game libraries, the plugin requires three additional libraries to run:
+
+* `AustinHarris.JsonRpc.dll`, which in turn requires:
+* `Newtonsoft.Json.dll`
+* `ImpromptuInterface.dll`
+
+There are many ways how to obtain the libraries. For convenience we provide them as special releases in this repository. _They are **not** part of the official releases_ because – among other things – they may have different licenses. Look for "3rd Party Library Dependencies" among releases.
+
+Another way how to get the libraries is the following:
+
+* Check-out the [JSON-RPC.NET master branch on GitHub](https://github.com/Astn/JSON-RPC.NET).
+  * *Side note: The binary releases are not updated (compared to NuGet packages), but the the last [release v1.1.74](https://github.com/Astn/JSON-RPC.NET/releases/tag/v1.1.74) works as well. You can try it if the master branch does not.* 
+* Build the solution including the test project (tested with Visual Studio 2019).
+* You will find the `AustinHarris.JsonRpc.dll` library in this path:
+  `Json-Rpc\bin\Debug\netstandard2.0`
+* And the `Newtonsoft.Json.dll` library in this path:
+  `AustinHarris.JsonRpcTestN\bin\Debug\netcoreapp3.0`
+
+Note: If you build the project from the sources as described in the section **How to Build**, the libraries are downloaded via NuGet packages.
+
+
+
