@@ -453,7 +453,7 @@ class CharacterAsserts : AbstractMultiplayerSteps() {
             observer.observe().currentWeapon.let { weapon ->
                 assertNotNull(weapon, "Character holds no weapon!")
                 assertTrue(weapon is HandTool, "${weapon.javaClass} ${weapon.definitionId}")
-                assertTrue(weapon.isShooting)
+                assertTrue(weapon.isShooting, "The tool ${weapon.definitionId} is not active when it should.")
             }
         }
     }
@@ -464,7 +464,7 @@ class CharacterAsserts : AbstractMultiplayerSteps() {
             observer.observe().currentWeapon.let { weapon ->
                 assertNotNull(weapon)
                 assertTrue(weapon is HandTool)
-                assertFalse(weapon.isShooting)
+                assertFalse(weapon.isShooting, "The tool ${weapon.definitionId} is active when it shouldn't.")
             }
         }
     }
@@ -537,9 +537,11 @@ class CharacterAsserts : AbstractMultiplayerSteps() {
 
     @Then("Layer {string} is in {string} stance.")
     fun character_is_in_stance(layer: String, stance: String) = observers {
+        val stc = debug.characterAnimations().animationsPerLayer.getValue(layer)
         assertEquals(
             "$layer/$stance",
-            debug.characterAnimations().animationsPerLayer.getValue(layer)
+            stc,
+            message = "Expected layer '${layer}', stance '$stance', but was '$stc'",
         )
     }
 

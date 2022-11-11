@@ -2,6 +2,7 @@ package spaceEngineers.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import spaceEngineers.util.generator.removeBuilderPrefix
 
 @Serializable
 data class DefinitionId(
@@ -12,7 +13,7 @@ data class DefinitionId(
 ) {
 
     override fun toString(): String {
-        return "$id/$type"
+        return "$id/$type".removeBuilderPrefix()
     }
 
     companion object {

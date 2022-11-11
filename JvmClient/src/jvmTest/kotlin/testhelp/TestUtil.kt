@@ -7,6 +7,7 @@ import kotlinx.serialization.json.JsonPrimitive
 import spaceEngineers.controller.*
 import spaceEngineers.iv4xr.navigation.Iv4XRAStarPathFinder
 import spaceEngineers.transport.jsonrpc.KotlinJsonRpcError
+import spaceEngineers.transport.jsonrpc.remoteException
 import java.lang.reflect.UndeclaredThrowableException
 
 const val TEST_AGENT = SpaceEngineers.DEFAULT_AGENT_ID
@@ -19,37 +20,6 @@ val TEST_MOCK_RESPONSE_LINE = """
 
 val SIMPLE_PLACE_GRIND_TORCH = "simple-place-grind-torch"
 
-
-fun JsonObject.dataStringAttribute(name: String): String? {
-    if (containsKey(name)) {
-        val value = this[name] as JsonPrimitive
-        return value.content
-    }
-    return null
-}
-
-val KotlinJsonRpcError.remoteException: RemoteException?
-    get() = RemoteException.fromJsonObject(data)
-
-
-data class RemoteException(
-    val className: String? = null,
-    val message: String? = null,
-    val stacktrace: String? = null,
-) {
-    companion object {
-        fun fromJsonObject(data: JsonElement?): RemoteException? {
-            if (data == null || data !is JsonObject) {
-                return null
-            }
-            return RemoteException(
-                className = data.dataStringAttribute("ClassName"),
-                message = data.dataStringAttribute("Message"),
-                stacktrace = data.dataStringAttribute("StackTraceString"),
-            )
-        }
-    }
-}
 
 fun spaceEngineersSimplePlaceGrindTorchSuspend(
     scenarioId: String = SIMPLE_PLACE_GRIND_TORCH,

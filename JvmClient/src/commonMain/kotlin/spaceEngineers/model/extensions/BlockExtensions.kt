@@ -38,3 +38,12 @@ fun Block.orientationUpTowardsMountPoint(
 ): Vec3F {
     return (-rotationMatrix * ((mountPoint.start - mountPoint.end))).normalized()
 }
+
+val Block.shortDescription: String
+    get() = "$definitionId ($id) ${
+        if (this is TerminalBlock) {
+            customName
+        } else {
+            ""
+        }
+    }"

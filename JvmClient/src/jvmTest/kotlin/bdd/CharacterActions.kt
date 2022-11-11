@@ -307,14 +307,15 @@ class CharacterActions : AbstractMultiplayerSteps() {
     fun character_drops_from_the_inventory(definitionIdStr: String) = mainClient {
         val definitionId = DefinitionId.parse(definitionIdStr)
         observer.observe().inventory.items.indexOfFirst { it.id == definitionId }.toNullIfMinusOne()
-            ?: error("Item $definitionId not found in inventory")
+            ?: error("Item $definitionId not found in the character inventory (1)")
         character.showInventory()
         smallPause()
         with(screens.terminal.inventory) {
             val firstLeftInventory = this.data().leftInventories.first()
             val itemIndex = firstLeftInventory.items.indexOfFirst { it.id == definitionId }.toNullIfMinusOne()
-                ?: error("Item $definitionId not found in inventory (2)")
+                ?: error("Item $definitionId not found in the first left terminal inventory (2)")
             left.selectItem(itemIndex)
+            smallPause()
             dropSelected()
             smallPause()
             screens.terminal.close()
