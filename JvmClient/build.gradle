@@ -78,7 +78,7 @@ cucumber {
 
 
     featurePath = 'src/jvmTest/resources/features/se-testing/astronaut'
-    main = 'io.cucumber.core.cli.Main'
+    main = 'bdd.MainKt'
 }
 
 
