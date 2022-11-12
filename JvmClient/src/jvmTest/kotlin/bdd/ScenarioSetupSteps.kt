@@ -20,9 +20,9 @@ SINGLE_COMPUTER_DEDICATED_DEV_KAREL    OFFLINE_STEAM
 LOBBY_STEAM DS_STEAM
 */
 
-val fileName = "SINGLE_COMPUTER_DEDICATED_DEV_KAREL.json"
-val cfg = loadConfigFromFile(fileName)
-val bddRunConfig = Config.fromPropsOrEnv().copy(connectionSetupName = fileName)
+val bddRunConfig by lazy { Config.fromPropsOrEnv() }
+val cfg = loadConfigFromFile(bddRunConfig.connectionSetupName, bddRunConfig.bddConfigPath)
+
 val globalCm = ConnectionManager(config = bddRunConfig, connectionSetup = cfg)
 
 fun testSetupFactory(config: ConnectionSetup, connectionManager: ConnectionManager): TestSetup {

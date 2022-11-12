@@ -1,5 +1,6 @@
 package spaceEngineers.controller.connection
 
+import spaceEngineers.controller.connection.ConnectionSetup.Companion.CONNECTION_SETUP_DIR
 import spaceEngineers.controller.extensions.toNullIfBlank
 import spaceEngineers.controller.toFile
 import java.io.File
@@ -13,26 +14,35 @@ data class Config(
     val outputDirectory: File,
     val screenshotMode: ScreenshotMode,
     val exitMode: ExitMode,
+    val bddConfigPath: String,
 ) {
+
+    val name: String
+        get() = connectionSetupName.substringBefore(".").lowercase()
 
     companion object {
         val DEFAULT = Config(
-            connectionSetupName = "default-name",
+            connectionSetupName = "OFFLINE_STEAM.json",
             outputDirectory = File("./reports/"),
             screenshotMode = ScreenshotMode.ALWAYS,
             exitMode = ExitMode.AFTER_LAST_SCENARIO,
+            bddConfigPath = CONNECTION_SETUP_DIR,
         )
 
         fun fromEnv(): Config {
-            return fromGetter { System.getenv(it) }
+            return fromGetter(System::getenv)
         }
 
         fun fromProps(): Config {
-            return fromGetter { System.getProperty(it) }
+            return fromGetter(System::getProperty)
         }
 
         fun fromPropsOrEnv(): Config {
-            return fromGetter { System.getProperty(it) ?: System.getenv(it) }
+            return fromGetter(::get)
+        }
+
+        fun get(key: String): String? {
+            return System.getProperty(key) ?: System.getenv(key)
         }
 
         private fun fromGetter(getter: (String) -> String?): Config {
@@ -44,7 +54,8 @@ data class Config(
                 } ?: DEFAULT.screenshotMode,
                 exitMode = getter("exitMode").toNullIfBlank()?.let {
                     ExitMode.valueOf(it)
-                } ?: DEFAULT.exitMode
+                } ?: DEFAULT.exitMode,
+                bddConfigPath = getter("bddConfigPath").toNullIfBlank() ?: DEFAULT.bddConfigPath,
             )
         }
 
