@@ -5,6 +5,7 @@ import spaceEngineers.model.BlockId
 import spaceEngineers.model.Vec3F
 import spaceEngineers.navigation.PathFinder
 import java.io.File
+import java.util.*
 
 val SCENARIO_DIR = "src/jvmTest/resources/game-saves/"
 
@@ -43,4 +44,9 @@ fun SpaceEngineers.extend(pathFinder: PathFinder<BlockId, Vec3F, String, String>
         return this
     }
     return DataExtendedSpaceEngineers(this, pathFinder = pathFinder)
+}
+
+fun Observer.downloadScreenShot(destination: File) {
+    destination.parentFile.mkdirs()
+    destination.writeBytes(Base64.getDecoder().decode(downloadScreenshotBase64()))
 }

@@ -50,6 +50,7 @@ namespace Iv4xr.SpaceEngineers
         NavGraph NavigationGraph(string gridId);
         void SwitchCamera();
         void TakeScreenshot(string absolutePath);
+        string DownloadScreenshotBase64();
     }
 
     [Role(Game)]
