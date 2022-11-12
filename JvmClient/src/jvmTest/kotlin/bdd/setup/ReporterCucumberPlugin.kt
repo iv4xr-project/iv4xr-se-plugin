@@ -25,7 +25,6 @@ class ReporterCucumberPlugin @JvmOverloads constructor(
     }
 
     fun onFinished(event: TestRunFinished) {
-        sleep(10000)
         reporter.saveReports()
     }
 
