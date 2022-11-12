@@ -18,6 +18,7 @@ suspend fun downloadEverything(
     sectionIds: List<Long> = listOf(49388, 50008),
     projectId: Long = TestRailClient.SE_PROJECT_ID,
     suiteId: Long = TestRailClient.SE_SUITE_ID,
+    overwrite: Boolean = false,
     testCaseDirectory: File = File("./src/jvmTest/resources/testrail/features/"),
     mapDirectory: File = File("./src/jvmTest/resources/testrail/maps"),
 ) {
@@ -33,7 +34,8 @@ suspend fun downloadEverything(
             projectId = projectId,
             sectionId = sectionId,
             sectionHelper = sectionHelper,
-            testCaseDirectory = testCaseDirectory
+            testCaseDirectory = testCaseDirectory,
+            overwrite = overwrite,
         )
     }
     testRailClient.downloadMaps(suiteId = suiteId, destination = mapDirectory)
@@ -51,6 +53,7 @@ suspend fun TestRailClient.downloadSection(
     suiteId: Long = TestRailClient.SE_SUITE_ID,
     projectId: Long = TestRailClient.SE_PROJECT_ID,
     sectionHelper: SectionHelper,
+    overwrite: Boolean = false,
     excludingTags: Set<String> = setOf("ignore", "duplicate", "creative", "difficult", "todo"),
     testCaseDirectory: File = File("./src/jvmTest/resources/features/testrail-2/"),
 ) {
@@ -76,6 +79,7 @@ suspend fun TestRailClient.downloadSection(
             case.save(
                 sectionHelper = sectionHelper,
                 outputDirectory = testCaseDirectory,
+                overwrite = overwrite,
             )
         }
 }

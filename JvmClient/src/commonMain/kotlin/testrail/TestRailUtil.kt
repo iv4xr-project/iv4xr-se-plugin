@@ -48,16 +48,16 @@ fun parseTags(title: String): List<String> {
 
 
 fun String.convertTables(): String {
-
     var previousLinePiped = false
     return lineSequence().map { it ->
         if (it.startsWith("||")) {
             if (previousLinePiped) {
-                previousLinePiped = true
-                "  " + it.substring(1) + "|"
+                1
             } else {
+                2
+            }.let { startIndex ->
                 previousLinePiped = true
-                "  " + it.substring(2) + "|"
+                "  " + it.substring(startIndex) + "|"
             }
         } else {
             previousLinePiped = false
