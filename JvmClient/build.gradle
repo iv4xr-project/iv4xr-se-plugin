@@ -80,3 +80,15 @@ cucumber {
     featurePath = 'src/jvmTest/resources/features/se-testing/astronaut'
     main = 'io.cucumber.core.cli.Main'
 }
+
+
+configurations {
+    testArtifacts
+}
+task testJar (type: Jar) {
+    baseName = "${project.name}-test"
+    from sourceSets["test"].output
+}
+artifacts {
+    testArtifacts testJar
+}
