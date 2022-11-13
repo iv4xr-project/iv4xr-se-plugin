@@ -1,9 +1,11 @@
 package bdd.setup
 
+import kotlinx.coroutines.delay
 import spaceEngineers.controller.ExtendedSpaceEngineers
 import spaceEngineers.model.ScreenName
 import spaceEngineers.model.canUse
 import spaceEngineers.util.whileWithTimeout
+import kotlin.time.Duration.Companion.seconds
 
 suspend fun ExtendedSpaceEngineers.connectDirectly(address: String) {
     extensions.screen.navigation.navigateTo(ScreenName.ServerConnect)
@@ -26,12 +28,13 @@ suspend fun ExtendedSpaceEngineers.createLobbyGame(scenarioId: String, filterSav
 suspend fun ExtendedSpaceEngineers.connectToFirstFriendlyGame() {
     extensions.screen.navigation.navigateTo(ScreenName.JoinGame)
     with(screens.joinGame) {
-        selectTab(5)
-        whileWithTimeout {
-            data().selectedTab != 5 || data().games.isEmpty()
+        whileWithTimeout(61.seconds) {
+            selectTab(5)
+            delay((3 * (it + 1)).seconds)
+            (data().selectedTab != 5 || data().games.isEmpty())
         }
         selectGame(0)
-        whileWithTimeout { !data().joinWorldButton.canUse }
+        whileWithTimeout(23.seconds) { !data().joinWorldButton.canUse }
         joinWorld()
     }
 }
