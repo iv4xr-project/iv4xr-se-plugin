@@ -1,22 +1,19 @@
 package bdd.setup
 
+import bdd.screenshotName
 import io.cucumber.java.Scenario
 import io.cucumber.plugin.event.TestCaseFinished
-import kotlinx.coroutines.*
 import spaceEngineers.controller.connection.Config
 import spaceEngineers.controller.connection.ConnectionManager
 import spaceEngineers.controller.connection.ProcessWithConnection
+import spaceEngineers.controller.downloadScreenShot
 import spaceEngineers.controller.toFile
 import java.io.File
-import java.lang.Thread.sleep
 import java.nio.file.*
 import java.nio.file.attribute.BasicFileAttributes
 import java.text.SimpleDateFormat
 import java.time.Instant
 import java.util.*
-import kotlin.concurrent.thread
-import kotlin.io.path.absolutePathString
-
 
 class Reporter(
     val connectionManager: ConnectionManager,
@@ -36,8 +33,6 @@ class Reporter(
         dir.mkdirs()
         screenshots.mkdirs()
         reports.mkdirs()
-        File(screenshots, "FAILED").mkdirs()
-        File(screenshots, "PASSED").mkdirs()
     }
 
     fun saveReports() {
@@ -76,21 +71,19 @@ class Reporter(
     fun ProcessWithConnection.processScreenshot(scenario: Scenario) {
         val abs = File(
             screenshots,
-            "${scenario.status}/${
-                scenario.uri.toString().substringAfterLast('/').substringBefore(".feature")
-            }-${scenario.line}.png"
-        ).absolutePath
-        observer.takeScreenshot(abs)
+            "${gameProcess.address}/${scenario.screenshotName()}"
+        )
+        observer.downloadScreenShot(abs)
     }
 
     fun ProcessWithConnection.processScreenshot(scenario: TestCaseFinished) {
         val abs = File(
             screenshots,
-            "${scenario.result.status}/${
-                scenario.testCase.uri.toString().substringAfterLast('/').substringBefore(".feature")
-            }-${scenario.testCase.location.line}.png"
-        ).absolutePath
-        observer.takeScreenshot(abs)
+            "${gameProcess.address}/${
+                scenario.testCase.screenshotName()
+            }"
+        )
+        observer.downloadScreenShot(abs)
     }
 
     companion object {
