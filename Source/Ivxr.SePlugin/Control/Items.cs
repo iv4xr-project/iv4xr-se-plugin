@@ -82,7 +82,7 @@ namespace Iv4xr.SePlugin.Control
         public void SetToolbarItem(DefinitionId definitionId, ToolbarLocation toolbarLocation)
         {
             var myDefinitionId = definitionId.ToMyDefinitionId();
-            Definitions.CheckDefinitionIdExists(myDefinitionId);
+            Definitions.CheckDefinitionIdExistsAndEnabled(myDefinitionId);
             if (IsWeapon(definitionId.Type))
             {
                 SetToolbarItem<MyObjectBuilder_ToolbarItemWeapon>(myDefinitionId, toolbarLocation);
