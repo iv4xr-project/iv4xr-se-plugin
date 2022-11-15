@@ -4,7 +4,8 @@
 
 A plugin providing integration of **[Space Engineers](https://www.spaceengineersgame.com/)** to the **iv4XR framework**. You can find the project page at [iv4xr-project.eu](https://iv4xr-project.eu/).
 
-Status: Active development (alpha version); high-level architecture is now mostly stable
+The plugin is developed by [GoodAI](https://www.goodai.com/).
+<img src="./JvmClient/docs/goodai-logo.png" align="right" width="15%">
 
 ## Introduction
 
