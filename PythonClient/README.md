@@ -15,8 +15,9 @@ The client itself doesn't have any dependencies, but some of the examples do:
 - [Maze generator example](src/examples/maze.py) uses a great maze generator
   library [mazelib](https://github.com/john-science/mazelib)
 - Cucumber test uses [behave](https://behave.readthedocs.io/en/stable/)
+- [PNG](src/examples/png.py) uses [Pillow](https://github.com/python-pillow/Pillow).
 
-If you want to install those dependencies, simply install them through pip or use:
+If you want to install those dependencies, simply install them through pip:
 
 ```
 pip install -r requirements.txt

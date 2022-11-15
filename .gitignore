@@ -387,3 +387,4 @@ Desktop.ini
 
 **/BinaryDependencies/*.dll
 se-env.bat
+Scripts/se-env.bat
