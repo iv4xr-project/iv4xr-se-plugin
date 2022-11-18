@@ -1,15 +1,15 @@
 package bdd
 
+import spaceEngineers.config.cfg
+import spaceEngineers.config.globalCm
 import bdd.setup.MedbayDSSetup
 import bdd.setup.MedbayLobbySetup
 import bdd.setup.TestSetup
 import io.cucumber.datatable.DataTable
 import io.cucumber.java.*
 import io.cucumber.java.en.Given
-import spaceEngineers.controller.connection.Config
 import spaceEngineers.controller.connection.ConnectionManager
 import spaceEngineers.controller.connection.ConnectionSetup
-import spaceEngineers.controller.connection.ConnectionSetup.Companion.loadConfigFromFile
 import testhelp.hideUndeclaredThrowableException
 
 
@@ -20,10 +20,7 @@ SINGLE_COMPUTER_DEDICATED_DEV_KAREL    OFFLINE_STEAM
 LOBBY_STEAM DS_STEAM
 */
 
-val bddRunConfig by lazy { Config.fromPropsOrEnv() }
-val cfg = loadConfigFromFile(bddRunConfig.connectionSetupName, bddRunConfig.bddConfigPath)
 
-val globalCm = ConnectionManager(config = bddRunConfig, connectionSetup = cfg)
 
 fun testSetupFactory(config: ConnectionSetup, connectionManager: ConnectionManager): TestSetup {
     return if (config.ds) {

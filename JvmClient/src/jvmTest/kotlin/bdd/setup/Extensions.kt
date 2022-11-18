@@ -162,24 +162,4 @@ suspend fun SpaceEngineers.waitForGameplay() {
     screens.waitForScreen(timeout = 60_001.milliseconds, screenName = GamePlay)
 }
 
-fun shouldTakeScreenshot(scenario: Scenario, screenshotMode: ScreenshotMode): Boolean {
-    return shouldTakeScreenshot(
-        scenarioFailed = scenario.isFailed,
-        screenshotMode = screenshotMode,
-    )
-}
 
-fun shouldTakeScreenshot(scenario: TestCaseFinished, screenshotMode: ScreenshotMode): Boolean {
-    return shouldTakeScreenshot(
-        scenarioFailed = scenario.result.status == Status.FAILED,
-        screenshotMode = screenshotMode,
-    )
-}
-
-fun shouldTakeScreenshot(scenarioFailed: Boolean, screenshotMode: ScreenshotMode): Boolean {
-    return when (screenshotMode) {
-        ScreenshotMode.NEVER -> false
-        ScreenshotMode.ON_FAILURE -> scenarioFailed
-        ScreenshotMode.ALWAYS -> true
-    }
-}
