@@ -80,6 +80,12 @@ namespace Iv4xr.SePlugin.Control
             MyHud.Notifications.Add(new MyHudNotificationDebug(text, 5000, level: MyNotificationLevel.Important));
         }
 
+        [CallOn(CurrentThread)]
+        public string Ping()
+        {
+                return "Pong";
+        }
+
         public void UpdateDefaultInteractDistance(float distance)
         {
             MyConstants.DEFAULT_INTERACTIVE_DISTANCE = distance;

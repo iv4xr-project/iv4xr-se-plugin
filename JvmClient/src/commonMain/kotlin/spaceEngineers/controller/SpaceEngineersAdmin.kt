@@ -11,6 +11,7 @@ interface SpaceEngineersAdmin {
     fun debugInfo(): DebugInfo
     val tests: TestAdmin
     fun showNotification(text: String)
+    fun ping(): String
 }
 
 interface TestAdmin {
