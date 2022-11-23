@@ -10,7 +10,9 @@ class MedbayDSSetup(
     cm: ConnectionManager,
     realConnectionManagerUser: RealConnectionManagerUser = RealConnectionManagerUser(cm)
 ) : MedbaySetup(connectionSetup = connectionSetup, cm = cm, realConnectionManagerUser = realConnectionManagerUser) {
-    val dedicatedServerManager = DedicatedServerManager(processConfig = connectionSetup.admin)
+    val dedicatedServerManager =
+        DedicatedServerManager(processConfig = connectionSetup.admin, scenarioDir = cm.config.scenarioPath)
+
     override fun beforeAll() {
         super.beforeAll()
         DedicatedServerManager.killDedicatedServerWindows()
@@ -34,6 +36,7 @@ class MedbayDSSetup(
         if (!dedicatedServerManager.isRunning()) {
             dedicatedServerManager.start(scenarioId)
         }
+        //TODO: check if its responding and kill + restart otherwise
     }
 
 }

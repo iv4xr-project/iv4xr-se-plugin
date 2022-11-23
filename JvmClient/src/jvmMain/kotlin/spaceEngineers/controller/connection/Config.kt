@@ -15,6 +15,7 @@ data class Config(
     val screenshotMode: ScreenshotMode,
     val exitMode: ExitMode,
     val bddConfigPath: String,
+    val scenarioPath: String,
 ) {
 
     val name: String
@@ -27,6 +28,7 @@ data class Config(
             screenshotMode = ScreenshotMode.ALWAYS,
             exitMode = ExitMode.AFTER_LAST_SCENARIO,
             bddConfigPath = CONNECTION_SETUP_DIR,
+            scenarioPath = "./testrail/maps"
         )
 
         fun fromEnv(): Config {
@@ -56,6 +58,7 @@ data class Config(
                     ExitMode.valueOf(it)
                 } ?: DEFAULT.exitMode,
                 bddConfigPath = getter("bddConfigPath").toNullIfBlank() ?: DEFAULT.bddConfigPath,
+                scenarioPath = getter("scenarioPath") ?: DEFAULT.scenarioPath,
             )
         }
 

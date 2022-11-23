@@ -354,7 +354,7 @@ class CharacterAsserts : AbstractMultiplayerSteps() {
 
     @Then("Character is positioned more than {double}m in the {string} from it's original position.")
     fun character_is_positioned_more_than_m_in_the_from_it_s_original_position(distance: Double, direction: String) {
-        observers {
+        mainClient {
             val remembered = context.characterObservation ?: error("No original observation recorded for position")
             val new = observer.observe()
             val distanceVector = new.position - remembered.position
@@ -364,7 +364,7 @@ class CharacterAsserts : AbstractMultiplayerSteps() {
 
     @When("Character remembers it's position.")
     fun character_remembers_it_s_position() {
-        observers {
+        mainClient {
             context.rememberCharacter(observer.observe())
         }
     }

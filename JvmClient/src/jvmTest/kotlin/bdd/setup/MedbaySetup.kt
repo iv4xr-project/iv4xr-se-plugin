@@ -7,6 +7,7 @@ import spaceEngineers.controller.connection.ConnectionSetup
 import spaceEngineers.controller.connection.ExitMode
 import spaceEngineers.controller.connection.ProcessWithConnection
 import testhelp.hideUndeclaredThrowableException
+import java.net.SocketException
 
 abstract class MedbaySetup(
     val connectionSetup: ConnectionSetup,
@@ -15,11 +16,22 @@ abstract class MedbaySetup(
 ) : AbstractTestSetup(), ConnectionManagerUser by realConnectionManagerUser {
 
     override fun beforeAll() {
-
     }
 
     override fun beforeScenario(scenario: Scenario) {
+    }
 
+    private fun pingAll() {
+        all {
+            try {
+                val ping = admin.ping()
+                check(ping == "Pong") {
+                    "Did not receive 'Pong' from ping, received '$ping' from ${gameProcess.simpleString()}!"
+                }
+            } catch(e: SocketException) {
+                throw IllegalStateException("Couldn't ping ${gameProcess.simpleString()}", e)
+            }
+        }
     }
 
     override fun afterScenario(scenario: Scenario) = runBlocking {
@@ -41,10 +53,16 @@ abstract class MedbaySetup(
         Respawner(connectionManager = connectionManager)
     }
 
+    val DEFAULT_SCENARIO = "character-actions"
+
+    val scenarioMapping = mapOf(
+        "character-movement" to DEFAULT_SCENARIO
+    )
+
     override suspend fun scenarioConfig(dataTable: List<Map<String, String>>) {
         val data = dataTable.first()
-        val scenarioId = data.getValue("scenario")
-        onScenario(scenarioId)
+        val scenarioId = data["scenario"] ?: DEFAULT_SCENARIO
+        onScenario(scenarioMapping[scenarioId] ?: DEFAULT_SCENARIO)
         val mainMedbay = data.getValue("main_client_medbay")
         val observerMedbay = data.getValue("observer_medbay")
         val faction = data["faction"] ?: "Astronaut Movement"
@@ -62,6 +80,7 @@ abstract class MedbaySetup(
 
     private fun onScenario(scenarioId: String) = hideUndeclaredThrowableException {
         onBeforeScenario(scenarioId)
+        pingAll()
         mainClient {
             if (session.info()?.ready != true) {
                 setupServer(scenarioId)

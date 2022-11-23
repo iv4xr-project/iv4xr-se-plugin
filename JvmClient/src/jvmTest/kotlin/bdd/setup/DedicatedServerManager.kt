@@ -19,14 +19,14 @@ import kotlin.test.assertTrue
 
 class DedicatedServerManager(
     val processConfig: GameProcess,
+    val scenarioDir: String,
 ) : AutoCloseable {
 
     var process: Process? = null
         private set
 
     suspend fun start(scenarioId: String) {
-        val scenarioDir = "src/jvmTest/resources/game-saves/".processHomeDir()
-        val scenarioPath = File(scenarioDir, scenarioId).absolutePath.unixToWindowsPath()
+        val scenarioPath = File(scenarioDir.processHomeDir(), scenarioId).absolutePath.unixToWindowsPath()
         val wdFile = File(processConfig.executablePath.processHomeDir())
         assertTrue(wdFile.exists(), wdFile.absolutePath)
         val wd = wdFile.absolutePath
@@ -90,7 +90,7 @@ class DedicatedServerManager(
 
     companion object {
         fun killDedicatedServerWindows() {
-            var process =
+            val process =
                 ProcessBuilder("""C:\windows\system32/taskkill""", "/IM", "SpaceEngineersDedicated.exe", "/F")
                     .redirectErrorStream(true)
                     .start()
