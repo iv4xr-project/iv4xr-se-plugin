@@ -11,7 +11,10 @@ class MedbayDSSetup(
     realConnectionManagerUser: RealConnectionManagerUser = RealConnectionManagerUser(cm)
 ) : MedbaySetup(connectionSetup = connectionSetup, cm = cm, realConnectionManagerUser = realConnectionManagerUser) {
     val dedicatedServerManager = DedicatedServerManager(processConfig = connectionSetup.admin)
-
+    override fun beforeAll() {
+        super.beforeAll()
+        DedicatedServerManager.killDedicatedServerWindows()
+    }
 
     override fun afterAll() {
         super.afterAll()
