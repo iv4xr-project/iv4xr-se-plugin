@@ -50,6 +50,14 @@ data class FrameSnapshot(
                 listOf(mousePressed)
             }
         }
+
+        fun empty(): List<FrameSnapshot> {
+            return listOf(
+                FrameSnapshot(
+                    InputSnapshot(keyboard = KeyboardSnapshot(), mouse = MouseSnapshot.nothingClicked())
+                )
+            )
+        }
     }
 }
 

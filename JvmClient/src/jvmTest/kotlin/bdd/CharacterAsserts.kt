@@ -352,23 +352,19 @@ class CharacterAsserts : AbstractMultiplayerSteps() {
         }
     }
 
-    @Then("Character is positioned {double}m in the {string} from it's original position.")
-    fun character_is_positioned_in_the_from_it_s_original_position(distance: Double, direction: String) {
-        val directionVector = Vec3F.directionFromString(direction)
-
-        mainClient {
+    @Then("Character is positioned more than {double}m in the {string} from it's original position.")
+    fun character_is_positioned_more_than_m_in_the_from_it_s_original_position(distance: Double, direction: String) {
+        observers {
             val remembered = context.characterObservation ?: error("No original observation recorded for position")
             val new = observer.observe()
             val distanceVector = new.position - remembered.position
-            // those vector match because of the lazy hack, otherwise rotation matrix would have to be used first
-            //assertVecEquals(distanceVector.normalized(), directionVector, absoluteTolerance = 0.1f)
-            assertEquals(distance.toFloat(), distanceVector.length(), absoluteTolerance = 1.5f)
+            assertGreaterThan(distanceVector.length(), distance.toFloat())
         }
     }
 
     @When("Character remembers it's position.")
     fun character_remembers_it_s_position() {
-        mainClient {
+        observers {
             context.rememberCharacter(observer.observe())
         }
     }
@@ -384,11 +380,13 @@ class CharacterAsserts : AbstractMultiplayerSteps() {
 
     @And("Character is inside block {string}.")
     fun character_is_inside_block(displayName: String) = mainClient {
-        assertEquals(
-            displayName,
-            observer.observeControlledEntity().displayName,
-            "Character is not inside a block, but it should."
-        )
+        repeatUntilSuccess {
+            assertEquals(
+                displayName,
+                observer.observeControlledEntity().displayName,
+                "Character is not inside a block, but it should."
+            )
+        }
     }
 
     @And("Character is not inside a block.")
