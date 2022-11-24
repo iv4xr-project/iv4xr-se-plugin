@@ -1,12 +1,12 @@
 package bdd
 
 import bdd.repetitiveassert.repeatUntilSuccess
-import io.cucumber.java.PendingException
 import io.cucumber.java.en.And
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import kotlinx.coroutines.delay
+import spaceEngineers.controller.connection.ProcessWithConnection
 import spaceEngineers.controller.extensions.typedFocusedScreen
 import spaceEngineers.model.*
 import spaceEngineers.model.extensions.allBlocks
@@ -251,14 +251,15 @@ class CharacterAsserts : AbstractMultiplayerSteps() {
         val gravity = mainClient {
             //gravity is not synchronized, we need to take it from the main client
             with(observer.observe()) {
+                assertGreaterThan(velocity.length(), 0, message = "Character cannot fall when at 0 speed!")
                 assertSameDirection(velocity, gravity)
                 gravity
             }
         }
         observers {
             with(observer.observe()) {
+                assertGreaterThan(velocity.length(), 0, message = "Character cannot fall when at 0 speed!")
                 assertSameDirection(velocity, gravity)
-                assertGreaterThan(velocity.length(), 0f)
             }
         }
     }
@@ -319,7 +320,7 @@ class CharacterAsserts : AbstractMultiplayerSteps() {
     @Then("Character dampeners are off.")
     fun character_dampeners_are_off() = mainClient {
         //TODO: maybe they are not synchronized
-        repeatUntilSuccess { assertFalse(observer.observe().dampenersOn) }
+        repeatUntilSuccess { assertFalse(observer.observe().dampenersOn, "Dampeners are not off.") }
     }
 
     @Then("UI dampeners are on.")
@@ -336,7 +337,10 @@ class CharacterAsserts : AbstractMultiplayerSteps() {
     fun dampeners_are_switched_to_relative_mode() = mainClient {
         repeatUntilSuccess(repeats = 10) {
             //assertNotNull(observer.observe().relativeDampeningEntity)
-            assertTrue(screens.gamePlay.data().hud.statsWrapper.relativeDampenersOn)
+            assertTrue(
+                screens.gamePlay.data().hud.statsWrapper.relativeDampenersOn,
+                "Dampeners are not in relative mode."
+            )
         }
     }
 
@@ -373,7 +377,8 @@ class CharacterAsserts : AbstractMultiplayerSteps() {
     fun character_is_inside_the_block() = mainClient {
         assertNotEquals(
             observer.observe().id,
-            observer.observeControlledEntity().id
+            observer.observeControlledEntity().id,
+            "Character is not inside a block, but it should."
         )
     }
 
@@ -381,7 +386,8 @@ class CharacterAsserts : AbstractMultiplayerSteps() {
     fun character_is_inside_block(displayName: String) = mainClient {
         assertEquals(
             displayName,
-            observer.observeControlledEntity().displayName
+            observer.observeControlledEntity().displayName,
+            "Character is not inside a block, but it should."
         )
     }
 
@@ -389,7 +395,8 @@ class CharacterAsserts : AbstractMultiplayerSteps() {
     fun character_is_not_inside_a_block() = mainClient {
         assertEquals(
             observer.observe().id,
-            observer.observeControlledEntity().id
+            observer.observeControlledEntity().id,
+            "Character is inside a block, but it shouldn't."
         )
     }
 
@@ -452,7 +459,7 @@ class CharacterAsserts : AbstractMultiplayerSteps() {
         repeatUntilSuccess {
             observer.observe().currentWeapon.let { weapon ->
                 assertNotNull(weapon, "Character holds no weapon!")
-                assertTrue(weapon is HandTool, "${weapon.javaClass} ${weapon.definitionId}")
+                assertTrue(weapon is HandTool, "The weapon is not HandTol${weapon.javaClass} ${weapon.definitionId}")
                 assertTrue(weapon.isShooting, "The tool ${weapon.definitionId} is not active when it should.")
             }
         }
@@ -472,17 +479,19 @@ class CharacterAsserts : AbstractMultiplayerSteps() {
     @Then("Character energy is depleted.")
     fun character_energy_gets_depleted() = observers {
         repeatUntilSuccess {
-            assertEquals(0f, observer.observe().suitEnergy, absoluteTolerance = 0.001f)
+            assertEquals(
+                0f,
+                observer.observe().suitEnergy,
+                absoluteTolerance = 0.001f,
+                "Energy was supposed to be depleted."
+            )
         }
     }
 
     @Then("Character inventory contains item {string}.")
     fun character_inventory_contains_item(definitionIdStr: String) = observers {
         val definition = DefinitionId.parse(definitionIdStr)
-        repeatUntilSuccess {
-            val items = observer.observe().inventory.items
-            assertTrue(items.any { it.id == definition }, items.map { it.id }.joinToString(","))
-        }
+        assertInventoryContains(definition)
     }
 
     @Then("Character inventory contains:")
@@ -550,10 +559,7 @@ class CharacterAsserts : AbstractMultiplayerSteps() {
         if (screens.typedFocusedScreen() != ScreenName.Terminal) {
             character.showInventory()
         }
-        val definition = DefinitionId.create("Ore", type)
-        repeatUntilSuccess {
-            assertTrue(observer.observe().inventory.items.any { it.id == definition })
-        }
+        assertInventoryContains(DefinitionId.create("Ore", type))
     }
 
     @Given("Character inventory contains ingot {string}.")
@@ -561,9 +567,16 @@ class CharacterAsserts : AbstractMultiplayerSteps() {
         if (screens.typedFocusedScreen() != ScreenName.Terminal) {
             character.showInventory()
         }
-        val definition = DefinitionId.create("Ingot", type)
+        assertInventoryContains(DefinitionId.create("Ingot", type))
+    }
+
+    private suspend fun ProcessWithConnection.assertInventoryContains(definition: DefinitionId) {
         repeatUntilSuccess {
-            assertTrue(observer.observe().inventory.items.any { it.id == definition })
+            val items = observer.observe().inventory.items
+            assertTrue(
+                items.any { it.id == definition },
+                "Character inventory doesn't contain ${definition}, it contains: ${items}"
+            )
         }
     }
 }
