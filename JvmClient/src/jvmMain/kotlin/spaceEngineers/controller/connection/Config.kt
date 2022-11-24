@@ -23,7 +23,7 @@ data class Config(
 
     companion object {
         val DEFAULT = Config(
-            connectionSetupName = "OFFLINE_STEAM.json",
+            connectionSetupName = "SINGLE_COMPUTER_DEDICATED_DEV_KAREL.json",
             outputDirectory = File("./reports/"),
             screenshotMode = ScreenshotMode.ALWAYS,
             exitMode = ExitMode.AFTER_LAST_SCENARIO,
@@ -39,27 +39,31 @@ data class Config(
             return fromGetter(System::getProperty)
         }
 
-        fun fromPropsOrEnv(): Config {
-            return fromGetter(::get)
+        fun fromPropsOrEnv(default: Config = DEFAULT): Config {
+            return fromGetter(::get, default)
         }
 
         fun get(key: String): String? {
             return System.getProperty(key) ?: System.getenv(key)
         }
 
-        private fun fromGetter(getter: (String) -> String?): Config {
+        fun fromGetter(getter: (String) -> String?, default: Config = DEFAULT): Config {
             return Config(
-                connectionSetupName = getter("connectionSetupName").toNullIfBlank() ?: DEFAULT.connectionSetupName,
-                outputDirectory = getter("outputDirectory").toNullIfBlank()?.toFile() ?: DEFAULT.outputDirectory,
+                connectionSetupName = getter("connectionSetupName").toNullIfBlank() ?: default.connectionSetupName,
+                outputDirectory = getter("outputDirectory").toNullIfBlank()?.toFile() ?: default.outputDirectory,
                 screenshotMode = getter("screenshotMode").toNullIfBlank()?.let {
                     ScreenshotMode.valueOf(it)
-                } ?: DEFAULT.screenshotMode,
+                } ?: default.screenshotMode,
                 exitMode = getter("exitMode").toNullIfBlank()?.let {
                     ExitMode.valueOf(it)
-                } ?: DEFAULT.exitMode,
-                bddConfigPath = getter("bddConfigPath").toNullIfBlank() ?: DEFAULT.bddConfigPath,
-                scenarioPath = getter("scenarioPath") ?: DEFAULT.scenarioPath,
+                } ?: default.exitMode,
+                bddConfigPath = getter("bddConfigPath").toNullIfBlank() ?: default.bddConfigPath,
+                scenarioPath = getter("scenarioPath") ?: default.scenarioPath,
             )
+        }
+
+        fun fromMap(map: Map<String, String?>, default: Config): Config {
+            return fromGetter({ map[it] }, default = default)
         }
 
 
