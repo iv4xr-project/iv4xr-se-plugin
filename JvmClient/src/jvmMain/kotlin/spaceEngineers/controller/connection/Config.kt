@@ -16,6 +16,7 @@ data class Config(
     val exitMode: ExitMode,
     val bddConfigPath: String,
     val scenarioPath: String,
+    val ignoredTags: Set<String>,
 ) {
 
     val name: String
@@ -28,7 +29,10 @@ data class Config(
             screenshotMode = ScreenshotMode.ALWAYS,
             exitMode = ExitMode.AFTER_LAST_SCENARIO,
             bddConfigPath = CONNECTION_SETUP_DIR,
-            scenarioPath = "./testrail/maps"
+            scenarioPath = "./testrail/maps",
+            ignoredTags = setOf(
+                "animation", "emotes", "ignore", "duplicate", "creative", "difficult", "todo"
+            ),
         )
 
         fun fromEnv(): Config {
@@ -59,6 +63,7 @@ data class Config(
                 } ?: default.exitMode,
                 bddConfigPath = getter("bddConfigPath").toNullIfBlank() ?: default.bddConfigPath,
                 scenarioPath = getter("scenarioPath") ?: default.scenarioPath,
+                ignoredTags = getter("ignoredTags")?.split(",")?.toSet() ?: default.ignoredTags,
             )
         }
 

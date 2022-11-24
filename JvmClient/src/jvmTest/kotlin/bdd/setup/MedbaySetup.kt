@@ -28,17 +28,22 @@ abstract class MedbaySetup(
                 check(ping == "Pong") {
                     "Did not receive 'Pong' from ping, received '$ping' from ${gameProcess.simpleString()}!"
                 }
-            } catch(e: SocketException) {
+            } catch (e: SocketException) {
                 throw IllegalStateException("Couldn't ping ${gameProcess.simpleString()}", e)
             }
         }
     }
 
-    override fun afterScenario(scenario: Scenario) = runBlocking {
+    var atLeastOneScenarioPassed = false
 
+    override fun afterScenario(scenario: Scenario) = runBlocking {
+        atLeastOneScenarioPassed = true
     }
 
     override fun afterAll() {
+        if (!atLeastOneScenarioPassed) {
+            error("No scenarios actually happened")
+        }
         if (connectionManager.config.exitMode == ExitMode.AFTER_LAST_SCENARIO) {
             Thread.sleep(500)
             exitToMainMenu()
