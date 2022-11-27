@@ -8,10 +8,11 @@ import kotlin.time.Duration.Companion.milliseconds
 suspend fun whileWithTimeout(
     timeout: Duration = 10_000.milliseconds,
     waitDelay: Duration = 100.milliseconds,
-    condition: () -> Boolean
+    condition: suspend (Int) -> Boolean
 ) {
     withTimeout(timeout) {
-        while (condition()) {
+        var index = 0
+        while (condition(index++)) {
             delay(waitDelay)
         }
     }

@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using Iv4xr.PluginLib;
+using Iv4xr.SePlugin.Communication;
 using Iv4xr.SePlugin.Navigation;
 using Iv4xr.SpaceEngineers;
 using Iv4xr.SpaceEngineers.Navigation;
@@ -77,6 +79,16 @@ namespace Iv4xr.SePlugin.Control
         {
             VRageRender.MyRenderProxy.TakeScreenshot(new Vector2(MySandboxGame.Config.ScreenshotSizeMultiplier),
                 absolutePath, false, false, true);
+        }
+
+        [CallOn(CallTarget.CurrentThread)]
+        public string DownloadScreenshotBase64()
+        {
+            var absolutePath = Path.GetTempFileName();
+            MySandboxGame.Static.Invoke(() => TakeScreenshot(absolutePath), "iv4xr-screenshot");
+            //TODO: better way to wait until the file is finished
+            System.Threading.Thread.Sleep(2000);
+            return Convert.ToBase64String(File.ReadAllBytes(absolutePath));
         }
     }
 }

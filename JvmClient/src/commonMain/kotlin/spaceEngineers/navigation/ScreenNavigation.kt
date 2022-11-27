@@ -85,8 +85,15 @@ val DEFAULT_TRANSITIONS = listOf(
         saveAs.pressCancel()
     },
     ScreenTransition(MessageBox, MainMenu) {
-        //TODO: depending on MessageBox data
         val data = messageBox.data()
+        if (data.text == "Multiplayer session no longer exists (probably closed).") {
+            messageBox.pressYes()
+        } else {
+            TODO("Don't know what to do with messagebox $data (get to MainMenu)")
+        }
+    },
+    ScreenTransition(ScreenName.ServerReconnector, MainMenu) {
+        TODO("Implement this")
     },
     ScreenTransition(JoinGame, MainMenu) {
         joinGame.close()

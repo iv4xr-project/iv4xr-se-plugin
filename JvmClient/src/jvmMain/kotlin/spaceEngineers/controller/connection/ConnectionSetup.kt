@@ -116,8 +116,8 @@ data class ConnectionSetup(
             return json.decodeFromString(serializer(), file.readText())
         }
 
-        fun loadConfigFromFile(name: String = "config.json"): ConnectionSetup {
-            return loadConfigFromFile(File(CONNECTION_SETUP_DIR, name))
+        fun loadConfigFromFile(name: String = "config.json", directory: String = CONNECTION_SETUP_DIR): ConnectionSetup {
+            return loadConfigFromFile(File(directory, name))
         }
     }
 }

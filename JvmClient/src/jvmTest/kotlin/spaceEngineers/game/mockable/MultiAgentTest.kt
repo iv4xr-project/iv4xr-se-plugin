@@ -1,8 +1,8 @@
 package spaceEngineers.game.mockable
 
 import spaceEngineers.transport.jsonrpc.KotlinJsonRpcError
+import spaceEngineers.transport.jsonrpc.remoteException
 import testhelp.MockOrRealGameTest
-import testhelp.remoteException
 import kotlin.test.*
 
 

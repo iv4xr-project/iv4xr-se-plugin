@@ -104,6 +104,7 @@ interface Observer {
      * @param absolutePath Absolute path to final image. For example `C:/Screenshots/image.png`
      */
     fun takeScreenshot(absolutePath: String)
+    fun downloadScreenshotBase64(): String
     fun switchCamera()
 }
 

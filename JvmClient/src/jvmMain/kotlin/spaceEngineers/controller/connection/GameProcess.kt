@@ -17,8 +17,23 @@ data class GameProcess(
         return "$type($roles)@$address:$pluginPort"
     }
 
+    val mainRole: Role
+        get() {
+            if (Role.MAIN_CLIENT in roles) {
+                return Role.MAIN_CLIENT
+            }
+            if (Role.ADMIN in roles) {
+                return Role.ADMIN
+            }
+            return Role.OBSERVER
+        }
+
     fun isMainClient(): Boolean {
         return Role.MAIN_CLIENT in roles
+    }
+
+    fun simpleString(): String {
+        return "$address:$pluginPort($mainRole)"
     }
 
 }

@@ -7,6 +7,7 @@ import spaceEngineers.model.Block
 import spaceEngineers.model.extensions.allBlocks
 import spaceEngineers.model.extensions.blockByCustomName
 import spaceEngineers.model.extensions.blocksByCustomName
+import spaceEngineers.model.extensions.shortDescription
 import testhelp.assertLessThan
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -37,7 +38,7 @@ class BlockAsserts : AbstractMultiplayerSteps() {
         val blockDefinition = definitions.blockDefinitions().first {
             it.definitionId.type == type
         }
-        assertEquals(mass.toFloat(), blockDefinition.mass)
+        assertEquals(mass.toFloat(), blockDefinition.mass, message = "Block $type does not have mass $mass")
     }
 
 
@@ -106,11 +107,11 @@ class BlockAsserts : AbstractMultiplayerSteps() {
 
     private fun checkBlockIntegrityAtMaximum(block: Block?) {
         assertNotNull(block, "Block not found!")
-        assertEquals(block.integrity, block.maxIntegrity, "Not maximum for block $block")
+        assertEquals(block.integrity, block.maxIntegrity, "Not maximum for block ${block.shortDescription}")
     }
 
     private fun checkBlockIntegrityLessThanMaximum(block: Block?) {
         assertNotNull(block, "Block not found!")
-        assertLessThan(block.integrity, block.maxIntegrity, "Not less than maximum for block $block")
+        assertLessThan(block.integrity, block.maxIntegrity, "Not less than maximum for block ${block.shortDescription}")
     }
 }

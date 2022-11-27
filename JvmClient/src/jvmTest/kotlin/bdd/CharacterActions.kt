@@ -307,15 +307,27 @@ class CharacterActions : AbstractMultiplayerSteps() {
     fun character_drops_from_the_inventory(definitionIdStr: String) = mainClient {
         val definitionId = DefinitionId.parse(definitionIdStr)
         observer.observe().inventory.items.indexOfFirst { it.id == definitionId }.toNullIfMinusOne()
-            ?: error("Item $definitionId not found in inventory")
+            ?: error("Item $definitionId not found in the character inventory (1)")
         character.showInventory()
         smallPause()
         with(screens.terminal.inventory) {
-            val firstLeftInventory = this.data().leftInventories.first()
+            val firstLeftInventory =
+                this.data().leftInventories.firstOrNull() ?: error("There are no inventories to the left!")
             val itemIndex = firstLeftInventory.items.indexOfFirst { it.id == definitionId }.toNullIfMinusOne()
-                ?: error("Item $definitionId not found in inventory (2)")
+                ?: error("Item $definitionId not found in the first left terminal inventory (2)")
             left.selectItem(itemIndex)
-            dropSelected()
+            smallPause()
+            try {
+                dropSelected()
+            } catch (e: Exception) {
+                // there's a bug in the game, first time selected first item doesn't make the drop button enabled
+                if (itemIndex == 0) {
+                    left.selectItem(1)
+                    smallPause()
+                    left.selectItem(itemIndex)
+                    dropSelected()
+                }
+            }
             smallPause()
             screens.terminal.close()
             smallPause()
@@ -329,7 +341,8 @@ class CharacterActions : AbstractMultiplayerSteps() {
         smallPause()
         with(screens.terminal) {
             val data = inventory.data()
-            val itemId = data.rightInventories.first().items.firstOrNull { it.id == definitionId }?.itemId
+            val itemId = (data.rightInventories.firstOrNull()
+                ?: error("No inventories on the right side!")).items.firstOrNull { it.id == definitionId }?.itemId
                 ?: error("Item $definitionId not found in the right inventory. Found: ${data.rightInventories.first().items.map { it.id }}")
             inventory.transferInventoryItemToLeft(0, 0, itemId)
             screens.terminal.close()

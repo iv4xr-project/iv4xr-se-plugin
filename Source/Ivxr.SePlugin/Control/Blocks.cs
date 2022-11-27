@@ -118,7 +118,7 @@ namespace Iv4xr.SePlugin.Control
         public string PlaceAt(DefinitionId blockDefinitionId, PlainVec3D position, PlainVec3D orientationForward,
             PlainVec3D orientationUp, PlainVec3F? color = null)
         {
-            Definitions.CheckDefinitionIdExists(blockDefinitionId.ToMyDefinitionId());
+            Definitions.CheckDefinitionIdExistsAndEnabled(blockDefinitionId.ToMyDefinitionId());
             return m_blockPlacer.PlaceSingleBlock(m_session.CurrentCharacterId, blockDefinitionId, position.ToVector3(),
                 orientationForward.ToVector3(),
                 orientationUp.ToVector3(), color?.ToVector3() ?? MyPlayer.SelectedColor).BlockId().ToString();
@@ -128,7 +128,7 @@ namespace Iv4xr.SePlugin.Control
             PlainVec3I orientationForward,
             PlainVec3I orientationUp, PlainVec3F? color = null)
         {
-            Definitions.CheckDefinitionIdExists(blockDefinitionId.ToMyDefinitionId());
+            Definitions.CheckDefinitionIdExistsAndEnabled(blockDefinitionId.ToMyDefinitionId());
             var grid = m_observer.GetGridById(gridId);
             return m_blockPlacer.PlaceInGrid(
                 blockDefinitionId.ToMyCubeBlockDefinition().Id, grid, minPosition.ToVector3I(),

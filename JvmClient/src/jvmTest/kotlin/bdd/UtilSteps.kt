@@ -1,5 +1,6 @@
 package bdd
 
+import io.cucumber.java.en.And
 import io.cucumber.java.en.Given
 import io.cucumber.junit.Cucumber
 import kotlinx.coroutines.delay
@@ -15,4 +16,18 @@ class UtilSteps : AbstractMultiplayerSteps() {
         delay((seconds * 1000f).toLong())
     }
 
+    @And("Test disconnects all clients.")
+    fun debug_disconect_clients() {
+        all {
+            close()
+        }
+    }
+
+    @And("Test waits indefinitely.")
+    fun debug_wait() {
+        println("Closed and waiting indefinitely.")
+        while (true) {
+            sleep(500)
+        }
+    }
 }

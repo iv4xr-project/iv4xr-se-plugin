@@ -18,6 +18,7 @@ namespace Iv4xr.SpaceEngineers
         DebugInfo DebugInfo();
         ITestAdmin Tests { get; }
         void ShowNotification(string text);
+        string Ping();
     }
 
     public interface IObserverAdmin

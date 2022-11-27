@@ -48,16 +48,16 @@ fun parseTags(title: String): List<String> {
 
 
 fun String.convertTables(): String {
-
     var previousLinePiped = false
     return lineSequence().map { it ->
         if (it.startsWith("||")) {
             if (previousLinePiped) {
-                previousLinePiped = true
-                "  " + it.substring(1) + "|"
+                1
             } else {
+                2
+            }.let { startIndex ->
                 previousLinePiped = true
-                "  " + it.substring(2) + "|"
+                "  " + it.substring(startIndex) + "|"
             }
         } else {
             previousLinePiped = false
@@ -75,7 +75,15 @@ fun String.convertTables(): String {
 
 class SectionHelper(
     val sections: Sections,
-) {
+    val ignoredSections: Set<Long> = DEFAULT_IGNORED_SECTIONS,
+    val sectionDirectoryNaming: (Section) -> String = {
+        "${it.name}-${it.id}"
+    },
+    val caseFileNaming: (Case) -> String = { case ->
+        "C${case.id}.feature"
+    },
+
+    ) {
 
     val sectionsById = sections.sections.associateBy { it.id }
 
@@ -94,8 +102,12 @@ class SectionHelper(
     }
 
     fun sectionsOfCase(case: Case): List<Section> {
+        return sectionsOfSection(case.section_id)
+    }
+
+    fun sectionsOfSection(sectionId: Long): List<Section> {
         val sections = mutableListOf<Section>()
-        var section: Section? = sectionsById[case.section_id]
+        var section: Section? = sectionsById[sectionId]
         do {
             section?.let {
                 sections.add(it)
@@ -103,5 +115,19 @@ class SectionHelper(
             section = sectionsById[section?.parent_id]
         } while (section != null)
         return sections.asReversed()
+    }
+
+    fun fileRelativePath(case: Case): String {
+        return sectionDirectory(case.section_id) + "/" + caseFileNaming(case)
+    }
+
+    fun sectionDirectory(sectionId: Long): String {
+        return sectionsOfSection(sectionId).filter { it.id !in ignoredSections }
+            .joinToString(separator = "/", transform = sectionDirectoryNaming)
+
+    }
+
+    companion object {
+        val DEFAULT_IGNORED_SECTIONS = setOf(49384L, 49385L, 49386L)
     }
 }

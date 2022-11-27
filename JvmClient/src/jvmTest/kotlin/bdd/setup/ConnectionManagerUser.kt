@@ -1,6 +1,6 @@
 package bdd.setup
 
-import bdd.globalCm
+import spaceEngineers.config.globalCm
 import kotlinx.coroutines.delay
 import spaceEngineers.controller.connection.ConnectionManager
 import spaceEngineers.controller.connection.ProcessWithConnection

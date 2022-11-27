@@ -58,6 +58,10 @@ class ContextControllerWrapper(
             spaceEngineers.observer.takeScreenshot(absolutePath)
         }
 
+        override fun downloadScreenshotBase64(): String {
+            return spaceEngineers.observer.downloadScreenshotBase64()
+        }
+
         override fun switchCamera() {
             spaceEngineers.observer.switchCamera()
         }

@@ -6,12 +6,11 @@ import bdd.repetitiveassert.SimpleRepetitiveAssertTestCase
 import bdd.setup.ConnectionManagerUser
 import bdd.setup.GlobalConnectionManagerUser
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
 import spaceEngineers.controller.connection.ConnectionManager
 import spaceEngineers.controller.extensions.typedFocusedScreen
 import spaceEngineers.controller.loadFromTestResources
 import spaceEngineers.model.ScreenName.Companion.Medicals
-import testhelp.hideUndeclaredThrowableException
+
 
 abstract class AbstractMultiplayerSteps(
     config: RepetitiveAssertConfig = RepetitiveAssertConfig(),
