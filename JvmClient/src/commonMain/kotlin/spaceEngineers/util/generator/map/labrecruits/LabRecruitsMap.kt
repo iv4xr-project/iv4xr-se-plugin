@@ -13,6 +13,11 @@ class LabRecruitsMap(
     val doors: Map<DoorId, Door>,
     val buttons: Map<ButtonId, Button>,
 ) : MapLayer {
+
+    fun doorsByButtonId(buttonId: ButtonId): Set<Door> {
+        return mappings.getValue(buttons.getValue(buttonId))
+    }
+
     override fun get(x: Int, y: Int): BlockPlacementInformation? {
         return cells[x][y]
     }
@@ -71,8 +76,9 @@ class LabRecruitsMap(
             door: Map<DoorId, Door>,
             buttons: Map<ButtonId, Button>
         ): Map<Button, Set<Door>> {
-            return lines.associate {
-                val cells = it.split(",")
+            return lines.associate { it ->
+                val cells = it.split(",").filter { it.isNotBlank() }
+
                 (buttons.get(cells.first()) ?: Button(cells.first())) to cells.subList(1, cells.size)
                     .map { doorId -> door.get(doorId) ?: Door(doorId, Direction.LEFT) }.toSet()
             }

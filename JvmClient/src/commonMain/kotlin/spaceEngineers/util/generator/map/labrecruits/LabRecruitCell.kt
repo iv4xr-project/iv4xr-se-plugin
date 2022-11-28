@@ -52,9 +52,9 @@ object Wall : LabRecruitCell() {
     override val customName: String? = null
 }
 
-val BUTTON_REGEX = "^f:b\\^(b[0-9]+)$".toRegex()
-val AGENT_REGEX = "^f:a\\^(Agent[0-9]+)$".toRegex()
-val DOOR_REGEX = "^f:d>([nwes])\\^(door[0-9]+)$".toRegex()
+val BUTTON_REGEX = "^f:b\\^(b(?:utton)?[0-9]+)$".toRegex()
+val AGENT_REGEX = "^f:a\\^([Aa](?:gent)?[0-9]+)$".toRegex()
+val DOOR_REGEX = "^f:d>([nwes])\\^(d(?:oor)?[0-9]+)$".toRegex()
 
 object Floor : LabRecruitCell() {
     override val regex: Regex = "\\|?f".toRegex()
