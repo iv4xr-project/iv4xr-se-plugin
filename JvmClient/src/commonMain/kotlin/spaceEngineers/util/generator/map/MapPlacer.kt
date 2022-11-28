@@ -3,6 +3,7 @@ package spaceEngineers.util.generator.map
 import spaceEngineers.controller.proxy.BatchCallable
 import spaceEngineers.controller.SpaceEngineers
 import spaceEngineers.controller.proxy.executeIfNotNull
+import spaceEngineers.graph.Cube3dGraph
 import spaceEngineers.model.*
 import spaceEngineers.model.extensions.blockById
 import spaceEngineers.model.extensions.toFloat
@@ -35,22 +36,51 @@ class MapPlacer(
     }
 
     private fun generateFloor(gridId: String, level: Int = 0) = batch {
-        for (z in 0 until map.height) {
-            for (x in 0 until map.width) {
-                print(".")
-                if (z == 0 && x == 0) {
-                    continue
-                }
-                val position = Vec3I(x, level, z)
-                map[x, z]?.let { cell ->
-                    if (cell is Floor || cell is UnnecessaryFloor) {
-                        processCell(cell, gridId, position)
-                    } else {
-                        processCell(floorPlacer.copy(color = cell.color ?: floorPlacer.color), gridId, position)
-                    }
+        placeUsingGraphSearch(level, gridId)
+        //placeTheOldWay(level, gridId)
+    }
+
+    private fun placeUsingGraphSearch(level: Int, gridId: String) {
+        placeInSequence(level = level)
+            .filter { (position, _) -> position.x != 0 || position.z != 0 }
+            .filter { (_, cell) -> cell != null && cell !is UnnecessaryFloor }.toMap()
+            .let {
+                Cube3dGraph(it as Map<Vec3I, BlockPlacementInformation>).dfs(
+                    start = Vec3I(x = 1, z = 0, y = level)
+                ).forEach { (position, cell) ->
+                    placeFloor(gridId, z = position.z, x = position.x, level = position.y)
                 }
             }
-            println(" $z")
+    }
+
+    private fun placeTheOldWay(level: Int, gridId: String) {
+        placeInSequence(level = level)
+            .filter { (position, _) -> position.x != 0 || position.z != 0 }
+            .forEach { (position, _) ->
+                placeFloor(gridId, level = position.y, z = position.z, x = position.x)
+            }
+    }
+
+
+    fun placeInSequence(level: Int) = sequence {
+        for (z in 0 until map.height) {
+            for (x in 0 until map.width) {
+                map[x, z].let { cell ->
+                    val position = Vec3I(x, level, z)
+                    yield(position to cell)
+                }
+            }
+        }
+    }
+
+    fun placeFloor(gridId: String, z: Int, x: Int, level: Int) {
+        val position = Vec3I(x, level, z)
+        map[x, z]?.let { cell ->
+            if (cell is Floor || cell is UnnecessaryFloor) {
+                processCell(cell, gridId, position)
+            } else {
+                processCell(floorPlacer.copy(color = cell.color ?: floorPlacer.color), gridId, position)
+            }
         }
     }
 

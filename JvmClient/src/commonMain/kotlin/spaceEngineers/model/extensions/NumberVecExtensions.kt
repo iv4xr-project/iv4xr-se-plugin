@@ -4,6 +4,7 @@ import spaceEngineers.model.CharacterMovementType
 import spaceEngineers.model.NumberVec3
 import spaceEngineers.model.Vec3F
 import spaceEngineers.model.Vec3I
+import spaceEngineers.movement.BasicDirection3d
 
 
 fun Vec3F.normalizeAsMovement(characterMovementType: CharacterMovementType): Vec3F {
@@ -49,4 +50,10 @@ public inline fun Iterable<Vec3F>.sum(): Vec3F {
         sum += element
     }
     return sum
+}
+
+fun Vec3I.neighbourPositions(): Set<Vec3I> {
+    return BasicDirection3d.excludingNone().map {
+        this + it.vector.toInt()
+    }.toSet()
 }

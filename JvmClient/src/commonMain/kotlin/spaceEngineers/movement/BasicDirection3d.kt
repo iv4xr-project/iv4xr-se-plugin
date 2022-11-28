@@ -34,6 +34,10 @@ enum class BasicDirection3d(
             }
         }
 
+        fun excludingNone(): List<BasicDirection3d> {
+            return values().filter { it != NONE }
+        }
+
     }
 
 }
