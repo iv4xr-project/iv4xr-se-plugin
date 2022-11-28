@@ -1,7 +1,9 @@
 package bdd.screenshots
 
+import kotlinx.serialization.Serializable
 import spaceEngineers.model.Block
 
+@Serializable
 data class Screenshots(
     val blockType: String,
     val maxIntegrity: Float,

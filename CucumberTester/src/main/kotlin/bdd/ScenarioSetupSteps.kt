@@ -1,10 +1,7 @@
 package bdd
 
-import spaceEngineers.config.cfg
-import spaceEngineers.config.globalCm
-import bdd.setup.MedbayDSSetup
-import bdd.setup.MedbayLobbySetup
-import bdd.setup.TestSetup
+
+import bdd.setup.*
 import io.cucumber.datatable.DataTable
 import io.cucumber.java.*
 import io.cucumber.java.en.Given
@@ -35,7 +32,7 @@ fun testSetupFactory(config: ConnectionSetup, connectionManager: ConnectionManag
 @BeforeAll
 fun beforeAll() {
     if (!::testSetup.isInitialized) {
-        testSetup = testSetupFactory(cfg, globalCm)
+        testSetup = testSetupFactory(globalCm.connectionSetup, globalCm)
     }
     testSetup.beforeAll()
 }
@@ -57,7 +54,7 @@ fun after(scenario: Scenario) {
 }
 
 
-class ScenarioSetupSteps : AbstractMultiplayerSteps() {
+class ScenarioSetupSteps(connectionManager: ConnectionManager) : AbstractMultiplayerSteps(connectionManager) {
 
 
     @Given("Scenario used is {string}.")

@@ -2,10 +2,11 @@ package bdd
 
 import bdd.repetitiveassert.repeatUntilSuccess
 import io.cucumber.java.en.Then
+import spaceEngineers.controller.connection.ConnectionManager
 import kotlin.test.assertTrue
 
 
-class DebugAsserts : AbstractMultiplayerSteps() {
+class DebugAsserts(connectionManager: ConnectionManager) : AbstractMultiplayerSteps(connectionManager) {
 
     @Then("Sound {string} is being played.")
     fun sound_is_being_played(soundNames: String) = mainClient {

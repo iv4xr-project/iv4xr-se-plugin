@@ -1,10 +1,11 @@
 package bdd
 
 import io.cucumber.java.en.Then
+import spaceEngineers.controller.connection.ConnectionManager
 import spaceEngineers.model.DefinitionId
 import kotlin.test.assertTrue
 
-class FloatingObjectAsserts : AbstractMultiplayerSteps() {
+class FloatingObjectAsserts(connectionManager: ConnectionManager) : AbstractMultiplayerSteps(connectionManager) {
 
     @Then("There is floating ore {string} in space around.")
     fun there_is_floating_ore_in_space_around(type: String) = observers {

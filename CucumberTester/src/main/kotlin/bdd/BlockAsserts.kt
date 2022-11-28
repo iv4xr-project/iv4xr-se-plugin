@@ -3,6 +3,7 @@ package bdd
 import bdd.repetitiveassert.repeatUntilSuccess
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
+import spaceEngineers.controller.connection.ConnectionManager
 import spaceEngineers.model.Block
 import spaceEngineers.model.extensions.allBlocks
 import spaceEngineers.model.extensions.blockByCustomName
@@ -13,7 +14,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
-class BlockAsserts : AbstractMultiplayerSteps() {
+class BlockAsserts(connectionManager: ConnectionManager) : AbstractMultiplayerSteps(connectionManager) {
 
 
     @Then("Observed grid mass is {double}.")

@@ -6,6 +6,7 @@ import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import kotlinx.coroutines.delay
+import spaceEngineers.controller.connection.ConnectionManager
 import spaceEngineers.controller.connection.ProcessWithConnection
 import spaceEngineers.controller.extensions.typedFocusedScreen
 import spaceEngineers.model.*
@@ -15,7 +16,7 @@ import java.lang.Thread.sleep
 import kotlin.test.*
 
 
-class CharacterAsserts : AbstractMultiplayerSteps() {
+class CharacterAsserts(connectionManager: ConnectionManager) : AbstractMultiplayerSteps(connectionManager) {
 
 
     @Then("Character is standing.")

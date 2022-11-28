@@ -3,7 +3,6 @@ plugins {
     id 'org.jetbrains.kotlin.plugin.serialization' version "$kotlin_version"
     id("org.jetbrains.dokka") version "$kotlin_version"
     id 'maven-publish'
-    id "se.thinkcode.cucumber-runner" version "0.0.11"
 }
 
 group = 'com.github.iv4xr-project'
@@ -63,32 +62,7 @@ kotlin {
             dependencies {
                 implementation 'org.jetbrains.kotlin:kotlin-test-junit5'
                 implementation group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.8.2'
-                implementation group: 'io.cucumber', name: 'cucumber-java', version: '7.2.3'
-                implementation group: 'io.cucumber', name: 'cucumber-junit', version: '7.2.3'
             }
         }
     }
-}
-
-cucumber {
-    glue = 'bdd'
-    plugin = ['pretty']
-    tags = ''
-    name = ''
-
-
-    featurePath = 'src/jvmTest/resources/features/se-testing/astronaut'
-    main = 'bdd.MainKt'
-}
-
-
-configurations {
-    testArtifacts
-}
-task testJar (type: Jar) {
-    baseName = "${project.name}-test"
-    from sourceSets["test"].output
-}
-artifacts {
-    testArtifacts testJar
 }

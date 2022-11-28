@@ -6,6 +6,7 @@ import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import kotlinx.coroutines.withTimeout
 import kotlinx.coroutines.yield
+import spaceEngineers.controller.connection.ConnectionManager
 import spaceEngineers.controller.extensions.typedFocusedScreen
 import spaceEngineers.model.*
 import spaceEngineers.model.ScreenName.Companion.Terminal
@@ -15,7 +16,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
-class ScreenSteps : AbstractMultiplayerSteps() {
+class ScreenSteps(connectionManager: ConnectionManager) : AbstractMultiplayerSteps(connectionManager) {
 
     val filesToCopy = listOf(
         "AustinHarris.JsonRpc.dll",

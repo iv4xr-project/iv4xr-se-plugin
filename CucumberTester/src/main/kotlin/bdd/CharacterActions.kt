@@ -9,6 +9,7 @@ import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
+import spaceEngineers.controller.connection.ConnectionManager
 import spaceEngineers.controller.extensions.blockingMoveForwardByDistance
 import spaceEngineers.controller.extensions.grindDownToPercentage
 import spaceEngineers.controller.extensions.toNullIfMinusOne
@@ -22,7 +23,7 @@ import spaceEngineers.movement.*
 import kotlin.test.assertEquals
 
 
-class CharacterActions : AbstractMultiplayerSteps() {
+class CharacterActions(connectionManager: ConnectionManager) : AbstractMultiplayerSteps(connectionManager) {
 
     @When("Character grinds to {double} integrity.")
     fun character_grinds_to_integrity(integrity: Double) = mainClient {
