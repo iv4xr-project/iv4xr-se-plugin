@@ -39,10 +39,6 @@ $dokka.location:environments/SeEnvironment/observe/#/PointingToDeclaration/spac
 $dokka.location:environments/SeEnvironment/observe/#kotlin.String/PointingToDeclaration/space-engineers-api/environments/-se-environment/observe.html
 $dokka.location:environments/SeEnvironment/observeForNewBlocks/#/PointingToDeclaration/space-engineers-api/environments/-se-environment/observe-for-new-blocks.html
 $dokka.location:environments/SeEnvironment/worldId/#/PointingToDeclaration/space-engineers-api/environments/-se-environment/world-id.html
-$dokka.location:spaceEngineers.config////PointingToDeclaration/space-engineers-api/spaceEngineers.config/index.html
-$dokka.location:spaceEngineers.config//bddRunConfig/#/PointingToDeclaration/space-engineers-api/spaceEngineers.config/bdd-run-config.html
-$dokka.location:spaceEngineers.config//cfg/#/PointingToDeclaration/space-engineers-api/spaceEngineers.config/cfg.html
-$dokka.location:spaceEngineers.config//globalCm/#/PointingToDeclaration/space-engineers-api/spaceEngineers.config/global-cm.html
 $dokka.location:spaceEngineers.controller.connection////PointingToDeclaration/space-engineers-api/spaceEngineers.controller.connection/index.html
 $dokka.location:spaceEngineers.controller.connection//main/#kotlin.Array[kotlin.String]/PointingToDeclaration/space-engineers-api/spaceEngineers.controller.connection/main.html
 $dokka.location:spaceEngineers.controller.connection/AppType.DEDICATED///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}space-engineers-api/spaceEngineers.controller.connection/-app-type/-d-e-d-i-c-a-t-e-d/index.html
@@ -6573,6 +6569,8 @@ $dokka.location:spaceEngineers.util//extractTo/java.util.zip.ZipInputStream#java
 $dokka.location:spaceEngineers.util//nonWhitespaceEquals/kotlin.String#kotlin.String/PointingToDeclaration/space-engineers-api/spaceEngineers.util/non-whitespace-equals.html
 $dokka.location:spaceEngineers.util//stripWhitespace/kotlin.String#/PointingToDeclaration/space-engineers-api/spaceEngineers.util/strip-whitespace.html
 $dokka.location:spaceEngineers.util//whileWithTimeout/#kotlin.time.Duration#kotlin.time.Duration#kotlin.coroutines.SuspendFunction1[kotlin.Int,kotlin.Boolean]/PointingToDeclaration/space-engineers-api/spaceEngineers.util/while-with-timeout.html
+$dokka.location:testhelp////PointingToDeclaration/space-engineers-api/testhelp/index.html
+$dokka.location:testhelp//hideUndeclaredThrowableException/#kotlin.coroutines.SuspendFunction0[TypeParam(bounds=[kotlin.Any?])]/PointingToDeclaration/space-engineers-api/testhelp/hide-undeclared-throwable-exception.html
 $dokka.location:testrail.model////PointingToDeclaration/space-engineers-api/testrail.model/index.html
 $dokka.location:testrail.model/Attachment///PointingToDeclaration/space-engineers-api/testrail.model/-attachment/index.html
 $dokka.location:testrail.model/Attachment/Attachment/#kotlin.String#kotlin.String#kotlin.Long#kotlin.Long#kotlin.Long/PointingToDeclaration/space-engineers-api/testrail.model/-attachment/-attachment.html
@@ -6695,7 +6693,6 @@ $dokka.location:testrail/TestRailConfig/testCaseDirectory/#/PointingToDeclaratio
 $dokka.location:testrail/TestRailConfig/toClient/#/PointingToDeclaration/space-engineers-api/testrail/-test-rail-config/to-client.html
 $dokka.location:testrail/TestRailConfig/username/#/PointingToDeclaration/space-engineers-api/testrail/-test-rail-config/username.html
 environments
-spaceEngineers.config
 spaceEngineers.controller
 spaceEngineers.controller.connection
 spaceEngineers.controller.extensions
@@ -6719,6 +6716,7 @@ spaceEngineers.util.generator.map
 spaceEngineers.util.generator.map.labrecruits
 spaceEngineers.util.generator.maze
 spaceEngineers.util.generator.python
+testhelp
 testrail
 testrail.model
 
