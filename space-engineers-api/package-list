@@ -624,6 +624,13 @@ $dokka.location:spaceEngineers.graph/BasicGraphSearch/BasicGraphSearch/#spaceEng
 $dokka.location:spaceEngineers.graph/BasicGraphSearch/canNavigateToSelf/#/PointingToDeclaration/space-engineers-api/spaceEngineers.graph/-basic-graph-search/can-navigate-to-self.html
 $dokka.location:spaceEngineers.graph/BasicGraphSearch/findPath/#TypeParam(bounds=[kotlin.Any?])#TypeParam(bounds=[kotlin.Any?])/PointingToDeclaration/space-engineers-api/spaceEngineers.graph/-basic-graph-search/find-path.html
 $dokka.location:spaceEngineers.graph/BasicGraphSearch/graphExtra/#/PointingToDeclaration/space-engineers-api/spaceEngineers.graph/-basic-graph-search/graph-extra.html
+$dokka.location:spaceEngineers.graph/Cube3dGraph///PointingToDeclaration/space-engineers-api/spaceEngineers.graph/-cube3d-graph/index.html
+$dokka.location:spaceEngineers.graph/Cube3dGraph/Cube3dGraph/#kotlin.collections.Map[spaceEngineers.model.Vec3I,TypeParam(bounds=[kotlin.Any])]/PointingToDeclaration/space-engineers-api/spaceEngineers.graph/-cube3d-graph/-cube3d-graph.html
+$dokka.location:spaceEngineers.graph/Cube3dGraph/bfs/#spaceEngineers.model.Vec3I#kotlin.collections.Set[spaceEngineers.model.Vec3I]/PointingToDeclaration/space-engineers-api/spaceEngineers.graph/-cube3d-graph/bfs.html
+$dokka.location:spaceEngineers.graph/Cube3dGraph/blocksByPositions/#/PointingToDeclaration/space-engineers-api/spaceEngineers.graph/-cube3d-graph/blocks-by-positions.html
+$dokka.location:spaceEngineers.graph/Cube3dGraph/dfs/#spaceEngineers.model.Vec3I#kotlin.collections.Set[spaceEngineers.model.Vec3I]/PointingToDeclaration/space-engineers-api/spaceEngineers.graph/-cube3d-graph/dfs.html
+$dokka.location:spaceEngineers.graph/Cube3dGraph/neighbourIds/#spaceEngineers.model.Vec3I/PointingToDeclaration/space-engineers-api/spaceEngineers.graph/-cube3d-graph/neighbour-ids.html
+$dokka.location:spaceEngineers.graph/Cube3dGraph/positions/#/PointingToDeclaration/space-engineers-api/spaceEngineers.graph/-cube3d-graph/positions.html
 $dokka.location:spaceEngineers.graph/DataEdge///PointingToDeclaration/space-engineers-api/spaceEngineers.graph/-data-edge/index.html
 $dokka.location:spaceEngineers.graph/DataEdge/DataEdge/#TypeParam(bounds=[kotlin.Any?])#TypeParam(bounds=[kotlin.Any?])#TypeParam(bounds=[kotlin.Any?])#TypeParam(bounds=[kotlin.Any?])/PointingToDeclaration/space-engineers-api/spaceEngineers.graph/-data-edge/-data-edge.html
 $dokka.location:spaceEngineers.graph/DataEdge/data/#/PointingToDeclaration/space-engineers-api/spaceEngineers.graph/-data-edge/data.html
@@ -713,6 +720,7 @@ $dokka.location:spaceEngineers.model.extensions//heaviestGrid/spaceEngineers.mod
 $dokka.location:spaceEngineers.model.extensions//isSidePoint/spaceEngineers.model.MountPoint#/PointingToDeclaration/space-engineers-api/spaceEngineers.model.extensions/is-side-point.html
 $dokka.location:spaceEngineers.model.extensions//largestGrid/spaceEngineers.model.Observation#/PointingToDeclaration/space-engineers-api/spaceEngineers.model.extensions/largest-grid.html
 $dokka.location:spaceEngineers.model.extensions//mountPointToRealWorldPosition/spaceEngineers.model.Block#spaceEngineers.model.MountPoint#spaceEngineers.model.BlockDefinition#kotlin.Float/PointingToDeclaration/space-engineers-api/spaceEngineers.model.extensions/mount-point-to-real-world-position.html
+$dokka.location:spaceEngineers.model.extensions//neighbourPositions/spaceEngineers.model.Vec3I#/PointingToDeclaration/space-engineers-api/spaceEngineers.model.extensions/neighbour-positions.html
 $dokka.location:spaceEngineers.model.extensions//normalizeAsMovement/spaceEngineers.model.Vec3F#spaceEngineers.model.CharacterMovementType/PointingToDeclaration/space-engineers-api/spaceEngineers.model.extensions/normalize-as-movement.html
 $dokka.location:spaceEngineers.model.extensions//normalizeAsRun/spaceEngineers.model.Vec3F#/PointingToDeclaration/space-engineers-api/spaceEngineers.model.extensions/normalize-as-run.html
 $dokka.location:spaceEngineers.model.extensions//normalizeAsSprint/spaceEngineers.model.Vec3F#/PointingToDeclaration/space-engineers-api/spaceEngineers.model.extensions/normalize-as-sprint.html
@@ -5919,6 +5927,7 @@ $dokka.location:spaceEngineers.movement//toKeyboardSnapshot/spaceEngineers.movem
 $dokka.location:spaceEngineers.movement/BasicDirection3d.BACKWARD///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}space-engineers-api/spaceEngineers.movement/-basic-direction3d/-b-a-c-k-w-a-r-d/index.html
 $dokka.location:spaceEngineers.movement/BasicDirection3d.Companion///PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-basic-direction3d/-companion/index.html
 $dokka.location:spaceEngineers.movement/BasicDirection3d.Companion/directionFromString/#kotlin.String/PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-basic-direction3d/-companion/direction-from-string.html
+$dokka.location:spaceEngineers.movement/BasicDirection3d.Companion/excludingNone/#/PointingToDeclaration/space-engineers-api/spaceEngineers.movement/-basic-direction3d/-companion/excluding-none.html
 $dokka.location:spaceEngineers.movement/BasicDirection3d.DOWN///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}space-engineers-api/spaceEngineers.movement/-basic-direction3d/-d-o-w-n/index.html
 $dokka.location:spaceEngineers.movement/BasicDirection3d.FORWARD///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}space-engineers-api/spaceEngineers.movement/-basic-direction3d/-f-o-r-w-a-r-d/index.html
 $dokka.location:spaceEngineers.movement/BasicDirection3d.LEFT///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}space-engineers-api/spaceEngineers.movement/-basic-direction3d/-l-e-f-t/index.html
@@ -6298,6 +6307,7 @@ $dokka.location:spaceEngineers.util.generator.map.labrecruits/LabRecruitsMap/Lab
 $dokka.location:spaceEngineers.util.generator.map.labrecruits/LabRecruitsMap/buttons/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.map.labrecruits/-lab-recruits-map/buttons.html
 $dokka.location:spaceEngineers.util.generator.map.labrecruits/LabRecruitsMap/cells/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.map.labrecruits/-lab-recruits-map/cells.html
 $dokka.location:spaceEngineers.util.generator.map.labrecruits/LabRecruitsMap/doors/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.map.labrecruits/-lab-recruits-map/doors.html
+$dokka.location:spaceEngineers.util.generator.map.labrecruits/LabRecruitsMap/doorsByButtonId/#kotlin.String/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.map.labrecruits/-lab-recruits-map/doors-by-button-id.html
 $dokka.location:spaceEngineers.util.generator.map.labrecruits/LabRecruitsMap/get/#kotlin.Int#kotlin.Int/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.map.labrecruits/-lab-recruits-map/get.html
 $dokka.location:spaceEngineers.util.generator.map.labrecruits/LabRecruitsMap/height/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.map.labrecruits/-lab-recruits-map/height.html
 $dokka.location:spaceEngineers.util.generator.map.labrecruits/LabRecruitsMap/mappings/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.map.labrecruits/-lab-recruits-map/mappings.html
@@ -6377,6 +6387,8 @@ $dokka.location:spaceEngineers.util.generator.map/MapPlacer/blockIdsToCustomName
 $dokka.location:spaceEngineers.util.generator.map/MapPlacer/floorPlacer/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.map/-map-placer/floor-placer.html
 $dokka.location:spaceEngineers.util.generator.map/MapPlacer/generate/#spaceEngineers.model.Vec3F#spaceEngineers.model.Vec3F/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.map/-map-placer/generate.html
 $dokka.location:spaceEngineers.util.generator.map/MapPlacer/map/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.map/-map-placer/map.html
+$dokka.location:spaceEngineers.util.generator.map/MapPlacer/placeFloor/#kotlin.String#kotlin.Int#kotlin.Int#kotlin.Int/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.map/-map-placer/place-floor.html
+$dokka.location:spaceEngineers.util.generator.map/MapPlacer/placeInSequence/#kotlin.Int/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.map/-map-placer/place-in-sequence.html
 $dokka.location:spaceEngineers.util.generator.map/MapPlacer/spaceEngineers/#/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.map/-map-placer/space-engineers.html
 $dokka.location:spaceEngineers.util.generator.map/Orientations///PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.map/-orientations/index.html
 $dokka.location:spaceEngineers.util.generator.map/Orientations/Orientations/#spaceEngineers.model.Vec3I#spaceEngineers.model.Vec3I/PointingToDeclaration/space-engineers-api/spaceEngineers.util.generator.map/-orientations/-orientations.html
