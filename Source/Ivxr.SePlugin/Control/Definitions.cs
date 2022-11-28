@@ -111,7 +111,7 @@ namespace Iv4xr.SePlugin.Control
         public static void CheckDefinitionIdExistsAndEnabled(MyDefinitionId id)
         {
             var blockDefinition = MyDefinitionManager.Static
-                    .GetDefinitionsOfType<MyCubeBlockDefinition>()
+                    .GetAllDefinitions()
                     .FirstOrDefault(bd => bd.Id == id);
             if (blockDefinition == null)
             {
