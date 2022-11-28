@@ -40,9 +40,8 @@ namespace Iv4xr.SePlugin.Control
             Definitions = new Definitions();
             var characterController = new CharacterController(gameSession, Observer, lowLevelObserver, log);
             Character = characterController;
-            var blocks = new Blocks(gameSession, lowLevelObserver);
-            Blocks = blocks;
-            Admin = new SpaceEngineersAdmin(characterController, blocks, new ObserverAdmin(lowLevelObserver));
+            Blocks = new Blocks(gameSession, lowLevelObserver);
+            Admin = new SpaceEngineersAdmin(characterController, new BlocksAdmin(gameSession, lowLevelObserver), new ObserverAdmin(lowLevelObserver));
             Screens = new Screens();
             Input = RealInput.Instance;
             Debug = new DebugData();

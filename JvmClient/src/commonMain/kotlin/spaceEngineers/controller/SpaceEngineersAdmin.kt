@@ -20,32 +20,6 @@ interface TestAdmin {
     fun observerOnly()
 }
 
-interface BlocksAdmin {
-    fun placeAt(
-        blockDefinitionId: DefinitionId,
-        position: Vec3F,
-        orientationForward: Vec3F,
-        orientationUp: Vec3F,
-        color: Vec3F? = null,
-    ): String
-
-    fun placeInGrid(
-        blockDefinitionId: DefinitionId,
-        gridId: String,
-        minPosition: Vec3I,
-        orientationForward: Vec3I,
-        orientationUp: Vec3I,
-        color: Vec3F? = null,
-    ): String
-
-    fun remove(blockId: BlockId)
-    fun setIntegrity(blockId: BlockId, integrity: Float)
-    fun setCustomName(blockId: BlockId, customName: String)
-    fun createOrUpdateGroup(name: String, gridId: String, blockIds: List<String>)
-    fun mapButtonToBlock(buttonBlockId: String, buttonIndex: Int, action: String, targetId: String)
-    fun mapButtonToGroup(buttonBlockId: String, buttonIndex: Int, action: String, groupName: String)
-}
-
 interface CharacterAdmin {
     /**
      * @param position A position within the game scenario itself in system coordinates, uses game units.

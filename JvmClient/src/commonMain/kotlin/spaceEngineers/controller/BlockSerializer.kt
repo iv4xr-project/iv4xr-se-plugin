@@ -32,6 +32,10 @@ val blockMappings = mapOf<String, Map<String, KClass<*>>>(
         "MaxOutput" to Float::class,
         "CurrentOutput" to Float::class,
         "Capacity" to Float::class,
+    ),
+    "Warhead" to mapOf(
+        "IsCountingDown" to Boolean::class,
+        "IsArmed" to Boolean::class,
     )
 )
 

@@ -24,3 +24,8 @@ interface FueledPowerProducer: FunctionalBlock  {
     val capacity: Float
 }
 
+interface Warhead: TerminalBlock  {
+    val isCountingDown: Boolean
+    val isArmed: Boolean
+}
+

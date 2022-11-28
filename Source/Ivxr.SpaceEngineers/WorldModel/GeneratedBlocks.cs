@@ -29,6 +29,12 @@ namespace Iv4xr.SpaceEngineers.WorldModel
 	    public float CurrentOutput;
 	    public float Capacity;
 	}
+	
+	public class Warhead : TerminalBlock 
+	{
+	    public bool IsCountingDown;
+	    public bool IsArmed;
+	}
 	public static class BlockMapper
 	{
 	    public static readonly Dictionary<string, string> Mapping = new Dictionary<string, string>
@@ -116,7 +122,6 @@ namespace Iv4xr.SpaceEngineers.WorldModel
 		    { "SmallGatlingGun", "FunctionalBlock" },
 		    { "Searchlight", "FunctionalBlock" },
 		    { "HeatVentBlock", "FunctionalBlock" },
-		    { "Warhead", "TerminalBlock" },
 		    { "Decoy", "FunctionalBlock" },
 		    { "LargeGatlingTurret", "FunctionalBlock" },
 		    { "ConveyorTurretBase", "FunctionalBlock" },
