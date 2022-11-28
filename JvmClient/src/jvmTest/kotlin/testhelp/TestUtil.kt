@@ -1,9 +1,6 @@
 package testhelp
 
 import kotlinx.coroutines.runBlocking
-import kotlinx.serialization.json.JsonElement
-import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.JsonPrimitive
 import spaceEngineers.controller.*
 import spaceEngineers.iv4xr.navigation.Iv4XRAStarPathFinder
 import spaceEngineers.transport.jsonrpc.KotlinJsonRpcError
@@ -37,13 +34,7 @@ fun spaceEngineersSimplePlaceGrindTorchSuspend(
     }
 }
 
-fun <R> hideUndeclaredThrowableException(block: suspend () -> R) = runBlocking {
-    try {
-        block()
-    } catch (e: UndeclaredThrowableException) {
-        throw e.cause ?: e
-    }
-}
+
 
 fun spaceEngineersSuspend(
     agentId: String = TEST_AGENT,

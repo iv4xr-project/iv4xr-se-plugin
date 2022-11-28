@@ -4,17 +4,19 @@ import bdd.AbstractMultiplayerSteps
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import kotlinx.coroutines.delay
+import spaceEngineers.controller.connection.ConnectionManager
 import spaceEngineers.controller.extensions.blockingMoveBackwardsByDistance
 import spaceEngineers.controller.extensions.blockingMoveForwardByDistance
 import spaceEngineers.controller.extensions.grindDownToPercentage
 import spaceEngineers.controller.extensions.torchUpToPercentage
+import spaceEngineers.controller.json
 import spaceEngineers.model.Block
 import spaceEngineers.model.ToolbarLocation
 import spaceEngineers.model.extensions.allBlocks
 import spaceEngineers.transport.SocketReaderWriter
 import java.io.File
 
-class ScreenshotSteps : AbstractMultiplayerSteps() {
+class ScreenshotSteps(connectionManager: ConnectionManager) : AbstractMultiplayerSteps(connectionManager) {
 
     private val blockScreenshotInfoByType = mutableMapOf<String, Screenshots>()
 
@@ -92,12 +94,16 @@ class ScreenshotSteps : AbstractMultiplayerSteps() {
     @Then("Character saves metadata about each threshold and file names.")
     fun character_saves_metadata_about_each_threshold_and_file_names() {
         val block = observeLatestNewBlock()
-        val blockDir = File(outputDirectory, "${block.definitionId.type}").apply { mkdirs() }
-        //File(blockDir, "blockDefinition.json").writeText(cw.gsonReaderWriter.gson.toJson(meta))
-        File(
-            blockDir,
-            "screenshotInfo.json"
-        ).writeText(SocketReaderWriter.SPACE_ENG_GSON.toJson(blockScreenshotInfoByType[block.definitionId.type]))
+        val blockDir = File(outputDirectory, block.definitionId.type).apply { mkdirs() }
+        blockScreenshotInfoByType[block.definitionId.type]?.let { screenshots ->
+            //val js = json.encodeToString(Screenshots.serializer(), screenshots)
+            val js = ""
+            File(
+                blockDir,
+                "screenshotInfo.json"
+            ).writeText(js)
+
+        }
     }
 
     private fun moveBackScreenshotAndForward(block: Block, singleScreenshot: SingleScreenshot, distance: Float = 2f) =

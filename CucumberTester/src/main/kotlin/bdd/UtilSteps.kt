@@ -6,10 +6,11 @@ import io.cucumber.junit.Cucumber
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.junit.runner.RunWith
+import spaceEngineers.controller.connection.ConnectionManager
 import java.lang.Thread.sleep
 
 @RunWith(Cucumber::class)
-class UtilSteps : AbstractMultiplayerSteps() {
+class UtilSteps(connectionManager: ConnectionManager) : AbstractMultiplayerSteps(connectionManager) {
 
     @Given("Test waits for {float} seconds.")
     fun test_waits_for_seconds(seconds: Float) = runBlocking {
