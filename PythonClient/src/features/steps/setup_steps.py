@@ -8,14 +8,18 @@ from spaceengineers.api import SpaceEngineers
 use_step_matcher("re")
 
 
+def get_scenario_path() -> str:
+    from pathlib import Path
+    return f"{Path(__file__).resolve().parent}/../../../scenarios/".replace("/mnt/c", "C:")
+
+
 @given("Scenario config:?")
 def step_impl(context: Context):
     row = context.table[0]
     scenario = row["scenario"]
     main_client_medbay = row["main_client_medbay"]
     se: SpaceEngineers = context.se
-    import os
-    abspath = os.path.abspath("./scenarios/" + scenario)
+    abspath = f"{get_scenario_path()}{scenario}".replace("/mnt/c", "C:")
     se.Session.LoadScenario(scenarioPath=abspath)
     se.Screens.WaitUntilTheGameLoaded()
     time.sleep(10)
