@@ -20,6 +20,7 @@ val blockMappings = mapOf<String, Map<String, KClass<*>>>(
         "ShowInTerminal" to Boolean::class,
         "ShowOnHUD" to Boolean::class,
         "CustomName" to String::class,
+        "CustomData" to String::class,
     ),
     "FunctionalBlock" to mapOf(
         "Enabled" to Boolean::class

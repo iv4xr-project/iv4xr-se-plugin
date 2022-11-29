@@ -53,6 +53,8 @@ data class DataTerminalBlock(
     override val showOnHUD: Boolean,
     @SerialName("CustomName")
     override val customName: String,
+    @SerialName("CustomData")
+    override val customData: String,
 ) : TerminalBlock
 
 @Serializable
@@ -100,6 +102,8 @@ data class DataFunctionalBlock(
     override val showOnHUD: Boolean,
     @SerialName("CustomName")
     override val customName: String,
+    @SerialName("CustomData")
+    override val customData: String,
 
     @SerialName("Enabled")
     override val enabled: Boolean,
@@ -152,6 +156,8 @@ data class DataDoorBase(
     override val showOnHUD: Boolean,
     @SerialName("CustomName")
     override val customName: String,
+    @SerialName("CustomData")
+    override val customData: String,
 
     @SerialName("Open")
     override val open: Boolean,
@@ -206,6 +212,8 @@ data class DataFueledPowerProducer(
     override val showOnHUD: Boolean,
     @SerialName("CustomName")
     override val customName: String,
+    @SerialName("CustomData")
+    override val customData: String,
 
     @SerialName("MaxOutput")
     override val maxOutput: Float,
@@ -260,6 +268,8 @@ data class DataWarhead(
     override val showOnHUD: Boolean,
     @SerialName("CustomName")
     override val customName: String,
+    @SerialName("CustomData")
+    override val customData: String,
 
     @SerialName("IsCountingDown")
     override val isCountingDown: Boolean,

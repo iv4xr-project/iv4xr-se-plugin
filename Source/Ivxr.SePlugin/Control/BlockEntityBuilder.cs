@@ -85,6 +85,7 @@ namespace Iv4xr.SePlugin.Control
                 terminalBlock.ShowInTerminal = myTerminalBlock.ShowInTerminal;
                 terminalBlock.ShowOnHUD = myTerminalBlock.ShowOnHUD;
                 terminalBlock.CustomName = myTerminalBlock.CustomName.ToString();
+                terminalBlock.CustomData = myTerminalBlock.CustomData;
             }
 
             switch (sourceBlock.FatBlock)

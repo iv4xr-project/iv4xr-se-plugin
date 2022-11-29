@@ -10,6 +10,7 @@ namespace Iv4xr.SpaceEngineers.WorldModel
 	    public bool ShowInTerminal;
 	    public bool ShowOnHUD;
 	    public string CustomName;
+	    public string CustomData;
 	}
 	
 	public class FunctionalBlock : TerminalBlock 

@@ -31,6 +31,8 @@ interface BlocksAdmin {
     fun mapButtonToBlock(buttonBlockId: BlockId, buttonIndex: Int, action: String, targetId: BlockId)
     fun mapButtonToGroup(buttonBlockId: BlockId, buttonIndex: Int, action: String, groupName: String)
     val warhead: WarheadAdmin
+    val functionalBlock: FunctionalBlockAdmin
+    val terminalBlock: TerminalBlockAdmin
 }
 
 interface WarheadAdmin {
@@ -39,4 +41,16 @@ interface WarheadAdmin {
     fun startCountDown(blockId: BlockId): Boolean
     fun stopCountdown(): Boolean
     fun setArmed(blockId: BlockId, armed: Boolean)
+}
+
+interface FunctionalBlockAdmin {
+    fun setEnabled(blockId: BlockId, enabled: Boolean)
+}
+
+interface TerminalBlockAdmin {
+    fun setCustomName(blockId: BlockId, customName: String)
+    fun setCustomData(blockId: BlockId, customData: String)
+    fun setShowInInventory(blockId: String, showInInventory: Boolean)
+    fun setShowInTerminal(blockId: String, showInTerminal: Boolean)
+    fun setShowOnHUD(blockId: String, showOnHUD: Boolean)
 }
