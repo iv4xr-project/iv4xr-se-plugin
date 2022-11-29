@@ -53,4 +53,6 @@ interface CharacterAdmin {
 
 interface ObserverAdmin {
     fun observeCharacters(): List<CharacterObservation>
+    fun blockById(blockId: BlockId): Block
+    fun gridById(gridId: String): CubeGrid
 }

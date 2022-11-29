@@ -78,6 +78,11 @@ namespace Iv4xr.SePlugin.Control
             sourceGrid.ToEntity(result);
             return result;
         }
+        
+        public CubeGrid CreateSeGrid(MyCubeGrid sourceGrid)
+        {
+            return CreateSeGrid(sourceGrid, sourceGrid.CubeBlocks.Select(b => CreateGridBlock(b)).ToList());
+        }
 
         private readonly PreviousBlocksFilter m_previousBlocksFilter = new PreviousBlocksFilter();
 

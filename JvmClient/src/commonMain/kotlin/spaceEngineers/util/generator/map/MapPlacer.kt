@@ -1,15 +1,17 @@
 package spaceEngineers.util.generator.map
 
-import spaceEngineers.controller.proxy.BatchCallable
 import spaceEngineers.controller.SpaceEngineers
+import spaceEngineers.controller.proxy.BatchCallable
 import spaceEngineers.controller.proxy.executeIfNotNull
 import spaceEngineers.graph.Cube3dGraph
 import spaceEngineers.model.*
-import spaceEngineers.model.extensions.blockById
 import spaceEngineers.model.extensions.toFloat
 import spaceEngineers.model.typing.DefinitionIds
 import spaceEngineers.model.typing.DefinitionIds.CubeBlock.LargeHeavyBlockArmorBlock
-import spaceEngineers.util.generator.map.labrecruits.*
+import spaceEngineers.util.generator.map.labrecruits.Agent
+import spaceEngineers.util.generator.map.labrecruits.Floor
+import spaceEngineers.util.generator.map.labrecruits.UnnecessaryFloor
+import spaceEngineers.util.generator.map.labrecruits.Wall
 
 class MapPlacer(
     val map: MapLayer,
@@ -116,14 +118,14 @@ class MapPlacer(
     private fun generateSpawn(level: Int = 1) =
         filterCells(level) { it::class == Agent::class }.forEach { (cell, position) ->
             val positionInGrid = position + Vec3I(-1, level, 0)
-            val blockId = placeAt(
+            val grid = placeAt(
                 cell.blockId,
                 position = positionInGrid * LARGE_BLOCK_CUBE_SIDE_SIZE,
                 color = cell.color,
                 orientationForward = cell.orientationForward.toFloat(),
                 orientationUp = cell.orientationUp.toFloat()
             )
-            val gridId = spaceEngineers.observer.observeBlocks().grids.first { it.blocks.any { it.id == blockId } }.id
+            val gridId = grid.id
             placeInGrid(
                 gridId = gridId,
                 blockDefinitionId = DefinitionIds.Reactor.LargeBlockSmallGenerator,
@@ -170,7 +172,6 @@ class MapPlacer(
                 color = cell.color,
             )
             cell.customName?.let { customName ->
-                spaceEngineers.observer.observeBlocks().blockById(blockId)
                 blockIdsToCustomNames[customName] = blockId
             }
         }
@@ -208,7 +209,7 @@ class MapPlacer(
         orientationForward: Vec3F,
         orientationUp: Vec3F,
         color: Vec3F?,
-    ): String {
+    ): CubeGrid {
         return spaceEngineers.admin.blocks.placeAt(
             blockDefinitionId, position, orientationForward, orientationUp, color
         )

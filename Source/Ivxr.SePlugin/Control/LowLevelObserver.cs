@@ -35,14 +35,14 @@ namespace Iv4xr.SePlugin.Control
         private readonly PlainVec3D
                 m_agentExtent = new PlainVec3D(0.5, 1, 0.5); // TODO(PP): It's just a quick guess, check the reality.
 
-        private readonly EntityBuilder m_entityBuilder;
+        internal readonly EntityBuilder EntityBuilder;
         private readonly CharacterObservationBuilder m_characterBuilder;
 
         public LowLevelObserver(IGameSession gameSession)
         {
             m_gameSession = gameSession;
-            m_entityBuilder = new EntityBuilder() { Log = Log };
-            m_characterBuilder = new CharacterObservationBuilder(m_entityBuilder.BlockEntityBuilder);
+            EntityBuilder = new EntityBuilder() { Log = Log };
+            m_characterBuilder = new CharacterObservationBuilder(EntityBuilder.BlockEntityBuilder);
         }
 
         private MyCharacter Character => m_gameSession.Character;
@@ -154,12 +154,12 @@ namespace Iv4xr.SePlugin.Control
         {
             return EnumerateSurroundingEntities(sphere)
                     .OfType<MyCubeGrid>()
-                    .Select(grid => m_entityBuilder.CreateSeGrid(grid, sphere, mode)).ToList();
+                    .Select(grid => EntityBuilder.CreateSeGrid(grid, sphere, mode)).ToList();
         }
 
         internal CubeGrid ConvertToSeGrid(MyCubeGrid sourceGrid, BoundingSphereD sphere)
         {
-            return m_entityBuilder.CreateSeGrid(sourceGrid, sphere, ObservationMode.BLOCKS);
+            return EntityBuilder.CreateSeGrid(sourceGrid, sphere, ObservationMode.BLOCKS);
         }
 
         public IEnumerable<MyCubeGrid> Grids()
@@ -180,13 +180,29 @@ namespace Iv4xr.SePlugin.Control
             return grid;
         }
 
+        public CubeGrid GetCubeGridById(string gridId)
+        {
+            var grid = GetGridById(gridId);
+            return new CubeGrid()
+            {
+                Mass = grid.Mass,
+                Parked = grid.IsParked,
+                Blocks = grid.CubeBlocks.Select(EntityBuilder.CreateGridBlock).ToList(),
+            };
+        }
+
+        public Block GetBlockDtoById(string blockId)
+        {
+            return EntityBuilder.CreateGridBlock(GetBlockById(blockId));
+        }
+
         public MyCubeGrid GetGridContainingBlock(string blockId)
         {
-            BoundingSphereD sphere = GetBoundingSphere();
+            BoundingSphereD sphere = GetBoundingSphere( null, 500.0);
             return EnumerateSurroundingEntities(sphere)
                     .OfType<MyCubeGrid>().ToList().FirstOrDefault(grid =>
                     {
-                        return GetBlocksOf(grid).FirstOrDefault(block => block.BlockId().ToString() == blockId) !=
+                        return grid.CubeBlocks.FirstOrDefault(block => block.BlockId().ToString() == blockId) !=
                                null;
                     });
         }

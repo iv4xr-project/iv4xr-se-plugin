@@ -25,6 +25,8 @@ namespace Iv4xr.SpaceEngineers
     {
         [Role(Observer)]
         List<CharacterObservation> ObserveCharacters();
+        CubeGrid GridById(string gridId);
+        Block BlockById(string blockId);
     }
 
     public interface IBlocksAdmin
@@ -37,7 +39,7 @@ namespace Iv4xr.SpaceEngineers
         void MapButtonToBlock(string buttonBlockId, int buttonIndex, string action, string targetId);
         void MapButtonToGroup(string buttonBlockId, int buttonIndex, string action, string groupName);
 
-        string PlaceAt(DefinitionId blockDefinitionId, PlainVec3D position, PlainVec3D orientationForward,
+        CubeGrid PlaceAt(DefinitionId blockDefinitionId, PlainVec3D position, PlainVec3D orientationForward,
             PlainVec3D orientationUp, PlainVec3F? color);
 
         string PlaceInGrid(DefinitionId blockDefinitionId, string gridId, PlainVec3I minPosition,

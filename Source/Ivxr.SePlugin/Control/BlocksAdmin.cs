@@ -118,13 +118,15 @@ namespace Iv4xr.SePlugin.Control
             }
         }
 
-        public string PlaceAt(DefinitionId blockDefinitionId, PlainVec3D position, PlainVec3D orientationForward,
+        public CubeGrid PlaceAt(DefinitionId blockDefinitionId, PlainVec3D position, PlainVec3D orientationForward,
             PlainVec3D orientationUp, PlainVec3F? color = null)
         {
             Definitions.CheckDefinitionIdExistsAndEnabled(blockDefinitionId.ToMyDefinitionId());
-            return m_blockPlacer.PlaceSingleBlock(m_session.CurrentCharacterId, blockDefinitionId, position.ToVector3(),
+            var grid = m_blockPlacer.PlaceSingleBlock(m_session.CurrentCharacterId, blockDefinitionId,
+                position.ToVector3(),
                 orientationForward.ToVector3(),
-                orientationUp.ToVector3(), color?.ToVector3() ?? MyPlayer.SelectedColor).BlockId().ToString();
+                orientationUp.ToVector3(), color?.ToVector3() ?? MyPlayer.SelectedColor);
+            return m_observer.EntityBuilder.CreateSeGrid(grid);
         }
 
         public string PlaceInGrid(DefinitionId blockDefinitionId, string gridId, PlainVec3I minPosition,
