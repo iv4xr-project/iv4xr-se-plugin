@@ -1,5 +1,4 @@
-﻿using System.Text;
-using Iv4xr.SpaceEngineers;
+﻿using Iv4xr.SpaceEngineers;
 using Sandbox.Game.Entities.Cube;
 
 namespace Iv4xr.SePlugin.Control.Screen.BlockAdmin

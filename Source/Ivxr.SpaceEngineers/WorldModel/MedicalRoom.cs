@@ -1,6 +1,6 @@
 ﻿namespace Iv4xr.SpaceEngineers.WorldModel
 {
-    public class MedicalRoom
+    public class MedicalRoomData
     {
         public string Name;
         public string AvailableIn;

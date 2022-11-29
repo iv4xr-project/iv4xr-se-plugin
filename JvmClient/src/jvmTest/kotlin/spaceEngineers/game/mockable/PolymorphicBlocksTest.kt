@@ -3,6 +3,7 @@ package spaceEngineers.game.mockable
 import spaceEngineers.controller.SpaceEngineers
 import spaceEngineers.model.*
 import spaceEngineers.model.extensions.allBlocks
+import spaceEngineers.model.typing.DefinitionIds
 import testhelp.MockOrRealGameTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -16,6 +17,12 @@ class PolymorphicBlocksTest : MockOrRealGameTest() {
         buildAndCheckType<FueledPowerProducer>(DefinitionId.reactor("LargeBlockSmallGenerator"))
         buildAndCheckType<TerminalBlock>(DefinitionId.reactor("LargeBlockSmallGenerator"))
         buildAndCheckType<FunctionalBlock>(DefinitionId.reactor("LargeBlockSmallGenerator"))
+
+    }
+
+    @Test
+    fun medicalRoom() = testContext {
+        buildAndCheckType<MedicalRoom>(DefinitionIds.MedicalRoom.LargeMedicalRoom)
     }
 
     @Test

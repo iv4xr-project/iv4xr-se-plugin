@@ -37,6 +37,16 @@ val blockMappings = mapOf<String, Map<String, KClass<*>>>(
     "Warhead" to mapOf(
         "IsCountingDown" to Boolean::class,
         "IsArmed" to Boolean::class,
+    ),
+    "MedicalRoom" to mapOf(
+        "SuitChangeAllowed" to Boolean::class,
+        "CustomWardrobesEnabled" to Boolean::class,
+        "SpawnName" to String::class,
+        "RespawnAllowed" to Boolean::class,
+        "RefuelAllowed" to Boolean::class,
+        "HealingAllowed" to Boolean::class,
+        "SpawnWithoutOxygenEnabled" to Boolean::class,
+        "ForceSuitChangeOnRespawn" to Boolean::class,
     )
 )
 
