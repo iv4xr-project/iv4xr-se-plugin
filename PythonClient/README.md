@@ -10,7 +10,7 @@ As an alternative there is [client in kotlin](../JvmClient).
 
 ## Installation
 
-The client itself doesn't have any dependencies, but some of the examples do:
+The client itself doesn't have any dependencies, but some examples do:
 
 - [Maze generator example](src/examples/maze.py) uses a great maze generator
   library [mazelib](https://github.com/john-science/mazelib)
@@ -23,10 +23,24 @@ If you want to install those dependencies, simply install them through pip:
 pip install -r requirements.txt
 ```
 
-## Basic usage:
+Then the `src` directory has to be in PYTHONPATH.
+If you are using [virtualenvwrapper](https://virtualenvwrapper.readthedocs.io/en/latest/) use:
 
-To use the client, you have to have Space Engineers game
-with a [running iv4XR plugin](../README.md#how-to-run-the-game-with-this-plugin).
+
+```
+add2virtualenv src
+```
+
+Otherwise, you can do this (you have to do this on every new cmd instance though):
+
+```
+set PYTHONPATH=%PYTHONPATH%;src
+```
+
+## Basic usage
+
+To use the client, you have to have Space Engineers game with
+a [running iv4XR plugin](../README.md#how-to-run-the-game-with-plugin).
 
 To connect to a local game with a running plugin:
 
@@ -54,9 +68,13 @@ they are purely for type safety/code completion IDE hints.
 
 ## Cucumber implementation
 
-The project includes a single feature file [C284491.feature](src/features/C284491.feature). This file has been copied from
-kotlin client. By implementing steps it showcases re-usability of gherkin (simpler than in the Kotlin client - works only
-for single-player).
+The project includes a single feature file [C284491.feature](src/features/C284491.feature). This file has been copied
+from kotlin client. By implementing steps it showcases re-usability of gherkin (simpler than in the Kotlin client -
+works only for single-player).
+
+To run the cucumber test, simply type `behave` command (behave needs to be installed, see [Installation](#installation)) from the root directory of the project (or you can right-click
+the feature file in PyCharm and select `Run`).
+
 
 ## Useful links
 

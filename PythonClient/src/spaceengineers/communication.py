@@ -1,6 +1,7 @@
 import dataclasses
 import json
 from dataclasses import dataclass
+from typing import List
 
 
 def cleanup_error_data(inner_data: dict):
@@ -104,7 +105,7 @@ def call_rpc(prefix, sock, *args, **kwargs):
 
 
 class ProxyAttribute(object):
-    prefix: list[str] = list()
+    prefix: List[str] = list()
     sock: object
 
     def __init__(self, prefix, sock) -> None:
