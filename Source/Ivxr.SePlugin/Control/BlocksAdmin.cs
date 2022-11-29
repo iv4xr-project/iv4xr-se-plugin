@@ -28,6 +28,7 @@ namespace Iv4xr.SePlugin.Control
             Warhead = new WarheadAdmin(session, observer);
             FunctionalBlock = new FunctionalBlockAdmin(session, observer);
             TerminalBlock = new TerminalBlockAdmin(session, observer);
+            MedicalRoom = new MedicalRoomAdmin(session, observer);
         }
 
         private readonly BlockPlacer m_blockPlacer = new BlockPlacer();
@@ -143,6 +144,7 @@ namespace Iv4xr.SePlugin.Control
         public IWarheadAdmin Warhead { get; }
         public IFunctionalBlockAdmin FunctionalBlock { get; }
         public ITerminalBlockAdmin TerminalBlock { get; }
+        public IMedicalRoomAdmin MedicalRoom { get; }
 
         public void Remove(string blockId)
         {

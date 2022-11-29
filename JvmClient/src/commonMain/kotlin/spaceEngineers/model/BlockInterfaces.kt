@@ -30,3 +30,14 @@ interface Warhead: TerminalBlock  {
     val isArmed: Boolean
 }
 
+interface MedicalRoom: FunctionalBlock  {
+    val suitChangeAllowed: Boolean
+    val customWardrobesEnabled: Boolean
+    val spawnName: String
+    val respawnAllowed: Boolean
+    val refuelAllowed: Boolean
+    val healingAllowed: Boolean
+    val spawnWithoutOxygenEnabled: Boolean
+    val forceSuitChangeOnRespawn: Boolean
+}
+

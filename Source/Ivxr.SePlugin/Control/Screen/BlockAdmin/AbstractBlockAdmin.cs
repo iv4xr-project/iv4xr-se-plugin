@@ -1,7 +1,7 @@
 ﻿using System;
 using Sandbox.Game.Entities;
 
-namespace Iv4xr.SePlugin.Control
+namespace Iv4xr.SePlugin.Control.Screen.BlockAdmin
 {
     public class AbstractBlockAdmin<T> where T : MyCubeBlock
     {

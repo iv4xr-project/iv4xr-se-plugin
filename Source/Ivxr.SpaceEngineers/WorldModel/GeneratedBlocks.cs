@@ -36,6 +36,18 @@ namespace Iv4xr.SpaceEngineers.WorldModel
 	    public bool IsCountingDown;
 	    public bool IsArmed;
 	}
+	
+	public class MedicalRoom : FunctionalBlock 
+	{
+	    public bool SuitChangeAllowed;
+	    public bool CustomWardrobesEnabled;
+	    public string SpawnName;
+	    public bool RespawnAllowed;
+	    public bool RefuelAllowed;
+	    public bool HealingAllowed;
+	    public bool SpawnWithoutOxygenEnabled;
+	    public bool ForceSuitChangeOnRespawn;
+	}
 	public static class BlockMapper
 	{
 	    public static readonly Dictionary<string, string> Mapping = new Dictionary<string, string>
@@ -102,7 +114,6 @@ namespace Iv4xr.SpaceEngineers.WorldModel
 		    { "MotorStator", "FunctionalBlock" },
 		    { "MotorBase", "FunctionalBlock" },
 		    { "MotorAdvancedStator", "FunctionalBlock" },
-		    { "MedicalRoom", "FunctionalBlock" },
 		    { "OxygenGenerator", "FunctionalBlock" },
 		    { "SurvivalKit", "FunctionalBlock" },
 		    { "OxygenFarm", "FunctionalBlock" },

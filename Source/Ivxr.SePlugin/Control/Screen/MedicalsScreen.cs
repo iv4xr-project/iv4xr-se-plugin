@@ -15,7 +15,7 @@ namespace Iv4xr.SePlugin.Control.Screen
         {
             return new MedicalsData()
             {
-                MedicalRooms = MedicalRoomRows().Select(row => new MedicalRoom()
+                MedicalRooms = MedicalRoomRows().Select(row => new MedicalRoomData()
                         {
                             Name = row.GetCell(0).Text.ToString(),
                             AvailableIn = row.GetCell(1).Text.ToString()

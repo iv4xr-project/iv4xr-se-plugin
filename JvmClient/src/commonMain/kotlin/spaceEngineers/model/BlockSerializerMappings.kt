@@ -69,7 +69,7 @@ val generatedSerializerMappings = mutableMapOf(
     "MotorStator" to DataFunctionalBlock.serializer(),
     "MotorBase" to DataFunctionalBlock.serializer(),
     "MotorAdvancedStator" to DataFunctionalBlock.serializer(),
-    "MedicalRoom" to DataFunctionalBlock.serializer(),
+    "MedicalRoom" to DataMedicalRoom.serializer(),
     "OxygenGenerator" to DataFunctionalBlock.serializer(),
     "SurvivalKit" to DataFunctionalBlock.serializer(),
     "OxygenFarm" to DataFunctionalBlock.serializer(),

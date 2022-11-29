@@ -46,6 +46,7 @@ namespace Iv4xr.SpaceEngineers
         IWarheadAdmin Warhead { get; }
         IFunctionalBlockAdmin FunctionalBlock { get; }
         ITerminalBlockAdmin TerminalBlock { get;  }
+        IMedicalRoomAdmin MedicalRoom { get; }
     }
 
     public interface IWarheadAdmin
@@ -73,6 +74,14 @@ namespace Iv4xr.SpaceEngineers
         void SetShowInInventory(string blockId, bool showInInventory);
         void SetShowInTerminal(string blockId, bool showInTerminal);
         void SetShowOnHUD(string blockId, bool showOnHUD);
+    }
+
+    public interface IMedicalRoomAdmin
+    {
+        void SetRespawnAllowed(string blockId, bool respawnAllowed);
+        void SetHealingAllowed(string blockId, bool healingAllowed);
+        void SetRefuelAllowed(string blockId, bool refuelAllowed);
+        void SetSpawnWithoutOxygenEnabled(string blockId, bool spawnWithoutOxygenEnabled);
     }
 
     public interface ICharacterAdmin

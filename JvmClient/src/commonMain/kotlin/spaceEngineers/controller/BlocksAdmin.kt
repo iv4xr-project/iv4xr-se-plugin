@@ -31,8 +31,13 @@ interface BlocksAdmin {
     fun mapButtonToBlock(buttonBlockId: BlockId, buttonIndex: Int, action: String, targetId: BlockId)
     fun mapButtonToGroup(buttonBlockId: BlockId, buttonIndex: Int, action: String, groupName: String)
     val warhead: WarheadAdmin
+    val medicalRoom: MedicalRoomAdmin
     val functionalBlock: FunctionalBlockAdmin
     val terminalBlock: TerminalBlockAdmin
+}
+
+interface MedicalRoomAdmin {
+
 }
 
 interface WarheadAdmin {

@@ -4,6 +4,7 @@ using System.Linq;
 using Iv4xr.SpaceEngineers.WorldModel;
 using Sandbox.Game.Entities;
 using Sandbox.Game.Entities.Cube;
+using SpaceEngineers.Game.Entities.Blocks;
 using VRage.Game.Entity.UseObject;
 
 namespace Iv4xr.SePlugin.Control
@@ -102,6 +103,16 @@ namespace Iv4xr.SePlugin.Control
                 case MyWarhead myWarhead when block is Warhead warhead:
                     warhead.IsArmed = myWarhead.IsArmed;
                     warhead.IsCountingDown = myWarhead.IsCountingDown;
+                    break;
+                case MyMedicalRoom myMedicalRoom when block is MedicalRoom medicalRoom:
+                    medicalRoom.SuitChangeAllowed = myMedicalRoom.SuitChangeAllowed;
+                    medicalRoom.CustomWardrobesEnabled = myMedicalRoom.CustomWardrobesEnabled;
+                    medicalRoom.SpawnName = myMedicalRoom.SpawnName.ToString();
+                    medicalRoom.RespawnAllowed = myMedicalRoom.RespawnAllowed;
+                    medicalRoom.RefuelAllowed = myMedicalRoom.RefuelAllowed;
+                    medicalRoom.HealingAllowed = myMedicalRoom.HealingAllowed;
+                    medicalRoom.SpawnWithoutOxygenEnabled = myMedicalRoom.SpawnWithoutOxygenEnabled;
+                    medicalRoom.ForceSuitChangeOnRespawn = myMedicalRoom.ForceSuitChangeOnRespawn;
                     break;
             }
         }
