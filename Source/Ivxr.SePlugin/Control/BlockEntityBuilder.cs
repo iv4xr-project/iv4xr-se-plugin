@@ -22,18 +22,27 @@ namespace Iv4xr.SePlugin.Control
 
         private Block CreateBlock(string id)
         {
-            var type = BlockMapper.Mapping.TryGetValue(id.Replace("MyObjectBuilder_", ""), out var cls)
+            var shortId = id.Replace("MyObjectBuilder_", "");
+            var foundMapping = BlockMapper.Mapping.TryGetValue(shortId, out var cls);
+            var type = foundMapping
                     ? GetBlockType(cls)
-                    : typeof(Block);
+                    : GetBlockTypeOrNull(shortId) 
+                      ?? typeof(Block);
             var instance = (Block)Activator.CreateInstance(type);
             return instance;
         }
 
-        public static Type GetBlockType(string id)
+        private static Type GetBlockType(string id)
+        {
+            return GetBlockTypeOrNull(id) ??
+                   throw new NullReferenceException("Type cannot be null, id: " + id);
+        }
+
+        private static Type GetBlockTypeOrNull(string id)
         {
             return typeof(Block).Assembly.GetTypes()
-                           .FirstOrDefault(type => type.Name == id) ??
-                   throw new NullReferenceException("Type cannot be null, id: " + id);
+                    .FirstOrDefault(type => type.Name == id);
+
         }
 
         private void AddStandardFields(MySlimBlock sourceBlock, Block block)
@@ -76,20 +85,24 @@ namespace Iv4xr.SePlugin.Control
                 terminalBlock.ShowInTerminal = myTerminalBlock.ShowInTerminal;
                 terminalBlock.ShowOnHUD = myTerminalBlock.ShowOnHUD;
                 terminalBlock.CustomName = myTerminalBlock.CustomName.ToString();
+                terminalBlock.CustomData = myTerminalBlock.CustomData;
             }
 
-            if (sourceBlock.FatBlock is MyDoorBase myDoorBase && block is DoorBase doorBase)
+            switch (sourceBlock.FatBlock)
             {
-                doorBase.Open = myDoorBase.Open;
-                doorBase.AnyoneCanUse = myDoorBase.AnyoneCanUse;
-            }
-
-            if (sourceBlock.FatBlock is MyFueledPowerProducer myReactor &&
-                block is FueledPowerProducer fueledPowerProducer)
-            {
-                fueledPowerProducer.Capacity = myReactor.Capacity;
-                fueledPowerProducer.MaxOutput = myReactor.MaxOutput;
-                fueledPowerProducer.CurrentOutput = myReactor.CurrentOutput;
+                case MyDoorBase myDoorBase when block is DoorBase doorBase:
+                    doorBase.Open = myDoorBase.Open;
+                    doorBase.AnyoneCanUse = myDoorBase.AnyoneCanUse;
+                    break;
+                case MyFueledPowerProducer myReactor when block is FueledPowerProducer fueledPowerProducer:
+                    fueledPowerProducer.Capacity = myReactor.Capacity;
+                    fueledPowerProducer.MaxOutput = myReactor.MaxOutput;
+                    fueledPowerProducer.CurrentOutput = myReactor.CurrentOutput;
+                    break;
+                case MyWarhead myWarhead when block is Warhead warhead:
+                    warhead.IsArmed = myWarhead.IsArmed;
+                    warhead.IsCountingDown = myWarhead.IsCountingDown;
+                    break;
             }
         }
 

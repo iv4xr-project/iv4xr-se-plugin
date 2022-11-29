@@ -7,6 +7,7 @@ interface TerminalBlock: Block  {
     val showInTerminal: Boolean
     val showOnHUD: Boolean
     val customName: String
+    val customData: String
 }
 
 interface FunctionalBlock: TerminalBlock  {
@@ -22,5 +23,10 @@ interface FueledPowerProducer: FunctionalBlock  {
     val maxOutput: Float
     val currentOutput: Float
     val capacity: Float
+}
+
+interface Warhead: TerminalBlock  {
+    val isCountingDown: Boolean
+    val isArmed: Boolean
 }
 

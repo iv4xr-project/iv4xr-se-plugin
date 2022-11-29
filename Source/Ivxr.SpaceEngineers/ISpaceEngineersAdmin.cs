@@ -42,6 +42,37 @@ namespace Iv4xr.SpaceEngineers
 
         string PlaceInGrid(DefinitionId blockDefinitionId, string gridId, PlainVec3I minPosition,
             PlainVec3I orientationForward, PlainVec3I orientationUp, PlainVec3F? color);
+        
+        IWarheadAdmin Warhead { get; }
+        IFunctionalBlockAdmin FunctionalBlock { get; }
+        ITerminalBlockAdmin TerminalBlock { get;  }
+    }
+
+    public interface IWarheadAdmin
+    {
+        void Explode(string blockId);
+
+        void Detonate(string blockId);
+
+        bool StartCountdown(string blockId);
+
+        bool StopCountdown(string blockId);
+        
+        void SetArmed(string blockId, bool armed);
+    }
+
+    public interface IFunctionalBlockAdmin
+    {
+        void SetEnabled(string blockId, bool enabled);
+    }
+
+    public interface ITerminalBlockAdmin
+    {
+        void SetCustomName(string blockId, string customName);
+        void SetCustomData(string blockId, string customData);
+        void SetShowInInventory(string blockId, bool showInInventory);
+        void SetShowInTerminal(string blockId, bool showInTerminal);
+        void SetShowOnHUD(string blockId, bool showOnHUD);
     }
 
     public interface ICharacterAdmin

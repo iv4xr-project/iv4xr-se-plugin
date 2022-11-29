@@ -10,6 +10,7 @@ namespace Iv4xr.SpaceEngineers.WorldModel
 	    public bool ShowInTerminal;
 	    public bool ShowOnHUD;
 	    public string CustomName;
+	    public string CustomData;
 	}
 	
 	public class FunctionalBlock : TerminalBlock 
@@ -28,6 +29,12 @@ namespace Iv4xr.SpaceEngineers.WorldModel
 	    public float MaxOutput;
 	    public float CurrentOutput;
 	    public float Capacity;
+	}
+	
+	public class Warhead : TerminalBlock 
+	{
+	    public bool IsCountingDown;
+	    public bool IsArmed;
 	}
 	public static class BlockMapper
 	{
@@ -116,7 +123,6 @@ namespace Iv4xr.SpaceEngineers.WorldModel
 		    { "SmallGatlingGun", "FunctionalBlock" },
 		    { "Searchlight", "FunctionalBlock" },
 		    { "HeatVentBlock", "FunctionalBlock" },
-		    { "Warhead", "TerminalBlock" },
 		    { "Decoy", "FunctionalBlock" },
 		    { "LargeGatlingTurret", "FunctionalBlock" },
 		    { "ConveyorTurretBase", "FunctionalBlock" },
