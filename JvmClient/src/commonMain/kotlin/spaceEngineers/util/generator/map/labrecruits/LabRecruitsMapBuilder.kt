@@ -22,13 +22,13 @@ class LabRecruitsMapBuilder(
         createGroups(gridId, map)
         mapButtons(map)
         sleep(50)
-        closeAllDoors(map)
+        closeAllDoors(gridId, map)
     }
 
 
-    private fun closeAllDoors(map: LabRecruitsMap) = se {
+    private fun closeAllDoors(gridId: String, map: LabRecruitsMap) = se {
         map.doors.values.forEach { door ->
-            val doorBlock = observer.observeBlocks().blockByCustomName(door.id) as DoorBase
+            val doorBlock = admin.observer.gridById(gridId).blocks.blockByCustomName(door.id) as DoorBase
             extensions.blocks.useObject.closeIfNotClosed(doorBlock)
         }
     }

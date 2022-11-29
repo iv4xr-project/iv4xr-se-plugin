@@ -102,7 +102,7 @@ namespace Iv4xr.SePlugin.Control
             return currentGrid.CubeBlocks.First(b => b.UniqueId == id);
         }
 
-        public MySlimBlock PlaceSingleBlock(long ownerId, DefinitionId blockDefinitionId, Vector3 position,
+        public MyCubeGrid PlaceSingleBlock(long ownerId, DefinitionId blockDefinitionId, Vector3 position,
             Vector3 orientationForward,
             Vector3 orientationUp, Vector3? colorRgb)
         {
@@ -110,7 +110,7 @@ namespace Iv4xr.SePlugin.Control
                 CubeBlockBuilderByBlockType(ownerId, blockDefinitionId, colorRgb?.RgbToHsv() ?? MyPlayer.SelectedColor),
                 position, orientationForward,
                 orientationUp);
-            return grid.CubeBlocks.First();
+            return grid;
         }
     }
 }

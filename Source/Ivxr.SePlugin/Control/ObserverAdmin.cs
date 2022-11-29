@@ -31,5 +31,14 @@ namespace Iv4xr.SePlugin.Control
             return m_lowLevelObserver.AllCharacters();
         }
 
+        public CubeGrid GridById(string gridId)
+        {
+            return m_lowLevelObserver.GetCubeGridById(gridId);
+        }
+
+        public Block BlockById(string blockId)
+        {
+            return m_lowLevelObserver.GetBlockDtoById(blockId);
+        }
     }
 }

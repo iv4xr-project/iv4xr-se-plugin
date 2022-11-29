@@ -1,9 +1,6 @@
 package spaceEngineers.controller
 
-import spaceEngineers.model.BlockId
-import spaceEngineers.model.DefinitionId
-import spaceEngineers.model.Vec3F
-import spaceEngineers.model.Vec3I
+import spaceEngineers.model.*
 
 interface BlocksAdmin {
 
@@ -13,7 +10,7 @@ interface BlocksAdmin {
         orientationForward: Vec3F,
         orientationUp: Vec3F,
         color: Vec3F? = null,
-    ): String
+    ): CubeGrid
 
     fun placeInGrid(
         blockDefinitionId: DefinitionId,

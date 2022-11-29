@@ -8,11 +8,14 @@ fun Observation.blocksByCustomName(customName: String): List<TerminalBlock> {
 }
 
 fun Observation.blockByCustomName(customName: String): TerminalBlock {
-    val blocks = allBlocks
-    return blocks.filterIsInstance<TerminalBlock>().firstOrNull { it.customName == customName } ?: error(
-            "Block with name $customName not found, found only ${
-                blocks.filterIsInstance<TerminalBlock>().map { it.customName }.sorted()
-            }")
+    return allBlocks.blockByCustomName(customName)
+}
+
+fun List<Block>.blockByCustomName(customName: String): TerminalBlock {
+    return filterIsInstance<TerminalBlock>().firstOrNull { it.customName == customName } ?: error(
+        "Block with name $customName not found, found only ${
+            filterIsInstance<TerminalBlock>().map { it.customName }.sorted()
+        }")
 }
 
 val Observation.allBlocks: List<Block>
