@@ -475,6 +475,8 @@ $dokka.location:spaceEngineers.controller/Observer/observeNewBlocks/#/PointingTo
 $dokka.location:spaceEngineers.controller/Observer/switchCamera/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-observer/switch-camera.html
 $dokka.location:spaceEngineers.controller/Observer/takeScreenshot/#kotlin.String/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-observer/take-screenshot.html
 $dokka.location:spaceEngineers.controller/ObserverAdmin///PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-observer-admin/index.html
+$dokka.location:spaceEngineers.controller/ObserverAdmin/blockById/#kotlin.String/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-observer-admin/block-by-id.html
+$dokka.location:spaceEngineers.controller/ObserverAdmin/gridById/#kotlin.String/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-observer-admin/grid-by-id.html
 $dokka.location:spaceEngineers.controller/ObserverAdmin/observeCharacters/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-observer-admin/observe-characters.html
 $dokka.location:spaceEngineers.controller/ProductionTab///PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-production-tab/index.html
 $dokka.location:spaceEngineers.controller/ProductionTab/addToProductionQueue/#kotlin.Int/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-production-tab/add-to-production-queue.html
@@ -729,6 +731,7 @@ $dokka.location:spaceEngineers.labrecruits/LabRecruitsController/pressButton/#ko
 $dokka.location:spaceEngineers.labrecruits/LabRecruitsController/spaceEngineers/#/PointingToDeclaration/space-engineers-api/spaceEngineers.labrecruits/-lab-recruits-controller/space-engineers.html
 $dokka.location:spaceEngineers.model.extensions////PointingToDeclaration/space-engineers-api/spaceEngineers.model.extensions/index.html
 $dokka.location:spaceEngineers.model.extensions//allBlocks/spaceEngineers.model.Observation#/PointingToDeclaration/space-engineers-api/spaceEngineers.model.extensions/all-blocks.html
+$dokka.location:spaceEngineers.model.extensions//blockByCustomName/kotlin.collections.List[spaceEngineers.model.Block]#kotlin.String/PointingToDeclaration/space-engineers-api/spaceEngineers.model.extensions/block-by-custom-name.html
 $dokka.location:spaceEngineers.model.extensions//blockByCustomName/spaceEngineers.model.Observation#kotlin.String/PointingToDeclaration/space-engineers-api/spaceEngineers.model.extensions/block-by-custom-name.html
 $dokka.location:spaceEngineers.model.extensions//blockById/spaceEngineers.controller.Observer#kotlin.String/PointingToDeclaration/space-engineers-api/spaceEngineers.model.extensions/block-by-id.html
 $dokka.location:spaceEngineers.model.extensions//blockById/spaceEngineers.model.Observation#kotlin.String/PointingToDeclaration/space-engineers-api/spaceEngineers.model.extensions/block-by-id.html
