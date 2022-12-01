@@ -61,6 +61,15 @@ val blockMappings = mapOf<String, Map<String, KClass<*>>>(
         "Filters" to Int::class,
         "Toolbar" to Toolbar::class,
     ),
+    "GravityGenerator" to mapOf(
+        "FieldSize" to Vec3F::class,
+    ),
+    "GravityGeneratorSphere" to mapOf(
+        "Radius" to Float::class,
+    ),
+    "GravityGeneratorBase" to mapOf(
+        "GravityAcceleration" to Float::class,
+    ),
 )
 
 val serializerMapping = mutableMapOf<String, DeserializationStrategy<out Block>>()

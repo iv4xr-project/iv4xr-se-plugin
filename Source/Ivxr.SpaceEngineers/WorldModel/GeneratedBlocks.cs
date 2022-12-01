@@ -65,6 +65,21 @@ namespace Iv4xr.SpaceEngineers.WorldModel
 	    public int Filters;
 	    public Toolbar Toolbar;
 	}
+	
+	public class GravityGenerator : GravityGeneratorBase 
+	{
+	    public PlainVec3D FieldSize;
+	}
+	
+	public class GravityGeneratorSphere : GravityGeneratorBase 
+	{
+	    public float Radius;
+	}
+	
+	public class GravityGeneratorBase : FunctionalBlock 
+	{
+	    public float GravityAcceleration;
+	}
 	public static class BlockMapper
 	{
 	    public static readonly Dictionary<string, string> Mapping = new Dictionary<string, string>
@@ -106,9 +121,6 @@ namespace Iv4xr.SpaceEngineers.WorldModel
 		    { "HydrogenEngine", "FueledPowerProducer" },
 		    { "WindTurbine", "FunctionalBlock" },
 		    { "SolarPanel", "FunctionalBlock" },
-		    { "GravityGenerator", "FunctionalBlock" },
-		    { "GravityGeneratorBase", "FunctionalBlock" },
-		    { "GravityGeneratorSphere", "FunctionalBlock" },
 		    { "VirtualMass", "FunctionalBlock" },
 		    { "SpaceBall", "FunctionalBlock" },
 		    { "LandingGear", "FunctionalBlock" },

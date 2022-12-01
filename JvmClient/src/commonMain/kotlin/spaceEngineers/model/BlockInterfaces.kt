@@ -56,3 +56,15 @@ interface SensorBlock: FunctionalBlock  {
     val toolbar: Toolbar
 }
 
+interface GravityGenerator: GravityGeneratorBase  {
+    val fieldSize: Vec3F
+}
+
+interface GravityGeneratorSphere: GravityGeneratorBase  {
+    val radius: Float
+}
+
+interface GravityGeneratorBase: FunctionalBlock  {
+    val gravityAcceleration: Float
+}
+

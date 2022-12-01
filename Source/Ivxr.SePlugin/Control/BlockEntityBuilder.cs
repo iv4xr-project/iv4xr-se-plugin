@@ -126,6 +126,15 @@ namespace Iv4xr.SePlugin.Control
                     timerBlock.TriggerDelay = myTimerBlock.TriggerDelay;
                     timerBlock.Toolbar = myTimerBlock.Toolbar.ToToolbar();
                     break;
+                case MyGravityGenerator myGravityGeneratorBase when block is GravityGenerator gravityGenerator:
+                    gravityGenerator.FieldSize = myGravityGeneratorBase.FieldSize.ToPlain();
+                    gravityGenerator.GravityAcceleration = myGravityGeneratorBase.GravityAcceleration;
+                    break;
+                case MyGravityGeneratorSphere myGravityGeneratorSphere when block is GravityGeneratorSphere gravityGeneratorSphere:
+                    gravityGeneratorSphere.Radius = myGravityGeneratorSphere.Radius;
+                    gravityGeneratorSphere.GravityAcceleration = myGravityGeneratorSphere.GravityAcceleration;
+                    break;
+
             }
         }
 
