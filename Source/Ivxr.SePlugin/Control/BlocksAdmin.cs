@@ -7,12 +7,16 @@ using Iv4xr.SePlugin.Control.Screen.BlockAdmin;
 using Iv4xr.SpaceEngineers;
 using Iv4xr.SpaceEngineers.WorldModel;
 using Sandbox.Common.ObjectBuilders;
+using Sandbox.Game.Entities;
 using Sandbox.Game.Entities.Blocks;
 using Sandbox.Game.Entities.Cube;
 using Sandbox.Game.GameSystems;
 using Sandbox.Game.Screens.Helpers;
+using Sandbox.Game.Weapons;
 using Sandbox.Game.World;
+using Sandbox.ModAPI;
 using SpaceEngineers.Game.Entities.Blocks;
+using VRage.Game;
 using VRage.Utils;
 
 namespace Iv4xr.SePlugin.Control
@@ -100,33 +104,61 @@ namespace Iv4xr.SePlugin.Control
         private void MapAction(string buttonBlockId, int buttonIndex,
             MyObjectBuilder_ToolbarItemTerminal data)
         {
+            MapAction(m_observer.GetBlockById(buttonBlockId).FatBlock, buttonIndex, data);
+        }
+
+        private static void MapAction(MyCubeBlock block, int buttonIndex,
+            MyObjectBuilder_ToolbarItemTerminal data)
+        {
             data._Action.ThrowIfNull("_Action", "Action must be set!");
-            var block = m_observer.GetBlockById(buttonBlockId);
+            switch (block)
+            {
+                case MyButtonPanel buttonPanel:
+                    MapToolbar(buttonPanel.Toolbar, buttonIndex, data);
+                    break;
+                case MyEventControllerBlock eventControllerBlock:
+                    MapToolbar(eventControllerBlock.Toolbar, buttonIndex, data);
+                    break;
+                case MyFlightMovementBlock flightMovementBlock:
+                    MapToolbar(flightMovementBlock.Toolbar, buttonIndex, data);
+                    break;
+                case MySearchlight searchLight:
+                    MapToolbar(searchLight.Toolbar, buttonIndex, data);
+                    break;
+                case MyTimerBlock timerBlock:
+                    MapToolbar(timerBlock.Toolbar, buttonIndex, data);
+                    break;
+                case MyTurretControlBlock turretControlBlock:
+                    MapToolbar(turretControlBlock.Toolbar, buttonIndex, data);
+                    break;
+                case MySensorBlock sensorBlock:
+                    MapToolbar(sensorBlock.Toolbar, buttonIndex, data);
+                    break;
+                case MyShipController timerBlock:
+                    MapToolbar(timerBlock.Toolbar, buttonIndex, data);
+                    break;
+                case MyTargetDummyBlock targetDummyBlock:
+                    MapToolbar(targetDummyBlock.Toolbar, buttonIndex, data);
+                    break;
+                case MyLargeTurretBase largeTurretBase:
+                    MapToolbar(largeTurretBase.Toolbar, buttonIndex, data);
+                    break;
+                default:
+                    throw new InvalidOperationException(
+                        $"Block {block.SlimBlock.BlockId()} '{block.GetType().Name}' does not have toolbar or doesn't have implemented mapping.");
+            }
+        }
+
+        private static void MapToolbar(MyToolbar toolbar, int buttonIndex, MyObjectBuilder_ToolbarItem data)
+        {
+            if (buttonIndex >= toolbar.ItemCount || buttonIndex < 0)
+            {
+                throw new IndexOutOfRangeException(
+                    $"Invalid buttonIndex {buttonIndex}, can be between 0 and {toolbar.ItemCount}");
+            }
+
             var item = MyToolbarItemFactory.CreateToolbarItem(data);
-            if (block.FatBlock is MyButtonPanel buttonPanel)
-            {
-                if (buttonIndex >= buttonPanel.Toolbar.ItemCount || buttonIndex < 0)
-                {
-                    throw new IndexOutOfRangeException(
-                        $"Invalid buttonIndex {buttonIndex}, can be between 0 and {buttonPanel.Toolbar.ItemCount}");
-                }
-
-                buttonPanel.Toolbar.SetItemAtIndex(buttonIndex, item);
-            }
-            else if (block.FatBlock is MySensorBlock sensorBlock)
-            {
-                if (buttonIndex >= sensorBlock.Toolbar.ItemCount || buttonIndex < 0)
-                {
-                    throw new IndexOutOfRangeException(
-                        $"Invalid buttonIndex {buttonIndex}, can be between 0 and {sensorBlock.Toolbar.ItemCount}");
-                }
-
-                sensorBlock.Toolbar.SetItemAtIndex(buttonIndex, item);
-            }
-            else
-            {
-                throw new InvalidOperationException($"block {buttonBlockId} is not ButtonPanel");
-            }
+            toolbar.SetItemAtIndex(buttonIndex, item);
         }
 
         public CubeGrid PlaceAt(DefinitionId blockDefinitionId, PlainVec3D position, PlainVec3D orientationForward,
