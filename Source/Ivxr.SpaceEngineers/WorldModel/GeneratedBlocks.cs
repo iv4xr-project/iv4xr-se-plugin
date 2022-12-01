@@ -48,6 +48,23 @@ namespace Iv4xr.SpaceEngineers.WorldModel
 	    public bool SpawnWithoutOxygenEnabled;
 	    public bool ForceSuitChangeOnRespawn;
 	}
+	
+	public class TimerBlock : FunctionalBlock 
+	{
+	    public bool Silent;
+	    public float TriggerDelay;
+	    public Toolbar Toolbar;
+	}
+	
+	public class SensorBlock : FunctionalBlock 
+	{
+	    public bool IsActive;
+	    public PlainVec3D FieldMin;
+	    public PlainVec3D FieldMax;
+	    public float MaxRange;
+	    public int Filters;
+	    public Toolbar Toolbar;
+	}
 	public static class BlockMapper
 	{
 	    public static readonly Dictionary<string, string> Mapping = new Dictionary<string, string>
@@ -58,11 +75,9 @@ namespace Iv4xr.SpaceEngineers.WorldModel
 		    { "MyProgrammableBlock", "FunctionalBlock" },
 		    { "Projector", "FunctionalBlock" },
 		    { "ProjectorBase", "FunctionalBlock" },
-		    { "SensorBlock", "FunctionalBlock" },
 		    { "TargetDummyBlock", "FunctionalBlock" },
 		    { "SoundBlock", "FunctionalBlock" },
 		    { "ButtonPanel", "FunctionalBlock" },
-		    { "TimerBlock", "FunctionalBlock" },
 		    { "TurretControlBlock", "FunctionalBlock" },
 		    { "RadioAntenna", "FunctionalBlock" },
 		    { "Beacon", "FunctionalBlock" },

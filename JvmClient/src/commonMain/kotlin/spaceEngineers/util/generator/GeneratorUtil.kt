@@ -20,6 +20,8 @@ val typeMapping = mapOf(
     "Double" to "double",
     "Int" to "int",
     "String" to "string",
+    "Vec3F" to "PlainVec3D",
+    "Toolbar" to "Toolbar",
 )
 
 fun mapToCsType(type: String): String {

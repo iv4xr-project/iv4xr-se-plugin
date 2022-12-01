@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Iv4xr.SpaceEngineers.WorldModel;
 using Sandbox.Game.Entities;
+using Sandbox.Game.Entities.Blocks;
 using Sandbox.Game.Entities.Cube;
 using SpaceEngineers.Game.Entities.Blocks;
 using VRage.Game.Entity.UseObject;
@@ -11,7 +12,6 @@ namespace Iv4xr.SePlugin.Control
 {
     public class BlockEntityBuilder
     {
-
         public Block CreateAndFill(MySlimBlock sourceBlock)
         {
             var definitionId = sourceBlock.BlockDefinition.ToDefinitionId();
@@ -27,7 +27,7 @@ namespace Iv4xr.SePlugin.Control
             var foundMapping = BlockMapper.Mapping.TryGetValue(shortId, out var cls);
             var type = foundMapping
                     ? GetBlockType(cls)
-                    : GetBlockTypeOrNull(shortId) 
+                    : GetBlockTypeOrNull(shortId)
                       ?? typeof(Block);
             var instance = (Block)Activator.CreateInstance(type);
             return instance;
@@ -43,7 +43,6 @@ namespace Iv4xr.SePlugin.Control
         {
             return typeof(Block).Assembly.GetTypes()
                     .FirstOrDefault(type => type.Name == id);
-
         }
 
         private void AddStandardFields(MySlimBlock sourceBlock, Block block)
@@ -113,6 +112,19 @@ namespace Iv4xr.SePlugin.Control
                     medicalRoom.HealingAllowed = myMedicalRoom.HealingAllowed;
                     medicalRoom.SpawnWithoutOxygenEnabled = myMedicalRoom.SpawnWithoutOxygenEnabled;
                     medicalRoom.ForceSuitChangeOnRespawn = myMedicalRoom.ForceSuitChangeOnRespawn;
+                    break;
+                case MySensorBlock mySensorBlock when block is SensorBlock sensorBlock:
+                    sensorBlock.IsActive = mySensorBlock.IsActive;
+                    sensorBlock.Toolbar = mySensorBlock.Toolbar.ToToolbar();
+                    sensorBlock.FieldMax = mySensorBlock.FieldMax.ToPlain();
+                    sensorBlock.FieldMin = mySensorBlock.FieldMin.ToPlain();
+                    sensorBlock.MaxRange = mySensorBlock.MaxRange;
+                    sensorBlock.Filters = (int)mySensorBlock.Filters;
+                    break;
+                case MyTimerBlock myTimerBlock when block is TimerBlock timerBlock:
+                    timerBlock.Silent = myTimerBlock.Silent;
+                    timerBlock.TriggerDelay = myTimerBlock.TriggerDelay;
+                    timerBlock.Toolbar = myTimerBlock.Toolbar.ToToolbar();
                     break;
             }
         }

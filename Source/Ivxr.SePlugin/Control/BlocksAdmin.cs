@@ -7,6 +7,7 @@ using Iv4xr.SePlugin.Control.Screen.BlockAdmin;
 using Iv4xr.SpaceEngineers;
 using Iv4xr.SpaceEngineers.WorldModel;
 using Sandbox.Common.ObjectBuilders;
+using Sandbox.Game.Entities.Blocks;
 using Sandbox.Game.Entities.Cube;
 using Sandbox.Game.GameSystems;
 using Sandbox.Game.Screens.Helpers;
@@ -111,6 +112,16 @@ namespace Iv4xr.SePlugin.Control
                 }
 
                 buttonPanel.Toolbar.SetItemAtIndex(buttonIndex, item);
+            }
+            else if (block.FatBlock is MySensorBlock sensorBlock)
+            {
+                if (buttonIndex >= sensorBlock.Toolbar.ItemCount || buttonIndex < 0)
+                {
+                    throw new IndexOutOfRangeException(
+                        $"Invalid buttonIndex {buttonIndex}, can be between 0 and {sensorBlock.Toolbar.ItemCount}");
+                }
+
+                sensorBlock.Toolbar.SetItemAtIndex(buttonIndex, item);
             }
             else
             {

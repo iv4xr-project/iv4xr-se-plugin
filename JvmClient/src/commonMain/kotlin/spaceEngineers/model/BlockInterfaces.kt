@@ -41,3 +41,18 @@ interface MedicalRoom: FunctionalBlock  {
     val forceSuitChangeOnRespawn: Boolean
 }
 
+interface TimerBlock: FunctionalBlock  {
+    val silent: Boolean
+    val triggerDelay: Float
+    val toolbar: Toolbar
+}
+
+interface SensorBlock: FunctionalBlock  {
+    val isActive: Boolean
+    val fieldMin: Vec3F
+    val fieldMax: Vec3F
+    val maxRange: Float
+    val filters: Int
+    val toolbar: Toolbar
+}
+
