@@ -21,11 +21,8 @@ namespace Iv4xr.SePlugin.Control
         private MyObjectBuilder_CubeBlock CubeBlockBuilderByBlockType(long ownerId, DefinitionId blockDefinitionId,
             Vector3 colorMask)
         {
-            var definitionBase = MyDefinitionManager.Static
-                    .GetAllDefinitions()
-                    .First(definition => definition.ToDefinitionId().Type == blockDefinitionId.Type);
-
-            var obj = (MyObjectBuilder_CubeBlock)MyObjectBuilderSerializer.CreateNewObject(definitionBase.Id);
+            
+            var obj = (MyObjectBuilder_CubeBlock)MyObjectBuilderSerializer.CreateNewObject(blockDefinitionId.ToMyDefinitionId());
             obj.Min = new SerializableVector3I(0, 0, 0);
             obj.SubtypeName = blockDefinitionId.Type;
             obj.BlockOrientation = new SerializableBlockOrientation(Base6Directions.Direction.Forward,
