@@ -7,6 +7,7 @@ import spaceEngineers.transport.SocketReaderWriter.Companion.DEFAULT_PORT
 import spaceEngineers.transport.StringLineReaderWriter
 import java.io.File
 import java.lang.reflect.UndeclaredThrowableException
+import kotlin.time.Duration
 
 
 abstract class MockOrRealGameTest(
@@ -66,6 +67,12 @@ abstract class MockOrRealGameTest(
     protected suspend fun delay(timeMillis: Long) {
         if (useRealGame) {
             kotlinx.coroutines.delay(timeMillis)
+        }
+    }
+
+    protected suspend fun delay(duration: Duration) {
+        if (useRealGame) {
+            kotlinx.coroutines.delay(duration)
         }
     }
 

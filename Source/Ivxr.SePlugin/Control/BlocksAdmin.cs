@@ -14,7 +14,6 @@ using Sandbox.Game.GameSystems;
 using Sandbox.Game.Screens.Helpers;
 using Sandbox.Game.Weapons;
 using Sandbox.Game.World;
-using Sandbox.ModAPI;
 using SpaceEngineers.Game.Entities.Blocks;
 using VRage.Game;
 using VRage.Utils;
@@ -34,6 +33,7 @@ namespace Iv4xr.SePlugin.Control
             FunctionalBlock = new FunctionalBlockAdmin(session, observer);
             TerminalBlock = new TerminalBlockAdmin(session, observer);
             MedicalRoom = new MedicalRoomAdmin(session, observer);
+            SensorBlock = new SensorBlockAdmin(session, observer);
         }
 
         private readonly BlockPlacer m_blockPlacer = new BlockPlacer();
@@ -190,6 +190,7 @@ namespace Iv4xr.SePlugin.Control
         public IFunctionalBlockAdmin FunctionalBlock { get; }
         public ITerminalBlockAdmin TerminalBlock { get; }
         public IMedicalRoomAdmin MedicalRoom { get; }
+        public ISensorBlockAdmin SensorBlock { get; }
 
         public void Remove(string blockId)
         {

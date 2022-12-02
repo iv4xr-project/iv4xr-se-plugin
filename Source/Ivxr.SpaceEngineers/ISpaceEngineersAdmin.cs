@@ -49,6 +49,7 @@ namespace Iv4xr.SpaceEngineers
         IFunctionalBlockAdmin FunctionalBlock { get; }
         ITerminalBlockAdmin TerminalBlock { get;  }
         IMedicalRoomAdmin MedicalRoom { get; }
+        ISensorBlockAdmin SensorBlock { get; }
     }
 
     public interface IWarheadAdmin
@@ -84,6 +85,12 @@ namespace Iv4xr.SpaceEngineers
         void SetHealingAllowed(string blockId, bool healingAllowed);
         void SetRefuelAllowed(string blockId, bool refuelAllowed);
         void SetSpawnWithoutOxygenEnabled(string blockId, bool spawnWithoutOxygenEnabled);
+    }
+    
+    public interface ISensorBlockAdmin
+    {
+        void SetFieldMin(string blockId, PlainVec3D fieldMin);
+        void SetFieldMax(string blockId, PlainVec3D fieldMax);
     }
 
     public interface ICharacterAdmin

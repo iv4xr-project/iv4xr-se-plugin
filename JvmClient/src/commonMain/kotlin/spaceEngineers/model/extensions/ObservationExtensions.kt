@@ -15,7 +15,8 @@ fun List<Block>.blockByCustomName(customName: String): TerminalBlock {
     return filterIsInstance<TerminalBlock>().firstOrNull { it.customName == customName } ?: error(
         "Block with name $customName not found, found only ${
             filterIsInstance<TerminalBlock>().map { it.customName }.sorted()
-        }")
+        }"
+    )
 }
 
 val Observation.allBlocks: List<Block>
@@ -24,7 +25,12 @@ val Observation.allBlocks: List<Block>
     }
 
 fun Observation.blockById(blockId: BlockId): Block {
-    return allBlocks.firstOrNull { it.id == blockId } ?: error("Block by id $blockId not found!")
+    return typedBlockById(blockId)
+}
+
+fun <T : Block> Observation.typedBlockById(blockId: BlockId): T {
+    return allBlocks.firstOrNull { it.id == blockId } as T?
+        ?: error("Block by id $blockId not found!")
 }
 
 fun Observation.heaviestGrid(): CubeGrid {

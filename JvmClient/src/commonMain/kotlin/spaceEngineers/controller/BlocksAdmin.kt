@@ -31,10 +31,19 @@ interface BlocksAdmin {
     val medicalRoom: MedicalRoomAdmin
     val functionalBlock: FunctionalBlockAdmin
     val terminalBlock: TerminalBlockAdmin
+    val sensorBlock: SensorBlockAdmin
+}
+
+interface SensorBlockAdmin {
+    fun setFieldMin(blockId: String, fieldMin: Vec3F)
+    fun setFieldMax(blockId: String, fieldMax: Vec3F)
 }
 
 interface MedicalRoomAdmin {
-
+    fun setRespawnAllowed(blockId: String, respawnAllowed: Boolean)
+    fun setHealingAllowed(blockId: String, healingAllowed: Boolean)
+    fun setRefuelAllowed(blockId: String, refuelAllowed: Boolean)
+    fun setSpawnWithoutOxygenEnabled(blockId: String, spawnWithoutOxygenEnabled: Boolean)
 }
 
 interface WarheadAdmin {
