@@ -34,6 +34,9 @@ namespace Iv4xr.SePlugin.Control
             TerminalBlock = new TerminalBlockAdmin(session, observer);
             MedicalRoom = new MedicalRoomAdmin(session, observer);
             SensorBlock = new SensorBlockAdmin(session, observer);
+            GravityGenerator = new GravityGeneratorAdmin(session, observer);
+            GravityGeneratorSphere = new GravityGeneratorSphereAdmin(session, observer);
+            TimerBlock = new TimerBlockAdmin(session, observer);
         }
 
         private readonly BlockPlacer m_blockPlacer = new BlockPlacer();
@@ -191,6 +194,9 @@ namespace Iv4xr.SePlugin.Control
         public ITerminalBlockAdmin TerminalBlock { get; }
         public IMedicalRoomAdmin MedicalRoom { get; }
         public ISensorBlockAdmin SensorBlock { get; }
+        public IGravityGeneratorAdmin GravityGenerator { get; }
+        public IGravityGeneratorSphereAdmin GravityGeneratorSphere { get; }
+        public ITimerBlockAdmin TimerBlock { get; }
 
         public void Remove(string blockId)
         {
