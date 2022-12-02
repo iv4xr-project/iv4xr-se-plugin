@@ -7,8 +7,8 @@ interface BlocksAdmin {
     fun placeAt(
         blockDefinitionId: DefinitionId,
         position: Vec3F,
-        orientationForward: Vec3F,
-        orientationUp: Vec3F,
+        orientationForward: Vec3F= Vec3F.FORWARD,
+        orientationUp: Vec3F = Vec3F.UP,
         color: Vec3F? = null,
     ): CubeGrid
 
@@ -16,8 +16,8 @@ interface BlocksAdmin {
         blockDefinitionId: DefinitionId,
         gridId: String,
         minPosition: Vec3I,
-        orientationForward: Vec3I,
-        orientationUp: Vec3I,
+        orientationForward: Vec3I = Vec3I.FORWARD,
+        orientationUp: Vec3I = Vec3I.UP,
         color: Vec3F? = null,
     ): String
 
