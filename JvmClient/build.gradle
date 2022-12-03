@@ -3,6 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.plugin.serialization' version "$kotlin_version"
     id("org.jetbrains.dokka") version "$kotlin_version"
     id 'maven-publish'
+    id 'jacoco'
 }
 
 group = 'com.github.iv4xr-project'
@@ -66,3 +67,20 @@ kotlin {
         }
     }
 }
+
+tasks.jacocoTestReport {
+
+    sourceDirectories.setFrom(files(project.projectDir))
+    executionData.setFrom(
+            fileTree(project.projectDir) {
+                setIncludes(["**/**/*.exec", "**/**/*.ec"])
+            }
+    )
+
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
+}
+
+check.dependsOn jacocoTestReport
