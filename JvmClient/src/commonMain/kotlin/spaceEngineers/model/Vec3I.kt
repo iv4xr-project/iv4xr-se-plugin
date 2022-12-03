@@ -32,6 +32,10 @@ data class Vec3I(
         return Vec3I(-x, -y, -z)
     }
 
+    operator fun times(scalar: Int): Vec3I {
+        return Vec3I(x * scalar, y * scalar, z * scalar)
+    }
+
     operator fun minus(other: NumberVec3<Int>): Vec3I {
         return Vec3I(x - other.x, y - other.y, z - other.z)
     }

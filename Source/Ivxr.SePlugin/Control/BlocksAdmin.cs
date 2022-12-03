@@ -7,11 +7,15 @@ using Iv4xr.SePlugin.Control.Screen.BlockAdmin;
 using Iv4xr.SpaceEngineers;
 using Iv4xr.SpaceEngineers.WorldModel;
 using Sandbox.Common.ObjectBuilders;
+using Sandbox.Game.Entities;
+using Sandbox.Game.Entities.Blocks;
 using Sandbox.Game.Entities.Cube;
 using Sandbox.Game.GameSystems;
 using Sandbox.Game.Screens.Helpers;
+using Sandbox.Game.Weapons;
 using Sandbox.Game.World;
 using SpaceEngineers.Game.Entities.Blocks;
+using VRage.Game;
 using VRage.Utils;
 
 namespace Iv4xr.SePlugin.Control
@@ -29,6 +33,10 @@ namespace Iv4xr.SePlugin.Control
             FunctionalBlock = new FunctionalBlockAdmin(session, observer);
             TerminalBlock = new TerminalBlockAdmin(session, observer);
             MedicalRoom = new MedicalRoomAdmin(session, observer);
+            SensorBlock = new SensorBlockAdmin(session, observer);
+            GravityGenerator = new GravityGeneratorAdmin(session, observer);
+            GravityGeneratorSphere = new GravityGeneratorSphereAdmin(session, observer);
+            TimerBlock = new TimerBlockAdmin(session, observer);
         }
 
         private readonly BlockPlacer m_blockPlacer = new BlockPlacer();
@@ -99,23 +107,61 @@ namespace Iv4xr.SePlugin.Control
         private void MapAction(string buttonBlockId, int buttonIndex,
             MyObjectBuilder_ToolbarItemTerminal data)
         {
-            data._Action.ThrowIfNull("_Action", "Action must be set!");
-            var block = m_observer.GetBlockById(buttonBlockId);
-            var item = MyToolbarItemFactory.CreateToolbarItem(data);
-            if (block.FatBlock is MyButtonPanel buttonPanel)
-            {
-                if (buttonIndex >= buttonPanel.Toolbar.ItemCount || buttonIndex < 0)
-                {
-                    throw new IndexOutOfRangeException(
-                        $"Invalid buttonIndex {buttonIndex}, can be between 0 and {buttonPanel.Toolbar.ItemCount}");
-                }
+            MapAction(m_observer.GetBlockById(buttonBlockId).FatBlock, buttonIndex, data);
+        }
 
-                buttonPanel.Toolbar.SetItemAtIndex(buttonIndex, item);
-            }
-            else
+        private static void MapAction(MyCubeBlock block, int buttonIndex,
+            MyObjectBuilder_ToolbarItemTerminal data)
+        {
+            data._Action.ThrowIfNull("_Action", "Action must be set!");
+            switch (block)
             {
-                throw new InvalidOperationException($"block {buttonBlockId} is not ButtonPanel");
+                case MyButtonPanel buttonPanel:
+                    MapToolbar(buttonPanel.Toolbar, buttonIndex, data);
+                    break;
+                case MyEventControllerBlock eventControllerBlock:
+                    MapToolbar(eventControllerBlock.Toolbar, buttonIndex, data);
+                    break;
+                case MyFlightMovementBlock flightMovementBlock:
+                    MapToolbar(flightMovementBlock.Toolbar, buttonIndex, data);
+                    break;
+                case MySearchlight searchLight:
+                    MapToolbar(searchLight.Toolbar, buttonIndex, data);
+                    break;
+                case MyTimerBlock timerBlock:
+                    MapToolbar(timerBlock.Toolbar, buttonIndex, data);
+                    break;
+                case MyTurretControlBlock turretControlBlock:
+                    MapToolbar(turretControlBlock.Toolbar, buttonIndex, data);
+                    break;
+                case MySensorBlock sensorBlock:
+                    MapToolbar(sensorBlock.Toolbar, buttonIndex, data);
+                    break;
+                case MyShipController timerBlock:
+                    MapToolbar(timerBlock.Toolbar, buttonIndex, data);
+                    break;
+                case MyTargetDummyBlock targetDummyBlock:
+                    MapToolbar(targetDummyBlock.Toolbar, buttonIndex, data);
+                    break;
+                case MyLargeTurretBase largeTurretBase:
+                    MapToolbar(largeTurretBase.Toolbar, buttonIndex, data);
+                    break;
+                default:
+                    throw new InvalidOperationException(
+                        $"Block {block.SlimBlock.BlockId()} '{block.GetType().Name}' does not have toolbar or doesn't have implemented mapping.");
             }
+        }
+
+        private static void MapToolbar(MyToolbar toolbar, int buttonIndex, MyObjectBuilder_ToolbarItem data)
+        {
+            if (buttonIndex >= toolbar.ItemCount || buttonIndex < 0)
+            {
+                throw new IndexOutOfRangeException(
+                    $"Invalid buttonIndex {buttonIndex}, can be between 0 and {toolbar.ItemCount}");
+            }
+
+            var item = MyToolbarItemFactory.CreateToolbarItem(data);
+            toolbar.SetItemAtIndex(buttonIndex, item);
         }
 
         public CubeGrid PlaceAt(DefinitionId blockDefinitionId, PlainVec3D position, PlainVec3D orientationForward,
@@ -147,6 +193,10 @@ namespace Iv4xr.SePlugin.Control
         public IFunctionalBlockAdmin FunctionalBlock { get; }
         public ITerminalBlockAdmin TerminalBlock { get; }
         public IMedicalRoomAdmin MedicalRoom { get; }
+        public ISensorBlockAdmin SensorBlock { get; }
+        public IGravityGeneratorAdmin GravityGenerator { get; }
+        public IGravityGeneratorSphereAdmin GravityGeneratorSphere { get; }
+        public ITimerBlockAdmin TimerBlock { get; }
 
         public void Remove(string blockId)
         {

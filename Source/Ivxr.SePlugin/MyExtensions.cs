@@ -260,13 +260,41 @@ namespace Iv4xr.SePlugin
             return result;
         }
 
-        public static ToolbarItem ToToolbarItem(this MyToolbarItemDefinition toolbarItem)
+        public static ToolbarItem ToToolbarItem(this MyToolbarItem toolbarItem)
         {
-            return new ToolbarItem()
+            switch (toolbarItem)
             {
-                Id = toolbarItem.Definition.Id.ToDefinitionId(),
-                Name = toolbarItem.DisplayName.ToString()
-            };
+                case null:
+                    return null;
+                case MyToolbarItemDefinition myToolbarItemDefinition:
+                    return new ToolbarItemDefinition()
+                    {
+                        Id = myToolbarItemDefinition.Definition.Id.ToDefinitionId(),
+                        Name = toolbarItem.DisplayName.ToString(),
+                        Enabled = toolbarItem.Enabled,
+                    };
+                case MyToolbarItemTerminalBlock myToolbarItemTerminalBlock:
+                    return new ToolbarItemTerminalBlock()
+                    {
+                        Name = toolbarItem.DisplayName.ToString(),
+                        Enabled = toolbarItem.Enabled,
+                        ActionId = myToolbarItemTerminalBlock.ActionId,
+                        BlockEntityId = myToolbarItemTerminalBlock.BlockEntityId,
+                    };
+                case MyToolbarItemActions myToolbarItemActions:
+                    return new ToolbarItemTerminalBlock()
+                    {
+                        Name = toolbarItem.DisplayName.ToString(),
+                        Enabled = toolbarItem.Enabled,
+                        ActionId = myToolbarItemActions.ActionId,
+                    };
+                default:
+                    return new ToolbarItem()
+                    {
+                        Name = toolbarItem.DisplayName.ToString(),
+                        Enabled = toolbarItem.Enabled,
+                    };
+            }
         }
 
         public static List<Role> Roles(this DebugInfo debugInfo)
@@ -502,5 +530,19 @@ namespace Iv4xr.SePlugin
                 Position = myParticleEffect.WorldMatrix.Translation.ToPlain(),
             };
         }
+
+        public static Toolbar ToToolbar(this MyToolbar toolbar)
+        {
+            return new Toolbar()
+            {
+                SlotCount = toolbar.SlotCount,
+                PageCount = toolbar.PageCount,
+                Items = new ToolbarItem[toolbar.ItemCount]
+                        .Select((index, item) => toolbar[item]?.ToToolbarItem())
+                        .ToList()
+            };
+        }
+
+
     }
 }

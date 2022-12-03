@@ -182,13 +182,7 @@ namespace Iv4xr.SePlugin.Control
 
         public CubeGrid GetCubeGridById(string gridId)
         {
-            var grid = GetGridById(gridId);
-            return new CubeGrid()
-            {
-                Mass = grid.Mass,
-                Parked = grid.IsParked,
-                Blocks = grid.CubeBlocks.Select(EntityBuilder.CreateGridBlock).ToList(),
-            };
+            return EntityBuilder.CreateSeGrid(GetGridById(gridId));
         }
 
         public Block GetBlockDtoById(string blockId)

@@ -2,7 +2,6 @@ package spaceEngineers.game.mockable
 
 import spaceEngineers.controller.SpaceEngineers
 import spaceEngineers.model.*
-import spaceEngineers.model.extensions.allBlocks
 import spaceEngineers.model.typing.DefinitionIds
 import testhelp.MockOrRealGameTest
 import kotlin.test.Test
@@ -26,6 +25,16 @@ class PolymorphicBlocksTest : MockOrRealGameTest() {
     }
 
     @Test
+    fun gravityGenerator() = testContext {
+        buildAndCheckType<GravityGenerator>(DefinitionIds.GravityGenerator.EMPTY)
+    }
+
+    @Test
+    fun gravityGeneratorSphere() = testContext {
+        buildAndCheckType<GravityGeneratorSphere>(DefinitionIds.GravityGeneratorSphere.EMPTY)
+    }
+
+    @Test
     fun slideDoor() = testContext {
         buildAndCheckType<DoorBase>(DefinitionId.door("LargeBlockSlideDoor"))
         buildAndCheckType<TerminalBlock>(DefinitionId.door("LargeBlockSlideDoor"))
@@ -37,8 +46,8 @@ class PolymorphicBlocksTest : MockOrRealGameTest() {
         val z = 1000
         admin.character.teleport(Vec3F(0, 0, z + 15), Vec3F.FORWARD, Vec3F.UP)
         observer.observeNewBlocks()
-        admin.blocks.placeAt(definitionId, Vec3F(0, 0, z + 0), Vec3F.FORWARD, Vec3F.UP)
-        val block = observer.observeNewBlocks().allBlocks.first()
+        val grid = admin.blocks.placeAt(definitionId, Vec3F(0, 0, z + 0), Vec3F.FORWARD, Vec3F.UP)
+        val block = grid.blocks.first()
         assertEquals(block.definitionId.type, definitionId.type)
         assertTrue(block is T)
         admin.blocks.remove(block.id)
