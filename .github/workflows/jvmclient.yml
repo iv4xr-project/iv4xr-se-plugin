@@ -1,4 +1,4 @@
-name: CI Tests
+name: JvmClient
 
 on: 
   push:
@@ -7,7 +7,7 @@ on:
 
 
 jobs:
-  jvmTest:
+  test:
     runs-on: ubuntu-latest
 
     steps:
@@ -34,7 +34,7 @@ jobs:
           curl -Os https://uploader.codecov.io/latest/linux/codecov
           chmod +x codecov
           ./codecov -f build/reports/jacoco/test/jacocoTestReport.xml
-  ktLint:
+  lint:
     runs-on: ubuntu-latest
 
     steps:
@@ -51,13 +51,3 @@ jobs:
           echo Checking code style
           cd JvmClient/
           ./gradlew ktCheck
-          
-  csTest:
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Unit tests
-        run: |
-          echo Running Cs unit tests
-          cd Source/Tests/Ivxr.PlugIndependentLib.Tests
-          dotnet test
