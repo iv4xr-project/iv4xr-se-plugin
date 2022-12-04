@@ -16,9 +16,11 @@ def generate_image(url):
     se.Admin.Character.Teleport(
         position=Vec3F(X=3, Y=3, Z=3),
         orientationForward=Vec3I(0, 0, 1),
-        orientationUp=Vec3I(0, 1, 0)
+        orientationUp=Vec3I(0, 1, 0),
     )
-    definitionId = DefinitionId(Id="MyObjectBuilder_CubeBlock", Type="LargeHeavyBlockArmorBlock")
+    definitionId = DefinitionId(
+        Id="MyObjectBuilder_CubeBlock", Type="LargeHeavyBlockArmorBlock"
+    )
     gridId = None
     z = 0
     for x in range(0, width):
@@ -31,7 +33,7 @@ def generate_image(url):
                     position=Vec3F(
                         X=x * LARGE_BLOCK_CUBE_SIDE_SIZE,
                         Y=y * LARGE_BLOCK_CUBE_SIDE_SIZE,
-                        Z=z * LARGE_BLOCK_CUBE_SIDE_SIZE
+                        Z=z * LARGE_BLOCK_CUBE_SIDE_SIZE,
                     ),
                     orientationUp=Vec3F(X=0, Y=1, Z=0),
                     orientationForward=Vec3F(X=0, Y=0, Z=-1),
@@ -42,10 +44,10 @@ def generate_image(url):
                     position=Vec3F(
                         X=width * LARGE_BLOCK_CUBE_SIDE_SIZE / 2,
                         Y=height * LARGE_BLOCK_CUBE_SIDE_SIZE / 2,
-                        Z=-60
+                        Z=-60,
                     ),
                     orientationForward=Vec3I(0, 0, 1),
-                    orientationUp=Vec3I(0, -1, 0)
+                    orientationUp=Vec3I(0, -1, 0),
                 )
             elif gridId:
                 place_in_grid(definitionId, gridId, se, x, y, z, color=color)
@@ -62,5 +64,5 @@ def place_in_grid(definitionId, gridId, se, x, y, z, color):
     )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     generate_image("../../resources/goodai-logo64.png")

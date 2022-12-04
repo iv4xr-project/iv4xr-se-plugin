@@ -15,7 +15,9 @@ def generate_maze(width, height):
     maze.generate()
     se = SpaceEngineersProxy.localhost()
     se.Admin.Character.Teleport(position=Vec3F(X=10, Y=10, Z=10))
-    definitionId = DefinitionId(Id="MyObjectBuilder_CubeBlock", Type="LargeHeavyBlockArmorBlock")
+    definitionId = DefinitionId(
+        Id="MyObjectBuilder_CubeBlock", Type="LargeHeavyBlockArmorBlock"
+    )
     gridId = None
     z = 0
     for x in range(0, width):
@@ -26,7 +28,7 @@ def generate_maze(width, height):
                     position=Vec3F(
                         X=x * LARGE_BLOCK_CUBE_SIDE_SIZE,
                         Y=y * LARGE_BLOCK_CUBE_SIDE_SIZE,
-                        Z=z * LARGE_BLOCK_CUBE_SIDE_SIZE
+                        Z=z * LARGE_BLOCK_CUBE_SIDE_SIZE,
                     ),
                     orientationUp=Vec3F(X=0, Y=1, Z=0),
                     orientationForward=Vec3F(X=0, Y=0, Z=-1),
@@ -37,10 +39,10 @@ def generate_maze(width, height):
                     position=Vec3F(
                         X=width * LARGE_BLOCK_CUBE_SIDE_SIZE / 2,
                         Y=height * LARGE_BLOCK_CUBE_SIDE_SIZE / 2,
-                        Z=-60
+                        Z=-60,
                     ),
                     orientationForward=Vec3I(0, 0, 1),
-                    orientationUp=Vec3I(0, -1, 0)
+                    orientationUp=Vec3I(0, -1, 0),
                 )
             else:
                 place_in_grid(definitionId, gridId, se, x, y, z)
@@ -63,5 +65,5 @@ def place_in_grid(definitionId, gridId, se, x, y, z):
     )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     generate_maze(38, 30)

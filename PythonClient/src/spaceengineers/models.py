@@ -1,3 +1,5 @@
+# pylint: disable=C0103,C0115,C0114,R0902
+
 from dataclasses import dataclass
 from typing import List
 

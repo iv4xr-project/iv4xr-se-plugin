@@ -1,14 +1,28 @@
+# pylint: disable=C0115,C0116,R0902,C0103,R0903,R0913,W0401,W0622,C0114,R0205
+
 from .models import *
 
 
 class BlocksAdmin(object):
-
-    def PlaceAt(self, blockDefinitionId: DefinitionId, position: Vec3F, orientationForward: Vec3F, orientationUp: Vec3F,
-                color: Vec3F) -> str:
+    def PlaceAt(
+        self,
+        blockDefinitionId: DefinitionId,
+        position: Vec3F,
+        orientationForward: Vec3F,
+        orientationUp: Vec3F,
+        color: Vec3F,
+    ) -> str:
         pass
 
-    def PlaceInGrid(self, blockDefinitionId: DefinitionId, gridId: str, minPosition: Vec3I, orientationForward: Vec3I,
-                    orientationUp: Vec3I, color: Vec3F) -> str:
+    def PlaceInGrid(
+        self,
+        blockDefinitionId: DefinitionId,
+        gridId: str,
+        minPosition: Vec3I,
+        orientationForward: Vec3I,
+        orientationUp: Vec3I,
+        color: Vec3F,
+    ) -> str:
         pass
 
     def Remove(self, blockId: str):
@@ -19,9 +33,13 @@ class BlocksAdmin(object):
 
 
 class CharacterAdmin(object):
-
-    def Create(self, name: str, position: Vec3F, orientationForward: Vec3F,
-               orientationUp: Vec3F) -> CharacterObservation:
+    def Create(
+        self,
+        name: str,
+        position: Vec3F,
+        orientationForward: Vec3F,
+        orientationUp: Vec3F,
+    ) -> CharacterObservation:
         pass
 
     def Die(self):
@@ -42,7 +60,9 @@ class CharacterAdmin(object):
     def Switch(self, id: str):
         pass
 
-    def Teleport(self, position: Vec3F, orientationForward: Vec3F, orientationUp: Vec3F) -> CharacterObservation:
+    def Teleport(
+        self, position: Vec3F, orientationForward: Vec3F, orientationUp: Vec3F
+    ) -> CharacterObservation:
         pass
 
     def Use(self, blockId: str, functionIndex: int, action: int):
@@ -50,13 +70,11 @@ class CharacterAdmin(object):
 
 
 class ObserverAdmin(object):
-
     def ObserveCharacters(self) -> List[CharacterObservation]:
         pass
 
 
 class TestAdmin(object):
-
     def AdminOnly(self):
         pass
 
@@ -87,13 +105,11 @@ class SpaceEngineersAdmin(object):
 
 
 class Blocks(object):
-
     def Place(self):
         pass
 
 
 class Character(object):
-
     def BeginUsingTool(self):
         pass
 
@@ -103,7 +119,9 @@ class Character(object):
     def Jump(self, movement: Vec3F):
         pass
 
-    def MoveAndRotate(self, movement: Vec3F, rotation3: Vec2F, roll: float, ticks: int) -> CharacterObservation:
+    def MoveAndRotate(
+        self, movement: Vec3F, rotation3: Vec2F, roll: float, ticks: int
+    ) -> CharacterObservation:
         pass
 
     def ShowInventory(self):
@@ -141,7 +159,6 @@ class Character(object):
 
 
 class Definitions(object):
-
     def AllDefinitions(self) -> List[DefinitionBase]:
         pass
 
@@ -156,7 +173,6 @@ class Definitions(object):
 
 
 class Input(object):
-
     def StartPlaying(self, snapshots: List[FrameSnapshot]):
         pass
 
@@ -171,14 +187,15 @@ class Input(object):
 
 
 class Items(object):
-
     def Activate(self, toolbarLocation: ToolbarLocation):
         pass
 
     def Equip(self, toolbarLocation: ToolbarLocation):
         pass
 
-    def SetToolbarItem(self, definitionId: DefinitionId, toolbarLocation: ToolbarLocation):
+    def SetToolbarItem(
+        self, definitionId: DefinitionId, toolbarLocation: ToolbarLocation
+    ):
         pass
 
     def Toolbar(self) -> Toolbar:
@@ -186,7 +203,6 @@ class Items(object):
 
 
 class Observer(object):
-
     def NavigationGraph(self, gridId: str) -> NavGraph:
         pass
 
@@ -216,7 +232,6 @@ class Observer(object):
 
 
 class GamePlay(object):
-
     def Data(self) -> GamePlayData:
         pass
 
@@ -225,7 +240,6 @@ class GamePlay(object):
 
 
 class JoinGame(object):
-
     def Data(self) -> JoinGameData:
         pass
 
@@ -249,7 +263,6 @@ class JoinGame(object):
 
 
 class LoadGame(object):
-
     def Data(self) -> LoadGameData:
         pass
 
@@ -276,7 +289,6 @@ class LoadGame(object):
 
 
 class MainMenu(object):
-
     def Character(self):
         pass
 
@@ -309,7 +321,6 @@ class MainMenu(object):
 
 
 class Medicals(object):
-
     def Data(self) -> MedicalsData:
         pass
 
@@ -333,7 +344,6 @@ class Medicals(object):
 
 
 class MessageBox(object):
-
     def Data(self) -> MessageBoxData:
         pass
 
@@ -345,7 +355,6 @@ class MessageBox(object):
 
 
 class SaveAs(object):
-
     def Data(self) -> SaveAsData:
         pass
 
@@ -360,7 +369,6 @@ class SaveAs(object):
 
 
 class ServerConnect(object):
-
     def Connect(self):
         pass
 
@@ -379,7 +387,6 @@ class CommsTab(object):
 
 
 class ControlPanelTab(object):
-
     def Data(self) -> TerminalControlPanelData:
         pass
 
@@ -403,7 +410,6 @@ class InfoTab(object):
 
 
 class InventorySide(object):
-
     def ClickSelectedItem(self):
         pass
 
@@ -442,7 +448,6 @@ class InventorySide(object):
 
 
 class InventorySide(object):
-
     def ClickSelectedItem(self):
         pass
 
@@ -499,7 +504,9 @@ class InventoryTab(object):
     def SelectedToProductionQueue(self):
         pass
 
-    def TransferInventoryItem(self, sourceInventoryId: int, destinationInventoryId: int, itemId: int):
+    def TransferInventoryItem(
+        self, sourceInventoryId: int, destinationInventoryId: int, itemId: int
+    ):
         pass
 
     def Withdraw(self):
@@ -507,7 +514,6 @@ class InventoryTab(object):
 
 
 class ProductionTab(object):
-
     def AddToProductionQueue(self, index: int):
         pass
 
@@ -571,7 +577,6 @@ class Screens(object):
 
 
 class Session(object):
-
     def Connect(self, address: str):
         pass
 

@@ -10,7 +10,10 @@ use_step_matcher("re")
 
 def get_scenario_path() -> str:
     from pathlib import Path
-    return f"{Path(__file__).resolve().parent}/../../../scenarios/".replace("/mnt/c", "C:")
+
+    return f"{Path(__file__).resolve().parent}/../../../scenarios/".replace(
+        "/mnt/c", "C:"
+    )
 
 
 @given("Scenario config:?")
@@ -36,4 +39,5 @@ def step_impl(context: Context):
 @when("Test waits for ([0-9].*) seconds.")
 def step_impl(context: Context, seconds):
     import time
+
     time.sleep(float(seconds))
