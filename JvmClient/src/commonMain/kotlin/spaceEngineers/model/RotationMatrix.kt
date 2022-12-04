@@ -3,7 +3,6 @@ package spaceEngineers.model
 import spaceEngineers.model.extensions.crossProduct
 import spaceEngineers.model.extensions.toArray
 
-
 inline class RotationMatrix(
     val values: FloatArray = FloatArray(9)
 ) {

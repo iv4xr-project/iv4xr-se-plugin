@@ -6,7 +6,6 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
-
 class ObservationTest : MockOrRealGameTest(mockFile = inMockResourcesDirectory("ObservationTest.txt")) {
 
     @Test

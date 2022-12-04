@@ -112,5 +112,4 @@ w
         assertEquals(map.width, 1)
         assertEquals(map.height, 1)
     }
-
 }

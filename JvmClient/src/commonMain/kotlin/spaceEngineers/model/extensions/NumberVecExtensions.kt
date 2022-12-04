@@ -6,7 +6,6 @@ import spaceEngineers.model.Vec3F
 import spaceEngineers.model.Vec3I
 import spaceEngineers.movement.BasicDirection3d
 
-
 fun Vec3F.normalizeAsMovement(characterMovementType: CharacterMovementType): Vec3F {
     return normalized() * characterMovementType.speed
 }

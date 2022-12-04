@@ -2,7 +2,6 @@ package spaceEngineers.model
 
 // Generated automatically by BlockMappingGeneratorRunner.kt, do not change.
 
-
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -42,8 +41,6 @@ data class DataTerminalBlock(
     override val ownerId: CharacterId,
     @SerialName("BuiltBy")
     override val builtBy: CharacterId,
-
-
 
     @SerialName("ShowInInventory")
     override val showInInventory: Boolean,
@@ -632,4 +629,3 @@ data class DataGravityGeneratorBase(
     @SerialName("GravityAcceleration")
     override val gravityAcceleration: Float,
 ) : GravityGeneratorBase
-

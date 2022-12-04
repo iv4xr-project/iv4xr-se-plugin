@@ -1,6 +1,6 @@
 package spaceEngineers.model
 
-interface BlockDefinition: PhysicalModelDefinition {
+interface BlockDefinition : PhysicalModelDefinition {
 
     /**
      * List containing integrity thresholds that change block state (and visual model).
@@ -15,7 +15,4 @@ interface BlockDefinition: PhysicalModelDefinition {
     val cubeSize: CubeSize
     val mountPoints: List<MountPoint>
     val components: List<Component>
-
 }
-
-

@@ -9,7 +9,6 @@ import spaceEngineers.navigation.CharacterNavigation
 import spaceEngineers.navigation.PathFinder
 import spaceEngineers.navigation.ScreenNavigation
 
-
 data class CharacterExtensions(
     val navigation: CharacterNavigation,
     val replayMovement: ReplayMovement,
@@ -45,7 +44,6 @@ data class SpaceEngineersExtensions(
         screen = ScreenExtensions(spaceEngineers),
         blocks = BlockExtensions(useObject = UseObjectExtensions(spaceEngineers)),
     )
-
 }
 
 interface ExtendedSpaceEngineers : SpaceEngineers {
@@ -56,6 +54,4 @@ class DataExtendedSpaceEngineers(
     val spaceEngineers: SpaceEngineers,
     pathFinder: PathFinder<BlockId, Vec3F, String, String>,
     override val extensions: SpaceEngineersExtensions = SpaceEngineersExtensions(spaceEngineers, pathFinder)
-) : SpaceEngineers by spaceEngineers, ExtendedSpaceEngineers {
-
-}
+) : SpaceEngineers by spaceEngineers, ExtendedSpaceEngineers

@@ -2,7 +2,6 @@ package spaceEngineers.movement
 
 import spaceEngineers.model.CharacterMovementType
 import spaceEngineers.model.Vec3F
-import spaceEngineers.model.extensions.sum
 
 val leftShift = setOf(16, 160)
 
@@ -37,9 +36,7 @@ enum class BasicDirection3d(
         fun excludingNone(): List<BasicDirection3d> {
             return values().filter { it != NONE }
         }
-
     }
-
 }
 
 fun fromChar(char: Char): Map<CharacterMovementType, Set<Int>> {

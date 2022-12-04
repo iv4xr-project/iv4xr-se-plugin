@@ -43,5 +43,4 @@ class UseObjectExtensions(val spaceEngineers: SpaceEngineers) {
     private fun <T> se(block: SpaceEngineers.() -> T): T {
         return block(spaceEngineers)
     }
-
 }

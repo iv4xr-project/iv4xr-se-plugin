@@ -9,24 +9,28 @@ class StringUtilTest {
     fun testStripWhitespace() {
         assertEquals("aaaa", " a a a a ".stripWhitespace())
         assertEquals("abcd", " a  b   c     d ".stripWhitespace())
-        assertEquals("abcd", """
+        assertEquals(
+            "abcd",
+            """
             a
             b
             c
             d
-        """.trimIndent().stripWhitespace())
+            """.trimIndent().stripWhitespace()
+        )
     }
 
     @Test
     fun testWhitespaceEquals() {
         "aaaa".nonWhitespaceEquals(" a a a a ")
         "abcd".nonWhitespaceEquals(" a  b   c     d ")
-        "abcd".nonWhitespaceEquals("""
+        "abcd".nonWhitespaceEquals(
+            """
             a
             b
             c
             d
-        """.trimIndent())
+            """.trimIndent()
+        )
     }
-
 }

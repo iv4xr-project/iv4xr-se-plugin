@@ -2,7 +2,6 @@ package spaceEngineers.model
 
 import kotlinx.serialization.SerialName
 
-
 interface Pose {
     @SerialName("Position")
     val position: Vec3F

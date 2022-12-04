@@ -11,7 +11,6 @@ interface MapLayer {
     operator fun get(x: Int, y: Int): BlockPlacementInformation?
 }
 
-
 fun simplifiedMap(mapLayer: LabRecruitsMap): LabRecruitsMap = with(mapLayer) {
     return LabRecruitsMap(
         cells = cells.simplifiedArray().removeUselessFloors().connectXToBase(),

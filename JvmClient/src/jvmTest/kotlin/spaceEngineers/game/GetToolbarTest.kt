@@ -9,14 +9,10 @@ import spaceEngineers.model.ToolbarLocation
 import spaceEngineers.model.extensions.allBlocks
 import testhelp.MockOrRealGameTest
 import testhelp.assertGreaterThan
-import java.lang.Thread.sleep
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertTrue
-
 
 class GetToolbarTest : MockOrRealGameTest() {
-
 
     @Test
     fun toolbar() = testContext {
@@ -51,7 +47,6 @@ class GetToolbarTest : MockOrRealGameTest() {
         val block = blocks.first()
         assertEquals(blockDefinition.type, block.definitionId.type)
     }
-
 
     suspend fun SpaceEngineers.checkBlockType(
         definitionId: DefinitionId,

@@ -1,12 +1,25 @@
 package spaceEngineers.controller
 
-import spaceEngineers.model.*
-import spaceEngineers.navigation.NavGraph
+import spaceEngineers.model.BlockDefinition
+import spaceEngineers.model.CharacterAnimations
+import spaceEngineers.model.CharacterObservation
+import spaceEngineers.model.DefinitionBase
+import spaceEngineers.model.DefinitionId
+import spaceEngineers.model.ExtendedEntity
+import spaceEngineers.model.FloatingObject
+import spaceEngineers.model.Observation
+import spaceEngineers.model.Particles
+import spaceEngineers.model.SessionInfo
+import spaceEngineers.model.SoundBanks
+import spaceEngineers.model.Toolbar
+import spaceEngineers.model.ToolbarLocation
+import spaceEngineers.model.Vec2F
+import spaceEngineers.model.Vec3F
 import spaceEngineers.movement.FrameSnapshot
+import spaceEngineers.navigation.NavGraph
 import spaceEngineers.transport.Closeable
 
-
-interface SpaceEngineers: Closeable {
+interface SpaceEngineers : Closeable {
     val session: Session
     val character: Character
     val items: Items
@@ -78,7 +91,6 @@ interface Character {
     fun endUsingTool()
     fun showTerminal()
     fun showInventory()
-
 
     companion object {
         /**

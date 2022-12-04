@@ -34,7 +34,6 @@ enum class Direction(val vector: Position) {
             DOWN -> MovementDirection.BACK
             LEFT -> MovementDirection.LEFT
         }
-
     }
 
     fun toMovementDirection(direction: Direction): MovementDirection {
@@ -57,5 +56,4 @@ enum class Direction(val vector: Position) {
             LEFT -> "◀"
             RIGHT -> "▶"
         }
-
 }

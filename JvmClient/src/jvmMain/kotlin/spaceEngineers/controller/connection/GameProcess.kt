@@ -1,7 +1,6 @@
 package spaceEngineers.controller.connection
 
 import kotlinx.serialization.Serializable
-import spaceEngineers.controller.connection.ConnectionSetupBuilder.Companion.DEDICATED_SERVER_PORT
 
 @Serializable
 data class GameProcess(
@@ -35,5 +34,4 @@ data class GameProcess(
     fun simpleString(): String {
         return "$address:$pluginPort($mainRole)"
     }
-
 }

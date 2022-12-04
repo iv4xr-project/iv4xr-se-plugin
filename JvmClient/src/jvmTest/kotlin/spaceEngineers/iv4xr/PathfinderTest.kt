@@ -3,7 +3,11 @@ package spaceEngineers.iv4xr
 import eu.iv4xr.framework.extensions.pathfinding.AStar
 import spaceEngineers.iv4xr.navigation.NavigableGraph
 import spaceEngineers.model.Vec3F
-import spaceEngineers.navigation.*
+import spaceEngineers.navigation.Edge
+import spaceEngineers.navigation.NavGraph
+import spaceEngineers.navigation.Node
+import spaceEngineers.navigation.NodeId
+import spaceEngineers.navigation.makeEdgeId
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

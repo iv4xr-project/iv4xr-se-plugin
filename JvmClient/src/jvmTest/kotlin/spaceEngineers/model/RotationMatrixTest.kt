@@ -7,7 +7,6 @@ import kotlin.test.assertEquals
 
 class RotationMatrixTest {
 
-
     private fun assertEquals(v1: Vec3F, v2: Vec3F, diff: Float = 0f) {
         assertVecEquals(v1, v2, absoluteTolerance = diff)
     }
@@ -64,7 +63,6 @@ class RotationMatrixTest {
         assertEquals(-Vec3F(x = 0.30723935f, y = -6.2047493E-6f, z = 0.95163226f), matrix.forward)
         assertEquals(Vec3F(x = 7.147936E-6f, y = 1.0f, z = 4.212364E-6f), matrix.up)
         assertEquals(Vec3F(0.95163226f, -5.5080022E-6f, -0.30723935f), matrix.right)
-
 
         assertEquals(
             matrix, RotationMatrix.fromForwardAndUp(matrix.forward, matrix.up), diff = 0.001f

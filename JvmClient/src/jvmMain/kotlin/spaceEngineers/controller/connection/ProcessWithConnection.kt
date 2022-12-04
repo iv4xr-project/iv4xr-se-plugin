@@ -1,6 +1,8 @@
 package spaceEngineers.controller.connection
 
-import spaceEngineers.controller.*
+import spaceEngineers.controller.ContextControllerWrapper
+import spaceEngineers.controller.ExtendedSpaceEngineers
+import spaceEngineers.controller.extend
 import spaceEngineers.iv4xr.navigation.Iv4XRAStarPathFinder
 import spaceEngineers.model.BlockId
 import spaceEngineers.model.Vec3F

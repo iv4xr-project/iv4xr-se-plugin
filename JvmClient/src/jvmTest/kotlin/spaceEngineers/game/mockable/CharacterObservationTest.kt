@@ -40,5 +40,4 @@ class CharacterObservationTest : MockOrRealGameTest(inMockResourcesDirectory("Ch
         assertEquals(9.223372E12f, inventory.maxVolume)
         assertEquals(7, inventory.items.size)
     }
-
 }

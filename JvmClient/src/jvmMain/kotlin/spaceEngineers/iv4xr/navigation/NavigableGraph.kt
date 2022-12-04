@@ -11,7 +11,6 @@ import spaceEngineers.navigation.NodeId
 import spaceEngineers.navigation.PathFinder
 import spaceEngineers.navigation.RichNavGraph
 
-
 class Iv4XRAStarPathFinder : PathFinder<BlockId, Vec3F, String, String> {
 
     private fun DirectedGraph<BlockId, Vec3F, String, String>.toNavGraph(): NavGraph {
@@ -20,7 +19,6 @@ class Iv4XRAStarPathFinder : PathFinder<BlockId, Vec3F, String, String> {
             edges = this.edges,
         )
     }
-
 
     private fun DirectedGraph<BlockId, Vec3F, String, String>.asNavigatable(): Navigatable<NodeId> {
         return NavigableGraph(
@@ -35,7 +33,6 @@ class Iv4XRAStarPathFinder : PathFinder<BlockId, Vec3F, String, String> {
     ): List<BlockId> {
         val pathfinder = AStar<BlockId>()
         return pathfinder.findPath(navigableGraph.asNavigatable(), startNodeId, targetNodeId)
-
     }
 }
 

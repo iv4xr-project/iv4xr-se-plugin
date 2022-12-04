@@ -21,8 +21,10 @@ class NavigationGraphTest : MockOrRealGameTest(
     @Test
     fun getGraphByGridId() = testContext {
         observer.navigationGraph(
-            (observer.observeBlocks().grids.maxByOrNull { grid -> grid.blocks.count() }
-                ?: error("No grid!")).id
+            (
+                observer.observeBlocks().grids.maxByOrNull { grid -> grid.blocks.count() }
+                    ?: error("No grid!")
+                ).id
         ).let {
             assertEquals(40, it.nodes.size)
             assertEquals(67, it.edges.size)

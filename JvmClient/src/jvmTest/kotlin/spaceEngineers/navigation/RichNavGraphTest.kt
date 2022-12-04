@@ -16,7 +16,8 @@ class RichNavGraphTest {
             makeNode(1, Vec3F.ZERO),
             makeNode(2, Vec3F.ZERO),
             makeNode(3, Vec3F.ZERO),
-            makeNode(4, Vec3F.ZERO))
+            makeNode(4, Vec3F.ZERO)
+        )
         val edges = listOf(makeEdge(0, 1), makeEdge(0, 2), makeEdge(3, 0), makeEdge(2, 3))
         val navGraph = NavGraph(nodes, edges)
 

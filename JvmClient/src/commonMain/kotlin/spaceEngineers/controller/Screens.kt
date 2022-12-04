@@ -1,7 +1,21 @@
 package spaceEngineers.controller
 
-import spaceEngineers.model.*
-
+import spaceEngineers.model.BaseScreenData
+import spaceEngineers.model.GamePlayData
+import spaceEngineers.model.JoinGameData
+import spaceEngineers.model.LoadGameData
+import spaceEngineers.model.LoadingData
+import spaceEngineers.model.MainMenuData
+import spaceEngineers.model.MedicalsData
+import spaceEngineers.model.MessageBoxData
+import spaceEngineers.model.SaveAsData
+import spaceEngineers.model.ServerConnectData
+import spaceEngineers.model.TerminalControlPanelData
+import spaceEngineers.model.TerminalInfoData
+import spaceEngineers.model.TerminalInventoryData
+import spaceEngineers.model.TerminalProductionData
+import spaceEngineers.model.TerminalScreenData
+import spaceEngineers.model.ToolbarConfigData
 
 interface Screens {
     val focusedScreen: FocusedScreen
@@ -102,7 +116,6 @@ interface Medicals {
     fun selectFaction(factionIndex: Int)
     fun refresh()
     fun showMessageOfTheDay()
-
 }
 
 interface Terminal {

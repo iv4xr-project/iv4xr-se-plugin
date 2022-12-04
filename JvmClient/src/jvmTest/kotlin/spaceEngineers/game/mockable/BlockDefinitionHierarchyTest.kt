@@ -1,11 +1,8 @@
 package spaceEngineers.game.mockable
 
-import spaceEngineers.transport.SocketReaderWriter
 import testhelp.MockOrRealGameTest
-import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertEquals
-
 
 class BlockDefinitionHierarchyTest : MockOrRealGameTest(inMockResourcesDirectory("BlockDefinitionHierarchyTest.txt")) {
 
@@ -16,13 +13,10 @@ class BlockDefinitionHierarchyTest : MockOrRealGameTest(inMockResourcesDirectory
         }
     }
 
-
     @Test
     fun print() = testContext {
         definitions.blockDefinitionHierarchy().forEach { it ->
             println(it)
         }
     }
-
-
 }

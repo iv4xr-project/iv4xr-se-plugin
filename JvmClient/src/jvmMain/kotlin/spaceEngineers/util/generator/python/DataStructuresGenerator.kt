@@ -9,7 +9,6 @@ import kotlin.reflect.KType
 import kotlin.reflect.full.createType
 import kotlin.reflect.full.memberProperties
 
-
 fun main() {
     val text = DataStructuresGenerator().generate()
 
@@ -18,10 +17,9 @@ fun main() {
         """from dataclasses import dataclass
 from typing import List
 
-    """.trimIndent()
+        """.trimIndent()
     )
     modelsFile.appendText(text)
-
 }
 
 fun generateDataClass(ktype: KType, validTypes: Set<KType>): String {
@@ -34,7 +32,7 @@ class ${klass.simpleName}:
 """
     result += klass.memberProperties.filter { it.returnType.toKClass() != null }.filter { it.name != "dimensions" }
         .joinToString("\n") {
-            //println(it)
+            // println(it)
             """$TAB${it.name.firstUppercase()}: ${it.returnType.toPythonType(validTypes)}"""
         }
     return "\n\n" + result + ""
@@ -47,27 +45,28 @@ fun KType.toKClass(): KClass<*>? {
     return null
 }
 
-
 fun KType.containsMemberOfType(type: KType): Boolean {
     if (this.toString().contains("kotlin") && type.toString().contains("kotlin")) {
         return false
     }
     println("$this contains $type TEST")
-    return (toKClass()?.run {
-        memberProperties.map { it.returnType }.any { property ->
-            (property == type).apply {
-                if (this) {
-                    println("1")
-                }
-            } ||
+    return (
+        toKClass()?.run {
+            memberProperties.map { it.returnType }.any { property ->
+                (property == type).apply {
+                    if (this) {
+                        println("1")
+                    }
+                } ||
                     property.arguments.mapNotNull { argumentProjection -> argumentProjection.type }
                         .contains(type).apply {
                             if (this) {
                                 println("2")
                             }
                         }
-        }
-    } == true).apply {
+            }
+        } == true
+        ).apply {
         if (this) {
             println(this@containsMemberOfType)
             println("""${this@containsMemberOfType} contains $type""")
@@ -100,7 +99,6 @@ class DataStructuresGenerator(
                 y.arguments.count { it.type != null } - x.arguments.count { it.type != null }
             }
         }.filter { it.toString().length > 4 }
-
 
         return types.joinToString("\n") { generateDataClass(it, types.toSet()) }
     }
@@ -155,16 +153,13 @@ class DataStructuresGenerator(
         }
         exploredInterfaces.add(kclass)
 
-
         val subInterfaces = kclass.members.filterIsInstance<KProperty1<*, *>>().map { it.returnType }
-
 
         val functionalParameterTypes = findFunctionTypes(kclass)
 
         val nestedTypes = subInterfaces.mapNotNull { it.toKClass() }.flatMap {
             exploreInterfaces(it)
         }
-
 
         return (functionalParameterTypes + nestedTypes).includeGenerics().includeDataMembers()
     }

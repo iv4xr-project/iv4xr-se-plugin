@@ -15,5 +15,4 @@ interface JsonRpcSpaceEngineersBuilder {
     fun mock(agentId: String = DEFAULT_AGENT_ID, lines: List<String>): SpaceEngineers
 
     fun fromStringLineReaderWriter(agentId: String, stringLineReaderWriter: StringLineReaderWriter): SpaceEngineers
-
 }

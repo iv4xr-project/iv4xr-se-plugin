@@ -1,7 +1,5 @@
 package spaceEngineers.model
 
-interface PhysicalModelDefinition: DefinitionBase {
+interface PhysicalModelDefinition : DefinitionBase {
     val mass: Float
 }
-
-

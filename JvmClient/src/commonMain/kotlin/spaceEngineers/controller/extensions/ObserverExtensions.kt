@@ -13,4 +13,3 @@ fun Observer.distanceTo(position: Vec3F): Float {
 fun Observer.navigationGraph(): NavGraph {
     return navigationGraph(observeBlocks().largestGrid().id)
 }
-

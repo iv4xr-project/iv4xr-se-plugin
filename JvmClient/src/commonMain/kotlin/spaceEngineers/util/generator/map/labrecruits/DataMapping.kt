@@ -3,7 +3,6 @@ package spaceEngineers.util.generator.map.labrecruits
 import spaceEngineers.model.Vec3I
 import spaceEngineers.util.generator.maze.Direction
 
-
 val directionToChar = mapOf(
     Direction.UP to 'n',
     Direction.DOWN to 's',

@@ -5,7 +5,12 @@ import kotlinx.coroutines.withTimeout
 import spaceEngineers.controller.SpaceEngineers
 import spaceEngineers.controller.extensions.distanceTo
 import spaceEngineers.graph.DirectedGraph
-import spaceEngineers.model.*
+import spaceEngineers.model.BlockId
+import spaceEngineers.model.CharacterMovementType
+import spaceEngineers.model.CharacterObservation
+import spaceEngineers.model.LARGE_BLOCK_CUBE_SIDE_SIZE
+import spaceEngineers.model.RotationMatrix
+import spaceEngineers.model.Vec3F
 import spaceEngineers.model.extensions.allBlocks
 import spaceEngineers.model.extensions.blockById
 import spaceEngineers.movement.CharacterMovement
@@ -35,9 +40,8 @@ interface PathFinder<NodeId, NodeData, EdgeId, EdgeData> {
     fun findPath(
         navigableGraph: DirectedGraph<NodeId, NodeData, EdgeId, EdgeData>,
         targetNodeId: NodeId,
-        startNodeId: NodeId,  // Should be 0 if the nav graph was generated at the current character position.
+        startNodeId: NodeId, // Should be 0 if the nav graph was generated at the current character position.
     ): List<BlockId>
-
 }
 
 class CharacterNavigation(
@@ -70,14 +74,14 @@ class CharacterNavigation(
         if (targetNode.data.distanceTo(target.position) > maxAllowedDistance) {
             error(
                 "Target block $id is too far, distance to the closest navigable node: ${
-                    targetNode.data.distanceTo(
-                        target.position
-                    )
-                }, (${targetNode.id}). Allowed max distance is ${maxAllowedDistance}"
+                targetNode.data.distanceTo(
+                    target.position
+                )
+                }, (${targetNode.id}). Allowed max distance is $maxAllowedDistance"
             )
         }
         val graphNodes = graph.nodes.map { it.id }
-        val startNode = allBlocks.filter { it.id in graphNodes}.minByOrNull { it.position.distanceTo(blockObservation.character.position) }
+        val startNode = allBlocks.filter { it.id in graphNodes }.minByOrNull { it.position.distanceTo(blockObservation.character.position) }
             ?: error("No nodes found!")
 
         val path = pathFinder.findPath(graph.toDirectedGraph(), targetNode.id, startNode.id)
@@ -106,7 +110,7 @@ class CharacterNavigation(
             stepTicks = 20,
             distanceTolerance = distanceTolerance
         )
-        //goToLocation(spaceEngineers, targetLocation, movementType, stepTicks = 6, tolerance = 0.4f)
+        // goToLocation(spaceEngineers, targetLocation, movementType, stepTicks = 6, tolerance = 0.4f)
     }
 
     private suspend fun goToLocation(
@@ -117,14 +121,14 @@ class CharacterNavigation(
         distanceTolerance: Float,
         rotationTolerance: Float = 1.2f
     ) = with(spaceEngineers) {
-        var lastDistance = Float.MAX_VALUE;
+        var lastDistance = Float.MAX_VALUE
 
         fun isNotYetThereButProgressing(maxDistanceRegression: Float = 0.01f): Boolean {
             val distance = observer.distanceTo(targetLocation)
             if (distance < distanceTolerance) {
                 return false
             }
-            if (distance > lastDistance + maxDistanceRegression) {  // Allow very small worsening of distance.
+            if (distance > lastDistance + maxDistanceRegression) { // Allow very small worsening of distance.
                 return false
             }
             lastDistance = distance
@@ -157,9 +161,9 @@ class CharacterNavigation(
         }
 
         val iterationLimit = if (distance < 2 * orientationTolerance) {
-            3  // When we are close, only allow fine-tuning to prevent unbounded loop.
+            3 // When we are close, only allow fine-tuning to prevent unbounded loop.
         } else {
-            (180 / MAX_ROTATION_TICKS)  // 60 ticks is 1s. Limit rotation to 3 seconds.
+            (180 / MAX_ROTATION_TICKS) // 60 ticks is 1s. Limit rotation to 3 seconds.
         }
 
         rotateToDirection(
@@ -188,7 +192,6 @@ class CharacterNavigation(
         delay((ticks * DELAY_PER_TICKS_MS).toLong())
     }
 
-
     // Estimate rotation limit in ticks for smooth movement. Too many ticks risk overshooting of the rotation,
     // too few ticks lead to jerky movement (commands are not executed fast enough).
     private fun estimateRotationLimit(forwardOrientationDistance: Float) = when (forwardOrientationDistance) {
@@ -210,8 +213,7 @@ class CharacterNavigation(
     }
 
     companion object {
-        const val DELAY_PER_TICKS_MS = 12  // One tick lasts ~16.7 ms, wait slightly less to avoid character freezes.
+        const val DELAY_PER_TICKS_MS = 12 // One tick lasts ~16.7 ms, wait slightly less to avoid character freezes.
         const val MAX_ROTATION_TICKS = 10
     }
 }
-

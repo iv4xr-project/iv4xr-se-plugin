@@ -1,6 +1,5 @@
 package spaceEngineers.util.generator.map.labrecruits
 
-
 import spaceEngineers.util.generator.map.BlockPlacementInformation
 import spaceEngineers.util.generator.map.MapLayer
 import spaceEngineers.util.generator.maze.Direction
@@ -39,7 +38,6 @@ class LabRecruitsMap(
                 }
             }
         }
-
     }
 
     fun toCsv(): String {
@@ -94,6 +92,5 @@ class LabRecruitsMap(
                 }
             }
         }
-
     }
 }

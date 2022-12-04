@@ -3,7 +3,6 @@ package spaceEngineers.model
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-
 interface ToolbarItem {
     val name: String
     val enabled: Boolean

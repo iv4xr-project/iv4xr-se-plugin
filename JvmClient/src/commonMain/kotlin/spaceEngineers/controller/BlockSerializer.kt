@@ -5,12 +5,23 @@ import kotlinx.serialization.json.JsonContentPolymorphicSerializer
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
-import spaceEngineers.model.*
+import spaceEngineers.model.BaseEntity
+import spaceEngineers.model.Block
+import spaceEngineers.model.BlockGroupItem
+import spaceEngineers.model.BlockItem
+import spaceEngineers.model.BlockOrGroupItem
+import spaceEngineers.model.CubeGrid
+import spaceEngineers.model.DataBlock
 import spaceEngineers.model.DefinitionId.Companion.ANGLE_GRINDER
 import spaceEngineers.model.DefinitionId.Companion.CUBE_GRID
 import spaceEngineers.model.DefinitionId.Companion.HAND_DRILL
 import spaceEngineers.model.DefinitionId.Companion.PHYSICAL_GUN
 import spaceEngineers.model.DefinitionId.Companion.WELDER
+import spaceEngineers.model.ExtendedEntity
+import spaceEngineers.model.HandTool
+import spaceEngineers.model.Toolbar
+import spaceEngineers.model.Vec3F
+import spaceEngineers.model.generatedSerializerMappings
 import spaceEngineers.util.generator.removeBuilderPrefix
 import kotlin.reflect.KClass
 
@@ -95,13 +106,11 @@ object EntitySerializer : JsonContentPolymorphicSerializer<ExtendedEntity>(Exten
         HAND_DRILL to HandTool.serializer(),
     )
 
-
     override fun selectDeserializer(element: JsonElement): DeserializationStrategy<out ExtendedEntity> {
         val id = getDefinitionIdId(element)
         return generatedSerializerMappings[id] ?: BaseEntity.serializer()
     }
 }
-
 
 object BlockOrGroupItemSerializer : JsonContentPolymorphicSerializer<BlockOrGroupItem>(BlockOrGroupItem::class) {
     override fun selectDeserializer(element: JsonElement): DeserializationStrategy<out BlockOrGroupItem> {

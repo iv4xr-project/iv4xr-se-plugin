@@ -7,7 +7,13 @@ import eu.iv4xr.framework.spatial.meshes.Mesh
 import spaceEngineers.controller.ContextControllerWrapper
 import spaceEngineers.controller.SpaceEngineersTestContext
 import spaceEngineers.controller.extensions.moveForward
-import spaceEngineers.model.*
+import spaceEngineers.model.Block
+import spaceEngineers.model.CharacterMovementType
+import spaceEngineers.model.CharacterObservation
+import spaceEngineers.model.CubeGrid
+import spaceEngineers.model.Observation
+import spaceEngineers.model.ToolbarLocation
+import spaceEngineers.model.Vec3F
 import spaceEngineers.model.extensions.centerPosition
 import java.io.File
 import java.lang.Thread.sleep
@@ -121,11 +127,9 @@ class SeEnvironment(
         return controller.character.endUsingTool()
     }
 
-
     fun moveForward(): WorldModel {
         return controller.character.moveForward(CharacterMovementType.RUN).toWorldModel()
     }
-
 
     fun equipAndPlace(blockType: String) {
         return equipAndPlace(context.blockToolbarLocation(blockType))

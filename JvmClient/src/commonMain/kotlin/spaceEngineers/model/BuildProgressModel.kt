@@ -10,5 +10,4 @@ data class BuildProgressModel(
      */
     @SerialName("BuildRatioUpperBound")
     val buildRatioUpperBound: Float,
-) {
-}
+)

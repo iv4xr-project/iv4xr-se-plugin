@@ -17,7 +17,6 @@ import kotlin.time.Duration.Companion.seconds
 
 class SensorMapTest : MockOrRealGameTest(scenarioId = "empty-world-creative") {
 
-
     @Test
     fun attachSensor() = testContext {
         admin.character.teleport(
@@ -29,7 +28,6 @@ class SensorMapTest : MockOrRealGameTest(scenarioId = "empty-world-creative") {
             DefinitionIds.AirtightSlideDoor.LargeBlockSlideDoor,
             position = Vec3F.ZERO,
         )
-
 
         val door = grid.blocks.first()
         val reactorId =

@@ -18,7 +18,6 @@ import kotlin.reflect.full.createType
 import kotlin.reflect.full.memberFunctions
 import kotlin.reflect.full.valueParameters
 
-
 class SpaceEngineersBatchJavaProxy(
     val agentId: String,
     val implementedInterface: KClass<*>,
@@ -56,8 +55,8 @@ class SpaceEngineersBatchJavaProxy(
         val responseReturnType = KotlinJsonRpcResponse::class.createType(arguments = listOf(returnTypeProjection))
         val request = createRequest(
             methodName = "$dottedPrefix${
-                method.name.replaceFirstChar
-                { it.uppercase() }
+            method.name.replaceFirstChar
+            { it.uppercase() }
             }",
             parameters = method.parameters.mapIndexed
             { index, parameter ->
@@ -98,7 +97,6 @@ class SpaceEngineersBatchJavaProxy(
             batchController = rpcCaller,
         )
     }
-
 
     private fun Method.isGetter(): Boolean {
         return name.startsWith("get")
@@ -173,4 +171,3 @@ class SpaceEngineersBatchJavaProxy(
         }
     }
 }
-

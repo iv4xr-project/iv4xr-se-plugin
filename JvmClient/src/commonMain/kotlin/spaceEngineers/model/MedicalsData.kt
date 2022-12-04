@@ -22,4 +22,3 @@ data class MedicalsData(
     @SerialName("RespawnButton")
     val respawnButton: GuiControlBase?,
 )
-

@@ -95,5 +95,4 @@ class JsonRpcCaller(
             responseJson
         )
     }
-
 }

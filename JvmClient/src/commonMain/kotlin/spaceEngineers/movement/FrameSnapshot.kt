@@ -60,4 +60,3 @@ data class FrameSnapshot(
         }
     }
 }
-

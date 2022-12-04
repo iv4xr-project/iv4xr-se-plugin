@@ -7,11 +7,10 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-
 class BlockDefinitionsPolymorphismTest : MockOrRealGameTest(
     inMockResourcesDirectory("BlockDefinitionsPolymorphismTest.txt"),
-    //forceRealGame = true,
-    //loadScenario = false
+    // forceRealGame = true,
+    // loadScenario = false
 ) {
 
     @Test

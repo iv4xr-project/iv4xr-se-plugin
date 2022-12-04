@@ -97,4 +97,5 @@ val generatedSerializerMappings = mutableMapOf(
     "TurretBase" to DataFunctionalBlock.serializer(),
     "LargeMissileTurret" to DataFunctionalBlock.serializer(),
     "InteriorTurret" to DataFunctionalBlock.serializer(),
-    "SmallMissileLauncherReload" to DataFunctionalBlock.serializer())
+    "SmallMissileLauncherReload" to DataFunctionalBlock.serializer()
+)

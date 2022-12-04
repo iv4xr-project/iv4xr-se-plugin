@@ -13,4 +13,4 @@ data class DataDefinitionBase(
     override val availableInSurvival: Boolean,
     @SerialName("Enabled")
     override val enabled: Boolean,
-): DefinitionBase
+) : DefinitionBase

@@ -3,11 +3,14 @@ package spaceEngineers.game.mockable
 import spaceEngineers.transport.jsonrpc.KotlinJsonRpcError
 import spaceEngineers.transport.jsonrpc.remoteException
 import testhelp.MockOrRealGameTest
-import kotlin.test.*
-
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
+import kotlin.test.fail
 
 class MultiAgentTest : MockOrRealGameTest() {
-
 
     @Test
     fun createAndSetJetpack() = testContext {
@@ -84,5 +87,4 @@ class MultiAgentTest : MockOrRealGameTest() {
             assertEquals("Cannot remove the main character!", remoteException.message)
         }
     }
-
 }

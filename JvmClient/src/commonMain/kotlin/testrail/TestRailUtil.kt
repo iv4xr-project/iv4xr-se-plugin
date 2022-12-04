@@ -9,7 +9,7 @@ fun Case.featureContent(): String {
 ${formattedTags()}Feature: C$id $title
 
 ${custom_preconds?.convertTables()}
-""".trimIndent()
+    """.trimIndent()
 }
 
 fun Case.relativeUrl(): String {
@@ -46,7 +46,6 @@ fun parseTags(title: String): List<String> {
     }.toList()
 }
 
-
 fun String.convertTables(): String {
     var previousLinePiped = false
     return lineSequence().map { it ->
@@ -68,7 +67,6 @@ fun String.convertTables(): String {
             } else {
                 "    $it"
             }
-
         }
     }.joinToString("\r\n")
 }
@@ -83,7 +81,7 @@ class SectionHelper(
         "C${case.id}.feature"
     },
 
-    ) {
+) {
 
     val sectionsById = sections.sections.associateBy { it.id }
 
@@ -124,7 +122,6 @@ class SectionHelper(
     fun sectionDirectory(sectionId: Long): String {
         return sectionsOfSection(sectionId).filter { it.id !in ignoredSections }
             .joinToString(separator = "/", transform = sectionDirectoryNaming)
-
     }
 
     companion object {

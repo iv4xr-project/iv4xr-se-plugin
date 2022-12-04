@@ -12,7 +12,6 @@ interface ScreenData {
     val closeButtonEnabled: Boolean
 }
 
-
 @Serializable
 data class BaseScreenData(
     @SerialName("Name")

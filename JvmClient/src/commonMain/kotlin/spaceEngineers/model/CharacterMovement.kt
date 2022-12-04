@@ -13,7 +13,6 @@ value class CharacterMovement(val value: UShort) {
     val direction: UShort
         get() = value and movementDirectionMask.toUShort()
 
-
     val speed: UShort
         get() = value and movementSpeedMask.toUShort()
 
@@ -33,10 +32,10 @@ value class CharacterMovement(val value: UShort) {
         get() = (mode == falling.toUShort())
 
     companion object {
-        const val movementTypeMask      = 0x000f // 4 bits (0 - 3) for movement type should be enough even for the future
+        const val movementTypeMask = 0x000f // 4 bits (0 - 3) for movement type should be enough even for the future
         const val movementDirectionMask = 0x03f0 // 6 bits (4 - 9)
-        const val movementSpeedMask     = 0x0c00 // 2 bits (10 - 11)
-        const val rotationMask          = 0x3000 // 2 bits (12 - 13)
+        const val movementSpeedMask = 0x0c00 // 2 bits (10 - 11)
+        const val rotationMask = 0x3000 // 2 bits (12 - 13)
 
         // The movement types are mutually exclusive - i.e. you cannot be sitting and crouching at the same time
         const val standing = 0
@@ -67,8 +66,7 @@ value class CharacterMovement(val value: UShort) {
         const val rotatingLeft = 1 shl 12
         const val rotatingRight = 1 shl 13
 
-        //Ladder
+        // Ladder
         const val ladderOut = 1 shl 14
-
     }
 }

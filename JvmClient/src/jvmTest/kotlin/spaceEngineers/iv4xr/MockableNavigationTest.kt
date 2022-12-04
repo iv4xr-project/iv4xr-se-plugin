@@ -20,15 +20,15 @@ class MockableNavigationTest : MockOrRealGameTest(
     scenarioId = "amaze-20x20",
 ) {
 
-    //@Ignore("This test is quite slow.")
+    // @Ignore("This test is quite slow.")
     @Test
     fun navigateMaze() = testContext {
         val graph = observer.navigationGraph(observer.observeBlocks().largestGrid().id)
         assertGreaterThan(graph.nodes.size, 70)
 
         val navigableGraph = NavigableGraph(graph)
-        //TODO:
-        //val targetNode = navigableGraph.node(nodeId = 20.toString())
+        // TODO:
+        // val targetNode = navigableGraph.node(nodeId = 20.toString())
 
         val blockObservation = observer.observeBlocks()
         val allBlocks = blockObservation.allBlocks
@@ -38,7 +38,7 @@ class MockableNavigationTest : MockOrRealGameTest(
                 .firstOrNull { it.customName == "MazeTarget" } ?: error("Target not found!")
         val targetNode =
             graph.nodes.minByOrNull { it.data.distanceTo(target.position) } ?: error("Target not found in the graph")
-        //TODO:
+        // TODO:
         val startNode = allBlocks.minByOrNull { it.position.distanceTo(blockObservation.character.position) }
             ?: error("No nodes found!")
         val path = getPath(navigableGraph, targetNode.id, startNode.id)
@@ -67,7 +67,7 @@ class MockableNavigationTest : MockOrRealGameTest(
     private fun SpaceEngineers.getPath(
         navigableGraph: NavigableGraph,
         targetNodeId: NodeId,
-        startNodeId: NodeId,  // Should be 0 if the nav graph was generated at the current character position.
+        startNodeId: NodeId, // Should be 0 if the nav graph was generated at the current character position.
     ): List<NodeId> {
         val pathfinder = AStar<NodeId>()
         return pathfinder.findPath(navigableGraph, startNodeId, targetNodeId)

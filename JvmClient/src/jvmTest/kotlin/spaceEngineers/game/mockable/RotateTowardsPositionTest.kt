@@ -8,9 +8,7 @@ import testhelp.MockOrRealGameTest
 import testhelp.assertVecEquals
 import kotlin.test.Test
 
-
-class RotateTowardsPositionTes: MockOrRealGameTest() {
-
+class RotateTowardsPositionTes : MockOrRealGameTest() {
 
     @Test
     fun rotateTowardsPosition() = testContext {
@@ -32,7 +30,6 @@ class RotateTowardsPositionTes: MockOrRealGameTest() {
         )
         assertVecEquals(Vec3F.LEFT, observer.observe().orientationForward)
     }
-
 
     @Test
     fun rotateTowardsPositionUp() = testContext {

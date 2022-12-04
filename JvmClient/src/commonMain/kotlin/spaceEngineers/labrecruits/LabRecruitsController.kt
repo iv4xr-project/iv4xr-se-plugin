@@ -50,7 +50,6 @@ class LabRecruitsController(
         )
     }
 
-
     fun buttonBlockById(buttonId: String) = seSync {
         observer.observeBlocks().blockByCustomName(buttonId)
     }
@@ -58,7 +57,6 @@ class LabRecruitsController(
     fun doorBlockById(doorId: String) = seSync {
         observer.observeBlocks().blockByCustomName(doorId) as DoorBase
     }
-
 
     suspend fun goToButton(buttonId: String) = se {
         extensions.character.navigation.navigateToBlock(
@@ -76,9 +74,8 @@ class LabRecruitsController(
         val button = buttonBlockById(buttonId)
         val distanceToButton = button.position.distanceTo(observer.observe().position)
         if (distanceToButton > maximumButtonReachDistance) {
-            error("Too far from the button ${buttonId}, distance: $distanceToButton, maximum: $maximumButtonReachDistance")
+            error("Too far from the button $buttonId, distance: $distanceToButton, maximum: $maximumButtonReachDistance")
         }
         extensions.blocks.useObject.pressButton(button)
     }
-
 }

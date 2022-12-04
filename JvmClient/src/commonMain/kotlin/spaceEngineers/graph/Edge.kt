@@ -20,6 +20,4 @@ data class DataEdge<EdgeId, NodeId, EdgeData>(
     override val id: EdgeId,
     @SerialName("Data")
     override val data: EdgeData,
-) : Edge<EdgeId, NodeId, EdgeData> {
-
-}
+) : Edge<EdgeId, NodeId, EdgeData>

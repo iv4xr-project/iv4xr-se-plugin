@@ -21,7 +21,6 @@ data class BlueprintDefinition(
     val results: List<AmountedDefinitionId>,
 )
 
-
 @Serializable
 data class AmountedDefinitionId(
     @SerialName("Id")
@@ -60,7 +59,6 @@ data class BlockGroupItem(
     @SerialName("Blocks")
     val blocks: List<Block>,
 ) : BlockOrGroupItem
-
 
 @Serializable
 data class TerminalControlPanelData(
@@ -129,7 +127,6 @@ data class SliderData(
     @SerialName("Value")
     val value: Float,
 )
-
 
 @Serializable
 data class TerminalProductionData(

@@ -8,7 +8,6 @@ import spaceEngineers.controller.connection.ConnectionSetupBuilder.Companion.LOC
 import spaceEngineers.controller.connection.ConnectionSetupBuilder.Companion.REMOTE_DESKTOP
 import java.io.File
 
-
 fun main(args: Array<String>) {
     val CONNECTION_SETUP_DIR = File("src/jvmTest/resources/connection-setup/")
     val json = Json {
@@ -34,7 +33,6 @@ data class ConnectionSetup(
         check(connections.filter { it.type == AppType.DEDICATED }.size <= 1)
     }
 
-
     val mainClient = connections.first { it.roles.contains(Role.MAIN_CLIENT) }
     val admin = connections.first { it.roles.contains(Role.ADMIN) }
     val observers = connections.filter { it.roles.contains(Role.OBSERVER) }
@@ -55,7 +53,6 @@ data class ConnectionSetup(
     val lobby: Boolean by lazy {
         !ds
     }
-
 
     companion object {
         val OFFLINE_STEAM = ConnectionSetupBuilder(gameVersion = GameVersion.STEAM).setServer(
@@ -105,7 +102,6 @@ data class ConnectionSetup(
             "SINGLE_COMPUTER_DEDICATED_DEV_KAREL" to SINGLE_COMPUTER_DEDICATED_DEV_KAREL,
             "DOUBLE_PC_LOBBY_STEAM" to DOUBLE_PC_LOBBY_STEAM,
         )
-
 
         private val json: Json = Json {
         }

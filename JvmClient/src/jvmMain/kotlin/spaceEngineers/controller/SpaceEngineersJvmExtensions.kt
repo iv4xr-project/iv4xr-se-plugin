@@ -5,7 +5,7 @@ import spaceEngineers.model.BlockId
 import spaceEngineers.model.Vec3F
 import spaceEngineers.navigation.PathFinder
 import java.io.File
-import java.util.*
+import java.util.Base64
 
 val SCENARIO_DIR = "src/jvmTest/resources/game-saves/"
 
@@ -32,7 +32,7 @@ fun Session.loadFromTestResources(scenarioId: String, scenarioDir: String = SCEN
     val unixPath = file.absolutePath.unixToWindowsPath()
     check(
         file.exists() ||
-                unixPath.toFile().exists()
+            unixPath.toFile().exists()
     ) {
         "Couldn't find scenario"
     }

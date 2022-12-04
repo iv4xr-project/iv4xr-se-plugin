@@ -3,7 +3,6 @@ package spaceEngineers.graph
 import spaceEngineers.model.Vec3I
 import spaceEngineers.model.extensions.neighbourPositions
 
-
 data class Cube3dGraph<T : Any>(
     val blocksByPositions: Map<Vec3I, T>,
 ) {
@@ -26,7 +25,6 @@ data class Cube3dGraph<T : Any>(
     ): Sequence<Pair<Vec3I, T>> {
         return explore(start = start, removeFunction = MutableList<Vec3I>::removeLast, visited = visited)
     }
-
 
     private fun explore(
         start: Vec3I,
