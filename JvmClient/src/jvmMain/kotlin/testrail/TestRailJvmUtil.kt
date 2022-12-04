@@ -1,7 +1,7 @@
 package testrail
 
-import io.ktor.client.plugins.auth.providers.*
-import io.ktor.http.*
+import io.ktor.client.plugins.auth.providers.BasicAuthCredentials
+import io.ktor.http.Url
 import spaceEngineers.controller.toFile
 import spaceEngineers.util.extractTo
 import testrail.model.Case

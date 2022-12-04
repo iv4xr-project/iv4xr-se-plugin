@@ -96,7 +96,3 @@ tasks.jacocoTestReport {
 }
 
 check.dependsOn jacocoTestReport
-
-ktlint {
-    disabledRules = ["filename"]
-}

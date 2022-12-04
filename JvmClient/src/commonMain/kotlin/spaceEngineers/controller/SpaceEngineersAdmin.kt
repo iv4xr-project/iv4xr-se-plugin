@@ -1,6 +1,11 @@
 package spaceEngineers.controller
 
-import spaceEngineers.model.*
+import spaceEngineers.model.Block
+import spaceEngineers.model.BlockId
+import spaceEngineers.model.CharacterObservation
+import spaceEngineers.model.CubeGrid
+import spaceEngineers.model.DebugInfo
+import spaceEngineers.model.Vec3F
 
 interface SpaceEngineersAdmin {
     val blocks: BlocksAdmin

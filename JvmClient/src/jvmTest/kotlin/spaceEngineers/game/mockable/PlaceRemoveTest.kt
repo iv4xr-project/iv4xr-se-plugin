@@ -1,6 +1,10 @@
 package spaceEngineers.game.mockable
 
-import spaceEngineers.model.*
+import spaceEngineers.model.Block
+import spaceEngineers.model.CharacterObservation
+import spaceEngineers.model.DefinitionId
+import spaceEngineers.model.Vec3F
+import spaceEngineers.model.Vec3I
 import spaceEngineers.model.extensions.allBlocks
 import spaceEngineers.model.extensions.blockById
 import testhelp.MockOrRealGameTest

@@ -5,7 +5,7 @@ import spaceEngineers.model.BlockId
 import spaceEngineers.model.Vec3F
 import spaceEngineers.navigation.PathFinder
 import java.io.File
-import java.util.*
+import java.util.Base64
 
 val SCENARIO_DIR = "src/jvmTest/resources/game-saves/"
 

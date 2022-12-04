@@ -3,7 +3,11 @@ package spaceEngineers.game.mockable
 import spaceEngineers.controller.SpaceEngineers
 import spaceEngineers.model.CharacterMovementType
 import spaceEngineers.model.Vec3F
-import spaceEngineers.movement.*
+import spaceEngineers.movement.CharacterMovement
+import spaceEngineers.movement.CompositeDirection3d
+import spaceEngineers.movement.ReplayMovement
+import spaceEngineers.movement.RotationDirection
+import spaceEngineers.movement.VectorMovement
 import testhelp.MockOrRealGameTest
 import testhelp.assertVecEquals
 import kotlin.test.Test

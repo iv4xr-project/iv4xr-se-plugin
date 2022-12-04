@@ -1,7 +1,15 @@
 package spaceEngineers.game.mockable
 
 import spaceEngineers.controller.SpaceEngineers
-import spaceEngineers.model.*
+import spaceEngineers.model.DefinitionId
+import spaceEngineers.model.DoorBase
+import spaceEngineers.model.FueledPowerProducer
+import spaceEngineers.model.FunctionalBlock
+import spaceEngineers.model.GravityGenerator
+import spaceEngineers.model.GravityGeneratorSphere
+import spaceEngineers.model.MedicalRoom
+import spaceEngineers.model.TerminalBlock
+import spaceEngineers.model.Vec3F
 import spaceEngineers.model.typing.DefinitionIds
 import testhelp.MockOrRealGameTest
 import kotlin.test.Test

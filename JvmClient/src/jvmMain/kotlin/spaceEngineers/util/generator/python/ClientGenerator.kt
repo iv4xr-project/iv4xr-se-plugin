@@ -2,7 +2,10 @@ package spaceEngineers.util.generator.python
 
 import spaceEngineers.controller.SpaceEngineers
 import java.io.File
-import kotlin.reflect.*
+import kotlin.reflect.KClass
+import kotlin.reflect.KFunction
+import kotlin.reflect.KProperty1
+import kotlin.reflect.KType
 
 fun main() {
     val types = DataStructuresGenerator().find().toSet()
