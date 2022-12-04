@@ -3,8 +3,12 @@ package spaceEngineers.transport
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import java.io.*
+import java.io.BufferedReader
 import java.io.Closeable
+import java.io.IOException
+import java.io.InputStreamReader
+import java.io.OutputStreamWriter
+import java.io.PrintWriter
 import java.lang.reflect.Modifier
 import java.net.InetSocketAddress
 import java.net.Socket
@@ -13,7 +17,6 @@ import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.nanoseconds
 import kotlin.time.Duration.Companion.seconds
-
 
 class SocketReaderWriter(
     val host: String = DEFAULT_HOSTNAME,
@@ -34,8 +37,7 @@ class SocketReaderWriter(
         connect()
     }
 
-    private fun connect(
-    ) {
+    private fun connect() {
         val startTime = System.nanoTime()
         var connected = false
         var lastException: IOException? = null
@@ -100,7 +102,7 @@ class SocketReaderWriter(
             try {
                 closeable?.close()
             } catch (e: IOException) {
-                //at this point we don't care, just cleanup
+                // at this point we don't care, just cleanup
             }
         }
 
@@ -108,11 +110,11 @@ class SocketReaderWriter(
             try {
                 closeable?.close()
             } catch (e: IOException) {
-                //at this point we don't care, just cleanup
+                // at this point we don't care, just cleanup
             }
         }
 
-        //ensure this class can be created from Java
+        // ensure this class can be created from Java
         @JvmOverloads
         fun createUsingLongDurations(
             host: String = DEFAULT_HOSTNAME,
@@ -128,5 +130,4 @@ class SocketReaderWriter(
             socketDataTimeout = socketDataTimeoutMs.milliseconds,
         )
     }
-
 }

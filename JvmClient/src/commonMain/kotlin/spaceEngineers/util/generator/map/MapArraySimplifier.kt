@@ -1,6 +1,5 @@
 package spaceEngineers.util.generator.map
 
-
 inline fun <reified T : Any?> Array<Array<T>>.simplifiedArray(): Array<Array<T>> {
     return simplifyColumns().simplifyRows()
 }
@@ -22,7 +21,6 @@ inline fun <reified T : Any?> Array<Array<T>>.simplifyRows(): Array<Array<T>> {
         }
     }
 }
-
 
 fun <T : Any?> Array<Array<T>>.uniqueColumns(): List<Int> {
     val uniqueColumns = mutableListOf<Int>()
@@ -71,7 +69,6 @@ val <T : Any?> Array<Array<T>>.width
 
 val <T : Any?> Array<Array<T>>.height
     get() = firstOrNull()?.size ?: 0
-
 
 fun <T : Any?> Array<Array<T>>.countIdenticalColumns(
     columnIndex: Int,

@@ -63,6 +63,4 @@ class Vec3Test {
     fun timesScalar() {
         assertEquals(x2, x1 * 2f)
     }
-
-
 }

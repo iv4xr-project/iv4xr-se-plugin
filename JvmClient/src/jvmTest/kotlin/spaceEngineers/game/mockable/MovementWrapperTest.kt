@@ -10,7 +10,6 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-
 class MovementWrapperTest : MockOrRealGameTest() {
 
     private val vectorAbsoluteTolerance = 0.001f
@@ -34,7 +33,6 @@ class MovementWrapperTest : MockOrRealGameTest() {
     fun replayMovement() = testContext {
         testMovementForward(ReplayMovement(this))
     }
-
 
     private suspend fun SpaceEngineers.testMovementForward(movement: CharacterMovement) {
         val position = observer.observe().position
@@ -65,5 +63,4 @@ class MovementWrapperTest : MockOrRealGameTest() {
             )
         }
     }
-
 }

@@ -5,7 +5,6 @@ import spaceEngineers.controller.*
 import spaceEngineers.iv4xr.navigation.Iv4XRAStarPathFinder
 import spaceEngineers.transport.jsonrpc.KotlinJsonRpcError
 import spaceEngineers.transport.jsonrpc.remoteException
-import java.lang.reflect.UndeclaredThrowableException
 
 const val TEST_AGENT = SpaceEngineers.DEFAULT_AGENT_ID
 
@@ -16,7 +15,6 @@ val TEST_MOCK_RESPONSE_LINE = """
 """.trim()
 
 val SIMPLE_PLACE_GRIND_TORCH = "simple-place-grind-torch"
-
 
 fun spaceEngineersSimplePlaceGrindTorchSuspend(
     scenarioId: String = SIMPLE_PLACE_GRIND_TORCH,
@@ -33,8 +31,6 @@ fun spaceEngineersSimplePlaceGrindTorchSuspend(
         spaceEngineers.close()
     }
 }
-
-
 
 fun spaceEngineersSuspend(
     agentId: String = TEST_AGENT,

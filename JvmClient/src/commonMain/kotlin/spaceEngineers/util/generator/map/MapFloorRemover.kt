@@ -1,6 +1,12 @@
 package spaceEngineers.util.generator.map
 
-import spaceEngineers.util.generator.map.labrecruits.*
+import spaceEngineers.util.generator.map.labrecruits.Agent
+import spaceEngineers.util.generator.map.labrecruits.Button
+import spaceEngineers.util.generator.map.labrecruits.Door
+import spaceEngineers.util.generator.map.labrecruits.Floor
+import spaceEngineers.util.generator.map.labrecruits.LabRecruitCell
+import spaceEngineers.util.generator.map.labrecruits.UnnecessaryFloor
+import spaceEngineers.util.generator.map.labrecruits.Wall
 import spaceEngineers.util.generator.maze.Direction
 import spaceEngineers.util.generator.maze.Position
 import spaceEngineers.util.generator.maze.plus
@@ -130,4 +136,3 @@ fun Array<Array<LabRecruitCell?>>.removeUselessFloors(): Array<Array<LabRecruitC
     UselessFloorRemover(this).explore()
     return this
 }
-

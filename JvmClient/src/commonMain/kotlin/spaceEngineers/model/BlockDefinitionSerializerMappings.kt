@@ -57,4 +57,5 @@ val generatedBlockDefinitionSerializerMappings = mutableMapOf(
     "ParachuteDefinition" to DataParachuteDefinition.serializer(),
     "WeaponBlockDefinition" to DataWeaponBlockDefinition.serializer(),
     "DecoyDefinition" to DataDecoyDefinition.serializer(),
-    "LargeTurretBaseDefinition" to DataWeaponBlockDefinition.serializer())
+    "LargeTurretBaseDefinition" to DataWeaponBlockDefinition.serializer()
+)

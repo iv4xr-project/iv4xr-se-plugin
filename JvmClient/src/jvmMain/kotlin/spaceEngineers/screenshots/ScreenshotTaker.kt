@@ -10,7 +10,12 @@ import spaceEngineers.model.CubeSize
 import spaceEngineers.model.Vec3F
 import spaceEngineers.model.extensions.allBlocks
 import spaceEngineers.model.extensions.centerPosition
-import spaceEngineers.screenshots.NamedOrientations.*
+import spaceEngineers.screenshots.NamedOrientations.BACKWARD_UP
+import spaceEngineers.screenshots.NamedOrientations.DOWN_BACKWARD
+import spaceEngineers.screenshots.NamedOrientations.FORWARD_UP
+import spaceEngineers.screenshots.NamedOrientations.LEFT_UP
+import spaceEngineers.screenshots.NamedOrientations.RIGHT_UP
+import spaceEngineers.screenshots.NamedOrientations.UP_FORWARD
 import spaceEngineers.transport.SocketReaderWriter
 import java.io.File
 import java.lang.Thread.sleep
@@ -38,16 +43,14 @@ class ScreenshotTaker(
     val blockPosition: Vec3F = Vec3F(0, 1000, 0)
 ) {
     fun run() {
-        se.definitions.blockDefinitions()
-            .filterForScreenshots()
-            .forEach {
-                try {
-                    saveMeta(takeScreenshots(it))
-                } catch (e: Exception) {
-                    println("error for $it")
-                    e.printStackTrace()
-                }
+        se.definitions.blockDefinitions().filterForScreenshots().forEach {
+            try {
+                saveMeta(takeScreenshots(it))
+            } catch (e: Exception) {
+                println("error for $it")
+                e.printStackTrace()
             }
+        }
     }
 
     fun saveMeta(screenshots: Screenshots) {
@@ -56,7 +59,6 @@ class ScreenshotTaker(
                 screenshots
             )
         )
-
     }
 
     private fun List<BlockDefinition>.filterForScreenshots(): List<BlockDefinition> {
@@ -81,7 +83,7 @@ class ScreenshotTaker(
         namedOrientation: NamedOrientations,
         buildProgressModel: BuildProgressModel
     ): String {
-        return "${blockDefinition.definitionId.type}_${namedOrientation.name}_${integrity}.png"
+        return "${blockDefinition.definitionId.type}_${namedOrientation.name}_$integrity.png"
     }
 
     private fun takeScreenshots(blockDefinition: BlockDefinition): Screenshots {
@@ -112,8 +114,7 @@ class ScreenshotTaker(
             block.centerPosition + Vec3F(
                 y = -DISTANCE_CENTER_CAMERA,
                 z = screenshotDistance(
-                    blockDefinition,
-                    namedOrientation.orientationForward
+                    blockDefinition, namedOrientation.orientationForward
                 )
             ),
             Vec3F.FORWARD, Vec3F.UP
@@ -136,8 +137,7 @@ class ScreenshotTaker(
             )
             se.observer.takeScreenshot(
                 File(
-                    blockOutputDirectory(blockDefinition.definitionId.type),
-                    singleScreenshot.filename
+                    blockOutputDirectory(blockDefinition.definitionId.type), singleScreenshot.filename
                 ).absolutePath
             )
             sleep(200)

@@ -20,7 +20,6 @@ class SimplifiedArrayTest {
         }
     }
 
-
     fun assertMapsEqual(map1: String, map2: String) {
         val m1 = parseArray(map1).simplifiedArray()
         val m2 = parseArray(map2)
@@ -94,7 +93,6 @@ class SimplifiedArrayTest {
         )
     }
 
-
     @Test
     fun test5x5vs3x3() {
         assertMapsEqual(
@@ -112,5 +110,4 @@ class SimplifiedArrayTest {
             """.trimIndent().trim()
         )
     }
-
 }

@@ -4,7 +4,6 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlin.math.sqrt
 
-
 @Serializable
 data class Vec2F(
     @SerialName("X")

@@ -1,7 +1,11 @@
 package spaceEngineers.model.extensions
 
 import spaceEngineers.controller.Observer
-import spaceEngineers.model.*
+import spaceEngineers.model.Block
+import spaceEngineers.model.BlockId
+import spaceEngineers.model.CubeGrid
+import spaceEngineers.model.Observation
+import spaceEngineers.model.TerminalBlock
 
 fun Observation.blocksByCustomName(customName: String): List<TerminalBlock> {
     return allBlocks.filterIsInstance<TerminalBlock>().filter { it.customName == customName }
@@ -14,7 +18,7 @@ fun Observation.blockByCustomName(customName: String): TerminalBlock {
 fun List<Block>.blockByCustomName(customName: String): TerminalBlock {
     return filterIsInstance<TerminalBlock>().firstOrNull { it.customName == customName } ?: error(
         "Block with name $customName not found, found only ${
-            filterIsInstance<TerminalBlock>().map { it.customName }.sorted()
+        filterIsInstance<TerminalBlock>().map { it.customName }.sorted()
         }"
     )
 }

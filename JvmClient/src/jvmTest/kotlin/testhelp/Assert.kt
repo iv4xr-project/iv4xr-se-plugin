@@ -1,11 +1,9 @@
 package testhelp
 
-
 import spaceEngineers.model.CharacterObservation
 import spaceEngineers.model.Vec3F
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
-
 
 const val DEFAULT_VECTOR_EQUALITY_TOLERANCE: Float = 0.01f
 const val DEFAULT_VECTOR_DIRECTION_TOLERANCE: Float = 0.001f
@@ -31,7 +29,6 @@ fun assertGreaterThan(higher: Float, lower: Float, message: String? = null) {
 fun assertGreaterThan(higher: Number, lower: Number, message: String? = null) {
     assertTrue(higher.toDouble() > lower.toDouble(), message ?: "$higher is not greater than $lower")
 }
-
 
 fun assertVecEquals(v1: Vec3F, v2: Vec3F, absoluteTolerance: Float = DEFAULT_VECTOR_EQUALITY_TOLERANCE, message: String = "") {
     assertEquals(
@@ -67,7 +64,7 @@ fun assertCharacterObservationEquals(co1: CharacterObservation, co2: CharacterOb
     assertEquals(co1.oxygen, co2.oxygen)
     assertEquals(co1.hydrogen, co2.hydrogen)
     assertEquals(co1.suitEnergy, co2.suitEnergy)
-    //assertEquals(co1.camera, co2.camera)
+    // assertEquals(co1.camera, co2.camera)
     assertEquals(co1.headLocalXAngle, co2.headLocalXAngle)
     assertEquals(co1.headLocalYAngle, co2.headLocalYAngle)
     assertEquals(co1.targetBlock, co2.targetBlock)

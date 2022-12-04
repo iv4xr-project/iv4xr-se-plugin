@@ -10,7 +10,6 @@ import spaceEngineers.model.ToolbarLocation
 import spaceEngineers.model.extensions.allBlocks
 import spaceEngineers.model.extensions.blockById
 
-
 suspend fun SpaceEngineers.grindUntilIntegrityValue(
     block: Block,
     integrity: Double,
@@ -29,7 +28,6 @@ suspend fun SpaceEngineers.grindUntilIntegrityValue(
     }
     character.endUsingTool()
 }
-
 
 suspend fun SpaceEngineers.grindUntilIntegrityPercentage(
     block: Block,

@@ -2,16 +2,12 @@ package testrail
 
 import io.ktor.client.plugins.auth.providers.*
 import io.ktor.http.*
-import org.apache.commons.lang3.StringUtils
 import spaceEngineers.controller.toFile
 import spaceEngineers.util.extractTo
-import spaceEngineers.util.nonWhitespaceEquals
 import testrail.model.Case
-import testrail.model.Section
 import java.io.ByteArrayInputStream
 import java.io.File
 import java.util.zip.ZipInputStream
-
 
 suspend fun getTestrailPaths(
     sectionIds: List<Long>,
@@ -28,7 +24,6 @@ suspend fun getTestrailPaths(
         sectionHelper.sectionDirectory(it).toFile()
     }
 }
-
 
 suspend fun TestRailClient.downloadEverything(
     sectionIds: List<Long> = listOf(49388, 50008),
@@ -75,19 +70,20 @@ suspend fun TestRailClient.downloadSection(
     testCaseDirectory: File = File("./src/jvmTest/resources/features/testrail-2/"),
 ) {
 
-    val sectionChildren = (sectionHelper.allChildren(sectionId).map {
-        it
-    } + listOf(sectionHelper.sectionsById.getValue(sectionId))).filter { section ->
+    val sectionChildren = (
+        sectionHelper.allChildren(sectionId).map {
+            it
+        } + listOf(sectionHelper.sectionsById.getValue(sectionId))
+        ).filter { section ->
         section.tags().none { tag -> tag.lowercase() in excludingTags }
     }
-
 
     val sectionChildrenIds = sectionChildren.map { it.id }
 
     getCases(suiteId = suiteId, projectId = projectId).cases
         .filter {
             it.tags().none { tag -> tag in excludingTags } &&
-                    it.section_id in sectionChildrenIds
+                it.section_id in sectionChildrenIds
         }
         .filter {
             it.custom_preconds != null

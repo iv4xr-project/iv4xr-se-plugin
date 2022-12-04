@@ -5,7 +5,6 @@ import spaceEngineers.controller.SpaceEngineersJavaProxyBuilder
 import spaceEngineers.controller.extend
 import spaceEngineers.labrecruits.LabRecruitsController
 
-
 fun main() = runBlocking {
     val batch = SpaceEngineersJavaProxyBuilder().localhost()
     val se = batch.extend()
@@ -23,5 +22,4 @@ fun main() = runBlocking {
         println("goto door1")
         goToDoor("door1")
     }
-
 }

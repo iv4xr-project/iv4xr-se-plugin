@@ -5,9 +5,7 @@ import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-
 class JetpackRunningTest : MockOrRealGameTest() {
-
 
     @Test
     fun testJetpackNotRunning() = testContext {

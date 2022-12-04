@@ -30,7 +30,6 @@ interface ExtendedEntity : Entity {
     val definitionId: DefinitionId
 }
 
-
 @Serializable
 data class BaseEntity(
     @SerialName("Id")
@@ -52,7 +51,6 @@ data class BaseEntity(
     @SerialName("DefinitionId")
     override val definitionId: DefinitionId,
 ) : ExtendedEntity
-
 
 @Serializable
 data class HandTool(

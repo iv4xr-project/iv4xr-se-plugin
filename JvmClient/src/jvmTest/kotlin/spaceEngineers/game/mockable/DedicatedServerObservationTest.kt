@@ -6,13 +6,11 @@ import testhelp.MockOrRealGameTest
 import kotlin.test.Ignore
 import kotlin.test.Test
 
-
 @Ignore
 class DedicatedServerObservationTest : MockOrRealGameTest(loadScenario = true, forceRealGame = true, port = 3333u) {
 
     @Test
     fun testLoad() = testContext {
-
     }
 
     @Test
@@ -50,5 +48,4 @@ class DedicatedServerObservationTest : MockOrRealGameTest(loadScenario = true, f
     fun connect() = testContext {
         session.connect("127.0.0.1:27016")
     }
-
 }

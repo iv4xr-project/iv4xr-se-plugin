@@ -41,7 +41,6 @@ sealed class LabRecruitCell : BlockPlacementInformation {
     override val offset: Vec3I = Vec3I.ZERO
 }
 
-
 object Wall : LabRecruitCell() {
     override val regex: Regex = "\\|?w".toRegex()
     override fun toCsv(): String {
@@ -76,7 +75,6 @@ object UnnecessaryFloor : LabRecruitCell() {
     }
 }
 
-
 object Generator : LabRecruitCell() {
     override val regex: Regex = "\\|?g".toRegex()
     override fun toCsv(): String {
@@ -85,7 +83,6 @@ object Generator : LabRecruitCell() {
 
     override val blockId: DefinitionId = LargeBlockSmallGenerator
     override val customName: String = blockId.id
-
 }
 
 object GravityGenerator : LabRecruitCell() {
@@ -110,7 +107,7 @@ data class Button(val id: ButtonId) : LabRecruitCell() {
     )
 
     override fun toCsv(): String {
-        return "f:b^${id}"
+        return "f:b^$id"
     }
 
     override val color: Vec3F = Vec3F.GREEN
@@ -123,7 +120,7 @@ data class Agent(val id: AgentId) : LabRecruitCell() {
     override val orientations: List<Orientations> = listOf(Orientations())
     override val offset: Vec3I = Vec3I(-1, 1, 0)
     override fun toCsv(): String {
-        return "f:a^${id}"
+        return "f:a^$id"
     }
 
     override val color: Vec3F = Vec3F.BLUE
@@ -138,7 +135,7 @@ data class Door(val id: DoorId, val orientation: Direction) : LabRecruitCell() {
     override val customName: String = id
 
     override fun toCsv(): String {
-        return "f:d>${orientation.toChar()}^${id}"
+        return "f:d>${orientation.toChar()}^$id"
     }
 
     override val color: Vec3F = Vec3F.RED

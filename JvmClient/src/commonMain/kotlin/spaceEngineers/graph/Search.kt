@@ -17,9 +17,11 @@ class BasicGraphSearch<NodeId, NodeData, EdgeId, EdgeData>(
         val destination: NodeId,
     ) {
         fun withAddedEdge(edge: EdgeId): SearchContext<NodeId, EdgeId> {
-            return copy(currentPath = currentPath.toMutableList().apply {
-                add(edge)
-            }.toList())
+            return copy(
+                currentPath = currentPath.toMutableList().apply {
+                    add(edge)
+                }.toList()
+            )
         }
     }
 
@@ -36,7 +38,6 @@ class BasicGraphSearch<NodeId, NodeData, EdgeId, EdgeData>(
         return visitNode(from, SearchContext<NodeId, EdgeId>(mutableSetOf(), listOf(), destination = to))
             ?: error("Path from $from to $to not found")
     }
-
 
     private fun visitNode(nodeId: NodeId, searchContext: SearchContext<NodeId, EdgeId>): Path<EdgeId>? {
         if (nodeId in searchContext.finishedNodes) {

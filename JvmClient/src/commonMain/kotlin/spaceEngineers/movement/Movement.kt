@@ -37,7 +37,6 @@ class ReplayMovement(val spaceEngineers: SpaceEngineers) : CharacterMovement {
                 List(ticks) { frame }
             )
         }
-
 }
 
 class VectorMovement(
@@ -62,7 +61,4 @@ class VectorMovement(
             )
             Unit
         }
-
 }
-
-

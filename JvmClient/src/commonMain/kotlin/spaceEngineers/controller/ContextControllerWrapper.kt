@@ -12,7 +12,6 @@ class ContextControllerWrapper(
     val context: SpaceEngineersTestContext = SpaceEngineersTestContext()
 ) : SpaceEngineers by spaceEngineers {
 
-
     private fun addToHistory(observation: Observation) {
         context.addToHistory(observation)
     }
@@ -21,7 +20,7 @@ class ContextControllerWrapper(
         context.addToHistory(observation)
     }
 
-    override val observer: Observer = object: Observer {
+    override val observer: Observer = object : Observer {
         override fun observe(): CharacterObservation {
             return spaceEngineers.observer.observe().apply(::addToHistory)
         }
@@ -66,5 +65,4 @@ class ContextControllerWrapper(
             spaceEngineers.observer.switchCamera()
         }
     }
-
 }

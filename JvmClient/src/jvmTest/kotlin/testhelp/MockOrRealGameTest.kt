@@ -1,6 +1,11 @@
 package testhelp
 
-import spaceEngineers.controller.*
+import spaceEngineers.controller.ExtendedSpaceEngineers
+import spaceEngineers.controller.JsonRpcSpaceEngineersBuilder
+import spaceEngineers.controller.SpaceEngineers
+import spaceEngineers.controller.SpaceEngineersJavaProxyBuilder
+import spaceEngineers.controller.extend
+import spaceEngineers.controller.loadFromTestResources
 import spaceEngineers.transport.GsonResponseAppendToFileReaderWriter
 import spaceEngineers.transport.ReconnectingSocketReaderWriter
 import spaceEngineers.transport.SocketReaderWriter.Companion.DEFAULT_PORT
@@ -8,7 +13,6 @@ import spaceEngineers.transport.StringLineReaderWriter
 import java.io.File
 import java.lang.reflect.UndeclaredThrowableException
 import kotlin.time.Duration
-
 
 abstract class MockOrRealGameTest(
     val mockFile: File? = null,
@@ -94,7 +98,8 @@ abstract class MockOrRealGameTest(
     }
 
     private fun readerWriter(
-        file: File, rw: StringLineReaderWriter = ReconnectingSocketReaderWriter(
+        file: File,
+        rw: StringLineReaderWriter = ReconnectingSocketReaderWriter(
             port = port
         )
     ): StringLineReaderWriter {
@@ -110,8 +115,7 @@ abstract class MockOrRealGameTest(
     companion object {
 
         fun inMockResourcesDirectory(fileName: String): File {
-            return File("${MOCK_RESOURCES_DIR}${fileName}")
+            return File("${MOCK_RESOURCES_DIR}$fileName")
         }
     }
-
 }

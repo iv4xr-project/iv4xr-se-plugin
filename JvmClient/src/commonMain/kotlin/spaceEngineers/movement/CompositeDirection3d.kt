@@ -11,7 +11,6 @@ fun CompositeDirection3d.toKeyboardSnapshot(movementType: CharacterMovementType)
     )
 }
 
-
 enum class CompositeDirection3d(val basicDirections: Set<BasicDirection3d>) {
     NONE(BasicDirection3d.NONE),
 

@@ -1,8 +1,7 @@
 package spaceEngineers.game.mockable
 
-import spaceEngineers.model.CharacterObservation
-import testhelp.assertCharacterObservationEquals
 import testhelp.MockOrRealGameTest
+import testhelp.assertCharacterObservationEquals
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -30,6 +29,4 @@ class ObserveCharactersTest : MockOrRealGameTest() {
         val characterObservations = observer.observeCharacters()
         assertEquals(2, characterObservations.size)
     }
-
-
 }

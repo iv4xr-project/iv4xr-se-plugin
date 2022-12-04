@@ -4,24 +4,20 @@ import spaceEngineers.controller.SpaceEngineers
 import java.io.File
 import kotlin.reflect.*
 
-
 fun main() {
     val types = DataStructuresGenerator().find().toSet()
     val clientGenerator = ClientGenerator(SpaceEngineers::class, types)
-
 
     val outFile = File("../PythonClient/src/spaceengineers/api.py")
     outFile.writeText(
         """from .models import *
 
-    """.trimIndent()
+        """.trimIndent()
     )
     outFile.appendText(clientGenerator.generateInterfaces())
-
 }
 
 val filteredMethods = setOf("toString", "equals", "hashCode")
-
 
 val kotlinTypeToPython = mapOf(
     "String" to "str",
@@ -41,7 +37,6 @@ val kotlinTypeToPython = mapOf(
 val kotlinMethodToPython = mapOf(
     "continue" to "Continue"
 )
-
 
 fun KType.toPythonType(validTypes: Set<KType>): String {
     val kclass = toKClass()!!
@@ -70,7 +65,6 @@ fun KType.toPythonTypeOrKeep(validTypes: Set<KType>): String {
 
 fun String.firstUppercase(): String {
     return this.substring(0, 1).uppercase() + this.substring(1, length)
-
 }
 
 fun String.toPythonMethod(): String {

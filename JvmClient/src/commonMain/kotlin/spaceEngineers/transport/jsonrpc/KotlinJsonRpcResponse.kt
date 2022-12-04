@@ -20,5 +20,4 @@ data class KotlinJsonRpcResponse<T : Any?>(
             Result.failure(it)
         } ?: Result.success(result)
     }
-
 }

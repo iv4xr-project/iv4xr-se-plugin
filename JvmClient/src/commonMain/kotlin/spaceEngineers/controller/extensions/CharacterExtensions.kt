@@ -59,8 +59,9 @@ suspend fun SpaceEngineers.blockingRotateUntilOrientationForward(
 ) {
     withTimeout(timeoutMs) {
         while (observer.observe().let {
-                !finalOrientation.similar(it.camera.orientationForward, delta = delta)
-            }) {
+            !finalOrientation.similar(it.camera.orientationForward, delta = delta)
+        }
+        ) {
             character.moveAndRotate(rotation3 = rotation)
             yield()
         }
@@ -75,11 +76,12 @@ suspend fun SpaceEngineers.blockingRotateUntilOrientationUp(
 ) {
     withTimeout(timeoutMs) {
         while (observer.observe().let {
-                !finalOrientation.similar(
+            !finalOrientation.similar(
                     it.camera.orientationUp,
                     delta = delta
                 )
-            }) {
+        }
+        ) {
             character.moveAndRotate(rotation3 = rotation)
             yield()
         }

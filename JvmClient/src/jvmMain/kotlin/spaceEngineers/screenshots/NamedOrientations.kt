@@ -1,13 +1,12 @@
 package spaceEngineers.screenshots
 
 import spaceEngineers.model.Vec3F
-import spaceEngineers.model.Vec3F.Companion.FORWARD
-import spaceEngineers.model.Vec3F.Companion.UP
-import spaceEngineers.model.Vec3F.Companion.LEFT
-import spaceEngineers.model.Vec3F.Companion.RIGHT
 import spaceEngineers.model.Vec3F.Companion.BACKWARD
 import spaceEngineers.model.Vec3F.Companion.DOWN
-
+import spaceEngineers.model.Vec3F.Companion.FORWARD
+import spaceEngineers.model.Vec3F.Companion.LEFT
+import spaceEngineers.model.Vec3F.Companion.RIGHT
+import spaceEngineers.model.Vec3F.Companion.UP
 
 enum class NamedOrientations(
     val orientationForward: Vec3F,

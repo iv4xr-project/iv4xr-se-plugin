@@ -21,9 +21,9 @@ data class UseObject(
         val Manipulate = 1 shl 0
         val OpenTerminal = 1 shl 1
         val OpenInventory = 1 shl 2
-        val UseFinished = 1 shl 3           // Finished of using "USE" key (key released)
+        val UseFinished = 1 shl 3 // Finished of using "USE" key (key released)
         val Close =
-            1 shl 4// Use object is closing (called before). Ie. character just got out of sight of interactive object
+            1 shl 4 // Use object is closing (called before). Ie. character just got out of sight of interactive object
         val PickUp = 1 shl 5
         val BuildPlanner = 1 shl 6
     }

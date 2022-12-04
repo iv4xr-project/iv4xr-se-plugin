@@ -23,5 +23,4 @@ w,w,w,w,w
         val simpleMap = map.toSimplified()
         assertEquals(simpleMap.cells[0][0], null)
     }
-
 }

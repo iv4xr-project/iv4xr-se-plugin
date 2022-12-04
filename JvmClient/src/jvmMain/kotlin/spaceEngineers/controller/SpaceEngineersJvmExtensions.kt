@@ -32,7 +32,7 @@ fun Session.loadFromTestResources(scenarioId: String, scenarioDir: String = SCEN
     val unixPath = file.absolutePath.unixToWindowsPath()
     check(
         file.exists() ||
-                unixPath.toFile().exists()
+            unixPath.toFile().exists()
     ) {
         "Couldn't find scenario"
     }

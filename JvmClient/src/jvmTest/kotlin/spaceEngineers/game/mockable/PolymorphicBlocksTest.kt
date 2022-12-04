@@ -8,7 +8,6 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-
 class PolymorphicBlocksTest : MockOrRealGameTest() {
 
     @Test
@@ -16,7 +15,6 @@ class PolymorphicBlocksTest : MockOrRealGameTest() {
         buildAndCheckType<FueledPowerProducer>(DefinitionId.reactor("LargeBlockSmallGenerator"))
         buildAndCheckType<TerminalBlock>(DefinitionId.reactor("LargeBlockSmallGenerator"))
         buildAndCheckType<FunctionalBlock>(DefinitionId.reactor("LargeBlockSmallGenerator"))
-
     }
 
     @Test
@@ -40,7 +38,6 @@ class PolymorphicBlocksTest : MockOrRealGameTest() {
         buildAndCheckType<TerminalBlock>(DefinitionId.door("LargeBlockSlideDoor"))
         buildAndCheckType<FunctionalBlock>(DefinitionId.door("LargeBlockSlideDoor"))
     }
-
 
     private inline fun <reified T> SpaceEngineers.buildAndCheckType(definitionId: DefinitionId) {
         val z = 1000

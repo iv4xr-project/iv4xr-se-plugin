@@ -3,7 +3,6 @@ package spaceEngineers.model
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-
 @Serializable
 data class CameraController(
     @SerialName("IsInFirstPersonView")
@@ -45,4 +44,3 @@ data class SessionInfo(
     @SerialName("Camera")
     val camera: CameraController? = null,
 )
-

@@ -73,9 +73,7 @@ class ConnectionSetupBuilder(
             type = AppType.GAME,
             gameVersion = gameVersion,
         )
-
     }
-
 
     companion object {
         val DEFAULT_STEAM_EXECUTABLE_PATH = "C:/Program Files (x86)/Steam/steamapps/common/SpaceEngineers/Bin64"

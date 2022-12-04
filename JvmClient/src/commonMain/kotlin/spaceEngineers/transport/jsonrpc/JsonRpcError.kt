@@ -5,4 +5,3 @@ interface JsonRpcError<T> {
     val message: String
     val data: T?
 }
-

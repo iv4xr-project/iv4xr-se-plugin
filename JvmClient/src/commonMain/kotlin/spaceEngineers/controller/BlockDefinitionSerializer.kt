@@ -36,7 +36,7 @@ val blockDefinitionMappings = mapOf<String, Map<String, KClass<*>>>(
         "InventoryMaxVolume" to Float::class,
         "StandbyPowerConsumption" to Float::class,
         "OperationalPowerConsumption" to Float::class,
-        //"InventorySize" to Vec3F::class,
+        // "InventorySize" to Vec3F::class,
     ),
     "AssemblerDefinition" to mapOf(
         "AssemblySpeed" to Float::class,
@@ -208,10 +208,9 @@ val blockDefinitionMappings = mapOf<String, Map<String, KClass<*>>>(
     ),
 )
 
-
 object BlockDefinitionSerializer : JsonContentPolymorphicSerializer<BlockDefinition>(BlockDefinition::class) {
     override fun selectDeserializer(element: JsonElement): DeserializationStrategy<out BlockDefinition> {
-        //val id = element.jsonObject["DefinitionId"]!!.jsonObject["Id"]!!.jsonPrimitive.content.removeBuilderPrefix()
+        // val id = element.jsonObject["DefinitionId"]!!.jsonObject["Id"]!!.jsonPrimitive.content.removeBuilderPrefix()
         val type = element.jsonObject["Type"]!!.jsonPrimitive.content.removeDefinitionPrefix()
         return generatedBlockDefinitionSerializerMappings[type] ?: DataBlockDefinition.serializer()
     }

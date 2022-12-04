@@ -4,7 +4,11 @@ import spaceEngineers.controller.SpaceEngineers
 import spaceEngineers.controller.proxy.BatchCallable
 import spaceEngineers.controller.proxy.executeIfNotNull
 import spaceEngineers.graph.Cube3dGraph
-import spaceEngineers.model.*
+import spaceEngineers.model.CubeGrid
+import spaceEngineers.model.DefinitionId
+import spaceEngineers.model.LARGE_BLOCK_CUBE_SIDE_SIZE
+import spaceEngineers.model.Vec3F
+import spaceEngineers.model.Vec3I
 import spaceEngineers.model.extensions.toFloat
 import spaceEngineers.model.typing.DefinitionIds
 import spaceEngineers.model.typing.DefinitionIds.CubeBlock.LargeHeavyBlockArmorBlock
@@ -39,7 +43,7 @@ class MapPlacer(
 
     private fun generateFloor(gridId: String, level: Int = 0) = batch {
         placeUsingGraphSearch(level, gridId)
-        //placeTheOldWay(level, gridId)
+        // placeTheOldWay(level, gridId)
     }
 
     private fun placeUsingGraphSearch(level: Int, gridId: String) {
@@ -62,7 +66,6 @@ class MapPlacer(
                 placeFloor(gridId, level = position.y, z = position.z, x = position.x)
             }
     }
-
 
     fun placeInSequence(level: Int) = sequence {
         for (z in 0 until map.height) {
@@ -136,7 +139,6 @@ class MapPlacer(
             )
         }
 
-
     private fun generateWalls(gridId: String) =
         filterCells(1) { it == Wall }.forEach { (cell, position) ->
             processCell(cell, gridId, position)
@@ -201,7 +203,6 @@ class MapPlacer(
         setupCustomNames()
         return gridId
     }
-
 
     private fun placeAt(
         blockDefinitionId: DefinitionId,

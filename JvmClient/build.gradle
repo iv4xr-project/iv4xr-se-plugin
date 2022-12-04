@@ -4,6 +4,7 @@ plugins {
     id("org.jetbrains.dokka") version "$kotlin_version"
     id 'maven-publish'
     id 'jacoco'
+    id("org.jlleitschuh.gradle.ktlint") version "11.0.0"
 }
 
 group = 'com.github.iv4xr-project'
@@ -95,3 +96,7 @@ tasks.jacocoTestReport {
 }
 
 check.dependsOn jacocoTestReport
+
+ktlint {
+    disabledRules = ["filename"]
+}

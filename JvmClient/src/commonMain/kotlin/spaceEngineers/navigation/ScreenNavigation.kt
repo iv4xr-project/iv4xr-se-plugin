@@ -4,7 +4,12 @@ import spaceEngineers.controller.Screens
 import spaceEngineers.controller.SpaceEngineers
 import spaceEngineers.controller.extensions.typedFocusedScreen
 import spaceEngineers.controller.extensions.waitForScreen
-import spaceEngineers.graph.*
+import spaceEngineers.graph.BasicGraphSearch
+import spaceEngineers.graph.DataEdge
+import spaceEngineers.graph.DataNode
+import spaceEngineers.graph.DirectedGraph
+import spaceEngineers.graph.GraphSearch
+import spaceEngineers.graph.toExtra
 import spaceEngineers.model.ScreenName
 import spaceEngineers.model.ScreenName.Companion.CubeBuilder
 import spaceEngineers.model.ScreenName.Companion.GamePlay
@@ -39,10 +44,7 @@ data class ScreenTransition(
         val from: ScreenName,
         val to: ScreenName,
         val spaceEngineers: SpaceEngineers,
-    ) : Screens by spaceEngineers.screens {
-
-
-    }
+    ) : Screens by spaceEngineers.screens
 
     private fun toContext(spaceEngineers: SpaceEngineers): ScreenTransitionContext {
         return ScreenTransitionContext(
@@ -60,7 +62,7 @@ val DEFAULT_TRANSITIONS = listOf(
         terminal.close()
     },
     ScreenTransition(GamePlay, Terminal) {
-        //OR spaceEngineers.character.showTerminal()
+        // OR spaceEngineers.character.showTerminal()
         spaceEngineers.character.showInventory()
     },
     ScreenTransition(GamePlay, CubeBuilder) {
@@ -115,7 +117,6 @@ val DEFAULT_TRANSITIONS = listOf(
     },
 )
 
-
 fun ScreenName.toNode(): spaceEngineers.graph.Node<ScreenName, Unit> {
     return DataNode(this, Unit)
 }
@@ -124,14 +125,12 @@ fun ScreenTransition.toDirectedEdge(): DataEdge<String, ScreenName, ScreenTransi
     return DataEdge(from, to, edgeId, this)
 }
 
-
 fun List<ScreenTransition>.toGraph(): DirectedGraph<ScreenName, Unit, String, ScreenTransition> {
     return DirectedGraph(
         nodes = flatMap { listOf(it.from, it.to) }.map { it.toNode() },
         edges = map { it.toDirectedEdge() }
     )
 }
-
 
 class ScreenNavigation(
     val spaceEngineers: SpaceEngineers,

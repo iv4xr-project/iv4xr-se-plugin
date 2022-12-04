@@ -79,7 +79,6 @@ class GoalBuilder(
         )
     }
 
-
     private fun lastBuiltBlockIntegrityCheck(
         percentage: Double,
         checkFunction: (Block) -> Boolean,
@@ -113,7 +112,4 @@ class GoalBuilder(
             return block.integrity <= requiredIntegrity
         }
     }
-
-
-
 }

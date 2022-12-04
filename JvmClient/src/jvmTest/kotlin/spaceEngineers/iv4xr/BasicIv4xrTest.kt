@@ -9,14 +9,15 @@ import nl.uu.cs.aplib.AplibEDSL.SEQ
 import nl.uu.cs.aplib.mainConcepts.GoalStructure
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
-import spaceEngineers.controller.*
+import spaceEngineers.controller.ContextControllerWrapper
+import spaceEngineers.controller.JvmSpaceEngineersBuilder
 import spaceEngineers.controller.SpaceEngineers.Companion.DEFAULT_AGENT_ID
+import spaceEngineers.controller.SpaceEngineersTestContext
 import spaceEngineers.iv4xr.goal.GoalBuilder
 import spaceEngineers.iv4xr.goal.TacticLib
 import spaceEngineers.model.DefinitionId
 import spaceEngineers.model.ToolbarLocation
 import kotlin.test.assertTrue
-
 
 class BasicIv4xrTest {
 
@@ -24,7 +25,7 @@ class BasicIv4xrTest {
     @Test
     fun placeGrindDownTorchUp() {
         // Setup constants to use later.
-        val agentId = DEFAULT_AGENT_ID //agent id
+        val agentId = DEFAULT_AGENT_ID // agent id
         val blockType = DefinitionId.cubeBlock("LargeHeavyBlockArmorBlock") // Block type that we will operate with (it's a cube block).
         val context = SpaceEngineersTestContext() // This context saves recent information about operations (for example last built blocks and all the observations).
         val blockLocation = ToolbarLocation(1, 0) // We will put block here in the toolbar.
@@ -47,7 +48,6 @@ class BasicIv4xrTest {
             worldId = "simple-place-grind-torch-with-tools",
         )
 
-
         // Creating IV4XR related classes.
         val dataCollector = TestDataCollector()
 
@@ -58,7 +58,6 @@ class BasicIv4xrTest {
             .attachState(myAgentState)
             .attachEnvironment(theEnv)
             .setTestDataCollector(dataCollector)
-
 
         val goals = GoalBuilder()
         val tactics = TacticLib()

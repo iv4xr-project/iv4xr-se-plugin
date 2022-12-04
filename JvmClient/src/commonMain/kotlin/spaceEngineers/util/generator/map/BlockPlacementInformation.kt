@@ -20,7 +20,6 @@ val BlockPlacementInformation.orientationForward
 val BlockPlacementInformation.orientationUp
     get() = orientations.first().up
 
-
 data class Orientations(
     val forward: Vec3I = Vec3I.FORWARD,
     val up: Vec3I = Vec3I.UP,
@@ -39,4 +38,3 @@ data class DataBlockPlacementInformation(
         }
     }
 }
-

@@ -13,7 +13,6 @@ data class RemoteException(
 ) : Throwable(message) {
     override fun printStackTrace(s: PrintWriter) {
         s.println(stacktrace)
-
     }
 
     override fun printStackTrace() {
@@ -38,7 +37,6 @@ data class RemoteException(
     }
 }
 
-
 fun JsonObject.dataStringAttribute(name: String): String? {
     if (containsKey(name)) {
         val value = this[name] as JsonPrimitive
@@ -49,5 +47,3 @@ fun JsonObject.dataStringAttribute(name: String): String? {
 
 val KotlinJsonRpcError.remoteException: RemoteException?
     get() = RemoteException.fromJsonObject(data)
-
-

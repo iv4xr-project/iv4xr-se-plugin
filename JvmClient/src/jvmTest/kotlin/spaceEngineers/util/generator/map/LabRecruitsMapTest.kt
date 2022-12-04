@@ -29,7 +29,6 @@ class LabRecruitsMapTest {
             .forEach {
                 checkMap(it.name)
             }
-
     }
 
     private fun checkMap(name: String) {
@@ -38,7 +37,6 @@ class LabRecruitsMapTest {
         val labRecruitsMap = LabRecruitsMap.fromString(text)
         val newText = labRecruitsMap.toCsv()
         verifyMaps(text, newText)
-
     }
 
     private fun verifyMaps(mapText: String, anotherMapText: String) {

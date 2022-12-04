@@ -4,7 +4,6 @@ import testhelp.MockOrRealGameTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-
 class BlockHierarchyTest : MockOrRealGameTest(inMockResourcesDirectory("BlockHierarchyTest.txt")) {
 
     @Test
@@ -21,6 +20,4 @@ class BlockHierarchyTest : MockOrRealGameTest(inMockResourcesDirectory("BlockHie
     fun functionalParentOfTerminal() = testContext {
         assertEquals("MyObjectBuilder_TerminalBlock", definitions.blockHierarchy()["MyObjectBuilder_FunctionalBlock"])
     }
-
-
 }

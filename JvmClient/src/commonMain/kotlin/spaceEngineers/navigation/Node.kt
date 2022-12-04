@@ -6,4 +6,3 @@ import spaceEngineers.model.Vec3F
 
 typealias NodeId = BlockId
 typealias Node = DataNode<NodeId, Vec3F>
-

@@ -40,14 +40,11 @@ const val commonBlockFields = """
     override val builtBy: CharacterId,
 """
 
-
-
 val regex = "override val ([a-zA-Z]+):".toRegex()
 
 val commonFieldNames = regex.findAll(commonBlockFields).map {
     it.groupValues[1]
 }.toList()
-
 
 val filteredParents = setOf("MyObjectBuilder_CubeBlock", "MyObjectBuilder_Base", "Object")
 
@@ -78,7 +75,7 @@ ${interfaceFields()}
         return """
 ${generateInterface()}
 ${generateDataClass()}
-""".trimIndent()
+        """.trimIndent()
     }
 
     fun generateDataClass(): String {
@@ -95,7 +92,7 @@ ${fields()}
     fun generateCsClass(): String {
         return """
 
-public class ${cls} : ${parentCall()}
+public class $cls : ${parentCall()}
 {
 ${csFields()}
 }
@@ -132,7 +129,6 @@ ${ip.firstOrNull() ?: defaultParent}
     private fun importantParents(): List<String> {
         return parents.filter { it in blockMappings }
     }
-
 }
 
 fun getBlockParentsById(id: String, parentMappings: Map<String, String>): List<String> {
@@ -189,11 +185,13 @@ fun generateMappings(parentMappings: Map<String, String>, idsWithSerializers: Se
     return parentMappings.keys.flatMap {
         generateMappingsForSingleClass(it, parentMappings = parentMappings, idsWithSerializers = idsWithSerializers)
     }.distinct().joinToString(
-        separator = ",\n", prefix = """
+        separator = ",\n",
+        prefix = """
 val $variableName = mutableMapOf(
-""".trimStart(), postfix = """
+""".trimStart(),
+        postfix = """
 )
-""".trimIndent()
+        """.trimIndent()
     )
 }
 
@@ -211,12 +209,14 @@ fun generateCsMappings(parentMappings: Map<String, String>, idsWithSerializers: 
     return parentMappings.keys.flatMap {
         generateMappingsForSingleCsClass(it, parentMappings = parentMappings, idsWithSerializers = idsWithSerializers)
     }.joinToString(
-        separator = ",\n", prefix = """
+        separator = ",\n",
+        prefix = """
 public static class $className
 {
     public static readonly Dictionary<string, string> Mapping = new Dictionary<string, string>
     {
-""".trim().padTabs(1) + "\n", postfix = """,
+""".trim().padTabs(1) + "\n",
+        postfix = """,
         };
     }"""
     ) {

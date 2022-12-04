@@ -4,7 +4,6 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlin.math.sqrt
 
-
 @Serializable
 data class Vec3I(
     @SerialName("X")
@@ -16,13 +15,16 @@ data class Vec3I(
 ) : NumberVec3<Int> {
 
     constructor(
-        x: Double = 0.0, y: Double = 0.0, z: Double = 0.0
+        x: Double = 0.0,
+        y: Double = 0.0,
+        z: Double = 0.0
     ) : this(x.toInt(), y.toInt(), z.toInt())
 
     constructor(
-        x: Float = 0.0f, y: Float = 0.0f, z: Float = 0.0f
+        x: Float = 0.0f,
+        y: Float = 0.0f,
+        z: Float = 0.0f
     ) : this(x.toInt(), y.toInt(), z.toInt())
-
 
     fun distanceTo(other: NumberVec3<Int>): Float {
         return (this - other).length()

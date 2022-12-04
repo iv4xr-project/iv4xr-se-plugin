@@ -6,9 +6,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 
-
 class TeleportTest : MockOrRealGameTest() {
-
 
     @Test
     fun teleportPosition() = testContext {

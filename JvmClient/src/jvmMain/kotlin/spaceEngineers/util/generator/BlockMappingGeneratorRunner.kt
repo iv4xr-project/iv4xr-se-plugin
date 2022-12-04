@@ -41,13 +41,11 @@ fun getBlockIdsToTypes(defs: List<BlockDefinition>): Map<String, List<String>> {
     }.toMap()
 }
 
-
 fun generateBlockIdsToTypes() {
     val defs = JvmSpaceEngineersBuilder.default().localhost().definitions.blockDefinitions()
     val idToTypes = getBlockIdsToTypes(defs)
     idToTypesFile.writeText(SocketReaderWriter.SPACE_ENG_GSON.toJson(idToTypes))
 }
-
 
 fun generateBlockFiles() {
     val dataClasses = File("./src/commonMain/kotlin/spaceEngineers/model/BlockDataClasses.kt")
@@ -59,7 +57,6 @@ fun generateBlockFiles() {
     serializerMappings.writeText(filePrefix)
 
     val csClassesAndMappings = File("../Source/Ivxr.SpaceEngineers/WorldModel/GeneratedBlocks.cs")
-
 
     csClassesAndMappings.writeText(
         """
@@ -90,11 +87,8 @@ namespace Iv4xr.SpaceEngineers.WorldModel
             generator.generateCsClass().let {
                 csClassesAndMappings.appendText("${it.padTabs(1)}\n")
             }
-
         }
     }
-
-
 
     generateMappings(
         parentMappings = parentMappings,
@@ -115,9 +109,8 @@ namespace Iv4xr.SpaceEngineers.WorldModel
     csClassesAndMappings.appendText(
         """
 }
-    """.trimIndent()
+        """.trimIndent()
     )
-
 }
 
 fun generateBlockDefinitionFiles() {
@@ -182,8 +175,6 @@ namespace Iv4xr.SePlugin.Control
         }
     }
 
-
-
     generateMappings(
         parentMappings = parentBlockDefinitionMappings,
         idsWithSerializers = blockDefinitionMappings.keys,
@@ -203,7 +194,7 @@ namespace Iv4xr.SePlugin.Control
     csClassesAndMappings.appendText(
         """
 }
-    """.trimIndent()
+        """.trimIndent()
     )
 
     csFieldMappings.appendText(
@@ -213,7 +204,6 @@ namespace Iv4xr.SePlugin.Control
 }
     """
     )
-
 }
 
 val jsonWriter = Json {
@@ -228,12 +218,11 @@ fun generateBlockDefinitionHierarchyJson(spaceEngineers: SpaceEngineers) {
     )
 }
 
-
 fun generateBlockHierarchyJson(spaceEngineers: SpaceEngineers) {
     val hierarchy = spaceEngineers.definitions.blockHierarchy()
         .filter { it.key !in filteredParents && it.value !in filteredParents }.map {
-        it.key.removeBuilderPrefix() to it.value.removeBuilderPrefix()
-    }.toMap()
+            it.key.removeBuilderPrefix() to it.value.removeBuilderPrefix()
+        }.toMap()
     blockHierarchyFile.writeText(
         jsonWriter.encodeToString(hierarchy)
     )
@@ -247,7 +236,7 @@ fun generateSourceJsonFromGame() {
 
 fun main() {
     // This run requires SE game running and updates definition json files for the generator.
-    //generateSourceJsonFromGame()
+    // generateSourceJsonFromGame()
     generateBlockFiles()
     generateBlockDefinitionFiles()
 }

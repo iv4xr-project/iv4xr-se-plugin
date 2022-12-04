@@ -70,7 +70,5 @@ data class Config(
         fun fromMap(map: Map<String, String?>, default: Config): Config {
             return fromGetter({ map[it] }, default = default)
         }
-
-
     }
 }

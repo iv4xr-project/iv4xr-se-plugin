@@ -81,8 +81,8 @@ class ConnectionManager(
         try {
             spaceEngineers.admin.character.switch(spaceEngineers.admin.character.mainCharacterId())
         } catch (e: Exception) {
-            /*  
-            We switch, but it's okay to fail - maybe sometimes we want to control the game and there is no character. 
+            /*
+            We switch, but it's okay to fail - maybe sometimes we want to control the game and there is no character.
             Could use some refactoring to avoid this.
             */
         }
@@ -123,5 +123,4 @@ class ConnectionManager(
             connectionsById.values.forEach { it.spaceEngineers.close() }
         }
     }
-
 }

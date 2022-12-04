@@ -3,7 +3,6 @@ package spaceEngineers.model
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-
 @Serializable
 data class PointOfInterest(
     @SerialName("Position")
@@ -32,7 +31,6 @@ data class OreMarker(
     var materials: List<DefinitionId>,
 )
 
-
 interface HudStatsWrapper {
     val dampenersOn: Boolean
     val relativeDampenersOn: Boolean
@@ -59,7 +57,6 @@ data class Hud(
             override val naturalGravity: Float = stats["NaturalGravity"] ?: error("no naturalGravity in stats")
         }
 }
-
 
 @Serializable
 data class GamePlayData(
