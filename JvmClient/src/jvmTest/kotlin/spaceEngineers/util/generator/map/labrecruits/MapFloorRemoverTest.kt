@@ -21,6 +21,14 @@ w,w,w,w,w
         val map = map(mapStr)
         assertEquals(map.cells[0][0], Floor)
         val simpleMap = map.toSimplified()
-        assertEquals(simpleMap.cells[0][0], null)
+        assertEquals(
+            """
+|f,f
+w,w
+f,f:d>n^door0
+w,w 
+        """.trim(),
+            simpleMap.toCsv()
+        )
     }
 }

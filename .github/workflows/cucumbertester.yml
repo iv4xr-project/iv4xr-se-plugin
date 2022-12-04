@@ -1,0 +1,28 @@
+name: CucumberTester
+
+on: 
+  push:
+  pull_request:
+  workflow_dispatch:
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+      - name: Change wrapper permissions
+        run: chmod +x CucumberTester/gradlew
+
+      - name: Build
+        run: |
+          echo Running JVM unit tests
+          cd CucumberTester/
+          ./gradlew build

@@ -41,7 +41,7 @@ class LabRecruitsMap(
     }
 
     fun toCsv(): String {
-        return generateHeadersCsv() + "\n" + generateMapCsv()
+        return (generateHeadersCsv() + "\n" + generateMapCsv()).trim()
     }
 
     private fun generateHeadersCsv() = mappings.keys.sortedWith(labRecruitsButtonComparator).map {
@@ -59,8 +59,8 @@ class LabRecruitsMap(
     companion object {
         fun fromString(text: String): LabRecruitsMap {
             val parts = text.split("|")
-            val mapping = parts.first().trim().lines()
-            val firstFloor = parts[1].trim().lines()
+            val mapping = parts.first().trim().lines().filter { it.isNotBlank() }
+            val firstFloor = parts[1].trim().lines().filter { it.isNotBlank() }
             val map = parseMap(firstFloor)
             val flatMap = map.flatten()
             val doors = flatMap.filterIsInstance<Door>().associateBy { it.id }
@@ -74,6 +74,9 @@ class LabRecruitsMap(
             door: Map<DoorId, Door>,
             buttons: Map<ButtonId, Button>
         ): Map<Button, Set<Door>> {
+            if (lines.isEmpty()) {
+                return emptyMap()
+            }
             return lines.associate { it ->
                 val cells = it.split(",").filter { it.isNotBlank() }
 
