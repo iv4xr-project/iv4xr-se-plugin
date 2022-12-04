@@ -3,6 +3,7 @@ package spaceEngineers.game
 import org.junit.jupiter.api.Disabled
 import spaceEngineers.controller.SpaceEngineers
 import spaceEngineers.game.mockable.filterForScreenshots
+import spaceEngineers.model.DataToolbarItemDefinition
 import spaceEngineers.model.DefinitionId
 import spaceEngineers.model.ToolbarLocation
 import spaceEngineers.model.extensions.allBlocks
@@ -14,15 +15,13 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 
-
-
 class GetToolbarTest : MockOrRealGameTest() {
 
 
     @Test
     fun toolbar() = testContext {
         val toolbar = items.toolbar()
-        assertEquals(toolbar[ToolbarLocation(0, 0)]?.id?.type, "LargeBlockArmorBlock")
+        assertEquals((toolbar[ToolbarLocation(0, 0)] as DataToolbarItemDefinition?)?.id?.type, "LargeBlockArmorBlock")
         assertEquals(toolbar.items.size, toolbar.pageCount * toolbar.slotCount)
     }
 
@@ -62,7 +61,7 @@ class GetToolbarTest : MockOrRealGameTest() {
         delay(10)
         val toolbar = items.toolbar()
         delay(10)
-        val toolbarItem = toolbar[location]
+        val toolbarItem = toolbar[location] as DataToolbarItemDefinition?
         return toolbarItem != null && toolbarItem.id.type == definitionId.type
     }
 

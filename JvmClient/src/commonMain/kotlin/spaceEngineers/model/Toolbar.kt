@@ -20,6 +20,7 @@ data class Toolbar(
 
     fun findLocation(blockType: String): ToolbarLocation? {
         return items.indexOfFirst {
+            it is DataToolbarItemDefinition? &&
             it?.id?.type == blockType
         }.toNullIfMinusOne()?.let {
             ToolbarLocation.fromIndex(it)
@@ -28,6 +29,7 @@ data class Toolbar(
 
     fun findLocation(definitionId: DefinitionId): ToolbarLocation? {
         return items.indexOfFirst {
+            it is DataToolbarItemDefinition? &&
             it?.id == definitionId
         }.toNullIfMinusOne()?.let {
             ToolbarLocation.fromIndex(it)

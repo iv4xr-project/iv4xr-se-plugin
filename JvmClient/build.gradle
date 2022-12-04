@@ -81,6 +81,17 @@ tasks.jacocoTestReport {
         xml.enabled = true
         html.enabled = true
     }
+
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it,
+                    exclude: [
+                            'spaceEngineers/model/typing/**',
+                            'spaceEngineers/model/**serializer**',
+                            "spaceEngineers/model/BlockDataClasses.kt"
+                    ])
+        }))
+    }
 }
 
 check.dependsOn jacocoTestReport

@@ -47,7 +47,29 @@ val blockMappings = mapOf<String, Map<String, KClass<*>>>(
         "HealingAllowed" to Boolean::class,
         "SpawnWithoutOxygenEnabled" to Boolean::class,
         "ForceSuitChangeOnRespawn" to Boolean::class,
-    )
+    ),
+    "TimerBlock" to mapOf(
+        "Silent" to Boolean::class,
+        "TriggerDelay" to Float::class,
+        "Toolbar" to Toolbar::class,
+    ),
+    "SensorBlock" to mapOf(
+        "IsActive" to Boolean::class,
+        "FieldMin" to Vec3F::class,
+        "FieldMax" to Vec3F::class,
+        "MaxRange" to Float::class,
+        "Filters" to Int::class,
+        "Toolbar" to Toolbar::class,
+    ),
+    "GravityGenerator" to mapOf(
+        "FieldSize" to Vec3F::class,
+    ),
+    "GravityGeneratorSphere" to mapOf(
+        "Radius" to Float::class,
+    ),
+    "GravityGeneratorBase" to mapOf(
+        "GravityAcceleration" to Float::class,
+    ),
 )
 
 val serializerMapping = mutableMapOf<String, DeserializationStrategy<out Block>>()
