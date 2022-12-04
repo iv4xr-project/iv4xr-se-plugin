@@ -64,19 +64,20 @@ class CharacterNavigation(
             error("Graph is empty!")
         }
 
+        val maxAllowedDistance = LARGE_BLOCK_CUBE_SIDE_SIZE * 1.15
         val targetNode = graph.nodes
             .minByOrNull { it.data.distanceTo(target.position) } ?: error("Target not found in the graph")
-        if (targetNode.data.distanceTo(target.position) > LARGE_BLOCK_CUBE_SIDE_SIZE) {
+        if (targetNode.data.distanceTo(target.position) > maxAllowedDistance) {
             error(
                 "Target block $id is too far, distance to the closest navigable node: ${
                     targetNode.data.distanceTo(
                         target.position
                     )
-                }, (${targetNode.id})"
+                }, (${targetNode.id}). Allowed max distance is ${maxAllowedDistance}"
             )
         }
-
-        val startNode = allBlocks.minByOrNull { it.position.distanceTo(blockObservation.character.position) }
+        val graphNodes = graph.nodes.map { it.id }
+        val startNode = allBlocks.filter { it.id in graphNodes}.minByOrNull { it.position.distanceTo(blockObservation.character.position) }
             ?: error("No nodes found!")
 
         val path = pathFinder.findPath(graph.toDirectedGraph(), targetNode.id, startNode.id)
