@@ -21,7 +21,7 @@ class LabRecruitsMapBuilder(
         val gridId = mapPlacer.generate()
         createGroups(gridId, map)
         mapButtons(map)
-        sleep(50)
+        sleep(1500)
         closeAllDoors(gridId, map)
     }
 

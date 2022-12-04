@@ -48,11 +48,11 @@ namespace Iv4xr.SePlugin.Navigation
 
             // Get some look-ahead
             var sphere = m_lowLevelObserver.GetBoundingSphere(null, m_lowLevelObserver.Radius * 3d);
-
-            // TODO: offset the start position to be below the character's feet
+            
+            var orientationUp = GuessWhichSideIsUp(sourceGrid);
             return CreateGraph(m_lowLevelObserver.ConvertToSeGrid(sourceGrid, sphere),
-                m_lowLevelObserver.CurrentPlayerPosition(),
-                GuessWhichSideIsUp(sourceGrid));
+                m_lowLevelObserver.CurrentPlayerPosition() - orientationUp * 2.5,
+                orientationUp);
         }
 
         internal FatNavGraph CreateGraph(CubeGrid grid, Vector3D start, Vector3I up)
@@ -75,7 +75,6 @@ namespace Iv4xr.SePlugin.Navigation
 
                 map[currentPosition].Visited = true;
 
-                // check for obstacles (2 blocks above the site)
                 if (IsObstructed(currentPosition, map, up))
                     continue;
 
