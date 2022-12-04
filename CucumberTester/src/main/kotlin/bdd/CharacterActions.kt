@@ -118,7 +118,7 @@ class CharacterActions(connectionManager: ConnectionManager) : AbstractMultiplay
         val toolbarLocation =
             toolbar.findLocation(blockType) ?: error("cannot find $blockType in toolbar")
         val definitionId =
-            toolbar.items.first { it?.id?.type == blockType }?.id ?: error("Cannot find $blockType in toolbar")
+            toolbar.items.filterIsInstance<DataToolbarItemDefinition>().firstOrNull { it.id.type == blockType }?.id ?: error("Cannot find $blockType in toolbar")
         items.setToolbarItem(definitionId, toolbarLocation)
         items.equip(toolbarLocation)
         delay(150)
@@ -166,7 +166,7 @@ class CharacterActions(connectionManager: ConnectionManager) : AbstractMultiplay
             .let { toolbar ->
                 toolbar.findLocation(DefinitionId.parse(tool)) ?: error(
                     "Item $tool not found in the toolbar, found: ${
-                        toolbar.items.filterNotNull().map { it.id }
+                        toolbar.items.filterIsInstance<DataToolbarItemDefinition>().map { it.id }
                     }"
                 )
             }
