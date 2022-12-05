@@ -1,3 +1,7 @@
+# pylint: disable=C0116
+"""
+This module handles lower level TCP and json-rpc communication.
+"""
 import dataclasses
 import json
 from dataclasses import dataclass
@@ -19,6 +23,10 @@ def cleanup_error_data(inner_data: dict):
 
 
 class JsonRpcError(Exception):
+    """
+    Exception representing json-rpc error. Also trying to tidy up messy C# exception if possible.
+    """
+
     data: dict
 
     def __init__(self, data: dict):
@@ -53,6 +61,10 @@ class JsonRpcError(Exception):
 
 @dataclass
 class JsonRpcRequest:
+    """
+    Data class as per json-rpc request specification.
+    """
+
     method: str
     params: object
     id: int
@@ -60,6 +72,10 @@ class JsonRpcRequest:
 
 
 class DictUppercaseWrapper(dict):
+    """
+    Wrapper around dict to allow dot notation and also by lowercase starting names.
+    """
+
     def __getattr__(self, item):
         edited_item = item[0].upper() + item[1:]
         if edited_item in self:
@@ -75,8 +91,8 @@ class DictUppercaseWrapper(dict):
 
 def method_name(prefixes):
     name = ""
-    for n in prefixes:
-        name = name + "." + n[0].upper() + n[1:]
+    for prefix in prefixes:
+        name = name + "." + prefix[0].upper() + prefix[1:]
     return name[1:]
 
 
@@ -111,7 +127,6 @@ def call_rpc(prefix, sock, *args, **kwargs):
         raise ValueError(
             "Cannot use both positional and named arguments at the same time."
         )
-    print(prefix)
     arguments = args or kwargs
     request = JsonRpcRequest(method=method_name(prefix), params=arguments, id=0)
     result = send_request(request=request, sock=sock)

@@ -1,4 +1,8 @@
-from behave import *
+# pylint: disable=E0102,E0611,C0116
+"""
+Asserts to check the character state through SE plugin.
+"""
+from behave import use_step_matcher, step, then
 from behave.runner import Context
 
 from spaceengineers.api import SpaceEngineers
