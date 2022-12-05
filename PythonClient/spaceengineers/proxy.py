@@ -41,7 +41,7 @@ class SpaceEngineersProxy(ProxyAttribute, api.SpaceEngineers):
         super().__init__(prefix=list(), sock=sock)
 
     @staticmethod
-    def localhost():
+    def localhost() -> "SpaceEngineersProxy":
         """
         :return: The proxy connected to the default port and localhost.
         """
@@ -52,7 +52,7 @@ class SpaceEngineersProxy(ProxyAttribute, api.SpaceEngineers):
         return SpaceEngineersProxy(sock=sock)
 
     @staticmethod
-    def connect(host, port):
+    def connect(host, port) -> "SpaceEngineersProxy":
         """
         :param host: Hostname of the plugin to connect.
         :param port: Port on which the plugin runs (default is 3333).
