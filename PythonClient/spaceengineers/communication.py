@@ -75,8 +75,8 @@ class DictUppercaseWrapper(dict):
 
 def method_name(prefixes):
     name = ""
-    for prefix in prefixes:
-        name = name + "." + prefix[0].upper() + prefix[1:]
+    for n in prefixes:
+        name = name + "." + n[0].upper() + n[1:]
     return name[1:]
 
 
@@ -111,7 +111,7 @@ def call_rpc(prefix, sock, *args, **kwargs):
         raise ValueError(
             "Cannot use both positional and named arguments at the same time."
         )
-
+    print(prefix)
     arguments = args or kwargs
     request = JsonRpcRequest(method=method_name(prefix), params=arguments, id=0)
     result = send_request(request=request, sock=sock)

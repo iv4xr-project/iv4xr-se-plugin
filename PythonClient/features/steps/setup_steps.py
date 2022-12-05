@@ -11,9 +11,7 @@ use_step_matcher("re")
 def get_scenario_path() -> str:
     from pathlib import Path
 
-    return f"{Path(__file__).resolve().parent}/../../../scenarios/".replace(
-        "/mnt/c", "C:"
-    )
+    return f"{Path(__file__).resolve().parent}/../../scenarios/".replace("/mnt/c", "C:")
 
 
 @given("Scenario config:?")

@@ -6,7 +6,7 @@ from spaceengineers import communication
 
 
 class ProxyAttribute:
-    prefix: List[str] = []
+    prefix: List[str] = list()
     sock: object
 
     def __init__(self, prefix, sock) -> None:
@@ -20,12 +20,12 @@ class ProxyAttribute:
     def __getattribute__(self, item):
         if item in ("prefix", "sock", "call_rpc"):
             return super().__getattribute__(item)
-        return ProxyAttribute(prefix=[self.prefix] + [item], sock=self.sock)
+        return ProxyAttribute(prefix=list(self.prefix) + [item], sock=self.sock)
 
 
 class SpaceEngineersProxy(ProxyAttribute, api.SpaceEngineers):
     def __init__(self, sock) -> None:
-        super().__init__(prefix=[], sock=sock)
+        super().__init__(prefix=list(), sock=sock)
 
     @staticmethod
     def localhost():
