@@ -1,7 +1,6 @@
 package spaceEngineers.labrecruits
 
 import spaceEngineers.controller.ExtendedSpaceEngineers
-import spaceEngineers.model.CharacterObservation
 import spaceEngineers.model.DoorBase
 import spaceEngineers.model.TerminalBlock
 import spaceEngineers.model.extensions.allBlocks
@@ -19,20 +18,6 @@ class LabRecruitsController(
 
     private fun <T> seSync(block: ExtendedSpaceEngineers.() -> T): T {
         return block(spaceEngineers)
-    }
-
-    data class SimpleLabRecruitsObservation(
-        val door: List<DoorBase>,
-        val buttons: List<TerminalBlock>,
-        val character: CharacterObservation,
-    ) {
-        override fun toString(): String {
-            return """
-                ${door.map { it.customName }}
-                ${buttons.map { it.customName }}
-                ${character.position}
-            """.trimIndent()
-        }
     }
 
     fun observeActiveObjects() = seSync {
@@ -72,7 +57,7 @@ class LabRecruitsController(
         )
     }
 
-    suspend fun pressButton(buttonId: String) = se {
+    fun pressButton(buttonId: String) = seSync {
         val button = buttonBlockById(buttonId)
         val distanceToButton = button.position.distanceTo(observer.observe().position)
         if (distanceToButton > maximumButtonReachDistance) {
