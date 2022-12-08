@@ -18,7 +18,7 @@ class LabRecruitsCoroutinesFreeController(
         labRecruitsController.goToButton(buttonId)
     }
 
-    suspend fun goToDoor(doorId: String) = runBlocking {
+     fun goToDoor(doorId: String) = runBlocking {
         labRecruitsController.goToDoor(doorId)
     }
 
