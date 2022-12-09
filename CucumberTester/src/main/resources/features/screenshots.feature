@@ -1,7 +1,7 @@
 Feature: Screenshots
 
   Background:
-    Given Scenario used is "simple-place-grind-torch-with-tools".
+    Given Scenario used is "simple-place-grind-torch".
     Given Output directory is "~/screenshots".
 
   Scenario Outline: Taking screenshot at each block threshold.

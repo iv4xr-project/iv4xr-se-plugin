@@ -34,7 +34,7 @@ fun Session.loadFromTestResources(scenarioId: String, scenarioDir: String = SCEN
         file.exists() ||
             unixPath.toFile().exists()
     ) {
-        "Couldn't find scenario"
+        "Couldn't find scenario at ${file.absolutePath}"
     }
     loadScenario(unixPath)
 }
