@@ -26,17 +26,17 @@ class BasicGraphSearch<NodeId, NodeData, EdgeId, EdgeData>(
     }
 
     override fun findPath(from: NodeId, to: NodeId): Path<EdgeId> {
-        check(from in graphExtra.graph.nodes.map { it.id }) {
+        require(from in graphExtra.graph.nodes.map { it.id }) {
             "From $from not in the navigation graph, cannot find path."
         }
-        check(to in graphExtra.graph.nodes.map { it.id }) {
+        require(to in graphExtra.graph.nodes.map { it.id }) {
             "To $to not in the navigation graph, cannot find path."
         }
         if (canNavigateToSelf && from == to) {
             return emptyList()
         }
         return visitNode(from, SearchContext<NodeId, EdgeId>(mutableSetOf(), listOf(), destination = to))
-            ?: error("Path from $from to $to not found")
+            ?: throw IllegalStateException("Path from $from to $to not found")
     }
 
     private fun visitNode(nodeId: NodeId, searchContext: SearchContext<NodeId, EdgeId>): Path<EdgeId>? {
