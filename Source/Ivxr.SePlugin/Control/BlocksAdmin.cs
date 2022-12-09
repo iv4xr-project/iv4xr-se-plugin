@@ -37,6 +37,7 @@ namespace Iv4xr.SePlugin.Control
             GravityGenerator = new GravityGeneratorAdmin(session, observer);
             GravityGeneratorSphere = new GravityGeneratorSphereAdmin(session, observer);
             TimerBlock = new TimerBlockAdmin(session, observer);
+            PistonBase = new PistonBaseAdmin(session, observer);
         }
 
         private readonly BlockPlacer m_blockPlacer = new BlockPlacer();
@@ -197,6 +198,7 @@ namespace Iv4xr.SePlugin.Control
         public IGravityGeneratorAdmin GravityGenerator { get; }
         public IGravityGeneratorSphereAdmin GravityGeneratorSphere { get; }
         public ITimerBlockAdmin TimerBlock { get; }
+        public IPistonBaseAdmin PistonBase { get; }
 
         public void Remove(string blockId)
         {

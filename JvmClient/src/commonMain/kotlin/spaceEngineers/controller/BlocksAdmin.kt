@@ -36,6 +36,11 @@ interface BlocksAdmin {
     val functionalBlock: FunctionalBlockAdmin
     val terminalBlock: TerminalBlockAdmin
     val sensorBlock: SensorBlockAdmin
+    val pistonBase: PistonBaseAdmin
+}
+
+interface PistonBaseAdmin {
+    fun setVelocity(blockId: String, velocity: Float)
 }
 
 interface SensorBlockAdmin {

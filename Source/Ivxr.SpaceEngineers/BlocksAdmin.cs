@@ -27,6 +27,7 @@ namespace Iv4xr.SpaceEngineers
         IGravityGeneratorAdmin GravityGenerator { get; }
         IGravityGeneratorSphereAdmin GravityGeneratorSphere { get; }
         ITimerBlockAdmin TimerBlock { get; }
+        IPistonBaseAdmin PistonBase { get; }
     }
     
     public interface IGravityGeneratorBaseAdmin
@@ -88,6 +89,11 @@ namespace Iv4xr.SpaceEngineers
     {
         void SetFieldMin(string blockId, PlainVec3D fieldMin);
         void SetFieldMax(string blockId, PlainVec3D fieldMax);
+    }
+    
+    public interface IPistonBaseAdmin
+    {
+        void SetVelocity(string blockId, float velocity);
     }
 
     public interface ICharacterAdmin
