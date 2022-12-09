@@ -1,7 +1,6 @@
-﻿using Iv4xr.SpaceEngineers;
-using Iv4xr.SpaceEngineers.WorldModel;
+﻿using Iv4xr.PluginLib;
+using Iv4xr.SpaceEngineers;
 using Sandbox.Game.Entities.Blocks;
-using Sandbox.Game.Entities.Cube;
 
 namespace Iv4xr.SePlugin.Control.Screen.BlockAdmin
 {
@@ -16,5 +15,9 @@ namespace Iv4xr.SePlugin.Control.Screen.BlockAdmin
             BlockById(blockId).Velocity.Value = velocity;
         }
 
+        public void RecreateTop(string blockId)
+        {
+            BlockById(blockId).CallMethod<object>("RecreateTop", new object[] { null, false, false });
+        }
     }
 }
