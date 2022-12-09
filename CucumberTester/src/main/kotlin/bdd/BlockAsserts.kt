@@ -5,6 +5,7 @@ import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import spaceEngineers.controller.connection.ConnectionManager
 import spaceEngineers.model.Block
+import spaceEngineers.model.DefinitionId
 import spaceEngineers.model.extensions.allBlocks
 import spaceEngineers.model.extensions.blockByCustomName
 import spaceEngineers.model.extensions.blocksByCustomName
@@ -34,21 +35,21 @@ class BlockAsserts(connectionManager: ConnectionManager) : AbstractMultiplayerSt
         )
     }
 
-    @When("Block type {string} has mass {double}.")
-    fun block_type_has_mass(type: String, mass: Double) = observers {
+    @When("Block type {block} has mass {double}.")
+    fun block_type_has_mass(definitionId: DefinitionId, mass: Double) = observers {
         val blockDefinition = definitions.blockDefinitions().first {
-            it.definitionId.type == type
+            it.definitionId == definitionId
         }
-        assertEquals(mass.toFloat(), blockDefinition.mass, message = "Block $type does not have mass $mass")
+        assertEquals(mass.toFloat(), blockDefinition.mass, message = "Block $definitionId does not have mass $mass")
     }
 
 
-    @Then("I see no block of type {string}.")
-    fun i_see_no_block_of_type(string: String) = observers {
+    @Then("I see no block of type {block}.")
+    fun i_see_no_block_of_type(definitionId: DefinitionId) = observers {
         val observation = observer.observeBlocks()
         assertTrue(
             observation.allBlocks
-                .none { it.definitionId.type == string }
+                .none { it.definitionId == definitionId }
         )
     }
 

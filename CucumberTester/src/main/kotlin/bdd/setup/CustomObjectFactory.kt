@@ -1,6 +1,7 @@
 package bdd.setup
 
 import bdd.*
+import bdd.screenshots.ScreenshotSteps
 import io.cucumber.core.backend.ObjectFactory
 import io.cucumber.core.exception.CucumberException
 import spaceEngineers.controller.connection.Config
@@ -58,6 +59,10 @@ class CustomObjectFactory @JvmOverloads constructor(
 
             ScreenSteps::class.java -> instances.getOrPut(type) {
                 ScreenSteps(connectionManager)
+            }
+
+            ScreenshotSteps::class.java -> instances.getOrPut(type) {
+                ScreenshotSteps(connectionManager)
             }
 
             UtilSteps::class.java -> instances.getOrPut(type) {

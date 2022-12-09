@@ -5,9 +5,12 @@ import bdd.setup.*
 import io.cucumber.datatable.DataTable
 import io.cucumber.java.*
 import io.cucumber.java.en.Given
+import kotlinx.coroutines.delay
 import spaceEngineers.controller.connection.ConnectionManager
 import spaceEngineers.controller.connection.ConnectionSetup
+import spaceEngineers.controller.loadFromTestResources
 import testhelp.hideUndeclaredThrowableException
+import kotlin.time.Duration.Companion.seconds
 
 
 lateinit var testSetup: TestSetup
@@ -59,8 +62,11 @@ class ScenarioSetupSteps(connectionManager: ConnectionManager) : AbstractMultipl
 
     @Given("Scenario used is {string}.")
     fun scenario_used_is(scenarioId: String) = hideUndeclaredThrowableException {
-        //loadScenario(scenarioId)
-        ensureCharacterExists()
+        mainClient {
+            session.loadFromTestResources(scenarioId, "src/main/resources/game-saves/")
+            screens.waitUntilTheGameLoaded()
+            delay(1.seconds)
+        }
         observers {
             observer.observeNewBlocks()
         }
