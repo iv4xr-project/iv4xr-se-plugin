@@ -242,5 +242,4 @@ class BasicGraphSearchTest {
 
         assertEquals(listOf(1, 3), path)
     }
-
 }
