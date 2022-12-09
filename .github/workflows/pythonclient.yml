@@ -1,0 +1,26 @@
+name: PythonClient
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    name: Checks
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+      - run: pip install --upgrade pip
+      - run: pip install black pylint mypy
+      - run: black --diff --check $(git ls-files '*.py')
+      - run: |
+          echo Running pylint
+          cd PythonClient/
+          pylint spaceengineers/ features/ #$(git ls-files 'spaceengineers/*.py' 'features/*.py')
+          mypy spaceengineers/ features/
+    
