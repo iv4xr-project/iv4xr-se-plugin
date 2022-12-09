@@ -88,8 +88,9 @@ tasks.jacocoTestReport {
             fileTree(dir: it,
                     exclude: [
                             'spaceEngineers/model/typing/**',
-                            'spaceEngineers/model/**serializer**',
-                            "spaceEngineers/model/BlockDataClasses.kt"
+                            'spaceEngineers/**/**serializer*',
+                            "spaceEngineers/model/**",
+                            "testrail/**",
                     ])
         }))
     }
