@@ -17,6 +17,7 @@ interface SpaceEngineersAdmin {
     val tests: TestAdmin
     fun showNotification(text: String)
     fun ping(): String
+    fun echo(text: String): String
 }
 
 interface TestAdmin {

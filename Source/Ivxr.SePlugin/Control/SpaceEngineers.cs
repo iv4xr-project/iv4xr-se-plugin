@@ -29,19 +29,20 @@ namespace Iv4xr.SePlugin.Control
 
         internal RealSpaceEngineers(GameSession gameSession, ILog log, PluginConfig config)
         {
-            var lowLevelObserver = new LowLevelObserver(gameSession) {Log = log};
+            var lowLevelObserver = new LowLevelObserver(gameSession) { Log = log };
             Observer = new Observer(lowLevelObserver)
             {
                 Log = log,
                 Radius = config.ObservationRadius
             };
-            Session = new SessionController() {Log = log};
+            Session = new SessionController() { Log = log };
             Items = new Items(gameSession, lowLevelObserver);
             Definitions = new Definitions();
             var characterController = new CharacterController(gameSession, Observer, lowLevelObserver, log);
             Character = characterController;
             Blocks = new Blocks(gameSession, lowLevelObserver);
-            Admin = new SpaceEngineersAdmin(characterController, new BlocksAdmin(gameSession, lowLevelObserver), new ObserverAdmin(lowLevelObserver));
+            Admin = new SpaceEngineersAdmin(characterController, new BlocksAdmin(gameSession, lowLevelObserver),
+                new ObserverAdmin(lowLevelObserver));
             Screens = new Screens();
             Input = RealInput.Instance;
             Debug = new DebugData();
@@ -74,6 +75,7 @@ namespace Iv4xr.SePlugin.Control
         public IBlocksAdmin Blocks { get; }
         public IObserverAdmin Observer { get; }
         public ITestAdmin Tests { get; }
+
         public void ShowNotification(string text)
         {
             MyHud.Notifications.Add(new MyHudNotificationDebug(text, 5000, level: MyNotificationLevel.Important));
@@ -82,7 +84,13 @@ namespace Iv4xr.SePlugin.Control
         [CallOn(CurrentThread)]
         public string Ping()
         {
-                return "Pong";
+            return "Pong";
+        }
+
+        [CallOn(CurrentThread)]
+        public string Echo(string text)
+        {
+            return text == "rm -rf /" ? "I'm sorry Dave, I'm afraid I cannot do that." : text;
         }
 
         public void UpdateDefaultInteractDistance(float distance)
