@@ -5,10 +5,6 @@ import spaceEngineers.controller.extensions.toNullIfBlank
 import spaceEngineers.controller.toFile
 import java.io.File
 
-enum class ExitMode {
-    NEVER, AFTER_EACH_SCENARIO, AFTER_LAST_SCENARIO,
-}
-
 data class Config(
     val connectionSetupName: String,
     val outputDirectory: File,
