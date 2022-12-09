@@ -67,3 +67,17 @@ interface GravityGeneratorSphere : GravityGeneratorBase {
 interface GravityGeneratorBase : FunctionalBlock {
     val gravityAcceleration: Float
 }
+
+interface MechanicalConnectionBlockBase : Block {
+    val safetyDetach: Float
+}
+
+interface PistonBase : FunctionalBlock {
+    val currentPosition: Float
+    val status: Int
+    val velocity: Float
+    val minLimit: Float
+    val maxLimit: Float
+    val maxImpulseAxis: Float
+    val maxImpulseNonAxis: Float
+}

@@ -88,6 +88,24 @@ namespace Iv4xr.SePlugin.Control
                 terminalBlock.CustomData = myTerminalBlock.CustomData;
             }
 
+            if (sourceBlock.FatBlock is MyMechanicalConnectionBlockBase myMechanicalConnectionBlockBase &&
+                block is MechanicalConnectionBlockBase mechanicalConnectionBlockBase)
+            {
+                mechanicalConnectionBlockBase.SafetyDetach = myMechanicalConnectionBlockBase.SafetyDetach;
+            }
+            
+            if (sourceBlock.FatBlock is MyPistonBase myPistonBase &&
+                block is PistonBase pistonBase)
+            {
+                pistonBase.CurrentPosition = myPistonBase.CurrentPosition;
+                pistonBase.Status = (int)myPistonBase.Status;
+                pistonBase.CurrentPosition = myPistonBase.CurrentPosition;
+                pistonBase.MinLimit = myPistonBase.MinLimit;
+                pistonBase.MaxLimit = myPistonBase.MaxLimit;
+                pistonBase.MaxImpulseAxis = myPistonBase.MaxImpulseAxis;
+                pistonBase.MaxImpulseNonAxis = myPistonBase.MaxImpulseNonAxis;
+            }
+
             switch (sourceBlock.FatBlock)
             {
                 case MyDoorBase myDoorBase when block is DoorBase doorBase:
@@ -130,11 +148,11 @@ namespace Iv4xr.SePlugin.Control
                     gravityGenerator.FieldSize = myGravityGeneratorBase.FieldSize.ToPlain();
                     gravityGenerator.GravityAcceleration = myGravityGeneratorBase.GravityAcceleration;
                     break;
-                case MyGravityGeneratorSphere myGravityGeneratorSphere when block is GravityGeneratorSphere gravityGeneratorSphere:
+                case MyGravityGeneratorSphere myGravityGeneratorSphere
+                        when block is GravityGeneratorSphere gravityGeneratorSphere:
                     gravityGeneratorSphere.Radius = myGravityGeneratorSphere.Radius;
                     gravityGeneratorSphere.GravityAcceleration = myGravityGeneratorSphere.GravityAcceleration;
                     break;
-
             }
         }
 

@@ -80,6 +80,22 @@ namespace Iv4xr.SpaceEngineers.WorldModel
 	{
 	    public float GravityAcceleration;
 	}
+	
+	public class MechanicalConnectionBlockBase : Block 
+	{
+	    public float SafetyDetach;
+	}
+	
+	public class PistonBase : FunctionalBlock 
+	{
+	    public float CurrentPosition;
+	    public int Status;
+	    public float Velocity;
+	    public float MinLimit;
+	    public float MaxLimit;
+	    public float MaxImpulseAxis;
+	    public float MaxImpulseNonAxis;
+	}
 	public static class BlockMapper
 	{
 	    public static readonly Dictionary<string, string> Mapping = new Dictionary<string, string>
@@ -135,9 +151,8 @@ namespace Iv4xr.SpaceEngineers.WorldModel
 		    { "AirVent", "FunctionalBlock" },
 		    { "Collector", "FunctionalBlock" },
 		    { "ShipConnector", "FunctionalBlock" },
-		    { "PistonBase", "FunctionalBlock" },
 		    { "MechanicalConnectionBlock", "FunctionalBlock" },
-		    { "ExtendedPistonBase", "FunctionalBlock" },
+		    { "ExtendedPistonBase", "PistonBase" },
 		    { "MotorStator", "FunctionalBlock" },
 		    { "MotorBase", "FunctionalBlock" },
 		    { "MotorAdvancedStator", "FunctionalBlock" },

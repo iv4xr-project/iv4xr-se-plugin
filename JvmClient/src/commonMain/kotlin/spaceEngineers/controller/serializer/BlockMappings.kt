@@ -64,6 +64,18 @@ val blockMappings = mapOf<String, Map<String, KClass<*>>>(
     "GravityGeneratorBase" to mapOf(
         "GravityAcceleration" to Float::class,
     ),
+    "MechanicalConnectionBlockBase" to mapOf(
+        "SafetyDetach" to Float::class,
+    ),
+    "PistonBase" to mapOf(
+        "CurrentPosition" to Float::class,
+        "Status" to Int::class,
+        "Velocity" to Float::class,
+        "MinLimit" to Float::class,
+        "MaxLimit" to Float::class,
+        "MaxImpulseAxis" to Float::class,
+        "MaxImpulseNonAxis" to Float::class,
+    ),
 )
 
 internal fun getDefinitionIdId(element: JsonElement): String? {
