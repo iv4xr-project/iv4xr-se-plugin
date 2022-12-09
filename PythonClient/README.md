@@ -1,3 +1,8 @@
+[![PyPI version](https://badge.fury.io/py/space-engineers-iv4xr.svg)](https://pypi.org/project/space-engineers-iv4xr/)
+[![LGPL3 License](https://img.shields.io/pypi/l/space-engineers-iv4xr.svg)](https://pypi.org/project/space-engineers-iv4xr/)
+[![PyPI pyversions](https://img.shields.io/pypi/pyversions/space-engineers-iv4xr.svg)](https://pypi.python.org/pypi/space-engineers-iv4xr/)
+[![PyPI status](https://img.shields.io/pypi/status/space-engineers-iv4xr.svg)](https://pypi.python.org/pypi/space-engineers-iv4xr/)
+
 # Python Client
 
 Client for iv4XR [plugin](https://github.com/iv4xr-project/iv4xr-se-plugin). It can be used to control
