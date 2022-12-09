@@ -5,7 +5,7 @@ import kotlinx.serialization.json.Json
 import spaceEngineers.controller.JvmSpaceEngineersBuilder
 import spaceEngineers.controller.SpaceEngineers
 import spaceEngineers.controller.blockDefinitionMappings
-import spaceEngineers.controller.blockMappings
+import spaceEngineers.controller.serializer.blockMappings
 import spaceEngineers.model.BlockDefinition
 import spaceEngineers.transport.SocketReaderWriter
 import java.io.File

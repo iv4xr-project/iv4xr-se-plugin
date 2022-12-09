@@ -1,6 +1,6 @@
 package spaceEngineers.util.generator
 
-import spaceEngineers.controller.blockMappings
+import spaceEngineers.controller.serializer.blockMappings
 import kotlin.reflect.KClass
 
 const val commonBlockFields = """
