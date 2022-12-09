@@ -94,6 +94,7 @@ namespace Iv4xr.SpaceEngineers
     public interface IPistonBaseAdmin
     {
         void SetVelocity(string blockId, float velocity);
+        void RecreateTop(string blockId);
     }
 
     public interface ICharacterAdmin

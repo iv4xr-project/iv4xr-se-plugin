@@ -41,6 +41,7 @@ interface BlocksAdmin {
 
 interface PistonBaseAdmin {
     fun setVelocity(blockId: String, velocity: Float)
+    fun recreateTop(blockId: String)
 }
 
 interface SensorBlockAdmin {
