@@ -6,7 +6,7 @@ import spaceEngineers.controller.SpaceEngineers
 import spaceEngineers.controller.SpaceEngineersJavaProxyBuilder
 import spaceEngineers.controller.extend
 import spaceEngineers.controller.loadFromTestResources
-import spaceEngineers.transport.GsonResponseAppendToFileReaderWriter
+import spaceEngineers.transport.AppendToFileReaderWriter
 import spaceEngineers.transport.ReconnectingSocketReaderWriter
 import spaceEngineers.transport.SocketReaderWriter.Companion.DEFAULT_PORT
 import spaceEngineers.transport.StringLineReaderWriter
@@ -104,7 +104,7 @@ abstract class MockOrRealGameTest(
         )
     ): StringLineReaderWriter {
         if (!file.exists() || forceWrite) {
-            return GsonResponseAppendToFileReaderWriter(
+            return AppendToFileReaderWriter(
                 rw = rw,
                 file = file
             )

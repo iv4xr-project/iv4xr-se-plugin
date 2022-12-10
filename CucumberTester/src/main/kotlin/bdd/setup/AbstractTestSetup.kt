@@ -4,7 +4,7 @@ import bdd.repetitiveassert.RepetitiveAssertConfig
 import bdd.repetitiveassert.RepetitiveAssertTestCase
 import bdd.repetitiveassert.SimpleRepetitiveAssertTestCase
 import io.cucumber.java.Scenario
-import spaceEngineers.controller.connection.ConnectionManager
+import bdd.connection.ConnectionManager
 
 interface TestSetup {
     val connectionManager: ConnectionManager

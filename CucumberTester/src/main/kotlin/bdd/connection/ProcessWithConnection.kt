@@ -1,5 +1,6 @@
-package spaceEngineers.controller.connection
+package bdd.connection
 
+import bdd.connection.GameProcess
 import spaceEngineers.controller.ContextControllerWrapper
 import spaceEngineers.controller.ExtendedSpaceEngineers
 import spaceEngineers.controller.extend

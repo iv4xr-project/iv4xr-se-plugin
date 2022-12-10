@@ -1,6 +1,6 @@
-package spaceEngineers.controller.connection
+package bdd.connection
 
-import spaceEngineers.controller.connection.ConnectionSetup.Companion.CONNECTION_SETUP_DIR
+import bdd.connection.ConnectionSetup.Companion.CONNECTION_SETUP_DIR
 import spaceEngineers.controller.extensions.toNullIfBlank
 import spaceEngineers.controller.toFile
 import java.io.File
@@ -40,7 +40,7 @@ data class Config(
         }
 
         fun fromPropsOrEnv(default: Config = DEFAULT): Config {
-            return fromGetter(::get, default)
+            return fromGetter(Companion::get, default)
         }
 
         fun get(key: String): String? {

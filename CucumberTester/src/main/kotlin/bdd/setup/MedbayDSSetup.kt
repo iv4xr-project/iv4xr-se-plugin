@@ -1,8 +1,8 @@
 package bdd.setup
 
-import spaceEngineers.controller.connection.ConnectionManager
-import spaceEngineers.controller.connection.ConnectionSetup
-import spaceEngineers.controller.connection.ProcessWithConnection
+import bdd.connection.ConnectionManager
+import bdd.connection.ConnectionSetup
+import bdd.connection.ProcessWithConnection
 
 
 class MedbayDSSetup(

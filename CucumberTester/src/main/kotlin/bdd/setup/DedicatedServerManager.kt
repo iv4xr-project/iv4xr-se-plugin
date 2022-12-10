@@ -3,7 +3,7 @@ package bdd.setup
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withTimeout
 import kotlinx.coroutines.yield
-import spaceEngineers.controller.connection.GameProcess
+import bdd.connection.GameProcess
 import spaceEngineers.controller.processHomeDir
 import spaceEngineers.controller.toFile
 import spaceEngineers.controller.unixToWindowsPath

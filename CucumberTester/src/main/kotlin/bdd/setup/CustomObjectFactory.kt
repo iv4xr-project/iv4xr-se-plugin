@@ -4,9 +4,9 @@ import bdd.*
 import bdd.screenshots.ScreenshotSteps
 import io.cucumber.core.backend.ObjectFactory
 import io.cucumber.core.exception.CucumberException
-import spaceEngineers.controller.connection.Config
-import spaceEngineers.controller.connection.ConnectionManager
-import spaceEngineers.controller.connection.ConnectionSetup
+import bdd.connection.Config
+import bdd.connection.ConnectionManager
+import bdd.connection.ConnectionSetup
 
 private val bddRunConfig by lazy { Config.fromPropsOrEnv().apply { println(this) } }
 private val cfg by lazy { ConnectionSetup.loadConfigFromFile(bddRunConfig.connectionSetupName, bddRunConfig.bddConfigPath) }

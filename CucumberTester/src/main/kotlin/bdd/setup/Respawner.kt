@@ -7,8 +7,8 @@ import bdd.repetitiveassert.repeatUntilSuccess
 import kotlinx.coroutines.delay
 import spaceEngineers.controller.SocketReaderWriterException
 import spaceEngineers.controller.SpaceEngineers
-import spaceEngineers.controller.connection.ConnectionManager
-import spaceEngineers.controller.connection.ProcessWithConnection
+import bdd.connection.ConnectionManager
+import bdd.connection.ProcessWithConnection
 import spaceEngineers.controller.extensions.toNullIfMinusOne
 import spaceEngineers.controller.extensions.typedFocusedScreen
 import spaceEngineers.model.ScreenName

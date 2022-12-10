@@ -1,7 +1,7 @@
 package bdd.setup
 
 import io.cucumber.java.Scenario
-import spaceEngineers.controller.connection.ConnectionManager
+import bdd.connection.ConnectionManager
 
 class CommonTestSetup(override val connectionManager: ConnectionManager) : TestSetup {
     override fun beforeAll() {

@@ -1,7 +1,7 @@
 package bdd
 
 import io.cucumber.java.en.Then
-import spaceEngineers.controller.connection.ConnectionManager
+import bdd.connection.ConnectionManager
 import spaceEngineers.model.DefinitionId
 import kotlin.test.assertTrue
 

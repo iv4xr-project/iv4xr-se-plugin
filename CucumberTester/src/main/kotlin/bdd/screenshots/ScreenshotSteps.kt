@@ -4,16 +4,14 @@ import bdd.AbstractMultiplayerSteps
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import kotlinx.coroutines.delay
-import spaceEngineers.controller.connection.ConnectionManager
+import bdd.connection.ConnectionManager
 import spaceEngineers.controller.extensions.blockingMoveBackwardsByDistance
 import spaceEngineers.controller.extensions.blockingMoveForwardByDistance
 import spaceEngineers.controller.extensions.grindDownToPercentage
 import spaceEngineers.controller.extensions.torchUpToPercentage
-import spaceEngineers.controller.json
 import spaceEngineers.model.Block
 import spaceEngineers.model.ToolbarLocation
 import spaceEngineers.model.extensions.allBlocks
-import spaceEngineers.transport.SocketReaderWriter
 import java.io.File
 
 class ScreenshotSteps(connectionManager: ConnectionManager) : AbstractMultiplayerSteps(connectionManager) {

@@ -7,7 +7,7 @@ import io.cucumber.junit.Cucumber
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.junit.runner.RunWith
-import spaceEngineers.controller.connection.ConnectionManager
+import bdd.connection.ConnectionManager
 import spaceEngineers.model.DefinitionId
 import java.lang.Thread.sleep
 

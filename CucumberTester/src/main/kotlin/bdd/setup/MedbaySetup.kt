@@ -2,10 +2,10 @@ package bdd.setup
 
 import io.cucumber.java.Scenario
 import kotlinx.coroutines.runBlocking
-import spaceEngineers.controller.connection.ConnectionManager
-import spaceEngineers.controller.connection.ConnectionSetup
-import spaceEngineers.controller.connection.ExitMode
-import spaceEngineers.controller.connection.ProcessWithConnection
+import bdd.connection.ConnectionManager
+import bdd.connection.ConnectionSetup
+import bdd.connection.ExitMode
+import bdd.connection.ProcessWithConnection
 import testhelp.hideUndeclaredThrowableException
 import java.net.SocketException
 
