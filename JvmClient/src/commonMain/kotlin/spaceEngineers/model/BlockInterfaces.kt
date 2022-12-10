@@ -81,3 +81,7 @@ interface PistonBase : FunctionalBlock {
     val maxImpulseAxis: Float
     val maxImpulseNonAxis: Float
 }
+
+interface Thrust : FunctionalBlock {
+    val thrustOverride: Float
+}
