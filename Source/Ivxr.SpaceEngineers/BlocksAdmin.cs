@@ -49,6 +49,9 @@ namespace Iv4xr.SpaceEngineers
     public interface ITimerBlockAdmin
     {
         void SetTriggerDelay(string blockId, float triggerDelay);
+        void Start(string blockId);
+        void Stop(string blockId);
+        void TriggerNow(string blockId);
     }
 
     public interface IWarheadAdmin

@@ -38,6 +38,14 @@ interface BlocksAdmin {
     val sensorBlock: SensorBlockAdmin
     val pistonBase: PistonBaseAdmin
     val thrust: ThrustAdmin
+    val timerBlock: TimerBlockAdmin
+}
+
+interface TimerBlockAdmin {
+    fun setTriggerDelay(blockId: BlockId, triggerDelay: Float)
+    fun start(blockId: BlockId)
+    fun stop(blockId: BlockId)
+    fun triggerNow(blockId: BlockId)
 }
 
 interface ThrustAdmin {
