@@ -736,3 +736,57 @@ data class DataPistonBase(
     @SerialName("MaxImpulseNonAxis")
     override val maxImpulseNonAxis: Float,
 ) : PistonBase
+
+@Serializable
+data class DataThrust(
+    @SerialName("Id")
+    override val id: BlockId,
+    @SerialName("Position")
+    override val position: Vec3F,
+    @SerialName("OrientationForward")
+    override val orientationForward: Vec3F,
+    @SerialName("OrientationUp")
+    override val orientationUp: Vec3F,
+    @SerialName("DefinitionId")
+    override val definitionId: DefinitionId,
+    @SerialName("MaxIntegrity")
+    override val maxIntegrity: Float = 0f,
+    @SerialName("BuildIntegrity")
+    override val buildIntegrity: Float = 0f,
+    @SerialName("Integrity")
+    override val integrity: Float = 0f,
+    @SerialName("MinPosition")
+    override val minPosition: Vec3F,
+    @SerialName("MaxPosition")
+    override val maxPosition: Vec3F,
+    @SerialName("GridPosition")
+    override val gridPosition: Vec3I,
+    @SerialName("Size")
+    override val size: Vec3F,
+    @SerialName("UseObjects")
+    override val useObjects: List<UseObject> = emptyList(),
+    @SerialName("Functional")
+    override val functional: Boolean = false,
+    @SerialName("Working")
+    override val working: Boolean = false,
+    @SerialName("OwnerId")
+    override val ownerId: CharacterId,
+    @SerialName("BuiltBy")
+    override val builtBy: CharacterId,
+
+    @SerialName("Enabled")
+    override val enabled: Boolean,
+    @SerialName("ShowInInventory")
+    override val showInInventory: Boolean,
+    @SerialName("ShowInTerminal")
+    override val showInTerminal: Boolean,
+    @SerialName("ShowOnHUD")
+    override val showOnHUD: Boolean,
+    @SerialName("CustomName")
+    override val customName: String,
+    @SerialName("CustomData")
+    override val customData: String,
+
+    @SerialName("ThrustOverride")
+    override val thrustOverride: Float,
+) : Thrust

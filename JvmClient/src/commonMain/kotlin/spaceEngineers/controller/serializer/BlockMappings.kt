@@ -76,6 +76,9 @@ val blockMappings = mapOf<String, Map<String, KClass<*>>>(
         "MaxImpulseAxis" to Float::class,
         "MaxImpulseNonAxis" to Float::class,
     ),
+    "Thrust" to mapOf(
+        "ThrustOverride" to Float::class,
+    ),
 )
 
 internal fun getDefinitionIdId(element: JsonElement): String? {

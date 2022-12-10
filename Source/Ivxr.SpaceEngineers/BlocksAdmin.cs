@@ -28,23 +28,24 @@ namespace Iv4xr.SpaceEngineers
         IGravityGeneratorSphereAdmin GravityGeneratorSphere { get; }
         ITimerBlockAdmin TimerBlock { get; }
         IPistonBaseAdmin PistonBase { get; }
+        IThrustAdmin Thrust { get; }
     }
-    
+
     public interface IGravityGeneratorBaseAdmin
     {
         void SetGravityAcceleration(string blockId, float gravityAcceleration);
     }
 
-    public interface IGravityGeneratorAdmin: IGravityGeneratorBaseAdmin
+    public interface IGravityGeneratorAdmin : IGravityGeneratorBaseAdmin
     {
         void SetFieldSize(string blockId, PlainVec3D fieldSize);
     }
-    
-    public interface IGravityGeneratorSphereAdmin: IGravityGeneratorBaseAdmin
+
+    public interface IGravityGeneratorSphereAdmin : IGravityGeneratorBaseAdmin
     {
         void SetRadius(string blockId, float radius);
     }
-    
+
     public interface ITimerBlockAdmin
     {
         void SetTriggerDelay(string blockId, float triggerDelay);
@@ -90,11 +91,16 @@ namespace Iv4xr.SpaceEngineers
         void SetFieldMin(string blockId, PlainVec3D fieldMin);
         void SetFieldMax(string blockId, PlainVec3D fieldMax);
     }
-    
+
     public interface IPistonBaseAdmin
     {
         void SetVelocity(string blockId, float velocity);
         void RecreateTop(string blockId);
+    }
+
+    public interface IThrustAdmin
+    {
+        void SetThrustOverride(string blockId, float thrustOverride);
     }
 
     public interface ICharacterAdmin

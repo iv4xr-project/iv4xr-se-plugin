@@ -93,7 +93,7 @@ namespace Iv4xr.SePlugin.Control
             {
                 mechanicalConnectionBlockBase.SafetyDetach = myMechanicalConnectionBlockBase.SafetyDetach;
             }
-            
+
             if (sourceBlock.FatBlock is MyPistonBase myPistonBase &&
                 block is PistonBase pistonBase)
             {
@@ -152,6 +152,9 @@ namespace Iv4xr.SePlugin.Control
                         when block is GravityGeneratorSphere gravityGeneratorSphere:
                     gravityGeneratorSphere.Radius = myGravityGeneratorSphere.Radius;
                     gravityGeneratorSphere.GravityAcceleration = myGravityGeneratorSphere.GravityAcceleration;
+                    break;
+                case MyThrust myThrust when block is Thrust thrust:
+                    thrust.ThrustOverride = myThrust.ThrustOverride;
                     break;
             }
         }

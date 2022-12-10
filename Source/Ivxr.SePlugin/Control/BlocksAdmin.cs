@@ -38,6 +38,7 @@ namespace Iv4xr.SePlugin.Control
             GravityGeneratorSphere = new GravityGeneratorSphereAdmin(session, observer);
             TimerBlock = new TimerBlockAdmin(session, observer);
             PistonBase = new PistonBaseAdmin(session, observer);
+            Thrust = new ThrustAdmin(session, observer);
         }
 
         private readonly BlockPlacer m_blockPlacer = new BlockPlacer();
@@ -45,12 +46,7 @@ namespace Iv4xr.SePlugin.Control
         public void SetIntegrity(string blockId, float integrity)
         {
             var block = m_observer.GetBlockById(blockId);
-
-            var method = block.ComponentStack.GetType().GetMethod("SetIntegrity",
-                BindingFlags.NonPublic | BindingFlags.Instance);
-            if (method == null) throw new InvalidOperationException("Method not found");
-
-            method.Invoke(block.ComponentStack, new object[] { integrity, integrity });
+            block.ComponentStack.CallMethod<object>("SetIntegrity", new object[] { integrity, integrity });
             block.UpdateVisual();
         }
 
@@ -199,6 +195,7 @@ namespace Iv4xr.SePlugin.Control
         public IGravityGeneratorSphereAdmin GravityGeneratorSphere { get; }
         public ITimerBlockAdmin TimerBlock { get; }
         public IPistonBaseAdmin PistonBase { get; }
+        public IThrustAdmin Thrust { get; }
 
         public void Remove(string blockId)
         {

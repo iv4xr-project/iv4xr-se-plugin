@@ -37,6 +37,11 @@ interface BlocksAdmin {
     val terminalBlock: TerminalBlockAdmin
     val sensorBlock: SensorBlockAdmin
     val pistonBase: PistonBaseAdmin
+    val thrust: ThrustAdmin
+}
+
+interface ThrustAdmin {
+    fun setThrustOverride(blockId: BlockId, thrustOverride: Float)
 }
 
 interface PistonBaseAdmin {

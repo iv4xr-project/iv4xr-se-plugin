@@ -58,7 +58,7 @@ val generatedSerializerMappings = mutableMapOf(
     "ProductionBlock" to DataFunctionalBlock.serializer(),
     "Refinery" to DataFunctionalBlock.serializer(),
     "ConveyorSorter" to DataFunctionalBlock.serializer(),
-    "Thrust" to DataFunctionalBlock.serializer(),
+    "Thrust" to DataThrust.serializer(),
     "InteriorLight" to DataFunctionalBlock.serializer(),
     "AirVent" to DataFunctionalBlock.serializer(),
     "Collector" to DataFunctionalBlock.serializer(),

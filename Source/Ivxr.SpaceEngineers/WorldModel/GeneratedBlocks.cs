@@ -96,6 +96,11 @@ namespace Iv4xr.SpaceEngineers.WorldModel
 	    public float MaxImpulseAxis;
 	    public float MaxImpulseNonAxis;
 	}
+	
+	public class Thrust : FunctionalBlock 
+	{
+	    public float ThrustOverride;
+	}
 	public static class BlockMapper
 	{
 	    public static readonly Dictionary<string, string> Mapping = new Dictionary<string, string>
@@ -146,7 +151,6 @@ namespace Iv4xr.SpaceEngineers.WorldModel
 		    { "ProductionBlock", "FunctionalBlock" },
 		    { "Refinery", "FunctionalBlock" },
 		    { "ConveyorSorter", "FunctionalBlock" },
-		    { "Thrust", "FunctionalBlock" },
 		    { "InteriorLight", "FunctionalBlock" },
 		    { "AirVent", "FunctionalBlock" },
 		    { "Collector", "FunctionalBlock" },
