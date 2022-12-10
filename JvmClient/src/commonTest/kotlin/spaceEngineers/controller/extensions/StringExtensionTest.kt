@@ -1,4 +1,4 @@
-package spaceEngineers.util
+package spaceEngineers.controller.extensions
 
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -6,6 +6,34 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class StringExtensionTest {
+    fun testStripWhitespace() {
+        assertEquals("aaaa", " a a a a ".stripWhitespace())
+        assertEquals("abcd", " a  b   c     d ".stripWhitespace())
+        assertEquals(
+            "abcd",
+            """
+            a
+            b
+            c
+            d
+            """.trimIndent().stripWhitespace()
+        )
+    }
+
+    @Test
+    fun testWhitespaceEquals() {
+        "aaaa".nonWhitespaceEquals(" a a a a ")
+        "abcd".nonWhitespaceEquals(" a  b   c     d ")
+        "abcd".nonWhitespaceEquals(
+            """
+            a
+            b
+            c
+            d
+            """.trimIndent()
+        )
+    }
+    
     @Test
     fun `stripWhitespace removes whitespace characters from string`() {
         // Arrange
