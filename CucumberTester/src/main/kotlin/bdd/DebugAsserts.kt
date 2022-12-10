@@ -2,7 +2,7 @@ package bdd
 
 import bdd.repetitiveassert.repeatUntilSuccess
 import io.cucumber.java.en.Then
-import spaceEngineers.controller.connection.ConnectionManager
+import bdd.connection.ConnectionManager
 import kotlin.test.assertTrue
 
 

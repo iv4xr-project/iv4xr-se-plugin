@@ -6,8 +6,8 @@ import io.cucumber.datatable.DataTable
 import io.cucumber.java.*
 import io.cucumber.java.en.Given
 import kotlinx.coroutines.delay
-import spaceEngineers.controller.connection.ConnectionManager
-import spaceEngineers.controller.connection.ConnectionSetup
+import bdd.connection.ConnectionManager
+import bdd.connection.ConnectionSetup
 import spaceEngineers.controller.loadFromTestResources
 import testhelp.hideUndeclaredThrowableException
 import kotlin.time.Duration.Companion.seconds

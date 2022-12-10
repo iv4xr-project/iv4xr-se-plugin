@@ -6,7 +6,7 @@ import bdd.repetitiveassert.SimpleRepetitiveAssertTestCase
 import bdd.setup.ConnectionManagerUser
 import bdd.setup.RealConnectionManagerUser
 import kotlinx.coroutines.delay
-import spaceEngineers.controller.connection.ConnectionManager
+import bdd.connection.ConnectionManager
 import spaceEngineers.controller.extensions.typedFocusedScreen
 import spaceEngineers.controller.loadFromTestResources
 import spaceEngineers.model.ScreenName.Companion.Medicals

@@ -6,8 +6,8 @@ import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import kotlinx.coroutines.delay
-import spaceEngineers.controller.connection.ConnectionManager
-import spaceEngineers.controller.connection.ProcessWithConnection
+import bdd.connection.ConnectionManager
+import bdd.connection.ProcessWithConnection
 import spaceEngineers.controller.extensions.typedFocusedScreen
 import spaceEngineers.model.*
 import spaceEngineers.model.extensions.allBlocks

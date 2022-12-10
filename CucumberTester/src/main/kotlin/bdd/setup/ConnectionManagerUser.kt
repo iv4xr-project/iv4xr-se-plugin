@@ -1,8 +1,8 @@
 package bdd.setup
 
 import kotlinx.coroutines.delay
-import spaceEngineers.controller.connection.ConnectionManager
-import spaceEngineers.controller.connection.ProcessWithConnection
+import bdd.connection.ConnectionManager
+import bdd.connection.ProcessWithConnection
 import testhelp.hideUndeclaredThrowableException
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds

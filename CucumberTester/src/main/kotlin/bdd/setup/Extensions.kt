@@ -1,14 +1,10 @@
 package bdd.setup
 
-import io.cucumber.java.Scenario
-import io.cucumber.plugin.event.Status
-import io.cucumber.plugin.event.TestCaseFinished
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import spaceEngineers.controller.ExtendedSpaceEngineers
 import spaceEngineers.controller.SpaceEngineers
-import spaceEngineers.controller.connection.AppType
-import spaceEngineers.controller.connection.ScreenshotMode
+import bdd.connection.AppType
 import spaceEngineers.controller.extensions.typedFocusedScreen
 import spaceEngineers.controller.extensions.waitForScreen
 import spaceEngineers.controller.extensions.waitForScreenFinish

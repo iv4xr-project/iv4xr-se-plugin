@@ -2,10 +2,10 @@ package spaceEngineers.transport
 
 import java.io.File
 
-class GsonResponseAppendToFileReaderWriter(
+class AppendToFileReaderWriter(
     override val rw: StringLineReaderWriter,
     val file: File,
-    clearFile: Boolean = false
+    clearFile: Boolean = true
 ) : StringLineReaderWrapper, Closeable by rw {
 
     init {

@@ -9,7 +9,7 @@ import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
-import spaceEngineers.controller.connection.ConnectionManager
+import bdd.connection.ConnectionManager
 import spaceEngineers.controller.extensions.blockingMoveForwardByDistance
 import spaceEngineers.controller.extensions.grindDownToPercentage
 import spaceEngineers.controller.extensions.toNullIfMinusOne

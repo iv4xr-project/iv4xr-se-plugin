@@ -1,4 +1,4 @@
-package spaceEngineers.controller.connection
+package bdd.connection
 
 import kotlinx.serialization.Serializable
 
