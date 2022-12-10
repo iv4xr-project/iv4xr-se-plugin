@@ -39,7 +39,6 @@ class ${klass.simpleName}:
 """
     val next = klass.memberProperties.filter { it.returnType.toKClass() != null }.filter { it.name != "dimensions" }
         .joinToString("\n") {
-            // println(it)
             """$TAB${it.name.firstUppercase()}: '${it.returnType.toPythonType(validTypes)}'"""
         }
     val classBody = if (next.isBlank()) {
@@ -61,29 +60,14 @@ fun KType.containsMemberOfType(type: KType): Boolean {
     if (this.toString().contains("kotlin") && type.toString().contains("kotlin")) {
         return false
     }
-    println("$this contains $type TEST")
-    return (
-        toKClass()?.run {
-            memberProperties.map { it.returnType }.any { property ->
-                (property == type).apply {
-                    if (this) {
-                        println("1")
-                    }
-                } ||
+    return toKClass()?.run {
+        memberProperties.map { it.returnType }.any { property ->
+            (property == type) ||
                     property.arguments.mapNotNull { argumentProjection -> argumentProjection.type }
-                        .contains(type).apply {
-                            if (this) {
-                                println("2")
-                            }
-                        }
-            }
-        } == true
-        ).apply {
-        if (this) {
-            println(this@containsMemberOfType)
-            println("""${this@containsMemberOfType} contains $type""")
+                        .contains(type)
         }
-    }
+    } == true
+
 }
 
 class DataStructuresGenerator(
@@ -140,12 +124,6 @@ class DataStructuresGenerator(
     }
 
     val exploredInterfaces = mutableListOf<KClass<*>>()
-
-    val exploredModels = mutableListOf<KClass<*>>()
-
-    fun List<KType>.SEModelsOnly(): List<KType> = filter {
-        it.toKClass()?.qualifiedName?.startsWith("spaceEngineers") == true
-    }
 
     fun List<KType>.includeDataMembers(): List<KType> {
         return flatMap { listOf(it) + properties(it) }
