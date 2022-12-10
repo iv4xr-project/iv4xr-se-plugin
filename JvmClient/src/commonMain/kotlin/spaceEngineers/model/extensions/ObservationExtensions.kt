@@ -16,9 +16,17 @@ fun Observation.blockByCustomName(customName: String): TerminalBlock {
 }
 
 fun List<Block>.blockByCustomName(customName: String): TerminalBlock {
-    return filterIsInstance<TerminalBlock>().firstOrNull { it.customName == customName } ?: error(
+    return typedBlockByCustomName(customName = customName)
+}
+
+inline fun <reified T : TerminalBlock> Observation.typedBlockByCustomName(customName: String): T {
+    return allBlocks.typedBlockByCustomName(customName)
+}
+
+inline fun <reified T : TerminalBlock> List<Block>.typedBlockByCustomName(customName: String): T {
+    return filterIsInstance<T>().firstOrNull { it.customName == customName } ?: error(
         "Block with name $customName not found, found only ${
-        filterIsInstance<TerminalBlock>().map { it.customName }.sorted()
+        filterIsInstance<T>().map { it.customName }.sorted()
         }"
     )
 }

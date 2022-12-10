@@ -82,6 +82,14 @@ class Maze(val width: Int, val height: Int, val startX: Int = 2, val rnd: Random
         return data
     }
 
+    fun asSequence() = sequence {
+        for (y in 0 until height) {
+            for (x in 0 until width) {
+                yield(Position(x, y) to data[x][y])
+            }
+        }
+    }
+
     override fun toString(): String {
         var result = ""
         for (y in 0 until height) {
@@ -89,12 +97,16 @@ class Maze(val width: Int, val height: Int, val startX: Int = 2, val rnd: Random
                 when (data[x][y]) {
                     Cell.END ->
                         result += ("ee")
+
                     Cell.SPACE ->
                         result += ("  ")
+
                     Cell.WALL ->
                         result += ("██")
+
                     Cell.START ->
                         result += ("ss")
+
                     Cell.OUT_OF_BOUNDS ->
                         result += ("??")
                 }
