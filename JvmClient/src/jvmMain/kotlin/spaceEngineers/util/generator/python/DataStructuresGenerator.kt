@@ -63,11 +63,10 @@ fun KType.containsMemberOfType(type: KType): Boolean {
     return toKClass()?.run {
         memberProperties.map { it.returnType }.any { property ->
             (property == type) ||
-                    property.arguments.mapNotNull { argumentProjection -> argumentProjection.type }
-                        .contains(type)
+                property.arguments.mapNotNull { argumentProjection -> argumentProjection.type }
+                    .contains(type)
         }
     } == true
-
 }
 
 class DataStructuresGenerator(

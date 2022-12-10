@@ -1,6 +1,5 @@
 package spaceEngineers.controller.extensions
 
-
 fun String.stripWhitespace(): String {
     return replace("\\s".toRegex(), "")
 }

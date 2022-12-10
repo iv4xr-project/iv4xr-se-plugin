@@ -33,7 +33,7 @@ class StringExtensionTest {
             """.trimIndent()
         )
     }
-    
+
     @Test
     fun `stripWhitespace removes whitespace characters from string`() {
         // Arrange
