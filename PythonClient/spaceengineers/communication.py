@@ -4,10 +4,12 @@ This module handles lower level TCP and json-rpc communication.
 """
 import dataclasses
 import json
+import socket
 from dataclasses import dataclass
+from typing import Optional, Any, List, Dict, Union
 
 
-def cleanup_error_data(inner_data: dict):
+def cleanup_error_data(inner_data: Dict[str, Any]) -> Optional[Dict[str, Any]]:
     if not inner_data:
         return None
     if type(inner_data) != dict:
@@ -27,15 +29,15 @@ class JsonRpcError(Exception):
     Exception representing json-rpc error. Also trying to tidy up messy C# exception if possible.
     """
 
-    data: dict
+    data: Dict[str, Any]
 
-    def __init__(self, data: dict):
+    def __init__(self, data: Dict[str, Any]):
         self.data = data
         super().__init__(
             f"{data.get('message', 'Unknown error')} ({data.get('code', None)}). {self.inner_msg()}"
         )
 
-    def inner_msg(self):
+    def inner_msg(self) -> Optional[Any]:
         inner_data = self.data.get("data", None)
         if type(inner_data) == str:
             return inner_data
@@ -45,7 +47,7 @@ class JsonRpcError(Exception):
         return None
 
     @property
-    def detailed_message(self):
+    def detailed_message(self) -> str:
         result = ""
         data = self.data.copy()
         result += (data.get("message", "")) + "\n"
@@ -71,34 +73,35 @@ class JsonRpcRequest:
     jsonrpc: str = "2.0"
 
 
-class DictUppercaseWrapper(dict):
+class DictUppercaseWrapper(Dict[str, Any]):
     """
     Wrapper around dict to allow dot notation and also by lowercase starting names.
     """
 
-    def __getattr__(self, item):
+    def __getattr__(self, item: str) -> Any:
         edited_item = item[0].upper() + item[1:]
         if edited_item in self:
             return DictUppercaseWrapper.wrap_if_dict(super().__getitem__(edited_item))
         return DictUppercaseWrapper.wrap_if_dict(super().__getitem__(item))
 
     @staticmethod
-    def wrap_if_dict(dict_to_wrap):
+    def wrap_if_dict(dict_to_wrap: Union[Dict[str, Any], "DictUppercaseWrapper"]) -> Union[
+        Dict[str, Any], "DictUppercaseWrapper"]:
         if isinstance(dict_to_wrap, dict):
             return DictUppercaseWrapper(dict_to_wrap)
         return dict_to_wrap
 
 
-def method_name(prefixes):
+def method_name(prefixes: List[str]) -> str:
     name = ""
     for prefix in prefixes:
         name = name + "." + prefix[0].upper() + prefix[1:]
     return name[1:]
 
 
-def send_request(request, sock):
+def send_request(request: Any, sock: "socket.socket") -> Any:
     request_str = (
-        json.dumps(dataclasses.asdict(request), separators=(",", ":")).strip() + "\r\n"
+            json.dumps(dataclasses.asdict(request), separators=(",", ":")).strip() + "\r\n"
     )
 
     sock.sendall(bytearray(request_str, "utf-8"))
@@ -111,7 +114,7 @@ def send_request(request, sock):
     return DictUppercaseWrapper.wrap_if_dict(result)
 
 
-def receive_all(sock):
+def receive_all(sock: "socket.socket") -> bytearray:
     data = bytearray()
     while True:
         packet = sock.recv(4096)
@@ -122,7 +125,7 @@ def receive_all(sock):
             return data
 
 
-def call_rpc(prefix, sock, *args, **kwargs):
+def call_rpc(prefix: List[str], sock: "socket.socket", *args: List[Any], **kwargs: Any) -> Any:
     if len(args) > 0 and len(kwargs) > 0:
         raise ValueError(
             "Cannot use both positional and named arguments at the same time."
