@@ -8,7 +8,7 @@ from behave.runner import Context
 from spaceengineers.proxy import SpaceEngineersProxy
 
 
-def before_all(context: Context):
+def before_all(context: Context) -> None:
     """
     Runs before all tests, context can be used to save anything.
     """

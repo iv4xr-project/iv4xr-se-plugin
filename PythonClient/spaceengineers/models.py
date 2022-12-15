@@ -2,7 +2,7 @@
 # pylint: disable=C0103,C0115,C0114,R0902
 
 from dataclasses import dataclass
-from typing import List
+from typing import List, Dict, TypeVar, Generic
 
 
 @dataclass
@@ -92,7 +92,7 @@ class BuildProgressModel:
 
 @dataclass
 class CharacterAnimations:
-    AnimationsPerLayer: "dict"
+    AnimationsPerLayer: "Dict[str, str]"
 
 
 @dataclass
@@ -177,16 +177,6 @@ class CubeSize:
     Value: "float"
     Name: "str"
     Ordinal: "int"
-
-
-@dataclass
-class DataEdge:
-    pass
-
-
-@dataclass
-class DataNode:
-    pass
 
 
 @dataclass
@@ -281,7 +271,7 @@ class GuiControlBase:
 
 @dataclass
 class Hud:
-    Stats: "dict"
+    Stats: "Dict[str, float]"
     StatsWrapper: "object"
 
 
@@ -320,7 +310,7 @@ class JoinGameData:
 @dataclass
 class KeyboardSnapshot:
     PressedKeys: "List[int]"
-    Text: "List[object]"
+    Text: "List[str]"
 
 
 @dataclass
@@ -407,8 +397,8 @@ class MouseSnapshot:
 
 @dataclass
 class NavGraph:
-    Edges: "List[DataEdge]"
-    Nodes: "List[DataNode]"
+    Edges: "List[DataEdge[str, str, str]]"
+    Nodes: "List[DataNode[str, Vec3F]]"
 
 
 @dataclass
@@ -589,3 +579,26 @@ class Vec3I:
     X: "int"
     Y: "int"
     Z: "int"
+
+
+EdgeId = TypeVar("EdgeId")
+NodeId = TypeVar("NodeId")
+EdgeData = TypeVar("EdgeData")
+
+
+@dataclass
+class DataEdge(Generic[EdgeId, NodeId, EdgeData]):
+    Data: "EdgeData"
+    From: "NodeId"
+    Id: "EdgeId"
+    To: "NodeId"
+
+
+NodeId = TypeVar("NodeId")
+NodeData = TypeVar("NodeData")
+
+
+@dataclass
+class DataNode(Generic[NodeId, NodeData]):
+    Data: "NodeData"
+    Id: "NodeId"
