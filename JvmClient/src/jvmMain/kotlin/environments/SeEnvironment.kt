@@ -80,11 +80,11 @@ fun CharacterObservation.toWorldModel(): WorldModel {
     }
 }
 
-class SeEnvironment(
+class SeEnvironment @JvmOverloads constructor(
     val worldId: String,
     val controller: ContextControllerWrapper,
+    val scenarioDir: String = DEFAULT_SCENARIO_DIR,
 ) : W3DEnvironment(), AutoCloseable {
-    val SCENARIO_DIR = "src/jvmTest/resources/game-saves/"
 
     val context: SpaceEngineersTestContext = controller.context
 
@@ -93,7 +93,7 @@ class SeEnvironment(
     }
 
     override fun loadWorld() {
-        val scenario = File("$SCENARIO_DIR$worldId").absolutePath
+        val scenario = File("$scenarioDir$worldId").absolutePath
         controller.session.loadScenario(scenario)
     }
 
@@ -137,5 +137,9 @@ class SeEnvironment(
 
     override fun close() {
         controller.close()
+    }
+
+    companion object {
+        val DEFAULT_SCENARIO_DIR = "src/jvmTest/resources/game-saves/"
     }
 }
