@@ -16,6 +16,7 @@ import spaceEngineers.model.ScreenName.Companion.GamePlay
 import spaceEngineers.model.ScreenName.Companion.JoinGame
 import spaceEngineers.model.ScreenName.Companion.LoadGame
 import spaceEngineers.model.ScreenName.Companion.MainMenu
+import spaceEngineers.model.ScreenName.Companion.Medicals
 import spaceEngineers.model.ScreenName.Companion.MessageBox
 import spaceEngineers.model.ScreenName.Companion.NewGame
 import spaceEngineers.model.ScreenName.Companion.SaveAs
@@ -114,6 +115,9 @@ val DEFAULT_TRANSITIONS = listOf(
     },
     ScreenTransition(GamePlay, ToolbarConfig) {
         gamePlay.showToolbarConfig()
+    },
+    ScreenTransition(Medicals, MainMenu) {
+        medicals.showMainMenu()
     },
 )
 
