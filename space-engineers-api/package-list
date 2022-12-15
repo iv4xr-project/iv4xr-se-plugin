@@ -324,6 +324,7 @@ $dokka.location:spaceEngineers.controller/Medicals/refresh/#/PointingToDeclarati
 $dokka.location:spaceEngineers.controller/Medicals/respawn/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-medicals/respawn.html
 $dokka.location:spaceEngineers.controller/Medicals/selectFaction/#kotlin.Int/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-medicals/select-faction.html
 $dokka.location:spaceEngineers.controller/Medicals/selectRespawn/#kotlin.Int/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-medicals/select-respawn.html
+$dokka.location:spaceEngineers.controller/Medicals/showMainMenu/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-medicals/show-main-menu.html
 $dokka.location:spaceEngineers.controller/Medicals/showMessageOfTheDay/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-medicals/show-message-of-the-day.html
 $dokka.location:spaceEngineers.controller/MessageBox///PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-message-box/index.html
 $dokka.location:spaceEngineers.controller/MessageBox/data/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-message-box/data.html
