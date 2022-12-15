@@ -3,7 +3,7 @@
 Proxy wrapper that handles all the methods to rpc calls.
 """
 import socket
-from typing import List
+from typing import List, Any
 
 from spaceengineers import api
 from spaceengineers import communication
@@ -15,17 +15,17 @@ class ProxyAttribute:
     """
 
     prefix: List[str] = []
-    sock: object
+    sock: "socket.socket"
 
-    def __init__(self, prefix, sock) -> None:
+    def __init__(self, prefix: List[str], sock: "socket.socket") -> None:
         super().__init__()
         self.prefix = prefix
         self.sock = sock
 
-    def __call__(self, *args, **kwargs):
+    def __call__(self, *args: List[Any], **kwargs: Any) -> Any:
         return communication.call_rpc(self.prefix, self.sock, *args, **kwargs)
 
-    def __getattribute__(self, item):
+    def __getattribute__(self, item: str) -> Any:
         if item in ("prefix", "sock", "call_rpc"):
             return super().__getattribute__(item)
         return ProxyAttribute(prefix=list(self.prefix) + [item], sock=self.sock)
@@ -37,7 +37,7 @@ class SpaceEngineersProxy(ProxyAttribute, api.SpaceEngineers):
     It implements the interface and maps everything to json-rpc calls.
     """
 
-    def __init__(self, sock) -> None:
+    def __init__(self, sock: "socket.socket") -> None:
         super().__init__(prefix=list(), sock=sock)
 
     @staticmethod
@@ -52,7 +52,7 @@ class SpaceEngineersProxy(ProxyAttribute, api.SpaceEngineers):
         return SpaceEngineersProxy(sock=sock)
 
     @staticmethod
-    def connect(host, port) -> "SpaceEngineersProxy":
+    def connect(host: str, port: int) -> "SpaceEngineersProxy":
         """
         :param host: Hostname of the plugin to connect.
         :param port: Port on which the plugin runs (default is 3333).
