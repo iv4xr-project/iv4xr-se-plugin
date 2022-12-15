@@ -4,6 +4,8 @@ using Iv4xr.PluginLib;
 using Iv4xr.SpaceEngineers;
 using Iv4xr.SpaceEngineers.WorldModel;
 using Iv4xr.SpaceEngineers.WorldModel.Screen;
+using Sandbox;
+using Sandbox.Game;
 using Sandbox.Graphics.GUI;
 using SpaceEngineers.Game.GUI;
 
@@ -79,6 +81,13 @@ namespace Iv4xr.SePlugin.Control.Screen
         private List<MyGuiControlTable.Row> FactionRows()
         {
             return Screen.TableOrNull("m_factionsTable")?.RowsAsList() ?? new List<MyGuiControlTable.Row>();
+        }
+        
+        public void ShowMainMenu()
+        {
+            CheckScreen();
+            MyGuiSandbox.AddScreen(MyGuiSandbox.CreateScreen(MyPerGameSettings.GUI.MainMenu,
+                MySandboxGame.IsPaused == false));
         }
     }
 }

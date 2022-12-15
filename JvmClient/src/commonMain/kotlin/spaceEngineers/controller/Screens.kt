@@ -116,6 +116,7 @@ interface Medicals {
     fun selectFaction(factionIndex: Int)
     fun refresh()
     fun showMessageOfTheDay()
+    fun showMainMenu()
 }
 
 interface Terminal {

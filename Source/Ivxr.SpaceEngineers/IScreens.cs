@@ -90,6 +90,7 @@ namespace Iv4xr.SpaceEngineers
         void Join();
         void Refresh();
         void ShowMessageOfTheDay();
+        void ShowMainMenu();
     }
 
     public interface ITerminal
