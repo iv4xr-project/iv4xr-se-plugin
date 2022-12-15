@@ -18,36 +18,52 @@ fun main() {
 # pylint: disable=C0103,C0115,C0114,R0902
             
 from dataclasses import dataclass
-from typing import List
+from typing import List, Dict, TypeVar, Generic
 
         """.trimIndent()
     )
     modelsFile.appendText(text)
 }
 
-fun generateDataClass(ktype: KType, validTypes: Set<KType>): String {
+fun generateDataClass(ktype: KType, validNestedTypes: Set<KType>): String {
     if (ktype.classifier !is KClass<*>) {
         // TODO: fix this, probably because of typealias usage
         return ""
     }
     val klass = ktype.classifier as KClass<*>
+    return generateDataClass(klass, validNestedTypes)
+}
+
+fun generateDataClass(klass: KClass<*>, validNestedTypes: Set<KType>): String {
     if (klass.qualifiedName?.startsWith("spaceEngineers") != true) {
         return ""
     }
-    val classHeader = """@dataclass
-class ${klass.simpleName}:
+    val classHeader = """${defineGenerics(klass)}@dataclass
+class ${klass.simpleName}${generateGenerics(kclass = klass)}:
 """
-    val next = klass.memberProperties.filter { it.returnType.toKClass() != null }.filter { it.name != "dimensions" }
+    val next = klass.memberProperties.filter { it.name != "dimensions" }
         .joinToString("\n") {
             // println(it)
-            """$TAB${it.name.firstUppercase()}: '${it.returnType.toPythonType(validTypes)}'"""
+            """$TAB${it.name.firstUppercase()}: '${it.returnType.toPythonType(validNestedTypes, klass.typeParameters)}'"""
         }
-    val classBody = if (next.isBlank()) {
+    val classBody = next.ifBlank {
         "${TAB}pass"
-    } else {
-        next
     }
-    return "\n\n" + classHeader + classBody
+    return classHeader + classBody
+}
+
+fun defineGenerics(klass: KClass<*>): String {
+    if (klass.typeParameters.isEmpty()) {
+        return ""
+    }
+    return klass.typeParameters.joinToString("") { "${it.name} = TypeVar('${it.name}')\n" }
+}
+
+fun generateGenerics(kclass: KClass<*>): String {
+    if (kclass.typeParameters.isEmpty()) {
+        return ""
+    }
+    return kclass.typeParameters.joinToString(", ", prefix = "(Generic[", postfix = "])") { it.name }
 }
 
 fun KType.toKClass(): KClass<*>? {
@@ -61,29 +77,15 @@ fun KType.containsMemberOfType(type: KType): Boolean {
     if (this.toString().contains("kotlin") && type.toString().contains("kotlin")) {
         return false
     }
-    println("$this contains $type TEST")
     return (
         toKClass()?.run {
             memberProperties.map { it.returnType }.any { property ->
-                (property == type).apply {
-                    if (this) {
-                        println("1")
-                    }
-                } ||
+                (property == type) ||
                     property.arguments.mapNotNull { argumentProjection -> argumentProjection.type }
-                        .contains(type).apply {
-                            if (this) {
-                                println("2")
-                            }
-                        }
+                        .contains(type)
             }
         } == true
-        ).apply {
-        if (this) {
-            println(this@containsMemberOfType)
-            println("""${this@containsMemberOfType} contains $type""")
-        }
-    }
+        )
 }
 
 class DataStructuresGenerator(
@@ -115,19 +117,6 @@ class DataStructuresGenerator(
         return types.map { generateDataClass(it, types.toSet()) }.distinct().sorted().joinToString("\n")
     }
 
-    fun dependencyGraph(): Map<KType, Set<KType>> {
-        return find().toSet()
-            .filter {
-                it !in finishedTypes && it.toKClass()?.qualifiedName?.startsWith("spaceEngineers.model") == true
-            }
-            .map {
-                it to findMembers(it.toKClass()).flatMap { listOf(it) + it.arguments.mapNotNull { it.type } }
-                    .filter {
-                        it.toString().contains("spaceEngineers")
-                    }.filter { it !in finishedTypes }.toSet()
-            }.toMap()
-    }
-
     fun find(): List<KType> {
         return exploreInterfaces(SpaceEngineers::class)
             .includeGenerics().filter { it !in finishedTypes }
@@ -140,12 +129,6 @@ class DataStructuresGenerator(
     }
 
     val exploredInterfaces = mutableListOf<KClass<*>>()
-
-    val exploredModels = mutableListOf<KClass<*>>()
-
-    fun List<KType>.SEModelsOnly(): List<KType> = filter {
-        it.toKClass()?.qualifiedName?.startsWith("spaceEngineers") == true
-    }
 
     fun List<KType>.includeDataMembers(): List<KType> {
         return flatMap { listOf(it) + properties(it) }
@@ -174,15 +157,6 @@ class DataStructuresGenerator(
         }
 
         return (functionalParameterTypes + nestedTypes).includeGenerics().includeDataMembers()
-    }
-
-    private fun findMembers(kclass: KClass<*>?): List<KType> {
-        if (kclass == null) {
-            return emptyList()
-        }
-        return kclass.memberProperties.filter { it.name !in setOf("dimensions", "statsWrapper") }.map {
-            it.returnType
-        }
     }
 
     fun findFunctionTypes(kclass: KClass<*>): List<KType> {
