@@ -168,7 +168,7 @@ namespace Iv4xr.SePlugin.Control
             var grid = m_blockPlacer.PlaceSingleBlock(m_session.CurrentCharacterId, blockDefinitionId,
                 position.ToVector3(),
                 orientationForward.ToVector3(),
-                orientationUp.ToVector3(), color?.ToVector3() ?? MyPlayer.SelectedColor);
+                orientationUp.ToVector3(), color?.ToVector3());
             return m_observer.EntityBuilder.CreateSeGrid(grid);
         }
 
