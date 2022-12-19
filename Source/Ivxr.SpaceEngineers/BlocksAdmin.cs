@@ -19,6 +19,8 @@ namespace Iv4xr.SpaceEngineers
         string PlaceInGrid(DefinitionId blockDefinitionId, string gridId, PlainVec3I minPosition,
             PlainVec3I orientationForward, PlainVec3I orientationUp, PlainVec3F? color);
 
+        List<string> BatchPlaceInGrid(string gridId, PlainVec3F? color, List<BlockLocation> blockPlacementConfigs);
+
         IWarheadAdmin Warhead { get; }
         IFunctionalBlockAdmin FunctionalBlock { get; }
         ITerminalBlockAdmin TerminalBlock { get; }

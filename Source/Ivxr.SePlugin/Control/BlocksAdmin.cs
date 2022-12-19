@@ -186,6 +186,19 @@ namespace Iv4xr.SePlugin.Control
             ).UniqueId.ToString();
         }
 
+        public List<string> BatchPlaceInGrid(string gridId, PlainVec3F? color,
+            List<BlockLocation> blockPlacementConfigs)
+        {
+            var grid = m_observer.GetGridById(gridId);
+            return m_blockPlacer.PlaceInGrid(
+                grid,
+                blockPlacementConfigs,
+                MySession.Static.LocalPlayerId,
+                color?.ToVector3(),
+                MyStringHash.GetOrCompute(MyPlayer.SelectedArmorSkin)
+            ).Select(block => block.UniqueId.ToString()).ToList();
+        }
+
         public IWarheadAdmin Warhead { get; }
         public IFunctionalBlockAdmin FunctionalBlock { get; }
         public ITerminalBlockAdmin TerminalBlock { get; }

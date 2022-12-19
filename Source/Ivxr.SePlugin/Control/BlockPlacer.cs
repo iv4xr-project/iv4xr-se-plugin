@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 using Iv4xr.SpaceEngineers.WorldModel;
 using Sandbox.Definitions;
@@ -109,6 +108,44 @@ namespace Iv4xr.SePlugin.Control
                 position, orientationForward,
                 orientationUp);
             return grid;
+        }
+
+        public List<MySlimBlock> PlaceInGrid(
+            MyCubeGrid currentGrid,
+            List<BlockLocation> blockLocations,
+            long playerId,
+            Vector3? colorRgb,
+            MyStringHash skinId
+        )
+        {
+            var blocksBuildQueue = new HashSet<MyCubeGrid.MyBlockLocation>(blockLocations.Select(
+                bl => bl.ToMyBlockLocation(MyEntityIdentifier.AllocateId(), playerId)
+            ));
+
+            var newBlocksByGridPositions = new Dictionary<Vector3I, MySlimBlock>();
+            var callback = new Action<MyCubeGrid, MySlimBlock>((grid, block) =>
+            {
+                newBlocksByGridPositions.Add(block.Position, block);
+            });
+            MyCubeGrids.BlockBuilt += callback;
+            currentGrid.BuildBlocks(colorRgb?.RgbToHsv() ?? MyPlayer.SelectedColor, skinId,
+                blocksBuildQueue, MySession.Static.LocalCharacterEntityId, MySession.Static.LocalPlayerId);
+            MyCubeGrids.BlockBuilt -= callback;
+            if (newBlocksByGridPositions.Count == 0)
+            {
+                throw new InvalidOperationException(
+                    $"Couldn't place blocks to grid {currentGrid.EntityId}.");
+            }
+
+            if (newBlocksByGridPositions.Count != blockLocations.Count)
+            {
+                throw new InvalidOperationException("Built more than one block!");
+            }
+
+            return blockLocations.Select(
+                bl =>
+                        newBlocksByGridPositions[bl.MinPosition.ToVector3I()]
+            ).ToList();
         }
     }
 }
