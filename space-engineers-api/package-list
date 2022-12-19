@@ -128,6 +128,7 @@ $dokka.location:spaceEngineers.controller/BlockExtensions/useObject/#/PointingTo
 $dokka.location:spaceEngineers.controller/Blocks///PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-blocks/index.html
 $dokka.location:spaceEngineers.controller/Blocks/place/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-blocks/place.html
 $dokka.location:spaceEngineers.controller/BlocksAdmin///PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-blocks-admin/index.html
+$dokka.location:spaceEngineers.controller/BlocksAdmin/batchPlaceInGrid/#kotlin.String#spaceEngineers.model.Vec3F?#kotlin.collections.List[spaceEngineers.model.BlockLocation]/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-blocks-admin/batch-place-in-grid.html
 $dokka.location:spaceEngineers.controller/BlocksAdmin/createOrUpdateGroup/#kotlin.String#kotlin.String#kotlin.collections.List[kotlin.String]/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-blocks-admin/create-or-update-group.html
 $dokka.location:spaceEngineers.controller/BlocksAdmin/functionalBlock/#/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-blocks-admin/functional-block.html
 $dokka.location:spaceEngineers.controller/BlocksAdmin/mapButtonToBlock/#kotlin.String#kotlin.Int#kotlin.String#kotlin.String/PointingToDeclaration/space-engineers-api/spaceEngineers.controller/-blocks-admin/map-button-to-block.html
@@ -4198,6 +4199,12 @@ $dokka.location:spaceEngineers.model/BlockItem/BlockItem/#kotlin.Boolean#kotlin.
 $dokka.location:spaceEngineers.model/BlockItem/block/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-block-item/block.html
 $dokka.location:spaceEngineers.model/BlockItem/text/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-block-item/text.html
 $dokka.location:spaceEngineers.model/BlockItem/visible/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-block-item/visible.html
+$dokka.location:spaceEngineers.model/BlockLocation///PointingToDeclaration/space-engineers-api/spaceEngineers.model/-block-location/index.html
+$dokka.location:spaceEngineers.model/BlockLocation/BlockLocation/#spaceEngineers.model.DefinitionId#spaceEngineers.model.Vec3I#spaceEngineers.model.Vec3I#spaceEngineers.model.Vec3I/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-block-location/-block-location.html
+$dokka.location:spaceEngineers.model/BlockLocation/definitionId/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-block-location/definition-id.html
+$dokka.location:spaceEngineers.model/BlockLocation/minPosition/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-block-location/min-position.html
+$dokka.location:spaceEngineers.model/BlockLocation/orientationForward/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-block-location/orientation-forward.html
+$dokka.location:spaceEngineers.model/BlockLocation/orientationUp/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-block-location/orientation-up.html
 $dokka.location:spaceEngineers.model/BlockOrGroupItem///PointingToDeclaration/space-engineers-api/spaceEngineers.model/-block-or-group-item/index.html
 $dokka.location:spaceEngineers.model/BlockOrGroupItem/text/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-block-or-group-item/text.html
 $dokka.location:spaceEngineers.model/BlockOrGroupItem/visible/#/PointingToDeclaration/space-engineers-api/spaceEngineers.model/-block-or-group-item/visible.html
