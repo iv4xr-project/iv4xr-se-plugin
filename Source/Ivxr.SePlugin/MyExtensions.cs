@@ -17,6 +17,7 @@ using Sandbox.Game.Multiplayer;
 using Sandbox.Game.Screens.Helpers;
 using Sandbox.Game.Weapons;
 using Sandbox.Game.World;
+using VRage;
 using VRage.Audio;
 using VRage.Game;
 using VRage.Game.Entity;
@@ -543,6 +544,19 @@ namespace Iv4xr.SePlugin
             };
         }
 
-
+        public static MyCubeGrid.MyBlockLocation ToMyBlockLocation(
+            this BlockLocation blockLocation,
+            long? entityId = null,
+            long? playerId = null)
+        {
+            var min = blockLocation.MinPosition.ToVector3I();
+            var orientation = Quaternion.CreateFromForwardUp(blockLocation.OrientationForward.ToVector3I(),
+                blockLocation.OrientationUp.ToVector3I());
+            return new MyCubeGrid.MyBlockLocation(
+                blockLocation.DefinitionId.ToMyDefinitionId(), min, min, min, orientation,
+                entityId ?? MyEntityIdentifier.AllocateId(),
+                playerId ?? MySession.Static.LocalPlayerId
+            );
+        }
     }
 }

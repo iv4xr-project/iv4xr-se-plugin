@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 using Iv4xr.SpaceEngineers.WorldModel;
 using Sandbox.Definitions;
@@ -21,8 +20,8 @@ namespace Iv4xr.SePlugin.Control
         private MyObjectBuilder_CubeBlock CubeBlockBuilderByBlockType(long ownerId, DefinitionId blockDefinitionId,
             Vector3 colorMask)
         {
-            
-            var obj = (MyObjectBuilder_CubeBlock)MyObjectBuilderSerializer.CreateNewObject(blockDefinitionId.ToMyDefinitionId());
+            var obj = (MyObjectBuilder_CubeBlock)MyObjectBuilderSerializer.CreateNewObject(blockDefinitionId
+                    .ToMyDefinitionId());
             obj.Min = new SerializableVector3I(0, 0, 0);
             obj.SubtypeName = blockDefinitionId.Type;
             obj.BlockOrientation = new SerializableBlockOrientation(Base6Directions.Direction.Forward,
@@ -54,10 +53,10 @@ namespace Iv4xr.SePlugin.Control
 
             // Create the grid (not sure if all the lines below are required)
             MyAPIGateway.Entities.RemapObjectBuilder(gridBuilder);
-            MyCubeGrid entity = (MyCubeGrid) MyAPIGateway.Entities.CreateFromObjectBuilderAndAdd(gridBuilder);
+            MyCubeGrid entity = (MyCubeGrid)MyAPIGateway.Entities.CreateFromObjectBuilderAndAdd(gridBuilder);
             MyAPIGateway.Multiplayer.SendEntitiesCreated(new List<MyObjectBuilder_EntityBase> { gridBuilder });
 
-            
+
             // Return the created entity
             return entity;
         }
@@ -73,30 +72,31 @@ namespace Iv4xr.SePlugin.Control
             MyStringHash skinId
         )
         {
-            HashSet<MyCubeGrid.MyBlockLocation> blocksBuildQueue = new HashSet<MyCubeGrid.MyBlockLocation>();
+            var blocksBuildQueue = new HashSet<MyCubeGrid.MyBlockLocation>();
             var orientation = Quaternion.CreateFromForwardUp(orientationForward, orientationUp);
             var myBlockLocation = new MyCubeGrid.MyBlockLocation(
                 blockDefinitionId, min, min, min, orientation, MyEntityIdentifier.AllocateId(),
                 playerId
             );
             blocksBuildQueue.Add(myBlockLocation);
-            var blockIds = currentGrid.CubeBlocks.Select(b => b.UniqueId).ToImmutableHashSet();
+            var newBlocks = new List<MySlimBlock>();
+            var callback = new Action<MyCubeGrid, MySlimBlock>((grid, block) => { newBlocks.Add(block); });
+            MyCubeGrids.BlockBuilt += callback;
             currentGrid.BuildBlocks(colorRgb?.RgbToHsv() ?? MyPlayer.SelectedColor, skinId,
                 blocksBuildQueue, MySession.Static.LocalCharacterEntityId, MySession.Static.LocalPlayerId);
-            var blockIds2 = currentGrid.CubeBlocks.Select(b => b.UniqueId).ToImmutableHashSet();
-            var newIds = blockIds2.Except(blockIds);
-            if (newIds.IsEmpty)
+            MyCubeGrids.BlockBuilt -= callback;
+            if (newBlocks.Count == 0)
             {
-                throw new InvalidOperationException($"Couldn't place the block {blockDefinitionId} at {min} to grid {currentGrid.EntityId}.");
+                throw new InvalidOperationException(
+                    $"Couldn't place the block {blockDefinitionId} at {min} to grid {currentGrid.EntityId}.");
             }
 
-            if (newIds.Count > 1)
+            if (newBlocks.Count > 1)
             {
                 throw new InvalidOperationException("Built more than one block!");
             }
 
-            var id = newIds.First();
-            return currentGrid.CubeBlocks.First(b => b.UniqueId == id);
+            return newBlocks.First();
         }
 
         public MyCubeGrid PlaceSingleBlock(long ownerId, DefinitionId blockDefinitionId, Vector3 position,
@@ -108,6 +108,44 @@ namespace Iv4xr.SePlugin.Control
                 position, orientationForward,
                 orientationUp);
             return grid;
+        }
+
+        public List<MySlimBlock> PlaceInGrid(
+            MyCubeGrid currentGrid,
+            List<BlockLocation> blockLocations,
+            long playerId,
+            Vector3? colorRgb,
+            MyStringHash skinId
+        )
+        {
+            var blocksBuildQueue = new HashSet<MyCubeGrid.MyBlockLocation>(blockLocations.Select(
+                bl => bl.ToMyBlockLocation(MyEntityIdentifier.AllocateId(), playerId)
+            ));
+
+            var newBlocksByGridPositions = new Dictionary<Vector3I, MySlimBlock>();
+            var callback = new Action<MyCubeGrid, MySlimBlock>((grid, block) =>
+            {
+                newBlocksByGridPositions.Add(block.Position, block);
+            });
+            MyCubeGrids.BlockBuilt += callback;
+            currentGrid.BuildBlocks(colorRgb?.RgbToHsv() ?? MyPlayer.SelectedColor, skinId,
+                blocksBuildQueue, MySession.Static.LocalCharacterEntityId, MySession.Static.LocalPlayerId);
+            MyCubeGrids.BlockBuilt -= callback;
+            if (newBlocksByGridPositions.Count == 0)
+            {
+                throw new InvalidOperationException(
+                    $"Couldn't place blocks to grid {currentGrid.EntityId}.");
+            }
+
+            if (newBlocksByGridPositions.Count != blockLocations.Count)
+            {
+                throw new InvalidOperationException("Built more than one block!");
+            }
+
+            return blockLocations.Select(
+                bl =>
+                        newBlocksByGridPositions[bl.MinPosition.ToVector3I()]
+            ).ToList();
         }
     }
 }

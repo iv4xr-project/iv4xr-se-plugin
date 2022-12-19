@@ -168,7 +168,7 @@ namespace Iv4xr.SePlugin.Control
             var grid = m_blockPlacer.PlaceSingleBlock(m_session.CurrentCharacterId, blockDefinitionId,
                 position.ToVector3(),
                 orientationForward.ToVector3(),
-                orientationUp.ToVector3(), color?.ToVector3() ?? MyPlayer.SelectedColor);
+                orientationUp.ToVector3(), color?.ToVector3());
             return m_observer.EntityBuilder.CreateSeGrid(grid);
         }
 
@@ -184,6 +184,19 @@ namespace Iv4xr.SePlugin.Control
                 color?.ToVector3(),
                 MyStringHash.GetOrCompute(MyPlayer.SelectedArmorSkin)
             ).UniqueId.ToString();
+        }
+
+        public List<string> BatchPlaceInGrid(string gridId, PlainVec3F? color,
+            List<BlockLocation> blockPlacementConfigs)
+        {
+            var grid = m_observer.GetGridById(gridId);
+            return m_blockPlacer.PlaceInGrid(
+                grid,
+                blockPlacementConfigs,
+                MySession.Static.LocalPlayerId,
+                color?.ToVector3(),
+                MyStringHash.GetOrCompute(MyPlayer.SelectedArmorSkin)
+            ).Select(block => block.UniqueId.ToString()).ToList();
         }
 
         public IWarheadAdmin Warhead { get; }

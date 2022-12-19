@@ -1,6 +1,7 @@
 package spaceEngineers.controller
 
 import spaceEngineers.model.BlockId
+import spaceEngineers.model.BlockLocation
 import spaceEngineers.model.CubeGrid
 import spaceEngineers.model.DefinitionId
 import spaceEngineers.model.Vec3F
@@ -24,6 +25,12 @@ interface BlocksAdmin {
         orientationUp: Vec3I = Vec3I.UP,
         color: Vec3F? = null,
     ): String
+
+    fun batchPlaceInGrid(
+        gridId: String,
+        color: Vec3F? = null,
+        blockPlacementConfigs: List<BlockLocation>
+    ): List<BlockId>
 
     fun remove(blockId: BlockId)
     fun setIntegrity(blockId: BlockId, integrity: Float)
