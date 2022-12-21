@@ -157,6 +157,8 @@ interface ControlPanelTab {
     fun enterBlockGroup(text: String)
     fun groupSave()
     fun groupDelete()
+    fun transferTo(index: Int)
+    fun selectShareMode(index: Int)
 }
 
 interface InfoTab {

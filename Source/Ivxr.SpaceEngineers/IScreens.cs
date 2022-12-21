@@ -136,6 +136,8 @@ namespace Iv4xr.SpaceEngineers
         void EnterBlockGroup(string text);
         void GroupSave();
         void GroupDelete();
+        void TransferTo(int index);
+        void SelectShareMode(int index);
     }
 
     public interface IInfoTab
