@@ -14,6 +14,14 @@ class ConnectionManager(
     val builder: JsonRpcSpaceEngineersBuilder = JvmSpaceEngineersBuilder.default(),
 ) : AutoCloseable {
 
+    private suspend inline fun <T> ProcessWithConnection.watchForThrowables(block: suspend ()-> T): T {
+        return try {
+            block()
+        } catch(e: Throwable) {
+            throw ProcessException(this, e)
+        }
+    }
+
     var initiated: Boolean = false
         private set
 
@@ -53,19 +61,21 @@ class ConnectionManager(
         connectionsById.values
     }
 
-    suspend fun <T> mainClient(block: suspend ProcessWithConnection.() -> T): T {
-        return block(mainClient)
+    suspend fun <T> mainClient(block: suspend ProcessWithConnection.() -> T): T = mainClient.watchForThrowables {
+        block(mainClient)
     }
 
-    suspend fun <T> admin(block: suspend ProcessWithConnection.() -> T): T {
-        return block(admin)
+    suspend fun <T> admin(block: suspend ProcessWithConnection.() -> T): T = admin.watchForThrowables {
+        block(admin)
     }
 
     private suspend fun <T> Collection<ProcessWithConnection>.parallelEach(block: suspend ProcessWithConnection.() -> T) =
         coroutineScope {
             this@parallelEach.map {
                 async {
-                    block(it)
+                    it.watchForThrowables {
+                        block(it)
+                    }
                 }
             }.awaitAll()
         }
