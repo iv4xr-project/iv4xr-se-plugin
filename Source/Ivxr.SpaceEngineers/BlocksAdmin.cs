@@ -20,6 +20,7 @@ namespace Iv4xr.SpaceEngineers
             PlainVec3I orientationForward, PlainVec3I orientationUp, PlainVec3F? color);
 
         List<string> BatchPlaceInGrid(string gridId, PlainVec3F? color, List<BlockLocation> blockPlacementConfigs);
+        void SetPhysicalItemInInventory(string blockId, DefinitionId definitionId, float amount);
 
         IWarheadAdmin Warhead { get; }
         IFunctionalBlockAdmin FunctionalBlock { get; }

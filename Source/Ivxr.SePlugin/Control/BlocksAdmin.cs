@@ -7,6 +7,7 @@ using Iv4xr.SePlugin.Control.Screen.BlockAdmin;
 using Iv4xr.SpaceEngineers;
 using Iv4xr.SpaceEngineers.WorldModel;
 using Sandbox.Common.ObjectBuilders;
+using Sandbox.Game;
 using Sandbox.Game.Entities;
 using Sandbox.Game.Entities.Blocks;
 using Sandbox.Game.Entities.Cube;
@@ -15,7 +16,11 @@ using Sandbox.Game.Screens.Helpers;
 using Sandbox.Game.Weapons;
 using Sandbox.Game.World;
 using SpaceEngineers.Game.Entities.Blocks;
+using VRage;
 using VRage.Game;
+using VRage.Game.Entity;
+using VRage.Game.ModAPI.Ingame;
+using VRage.ObjectBuilders;
 using VRage.Utils;
 
 namespace Iv4xr.SePlugin.Control
@@ -42,7 +47,7 @@ namespace Iv4xr.SePlugin.Control
             Door = new DoorBaseAdmin(session, observer);
             ButtonPanel = new ButtonPanelAdmin(session, observer);
         }
-        
+
         private readonly BlockPlacer m_blockPlacer = new BlockPlacer();
 
         public void SetIntegrity(string blockId, float integrity)
@@ -50,6 +55,34 @@ namespace Iv4xr.SePlugin.Control
             var block = m_observer.GetBlockById(blockId);
             block.ComponentStack.CallMethod<object>("SetIntegrity", new object[] { integrity, integrity });
             block.UpdateVisual();
+        }
+
+        public void SetPhysicalItemInInventory(string blockId, DefinitionId definitionId, float amount)
+        {
+            var block = m_observer.GetBlockById(blockId);
+            var fat = block.FatBlock;
+            if (!(fat is IMyInventoryOwner))
+            {
+                throw new ArgumentException($"Block {blockId} is not InventoryOwner and doesn't have an inventory");
+            }
+
+            MyInventory inventory = fat.GetInventory();
+            if (inventory == null)
+            {
+                throw new ArgumentException($"Block {blockId} is not InventoryOwner and doesn't have an inventory");
+            }
+
+            var content =
+                    (MyObjectBuilder_PhysicalObject)MyObjectBuilderSerializer.CreateNewObject(
+                        definitionId.ToMyDefinitionId());
+
+            var item = new MyPhysicalInventoryItem()
+            {
+                Scale = 1,
+                Amount = new MyFixedPoint() { RawValue = (long)(amount * 1000000) },
+                Content = content,
+            };
+            inventory.GetItems().Add(item);
         }
 
 
