@@ -21,6 +21,9 @@ namespace Iv4xr.SpaceEngineers
 
         List<string> BatchPlaceInGrid(string gridId, PlainVec3F? color, List<BlockLocation> blockPlacementConfigs);
         void SetPhysicalItemInInventory(string blockId, DefinitionId definitionId, float amount);
+        void RequestConversionToShip(string gridId);
+        void RequestConversionToStation(string gridId);
+        void SetDestructibleBlocks(string gridId, bool destructibleBlocks);
 
         IWarheadAdmin Warhead { get; }
         IFunctionalBlockAdmin FunctionalBlock { get; }

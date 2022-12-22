@@ -20,6 +20,7 @@ namespace Iv4xr.SpaceEngineers
         void ShowNotification(string text);
         string Ping();
         string Echo(string text);
+        void SetCreativeTools(bool enabled);
     }
 
     public interface IObserverAdmin

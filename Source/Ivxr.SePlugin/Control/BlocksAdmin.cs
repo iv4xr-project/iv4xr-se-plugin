@@ -86,6 +86,20 @@ namespace Iv4xr.SePlugin.Control
             inventory.RaiseContentsChanged();
         }
 
+        public void RequestConversionToShip(string gridId)
+        {
+            m_observer.GetGridById(gridId).RequestConversionToShip(null);
+        }
+
+        public void RequestConversionToStation(string gridId)
+        {
+            m_observer.GetGridById(gridId).RequestConversionToStation();
+        }
+
+        public void SetDestructibleBlocks(string gridId, bool destructibleBlocks)
+        {
+            m_observer.GetGridById(gridId).DestructibleBlocks = destructibleBlocks;
+        }
 
         public void SetCustomName(string blockId, string customName)
         {

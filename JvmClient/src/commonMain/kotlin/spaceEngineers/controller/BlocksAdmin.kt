@@ -39,6 +39,10 @@ interface BlocksAdmin {
     fun mapButtonToBlock(buttonBlockId: BlockId, buttonIndex: Int, action: String, targetId: BlockId)
     fun mapButtonToGroup(buttonBlockId: BlockId, buttonIndex: Int, action: String, groupName: String)
     fun setPhysicalItemInInventory(blockId: BlockId, definitionId: DefinitionId, amount: Float)
+    fun requestConversionToShip(gridId: String)
+    fun requestConversionToStation(gridId: String)
+    fun setDestructibleBlocks(gridId: String, destructibleBlocks: Boolean)
+
     val warhead: WarheadAdmin
     val medicalRoom: MedicalRoomAdmin
     val functionalBlock: FunctionalBlockAdmin

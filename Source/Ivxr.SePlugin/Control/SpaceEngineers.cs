@@ -8,6 +8,8 @@ using Iv4xr.SpaceEngineers.UI;
 using Iv4xr.SpaceEngineers.WorldModel;
 using Sandbox;
 using Sandbox.Game.Gui;
+using Sandbox.Game.Multiplayer;
+using Sandbox.Game.World;
 using VRage.Game;
 using static Iv4xr.SePlugin.Communication.CallTarget;
 
@@ -91,6 +93,11 @@ namespace Iv4xr.SePlugin.Control
         public string Echo(string text)
         {
             return text == "rm -rf /" ? "I'm sorry Dave, I'm afraid I cannot do that." : text;
+        }
+
+        public void SetCreativeTools(bool enabled)
+        {
+            MySession.Static.EnableCreativeTools(Sync.MyId, enabled);
         }
 
         public void UpdateDefaultInteractDistance(float distance)

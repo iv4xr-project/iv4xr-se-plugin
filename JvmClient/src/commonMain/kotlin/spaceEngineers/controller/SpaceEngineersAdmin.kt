@@ -18,6 +18,7 @@ interface SpaceEngineersAdmin {
     fun showNotification(text: String)
     fun ping(): String
     fun echo(text: String): String
+    fun setCreativeTools(enabled: Boolean)
 }
 
 interface TestAdmin {
