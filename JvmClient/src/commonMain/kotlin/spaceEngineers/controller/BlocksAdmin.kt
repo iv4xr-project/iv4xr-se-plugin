@@ -38,6 +38,7 @@ interface BlocksAdmin {
     fun createOrUpdateGroup(name: String, gridId: String, blockIds: List<BlockId>)
     fun mapButtonToBlock(buttonBlockId: BlockId, buttonIndex: Int, action: String, targetId: BlockId)
     fun mapButtonToGroup(buttonBlockId: BlockId, buttonIndex: Int, action: String, groupName: String)
+    fun setPhysicalItemInInventory(blockId: BlockId, definitionId: DefinitionId, amount: Float)
     val warhead: WarheadAdmin
     val medicalRoom: MedicalRoomAdmin
     val functionalBlock: FunctionalBlockAdmin
