@@ -46,6 +46,17 @@ interface BlocksAdmin {
     val pistonBase: PistonBaseAdmin
     val thrust: ThrustAdmin
     val timerBlock: TimerBlockAdmin
+    val buttonPanel: ButtonPanelAdmin
+    val door: DoorBaseAdmin
+}
+
+interface DoorBaseAdmin {
+    fun setAnyoneCanUse(blockId: String, anyoneCanUse: Boolean)
+    fun setOpen(blockId: String, open: Boolean)
+}
+
+interface ButtonPanelAdmin {
+    fun setAnyoneCanUse(blockId: String, anyoneCanUse: Boolean)
 }
 
 interface TimerBlockAdmin {

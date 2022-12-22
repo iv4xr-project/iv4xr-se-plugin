@@ -31,6 +31,9 @@ namespace Iv4xr.SpaceEngineers
         ITimerBlockAdmin TimerBlock { get; }
         IPistonBaseAdmin PistonBase { get; }
         IThrustAdmin Thrust { get; }
+        IButtonPanelAdmin ButtonPanel { get; }
+        IDoorBaseAdmin Door { get; }
+
     }
 
     public interface IGravityGeneratorBaseAdmin
@@ -95,6 +98,17 @@ namespace Iv4xr.SpaceEngineers
     {
         void SetFieldMin(string blockId, PlainVec3D fieldMin);
         void SetFieldMax(string blockId, PlainVec3D fieldMax);
+    }
+
+    public interface IDoorBaseAdmin
+    {
+        void SetAnyoneCanUse(string blockId, bool anyoneCanUse);
+        void SetOpen(string blockId, bool open);
+    }
+    
+    public interface IButtonPanelAdmin
+    {
+        void SetAnyoneCanUse(string blockId, bool anyoneCanUse);
     }
 
     public interface IPistonBaseAdmin

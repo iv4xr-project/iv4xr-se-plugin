@@ -11,6 +11,7 @@ import spaceEngineers.model.MessageBoxData
 import spaceEngineers.model.SaveAsData
 import spaceEngineers.model.ServerConnectData
 import spaceEngineers.model.TerminalControlPanelData
+import spaceEngineers.model.TerminalFactionsData
 import spaceEngineers.model.TerminalInfoData
 import spaceEngineers.model.TerminalInventoryData
 import spaceEngineers.model.TerminalProductionData
@@ -137,7 +138,18 @@ interface CommsTab
 
 interface GpsTab
 
-interface FactionsTab
+interface FactionsTab {
+    fun data(): TerminalFactionsData
+    fun create()
+    fun join()
+    fun cancelJoin()
+    fun leave()
+    fun proposePeace()
+    fun acceptPeace()
+    fun declareWar()
+    fun cancelRequest()
+    fun selectFaction(index: Int)
+}
 
 interface ControlPanelTab {
     fun data(): TerminalControlPanelData
@@ -145,6 +157,8 @@ interface ControlPanelTab {
     fun enterBlockGroup(text: String)
     fun groupSave()
     fun groupDelete()
+    fun transferTo(index: Int)
+    fun selectShareMode(index: Int)
 }
 
 interface InfoTab {

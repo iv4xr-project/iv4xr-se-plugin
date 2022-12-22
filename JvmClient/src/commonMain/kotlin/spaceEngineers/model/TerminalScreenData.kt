@@ -61,6 +61,14 @@ data class BlockGroupItem(
 ) : BlockOrGroupItem
 
 @Serializable
+data class TerminalFactionsData(
+    @SerialName("Factions")
+    val factions: List<Faction>,
+    @SerialName("SelectedFactionIndex")
+    val selectedFactionIndex: Int? = null,
+)
+
+@Serializable
 data class TerminalControlPanelData(
     @SerialName("Search")
     val search: String,

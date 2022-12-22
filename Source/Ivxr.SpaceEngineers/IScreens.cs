@@ -117,6 +117,16 @@ namespace Iv4xr.SpaceEngineers
 
     public interface IFactionsTab
     {
+        TerminalFactionsData Data();
+        void Create();
+        void Join();
+        void CancelJoin();
+        void Leave();
+        void ProposePeace();
+        void AcceptPeace();
+        void DeclareWar();
+        void CancelRequest();
+        void SelectFaction(int index);
     }
 
     public interface IControlPanelTab
@@ -126,6 +136,8 @@ namespace Iv4xr.SpaceEngineers
         void EnterBlockGroup(string text);
         void GroupSave();
         void GroupDelete();
+        void TransferTo(int index);
+        void SelectShareMode(int index);
     }
 
     public interface IInfoTab
