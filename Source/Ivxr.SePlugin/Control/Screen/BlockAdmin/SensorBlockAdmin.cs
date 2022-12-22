@@ -20,5 +20,10 @@ namespace Iv4xr.SePlugin.Control.Screen.BlockAdmin
         {
             BlockById(blockId).FieldMax = fieldMax.ToVector3();
         }
+
+        public void SetFilters(string blockId, int filters)
+        {
+            BlockById(blockId).Filters = (MySensorFilterFlags)filters;
+        }
     }
 }
