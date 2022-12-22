@@ -39,8 +39,10 @@ namespace Iv4xr.SePlugin.Control
             TimerBlock = new TimerBlockAdmin(session, observer);
             PistonBase = new PistonBaseAdmin(session, observer);
             Thrust = new ThrustAdmin(session, observer);
+            Door = new DoorBaseAdmin(session, observer);
+            ButtonPanel = new ButtonPanelAdmin(session, observer);
         }
-
+        
         private readonly BlockPlacer m_blockPlacer = new BlockPlacer();
 
         public void SetIntegrity(string blockId, float integrity)
@@ -209,6 +211,8 @@ namespace Iv4xr.SePlugin.Control
         public ITimerBlockAdmin TimerBlock { get; }
         public IPistonBaseAdmin PistonBase { get; }
         public IThrustAdmin Thrust { get; }
+        public IButtonPanelAdmin ButtonPanel { get; }
+        public IDoorBaseAdmin Door { get; }
 
         public void Remove(string blockId)
         {
