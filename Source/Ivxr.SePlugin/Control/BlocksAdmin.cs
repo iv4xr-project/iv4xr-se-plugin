@@ -48,6 +48,8 @@ namespace Iv4xr.SePlugin.Control
             ButtonPanel = new ButtonPanelAdmin(session, observer);
             TextPanel = new TextPanelAdmin(session, observer);
             Beacon = new BeaconAdmin(session, observer);
+            SurvivalKit = new SurvivalKitAdmin(session, observer);
+            SoundBlock = new SoundBlockAdmin(session, observer);
         }
 
         private readonly BlockPlacer m_blockPlacer = new BlockPlacer();
@@ -265,6 +267,8 @@ namespace Iv4xr.SePlugin.Control
         public IDoorBaseAdmin Door { get; }
         public ITextPanelAdmin TextPanel { get; }
         public IBeaconAdmin Beacon { get; }
+        public ISurvivalKitAdmin SurvivalKit { get; }
+        public ISoundBlockAdmin SoundBlock { get; }
 
         public void Remove(string blockId)
         {

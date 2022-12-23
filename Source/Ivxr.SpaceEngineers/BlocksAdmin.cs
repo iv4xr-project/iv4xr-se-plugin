@@ -39,6 +39,8 @@ namespace Iv4xr.SpaceEngineers
         IDoorBaseAdmin Door { get; }
         ITextPanelAdmin TextPanel { get; }
         IBeaconAdmin Beacon { get; }
+        ISurvivalKitAdmin SurvivalKit { get; }
+        ISoundBlockAdmin SoundBlock { get; }
     }
 
     public interface IGravityGeneratorBaseAdmin
@@ -90,6 +92,21 @@ namespace Iv4xr.SpaceEngineers
         void SetShowInInventory(string blockId, bool showInInventory);
         void SetShowInTerminal(string blockId, bool showInTerminal);
         void SetShowOnHUD(string blockId, bool showOnHUD);
+    }
+
+    public interface ISoundBlockAdmin
+    {
+        void SetRange(string blockId, float range);
+        void SetVolume(string blockId, float volume);
+        void SetLoopPeriod(string blockId, float loopPeriod);
+        void PlaySound(string blockId);
+        void StopSound(string blockId);
+        void SelectSound(string blockId, string cueId);
+    }
+
+    public interface ISurvivalKitAdmin
+    {
+        void SetSpawnName(string blockId, string name);
     }
 
     public interface IMedicalRoomAdmin

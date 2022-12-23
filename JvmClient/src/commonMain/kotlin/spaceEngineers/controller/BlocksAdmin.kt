@@ -55,6 +55,21 @@ interface BlocksAdmin {
     val door: DoorBaseAdmin
     val textPanel: TextPanelAdmin
     val beacon: BeaconAdmin
+    val survivalKit: SurvivalKitAdmin
+    val soundBlock: SoundBlockAdmin
+}
+
+interface SoundBlockAdmin {
+    fun setRange(blockId: String, range: Float)
+    fun setVolume(blockId: String, volume: Float)
+    fun setLoopPeriod(blockId: String, loopPeriod: Float)
+    fun playSound(blockId: String)
+    fun stopSound(blockId: String)
+    fun selectSound(blockId: String, cueId: String)
+}
+
+interface SurvivalKitAdmin {
+    fun setSpawnName(blockId: String, name: String)
 }
 
 interface BeaconAdmin {
