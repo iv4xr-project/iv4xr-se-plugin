@@ -46,6 +46,7 @@ namespace Iv4xr.SePlugin.Control
             Thrust = new ThrustAdmin(session, observer);
             Door = new DoorBaseAdmin(session, observer);
             ButtonPanel = new ButtonPanelAdmin(session, observer);
+            TextPanel = new TextPanelAdmin(session, observer);
         }
 
         private readonly BlockPlacer m_blockPlacer = new BlockPlacer();
@@ -261,6 +262,7 @@ namespace Iv4xr.SePlugin.Control
         public IThrustAdmin Thrust { get; }
         public IButtonPanelAdmin ButtonPanel { get; }
         public IDoorBaseAdmin Door { get; }
+        public ITextPanelAdmin TextPanel { get; }
 
         public void Remove(string blockId)
         {

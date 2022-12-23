@@ -1,5 +1,7 @@
-﻿using Iv4xr.SpaceEngineers;
+﻿using Iv4xr.PluginLib;
+using Iv4xr.SpaceEngineers;
 using Sandbox.Game.Entities.Cube;
+using VRage.Sync;
 
 namespace Iv4xr.SePlugin.Control.Screen.BlockAdmin
 {
@@ -10,7 +12,6 @@ namespace Iv4xr.SePlugin.Control.Screen.BlockAdmin
             
         }
         
-        
         public void Explode(string blockId)
         {
             BlockById(blockId).Explode();
@@ -19,6 +20,11 @@ namespace Iv4xr.SePlugin.Control.Screen.BlockAdmin
         public void Detonate(string blockId)
         {
             BlockById(blockId).Detonate();
+        }
+
+        public void SetCountdownMs(string blockId, int countdown)
+        {
+            BlockById(blockId).GetInstanceField<Sync<int, SyncDirection.BothWays>>("m_countdownMs").Value = countdown;
         }
         
         public bool StartCountdown(string blockId)

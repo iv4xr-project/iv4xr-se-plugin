@@ -37,6 +37,7 @@ namespace Iv4xr.SpaceEngineers
         IThrustAdmin Thrust { get; }
         IButtonPanelAdmin ButtonPanel { get; }
         IDoorBaseAdmin Door { get; }
+        ITextPanelAdmin TextPanel { get; }
 
     }
 
@@ -74,6 +75,7 @@ namespace Iv4xr.SpaceEngineers
         bool StopCountdown(string blockId);
 
         void SetArmed(string blockId, bool armed);
+        void SetCountdownMs(string blockId, int countdown);
     }
 
     public interface IFunctionalBlockAdmin
@@ -119,6 +121,18 @@ namespace Iv4xr.SpaceEngineers
     {
         void SetVelocity(string blockId, float velocity);
         void RecreateTop(string blockId);
+    }
+
+    public interface ITextPanelAdmin
+    {
+        void SetPublicTitle(string blockId, string publicTitle);
+        void SetPrivateTitle(string blockId, string privateTitle);
+        void SetPrivateDescription(string blockId, string privateDescription);
+        void SetContentType(string blockId, int contentType);
+        void SetTextPadding(string blockId, float padding);
+        void SetText(string blockId, string text);
+        void SetAlignment(string blockId, int alignment);
+        void SetFontSize(string blockId, float fontSize);
     }
 
     public interface IThrustAdmin

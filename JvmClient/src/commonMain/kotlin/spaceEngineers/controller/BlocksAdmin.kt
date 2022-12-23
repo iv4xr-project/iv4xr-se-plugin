@@ -53,6 +53,18 @@ interface BlocksAdmin {
     val timerBlock: TimerBlockAdmin
     val buttonPanel: ButtonPanelAdmin
     val door: DoorBaseAdmin
+    val textPanel: TextPanelAdmin
+}
+
+interface TextPanelAdmin {
+    fun setPublicTitle(blockId: String, publicTitle: String)
+    fun setPrivateTitle(blockId: String, privateTitle: String)
+    fun setPrivateDescription(blockId: String, privateDescription: String)
+    fun setContentType(blockId: String, contentType: Int)
+    fun setTextPadding(blockId: String, padding: Float)
+    fun setText(blockId: String, text: String)
+    fun setAlignment(blockId: String, alignment: Int)
+    fun setFontSize(blockId: String, fontSize: Float)
 }
 
 interface DoorBaseAdmin {
@@ -95,9 +107,10 @@ interface MedicalRoomAdmin {
 interface WarheadAdmin {
     fun explode(blockId: BlockId)
     fun detonate(blockId: BlockId)
-    fun startCountDown(blockId: BlockId): Boolean
+    fun startCountdown(blockId: BlockId): Boolean
     fun stopCountdown(): Boolean
     fun setArmed(blockId: BlockId, armed: Boolean)
+    fun setCountdownMs(blockId: BlockId, countdown: Int)
 }
 
 interface FunctionalBlockAdmin {
