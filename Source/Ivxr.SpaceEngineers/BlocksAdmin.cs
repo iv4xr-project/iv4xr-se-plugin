@@ -38,7 +38,7 @@ namespace Iv4xr.SpaceEngineers
         IButtonPanelAdmin ButtonPanel { get; }
         IDoorBaseAdmin Door { get; }
         ITextPanelAdmin TextPanel { get; }
-
+        IBeaconAdmin Beacon { get; }
     }
 
     public interface IGravityGeneratorBaseAdmin
@@ -121,6 +121,13 @@ namespace Iv4xr.SpaceEngineers
     {
         void SetVelocity(string blockId, float velocity);
         void RecreateTop(string blockId);
+    }
+
+    public interface IBeaconAdmin
+    {
+        void SetRadius(string blockId, float radius);
+
+        void SetHudText(string blockId, string text);
     }
 
     public interface ITextPanelAdmin

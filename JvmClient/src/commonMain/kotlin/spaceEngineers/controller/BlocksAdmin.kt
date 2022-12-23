@@ -54,6 +54,11 @@ interface BlocksAdmin {
     val buttonPanel: ButtonPanelAdmin
     val door: DoorBaseAdmin
     val textPanel: TextPanelAdmin
+    val beacon: BeaconAdmin
+}
+
+interface BeaconAdmin {
+    fun setRadius(blockId: BlockId, radius: Float)
 }
 
 interface TextPanelAdmin {

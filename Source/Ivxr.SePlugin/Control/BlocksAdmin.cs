@@ -47,6 +47,7 @@ namespace Iv4xr.SePlugin.Control
             Door = new DoorBaseAdmin(session, observer);
             ButtonPanel = new ButtonPanelAdmin(session, observer);
             TextPanel = new TextPanelAdmin(session, observer);
+            Beacon = new BeaconAdmin(session, observer);
         }
 
         private readonly BlockPlacer m_blockPlacer = new BlockPlacer();
@@ -263,6 +264,7 @@ namespace Iv4xr.SePlugin.Control
         public IButtonPanelAdmin ButtonPanel { get; }
         public IDoorBaseAdmin Door { get; }
         public ITextPanelAdmin TextPanel { get; }
+        public IBeaconAdmin Beacon { get; }
 
         public void Remove(string blockId)
         {
