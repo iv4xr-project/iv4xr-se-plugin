@@ -22,13 +22,13 @@ data class PointOfInterest(
 @Serializable
 data class OreMarker(
     @SerialName("Position")
-    var position: Vec3F,
+    val position: Vec3F,
     @SerialName("Text")
-    var text: String,
+    val text: String,
     @SerialName("Distance")
-    var distance: Double,
+    val distance: Double,
     @SerialName("Materials")
-    var materials: List<DefinitionId>,
+    val materials: List<DefinitionId>,
 )
 
 interface HudStatsWrapper {
@@ -59,9 +59,19 @@ data class Hud(
 }
 
 @Serializable
+data class LocationMarker(
+    @SerialName("Position")
+    val position: Vec3F,
+    @SerialName("Text")
+    val text: String,
+)
+
+@Serializable
 data class GamePlayData(
     @SerialName("OreMarkers")
     val oreMarkers: List<OreMarker>,
     @SerialName("Hud")
     val hud: Hud,
+    @SerialName("LocationMarkers")
+    val locationMarkers: List<LocationMarker> = emptyList(),
 )

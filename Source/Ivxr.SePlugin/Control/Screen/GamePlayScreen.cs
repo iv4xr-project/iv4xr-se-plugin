@@ -123,7 +123,12 @@ namespace Iv4xr.SePlugin.Control.Screen
                                 x => x.GetType().Name.Replace("MyStat", ""),
                                 x => x.CurrentValue
                             )
-                }
+                },
+                LocationMarkers = MyHud.LocationMarkers.MarkerEntities.Select(me => new LocationMarker()
+                {
+                    Position = me.Position.ToPlain(),
+                    Text = me.Text.ToString(),
+                }).ToList(),
             };
         }
 
