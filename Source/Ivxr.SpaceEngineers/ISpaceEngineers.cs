@@ -44,7 +44,6 @@ namespace Iv4xr.SpaceEngineers
         CharacterObservation Observe();
         Entity ObserveControlledEntity();
         Observation ObserveBlocks();
-        Observation ObserveNewBlocks();
         List<CharacterObservation> ObserveCharacters();
         List<FloatingObject> ObserveFloatingObjects();
         NavGraph NavigationGraph(string gridId);

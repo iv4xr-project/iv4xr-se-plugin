@@ -278,7 +278,7 @@ namespace Iv4xr.SePlugin.Control
                 throw new ArgumentException("Block with id not found");
             }
 
-            var block = m_observer.GetBlocksOf(grid).FirstOrDefault(b => b.BlockId().ToString() == blockId);
+            var block = grid.CubeBlocks.FirstOrDefault(b => b.BlockId().ToString() == blockId);
             grid.RemoveBlock(block);
         }
     }

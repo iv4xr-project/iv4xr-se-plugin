@@ -48,11 +48,6 @@ namespace Iv4xr.SePlugin.Control
             return m_lowLevelObserver.GetBlocks();
         }
 
-        public Observation ObserveNewBlocks()
-        {
-            return m_lowLevelObserver.GetNewBlocks();
-        }
-
         public List<CharacterObservation> ObserveCharacters()
         {
             return m_lowLevelObserver.ObserveCharacters();
