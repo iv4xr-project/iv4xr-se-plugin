@@ -39,6 +39,10 @@ interface HudStatsWrapper {
     val artificialGravity: Float
     val naturalGravity: Float
     val helmet: Boolean
+    val health: Float
+    val oxygen: Float
+    val energy: Float
+    val hydrogen: Float
 }
 
 @Serializable
@@ -52,6 +56,10 @@ data class Hud(
             override val relativeDampenersOn: Boolean = stats["ControlledEntityDampeners"] == 0.5f
             override val jetpackOn: Boolean = stats["PlayerJetpack"] == 1.0f
             override val helmet: Boolean = stats["PlayerHelmet"] == 1.0f
+            override val health: Float = stats["PlayerHealth"] ?: error("no health in stats")
+            override val oxygen: Float = stats["PlayerOxygen"] ?: error("no oxygen in stats")
+            override val energy: Float = stats["PlayerEnergy"] ?: error("no energy in stats")
+            override val hydrogen: Float = stats["PlayerHydrogen"] ?: error("no hydrogen in stats")
             override val speed: Float = stats["ControlledEntitySpeed"] ?: error("no speed in stats")
             override val artificialGravity: Float = stats["ArtificialGravity"] ?: error("no artificialGravity in stats")
             override val naturalGravity: Float = stats["NaturalGravity"] ?: error("no naturalGravity in stats")

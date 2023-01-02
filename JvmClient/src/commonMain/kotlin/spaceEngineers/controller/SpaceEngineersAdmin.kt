@@ -56,6 +56,7 @@ interface CharacterAdmin {
     fun updateEnergy(energy: Float)
     fun updateOxygen(oxygen: Float)
     fun updateHydrogen(hydrogen: Float)
+    fun updateHealth(health: Float)
 }
 
 interface ObserverAdmin {

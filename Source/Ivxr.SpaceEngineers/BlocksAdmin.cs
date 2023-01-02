@@ -183,5 +183,6 @@ namespace Iv4xr.SpaceEngineers
         void UpdateEnergy(float energy);
         void UpdateOxygen(float oxygen);
         void UpdateHydrogen(float hydrogen);
+        void UpdateHealth(float health);
     }
 }

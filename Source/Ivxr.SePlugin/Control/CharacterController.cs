@@ -8,6 +8,7 @@ using Sandbox.Engine.Multiplayer;
 using Sandbox.Game;
 using Sandbox.Game.Entities;
 using Sandbox.Game.Entities.Character;
+using Sandbox.Game.Entities.Character.Components;
 using Sandbox.Game.EntityComponents;
 using Sandbox.Game.Gui;
 using Sandbox.Game.Multiplayer;
@@ -67,15 +68,22 @@ namespace Iv4xr.SePlugin.Control
             var absoluteEnergy = MyEnergyConstants.BATTERY_MAX_CAPACITY * energy;
             ResourceSource.SetRemainingCapacityByType(MyResourceDistributorComponent.ElectricityId, absoluteEnergy);
         }
+        
+        public void UpdateHealth(float health)
+        {
+            Character.StatComp.Health.Value = health * 100;
+        }
+
 
         public void UpdateOxygen(float oxygen)
         {
-            ResourceSource.SetRemainingCapacityByType(MyResourceDistributorComponent.OxygenId, oxygen);
+            Character.OxygenComponent.SuitOxygenAmount = Character.OxygenComponent.OxygenCapacity * oxygen;
         }
 
         public void UpdateHydrogen(float hydrogen)
         {
-            ResourceSource.SetRemainingCapacityByType(MyResourceDistributorComponent.HydrogenId, hydrogen);
+            var hydrogenId = MyCharacterOxygenComponent.HydrogenId;
+            Character.OxygenComponent.UpdateStoredGasLevel(ref hydrogenId, hydrogen);
         }
 
 
