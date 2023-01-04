@@ -46,6 +46,10 @@ namespace Iv4xr.SePlugin.Control
             Thrust = new ThrustAdmin(session, observer);
             Door = new DoorBaseAdmin(session, observer);
             ButtonPanel = new ButtonPanelAdmin(session, observer);
+            TextPanel = new TextPanelAdmin(session, observer);
+            Beacon = new BeaconAdmin(session, observer);
+            SurvivalKit = new SurvivalKitAdmin(session, observer);
+            SoundBlock = new SoundBlockAdmin(session, observer);
         }
 
         private readonly BlockPlacer m_blockPlacer = new BlockPlacer();
@@ -86,6 +90,20 @@ namespace Iv4xr.SePlugin.Control
             inventory.RaiseContentsChanged();
         }
 
+        public void RequestConversionToShip(string gridId)
+        {
+            m_observer.GetGridById(gridId).RequestConversionToShip(null);
+        }
+
+        public void RequestConversionToStation(string gridId)
+        {
+            m_observer.GetGridById(gridId).RequestConversionToStation();
+        }
+
+        public void SetDestructibleBlocks(string gridId, bool destructibleBlocks)
+        {
+            m_observer.GetGridById(gridId).DestructibleBlocks = destructibleBlocks;
+        }
 
         public void SetCustomName(string blockId, string customName)
         {
@@ -247,6 +265,10 @@ namespace Iv4xr.SePlugin.Control
         public IThrustAdmin Thrust { get; }
         public IButtonPanelAdmin ButtonPanel { get; }
         public IDoorBaseAdmin Door { get; }
+        public ITextPanelAdmin TextPanel { get; }
+        public IBeaconAdmin Beacon { get; }
+        public ISurvivalKitAdmin SurvivalKit { get; }
+        public ISoundBlockAdmin SoundBlock { get; }
 
         public void Remove(string blockId)
         {
@@ -256,7 +278,7 @@ namespace Iv4xr.SePlugin.Control
                 throw new ArgumentException("Block with id not found");
             }
 
-            var block = m_observer.GetBlocksOf(grid).FirstOrDefault(b => b.BlockId().ToString() == blockId);
+            var block = grid.CubeBlocks.FirstOrDefault(b => b.BlockId().ToString() == blockId);
             grid.RemoveBlock(block);
         }
     }

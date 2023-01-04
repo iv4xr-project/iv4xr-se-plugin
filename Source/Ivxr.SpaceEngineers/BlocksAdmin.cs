@@ -21,6 +21,9 @@ namespace Iv4xr.SpaceEngineers
 
         List<string> BatchPlaceInGrid(string gridId, PlainVec3F? color, List<BlockLocation> blockPlacementConfigs);
         void SetPhysicalItemInInventory(string blockId, DefinitionId definitionId, float amount);
+        void RequestConversionToShip(string gridId);
+        void RequestConversionToStation(string gridId);
+        void SetDestructibleBlocks(string gridId, bool destructibleBlocks);
 
         IWarheadAdmin Warhead { get; }
         IFunctionalBlockAdmin FunctionalBlock { get; }
@@ -34,7 +37,10 @@ namespace Iv4xr.SpaceEngineers
         IThrustAdmin Thrust { get; }
         IButtonPanelAdmin ButtonPanel { get; }
         IDoorBaseAdmin Door { get; }
-
+        ITextPanelAdmin TextPanel { get; }
+        IBeaconAdmin Beacon { get; }
+        ISurvivalKitAdmin SurvivalKit { get; }
+        ISoundBlockAdmin SoundBlock { get; }
     }
 
     public interface IGravityGeneratorBaseAdmin
@@ -71,6 +77,7 @@ namespace Iv4xr.SpaceEngineers
         bool StopCountdown(string blockId);
 
         void SetArmed(string blockId, bool armed);
+        void SetCountdownMs(string blockId, int countdown);
     }
 
     public interface IFunctionalBlockAdmin
@@ -85,6 +92,21 @@ namespace Iv4xr.SpaceEngineers
         void SetShowInInventory(string blockId, bool showInInventory);
         void SetShowInTerminal(string blockId, bool showInTerminal);
         void SetShowOnHUD(string blockId, bool showOnHUD);
+    }
+
+    public interface ISoundBlockAdmin
+    {
+        void SetRange(string blockId, float range);
+        void SetVolume(string blockId, float volume);
+        void SetLoopPeriod(string blockId, float loopPeriod);
+        void PlaySound(string blockId);
+        void StopSound(string blockId);
+        void SelectSound(string blockId, string cueId);
+    }
+
+    public interface ISurvivalKitAdmin
+    {
+        void SetSpawnName(string blockId, string name);
     }
 
     public interface IMedicalRoomAdmin
@@ -118,6 +140,25 @@ namespace Iv4xr.SpaceEngineers
         void RecreateTop(string blockId);
     }
 
+    public interface IBeaconAdmin
+    {
+        void SetRadius(string blockId, float radius);
+
+        void SetHudText(string blockId, string text);
+    }
+
+    public interface ITextPanelAdmin
+    {
+        void SetPublicTitle(string blockId, string publicTitle);
+        void SetPrivateTitle(string blockId, string privateTitle);
+        void SetPrivateDescription(string blockId, string privateDescription);
+        void SetContentType(string blockId, int contentType);
+        void SetTextPadding(string blockId, float padding);
+        void SetText(string blockId, string text);
+        void SetAlignment(string blockId, int alignment);
+        void SetFontSize(string blockId, float fontSize);
+    }
+
     public interface IThrustAdmin
     {
         void SetThrustOverride(string blockId, float thrustOverride);
@@ -142,5 +183,6 @@ namespace Iv4xr.SpaceEngineers
         void UpdateEnergy(float energy);
         void UpdateOxygen(float oxygen);
         void UpdateHydrogen(float hydrogen);
+        void UpdateHealth(float health);
     }
 }

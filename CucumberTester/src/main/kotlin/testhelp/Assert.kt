@@ -66,7 +66,7 @@ fun assertCharacterObservationEquals(co1: CharacterObservation, co2: CharacterOb
     assertEquals(co1.health, co2.health)
     assertEquals(co1.oxygen, co2.oxygen)
     assertEquals(co1.hydrogen, co2.hydrogen)
-    assertEquals(co1.suitEnergy, co2.suitEnergy)
+    assertEquals(co1.energy, co2.energy)
     //assertEquals(co1.camera, co2.camera)
     assertEquals(co1.headLocalXAngle, co2.headLocalXAngle)
     assertEquals(co1.headLocalYAngle, co2.headLocalYAngle)

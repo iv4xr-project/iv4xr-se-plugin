@@ -27,7 +27,7 @@ class CharacterObservationTest : MockOrRealGameTest(inMockResourcesDirectory("Ch
         assertEquals(1f, characterObservation.health)
         assertEquals(1f, characterObservation.oxygen)
         assertEquals(1f, characterObservation.hydrogen)
-        assertEquals(1f, characterObservation.suitEnergy)
+        assertEquals(1f, characterObservation.energy)
     }
 
     @Test

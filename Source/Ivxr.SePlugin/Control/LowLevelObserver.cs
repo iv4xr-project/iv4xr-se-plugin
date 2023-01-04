@@ -65,22 +65,13 @@ namespace Iv4xr.SePlugin.Control
 
             return MySession.Static.ControlledEntity?.Entity?.ToEntityOrNull() ?? Character.ToEntity();
         }
-
-        public Observation GetNewBlocks(Vector3? position = null)
-        {
-            return new Observation()
-            {
-                Character = GetCharacterObservation(),
-                Grids = CollectSurroundingBlocks(GetBoundingSphere(position), ObservationMode.NEW_BLOCKS)
-            };
-        }
-
+        
         public Observation GetBlocks(Vector3D? position = null)
         {
             return new Observation()
             {
                 Character = GetCharacterObservation(),
-                Grids = CollectSurroundingBlocks(GetBoundingSphere(position), ObservationMode.BLOCKS)
+                Grids = CollectSurroundingBlocks(GetBoundingSphere(position))
             };
         }
 
@@ -93,28 +84,10 @@ namespace Iv4xr.SePlugin.Control
         {
             return new BoundingSphereD(position ?? CurrentPlayerPosition(), radius);
         }
-
-        public HashSet<MySlimBlock> GetBlocksOf(MyCubeGrid grid)
+        
+        private List<MyEntity> EnumerateSurroundingEntities(BoundingSphereD sphere)
         {
-            var foundBlocks = new HashSet<MySlimBlock>();
-            var sphere = GetBoundingSphere();
-            grid.GetBlocksInsideSphere(ref sphere, foundBlocks);
-            return foundBlocks;
-        }
-
-        private IEnumerable<MyEntity> EnumerateSurroundingEntities(BoundingSphereD sphere)
-        {
-            List<MyEntity> entities = MyEntities.GetEntitiesInSphere(ref sphere);
-
-            try
-            {
-                foreach (MyEntity entity in entities)
-                    yield return entity;
-            }
-            finally
-            {
-                entities.Clear();
-            }
+            return MyEntities.GetEntitiesInSphere(ref sphere);
         }
 
         public List<FloatingObject> ObserveFloatingObjects(Vector3D? position = null)
@@ -150,16 +123,16 @@ namespace Iv4xr.SePlugin.Control
                     .ToList();
         }
 
-        internal List<CubeGrid> CollectSurroundingBlocks(BoundingSphereD sphere, ObservationMode mode)
+        internal List<CubeGrid> CollectSurroundingBlocks(BoundingSphereD sphere)
         {
             return EnumerateSurroundingEntities(sphere)
                     .OfType<MyCubeGrid>()
-                    .Select(grid => EntityBuilder.CreateSeGrid(grid, sphere, mode)).ToList();
+                    .Select(grid => EntityBuilder.CreateSeGrid(grid, sphere)).ToList();
         }
 
         internal CubeGrid ConvertToSeGrid(MyCubeGrid sourceGrid, BoundingSphereD sphere)
         {
-            return EntityBuilder.CreateSeGrid(sourceGrid, sphere, ObservationMode.BLOCKS);
+            return EntityBuilder.CreateSeGrid(sourceGrid, sphere);
         }
 
         public IEnumerable<MyCubeGrid> Grids()
@@ -192,7 +165,7 @@ namespace Iv4xr.SePlugin.Control
 
         public MyCubeGrid GetGridContainingBlock(string blockId)
         {
-            BoundingSphereD sphere = GetBoundingSphere( null, 500.0);
+            BoundingSphereD sphere = GetBoundingSphere( );
             return EnumerateSurroundingEntities(sphere)
                     .OfType<MyCubeGrid>().ToList().FirstOrDefault(grid =>
                     {
@@ -204,7 +177,7 @@ namespace Iv4xr.SePlugin.Control
         public MySlimBlock GetBlockByIdOrNull(string blockId)
         {
             var grid = GetGridContainingBlock(blockId);
-            return grid == null ? null : GetBlocksOf(grid).FirstOrDefault(b => b.BlockId().ToString() == blockId);
+            return grid?.CubeBlocks.FirstOrDefault(b => b.BlockId().ToString() == blockId);
         }
 
         public MySlimBlock GetBlockById(string blockId)

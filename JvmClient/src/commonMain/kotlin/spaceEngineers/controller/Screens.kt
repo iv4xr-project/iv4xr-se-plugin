@@ -15,6 +15,7 @@ import spaceEngineers.model.TerminalFactionsData
 import spaceEngineers.model.TerminalInfoData
 import spaceEngineers.model.TerminalInventoryData
 import spaceEngineers.model.TerminalProductionData
+import spaceEngineers.model.TerminalRemoteAccessData
 import spaceEngineers.model.TerminalScreenData
 import spaceEngineers.model.ToolbarConfigData
 
@@ -132,6 +133,11 @@ interface Terminal {
     val factions: FactionsTab
     val comms: CommsTab
     val gps: GpsTab
+    val remoteAccess: RemoteAccess
+}
+
+interface RemoteAccess {
+    fun data(): TerminalRemoteAccessData
 }
 
 interface CommsTab

@@ -69,6 +69,20 @@ data class TerminalFactionsData(
 )
 
 @Serializable
+data class RemoteGridData(
+    @SerialName("Name")
+    val name: String,
+    @SerialName("IsSelectable")
+    val isSelectable: Boolean,
+)
+
+@Serializable
+data class TerminalRemoteAccessData(
+    @SerialName("Grids")
+    val grids: List<RemoteGridData>,
+)
+
+@Serializable
 data class TerminalControlPanelData(
     @SerialName("Search")
     val search: String,

@@ -39,6 +39,10 @@ interface BlocksAdmin {
     fun mapButtonToBlock(buttonBlockId: BlockId, buttonIndex: Int, action: String, targetId: BlockId)
     fun mapButtonToGroup(buttonBlockId: BlockId, buttonIndex: Int, action: String, groupName: String)
     fun setPhysicalItemInInventory(blockId: BlockId, definitionId: DefinitionId, amount: Float)
+    fun requestConversionToShip(gridId: String)
+    fun requestConversionToStation(gridId: String)
+    fun setDestructibleBlocks(gridId: String, destructibleBlocks: Boolean)
+
     val warhead: WarheadAdmin
     val medicalRoom: MedicalRoomAdmin
     val functionalBlock: FunctionalBlockAdmin
@@ -49,6 +53,38 @@ interface BlocksAdmin {
     val timerBlock: TimerBlockAdmin
     val buttonPanel: ButtonPanelAdmin
     val door: DoorBaseAdmin
+    val textPanel: TextPanelAdmin
+    val beacon: BeaconAdmin
+    val survivalKit: SurvivalKitAdmin
+    val soundBlock: SoundBlockAdmin
+}
+
+interface SoundBlockAdmin {
+    fun setRange(blockId: String, range: Float)
+    fun setVolume(blockId: String, volume: Float)
+    fun setLoopPeriod(blockId: String, loopPeriod: Float)
+    fun playSound(blockId: String)
+    fun stopSound(blockId: String)
+    fun selectSound(blockId: String, cueId: String)
+}
+
+interface SurvivalKitAdmin {
+    fun setSpawnName(blockId: String, name: String)
+}
+
+interface BeaconAdmin {
+    fun setRadius(blockId: BlockId, radius: Float)
+}
+
+interface TextPanelAdmin {
+    fun setPublicTitle(blockId: String, publicTitle: String)
+    fun setPrivateTitle(blockId: String, privateTitle: String)
+    fun setPrivateDescription(blockId: String, privateDescription: String)
+    fun setContentType(blockId: String, contentType: Int)
+    fun setTextPadding(blockId: String, padding: Float)
+    fun setText(blockId: String, text: String)
+    fun setAlignment(blockId: String, alignment: Int)
+    fun setFontSize(blockId: String, fontSize: Float)
 }
 
 interface DoorBaseAdmin {
@@ -91,9 +127,10 @@ interface MedicalRoomAdmin {
 interface WarheadAdmin {
     fun explode(blockId: BlockId)
     fun detonate(blockId: BlockId)
-    fun startCountDown(blockId: BlockId): Boolean
+    fun startCountdown(blockId: BlockId): Boolean
     fun stopCountdown(): Boolean
     fun setArmed(blockId: BlockId, armed: Boolean)
+    fun setCountdownMs(blockId: BlockId, countdown: Int)
 }
 
 interface FunctionalBlockAdmin {

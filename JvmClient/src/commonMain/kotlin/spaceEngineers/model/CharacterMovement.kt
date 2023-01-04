@@ -28,6 +28,9 @@ value class CharacterMovement(val value: UShort) {
     val isJumping: Boolean
         get() = (mode == jump.toUShort())
 
+    val isDead: Boolean
+        get() = (mode == died.toUShort())
+
     val isFalling: Boolean
         get() = (mode == falling.toUShort())
 

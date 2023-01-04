@@ -25,14 +25,18 @@ data class CharacterObservation(
     val dampenersOn: Boolean = false,
     @SerialName("HelmetEnabled")
     val helmetEnabled: Boolean = true,
+    @SerialName("LightEnabled")
+    val lightEnabled: Boolean = true,
+    @SerialName("CurrentLightPower")
+    val currentLightPower: Float = 0f,
     @SerialName("Health")
-    val health: Float,
+    override val health: Float,
     @SerialName("Oxygen")
-    val oxygen: Float,
+    override val oxygen: Float,
     @SerialName("Hydrogen")
-    val hydrogen: Float,
+    override val hydrogen: Float,
     @SerialName("SuitEnergy")
-    val suitEnergy: Float = 1f,
+    override val energy: Float = 1f,
     @SerialName("Camera")
     val camera: BasePose,
     @SerialName("HeadLocalXAngle")
@@ -70,4 +74,12 @@ data class CharacterObservation(
     @SerialName("CurrentWeapon")
     val currentWeapon: ExtendedEntity? = null,
 
-) : ExtendedEntity
+) : ExtendedEntity, CharacterStats
+
+interface CharacterStats {
+    val health: Float
+    val oxygen: Float
+    val hydrogen: Float
+    val energy: Float
+    // TODO: helmet, light, jetpack
+}

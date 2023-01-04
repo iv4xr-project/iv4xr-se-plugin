@@ -8,6 +8,7 @@ using Iv4xr.SePlugin.Control;
 using Iv4xr.SpaceEngineers;
 using Iv4xr.SpaceEngineers.WorldModel;
 using Iv4xr.SpaceEngineers.WorldModel.Screen;
+using Sandbox.Common.ObjectBuilders.Definitions;
 using Sandbox.Definitions;
 using Sandbox.Game;
 using Sandbox.Game.Entities;
@@ -210,12 +211,18 @@ namespace Iv4xr.SePlugin
 
         public static InventoryItem ToInventoryItem(this MyPhysicalInventoryItem myItem)
         {
-            return new InventoryItem()
+            var item =  new InventoryItem()
             {
                 Amount = (int)myItem.Amount,
                 Id = myItem.Content.GetId().ToDefinitionId(),
                 ItemId = myItem.ItemId,
+                Scale = myItem.Scale,
             };
+            if (myItem.Content is MyObjectBuilder_GasContainerObject gasContainerObject)
+            {
+                item.GasLevel = gasContainerObject.GasLevel;
+            } 
+            return item;
         }
 
         public static File ToFile(this FileInfo fileInfo)

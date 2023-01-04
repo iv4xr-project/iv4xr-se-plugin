@@ -83,7 +83,9 @@ interface Character {
     fun turnOnDampeners(): CharacterObservation
     fun turnOnRelativeDampeners(): CharacterObservation
     fun turnOffDampeners(): CharacterObservation
-    fun switchHelmet(): CharacterObservation
+    fun setHelmet(enabled: Boolean)
+    fun setLight(enabled: Boolean)
+    fun setBroadcasting(enabled: Boolean)
     fun switchParkedStatus(): Boolean
     fun switchWalk(): Boolean
 

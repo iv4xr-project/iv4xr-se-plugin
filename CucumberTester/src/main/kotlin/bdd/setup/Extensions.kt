@@ -51,15 +51,17 @@ suspend fun SpaceEngineers.ensureCamera(cameraConfig: CameraConfig) {
     }
 }
 
-suspend fun ConnectionManagerUser.handleScenarioParameter(key: String, value: String) =
+suspend fun ConnectionManagerUser.handleScenarioParameter(key: String, value: String) {
     when (key) {
         "delay_after_spawn" -> delay((value.toFloat() * 1000f).toLong())
-        "energy" -> admin { admin.character.updateEnergy(energy = value.toFloat()) }
-        "hydrogen" -> admin { admin.character.updateHydrogen(hydrogen = value.toFloat()) }
-        "oxygen" -> admin { admin.character.updateOxygen(oxygen = value.toFloat()) }
+        "energy" -> admin { admin.character.updateEnergy(energy = value.toFloat() / 100f) }
+        "hydrogen" -> admin { admin.character.updateHydrogen(hydrogen = value.toFloat() / 100f) }
+        "health" -> admin { admin.character.updateHealth(health = value.toFloat() / 100f) }
+        "oxygen" -> admin { admin.character.updateOxygen(oxygen = value.toFloat() / 100f) }
         "camera" -> mainClient { ensureCamera(CameraConfig.fromText(value)) }
-        else -> println("Warning, unknown settings: $key - $value")
+        else -> error("Warning, unknown settings: $key - $value")
     }
+}
 
 suspend fun ConnectionManagerUser.handleScenarioParameters(data: Map<String, String>) {
     val alreadyHandledParameters = setOf("faction", "scenario", "main_client_medbay", "observer_medbay")

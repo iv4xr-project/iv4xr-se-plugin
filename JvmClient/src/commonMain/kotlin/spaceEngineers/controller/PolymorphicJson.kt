@@ -6,6 +6,7 @@ import kotlinx.serialization.modules.polymorphic
 import spaceEngineers.controller.serializer.BlockOrGroupItemSerializer
 import spaceEngineers.controller.serializer.BlockSerializer
 import spaceEngineers.controller.serializer.EntitySerializer
+import spaceEngineers.controller.serializer.PhysicalObjectSerializer
 import spaceEngineers.controller.serializer.ToolbarSerializer
 import spaceEngineers.model.Block
 import spaceEngineers.model.BlockDefinition
@@ -15,6 +16,7 @@ import spaceEngineers.model.DataPhysicalItemDefinition
 import spaceEngineers.model.DefinitionBase
 import spaceEngineers.model.ExtendedEntity
 import spaceEngineers.model.PhysicalItemDefinition
+import spaceEngineers.model.PhysicalObject
 import spaceEngineers.model.ToolbarItem
 
 val json = Json {
@@ -42,6 +44,9 @@ val json = Json {
         }
         polymorphic(ToolbarItem::class) {
             default { ToolbarSerializer }
+        }
+        polymorphic(PhysicalObject::class) {
+            default { PhysicalObjectSerializer }
         }
     }
 }
