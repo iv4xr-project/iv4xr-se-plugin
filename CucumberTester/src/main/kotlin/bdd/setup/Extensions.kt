@@ -33,7 +33,7 @@ suspend fun SpaceEngineers.dieAndConfirm(delayMs: Long = 100L) {
     screens.messageBox.pressYes()
 }
 
-suspend fun SpaceEngineers.ensureCamera(cameraConfig: CameraConfig) {
+fun SpaceEngineers.ensureCamera(cameraConfig: CameraConfig) {
     val info = session.info()
     val cameraInfo = info?.camera ?: error("No camera info")
     when (cameraConfig) {
@@ -54,11 +54,54 @@ suspend fun SpaceEngineers.ensureCamera(cameraConfig: CameraConfig) {
 suspend fun ConnectionManagerUser.handleScenarioParameter(key: String, value: String) {
     when (key) {
         "delay_after_spawn" -> delay((value.toFloat() * 1000f).toLong())
-        "energy" -> admin { admin.character.updateEnergy(energy = value.toFloat() / 100f) }
-        "hydrogen" -> admin { admin.character.updateHydrogen(hydrogen = value.toFloat() / 100f) }
-        "health" -> admin { admin.character.updateHealth(health = value.toFloat() / 100f) }
-        "oxygen" -> admin { admin.character.updateOxygen(oxygen = value.toFloat() / 100f) }
-        "camera" -> mainClient { ensureCamera(CameraConfig.fromText(value)) }
+        "energy" -> {
+            val id = mainClient {
+                admin.character.updateEnergy(energy = value.toFloat() / 100f)
+                admin.character.mainCharacterId()
+            }
+            admin {
+                admin.character.switch(id)
+                admin.character.updateEnergy(energy = value.toFloat() / 100f)
+            }
+        }
+
+        "hydrogen" -> {
+            val id = mainClient {
+                admin.character.updateHydrogen(hydrogen = value.toFloat() / 100f)
+                admin.character.mainCharacterId()
+            }
+            admin {
+                admin.character.switch(id)
+                admin.character.updateHydrogen(hydrogen = value.toFloat() / 100f)
+            }
+        }
+
+        "health" -> {
+            val id = mainClient {
+                admin.character.updateHealth(health = value.toFloat() / 100f)
+                admin.character.mainCharacterId()
+            }
+            admin {
+                admin.character.switch(id)
+                admin.character.updateHealth(health = value.toFloat() / 100f)
+            }
+        }
+
+        "oxygen" -> {
+            val id = mainClient {
+                admin.character.updateOxygen(oxygen = value.toFloat() / 100f)
+                admin.character.mainCharacterId()
+            }
+            admin {
+                admin.character.switch(id)
+                admin.character.updateOxygen(oxygen = value.toFloat() / 100f)
+            }
+        }
+
+        "camera" -> {
+            mainClient { ensureCamera(CameraConfig.fromText(value)) }
+        }
+
         else -> error("Warning, unknown settings: $key - $value")
     }
 }

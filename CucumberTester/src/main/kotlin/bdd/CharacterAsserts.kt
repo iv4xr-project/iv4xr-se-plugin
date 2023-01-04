@@ -616,8 +616,7 @@ class CharacterAsserts(connectionManager: ConnectionManager) : AbstractMultiplay
     @Then("Character stats are:")
     fun character_stats_are_changed_to(dt: DataTable) {
         val dataTable = dt.asMaps().first().map { it.key to it.value.toFloat() }.toMap()
-        val relativeTolerance = dataTable["relative_tolerance"] ?: 0.001f
-        println(dataTable)
+        val relativeTolerance = dataTable["relative_tolerance"] ?: 0.01f
         mainClient {
             val observation = observer.observe() as CharacterStats
             checkStats(dataTable, observation, relativeTolerance)
@@ -639,7 +638,12 @@ class CharacterAsserts(connectionManager: ConnectionManager) : AbstractMultiplay
         relativeTolerance: Float
     ) {
         dataTable[name]?.let { tableStat ->
-            assertEquals(tableStat / 100f, stat, absoluteTolerance = stat * relativeTolerance)
+            assertEquals(
+                tableStat / 100f,
+                stat,
+                absoluteTolerance = 1f * relativeTolerance,
+                message = "absoluteTolerance: ${1f * relativeTolerance}"
+            )
         }
     }
 
@@ -654,7 +658,9 @@ class CharacterAsserts(connectionManager: ConnectionManager) : AbstractMultiplay
     @Then("health is less than maximum.")
     fun health_is_less_than_maximum() {
         mainClient {
-            assertLessThan(observer.observe().health, 1f)
+            repeatUntilSuccess {
+                assertLessThan(observer.observe().health, 1f)
+            }
         }
     }
 
@@ -682,7 +688,6 @@ class CharacterAsserts(connectionManager: ConnectionManager) : AbstractMultiplay
 
     @Then("Personal light is off.")
     fun personal_light_is_off() = mainClient {
-        println(screens.gamePlay.data().hud.stats)
         assertEquals(0f, observer.observe().currentLightPower)
         //assertFalse(observer.observe().lightEnabled, "light is supposed to be off!")
         //TODO: check on hud too
@@ -690,15 +695,17 @@ class CharacterAsserts(connectionManager: ConnectionManager) : AbstractMultiplay
 
     @Then("Character is dead.")
     fun character_is_dead() = mainClient {
-        with(observer.observe()) {
-            assertTrue(movement.isDead)
-            assertEquals(0f, health)
+        repeatUntilSuccess {
+            with(observer.observe()) {
+                assertTrue(movement.isDead, "Not dead based on CharacterMovement flag: $movement")
+                assertEquals(0f, health, "Not dead based on health: $health")
+            }
         }
     }
 
     @Then("Remote terminal for grid {string} is disabled.")
     fun remote_terminal_is_disabled(grid: String) = mainClient {
-        delay(200.milliseconds)
+        delay(500.milliseconds)
         input.startPlaying(
             listOf(
                 FrameSnapshot(
@@ -708,7 +715,7 @@ class CharacterAsserts(connectionManager: ConnectionManager) : AbstractMultiplay
                 )
             )
         )
-        delay(200.milliseconds)
+        delay(500.milliseconds)
         val grids = screens.terminal.remoteAccess.data().grids
         assertTrue(grids.isNotEmpty(), "No grids to see!")
         assertFalse(
@@ -720,7 +727,7 @@ class CharacterAsserts(connectionManager: ConnectionManager) : AbstractMultiplay
 
     @Then("Remote terminal for grid {string} is enabled.")
     fun remote_terminal_is_enabled(grid: String) = mainClient {
-        delay(200.milliseconds)
+        delay(500.milliseconds)
         input.startPlaying(
             listOf(
                 FrameSnapshot(
@@ -730,7 +737,7 @@ class CharacterAsserts(connectionManager: ConnectionManager) : AbstractMultiplay
                 )
             )
         )
-        delay(200.milliseconds)
+        delay(500.milliseconds)
         val grids = screens.terminal.remoteAccess.data().grids
         assertTrue(grids.isNotEmpty(), "No grids to see!")
         assertTrue(

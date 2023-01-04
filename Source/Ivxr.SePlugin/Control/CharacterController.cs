@@ -74,7 +74,7 @@ namespace Iv4xr.SePlugin.Control
 
         public void UpdateHealth(float health)
         {
-            Character.StatComp.Health.Value = health * 100;
+            Character.StatComp.Health.CallMethod<object>("SetValue", new object[] { health * 100, null });
         }
 
 
@@ -120,7 +120,8 @@ namespace Iv4xr.SePlugin.Control
                 return;
             }
 
-            Character.OxygenComponent.SwitchHelmet();
+            IMyControllableEntity entity = (IMyControllableEntity) Character;            
+            entity.SwitchHelmet();
         }
 
         public void SetLight(bool enabled)
@@ -292,12 +293,12 @@ namespace Iv4xr.SePlugin.Control
 
         private MyCharacter Character => m_session.Character;
 
-        private void EnsureCharacterLives(string message ="Cannot do this while dead")
+        private void EnsureCharacterLives(string message = "Cannot do this while dead")
         {
             if (Character.IsDead)
             {
                 throw new InvalidOperationException(message);
-            }            
+            }
         }
     }
 }
