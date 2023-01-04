@@ -36,6 +36,6 @@ namespace Iv4xr.SePlugin.Control.Screen.Terminal
         public IFactionsTab Factions { get; } = new FactionsTab();
         public ICommsTab Comms { get; } = new CommsTab();
         public IGpsTab Gps { get; } = new GpsTab();
-
+        public IRemoteAccess RemoteAccess { get; } = new RemoteAccess();
     }
 }

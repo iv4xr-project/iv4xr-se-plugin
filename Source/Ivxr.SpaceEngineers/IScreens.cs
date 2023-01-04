@@ -104,7 +104,13 @@ namespace Iv4xr.SpaceEngineers
         IFactionsTab Factions { get; }
         ICommsTab Comms { get; }
         IGpsTab Gps { get; }
+        IRemoteAccess RemoteAccess { get; }
         void Close();
+    }
+
+    public interface IRemoteAccess
+    {
+        RemoteAccessData Data();
     }
 
     public interface IGpsTab

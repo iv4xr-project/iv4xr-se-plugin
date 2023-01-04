@@ -695,4 +695,47 @@ class CharacterAsserts(connectionManager: ConnectionManager) : AbstractMultiplay
             assertEquals(0f, health)
         }
     }
+
+    @Then("Remote terminal for grid {string} is disabled.")
+    fun remote_terminal_is_disabled(grid: String) = mainClient {
+        delay(200.milliseconds)
+        input.startPlaying(
+            listOf(
+                FrameSnapshot(
+                    InputSnapshot(
+                        keyboard = KeyboardSnapshot(pressedKeys = listOf(16, 75), text = listOf(' '))
+                    )
+                )
+            )
+        )
+        delay(200.milliseconds)
+        val grids = screens.terminal.remoteAccess.data().grids
+        assertTrue(grids.isNotEmpty(), "No grids to see!")
+        assertFalse(
+            grids.firstOrNull() { it.name == grid }?.isSelectable
+                ?: error("No grid with name $grid found, found only ${grids.map { it.name }}"),
+            "Grid $grid is Selectable and therefore not disabled"
+        )
+    }
+
+    @Then("Remote terminal for grid {string} is enabled.")
+    fun remote_terminal_is_enabled(grid: String) = mainClient {
+        delay(200.milliseconds)
+        input.startPlaying(
+            listOf(
+                FrameSnapshot(
+                    InputSnapshot(
+                        keyboard = KeyboardSnapshot(pressedKeys = listOf(16, 75), text = listOf(' '))
+                    )
+                )
+            )
+        )
+        delay(200.milliseconds)
+        val grids = screens.terminal.remoteAccess.data().grids
+        assertTrue(grids.isNotEmpty(), "No grids to see!")
+        assertTrue(
+            grids.first { it.name == grid }.isSelectable,
+            "Grid $grid is not Selectable and therefore disabled"
+        )
+    }
 }
