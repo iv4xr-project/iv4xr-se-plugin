@@ -488,7 +488,6 @@ class CharacterActions(connectionManager: ConnectionManager) : AbstractMultiplay
     @When("Character turns on personal light.")
     fun character_turns_on_personal_light() = mainClient {
         character.setLight(true)
-        println(screens.gamePlay.data().hud.stats)
     }
 
     @When("Character suicides.")
