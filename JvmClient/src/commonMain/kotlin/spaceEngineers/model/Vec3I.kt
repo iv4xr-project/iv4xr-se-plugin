@@ -2,6 +2,7 @@ package spaceEngineers.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import spaceEngineers.model.extensions.toInt
 import kotlin.math.sqrt
 
 @Serializable
@@ -46,8 +47,8 @@ data class Vec3I(
         return Vec3I(x + other.x, y + other.y, z + other.z)
     }
 
-    operator fun div(value: Float): Vec3I {
-        return Vec3I(x / value, y / value, z / value)
+    operator fun div(value: Float): Vec3F {
+        return Vec3F(x / value, y / value, z / value)
     }
 
     operator fun times(b: NumberVec3<out Number>): Float {
@@ -66,7 +67,7 @@ data class Vec3I(
     fun normalized(): Vec3I {
         val s = length()
         if (s == 0f) throw ArithmeticException()
-        return this / s
+        return (this / s).toInt()
     }
 
     companion object {

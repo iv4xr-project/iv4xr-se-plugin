@@ -3,6 +3,7 @@ package spaceEngineers.util.generator.map.advanced
 import spaceEngineers.controller.SpaceEngineersJavaProxyBuilder
 import spaceEngineers.controller.extend
 import spaceEngineers.controller.extensions.removeAllBlocks
+import spaceEngineers.model.Color
 import spaceEngineers.model.LARGE_BLOCK_CUBE_SIDE_SIZE
 import spaceEngineers.model.Vec3F
 import spaceEngineers.model.Vec3I
@@ -16,7 +17,7 @@ fun main() {
     se.removeAllBlocks()
     val size = 50
     val maze = Maze(height = size, width = size)
-    val f = MutableCell.WALL.copy(color = Vec3F.BLUE)
+    val f = MutableCell.WALL.copy(color = Color.BLUE)
     val ceiling = MutableCell.WALL.copy(color = null)
     val w = MutableCell.WALL.copy()
     val light = MutableCell.WALL.copy(
@@ -42,12 +43,12 @@ fun main() {
                     add(position.x, position.y, w)
                 }
                 if (cell == Maze.Cell.START) {
-                    floor(1)[position.x, position.y]?.color = Vec3F.RED
+                    floor(1)[position.x, position.y]?.color = Color.RED
                     remove(position.x, position.y - 1)
                 }
 
                 if (cell == Maze.Cell.END) {
-                    floor(1)[position.x, position.y]?.color = Vec3F.GREEN
+                    floor(1)[position.x, position.y]?.color = Color.GREEN
                 }
             }
         }

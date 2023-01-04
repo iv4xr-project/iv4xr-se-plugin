@@ -4,11 +4,7 @@ import spaceEngineers.controller.ExtendedSpaceEngineers
 import spaceEngineers.controller.SpaceEngineersJavaProxyBuilder
 import spaceEngineers.controller.extend
 import spaceEngineers.controller.extensions.removeAllBlocks
-import spaceEngineers.model.LARGE_BLOCK_CUBE_SIDE_SIZE
-import spaceEngineers.model.Thrust
-import spaceEngineers.model.TimerBlock
-import spaceEngineers.model.Vec3F
-import spaceEngineers.model.Vec3I
+import spaceEngineers.model.*
 import spaceEngineers.model.extensions.allBlocks
 import spaceEngineers.model.extensions.typedBlockByCustomName
 import spaceEngineers.model.typing.DefinitionIds
@@ -20,7 +16,7 @@ fun main() {
     se.removeAllBlocks()
     val width = 5
     val height = 10
-    val f = MutableCell.WALL.copy(color = Vec3F.BLUE)
+    val f = MutableCell.WALL.copy(color = Color.BLUE)
     val ceiling = MutableCell.WALL.copy(color = null)
     val w = MutableCell.WALL.copy()
 
