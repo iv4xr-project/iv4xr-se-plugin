@@ -37,6 +37,6 @@ class DedicatedServerClientTest : MockOrRealGameTest(loadScenario = false, force
 
     @Test
     fun switchHelmet() = testContext {
-        character.switchHelmet()
+        character.setHelmet(true)
     }
 }

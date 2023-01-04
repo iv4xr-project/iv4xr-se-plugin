@@ -7,8 +7,6 @@ import kotlin.time.Duration.Companion.seconds
 
 class CharacterStatsTest : MockOrRealGameTest() {
 
-
-    //OK
     @Test
     fun initialHealth() = testContext {
         delay(10.seconds)
@@ -27,16 +25,15 @@ class CharacterStatsTest : MockOrRealGameTest() {
     @Test
     fun initialEnergy() = testContext {
         delay(10.seconds)
-        assertEquals(1f, observer.observe().suitEnergy, absoluteTolerance = 0.001f)
+        assertEquals(1f, observer.observe().energy, absoluteTolerance = 0.001f)
         assertEquals(1f, screens.gamePlay.data().hud.statsWrapper.energy, absoluteTolerance = 0.001f)
     }
 
-    //OK
     @Test
     fun energyToHalf() = testContext {
         delay(10.seconds)
         admin.character.updateEnergy(0.5f)
-        assertEquals(0.5f, observer.observe().suitEnergy, absoluteTolerance = 0.001f)
+        assertEquals(0.5f, observer.observe().energy, absoluteTolerance = 0.001f)
         assertEquals(0.5f, screens.gamePlay.data().hud.statsWrapper.energy, absoluteTolerance = 0.001f)
     }
 
@@ -47,7 +44,6 @@ class CharacterStatsTest : MockOrRealGameTest() {
         assertEquals(1f, screens.gamePlay.data().hud.statsWrapper.oxygen, absoluteTolerance = 0.001f)
     }
 
-    //OK
     @Test
     fun oxygenToHalf() = testContext {
         delay(10.seconds)

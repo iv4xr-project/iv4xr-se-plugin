@@ -52,7 +52,6 @@ suspend fun SpaceEngineers.ensureCamera(cameraConfig: CameraConfig) {
 }
 
 suspend fun ConnectionManagerUser.handleScenarioParameter(key: String, value: String) {
-    println("handleScenarioParameter $key - $value")
     when (key) {
         "delay_after_spawn" -> delay((value.toFloat() * 1000f).toLong())
         "energy" -> admin { admin.character.updateEnergy(energy = value.toFloat() / 100f) }

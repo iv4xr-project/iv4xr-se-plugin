@@ -10,9 +10,9 @@ class SwitchHelmetTest : MockOrRealGameTest() {
     @Test
     fun switchHelmet() = testContext {
         assertTrue(observer.observe().helmetEnabled)
-        character.switchHelmet()
+        character.setHelmet(false)
         assertFalse(observer.observe().helmetEnabled)
-        character.switchHelmet()
+        character.setHelmet(true)
         assertTrue(observer.observe().helmetEnabled)
     }
 }

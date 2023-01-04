@@ -89,5 +89,6 @@ class TestRailClient(
         const val SE_SUITE_ID = 225L
         const val SE_ASTRONAUT_MOVEMENT = 49388L
         const val SE_ASTRONAUT_ACTIONS = 50008L
+        const val SE_ASTRONAUT_STATS = 50094L
     }
 }

@@ -1,25 +1,39 @@
 package bdd
 
+import bdd.connection.ConnectionManager
 import bdd.setup.connectClientsDirectly
 import bdd.setup.connectToFirstFriendlyGame
 import bdd.setup.createLobbyGame
+import bdd.setup.dieAndConfirm
 import bdd.setup.exitToMainMenu
+import io.cucumber.java.PendingException
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
-import bdd.connection.ConnectionManager
 import spaceEngineers.controller.extensions.blockingMoveForwardByDistance
 import spaceEngineers.controller.extensions.grindDownToPercentage
 import spaceEngineers.controller.extensions.toNullIfMinusOne
 import spaceEngineers.controller.extensions.torchBackToMax
-import spaceEngineers.model.*
+import spaceEngineers.model.Block
 import spaceEngineers.model.CharacterMovement
+import spaceEngineers.model.CharacterMovementType
+import spaceEngineers.model.DataToolbarItemDefinition
+import spaceEngineers.model.DefinitionId
 import spaceEngineers.model.DefinitionId.Companion.ID_PREFIX
+import spaceEngineers.model.ToolbarLocation
+import spaceEngineers.model.Vec2F
+import spaceEngineers.model.Vec3F
 import spaceEngineers.model.extensions.allBlocks
 import spaceEngineers.model.extensions.normalizeAsRun
-import spaceEngineers.movement.*
+import spaceEngineers.movement.CompositeDirection3d
+import spaceEngineers.movement.FrameSnapshot
+import spaceEngineers.movement.InputSnapshot
+import spaceEngineers.movement.KeyboardSnapshot
+import spaceEngineers.movement.MouseButton
+import spaceEngineers.movement.ReplayMovement
+import spaceEngineers.movement.VectorMovement
 import kotlin.test.assertEquals
 
 
@@ -118,7 +132,8 @@ class CharacterActions(connectionManager: ConnectionManager) : AbstractMultiplay
         val toolbarLocation =
             toolbar.findLocation(blockType) ?: error("cannot find $blockType in toolbar")
         val definitionId =
-            toolbar.items.filterIsInstance<DataToolbarItemDefinition>().firstOrNull { it.id.type == blockType }?.id ?: error("Cannot find $blockType in toolbar")
+            toolbar.items.filterIsInstance<DataToolbarItemDefinition>().firstOrNull { it.id.type == blockType }?.id
+                ?: error("Cannot find $blockType in toolbar")
         items.setToolbarItem(definitionId, toolbarLocation)
         items.equip(toolbarLocation)
         delay(150)
@@ -462,4 +477,22 @@ class CharacterActions(connectionManager: ConnectionManager) : AbstractMultiplay
         )
     }
 
+    @When("Character opens helmet.")
+    fun character_opens_helmet() {
+        mainClient {
+            character.setHelmet(false)
+        }
+
+    }
+
+    @When("Character turns on personal light.")
+    fun character_turns_on_personal_light() = mainClient {
+        character.setLight(true)
+        println(screens.gamePlay.data().hud.stats)
+    }
+
+    @When("Character suicides.")
+    fun character_suicides() = mainClient {
+        dieAndConfirm()
+    }
 }

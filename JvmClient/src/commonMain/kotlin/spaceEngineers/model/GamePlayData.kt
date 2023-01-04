@@ -31,7 +31,7 @@ data class OreMarker(
     val materials: List<DefinitionId>,
 )
 
-interface HudStatsWrapper {
+interface HudStatsWrapper : CharacterStats {
     val dampenersOn: Boolean
     val relativeDampenersOn: Boolean
     val jetpackOn: Boolean
@@ -39,16 +39,20 @@ interface HudStatsWrapper {
     val artificialGravity: Float
     val naturalGravity: Float
     val helmet: Boolean
-    val health: Float
-    val oxygen: Float
-    val energy: Float
-    val hydrogen: Float
 }
+
+@Serializable
+data class HudNotification(
+    @SerialName("Text")
+    val text: String,
+)
 
 @Serializable
 data class Hud(
     @SerialName("Stats")
     val stats: Map<String, Float>,
+    @SerialName("Notifications")
+    val notifications: List<HudNotification>,
 ) {
     val statsWrapper: HudStatsWrapper
         get() = object : HudStatsWrapper {

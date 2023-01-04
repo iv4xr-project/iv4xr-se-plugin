@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Iv4xr.PluginLib;
 using Iv4xr.SpaceEngineers;
 using Iv4xr.SpaceEngineers.WorldModel;
@@ -122,7 +124,10 @@ namespace Iv4xr.SePlugin.Control.Screen
                             .ToDictionary(
                                 x => x.GetType().Name.Replace("MyStat", ""),
                                 x => x.CurrentValue
-                            )
+                            ),
+                    Notifications = MyHud.Notifications.GetInstanceFieldOrThrow<IList>("m_toDraw").Cast<object>().Select(n =>
+                            new HudNotification()
+                                    { Text = n.GetInstanceFieldOrThrow<StringBuilder>("Text").ToString() }).ToList()
                 },
                 LocationMarkers = MyHud.LocationMarkers.MarkerEntities.Select(me => new LocationMarker()
                 {

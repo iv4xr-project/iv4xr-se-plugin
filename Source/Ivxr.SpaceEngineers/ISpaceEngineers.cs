@@ -80,7 +80,9 @@ namespace Iv4xr.SpaceEngineers
         CharacterObservation TurnOnDampeners();
         CharacterObservation TurnOnRelativeDampeners();
         CharacterObservation TurnOffDampeners();
-        CharacterObservation SwitchHelmet();
+        void SetLight(bool enabled);
+        void SetHelmet(bool enabled);
+        void SetBroadcasting(bool enabled);
         void BeginUsingTool();
         void EndUsingTool();
         void Use();

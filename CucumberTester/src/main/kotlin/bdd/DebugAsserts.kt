@@ -1,8 +1,10 @@
 package bdd
 
-import bdd.repetitiveassert.repeatUntilSuccess
-import io.cucumber.java.en.Then
 import bdd.connection.ConnectionManager
+import bdd.repetitiveassert.repeatUntilSuccess
+import io.cucumber.java.PendingException
+import io.cucumber.java.en.Then
+import spaceEngineers.model.Sound
 import kotlin.test.assertTrue
 
 
@@ -11,17 +13,27 @@ class DebugAsserts(connectionManager: ConnectionManager) : AbstractMultiplayerSt
     @Then("Sound {string} is being played.")
     fun sound_is_being_played(soundNames: String) = mainClient {
         repeatUntilSuccess {
-            val playingSounds = debug.sounds()
-            soundNames.split(",").map { it.trim() }.forEach { soundName ->
-                assertTrue(
-                    playingSounds.sound.filter {
-                        it.isPlaying
-                    }.any { it.cueEnum == soundName },
-                    "Playing sound '$soundName' not found, current playing sounds are: ${
-                        playingSounds.sound.filter { it.isPlaying }.map { it.cueEnum }.toSet()
-                    }"
-                )
-            }
+            checkSoundsAreBeingPlayed(soundNames, debug.sounds().sound)
+        }
+    }
+
+    @Then("Hud sound {string} is being played.")
+    fun hud_sound_is_being_played(soundNames: String) = mainClient {
+        repeatUntilSuccess(repeats = 15) {
+            checkSoundsAreBeingPlayed(soundNames, debug.sounds().hud)
+        }
+    }
+
+    fun checkSoundsAreBeingPlayed(soundNames: String, sounds: List<Sound>) {
+        soundNames.split(",").map { it.trim() }.forEach { soundName ->
+            assertTrue(
+                sounds.filter {
+                    it.isPlaying
+                }.any { it.cueEnum == soundName },
+                "Playing sound '$soundName' not found, current playing sounds are: ${
+                    sounds.filter { it.isPlaying }.map { it.cueEnum }.toSet()
+                }"
+            )
         }
     }
 
@@ -64,6 +76,19 @@ class DebugAsserts(connectionManager: ConnectionManager) : AbstractMultiplayerSt
                     }"
                 )
             }
+        }
+    }
+
+    @Then("Text notification {string} appears on HUD.")
+    fun text_notification_appears_on_hud(text: String) {
+        mainClient {
+            repeatUntilSuccess {
+                val notifications = screens.gamePlay.data().hud.notifications
+                assertTrue(notifications.any {
+                    it.text == text
+                }, "No notification with text $text found, only ${notifications.map { it.text }}")
+            }
+            println(screens.gamePlay.data().hud.notifications)
         }
     }
 }

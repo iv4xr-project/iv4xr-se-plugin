@@ -81,6 +81,6 @@ val blockMappings = mapOf<String, Map<String, KClass<*>>>(
     ),
 )
 
-internal fun getDefinitionIdId(element: JsonElement): String? {
-    return element.jsonObject["DefinitionId"]?.jsonObject?.get("Id")?.jsonPrimitive?.content?.removeBuilderPrefix()
+internal fun getDefinitionIdId(element: JsonElement, key: String = "DefinitionId"): String? {
+    return element.jsonObject[key]?.jsonObject?.get("Id")?.jsonPrimitive?.content?.removeBuilderPrefix()
 }

@@ -1,19 +1,43 @@
 package bdd
 
+import bdd.connection.ConnectionManager
+import bdd.connection.ProcessWithConnection
 import bdd.repetitiveassert.repeatUntilSuccess
+import io.cucumber.datatable.DataTable
+import io.cucumber.java.PendingException
 import io.cucumber.java.en.And
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import kotlinx.coroutines.delay
-import bdd.connection.ConnectionManager
-import bdd.connection.ProcessWithConnection
 import spaceEngineers.controller.extensions.typedFocusedScreen
-import spaceEngineers.model.*
+import spaceEngineers.model.BootsColour
+import spaceEngineers.model.CharacterStats
+import spaceEngineers.model.DefinitionId
+import spaceEngineers.model.GasContainerObject
+import spaceEngineers.model.HandTool
+import spaceEngineers.model.ScreenName
+import spaceEngineers.model.Vec3F
 import spaceEngineers.model.extensions.allBlocks
-import testhelp.*
+import spaceEngineers.movement.FrameSnapshot
+import spaceEngineers.movement.InputSnapshot
+import spaceEngineers.movement.KeyboardSnapshot
+import testhelp.DEFAULT_ORIENTATION_TOLERANCE
+import testhelp.DEFAULT_POSITION_TOLERANCE
+import testhelp.DEFAULT_SPEED_TOLERANCE
+import testhelp.DEFAULT_SPEED_TOLERANCE_OBSERVER
+import testhelp.assertGreaterThan
+import testhelp.assertLessThan
+import testhelp.assertSameDirection
+import testhelp.assertVecEquals
 import java.lang.Thread.sleep
-import kotlin.test.*
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertNotEquals
+import kotlin.test.assertNotNull
+import kotlin.test.assertNull
+import kotlin.test.assertTrue
+import kotlin.time.Duration.Companion.milliseconds
 
 
 class CharacterAsserts(connectionManager: ConnectionManager) : AbstractMultiplayerSteps(connectionManager) {
@@ -244,6 +268,16 @@ class CharacterAsserts(connectionManager: ConnectionManager) : AbstractMultiplay
         delay(delayMs.toLong())
         repeatUntilSuccess {
             assertEquals(0f, observer.observe().hydrogen, 0.03f)
+        }
+    }
+
+    @Then("Character begins to fall.")
+    fun character_begins_to_fall() {
+        mainClient {
+            repeatUntilSuccess {
+                val movement = observer.observe().movement
+                assertTrue(movement.isFalling || movement.isJumping, movement.toString())
+            }
         }
     }
 
@@ -480,7 +514,7 @@ class CharacterAsserts(connectionManager: ConnectionManager) : AbstractMultiplay
         repeatUntilSuccess {
             assertEquals(
                 0f,
-                observer.observe().suitEnergy,
+                observer.observe().energy,
                 absoluteTolerance = 0.001f,
                 "Energy was supposed to be depleted."
             )
@@ -576,6 +610,89 @@ class CharacterAsserts(connectionManager: ConnectionManager) : AbstractMultiplay
                 items.any { it.id == definition },
                 "Character inventory doesn't contain ${definition}, it contains: ${items}"
             )
+        }
+    }
+
+    @Then("Character stats are:")
+    fun character_stats_are_changed_to(dt: DataTable) {
+        val dataTable = dt.asMaps().first().map { it.key to it.value.toFloat() }.toMap()
+        val relativeTolerance = dataTable["relative_tolerance"] ?: 0.001f
+        println(dataTable)
+        mainClient {
+            val observation = observer.observe() as CharacterStats
+            checkStats(dataTable, observation, relativeTolerance)
+            checkStats(dataTable, screens.gamePlay.data().hud.statsWrapper, relativeTolerance)
+        }
+    }
+
+    private fun checkStats(dataTable: Map<String, Float>, stats: CharacterStats, relativeTolerance: Float) {
+        checkStat(dataTable, "health", stats.health, relativeTolerance)
+        checkStat(dataTable, "oxygen", stats.oxygen, relativeTolerance)
+        checkStat(dataTable, "energy", stats.energy, relativeTolerance)
+        checkStat(dataTable, "hydrogen", stats.hydrogen, relativeTolerance)
+    }
+
+    private fun checkStat(
+        dataTable: Map<String, Float>,
+        name: String,
+        stat: Float,
+        relativeTolerance: Float
+    ) {
+        dataTable[name]?.let { tableStat ->
+            assertEquals(tableStat / 100f, stat, absoluteTolerance = stat * relativeTolerance)
+        }
+    }
+
+
+    @Then("hydrogen is less than maximum.")
+    fun hydrogen_is_less_than_maximum() {
+        mainClient {
+            assertLessThan(observer.observe().hydrogen, 1f)
+        }
+    }
+
+    @Then("health is less than maximum.")
+    fun health_is_less_than_maximum() {
+        mainClient {
+            assertLessThan(observer.observe().health, 1f)
+        }
+    }
+
+    @Then("oxygen is less than maximum.")
+    fun oxygen_is_less_than_maximum() {
+        mainClient {
+            assertLessThan(observer.observe().oxygen, 1f)
+        }
+    }
+
+    @Then("Content of hydrogen in the {definitionId} in the inventory is less than maximum.")
+    fun of_hydrogen_in_the_in_the_inventory_is_less_than_maximum(definitionId: DefinitionId) {
+        mainClient {
+            val items = observer.observe().inventory.items
+            items.filterIsInstance<GasContainerObject>().apply {
+                assertTrue(
+                    isNotEmpty(),
+                    "No item of type $definitionId found in the inventory, found only ${items.map { it.id }}"
+                )
+            }.forEach {
+                assertLessThan(it.gasLevel, 1f)
+            }
+        }
+    }
+
+    @Then("Personal light is off.")
+    fun personal_light_is_off() = mainClient {
+        println(screens.gamePlay.data().hud.stats)
+        assertEquals(0f, observer.observe().currentLightPower)
+        //assertFalse(observer.observe().lightEnabled, "light is supposed to be off!")
+        //TODO: check on hud too
+    }
+
+    @Then("Character is dead.")
+    fun character_is_dead() = mainClient {
+        with(observer.observe()) {
+            assertTrue(movement.isDead)
+            assertEquals(0f, health)
         }
     }
 }

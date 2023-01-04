@@ -12,6 +12,8 @@ namespace Iv4xr.SpaceEngineers.WorldModel
         public bool JetpackRunning;
         public bool DampenersOn;
         public bool HelmetEnabled;
+        public bool LightEnabled;
+        public float CurrentLightPower;
         public float Health;
         public float Oxygen;
         public float Hydrogen;
