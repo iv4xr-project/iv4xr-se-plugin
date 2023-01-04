@@ -28,7 +28,7 @@ data class CharacterObservation(
     @SerialName("LightEnabled")
     val lightEnabled: Boolean = true,
     @SerialName("CurrentLightPower")
-    val currentLightPower: Float,
+    val currentLightPower: Float = 0f,
     @SerialName("Health")
     override val health: Float,
     @SerialName("Oxygen")

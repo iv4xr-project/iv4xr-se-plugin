@@ -52,7 +52,7 @@ data class Hud(
     @SerialName("Stats")
     val stats: Map<String, Float>,
     @SerialName("Notifications")
-    val notifications: List<HudNotification>,
+    val notifications: List<HudNotification> = emptyList(),
 ) {
     val statsWrapper: HudStatsWrapper
         get() = object : HudStatsWrapper {

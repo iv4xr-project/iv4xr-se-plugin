@@ -44,7 +44,7 @@ data class DataPhysicalObject(
     @SerialName("ItemId")
     override val itemId: Int,
     @SerialName("Scale")
-    override val scale: Float,
+    override val scale: Float = 0f,
 ) : PhysicalObject
 
 @Serializable
@@ -56,7 +56,7 @@ data class GasContainerObject(
     @SerialName("ItemId")
     override val itemId: Int,
     @SerialName("Scale")
-    override val scale: Float,
+    override val scale: Float = 0f,
     @SerialName("GasLevel")
-    val gasLevel: Float,
+    val gasLevel: Float = 0f,
 ) : PhysicalObject
