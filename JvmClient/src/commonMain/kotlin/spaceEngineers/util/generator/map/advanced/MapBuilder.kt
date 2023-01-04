@@ -2,6 +2,8 @@ package spaceEngineers.util.generator.map.advanced
 
 import spaceEngineers.model.Vec3I
 import spaceEngineers.model.extensions.allBetween
+import spaceEngineers.model.extensions.lineBetween
+import kotlin.random.Random
 
 fun mapBuilder(block: MapBuilder.() -> Unit): Map<Vec3I, MutableCell> {
     val builder = MapBuilder()
@@ -11,6 +13,7 @@ fun mapBuilder(block: MapBuilder.() -> Unit): Map<Vec3I, MutableCell> {
 
 class MapBuilder(
     private val cells: MutableMap<Vec3I, MutableCell> = mutableMapOf(),
+    val random: Random = Random.Default,
 ) {
 
     fun offset(offset: Vec3I): MapBuilder {
@@ -24,7 +27,13 @@ class MapBuilder(
 
     fun cube(start: Vec3I, end: Vec3I, cell: MutableCell): MapBuilder {
         val positions = start.allBetween(end).asIterable()
-        return batchPositions(positions, cell)
+        return addPositions(positions, cell)
+    }
+
+    fun line(start: Vec3I, end: Vec3I, cell: MutableCell, extraWidth: Float = 0.15f): MapBuilder {
+
+        val positions = start.lineBetween(end, extraWidth = extraWidth).asIterable()
+        return addPositions(positions, cell)
     }
 
     fun removeCube(start: Vec3I, end: Vec3I): MapBuilder {
@@ -39,7 +48,7 @@ class MapBuilder(
         return this
     }
 
-    private fun batchPositions(positions: Iterable<Vec3I>, cell: MutableCell): MapBuilder {
+    fun addPositions(positions: Iterable<Vec3I>, cell: MutableCell): MapBuilder {
         positions.forEach { position ->
             cells[position] = cell.copy(priority = cell.priority, customName = cell.customName)
         }

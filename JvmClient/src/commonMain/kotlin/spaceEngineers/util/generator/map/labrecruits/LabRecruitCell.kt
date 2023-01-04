@@ -1,5 +1,6 @@
 package spaceEngineers.util.generator.map.labrecruits
 
+import spaceEngineers.model.Color
 import spaceEngineers.model.DefinitionId
 import spaceEngineers.model.Vec3F
 import spaceEngineers.model.Vec3I
@@ -110,7 +111,7 @@ data class Button(val id: ButtonId) : LabRecruitCell() {
         return "f:b^$id"
     }
 
-    override val color: Vec3F = Vec3F.GREEN
+    override val color: Vec3F = Color.GREEN
 }
 
 data class Agent(val id: AgentId) : LabRecruitCell() {
@@ -123,7 +124,7 @@ data class Agent(val id: AgentId) : LabRecruitCell() {
         return "f:a^$id"
     }
 
-    override val color: Vec3F = Vec3F.BLUE
+    override val color: Vec3F = Color.BLUE
 }
 
 data class Door(val id: DoorId, val orientation: Direction) : LabRecruitCell() {
@@ -138,5 +139,5 @@ data class Door(val id: DoorId, val orientation: Direction) : LabRecruitCell() {
         return "f:d>${orientation.toChar()}^$id"
     }
 
-    override val color: Vec3F = Vec3F.RED
+    override val color: Vec3F = Color.RED
 }
