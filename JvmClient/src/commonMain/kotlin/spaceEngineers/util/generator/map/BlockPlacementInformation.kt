@@ -3,6 +3,8 @@ package spaceEngineers.util.generator.map
 import spaceEngineers.model.DefinitionId
 import spaceEngineers.model.Vec3F
 import spaceEngineers.model.Vec3I
+import spaceEngineers.model.extensions.toInt
+import spaceEngineers.movement.BasicDirection3d
 
 interface BlockPlacementInformation {
     val blockId: DefinitionId
@@ -23,7 +25,15 @@ val BlockPlacementInformation.orientationUp
 data class Orientations(
     val forward: Vec3I = Vec3I.FORWARD,
     val up: Vec3I = Vec3I.UP,
-)
+) {
+    companion object {
+        val ALL = BasicDirection3d.excludingNone().flatMap { forward ->
+            forward.perpendiculars().map { up ->
+                Orientations(up = up.vector.toInt(), forward = forward.vector.toInt())
+            }
+        }
+    }
+}
 
 data class DataBlockPlacementInformation(
     override val blockId: DefinitionId,

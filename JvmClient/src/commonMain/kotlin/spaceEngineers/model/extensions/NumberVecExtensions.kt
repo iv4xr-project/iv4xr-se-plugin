@@ -56,3 +56,21 @@ fun Vec3I.neighbourPositions(): Set<Vec3I> {
         this + it.vector.toInt()
     }.toSet()
 }
+
+fun stepSgn(value: Int): Int {
+    return if (value < 0) {
+        -1
+    } else {
+        1
+    }
+}
+
+fun Vec3I.allBetween(end: Vec3I): Sequence<Vec3I> = sequence {
+    (x..end.x step stepSgn((end.x - x))).forEach { newX ->
+        (y..end.y step stepSgn((end.y - y))).forEach { newY ->
+            (z..end.z step stepSgn((end.z - z))).forEach { newZ ->
+                yield(Vec3I(newX, newY, newZ))
+            }
+        }
+    }
+}
