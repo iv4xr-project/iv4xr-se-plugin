@@ -72,7 +72,13 @@ suspend fun SpaceEngineers.torchUpToPercentage(block: Block, percentage: Double,
     )
 }
 
-fun SpaceEngineers.removeAllBlocks() =
-    observer.observeBlocks().allBlocks.forEach {
-        admin.blocks.remove(it.id)
+fun SpaceEngineers.removeAllBlocks() {
+    while (observer.observeBlocks().allBlocks.isNotEmpty()) {
+        observer.observeBlocks().allBlocks.forEach {
+            try {
+                admin.blocks.remove(it.id)
+            } catch (e: Exception) {
+            }
+        }
     }
+}

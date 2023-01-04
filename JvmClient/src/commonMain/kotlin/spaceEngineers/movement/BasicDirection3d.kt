@@ -18,6 +18,10 @@ enum class BasicDirection3d(
     FORWARD(Vec3F.FORWARD, fromChar('w')),
     BACKWARD(Vec3F.BACKWARD, fromChar('s'));
 
+    fun perpendiculars(): List<BasicDirection3d> {
+        return excludingNone().filter { (it.vector + vector).length() > 0.01f && (it.vector - vector).length() > 0.01f }
+    }
+
     companion object {
         fun directionFromString(value: String): BasicDirection3d {
             return when (value) {
