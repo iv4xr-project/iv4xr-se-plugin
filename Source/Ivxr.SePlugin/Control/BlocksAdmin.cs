@@ -170,6 +170,8 @@ namespace Iv4xr.SePlugin.Control
                 case MyButtonPanel buttonPanel:
                     MapToolbar(buttonPanel.Toolbar, buttonIndex, data);
                     break;
+                // MyEventControllerBlock and MyFlightMovementBlock require the automatons-beta game version
+                // This beta version will update the game DLLs and enable these blocks
                 case MyEventControllerBlock eventControllerBlock:
                     MapToolbar(eventControllerBlock.Toolbar, buttonIndex, data);
                     break;

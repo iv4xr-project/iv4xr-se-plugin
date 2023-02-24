@@ -1,19 +1,17 @@
 package spaceEngineers.iv4xr
 
 import eu.iv4xr.framework.extensions.pathfinding.AStar
-import eu.iv4xr.framework.spatial.Vec3
 import spaceEngineers.controller.Observer
 import spaceEngineers.controller.SpaceEngineers
+import spaceEngineers.iv4xr.navigation.Iv4XRAStarPathFinder
 import spaceEngineers.iv4xr.navigation.NavigableGraph
 import spaceEngineers.model.Vec3F
 import spaceEngineers.model.extensions.allBlocks
-import spaceEngineers.model.extensions.blockById
 import spaceEngineers.model.extensions.largestGrid
 import spaceEngineers.navigation.CharacterNavigation
 import spaceEngineers.navigation.NodeId
 import spaceEngineers.navigation.toRichGraph
 import testhelp.MockOrRealGameTest
-import testhelp.assertGreaterThan
 import testhelp.assertLessThan
 import kotlin.test.Ignore
 import kotlin.test.Test
@@ -37,23 +35,23 @@ class NavigateEntityTest : MockOrRealGameTest(
         assertNotEquals(blockPosition, Vec3F(0,0,0))
 
         var reachablePosition = Vec3F(0,0,0)
-        var reachableNode = -1
+        var reachableNode = ""
         var closestDistance = 3f
 
         val richGraph = graph.toRichGraph()
         System.out.println("richGraph.nodeMap.size: " + richGraph.nodeMap.size);
         richGraph.nodeMap.forEach { entry ->
             println("${entry.key} : ${entry.value}")
-            val distance = entry.value.position.distanceTo(blockPosition)
+            val distance = entry.value.data.distanceTo(blockPosition)
             println(" --> distance: $distance ")
             if(distance < closestDistance){
-                reachablePosition = entry.value.position
+                reachablePosition = entry.value.data
                 reachableNode = entry.value.id
                 closestDistance = distance
             }
         }
 
-        assertNotEquals(reachableNode, -1)
+        assertNotEquals(reachableNode, "")
         assertLessThan(closestDistance, 3f)
 
         System.out.println("reachablePosition: " + reachablePosition);
@@ -61,18 +59,19 @@ class NavigateEntityTest : MockOrRealGameTest(
 
         val navigableGraph = NavigableGraph(graph)
         val targetNode = navigableGraph.node(nodeId = reachableNode)
-        val path = getPath(navigableGraph, targetNode.id)
+        val startNode: NodeId = richGraph.nodeMap.minByOrNull { it.value.data.distanceTo(observer.observeBlocks().character.position) }?.key ?: ""
+        val path = getPath(navigableGraph, startNode, targetNode.id)
 
-        val navigator = CharacterNavigation(this)
+        val navigator = CharacterNavigation(this, pathFinder = Iv4XRAStarPathFinder())
         for (nodeId in path) {
-            navigator.moveInLine(navigableGraph.node(nodeId).position, timeout = 5.seconds)
+            navigator.moveInLine(navigableGraph.node(nodeId).data, timeout = 5.seconds)
         }
     }
 
     private fun SpaceEngineers.getPath(
         navigableGraph: NavigableGraph,
-        targetNodeId: Int,
-        startNodeId: Int = 0  // Should be 0 if the nav graph was generated at the current character position.
+        startNodeId: NodeId,
+        targetNodeId: NodeId
     ): List<NodeId> {
         val pathfinder = AStar<NodeId>()
         return pathfinder.findPath(navigableGraph, startNodeId, targetNodeId)

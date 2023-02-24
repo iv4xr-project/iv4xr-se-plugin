@@ -182,8 +182,8 @@ namespace Iv4xr.SePlugin.Navigation
                     .OrderBy(x => x.Item1)
                     .Select(pair => pair.Item2).First();
 
-            return ((characterOrientationUpInGridCoords + closestAngleVector).LengthSquared() >
-                    (characterOrientationUpInGridCoords - closestAngleVector).LengthSquared())
+            return ((characterOrientationUpInGridCoords + (Vector3D)closestAngleVector).LengthSquared() >
+                    (characterOrientationUpInGridCoords - (Vector3D)closestAngleVector).LengthSquared())
                     ? closestAngleVector
                     : -closestAngleVector;
         }
