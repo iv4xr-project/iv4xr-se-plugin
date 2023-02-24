@@ -1,6 +1,7 @@
 package spaceEngineers.iv4xr
 
 import eu.iv4xr.framework.extensions.pathfinding.AStar
+import org.junit.jupiter.api.Disabled
 import spaceEngineers.controller.Observer
 import spaceEngineers.controller.SpaceEngineers
 import spaceEngineers.iv4xr.navigation.Iv4XRAStarPathFinder
@@ -13,7 +14,6 @@ import spaceEngineers.navigation.NodeId
 import spaceEngineers.navigation.toRichGraph
 import testhelp.MockOrRealGameTest
 import testhelp.assertLessThan
-import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertNotEquals
 import kotlin.time.Duration.Companion.seconds
@@ -24,27 +24,27 @@ class NavigateEntityTest : MockOrRealGameTest(
     loadScenario = true
 ) {
 
-    @Ignore("This test required a game instance running")
-    //@Test
+    @Disabled("This test required a game instance running, enable manually by uncommenting.")
+    @Test
     fun navigateMaze() = testContext {
         val graph = observer.navigationGraph(observer.observeBlocks().largestGrid().id)
 
         // Functional blocks are not included in the navigational graph as nodes
         // We need to find the closest nav node related to the desired block position
         val blockPosition = desiredBlockPosition("BlockCryoChamber", observer)
-        assertNotEquals(blockPosition, Vec3F(0,0,0))
+        assertNotEquals(blockPosition, Vec3F(0, 0, 0))
 
-        var reachablePosition = Vec3F(0,0,0)
+        var reachablePosition = Vec3F(0, 0, 0)
         var reachableNode = ""
         var closestDistance = 3f
 
         val richGraph = graph.toRichGraph()
-        System.out.println("richGraph.nodeMap.size: " + richGraph.nodeMap.size);
+        System.out.println("richGraph.nodeMap.size: " + richGraph.nodeMap.size)
         richGraph.nodeMap.forEach { entry ->
             println("${entry.key} : ${entry.value}")
             val distance = entry.value.data.distanceTo(blockPosition)
             println(" --> distance: $distance ")
-            if(distance < closestDistance){
+            if (distance < closestDistance) {
                 reachablePosition = entry.value.data
                 reachableNode = entry.value.id
                 closestDistance = distance
@@ -54,8 +54,8 @@ class NavigateEntityTest : MockOrRealGameTest(
         assertNotEquals(reachableNode, "")
         assertLessThan(closestDistance, 3f)
 
-        System.out.println("reachablePosition: " + reachablePosition);
-        System.out.println("reachableNode: " + reachableNode);
+        System.out.println("reachablePosition: " + reachablePosition)
+        System.out.println("reachableNode: " + reachableNode)
 
         val navigableGraph = NavigableGraph(graph)
         val targetNode = navigableGraph.node(nodeId = reachableNode)
@@ -78,17 +78,17 @@ class NavigateEntityTest : MockOrRealGameTest(
     }
 
     private fun desiredBlockPosition(
-            desiredBlock: String,
-            observer: Observer
+        desiredBlock: String,
+        observer: Observer
     ): Vec3F {
-        for(block in observer.observeBlocks().allBlocks){
-            if(desiredBlock in block.definitionId.toString()){
-                System.out.println("Math desired block in position: " + block.position);
-                System.out.println("block.definitionId: " + block.definitionId);
-                System.out.println("block.id: " + block.id);
+        for (block in observer.observeBlocks().allBlocks) {
+            if (desiredBlock in block.definitionId.toString()) {
+                System.out.println("Math desired block in position: " + block.position)
+                System.out.println("block.definitionId: " + block.definitionId)
+                System.out.println("block.id: " + block.id)
                 return block.position
             }
         }
-        return Vec3F(0,0,0)
+        return Vec3F(0, 0, 0)
     }
 }
