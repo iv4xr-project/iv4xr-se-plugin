@@ -8,7 +8,6 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import kotlin.reflect.KClass
 
-
 object ScreenNameSerializer : KSerializer<ScreenName> {
     override val descriptor: SerialDescriptor = String.serializer().descriptor
     override fun deserialize(decoder: Decoder): ScreenName {
@@ -18,7 +17,6 @@ object ScreenNameSerializer : KSerializer<ScreenName> {
     override fun serialize(encoder: Encoder, value: ScreenName) {
         encoder.encodeInline(descriptor).encodeString(value.name)
     }
-
 }
 
 @Serializable(ScreenNameSerializer::class)
@@ -58,8 +56,6 @@ value class ScreenName(val name: String) {
         val MAIN_MENU_SCREENS = setOf(
             LoadGame, JoinGame, ServerConnect, NewGame,
         )
-
-
     }
 }
 

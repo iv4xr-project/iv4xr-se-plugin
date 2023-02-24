@@ -1,16 +1,20 @@
 package testrail
 
-import io.ktor.client.*
-import io.ktor.client.call.*
-import io.ktor.client.plugins.auth.*
-import io.ktor.client.plugins.auth.providers.*
-import io.ktor.client.plugins.contentnegotiation.*
-import io.ktor.client.request.*
-import io.ktor.http.*
-import io.ktor.serialization.kotlinx.json.*
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.plugins.auth.Auth
+import io.ktor.client.plugins.auth.providers.BasicAuthCredentials
+import io.ktor.client.plugins.auth.providers.basic
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.request.get
+import io.ktor.http.Url
+import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
-import testrail.model.*
-
+import testrail.model.AttachmentsForCase
+import testrail.model.Case
+import testrail.model.Cases
+import testrail.model.Sections
+import testrail.model.Suite
 
 class TestRailClient(
     val baseUrl: Url,
@@ -83,5 +87,8 @@ class TestRailClient(
     companion object {
         const val SE_PROJECT_ID = 3L
         const val SE_SUITE_ID = 225L
+        const val SE_ASTRONAUT_MOVEMENT = 49388L
+        const val SE_ASTRONAUT_ACTIONS = 50008L
+        const val SE_ASTRONAUT_STATS = 50094L
     }
 }

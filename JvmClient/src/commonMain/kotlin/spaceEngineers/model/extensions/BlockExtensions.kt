@@ -1,8 +1,13 @@
 package spaceEngineers.model.extensions
 
-import spaceEngineers.model.*
+import spaceEngineers.model.Block
+import spaceEngineers.model.BlockDefinition
+import spaceEngineers.model.MountPoint
+import spaceEngineers.model.RotationMatrix
+import spaceEngineers.model.TerminalBlock
+import spaceEngineers.model.Vec3F
 
-//also watch out for MyCubeDefinition.ModelOffset (not exposed in API) - 4 models have this value non-zero and it could be another obscure issue
+// also watch out for MyCubeDefinition.ModelOffset (not exposed in API) - 4 models have this value non-zero and it could be another obscure issue
 val Block.centerPosition: Vec3F
     get() = maxPosition / 2f + minPosition / 2f
 
@@ -38,3 +43,12 @@ fun Block.orientationUpTowardsMountPoint(
 ): Vec3F {
     return (-rotationMatrix * ((mountPoint.start - mountPoint.end))).normalized()
 }
+
+val Block.shortDescription: String
+    get() = "$definitionId ($id) ${
+    if (this is TerminalBlock) {
+        customName
+    } else {
+        ""
+    }
+    }"

@@ -1,6 +1,5 @@
 package spaceEngineers.model
 
-
 interface Block : Entity {
     val maxIntegrity: Float
     val buildIntegrity: Float

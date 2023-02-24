@@ -33,7 +33,6 @@ class TestRailCaseTagsParserTest {
     @Test
     fun realExample1() {
         assertEquals(listOf("todo"), parseTags("[todo]Unequipping tools returns to the basic character animation"))
-
     }
 
     @Test
@@ -50,5 +49,4 @@ class TestRailCaseTagsParserTest {
 
         assertEquals(listOf("Creative"), parseTags("[Creative] Can be used for action freely when in Creative"))
     }
-
 }

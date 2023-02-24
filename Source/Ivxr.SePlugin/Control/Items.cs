@@ -59,30 +59,10 @@ namespace Iv4xr.SePlugin.Control
             toolbar.ActivateItemAtSlot(toolbarLocation.Slot);
         }
 
-        public Toolbar Toolbar()
-        {
-            var toolbar = MyToolbarComponent.CurrentToolbar;
-            return new Toolbar()
-            {
-                SlotCount = toolbar.SlotCount,
-                PageCount = toolbar.PageCount,
-                Items = new ToolbarItem[toolbar.ItemCount]
-                        .Select((index, item) => GetToolbarItem(toolbar[item]))
-                        .ToList()
-            };
-        }
-
-
-        private static ToolbarItem GetToolbarItem(MyToolbarItem myToolbarItem)
-        {
-            if (!(myToolbarItem is MyToolbarItemDefinition definition)) return null;
-            return definition.ToToolbarItem();
-        }
-
         public void SetToolbarItem(DefinitionId definitionId, ToolbarLocation toolbarLocation)
         {
             var myDefinitionId = definitionId.ToMyDefinitionId();
-            Definitions.CheckDefinitionIdExists(myDefinitionId);
+            Definitions.CheckDefinitionIdExistsAndEnabled(myDefinitionId);
             if (IsWeapon(definitionId.Type))
             {
                 SetToolbarItem<MyObjectBuilder_ToolbarItemWeapon>(myDefinitionId, toolbarLocation);
@@ -110,6 +90,11 @@ namespace Iv4xr.SePlugin.Control
             toolbar.SwitchToPage(toolbarLocation.Page);
             var item = MyToolbarItemFactory.CreateToolbarItem(toolbarItemBuilder);
             toolbar.SetItemAtSlot(toolbarLocation.Slot, item);
+        }
+        
+        public Toolbar Toolbar()
+        {
+            return MyToolbarComponent.CurrentToolbar.ToToolbar();
         }
     }
 }

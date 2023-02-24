@@ -1,6 +1,11 @@
 package spaceEngineers.controller
 
-import spaceEngineers.model.*
+import spaceEngineers.model.Block
+import spaceEngineers.model.BlockId
+import spaceEngineers.model.CharacterObservation
+import spaceEngineers.model.CubeGrid
+import spaceEngineers.model.DebugInfo
+import spaceEngineers.model.Vec3F
 
 interface SpaceEngineersAdmin {
     val blocks: BlocksAdmin
@@ -11,34 +16,15 @@ interface SpaceEngineersAdmin {
     fun debugInfo(): DebugInfo
     val tests: TestAdmin
     fun showNotification(text: String)
+    fun ping(): String
+    fun echo(text: String): String
+    fun setCreativeTools(enabled: Boolean)
 }
 
 interface TestAdmin {
     fun adminOnly()
     fun gameOnly()
     fun observerOnly()
-}
-
-interface BlocksAdmin {
-    fun placeAt(
-        blockDefinitionId: DefinitionId,
-        position: Vec3F,
-        orientationForward: Vec3F,
-        orientationUp: Vec3F,
-        color: Vec3F? = null,
-    ): String
-
-    fun placeInGrid(
-        blockDefinitionId: DefinitionId,
-        gridId: String,
-        minPosition: Vec3I,
-        orientationForward: Vec3I,
-        orientationUp: Vec3I,
-        color: Vec3F? = null,
-    ): String
-
-    fun remove(blockId: BlockId)
-    fun setIntegrity(blockId: BlockId, integrity: Float)
 }
 
 interface CharacterAdmin {
@@ -70,8 +56,11 @@ interface CharacterAdmin {
     fun updateEnergy(energy: Float)
     fun updateOxygen(oxygen: Float)
     fun updateHydrogen(hydrogen: Float)
+    fun updateHealth(health: Float)
 }
 
 interface ObserverAdmin {
     fun observeCharacters(): List<CharacterObservation>
+    fun blockById(blockId: BlockId): Block
+    fun gridById(gridId: String): CubeGrid
 }

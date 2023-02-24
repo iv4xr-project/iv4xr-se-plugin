@@ -6,7 +6,6 @@ import spaceEngineers.model.extensions.sum
 import kotlin.math.abs
 import kotlin.math.sqrt
 
-
 @Serializable
 data class Vec3F(
     @SerialName("X")
@@ -18,11 +17,15 @@ data class Vec3F(
 ) : NumberVec3<Float> {
 
     constructor(
-        x: Double = 0.0, y: Double = 0.0, z: Double = 0.0
+        x: Double = 0.0,
+        y: Double = 0.0,
+        z: Double = 0.0
     ) : this(x.toFloat(), y.toFloat(), z.toFloat())
 
     constructor(
-        x: Int = 0, y: Int = 0, z: Int = 0
+        x: Int = 0,
+        y: Int = 0,
+        z: Int = 0
     ) : this(x.toFloat(), y.toFloat(), z.toFloat())
 
     fun distanceTo(other: Vec3F): Float {
@@ -31,8 +34,8 @@ data class Vec3F(
 
     fun similar(other: Vec3F, delta: Float = 0.1f): Boolean {
         return abs(x - other.x) < delta &&
-                abs(y - other.y) < delta &&
-                abs(z - other.z) < delta
+            abs(y - other.y) < delta &&
+            abs(z - other.z) < delta
     }
 
     operator fun unaryMinus(): Vec3F {

@@ -108,12 +108,19 @@ namespace Iv4xr.SePlugin.Control
             return result;
         }
 
-        public static void CheckDefinitionIdExists(MyDefinitionId id)
+        public static void CheckDefinitionIdExistsAndEnabled(MyDefinitionId id)
         {
-            if (MyDefinitionManager.Static.GetAllDefinitions().All(definition => definition.Id != id))
+            var blockDefinition = MyDefinitionManager.Static
+                    .GetAllDefinitions()
+                    .FirstOrDefault(bd => bd.Id == id);
+            if (blockDefinition == null)
             {
                 var foundIds = string.Join(",", FindSimilar(id));
                 throw new InvalidOperationException($"Invalid definition id {id}, maybe you meant: {foundIds}");
+            }
+            if (!blockDefinition.Enabled)
+            {
+                throw new InvalidOperationException($"The block {id} is disabled, maybe dlc?");
             }
         }
 

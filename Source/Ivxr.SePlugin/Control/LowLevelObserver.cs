@@ -35,14 +35,14 @@ namespace Iv4xr.SePlugin.Control
         private readonly PlainVec3D
                 m_agentExtent = new PlainVec3D(0.5, 1, 0.5); // TODO(PP): It's just a quick guess, check the reality.
 
-        private readonly EntityBuilder m_entityBuilder;
+        internal readonly EntityBuilder EntityBuilder;
         private readonly CharacterObservationBuilder m_characterBuilder;
 
         public LowLevelObserver(IGameSession gameSession)
         {
             m_gameSession = gameSession;
-            m_entityBuilder = new EntityBuilder() { Log = Log };
-            m_characterBuilder = new CharacterObservationBuilder(m_entityBuilder.BlockEntityBuilder);
+            EntityBuilder = new EntityBuilder() { Log = Log };
+            m_characterBuilder = new CharacterObservationBuilder(EntityBuilder.BlockEntityBuilder);
         }
 
         private MyCharacter Character => m_gameSession.Character;
@@ -62,24 +62,16 @@ namespace Iv4xr.SePlugin.Control
             {
                 return ce.ToEntity();
             }
+
             return MySession.Static.ControlledEntity?.Entity?.ToEntityOrNull() ?? Character.ToEntity();
         }
-
-        public Observation GetNewBlocks(Vector3? position = null)
-        {
-            return new Observation()
-            {
-                Character = GetCharacterObservation(),
-                Grids = CollectSurroundingBlocks(GetBoundingSphere(position), ObservationMode.NEW_BLOCKS)
-            };
-        }
-
+        
         public Observation GetBlocks(Vector3D? position = null)
         {
             return new Observation()
             {
                 Character = GetCharacterObservation(),
-                Grids = CollectSurroundingBlocks(GetBoundingSphere(position), ObservationMode.BLOCKS)
+                Grids = CollectSurroundingBlocks(GetBoundingSphere(position))
             };
         }
 
@@ -92,28 +84,10 @@ namespace Iv4xr.SePlugin.Control
         {
             return new BoundingSphereD(position ?? CurrentPlayerPosition(), radius);
         }
-
-        public HashSet<MySlimBlock> GetBlocksOf(MyCubeGrid grid)
+        
+        private List<MyEntity> EnumerateSurroundingEntities(BoundingSphereD sphere)
         {
-            var foundBlocks = new HashSet<MySlimBlock>();
-            var sphere = GetBoundingSphere();
-            grid.GetBlocksInsideSphere(ref sphere, foundBlocks);
-            return foundBlocks;
-        }
-
-        private IEnumerable<MyEntity> EnumerateSurroundingEntities(BoundingSphereD sphere)
-        {
-            List<MyEntity> entities = MyEntities.GetEntitiesInSphere(ref sphere);
-
-            try
-            {
-                foreach (MyEntity entity in entities)
-                    yield return entity;
-            }
-            finally
-            {
-                entities.Clear();
-            }
+            return MyEntities.GetEntitiesInSphere(ref sphere);
         }
 
         public List<FloatingObject> ObserveFloatingObjects(Vector3D? position = null)
@@ -149,16 +123,16 @@ namespace Iv4xr.SePlugin.Control
                     .ToList();
         }
 
-        internal List<CubeGrid> CollectSurroundingBlocks(BoundingSphereD sphere, ObservationMode mode)
+        internal List<CubeGrid> CollectSurroundingBlocks(BoundingSphereD sphere)
         {
             return EnumerateSurroundingEntities(sphere)
                     .OfType<MyCubeGrid>()
-                    .Select(grid => m_entityBuilder.CreateSeGrid(grid, sphere, mode)).ToList();
+                    .Select(grid => EntityBuilder.CreateSeGrid(grid, sphere)).ToList();
         }
 
         internal CubeGrid ConvertToSeGrid(MyCubeGrid sourceGrid, BoundingSphereD sphere)
         {
-            return m_entityBuilder.CreateSeGrid(sourceGrid, sphere, ObservationMode.BLOCKS);
+            return EntityBuilder.CreateSeGrid(sourceGrid, sphere);
         }
 
         public IEnumerable<MyCubeGrid> Grids()
@@ -170,16 +144,32 @@ namespace Iv4xr.SePlugin.Control
 
         public MyCubeGrid GetGridById(string gridId)
         {
-            return (MyCubeGrid) MyEntities.GetEntityById(long.Parse(gridId));
+            var grid = (MyCubeGrid)MyEntities.GetEntityById(long.Parse(gridId));
+            if (grid == null)
+            {
+                throw new ArgumentException($"Grid by id {grid} not found");
+            }
+
+            return grid;
+        }
+
+        public CubeGrid GetCubeGridById(string gridId)
+        {
+            return EntityBuilder.CreateSeGrid(GetGridById(gridId));
+        }
+
+        public Block GetBlockDtoById(string blockId)
+        {
+            return EntityBuilder.CreateGridBlock(GetBlockById(blockId));
         }
 
         public MyCubeGrid GetGridContainingBlock(string blockId)
         {
-            BoundingSphereD sphere = GetBoundingSphere();
+            BoundingSphereD sphere = GetBoundingSphere( );
             return EnumerateSurroundingEntities(sphere)
                     .OfType<MyCubeGrid>().ToList().FirstOrDefault(grid =>
                     {
-                        return GetBlocksOf(grid).FirstOrDefault(block => block.BlockId().ToString() == blockId) !=
+                        return grid.CubeBlocks.FirstOrDefault(block => block.BlockId().ToString() == blockId) !=
                                null;
                     });
         }
@@ -187,7 +177,7 @@ namespace Iv4xr.SePlugin.Control
         public MySlimBlock GetBlockByIdOrNull(string blockId)
         {
             var grid = GetGridContainingBlock(blockId);
-            return grid == null ? null : GetBlocksOf(grid).FirstOrDefault(b => b.BlockId().ToString() == blockId);
+            return grid?.CubeBlocks.FirstOrDefault(b => b.BlockId().ToString() == blockId);
         }
 
         public MySlimBlock GetBlockById(string blockId)
@@ -195,7 +185,7 @@ namespace Iv4xr.SePlugin.Control
             var block = GetBlockByIdOrNull(blockId);
             if (block == null)
             {
-                throw new ArgumentException("block not found");
+                throw new ArgumentException($"Block by id {blockId} not found");
             }
 
             return block;

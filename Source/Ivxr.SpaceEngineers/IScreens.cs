@@ -90,6 +90,7 @@ namespace Iv4xr.SpaceEngineers
         void Join();
         void Refresh();
         void ShowMessageOfTheDay();
+        void ShowMainMenu();
     }
 
     public interface ITerminal
@@ -103,7 +104,13 @@ namespace Iv4xr.SpaceEngineers
         IFactionsTab Factions { get; }
         ICommsTab Comms { get; }
         IGpsTab Gps { get; }
+        IRemoteAccess RemoteAccess { get; }
         void Close();
+    }
+
+    public interface IRemoteAccess
+    {
+        RemoteAccessData Data();
     }
 
     public interface IGpsTab
@@ -116,6 +123,16 @@ namespace Iv4xr.SpaceEngineers
 
     public interface IFactionsTab
     {
+        TerminalFactionsData Data();
+        void Create();
+        void Join();
+        void CancelJoin();
+        void Leave();
+        void ProposePeace();
+        void AcceptPeace();
+        void DeclareWar();
+        void CancelRequest();
+        void SelectFaction(int index);
     }
 
     public interface IControlPanelTab
@@ -125,10 +142,25 @@ namespace Iv4xr.SpaceEngineers
         void EnterBlockGroup(string text);
         void GroupSave();
         void GroupDelete();
+        void TransferTo(int index);
+        void SelectShareMode(int index);
     }
 
     public interface IInfoTab
     {
+        TerminalInfoData Data();
+        void ConvertToShip();
+        void ConvertToStation();
+        void EnterGridName(string name);
+        void RenameGrid();
+        void SetShowCenterOfMassEnabled(bool enabled);
+        void SetShowGravityRangeEnabled(bool enabled);
+        void SetShowSensorsFieldRangeEnabled(bool enabled);
+        void SetShowAntennaRangeEnabled(bool enabled);
+        void SetShowGridPivotEnabled(bool enabled);
+        void SetFriendlyAntennaRange(float value);
+        void SetEnemyAntennaRange(float value);
+        void SetOwnedAntennaRange(float value);
     }
 
     public interface IProductionTab

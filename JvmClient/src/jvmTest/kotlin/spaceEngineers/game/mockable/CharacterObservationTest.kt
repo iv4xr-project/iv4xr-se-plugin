@@ -27,7 +27,7 @@ class CharacterObservationTest : MockOrRealGameTest(inMockResourcesDirectory("Ch
         assertEquals(1f, characterObservation.health)
         assertEquals(1f, characterObservation.oxygen)
         assertEquals(1f, characterObservation.hydrogen)
-        assertEquals(1f, characterObservation.suitEnergy)
+        assertEquals(1f, characterObservation.energy)
     }
 
     @Test
@@ -40,5 +40,4 @@ class CharacterObservationTest : MockOrRealGameTest(inMockResourcesDirectory("Ch
         assertEquals(9.223372E12f, inventory.maxVolume)
         assertEquals(7, inventory.items.size)
     }
-
 }

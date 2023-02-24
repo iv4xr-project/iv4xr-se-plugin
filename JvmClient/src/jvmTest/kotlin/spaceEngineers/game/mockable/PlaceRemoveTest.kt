@@ -1,13 +1,16 @@
 package spaceEngineers.game.mockable
 
-import spaceEngineers.model.*
+import spaceEngineers.model.Block
+import spaceEngineers.model.CharacterObservation
+import spaceEngineers.model.DefinitionId
+import spaceEngineers.model.Vec3F
+import spaceEngineers.model.Vec3I
 import spaceEngineers.model.extensions.allBlocks
 import spaceEngineers.model.extensions.blockById
 import testhelp.MockOrRealGameTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
-
 
 class PlaceRemoveTest : MockOrRealGameTest() {
 
@@ -23,13 +26,13 @@ class PlaceRemoveTest : MockOrRealGameTest() {
             admin.blocks.remove(it.id)
         }
 
-        val blockId1 = admin.blocks.placeAt(
+        val grid = admin.blocks.placeAt(
             blockDefinition1,
             observation.character.position + Vec3F(5f, 0f, 0f),
             Vec3F.FORWARD,
             Vec3F.UP
         )
-        val grid = observer.observeBlocks().grids.first()
+        val blockId1 = grid.blocks.first().id
         val blockId2 = admin.blocks.placeInGrid(
             blockDefinition2, grid.id, Vec3I.ZERO + Vec3I(1, 0, 0), Vec3I.FORWARD, Vec3I.UP
         )
@@ -50,11 +53,11 @@ class PlaceRemoveTest : MockOrRealGameTest() {
         val z = 1000
         admin.character.teleport(Vec3F(0, 0, z + 15), Vec3F.FORWARD, Vec3F.UP)
         observer.observeNewBlocks()
-        val blockId =
+        val grid =
             admin.blocks.placeAt(DefinitionId.reactor(blockType), Vec3F(0, 0, z + 0), Vec3F.FORWARD, Vec3F.UP)
         val observation = observer.observe()
         val block = observer.observeNewBlocks().allBlocks.first()
-        assertEquals(block.id, blockId)
+        assertEquals(block.id, grid.blocks.first().id)
         assertEquals(block.definitionId.type, blockType)
         checkBlockOwnership(block, observation)
         assertTrue(observer.observeBlocks().allBlocks.any { it.definitionId.type == blockType })
@@ -80,11 +83,11 @@ class PlaceRemoveTest : MockOrRealGameTest() {
         val blockType = "LargeBlockSmallGenerator"
         admin.character.teleport(Vec3F(0, 0, z + 15), Vec3F.FORWARD, Vec3F.UP)
         observer.observeNewBlocks()
-        val blockId =
+        val grid =
             admin.blocks.placeAt(DefinitionId.reactor(blockType), Vec3F(0, 0, z + 0), Vec3F.FORWARD, Vec3F.UP)
         val observation = observer.observe()
         val block = observer.observeNewBlocks().allBlocks.first()
-        assertEquals(block.id, blockId)
+        assertEquals(block.id, grid.blocks.first().id)
         assertEquals(block.definitionId.type, blockType)
         checkBlockOwnership(block, observation)
         assertTrue(observer.observeBlocks().allBlocks.any { it.definitionId.type == blockType })
@@ -101,10 +104,10 @@ class PlaceRemoveTest : MockOrRealGameTest() {
         val z = 1000
         admin.character.teleport(Vec3F(0, 0, z + 15), Vec3F.FORWARD, Vec3F.UP)
         val obs = observer.observeNewBlocks()
-        val blockId =
+        val grid =
             admin.blocks.placeAt(blockDefinition, Vec3F(0, 0, z + 0), Vec3F.FORWARD, Vec3F.UP)
         val block = observer.observeNewBlocks().allBlocks.first()
-        assertEquals(block.id, blockId)
+        assertEquals(block.id, grid.blocks.first().id)
         assertEquals(block.definitionId.type, blockType)
         checkBlockOwnership(block, obs.character)
         assertTrue(observer.observeBlocks().allBlocks.any { it.definitionId.type == blockType })
@@ -121,10 +124,10 @@ class PlaceRemoveTest : MockOrRealGameTest() {
         val z = 1000
         admin.character.teleport(Vec3F(0, 0, z + 15), Vec3F.FORWARD, Vec3F.UP)
         val obs = observer.observeNewBlocks()
-        val blockId =
+        val grid =
             admin.blocks.placeAt(blockDefinition, Vec3F(0, 0, z + 0), Vec3F.FORWARD, Vec3F.UP)
         val block = observer.observeNewBlocks().allBlocks.first()
-        assertEquals(block.id, blockId)
+        assertEquals(block.id, grid.blocks.first().id)
         assertEquals(block.definitionId.type, blockType)
         checkBlockOwnership(block, obs.character)
         assertTrue(observer.observeBlocks().allBlocks.any { it.definitionId.type == blockType })

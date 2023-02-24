@@ -1,12 +1,9 @@
 package spaceEngineers.navigation
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import spaceEngineers.graph.DataEdge
 
-@Serializable
-data class Edge (
-    @SerialName("I")
-    val i: NodeId,
-    @SerialName("J")
-    val j: NodeId
-)
+typealias Edge = DataEdge<String, NodeId, String>
+
+fun makeEdgeId(from: Any, to: Any): String {
+    return "Edge-$from-$to"
+}

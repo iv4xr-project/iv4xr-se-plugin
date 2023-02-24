@@ -9,7 +9,6 @@ import java.io.IOException
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 
-
 class ReconnectingSocketReaderWriter(
     val host: String = DEFAULT_HOSTNAME,
     val port: UShort = DEFAULT_PORT,
@@ -17,7 +16,7 @@ class ReconnectingSocketReaderWriter(
     val socketConnectionTimeout: Duration = DEFAULT_SOCKET_CONNECTION_TIMEOUT,
     val socketDataTimeout: Duration = DEFAULT_SOCKET_DATA_TIMEOUT,
     val maxRetries: Int = DEFAULT_MAX_RETRIES,
-) : AutoCloseable, StringLineReaderWriter {
+) : StringLineReaderWriter {
 
     var socketReaderWriter: SocketReaderWriter = connect()
 
@@ -68,5 +67,4 @@ class ReconnectingSocketReaderWriter(
             maxRetries = maxRetries,
         )
     }
-
 }

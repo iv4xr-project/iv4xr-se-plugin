@@ -8,6 +8,7 @@ using Iv4xr.SePlugin.Control;
 using Iv4xr.SpaceEngineers;
 using Iv4xr.SpaceEngineers.WorldModel;
 using Iv4xr.SpaceEngineers.WorldModel.Screen;
+using Sandbox.Common.ObjectBuilders.Definitions;
 using Sandbox.Definitions;
 using Sandbox.Game;
 using Sandbox.Game.Entities;
@@ -17,6 +18,7 @@ using Sandbox.Game.Multiplayer;
 using Sandbox.Game.Screens.Helpers;
 using Sandbox.Game.Weapons;
 using Sandbox.Game.World;
+using VRage;
 using VRage.Audio;
 using VRage.Game;
 using VRage.Game.Entity;
@@ -209,12 +211,18 @@ namespace Iv4xr.SePlugin
 
         public static InventoryItem ToInventoryItem(this MyPhysicalInventoryItem myItem)
         {
-            return new InventoryItem()
+            var item =  new InventoryItem()
             {
                 Amount = (int)myItem.Amount,
                 Id = myItem.Content.GetId().ToDefinitionId(),
                 ItemId = myItem.ItemId,
+                Scale = myItem.Scale,
             };
+            if (myItem.Content is MyObjectBuilder_GasContainerObject gasContainerObject)
+            {
+                item.GasLevel = gasContainerObject.GasLevel;
+            } 
+            return item;
         }
 
         public static File ToFile(this FileInfo fileInfo)
@@ -260,13 +268,41 @@ namespace Iv4xr.SePlugin
             return result;
         }
 
-        public static ToolbarItem ToToolbarItem(this MyToolbarItemDefinition toolbarItem)
+        public static ToolbarItem ToToolbarItem(this MyToolbarItem toolbarItem)
         {
-            return new ToolbarItem()
+            switch (toolbarItem)
             {
-                Id = toolbarItem.Definition.Id.ToDefinitionId(),
-                Name = toolbarItem.DisplayName.ToString()
-            };
+                case null:
+                    return null;
+                case MyToolbarItemDefinition myToolbarItemDefinition:
+                    return new ToolbarItemDefinition()
+                    {
+                        Id = myToolbarItemDefinition.Definition.Id.ToDefinitionId(),
+                        Name = toolbarItem.DisplayName.ToString(),
+                        Enabled = toolbarItem.Enabled,
+                    };
+                case MyToolbarItemTerminalBlock myToolbarItemTerminalBlock:
+                    return new ToolbarItemTerminalBlock()
+                    {
+                        Name = toolbarItem.DisplayName.ToString(),
+                        Enabled = toolbarItem.Enabled,
+                        ActionId = myToolbarItemTerminalBlock.ActionId,
+                        BlockEntityId = myToolbarItemTerminalBlock.BlockEntityId,
+                    };
+                case MyToolbarItemActions myToolbarItemActions:
+                    return new ToolbarItemTerminalBlock()
+                    {
+                        Name = toolbarItem.DisplayName.ToString(),
+                        Enabled = toolbarItem.Enabled,
+                        ActionId = myToolbarItemActions.ActionId,
+                    };
+                default:
+                    return new ToolbarItem()
+                    {
+                        Name = toolbarItem.DisplayName.ToString(),
+                        Enabled = toolbarItem.Enabled,
+                    };
+            }
         }
 
         public static List<Role> Roles(this DebugInfo debugInfo)
@@ -501,6 +537,33 @@ namespace Iv4xr.SePlugin
                 Name = myParticleEffect.GetName(),
                 Position = myParticleEffect.WorldMatrix.Translation.ToPlain(),
             };
+        }
+
+        public static Toolbar ToToolbar(this MyToolbar toolbar)
+        {
+            return new Toolbar()
+            {
+                SlotCount = toolbar.SlotCount,
+                PageCount = toolbar.PageCount,
+                Items = new ToolbarItem[toolbar.ItemCount]
+                        .Select((index, item) => toolbar[item]?.ToToolbarItem())
+                        .ToList()
+            };
+        }
+
+        public static MyCubeGrid.MyBlockLocation ToMyBlockLocation(
+            this BlockLocation blockLocation,
+            long? entityId = null,
+            long? playerId = null)
+        {
+            var min = blockLocation.MinPosition.ToVector3I();
+            var orientation = Quaternion.CreateFromForwardUp(blockLocation.OrientationForward.ToVector3I(),
+                blockLocation.OrientationUp.ToVector3I());
+            return new MyCubeGrid.MyBlockLocation(
+                blockLocation.DefinitionId.ToMyDefinitionId(), min, min, min, orientation,
+                entityId ?? MyEntityIdentifier.AllocateId(),
+                playerId ?? MySession.Static.LocalPlayerId
+            );
         }
     }
 }

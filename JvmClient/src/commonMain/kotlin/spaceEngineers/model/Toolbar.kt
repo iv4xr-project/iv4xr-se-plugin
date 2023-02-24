@@ -15,12 +15,13 @@ data class Toolbar(
 ) {
 
     operator fun get(location: ToolbarLocation): ToolbarItem? {
-        return items[location.slot + location.page * slotCount];
+        return items[location.slot + location.page * slotCount]
     }
 
     fun findLocation(blockType: String): ToolbarLocation? {
         return items.indexOfFirst {
-            it?.id?.type == blockType
+            it is DataToolbarItemDefinition? &&
+                it?.id?.type == blockType
         }.toNullIfMinusOne()?.let {
             ToolbarLocation.fromIndex(it)
         }
@@ -28,10 +29,10 @@ data class Toolbar(
 
     fun findLocation(definitionId: DefinitionId): ToolbarLocation? {
         return items.indexOfFirst {
-            it?.id == definitionId
+            it is DataToolbarItemDefinition? &&
+                it?.id == definitionId
         }.toNullIfMinusOne()?.let {
             ToolbarLocation.fromIndex(it)
         }
     }
-
 }

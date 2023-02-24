@@ -10,34 +10,6 @@ using VRageMath;
 
 namespace Iv4xr.SePlugin.Control
 {
-    internal class PreviousBlocksFilter
-    {
-        private readonly HashSet<long> m_previousBlockIds = new HashSet<long>();
-        private readonly HashSet<long> m_newBlockIds = new HashSet<long>();
-
-        private bool FilterOnlyNew(MySlimBlock block)
-        {
-            m_newBlockIds.Add(block.BlockId());
-            return !m_previousBlockIds.Contains(block.BlockId());
-        }
-
-        public Func<MySlimBlock, bool> FilterByMode(ObservationMode mode)
-        {
-            if (mode == ObservationMode.NEW_BLOCKS)
-            {
-                return FilterOnlyNew;
-            }
-
-            return block => true;
-        }
-
-        public void UpdateAfterFilter()
-        {
-            m_previousBlockIds.Clear();
-            m_newBlockIds.ForEach(it => m_previousBlockIds.Add(it));
-        }
-    }
-
     internal class EntityBuilder
     {
         public ILog Log { get; set; }
@@ -54,9 +26,9 @@ namespace Iv4xr.SePlugin.Control
             m_blockCountWarningRatio = blockCountWarningRatio;
         }
 
-        public CubeGrid CreateSeGrid(MyCubeGrid sourceGrid, BoundingSphereD sphere, ObservationMode mode)
+        public CubeGrid CreateSeGrid(MyCubeGrid sourceGrid, BoundingSphereD sphere)
         {
-            var seBlocks = CreateGridBLocks(FoundBlocks(sourceGrid, sphere), mode).ToList();
+            var seBlocks = CreateGridBLocks(FoundBlocks(sourceGrid, sphere)).ToList();
             return CreateSeGrid(sourceGrid, seBlocks);
         }
         
@@ -78,30 +50,20 @@ namespace Iv4xr.SePlugin.Control
             sourceGrid.ToEntity(result);
             return result;
         }
-
-        private readonly PreviousBlocksFilter m_previousBlocksFilter = new PreviousBlocksFilter();
-
-        private IEnumerable<Block> CreateGridBLocks(IEnumerable<MySlimBlock> foundBlocks, ObservationMode mode)
+        
+        public CubeGrid CreateSeGrid(MyCubeGrid sourceGrid)
         {
-            var blocks = foundBlocks.Where(m_previousBlocksFilter.FilterByMode(mode));
-            m_previousBlocksFilter.UpdateAfterFilter();
+            return CreateSeGrid(sourceGrid, sourceGrid.CubeBlocks.Select(b => CreateGridBlock(b)).ToList());
+        }
 
-            var limited = blocks.Take(m_blockCountTakeLimit).ToList();
-
-            if (limited.Count * m_blockCountWarningRatio > m_blockCountTakeLimit)
-            {
-                Log?.WriteLine(
-                    $"Number of blocks {limited.Count} for grid is reaching or reached limit {m_blockCountTakeLimit}");
-            }
-
-            return limited.Select(CreateGridBlock);
+        private IEnumerable<Block> CreateGridBLocks(IEnumerable<MySlimBlock> blocks)
+        {
+            return blocks.Select(CreateGridBlock);
         }
 
         private static IEnumerable<MySlimBlock> FoundBlocks(MyCubeGrid grid, BoundingSphereD sphere)
         {
-            var foundBlocks = new HashSet<MySlimBlock>();
-            grid.GetBlocksInsideSphere(ref sphere, foundBlocks);
-            return foundBlocks;
+            return grid.CubeBlocks;
         }
 
         public static UseObject CreateUseObject(IMyUseObject obj)

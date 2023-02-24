@@ -2,8 +2,8 @@ package spaceEngineers.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import spaceEngineers.model.extensions.toInt
 import kotlin.math.sqrt
-
 
 @Serializable
 data class Vec3I(
@@ -16,13 +16,16 @@ data class Vec3I(
 ) : NumberVec3<Int> {
 
     constructor(
-        x: Double = 0.0, y: Double = 0.0, z: Double = 0.0
+        x: Double = 0.0,
+        y: Double = 0.0,
+        z: Double = 0.0
     ) : this(x.toInt(), y.toInt(), z.toInt())
 
     constructor(
-        x: Float = 0.0f, y: Float = 0.0f, z: Float = 0.0f
+        x: Float = 0.0f,
+        y: Float = 0.0f,
+        z: Float = 0.0f
     ) : this(x.toInt(), y.toInt(), z.toInt())
-
 
     fun distanceTo(other: NumberVec3<Int>): Float {
         return (this - other).length()
@@ -30,6 +33,10 @@ data class Vec3I(
 
     operator fun unaryMinus(): Vec3I {
         return Vec3I(-x, -y, -z)
+    }
+
+    operator fun times(scalar: Int): Vec3I {
+        return Vec3I(x * scalar, y * scalar, z * scalar)
     }
 
     operator fun minus(other: NumberVec3<Int>): Vec3I {
@@ -40,8 +47,8 @@ data class Vec3I(
         return Vec3I(x + other.x, y + other.y, z + other.z)
     }
 
-    operator fun div(value: Float): Vec3I {
-        return Vec3I(x / value, y / value, z / value)
+    operator fun div(value: Float): Vec3F {
+        return Vec3F(x / value, y / value, z / value)
     }
 
     operator fun times(b: NumberVec3<out Number>): Float {
@@ -60,7 +67,7 @@ data class Vec3I(
     fun normalized(): Vec3I {
         val s = length()
         if (s == 0f) throw ArithmeticException()
-        return this / s
+        return (this / s).toInt()
     }
 
     companion object {

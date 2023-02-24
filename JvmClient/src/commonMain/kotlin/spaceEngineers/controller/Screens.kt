@@ -1,7 +1,23 @@
 package spaceEngineers.controller
 
-import spaceEngineers.model.*
-
+import spaceEngineers.model.BaseScreenData
+import spaceEngineers.model.GamePlayData
+import spaceEngineers.model.JoinGameData
+import spaceEngineers.model.LoadGameData
+import spaceEngineers.model.LoadingData
+import spaceEngineers.model.MainMenuData
+import spaceEngineers.model.MedicalsData
+import spaceEngineers.model.MessageBoxData
+import spaceEngineers.model.SaveAsData
+import spaceEngineers.model.ServerConnectData
+import spaceEngineers.model.TerminalControlPanelData
+import spaceEngineers.model.TerminalFactionsData
+import spaceEngineers.model.TerminalInfoData
+import spaceEngineers.model.TerminalInventoryData
+import spaceEngineers.model.TerminalProductionData
+import spaceEngineers.model.TerminalRemoteAccessData
+import spaceEngineers.model.TerminalScreenData
+import spaceEngineers.model.ToolbarConfigData
 
 interface Screens {
     val focusedScreen: FocusedScreen
@@ -102,7 +118,7 @@ interface Medicals {
     fun selectFaction(factionIndex: Int)
     fun refresh()
     fun showMessageOfTheDay()
-
+    fun showMainMenu()
 }
 
 interface Terminal {
@@ -117,21 +133,55 @@ interface Terminal {
     val factions: FactionsTab
     val comms: CommsTab
     val gps: GpsTab
+    val remoteAccess: RemoteAccess
+}
+
+interface RemoteAccess {
+    fun data(): TerminalRemoteAccessData
 }
 
 interface CommsTab
 
 interface GpsTab
 
-interface FactionsTab
+interface FactionsTab {
+    fun data(): TerminalFactionsData
+    fun create()
+    fun join()
+    fun cancelJoin()
+    fun leave()
+    fun proposePeace()
+    fun acceptPeace()
+    fun declareWar()
+    fun cancelRequest()
+    fun selectFaction(index: Int)
+}
 
 interface ControlPanelTab {
     fun data(): TerminalControlPanelData
     fun filterBlocks(text: String)
     fun enterBlockGroup(text: String)
+    fun groupSave()
+    fun groupDelete()
+    fun transferTo(index: Int)
+    fun selectShareMode(index: Int)
 }
 
-interface InfoTab
+interface InfoTab {
+    fun data(): TerminalInfoData
+    fun convertToShip()
+    fun convertToStation()
+    fun enterGridName(name: String)
+    fun renameGrid()
+    fun setShowCenterOfMassEnabled(enabled: Boolean)
+    fun setShowGravityRangeEnabled(enabled: Boolean)
+    fun setShowSensorsFieldRangeEnabled(enabled: Boolean)
+    fun setShowAntennaRangeEnabled(enabled: Boolean)
+    fun setShowGridPivotEnabled(enabled: Boolean)
+    fun setFriendlyAntennaRange(value: Float)
+    fun setEnemyAntennaRange(value: Float)
+    fun setOwnedAntennaRange(value: Float)
+}
 
 interface InventoryTab {
     fun data(): TerminalInventoryData

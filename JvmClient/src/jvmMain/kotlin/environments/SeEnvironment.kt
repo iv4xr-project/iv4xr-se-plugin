@@ -7,9 +7,14 @@ import eu.iv4xr.framework.spatial.meshes.Mesh
 import spaceEngineers.controller.ContextControllerWrapper
 import spaceEngineers.controller.SpaceEngineersTestContext
 import spaceEngineers.controller.extensions.moveForward
-import spaceEngineers.model.*
+import spaceEngineers.model.Block
+import spaceEngineers.model.CharacterMovementType
+import spaceEngineers.model.CharacterObservation
+import spaceEngineers.model.CubeGrid
+import spaceEngineers.model.Observation
+import spaceEngineers.model.ToolbarLocation
+import spaceEngineers.model.Vec3F
 import spaceEngineers.model.extensions.centerPosition
-import spaceEngineers.transport.closeIfCloseable
 import java.io.File
 import java.lang.Thread.sleep
 
@@ -75,11 +80,11 @@ fun CharacterObservation.toWorldModel(): WorldModel {
     }
 }
 
-class SeEnvironment(
+class SeEnvironment @JvmOverloads constructor(
     val worldId: String,
     val controller: ContextControllerWrapper,
+    val scenarioDir: String = DEFAULT_SCENARIO_DIR,
 ) : W3DEnvironment(), AutoCloseable {
-    val SCENARIO_DIR = "src/jvmTest/resources/game-saves/"
 
     val context: SpaceEngineersTestContext = controller.context
 
@@ -88,7 +93,7 @@ class SeEnvironment(
     }
 
     override fun loadWorld() {
-        val scenario = File("$SCENARIO_DIR$worldId").absolutePath
+        val scenario = File("$scenarioDir$worldId").absolutePath
         controller.session.loadScenario(scenario)
     }
 
@@ -122,17 +127,19 @@ class SeEnvironment(
         return controller.character.endUsingTool()
     }
 
-
     fun moveForward(): WorldModel {
         return controller.character.moveForward(CharacterMovementType.RUN).toWorldModel()
     }
-
 
     fun equipAndPlace(blockType: String) {
         return equipAndPlace(context.blockToolbarLocation(blockType))
     }
 
     override fun close() {
-        controller.closeIfCloseable()
+        controller.close()
+    }
+
+    companion object {
+        val DEFAULT_SCENARIO_DIR = "src/jvmTest/resources/game-saves/"
     }
 }

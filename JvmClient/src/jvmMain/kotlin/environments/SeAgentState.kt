@@ -16,7 +16,6 @@ class SeAgentState(val agentId: String) : W3DAgentState() {
         }
     }
 
-
     override fun updateState(agentId: String) {
         this.setOrUpdate(seEnv.observe())
         super.updateState(agentId)

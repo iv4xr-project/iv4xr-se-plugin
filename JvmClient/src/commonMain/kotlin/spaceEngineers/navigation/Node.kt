@@ -1,15 +1,8 @@
 package spaceEngineers.navigation
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import spaceEngineers.graph.DataNode
+import spaceEngineers.model.BlockId
 import spaceEngineers.model.Vec3F
 
-typealias NodeId = Int
-
-@Serializable
-data class Node (
-    @SerialName("Id")
-    val id: NodeId,
-    @SerialName("Position")
-    val position: Vec3F
-)
+typealias NodeId = BlockId
+typealias Node = DataNode<NodeId, Vec3F>

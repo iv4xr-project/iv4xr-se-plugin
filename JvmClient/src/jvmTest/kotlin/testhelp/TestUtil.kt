@@ -1,13 +1,15 @@
 package testhelp
 
 import kotlinx.coroutines.runBlocking
-import kotlinx.serialization.json.JsonElement
-import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.JsonPrimitive
-import spaceEngineers.controller.*
-import spaceEngineers.transport.closeIfCloseable
+import spaceEngineers.controller.ContextControllerWrapper
+import spaceEngineers.controller.DataExtendedSpaceEngineers
+import spaceEngineers.controller.ExtendedSpaceEngineers
+import spaceEngineers.controller.JvmSpaceEngineersBuilder
+import spaceEngineers.controller.SpaceEngineers
+import spaceEngineers.controller.loadFromTestResources
+import spaceEngineers.iv4xr.navigation.Iv4XRAStarPathFinder
 import spaceEngineers.transport.jsonrpc.KotlinJsonRpcError
-import java.lang.reflect.UndeclaredThrowableException
+import spaceEngineers.transport.jsonrpc.remoteException
 
 const val TEST_AGENT = SpaceEngineers.DEFAULT_AGENT_ID
 
@@ -18,38 +20,6 @@ val TEST_MOCK_RESPONSE_LINE = """
 """.trim()
 
 val SIMPLE_PLACE_GRIND_TORCH = "simple-place-grind-torch"
-
-
-fun JsonObject.dataStringAttribute(name: String): String? {
-    if (containsKey(name)) {
-        val value = this[name] as JsonPrimitive
-        return value.content
-    }
-    return null
-}
-
-val KotlinJsonRpcError.remoteException: RemoteException?
-    get() = RemoteException.fromJsonObject(data)
-
-
-data class RemoteException(
-    val className: String? = null,
-    val message: String? = null,
-    val stacktrace: String? = null,
-) {
-    companion object {
-        fun fromJsonObject(data: JsonElement?): RemoteException? {
-            if (data == null || data !is JsonObject) {
-                return null
-            }
-            return RemoteException(
-                className = data.dataStringAttribute("ClassName"),
-                message = data.dataStringAttribute("Message"),
-                stacktrace = data.dataStringAttribute("StackTraceString"),
-            )
-        }
-    }
-}
 
 fun spaceEngineersSimplePlaceGrindTorchSuspend(
     scenarioId: String = SIMPLE_PLACE_GRIND_TORCH,
@@ -63,24 +33,19 @@ fun spaceEngineersSimplePlaceGrindTorchSuspend(
             block(spaceEngineers)
         }
     } finally {
-        spaceEngineers.closeIfCloseable()
-    }
-}
-
-fun <R> hideUndeclaredThrowableException(block: suspend () -> R) = runBlocking {
-    try {
-        block()
-    } catch (e: UndeclaredThrowableException) {
-        throw e.cause ?: e
+        spaceEngineers.close()
     }
 }
 
 fun spaceEngineersSuspend(
     agentId: String = TEST_AGENT,
-    spaceEngineers: SpaceEngineers = ContextControllerWrapper(
-        spaceEngineers = JvmSpaceEngineersBuilder.default().localhost(agentId)
+    spaceEngineers: ExtendedSpaceEngineers = DataExtendedSpaceEngineers(
+        ContextControllerWrapper(
+            spaceEngineers = JvmSpaceEngineersBuilder.default().localhost(agentId)
+        ),
+        pathFinder = Iv4XRAStarPathFinder(),
     ),
-    block: suspend SpaceEngineers.() -> Unit
+    block: suspend ExtendedSpaceEngineers.() -> Unit
 ) {
     try {
         runBlocking {
@@ -90,7 +55,7 @@ fun spaceEngineersSuspend(
         e.remoteException?.stacktrace?.let(::println)
         throw e
     } finally {
-        spaceEngineers.closeIfCloseable()
+        spaceEngineers.close()
     }
 }
 
@@ -106,6 +71,6 @@ fun spaceEngineers(
             block(spaceEngineers)
         }
     } finally {
-        spaceEngineers.closeIfCloseable()
+        spaceEngineers.close()
     }
 }

@@ -2,58 +2,58 @@ package spaceEngineers.model
 
 // Generated automatically by BlockMappingGeneratorRunner.kt, do not change.
 
-interface AirtightDoorGenericDefinition: BlockDefinition  {
+interface AirtightDoorGenericDefinition : BlockDefinition {
     val powerConsumptionIdle: Float
     val powerConsumptionMoving: Float
     val openingSpeed: Float
 }
 
-interface LCDPanelsBlockDefinition: BlockDefinition  {
+interface LCDPanelsBlockDefinition : BlockDefinition {
     val requiredPowerInput: Float
 }
 
-interface PowerProducerDefinition: BlockDefinition  {
+interface PowerProducerDefinition : BlockDefinition {
     val maxPowerOutput: Float
 }
 
-interface AdvancedDoorDefinition: BlockDefinition  {
+interface AdvancedDoorDefinition : BlockDefinition {
     val powerConsumptionIdle: Float
     val powerConsumptionMoving: Float
 }
 
-interface AirVentDefinition: BlockDefinition  {
+interface AirVentDefinition : BlockDefinition {
     val standbyPowerConsumption: Float
     val operationalPowerConsumption: Float
     val ventilationCapacityPerSecond: Float
 }
 
-interface ProductionBlockDefinition: BlockDefinition  {
+interface ProductionBlockDefinition : BlockDefinition {
     val inventoryMaxVolume: Float
     val standbyPowerConsumption: Float
     val operationalPowerConsumption: Float
 }
 
-interface AssemblerDefinition: ProductionBlockDefinition  {
+interface AssemblerDefinition : ProductionBlockDefinition {
     val assemblySpeed: Float
 }
 
-interface BatteryBlockDefinition: PowerProducerDefinition  {
+interface BatteryBlockDefinition : PowerProducerDefinition {
     val maxStoredPower: Float
     val initialStoredPowerRatio: Float
     val requiredPowerInput: Float
     val adaptibleInput: Boolean
 }
 
-interface BeaconDefinition: BlockDefinition  {
+interface BeaconDefinition : BlockDefinition {
     val maxBroadcastRadius: Float
     val maxBroadcastPowerDrainkW: Float
 }
 
-interface ButtonPanelDefinition: BlockDefinition  {
+interface ButtonPanelDefinition : BlockDefinition {
     val buttonCount: Int
 }
 
-interface CameraBlockDefinition: BlockDefinition  {
+interface CameraBlockDefinition : BlockDefinition {
     val requiredPowerInput: Float
     val requiredChargingInput: Float
     val minFov: Float
@@ -63,75 +63,75 @@ interface CameraBlockDefinition: BlockDefinition  {
     val raycastTimeMultiplier: Float
 }
 
-interface ShipControllerDefinition: BlockDefinition  {
+interface ShipControllerDefinition : BlockDefinition {
     val enableFirstPerson: Boolean
     val enableShipControl: Boolean
     val enableBuilderCockpit: Boolean
     val isDefault3rdView: Boolean
 }
 
-interface CockpitDefinition: ShipControllerDefinition  {
+interface CockpitDefinition : ShipControllerDefinition {
     val oxygenCapacity: Float
     val isPressurized: Boolean
     val hasInventory: Boolean
 }
 
-interface ConveyorSorterDefinition: BlockDefinition  {
+interface ConveyorSorterDefinition : BlockDefinition {
     val powerInput: Float
 }
 
-interface CryoChamberDefinition: CockpitDefinition  {
+interface CryoChamberDefinition : CockpitDefinition {
     val idlePowerConsumption: Float
 }
 
-interface DecoyDefinition: BlockDefinition  {
+interface DecoyDefinition : BlockDefinition {
     val lightningRodRadiusLarge: Float
     val lightningRodRadiusSmall: Float
 }
 
-interface DoorDefinition: BlockDefinition  {
+interface DoorDefinition : BlockDefinition {
     val maxOpen: Float
     val openingSpeed: Float
 }
 
-interface ExhaustBlockDefinition: BlockDefinition  {
+interface ExhaustBlockDefinition : BlockDefinition {
     val requiredPowerInput: Float
 }
 
-interface FueledPowerProducerDefinition: PowerProducerDefinition  {
+interface FueledPowerProducerDefinition : PowerProducerDefinition {
     val fuelProductionToCapacityMultiplier: Float
 }
 
-interface GasFueledPowerProducerDefinition: FueledPowerProducerDefinition  {
+interface GasFueledPowerProducerDefinition : FueledPowerProducerDefinition {
     val fuelCapacity: Float
 }
 
-interface GasTankDefinition: ProductionBlockDefinition  {
+interface GasTankDefinition : ProductionBlockDefinition {
     val capacity: Float
 }
 
-interface GravityGeneratorBaseDefinition: BlockDefinition  {
+interface GravityGeneratorBaseDefinition : BlockDefinition {
     val minGravityAcceleration: Float
     val maxGravityAcceleration: Float
 }
 
-interface GravityGeneratorDefinition: GravityGeneratorBaseDefinition  {
+interface GravityGeneratorDefinition : GravityGeneratorBaseDefinition {
     val requiredPowerInput: Float
 }
 
-interface GravityGeneratorSphereDefinition: GravityGeneratorBaseDefinition  {
+interface GravityGeneratorSphereDefinition : GravityGeneratorBaseDefinition {
     val minRadius: Float
     val maxRadius: Float
     val basePowerInput: Float
     val consumptionPower: Float
 }
 
-interface GyroDefinition: BlockDefinition  {
+interface GyroDefinition : BlockDefinition {
     val forceMagnitude: Float
     val requiredPowerInput: Float
 }
 
-interface SoundBlockDefinition: BlockDefinition  {
+interface SoundBlockDefinition : BlockDefinition {
     val minRange: Float
     val maxRange: Float
     val maxLoopPeriod: Float
@@ -139,7 +139,7 @@ interface SoundBlockDefinition: BlockDefinition  {
     val loopUpdateThreshold: Int
 }
 
-interface JumpDriveDefinition: BlockDefinition  {
+interface JumpDriveDefinition : BlockDefinition {
     val requiredPowerInput: Float
     val powerNeededForJump: Float
     val minJumpDistance: Double
@@ -147,27 +147,27 @@ interface JumpDriveDefinition: BlockDefinition  {
     val maxJumpMass: Double
 }
 
-interface LandingGearDefinition: BlockDefinition  {
+interface LandingGearDefinition : BlockDefinition {
     val maxLockSeparatingVelocity: Float
 }
 
-interface WeaponBlockDefinition: BlockDefinition  {
+interface WeaponBlockDefinition : BlockDefinition {
     val inventoryMaxVolume: Float
     val inventoryFillFactorMin: Float
 }
 
-interface LightingBlockDefinition: BlockDefinition  {
+interface LightingBlockDefinition : BlockDefinition {
     val requiredPowerInput: Float
     val reflectorConeDegrees: Float
 }
 
-interface MechanicalConnectionBlockBaseDefinition: BlockDefinition  {
+interface MechanicalConnectionBlockBaseDefinition : BlockDefinition {
     val safetyDetach: Float
     val safetyDetachMin: Float
     val safetyDetachMax: Float
 }
 
-interface MedicalRoomDefinition: BlockDefinition  {
+interface MedicalRoomDefinition : BlockDefinition {
     val respawnAllowed: Boolean
     val healingAllowed: Boolean
     val refuelAllowed: Boolean
@@ -178,22 +178,22 @@ interface MedicalRoomDefinition: BlockDefinition  {
     val wardrobeCharacterOffsetLength: Float
 }
 
-interface MergeBlockDefinition: BlockDefinition  {
+interface MergeBlockDefinition : BlockDefinition {
     val strength: Float
 }
 
-interface OreDetectorDefinition: BlockDefinition  {
+interface OreDetectorDefinition : BlockDefinition {
     val maximumRange: Float
 }
 
-interface OxygenFarmDefinition: BlockDefinition  {
+interface OxygenFarmDefinition : BlockDefinition {
     val isTwoSided: Boolean
     val panelOffset: Float
     val maxGasOutput: Float
     val operationalPowerConsumption: Float
 }
 
-interface OxygenGeneratorDefinition: ProductionBlockDefinition  {
+interface OxygenGeneratorDefinition : ProductionBlockDefinition {
     val iceConsumptionPerSecond: Float
     val isOxygenOnly: Boolean
     val inventoryFillFactorMin: Float
@@ -201,7 +201,7 @@ interface OxygenGeneratorDefinition: ProductionBlockDefinition  {
     val fuelPullAmountFromConveyorInMinutes: Float
 }
 
-interface ParachuteDefinition: BlockDefinition  {
+interface ParachuteDefinition : BlockDefinition {
     val powerConsumptionIdle: Float
     val powerConsumptionMoving: Float
     val dragCoefficient: Float
@@ -210,7 +210,7 @@ interface ParachuteDefinition: BlockDefinition  {
     val radiusMultiplier: Float
 }
 
-interface PistonBaseDefinition: MechanicalConnectionBlockBaseDefinition  {
+interface PistonBaseDefinition : MechanicalConnectionBlockBaseDefinition {
     val minimum: Float
     val maximum: Float
     val maxVelocity: Float
@@ -221,7 +221,7 @@ interface PistonBaseDefinition: MechanicalConnectionBlockBaseDefinition  {
     val unsafeImpulseThreshold: Float
 }
 
-interface ProjectorDefinition: BlockDefinition  {
+interface ProjectorDefinition : BlockDefinition {
     val requiredPowerInput: Float
     val allowScaling: Boolean
     val allowWelding: Boolean
@@ -229,9 +229,8 @@ interface ProjectorDefinition: BlockDefinition  {
     val rotationAngleStepDeg: Int
 }
 
-interface RadioAntennaDefinition: BlockDefinition  {
+interface RadioAntennaDefinition : BlockDefinition {
     val maxBroadcastRadius: Float
     val lightningRodRadiusLarge: Float
     val lightningRodRadiusSmall: Float
 }
-

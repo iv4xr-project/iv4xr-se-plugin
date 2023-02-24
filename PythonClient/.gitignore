@@ -22,3 +22,5 @@ db.sqlite*
 /*.json
 data/
 db/db.sqlite3
+dist/
+.mypy_cache

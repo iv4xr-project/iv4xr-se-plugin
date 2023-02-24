@@ -12,13 +12,13 @@ namespace Iv4xr.SePlugin.Navigation
     /// </summary>
     public class FatNode
     {
-        public readonly int Id;
+        public readonly string Id;
         
         public readonly PlainVec3D Position;
 
         public readonly List<FatNode> Neighbours = new List<FatNode>(capacity: 8);
 
-        public FatNode(int id, PlainVec3D position)
+        public FatNode(string id, PlainVec3D position)
         {
             Id = id;
             Position = position;
@@ -30,27 +30,4 @@ namespace Iv4xr.SePlugin.Navigation
         }
     }
 
-    public class FatNodeBuilder
-    {
-        private int m_nextId;
-
-        private int GenerateId()
-        {
-            // Multi-threaded support not necessary for now (Interlocked.Increment(ref m_nextId))
-            return m_nextId++;
-        }
-
-        private FatNode Create(PlainVec3D position)
-        {
-            return new FatNode(GenerateId(), position);
-        }
-
-        /// <summary>
-        /// Use in a single thread only.
-        /// </summary>
-        public FatNode Create(Vector3D position)
-        {
-            return Create(position.ToPlain());
-        }
-    }
 }

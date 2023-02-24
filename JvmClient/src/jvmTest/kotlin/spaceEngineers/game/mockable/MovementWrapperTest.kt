@@ -3,13 +3,16 @@ package spaceEngineers.game.mockable
 import spaceEngineers.controller.SpaceEngineers
 import spaceEngineers.model.CharacterMovementType
 import spaceEngineers.model.Vec3F
-import spaceEngineers.movement.*
+import spaceEngineers.movement.CharacterMovement
+import spaceEngineers.movement.CompositeDirection3d
+import spaceEngineers.movement.ReplayMovement
+import spaceEngineers.movement.RotationDirection
+import spaceEngineers.movement.VectorMovement
 import testhelp.MockOrRealGameTest
 import testhelp.assertVecEquals
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
-
 
 class MovementWrapperTest : MockOrRealGameTest() {
 
@@ -34,7 +37,6 @@ class MovementWrapperTest : MockOrRealGameTest() {
     fun replayMovement() = testContext {
         testMovementForward(ReplayMovement(this))
     }
-
 
     private suspend fun SpaceEngineers.testMovementForward(movement: CharacterMovement) {
         val position = observer.observe().position
@@ -65,5 +67,4 @@ class MovementWrapperTest : MockOrRealGameTest() {
             )
         }
     }
-
 }

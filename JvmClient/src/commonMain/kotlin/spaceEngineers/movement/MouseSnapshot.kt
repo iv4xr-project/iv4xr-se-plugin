@@ -10,9 +10,9 @@ enum class MouseButton {
 @Serializable
 data class MouseSnapshot(
     @SerialName("CursorPositionX")
-    val cursorPositionX: Int = 0,
+    val cursorPositionX: Int = -1,
     @SerialName("CursorPositionY")
-    val cursorPositionY: Int = 0,
+    val cursorPositionY: Int = -1,
     @SerialName("X")
     val x: Int = 0,
     @SerialName("Y")

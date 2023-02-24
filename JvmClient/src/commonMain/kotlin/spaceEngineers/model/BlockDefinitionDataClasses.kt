@@ -2,7 +2,6 @@ package spaceEngineers.model
 
 // Generated automatically by BlockMappingGeneratorRunner.kt, do not change.
 
-
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -30,8 +29,6 @@ data class DataAirtightDoorGenericDefinition(
     override val enabled: Boolean,
     @SerialName("Components")
     override val components: List<Component>,
-
-
 
     @SerialName("PowerConsumptionIdle")
     override val powerConsumptionIdle: Float,
@@ -66,8 +63,6 @@ data class DataLCDPanelsBlockDefinition(
     @SerialName("Components")
     override val components: List<Component>,
 
-
-
     @SerialName("RequiredPowerInput")
     override val requiredPowerInput: Float,
 ) : LCDPanelsBlockDefinition
@@ -97,8 +92,6 @@ data class DataPowerProducerDefinition(
     @SerialName("Components")
     override val components: List<Component>,
 
-
-
     @SerialName("MaxPowerOutput")
     override val maxPowerOutput: Float,
 ) : PowerProducerDefinition
@@ -127,8 +120,6 @@ data class DataAdvancedDoorDefinition(
     override val enabled: Boolean,
     @SerialName("Components")
     override val components: List<Component>,
-
-
 
     @SerialName("PowerConsumptionIdle")
     override val powerConsumptionIdle: Float,
@@ -160,8 +151,6 @@ data class DataAirVentDefinition(
     override val enabled: Boolean,
     @SerialName("Components")
     override val components: List<Component>,
-
-
 
     @SerialName("StandbyPowerConsumption")
     override val standbyPowerConsumption: Float,
@@ -195,8 +184,6 @@ data class DataProductionBlockDefinition(
     override val enabled: Boolean,
     @SerialName("Components")
     override val components: List<Component>,
-
-
 
     @SerialName("InventoryMaxVolume")
     override val inventoryMaxVolume: Float,
@@ -305,8 +292,6 @@ data class DataBeaconDefinition(
     @SerialName("Components")
     override val components: List<Component>,
 
-
-
     @SerialName("MaxBroadcastRadius")
     override val maxBroadcastRadius: Float,
     @SerialName("MaxBroadcastPowerDrainkW")
@@ -338,8 +323,6 @@ data class DataButtonPanelDefinition(
     @SerialName("Components")
     override val components: List<Component>,
 
-
-
     @SerialName("ButtonCount")
     override val buttonCount: Int,
 ) : ButtonPanelDefinition
@@ -368,8 +351,6 @@ data class DataCameraBlockDefinition(
     override val enabled: Boolean,
     @SerialName("Components")
     override val components: List<Component>,
-
-
 
     @SerialName("RequiredPowerInput")
     override val requiredPowerInput: Float,
@@ -411,8 +392,6 @@ data class DataShipControllerDefinition(
     override val enabled: Boolean,
     @SerialName("Components")
     override val components: List<Component>,
-
-
 
     @SerialName("EnableFirstPerson")
     override val enableFirstPerson: Boolean,
@@ -491,8 +470,6 @@ data class DataConveyorSorterDefinition(
     @SerialName("Components")
     override val components: List<Component>,
 
-
-
     @SerialName("PowerInput")
     override val powerInput: Float,
 ) : ConveyorSorterDefinition
@@ -566,8 +543,6 @@ data class DataDecoyDefinition(
     @SerialName("Components")
     override val components: List<Component>,
 
-
-
     @SerialName("LightningRodRadiusLarge")
     override val lightningRodRadiusLarge: Float,
     @SerialName("LightningRodRadiusSmall")
@@ -599,8 +574,6 @@ data class DataDoorDefinition(
     @SerialName("Components")
     override val components: List<Component>,
 
-
-
     @SerialName("MaxOpen")
     override val maxOpen: Float,
     @SerialName("OpeningSpeed")
@@ -631,8 +604,6 @@ data class DataExhaustBlockDefinition(
     override val enabled: Boolean,
     @SerialName("Components")
     override val components: List<Component>,
-
-
 
     @SerialName("RequiredPowerInput")
     override val requiredPowerInput: Float,
@@ -765,8 +736,6 @@ data class DataGravityGeneratorBaseDefinition(
     @SerialName("Components")
     override val components: List<Component>,
 
-
-
     @SerialName("MinGravityAcceleration")
     override val minGravityAcceleration: Float,
     @SerialName("MaxGravityAcceleration")
@@ -872,8 +841,6 @@ data class DataGyroDefinition(
     @SerialName("Components")
     override val components: List<Component>,
 
-
-
     @SerialName("ForceMagnitude")
     override val forceMagnitude: Float,
     @SerialName("RequiredPowerInput")
@@ -904,8 +871,6 @@ data class DataSoundBlockDefinition(
     override val enabled: Boolean,
     @SerialName("Components")
     override val components: List<Component>,
-
-
 
     @SerialName("MinRange")
     override val minRange: Float,
@@ -944,8 +909,6 @@ data class DataJumpDriveDefinition(
     @SerialName("Components")
     override val components: List<Component>,
 
-
-
     @SerialName("RequiredPowerInput")
     override val requiredPowerInput: Float,
     @SerialName("PowerNeededForJump")
@@ -983,8 +946,6 @@ data class DataLandingGearDefinition(
     @SerialName("Components")
     override val components: List<Component>,
 
-
-
     @SerialName("MaxLockSeparatingVelocity")
     override val maxLockSeparatingVelocity: Float,
 ) : LandingGearDefinition
@@ -1013,8 +974,6 @@ data class DataWeaponBlockDefinition(
     override val enabled: Boolean,
     @SerialName("Components")
     override val components: List<Component>,
-
-
 
     @SerialName("InventoryMaxVolume")
     override val inventoryMaxVolume: Float,
@@ -1047,8 +1006,6 @@ data class DataLightingBlockDefinition(
     @SerialName("Components")
     override val components: List<Component>,
 
-
-
     @SerialName("RequiredPowerInput")
     override val requiredPowerInput: Float,
     @SerialName("ReflectorConeDegrees")
@@ -1079,8 +1036,6 @@ data class DataMechanicalConnectionBlockBaseDefinition(
     override val enabled: Boolean,
     @SerialName("Components")
     override val components: List<Component>,
-
-
 
     @SerialName("SafetyDetach")
     override val safetyDetach: Float,
@@ -1114,8 +1069,6 @@ data class DataMedicalRoomDefinition(
     override val enabled: Boolean,
     @SerialName("Components")
     override val components: List<Component>,
-
-
 
     @SerialName("RespawnAllowed")
     override val respawnAllowed: Boolean,
@@ -1160,8 +1113,6 @@ data class DataMergeBlockDefinition(
     @SerialName("Components")
     override val components: List<Component>,
 
-
-
     @SerialName("Strength")
     override val strength: Float,
 ) : MergeBlockDefinition
@@ -1191,8 +1142,6 @@ data class DataOreDetectorDefinition(
     @SerialName("Components")
     override val components: List<Component>,
 
-
-
     @SerialName("MaximumRange")
     override val maximumRange: Float,
 ) : OreDetectorDefinition
@@ -1221,8 +1170,6 @@ data class DataOxygenFarmDefinition(
     override val enabled: Boolean,
     @SerialName("Components")
     override val components: List<Component>,
-
-
 
     @SerialName("IsTwoSided")
     override val isTwoSided: Boolean,
@@ -1302,8 +1249,6 @@ data class DataParachuteDefinition(
     override val enabled: Boolean,
     @SerialName("Components")
     override val components: List<Component>,
-
-
 
     @SerialName("PowerConsumptionIdle")
     override val powerConsumptionIdle: Float,
@@ -1394,8 +1339,6 @@ data class DataProjectorDefinition(
     @SerialName("Components")
     override val components: List<Component>,
 
-
-
     @SerialName("RequiredPowerInput")
     override val requiredPowerInput: Float,
     @SerialName("AllowScaling")
@@ -1433,8 +1376,6 @@ data class DataRadioAntennaDefinition(
     @SerialName("Components")
     override val components: List<Component>,
 
-
-
     @SerialName("MaxBroadcastRadius")
     override val maxBroadcastRadius: Float,
     @SerialName("LightningRodRadiusLarge")
@@ -1442,4 +1383,3 @@ data class DataRadioAntennaDefinition(
     @SerialName("LightningRodRadiusSmall")
     override val lightningRodRadiusSmall: Float,
 ) : RadioAntennaDefinition
-

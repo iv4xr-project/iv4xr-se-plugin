@@ -12,9 +12,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-
 class BasicUsageTest {
-
 
     /**
      * This scenario:
@@ -38,12 +36,12 @@ class BasicUsageTest {
             // We observe for new blocks to ensure all the existing blocks won't be "new" anymore.
             observer.observeNewBlocks()
             // We place a block.
-            val blockId =
+            val cubeGrid =
                 admin.blocks.placeAt(blockDefinitionId, Vec3F(0, 0, z + 0), Vec3F.FORWARD, Vec3F.UP)
             // We observe for new blocks.
             val block = observer.observeNewBlocks().allBlocks.first()
             // We expect block to be there and to have all the expected properties:
-            assertEquals(block.id, blockId)
+            assertEquals(block.id, cubeGrid.blocks.first().id)
             assertEquals(block.definitionId.type, block.definitionId.type)
             assertTrue(observer.observeBlocks().allBlocks.any { it.definitionId.type == blockDefinitionId.type })
             assertEquals(12065.0f, block.integrity)

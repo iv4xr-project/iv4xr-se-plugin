@@ -10,6 +10,7 @@ namespace Iv4xr.SpaceEngineers.WorldModel
 	    public bool ShowInTerminal;
 	    public bool ShowOnHUD;
 	    public string CustomName;
+	    public string CustomData;
 	}
 	
 	public class FunctionalBlock : TerminalBlock 
@@ -29,6 +30,77 @@ namespace Iv4xr.SpaceEngineers.WorldModel
 	    public float CurrentOutput;
 	    public float Capacity;
 	}
+	
+	public class Warhead : TerminalBlock 
+	{
+	    public bool IsCountingDown;
+	    public bool IsArmed;
+	}
+	
+	public class MedicalRoom : FunctionalBlock 
+	{
+	    public bool SuitChangeAllowed;
+	    public bool CustomWardrobesEnabled;
+	    public string SpawnName;
+	    public bool RespawnAllowed;
+	    public bool RefuelAllowed;
+	    public bool HealingAllowed;
+	    public bool SpawnWithoutOxygenEnabled;
+	    public bool ForceSuitChangeOnRespawn;
+	}
+	
+	public class TimerBlock : FunctionalBlock 
+	{
+	    public bool Silent;
+	    public float TriggerDelay;
+	    public Toolbar Toolbar;
+	}
+	
+	public class SensorBlock : FunctionalBlock 
+	{
+	    public bool IsActive;
+	    public PlainVec3D FieldMin;
+	    public PlainVec3D FieldMax;
+	    public float MaxRange;
+	    public int Filters;
+	    public Toolbar Toolbar;
+	}
+	
+	public class GravityGenerator : GravityGeneratorBase 
+	{
+	    public PlainVec3D FieldSize;
+	}
+	
+	public class GravityGeneratorSphere : GravityGeneratorBase 
+	{
+	    public float Radius;
+	}
+	
+	public class GravityGeneratorBase : FunctionalBlock 
+	{
+	    public float GravityAcceleration;
+	}
+	
+	public class MechanicalConnectionBlockBase : Block 
+	{
+	    public float SafetyDetach;
+	}
+	
+	public class PistonBase : FunctionalBlock 
+	{
+	    public float CurrentPosition;
+	    public int Status;
+	    public float Velocity;
+	    public float MinLimit;
+	    public float MaxLimit;
+	    public float MaxImpulseAxis;
+	    public float MaxImpulseNonAxis;
+	}
+	
+	public class Thrust : FunctionalBlock 
+	{
+	    public float ThrustOverride;
+	}
 	public static class BlockMapper
 	{
 	    public static readonly Dictionary<string, string> Mapping = new Dictionary<string, string>
@@ -39,11 +111,9 @@ namespace Iv4xr.SpaceEngineers.WorldModel
 		    { "MyProgrammableBlock", "FunctionalBlock" },
 		    { "Projector", "FunctionalBlock" },
 		    { "ProjectorBase", "FunctionalBlock" },
-		    { "SensorBlock", "FunctionalBlock" },
 		    { "TargetDummyBlock", "FunctionalBlock" },
 		    { "SoundBlock", "FunctionalBlock" },
 		    { "ButtonPanel", "FunctionalBlock" },
-		    { "TimerBlock", "FunctionalBlock" },
 		    { "TurretControlBlock", "FunctionalBlock" },
 		    { "RadioAntenna", "FunctionalBlock" },
 		    { "Beacon", "FunctionalBlock" },
@@ -72,9 +142,6 @@ namespace Iv4xr.SpaceEngineers.WorldModel
 		    { "HydrogenEngine", "FueledPowerProducer" },
 		    { "WindTurbine", "FunctionalBlock" },
 		    { "SolarPanel", "FunctionalBlock" },
-		    { "GravityGenerator", "FunctionalBlock" },
-		    { "GravityGeneratorBase", "FunctionalBlock" },
-		    { "GravityGeneratorSphere", "FunctionalBlock" },
 		    { "VirtualMass", "FunctionalBlock" },
 		    { "SpaceBall", "FunctionalBlock" },
 		    { "LandingGear", "FunctionalBlock" },
@@ -84,18 +151,15 @@ namespace Iv4xr.SpaceEngineers.WorldModel
 		    { "ProductionBlock", "FunctionalBlock" },
 		    { "Refinery", "FunctionalBlock" },
 		    { "ConveyorSorter", "FunctionalBlock" },
-		    { "Thrust", "FunctionalBlock" },
 		    { "InteriorLight", "FunctionalBlock" },
 		    { "AirVent", "FunctionalBlock" },
 		    { "Collector", "FunctionalBlock" },
 		    { "ShipConnector", "FunctionalBlock" },
-		    { "PistonBase", "FunctionalBlock" },
 		    { "MechanicalConnectionBlock", "FunctionalBlock" },
-		    { "ExtendedPistonBase", "FunctionalBlock" },
+		    { "ExtendedPistonBase", "PistonBase" },
 		    { "MotorStator", "FunctionalBlock" },
 		    { "MotorBase", "FunctionalBlock" },
 		    { "MotorAdvancedStator", "FunctionalBlock" },
-		    { "MedicalRoom", "FunctionalBlock" },
 		    { "OxygenGenerator", "FunctionalBlock" },
 		    { "SurvivalKit", "FunctionalBlock" },
 		    { "OxygenFarm", "FunctionalBlock" },
@@ -116,7 +180,6 @@ namespace Iv4xr.SpaceEngineers.WorldModel
 		    { "SmallGatlingGun", "FunctionalBlock" },
 		    { "Searchlight", "FunctionalBlock" },
 		    { "HeatVentBlock", "FunctionalBlock" },
-		    { "Warhead", "TerminalBlock" },
 		    { "Decoy", "FunctionalBlock" },
 		    { "LargeGatlingTurret", "FunctionalBlock" },
 		    { "ConveyorTurretBase", "FunctionalBlock" },

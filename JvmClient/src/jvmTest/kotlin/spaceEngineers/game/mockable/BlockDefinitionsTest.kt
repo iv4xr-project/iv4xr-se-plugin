@@ -12,7 +12,7 @@ import kotlin.test.assertTrue
 
 fun BlockDefinition.isGoodForBig(): Boolean {
     return enabled && cubeSize == CubeSize.Large &&
-            buildProgressModels.isNotEmpty()
+        buildProgressModels.isNotEmpty()
 }
 
 fun Iterable<BlockDefinition>.filterForBig(): List<BlockDefinition> {
@@ -22,9 +22,9 @@ fun Iterable<BlockDefinition>.filterForBig(): List<BlockDefinition> {
 val stringFilters = setOf("Symbol", "Neon", "Window")
 fun BlockDefinition.isGoodForScreenshots(): Boolean {
     return enabled && cubeSize == CubeSize.Large &&
-            size == Vec3F.ONE &&
-            buildProgressModels.isNotEmpty() &&
-            stringFilters.none { definitionId.type.contains(it) }
+        size == Vec3F.ONE &&
+        buildProgressModels.isNotEmpty() &&
+        stringFilters.none { definitionId.type.contains(it) }
 }
 
 fun Iterable<BlockDefinition>.filterForScreenshots(): List<BlockDefinition> {
@@ -34,7 +34,6 @@ fun Iterable<BlockDefinition>.filterForScreenshots(): List<BlockDefinition> {
 fun Iterable<BlockDefinition>.filterSidePoints(): List<BlockDefinition> {
     return filter { it.mountPoints.any { mountPoint -> mountPoint.isSidePoint() } }
 }
-
 
 private const val EXPECTED_DEFINITION_COUNT = 897
 
@@ -105,10 +104,8 @@ class BlockDefinitionsTest : MockOrRealGameTest(inMockResourcesDirectory("BlockD
         definitions.blockDefinitions().let { blockDefinitions ->
             blockDefinitions.filterNot { it.public }.map { it.definitionId.type }
             assertEquals(46, blockDefinitions.count { !it.public })
-
         }
     }
-
 
     @Test
     fun duplicates() = testContext {
@@ -130,12 +127,11 @@ class BlockDefinitionsTest : MockOrRealGameTest(inMockResourcesDirectory("BlockD
                 .filterForBig()
                 .filterSidePoints()
                 .filter { it.definitionId.id == "MyObjectBuilder_CubeBlock" }
-                //.filter { it.mountPoints.any { it.default } }
+                // .filter { it.mountPoints.any { it.default } }
                 .forEach { blockDefinition ->
                     println("${blockDefinition.definitionId.id} ${blockDefinition.definitionId.type}")
                     println(blockDefinition.mountPoints)
                 }
-
         }
     }
 
@@ -178,7 +174,6 @@ class BlockDefinitionsTest : MockOrRealGameTest(inMockResourcesDirectory("BlockD
             blockDefinitions.first { it.definitionId.type == "LargeHeavyBlockArmorBlock" }.definitionId.id,
             blockDefinitions.first { it.definitionId.type == "SmallHeavyBlockArmorBlock" }.definitionId.id
         )
-
     }
 
     @Test
@@ -199,5 +194,4 @@ class BlockDefinitionsTest : MockOrRealGameTest(inMockResourcesDirectory("BlockD
             blockDefinitions.first { it.definitionId.type == "LargeBlockArmorBlock" }.definitionId.id
         )
     }
-
 }

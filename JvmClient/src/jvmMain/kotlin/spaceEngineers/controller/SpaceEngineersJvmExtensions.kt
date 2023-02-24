@@ -1,6 +1,11 @@
 package spaceEngineers.controller
 
+import spaceEngineers.iv4xr.navigation.Iv4XRAStarPathFinder
+import spaceEngineers.model.BlockId
+import spaceEngineers.model.Vec3F
+import spaceEngineers.navigation.PathFinder
 import java.io.File
+import java.util.Base64
 
 val SCENARIO_DIR = "src/jvmTest/resources/game-saves/"
 
@@ -27,9 +32,21 @@ fun Session.loadFromTestResources(scenarioId: String, scenarioDir: String = SCEN
     val unixPath = file.absolutePath.unixToWindowsPath()
     check(
         file.exists() ||
-                unixPath.toFile().exists()
+            unixPath.toFile().exists()
     ) {
-        "Couldn't find scenario"
+        "Couldn't find scenario at ${file.absolutePath}"
     }
     loadScenario(unixPath)
+}
+
+fun SpaceEngineers.extend(pathFinder: PathFinder<BlockId, Vec3F, String, String> = Iv4XRAStarPathFinder()): ExtendedSpaceEngineers {
+    if (this is ExtendedSpaceEngineers) {
+        return this
+    }
+    return DataExtendedSpaceEngineers(this, pathFinder = pathFinder)
+}
+
+fun Observer.downloadScreenShot(destination: File) {
+    destination.parentFile.mkdirs()
+    destination.writeBytes(Base64.getDecoder().decode(downloadScreenshotBase64()))
 }

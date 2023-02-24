@@ -1,0 +1,8 @@
+rootProject.name = 'CucumberTester'
+
+include("space-engineers-api")
+
+
+
+project(":space-engineers-api").projectDir = new File(rootProject.projectDir, "/../JvmClient")
+

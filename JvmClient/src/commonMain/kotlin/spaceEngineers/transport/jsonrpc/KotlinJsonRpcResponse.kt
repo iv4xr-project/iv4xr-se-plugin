@@ -13,4 +13,11 @@ data class KotlinJsonRpcResponse<T : Any?>(
     override val result: T? = null,
     @SerialName("error")
     override val error: KotlinJsonRpcError? = null
-) : JsonRpcResponse<T>
+) : JsonRpcResponse<T> {
+
+    fun asResult(): Result<T?> {
+        return error?.let {
+            Result.failure(it)
+        } ?: Result.success(result)
+    }
+}

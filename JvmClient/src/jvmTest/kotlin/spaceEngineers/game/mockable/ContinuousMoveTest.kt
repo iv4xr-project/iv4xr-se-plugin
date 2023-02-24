@@ -7,7 +7,6 @@ import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-
 class ContinuousMoveTest : MockOrRealGameTest() {
 
     @Test
@@ -53,5 +52,4 @@ class ContinuousMoveTest : MockOrRealGameTest() {
         val position2 = observer.observe().position
         assertEquals(2.3818512f, (position2 - position).length(), absoluteTolerance = 0.01f)
     }
-
 }

@@ -7,8 +7,8 @@ import spaceEngineers.controller.ContextControllerWrapper
 import spaceEngineers.controller.SpaceEngineers
 import spaceEngineers.model.Block
 import spaceEngineers.model.ToolbarLocation
+import spaceEngineers.model.extensions.allBlocks
 import spaceEngineers.model.extensions.blockById
-
 
 suspend fun SpaceEngineers.grindUntilIntegrityValue(
     block: Block,
@@ -28,7 +28,6 @@ suspend fun SpaceEngineers.grindUntilIntegrityValue(
     }
     character.endUsingTool()
 }
-
 
 suspend fun SpaceEngineers.grindUntilIntegrityPercentage(
     block: Block,
@@ -71,4 +70,15 @@ suspend fun SpaceEngineers.torchUpToPercentage(block: Block, percentage: Double,
         toolLocation = torchLocation,
         checkBlockIntegrity = { block_, integrity -> block_.integrity < integrity }
     )
+}
+
+fun SpaceEngineers.removeAllBlocks() {
+    while (observer.observeBlocks().allBlocks.isNotEmpty()) {
+        observer.observeBlocks().allBlocks.forEach {
+            try {
+                admin.blocks.remove(it.id)
+            } catch (e: Exception) {
+            }
+        }
+    }
 }

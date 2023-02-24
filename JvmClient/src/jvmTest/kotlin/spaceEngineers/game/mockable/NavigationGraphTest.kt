@@ -8,8 +8,6 @@ import kotlin.test.assertTrue
 
 class NavigationGraphTest : MockOrRealGameTest(
     mockFile = inMockResourcesDirectory("NavigationGraphTest.txt"),
-    forceRealGame = false,
-    loadScenario = true,
 ) {
 
     @Test
@@ -23,8 +21,10 @@ class NavigationGraphTest : MockOrRealGameTest(
     @Test
     fun getGraphByGridId() = testContext {
         observer.navigationGraph(
-            (observer.observeBlocks().grids.maxByOrNull { grid -> grid.blocks.count() }
-                ?: error("No grid!")).id
+            (
+                observer.observeBlocks().grids.maxByOrNull { grid -> grid.blocks.count() }
+                    ?: error("No grid!")
+                ).id
         ).let {
             assertEquals(40, it.nodes.size)
             assertEquals(67, it.edges.size)
@@ -39,9 +39,9 @@ class NavigationGraphTest : MockOrRealGameTest(
         assertTrue { minId < maxId }
 
         navGraph.edges.forEach {
-            assertTrue { it.i < it.j }
-            assertTrue { it.i >= minId }
-            assertTrue { it.j <= maxId }
+            assertTrue { it.from < it.to }
+            assertTrue { it.from >= minId }
+            assertTrue { it.to <= maxId }
         }
     }
 }

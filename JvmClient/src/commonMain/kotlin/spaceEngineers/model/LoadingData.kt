@@ -23,4 +23,4 @@ data class LoadingData(
     override val visible: Boolean,
     @SerialName("CloseButtonEnabled")
     override val closeButtonEnabled: Boolean,
-): ScreenData
+) : ScreenData

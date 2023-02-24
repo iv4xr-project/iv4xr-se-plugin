@@ -10,8 +10,7 @@ import spaceEngineers.navigation.NavGraph
 class ContextControllerWrapper(
     val spaceEngineers: SpaceEngineers,
     val context: SpaceEngineersTestContext = SpaceEngineersTestContext()
-) : SpaceEngineers {
-
+) : SpaceEngineers by spaceEngineers {
 
     private fun addToHistory(observation: Observation) {
         context.addToHistory(observation)
@@ -21,13 +20,7 @@ class ContextControllerWrapper(
         context.addToHistory(observation)
     }
 
-    override val session: Session = spaceEngineers.session
-
-    override val character: Character = spaceEngineers.character
-
-    override val items: Items = spaceEngineers.items
-
-    override val observer: Observer = object: Observer {
+    override val observer: Observer = object : Observer {
         override fun observe(): CharacterObservation {
             return spaceEngineers.observer.observe().apply(::addToHistory)
         }
@@ -64,15 +57,12 @@ class ContextControllerWrapper(
             spaceEngineers.observer.takeScreenshot(absolutePath)
         }
 
+        override fun downloadScreenshotBase64(): String {
+            return spaceEngineers.observer.downloadScreenshotBase64()
+        }
+
         override fun switchCamera() {
             spaceEngineers.observer.switchCamera()
         }
     }
-    override val definitions: Definitions = spaceEngineers.definitions
-    override val blocks: Blocks = spaceEngineers.blocks
-    override val admin: SpaceEngineersAdmin = spaceEngineers.admin
-    override val screens: Screens = spaceEngineers.screens
-    override val input: Input = spaceEngineers.input
-    override val debug: Debug = spaceEngineers.debug
-
 }

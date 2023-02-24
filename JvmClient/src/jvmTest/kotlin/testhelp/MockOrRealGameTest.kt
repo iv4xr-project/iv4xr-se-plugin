@@ -1,11 +1,18 @@
 package testhelp
 
-import spaceEngineers.controller.*
-import spaceEngineers.transport.*
+import spaceEngineers.controller.ExtendedSpaceEngineers
+import spaceEngineers.controller.JsonRpcSpaceEngineersBuilder
+import spaceEngineers.controller.SpaceEngineers
+import spaceEngineers.controller.SpaceEngineersJavaProxyBuilder
+import spaceEngineers.controller.extend
+import spaceEngineers.controller.loadFromTestResources
+import spaceEngineers.transport.AppendToFileReaderWriter
+import spaceEngineers.transport.ReconnectingSocketReaderWriter
 import spaceEngineers.transport.SocketReaderWriter.Companion.DEFAULT_PORT
+import spaceEngineers.transport.StringLineReaderWriter
 import java.io.File
 import java.lang.reflect.UndeclaredThrowableException
-
+import kotlin.time.Duration
 
 abstract class MockOrRealGameTest(
     val mockFile: File? = null,
@@ -39,7 +46,7 @@ abstract class MockOrRealGameTest(
         scenarioId: String = this.scenarioId,
         file: File = mockFile ?: inMockResourcesDirectory("${this::class.simpleName}-${getTestMethodName()}.txt"),
         spaceEngineersBuilder: JsonRpcSpaceEngineersBuilder = this.spaceEngineersBuilder,
-        block: suspend SpaceEngineers.() -> Unit
+        block: suspend ExtendedSpaceEngineers.() -> Unit
     ) {
         val spaceEngineers = getSpaceEngineers(forceRealGame, file, spaceEngineersBuilder)
         useRealGame = useRealGame(forceRealGame, file)
@@ -50,7 +57,7 @@ abstract class MockOrRealGameTest(
             } catch (e: UndeclaredThrowableException) {
                 throw e.cause ?: e
             } catch (e: Throwable) {
-                spaceEngineers.closeIfCloseable()
+                spaceEngineers.close()
                 throw e
             }
         }
@@ -67,16 +74,22 @@ abstract class MockOrRealGameTest(
         }
     }
 
+    protected suspend fun delay(duration: Duration) {
+        if (useRealGame) {
+            kotlinx.coroutines.delay(duration)
+        }
+    }
+
     private fun getSpaceEngineers(
         forceRealGame: Boolean,
         file: File,
         builder: JsonRpcSpaceEngineersBuilder
-    ): SpaceEngineers {
+    ): ExtendedSpaceEngineers {
         return if (useRealGame(forceRealGame, file)) {
             builder.fromStringLineReaderWriter(agentId, readerWriter(file))
         } else {
             builder.mock(agentId, file)
-        }
+        }.extend()
     }
 
     private fun getTestMethodName(index: Int = 4): String {
@@ -85,12 +98,13 @@ abstract class MockOrRealGameTest(
     }
 
     private fun readerWriter(
-        file: File, rw: StringLineReaderWriter = ReconnectingSocketReaderWriter(
+        file: File,
+        rw: StringLineReaderWriter = ReconnectingSocketReaderWriter(
             port = port
         )
     ): StringLineReaderWriter {
         if (!file.exists() || forceWrite) {
-            return GsonResponseAppendToFileReaderWriter(
+            return AppendToFileReaderWriter(
                 rw = rw,
                 file = file
             )
@@ -101,8 +115,7 @@ abstract class MockOrRealGameTest(
     companion object {
 
         fun inMockResourcesDirectory(fileName: String): File {
-            return File("${MOCK_RESOURCES_DIR}${fileName}")
+            return File("${MOCK_RESOURCES_DIR}$fileName")
         }
     }
-
 }

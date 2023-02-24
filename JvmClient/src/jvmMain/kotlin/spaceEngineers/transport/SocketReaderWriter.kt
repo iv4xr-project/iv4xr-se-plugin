@@ -3,7 +3,12 @@ package spaceEngineers.transport
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import java.io.*
+import java.io.BufferedReader
+import java.io.Closeable
+import java.io.IOException
+import java.io.InputStreamReader
+import java.io.OutputStreamWriter
+import java.io.PrintWriter
 import java.lang.reflect.Modifier
 import java.net.InetSocketAddress
 import java.net.Socket
@@ -13,14 +18,13 @@ import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.nanoseconds
 import kotlin.time.Duration.Companion.seconds
 
-
 class SocketReaderWriter(
     val host: String = DEFAULT_HOSTNAME,
     val port: UShort = DEFAULT_PORT,
     val maxWaitTime: Duration = DEFAULT_MAX_WAIT_TIME,
     val socketConnectionTimeout: Duration = DEFAULT_SOCKET_CONNECTION_TIMEOUT,
     val socketDataTimeout: Duration = DEFAULT_SOCKET_DATA_TIMEOUT,
-) : AutoCloseable, StringLineReaderWriter {
+) : StringLineReaderWriter {
 
     lateinit var socket: Socket
     lateinit var reader: BufferedReader
@@ -33,8 +37,7 @@ class SocketReaderWriter(
         connect()
     }
 
-    private fun connect(
-    ) {
+    private fun connect() {
         val startTime = System.nanoTime()
         var connected = false
         var lastException: IOException? = null
@@ -42,7 +45,10 @@ class SocketReaderWriter(
             try {
                 socket = Socket()
                 socket.soTimeout = socketDataTimeout.inWholeMilliseconds.toInt()
-                socket.connect(InetSocketAddress(host, port.toInt()), socketConnectionTimeout.inWholeMilliseconds.toInt())
+                socket.connect(
+                    InetSocketAddress(host, port.toInt()),
+                    socketConnectionTimeout.inWholeMilliseconds.toInt()
+                )
                 reader = BufferedReader(InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8))
                 writer = PrintWriter(OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8), true)
                 connected = true
@@ -81,7 +87,7 @@ class SocketReaderWriter(
         const val DEFAULT_PORT: UShort = 3333u
         val DEFAULT_MAX_WAIT_TIME = 120.seconds
         val DEFAULT_SOCKET_CONNECTION_TIMEOUT = 4.seconds
-        val DEFAULT_SOCKET_DATA_TIMEOUT = 120.seconds
+        val DEFAULT_SOCKET_DATA_TIMEOUT = 1200.seconds
 
         val SPACE_ENG_GSON: Gson = GsonBuilder()
             .setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)
@@ -92,15 +98,23 @@ class SocketReaderWriter(
             return (System.nanoTime() - startTimeNano).nanoseconds
         }
 
+        fun closeSafely(closeable: AutoCloseable?) {
+            try {
+                closeable?.close()
+            } catch (e: IOException) {
+                // at this point we don't care, just cleanup
+            }
+        }
+
         fun closeSafely(closeable: Closeable?) {
             try {
                 closeable?.close()
             } catch (e: IOException) {
-                //at this point we don't care, just cleanup
+                // at this point we don't care, just cleanup
             }
         }
 
-        //ensure this class can be created from Java
+        // ensure this class can be created from Java
         @JvmOverloads
         fun createUsingLongDurations(
             host: String = DEFAULT_HOSTNAME,
@@ -116,5 +130,4 @@ class SocketReaderWriter(
             socketDataTimeout = socketDataTimeoutMs.milliseconds,
         )
     }
-
 }

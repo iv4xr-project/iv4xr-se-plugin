@@ -3,7 +3,6 @@ package spaceEngineers.util.generator
 import spaceEngineers.controller.blockDefinitionMappings
 import kotlin.reflect.KClass
 
-
 const val commonBlockDefinitionFields = """
     @SerialName("DefinitionId")
     override val definitionId: DefinitionId,
@@ -56,7 +55,7 @@ ${interfaceFields()}
         return """
 ${generateInterface()}
 ${generateDataClass()}
-""".trimIndent()
+        """.trimIndent()
     }
 
     fun generateDataClass(): String {
@@ -72,11 +71,11 @@ ${fields()}
 
     fun generateCsClass(): String {
         return """
-public class ${cls} : ${parentCall()}
+public class $cls : ${parentCall()}
 {
 ${csFields()}
 }
-""".trimIndent().padTabs(1)
+        """.trimIndent().padTabs(1)
     }
 
     private fun parentCall(): String {
@@ -110,17 +109,15 @@ ${ip.firstOrNull() ?: defaultParent}
         return parents.filter { it in blockDefinitionMappings }
     }
 
-
     fun generateCsFieldMappings(): String {
         val fields = fields.entries.joinToString("\n") {
             """    ${cls.camelCase()}.${it.key} = my$cls.${it.key};"""
         }
         return """
-if (myBlockDefinition is My${cls} my$cls && 
+if (myBlockDefinition is My$cls my$cls && 
     blockDefinition is $cls ${cls.camelCase()} )
 {
 $fields    
 }""".trimStart().padTabs(3)
     }
-
 }

@@ -1,19 +1,15 @@
 package spaceEngineers.game.mockable
 
-import spaceEngineers.controller.extensions.blockDefinitionByType
 import spaceEngineers.model.DefinitionId
-import spaceEngineers.model.Vec3F
-import kotlin.test.Ignore
 import testhelp.MockOrRealGameTest
 import java.lang.Thread.sleep
+import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-
 @Ignore
 class ScreenTest : MockOrRealGameTest(forceRealGame = true, loadScenario = false, scenarioId = "automation-se") {
-
 
     @Test
     fun medicalRooms() = testContext {
@@ -81,7 +77,6 @@ class ScreenTest : MockOrRealGameTest(forceRealGame = true, loadScenario = false
         screens.terminal.inventory.left.swapToGrid()
     }
 
-
     @Test
     fun switchRightInventoryToGrid() = testContext {
         screens.terminal.inventory.right.swapToGrid()
@@ -131,7 +126,7 @@ class ScreenTest : MockOrRealGameTest(forceRealGame = true, loadScenario = false
     fun selectItemAndClick() = testContext {
         screens.terminal.inventory.left.selectItem(0)
         screens.terminal.inventory.dropSelected()
-        //screens.terminal.inventory.left.doubleClickSelectedItem()
+        // screens.terminal.inventory.left.doubleClickSelectedItem()
     }
 
     @Test
@@ -183,8 +178,8 @@ class ScreenTest : MockOrRealGameTest(forceRealGame = true, loadScenario = false
 
     @Test
     fun selectLoad() = testContext {
-        //screens.mainMenu.loadGame()
-        //delay(5000)
+        // screens.mainMenu.loadGame()
+        // delay(5000)
         screens.loadGame.doubleClickWorld(0)
     }
 
@@ -212,13 +207,11 @@ class ScreenTest : MockOrRealGameTest(forceRealGame = true, loadScenario = false
                 println(blueprint.displayName + " (${it.amount})" + blueprint.prerequisites.map { "${it.amount}: ${it.id}" } + " -> " + blueprint.results.map { "${it.amount}: ${it.id}" })
                 println()
             }
-            //println(productionQueue.flatMap { it.blueprint.results }.map { "${it.amount}: ${it.id}" })
+            // println(productionQueue.flatMap { it.blueprint.results }.map { "${it.amount}: ${it.id}" })
             blockDefinitions.forEach { blockDefinition ->
                 println(blockDefinition.components.map { "${it.count}: ${it.definition.definitionId} - ${it.deconstructItem.definitionId}" })
                 assertEquals(productionQueue.size, blockDefinition.components.size)
             }
-
-
         }
     }
 

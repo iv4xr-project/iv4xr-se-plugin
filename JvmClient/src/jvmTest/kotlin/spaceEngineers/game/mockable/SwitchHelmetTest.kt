@@ -5,16 +5,14 @@ import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-
 class SwitchHelmetTest : MockOrRealGameTest() {
-
 
     @Test
     fun switchHelmet() = testContext {
         assertTrue(observer.observe().helmetEnabled)
-        character.switchHelmet()
+        character.setHelmet(false)
         assertFalse(observer.observe().helmetEnabled)
-        character.switchHelmet()
+        character.setHelmet(true)
         assertTrue(observer.observe().helmetEnabled)
     }
 }

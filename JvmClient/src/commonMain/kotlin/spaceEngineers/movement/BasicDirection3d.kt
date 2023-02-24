@@ -2,7 +2,6 @@ package spaceEngineers.movement
 
 import spaceEngineers.model.CharacterMovementType
 import spaceEngineers.model.Vec3F
-import spaceEngineers.model.extensions.sum
 
 val leftShift = setOf(16, 160)
 
@@ -19,6 +18,10 @@ enum class BasicDirection3d(
     FORWARD(Vec3F.FORWARD, fromChar('w')),
     BACKWARD(Vec3F.BACKWARD, fromChar('s'));
 
+    fun perpendiculars(): List<BasicDirection3d> {
+        return excludingNone().filter { (it.vector + vector).length() > 0.01f && (it.vector - vector).length() > 0.01f }
+    }
+
     companion object {
         fun directionFromString(value: String): BasicDirection3d {
             return when (value) {
@@ -34,8 +37,10 @@ enum class BasicDirection3d(
             }
         }
 
+        fun excludingNone(): List<BasicDirection3d> {
+            return values().filter { it != NONE }
+        }
     }
-
 }
 
 fun fromChar(char: Char): Map<CharacterMovementType, Set<Int>> {

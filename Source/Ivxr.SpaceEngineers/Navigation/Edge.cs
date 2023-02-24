@@ -1,25 +1,44 @@
 ﻿using System;
+using System.Linq;
 
 namespace Iv4xr.SpaceEngineers.Navigation
 {
 
     public class Edge
     {
-        /// <summary>Smaller vertex index.</summary>
-        public readonly int I;
+        public readonly string Id;
         
-        /// <summary>Greater vertex index.</summary>
-        public readonly int J;
+        public readonly string I;
+        
+        public readonly string J;
 
-        public Edge(int u, int v)
+        public readonly string Data = "";
+
+        public Edge(string u, string v) : this(
+            MakeId(u, v), u, v)
+        {
+            
+        }
+
+        public Edge(string id, string u, string v)
         {
             if (u == v)
                 throw new ArgumentException("Edge cannot exist between equal indices.");
-            if (u < 0 || v < 0)
-                throw new ArgumentException("Vertex index cannot be negative.");
+            string[] nodeIds = { u, v };
+            Array.Sort(nodeIds);
+            I = nodeIds.First();
+            J = nodeIds.Last();
+            Id = id;
+            Id = $"E-{I}-{J}";
+        }
 
-            I = Math.Min(u, v);
-            J = Math.Max(u, v);
+        private static string MakeId(string u, string v)
+        {
+            string[] nodeIds = { u, v };
+            Array.Sort(nodeIds);
+            var i = nodeIds.First();
+            var j = nodeIds.Last();
+            return $"E-{i}-{j}";
         }
 
         public override bool Equals(object obj)
@@ -34,7 +53,7 @@ namespace Iv4xr.SpaceEngineers.Navigation
         {
             unchecked
             {
-                return I + J * 33013;
+                return I.GetHashCode() + J.GetHashCode() * 33013;
             }
         }
     }

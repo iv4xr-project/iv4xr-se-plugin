@@ -7,6 +7,8 @@ import kotlinx.serialization.Serializable
 data class SoundBanks(
     @SerialName("Sound")
     val sound: List<Sound>,
+    @SerialName("Hud")
+    val hud: List<Sound>,
 )
 
 @Serializable

@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class MedicalsData(
     @SerialName("MedicalRooms")
-    val medicalRooms: List<MedicalRoom>,
+    val medicalRooms: List<MedicalRoomData>,
     @SerialName("Factions")
     val factions: List<Faction>,
     @SerialName("ShowFactions")
@@ -22,4 +22,3 @@ data class MedicalsData(
     @SerialName("RespawnButton")
     val respawnButton: GuiControlBase?,
 )
-

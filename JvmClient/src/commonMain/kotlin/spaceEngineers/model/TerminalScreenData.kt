@@ -21,7 +21,6 @@ data class BlueprintDefinition(
     val results: List<AmountedDefinitionId>,
 )
 
-
 @Serializable
 data class AmountedDefinitionId(
     @SerialName("Id")
@@ -61,6 +60,27 @@ data class BlockGroupItem(
     val blocks: List<Block>,
 ) : BlockOrGroupItem
 
+@Serializable
+data class TerminalFactionsData(
+    @SerialName("Factions")
+    val factions: List<Faction>,
+    @SerialName("SelectedFactionIndex")
+    val selectedFactionIndex: Int? = null,
+)
+
+@Serializable
+data class RemoteGridData(
+    @SerialName("Name")
+    val name: String,
+    @SerialName("IsSelectable")
+    val isSelectable: Boolean,
+)
+
+@Serializable
+data class TerminalRemoteAccessData(
+    @SerialName("Grids")
+    val grids: List<RemoteGridData>,
+)
 
 @Serializable
 data class TerminalControlPanelData(
@@ -96,6 +116,39 @@ data class TerminalInventoryData(
     val rightInventories: List<Inventory>,
 )
 
+@Serializable
+data class TerminalInfoData(
+    @SerialName("GridInfo")
+    val gridInfo: String,
+    @SerialName("GridName")
+    val gridName: String,
+    @SerialName("ShowCenterOfMass")
+    val showCenterOfMass: Boolean,
+    @SerialName("ShowGravityRange")
+    val showGravityRange: Boolean,
+    @SerialName("ShowSensorsFieldRange")
+    val showSensorsFieldRange: Boolean,
+    @SerialName("ShowAntennaRange")
+    val showAntennaRange: Boolean,
+    @SerialName("ShowGridPivot")
+    val showGridPivot: Boolean,
+    @SerialName("FriendlyAntennaRange")
+    val friendlyAntennaRange: SliderData,
+    @SerialName("EnemyAntennaRange")
+    val enemyAntennaRange: SliderData,
+    @SerialName("OwnedAntennaRange")
+    val ownedAntennaRange: SliderData,
+)
+
+@Serializable
+data class SliderData(
+    @SerialName("MinValue")
+    val minValue: Float,
+    @SerialName("MaxValue")
+    val maxValue: Float,
+    @SerialName("Value")
+    val value: Float,
+)
 
 @Serializable
 data class TerminalProductionData(

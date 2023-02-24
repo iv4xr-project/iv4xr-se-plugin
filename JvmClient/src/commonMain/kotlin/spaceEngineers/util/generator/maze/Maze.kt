@@ -2,7 +2,6 @@ package spaceEngineers.util.generator.maze
 
 import kotlin.random.Random
 
-
 class Maze(val width: Int, val height: Int, val startX: Int = 2, val rnd: Random = Random.Default) {
 
     enum class Cell(
@@ -47,7 +46,6 @@ class Maze(val width: Int, val height: Int, val startX: Int = 2, val rnd: Random
                 count += 1
             }
         }
-
     }
 
     private fun generate(): Array<Array<Cell>> {
@@ -84,19 +82,31 @@ class Maze(val width: Int, val height: Int, val startX: Int = 2, val rnd: Random
         return data
     }
 
+    fun asSequence() = sequence {
+        for (y in 0 until height) {
+            for (x in 0 until width) {
+                yield(Position(x, y) to data[x][y])
+            }
+        }
+    }
+
     override fun toString(): String {
-        var result = "";
+        var result = ""
         for (y in 0 until height) {
             for (x in 0 until width) {
                 when (data[x][y]) {
                     Cell.END ->
                         result += ("ee")
+
                     Cell.SPACE ->
                         result += ("  ")
+
                     Cell.WALL ->
                         result += ("██")
+
                     Cell.START ->
                         result += ("ss")
+
                     Cell.OUT_OF_BOUNDS ->
                         result += ("??")
                 }

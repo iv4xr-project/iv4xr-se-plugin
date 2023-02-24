@@ -8,6 +8,7 @@ using Sandbox.Engine.Multiplayer;
 using Sandbox.Game;
 using Sandbox.Game.Entities;
 using Sandbox.Game.Entities.Character;
+using Sandbox.Game.Entities.Character.Components;
 using Sandbox.Game.EntityComponents;
 using Sandbox.Game.Gui;
 using Sandbox.Game.Multiplayer;
@@ -38,18 +39,21 @@ namespace Iv4xr.SePlugin.Control
 
         public CharacterObservation TurnOnDampeners()
         {
+            EnsureCharacterLives();
             Character.JetpackComp.EnableDampeners(true);
             return m_observer.Observe();
         }
 
         public CharacterObservation TurnOnRelativeDampeners()
         {
+            EnsureCharacterLives();
             MyMultiplayer.RaiseStaticEvent(s => MyPlayerCollection.SetDampeningEntity, Character.Entity.EntityId);
             return m_observer.Observe();
         }
 
         public CharacterObservation TurnOffDampeners()
         {
+            EnsureCharacterLives();
             Character.JetpackComp.EnableDampeners(false);
             return m_observer.Observe();
         }
@@ -68,70 +72,105 @@ namespace Iv4xr.SePlugin.Control
             ResourceSource.SetRemainingCapacityByType(MyResourceDistributorComponent.ElectricityId, absoluteEnergy);
         }
 
+        public void UpdateHealth(float health)
+        {
+            Character.StatComp.Health.CallMethod<object>("SetValue", new object[] { health * 100, null });
+        }
+
+
         public void UpdateOxygen(float oxygen)
         {
-            ResourceSource.SetRemainingCapacityByType(MyResourceDistributorComponent.OxygenId, oxygen);
+            var oxygenId = MyCharacterOxygenComponent.OxygenId;
+            Character.OxygenComponent.UpdateStoredGasLevel(ref oxygenId, oxygen);
         }
 
         public void UpdateHydrogen(float hydrogen)
         {
-            ResourceSource.SetRemainingCapacityByType(MyResourceDistributorComponent.HydrogenId, hydrogen);
+            var hydrogenId = MyCharacterOxygenComponent.HydrogenId;
+            Character.OxygenComponent.UpdateStoredGasLevel(ref hydrogenId, hydrogen);
         }
 
 
         public CharacterObservation Jump(PlainVec3D movement)
         {
+            EnsureCharacterLives();
             Character.Jump(movement.ToVector3());
             return m_observer.Observe();
         }
 
         public CharacterObservation TurnOnJetpack()
         {
+            EnsureCharacterLives();
             Character.JetpackComp.TurnOnJetpack(true);
             return m_observer.Observe();
         }
 
         public CharacterObservation TurnOffJetpack()
         {
+            EnsureCharacterLives();
             Character.JetpackComp.TurnOnJetpack(false);
             return m_observer.Observe();
         }
 
-        public CharacterObservation SwitchHelmet()
+        public void SetHelmet(bool enabled)
         {
-            Character.OxygenComponent.SwitchHelmet();
-            return m_observer.Observe();
+            EnsureCharacterLives();
+            if (Character.OxygenComponent.HelmetEnabled == enabled)
+            {
+                return;
+            }
+
+            IMyControllableEntity entity = (IMyControllableEntity) Character;            
+            entity.SwitchHelmet();
+        }
+
+        public void SetLight(bool enabled)
+        {
+            EnsureCharacterLives();
+            Character.EnableLights(enabled);
+        }
+
+        public void SetBroadcasting(bool enabled)
+        {
+            EnsureCharacterLives();
+            Character.EnableBroadcasting(enabled);
         }
 
         public void BeginUsingTool()
         {
+            EnsureCharacterLives();
             var entityController = GetEntityController();
             entityController.ControlledEntity.BeginShoot(MyShootActionEnum.PrimaryAction);
         }
 
         public void EndUsingTool()
         {
+            EnsureCharacterLives();
             var entityController = GetEntityController();
             entityController.ControlledEntity.EndShoot(MyShootActionEnum.PrimaryAction);
         }
 
         public void Use()
         {
+            EnsureCharacterLives();
             MySession.Static.ControlledEntity.Use();
         }
 
         public void ShowTerminal()
         {
+            EnsureCharacterLives();
             Character.ShowTerminal();
         }
 
         public void ShowInventory()
         {
+            EnsureCharacterLives();
             Character.ShowInventory();
         }
 
         public bool SwitchParkedStatus()
         {
+            EnsureCharacterLives();
             var controlledEntity = MySession.Static.ControlledEntity;
             if (!(controlledEntity is MyShipController ctrl))
                 throw new InvalidOperationException(
@@ -143,6 +182,7 @@ namespace Iv4xr.SePlugin.Control
 
         public bool SwitchWalk()
         {
+            EnsureCharacterLives();
             Character.SwitchWalk();
             return Character.WantsWalk;
         }
@@ -188,6 +228,7 @@ namespace Iv4xr.SePlugin.Control
 
         public void Die()
         {
+            EnsureCharacterLives();
             Character.Die();
         }
 
@@ -217,6 +258,7 @@ namespace Iv4xr.SePlugin.Control
 
         public CharacterObservation MoveAndRotate(PlainVec3D movement, PlainVec2F rotation3, float roll, int ticks)
         {
+            EnsureCharacterLives();
             var vector3d = movement.ToVector3D();
             if (!Character.JetpackRunning)
             {
@@ -250,5 +292,13 @@ namespace Iv4xr.SePlugin.Control
         }
 
         private MyCharacter Character => m_session.Character;
+
+        private void EnsureCharacterLives(string message = "Cannot do this while dead")
+        {
+            if (Character.IsDead)
+            {
+                throw new InvalidOperationException(message);
+            }
+        }
     }
 }

@@ -27,4 +27,4 @@ data class DataBlockDefinition(
     override val enabled: Boolean,
     @SerialName("Components")
     override val components: List<Component>,
-): BlockDefinition
+) : BlockDefinition

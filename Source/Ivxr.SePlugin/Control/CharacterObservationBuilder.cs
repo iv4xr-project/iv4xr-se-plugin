@@ -31,9 +31,11 @@ namespace Iv4xr.SePlugin.Control
                     OrientationForward = MySector.MainCamera.ForwardVector.ToPlain(),
                     OrientationUp = MySector.MainCamera.UpVector.ToPlain(),
                 },
-                JetpackRunning = character.JetpackComp.TurnedOn,
-                DampenersOn = character.JetpackComp.DampenersEnabled,
+                JetpackRunning = character.JetpackComp?.TurnedOn ?? false,
+                DampenersOn = character.JetpackComp?.DampenersEnabled ?? true,
                 HelmetEnabled = character.OxygenComponent.HelmetEnabled,
+                LightEnabled = character.LightEnabled,
+                CurrentLightPower = character.CurrentLightPower,
                 Health = character.StatComp.HealthRatio,
                 Oxygen = character.GetSuitGasFillLevel(MyCharacterOxygenComponent.OxygenId),
                 Hydrogen = character.GetSuitGasFillLevel(MyCharacterOxygenComponent.HydrogenId),
@@ -47,8 +49,11 @@ namespace Iv4xr.SePlugin.Control
                 BootsState = GetBootState(character),
                 RelativeDampeningEntity = character.RelativeDampeningEntity.ToEntityOrNull(),
                 MovementFlags = (CharacterMovementFlags)((byte)character.MovementFlags),
-                JetpackControlThrust = character.JetpackComp.GetInstanceProperty<MyEntityThrustComponent>("ThrustComp").ControlThrust.ToPlain(),
-                JetpackFinalThrust = character.JetpackComp.FinalThrust.ToPlain(),
+                JetpackControlThrust =
+                        character.JetpackComp?.GetInstanceProperty<MyEntityThrustComponent>("ThrustComp").ControlThrust
+                                .ToPlain() ?? new PlainVec3D(),
+                JetpackFinalThrust =
+                        character.JetpackComp?.FinalThrust.ToPlain() ?? new PlainVec3D(), // null JetpackComp
                 CurrentWeapon = WeaponEntity(character).ToPolymorphicEntity(),
             };
             character.ToEntity(result);

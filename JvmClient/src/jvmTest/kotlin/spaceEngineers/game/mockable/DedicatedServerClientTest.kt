@@ -6,14 +6,13 @@ import testhelp.MockOrRealGameTest
 import kotlin.test.Ignore
 import kotlin.test.Test
 
-
 @Ignore
 class DedicatedServerClientTest : MockOrRealGameTest(loadScenario = false, forceRealGame = true, port = 3334u) {
 
     @Test
     fun connect() = testContext {
         session.connect("127.0.0.1:27016")
-        //admin.observer.observeCharacters().apply(::println)
+        // admin.observer.observeCharacters().apply(::println)
     }
 
     @Test
@@ -38,7 +37,6 @@ class DedicatedServerClientTest : MockOrRealGameTest(loadScenario = false, force
 
     @Test
     fun switchHelmet() = testContext {
-        character.switchHelmet()
+        character.setHelmet(true)
     }
-
 }

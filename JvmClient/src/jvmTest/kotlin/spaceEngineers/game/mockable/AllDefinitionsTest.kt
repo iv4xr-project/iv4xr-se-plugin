@@ -4,7 +4,6 @@ import testhelp.MockOrRealGameTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-
 class AllDefinitionsTest : MockOrRealGameTest(mockFile = inMockResourcesDirectory("AllDefinitionsTest.txt")) {
 
     @Test

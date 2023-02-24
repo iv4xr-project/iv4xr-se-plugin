@@ -8,7 +8,6 @@ import testhelp.MockOrRealGameTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-
 class SetIntegrityTest :
     MockOrRealGameTest() {
 

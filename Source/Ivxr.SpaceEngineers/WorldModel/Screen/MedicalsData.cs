@@ -4,7 +4,7 @@ namespace Iv4xr.SpaceEngineers.WorldModel.Screen
 {
     public class MedicalsData
     {
-        public List<MedicalRoom> MedicalRooms;
+        public List<MedicalRoomData> MedicalRooms;
         public List<Faction> Factions;
         public bool ShowFactions;
         public bool ShowMotD;

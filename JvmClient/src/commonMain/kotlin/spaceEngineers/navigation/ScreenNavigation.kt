@@ -4,13 +4,19 @@ import spaceEngineers.controller.Screens
 import spaceEngineers.controller.SpaceEngineers
 import spaceEngineers.controller.extensions.typedFocusedScreen
 import spaceEngineers.controller.extensions.waitForScreen
-import spaceEngineers.graph.*
+import spaceEngineers.graph.BasicGraphSearch
+import spaceEngineers.graph.DataEdge
+import spaceEngineers.graph.DataNode
+import spaceEngineers.graph.DirectedGraph
+import spaceEngineers.graph.GraphSearch
+import spaceEngineers.graph.toExtra
 import spaceEngineers.model.ScreenName
 import spaceEngineers.model.ScreenName.Companion.CubeBuilder
 import spaceEngineers.model.ScreenName.Companion.GamePlay
 import spaceEngineers.model.ScreenName.Companion.JoinGame
 import spaceEngineers.model.ScreenName.Companion.LoadGame
 import spaceEngineers.model.ScreenName.Companion.MainMenu
+import spaceEngineers.model.ScreenName.Companion.Medicals
 import spaceEngineers.model.ScreenName.Companion.MessageBox
 import spaceEngineers.model.ScreenName.Companion.NewGame
 import spaceEngineers.model.ScreenName.Companion.SaveAs
@@ -39,10 +45,7 @@ data class ScreenTransition(
         val from: ScreenName,
         val to: ScreenName,
         val spaceEngineers: SpaceEngineers,
-    ) : Screens by spaceEngineers.screens {
-
-
-    }
+    ) : Screens by spaceEngineers.screens
 
     private fun toContext(spaceEngineers: SpaceEngineers): ScreenTransitionContext {
         return ScreenTransitionContext(
@@ -60,7 +63,7 @@ val DEFAULT_TRANSITIONS = listOf(
         terminal.close()
     },
     ScreenTransition(GamePlay, Terminal) {
-        //OR spaceEngineers.character.showTerminal()
+        // OR spaceEngineers.character.showTerminal()
         spaceEngineers.character.showInventory()
     },
     ScreenTransition(GamePlay, CubeBuilder) {
@@ -85,8 +88,15 @@ val DEFAULT_TRANSITIONS = listOf(
         saveAs.pressCancel()
     },
     ScreenTransition(MessageBox, MainMenu) {
-        //TODO: depending on MessageBox data
         val data = messageBox.data()
+        if (data.text == "Multiplayer session no longer exists (probably closed).") {
+            messageBox.pressYes()
+        } else {
+            TODO("Don't know what to do with messagebox $data (get to MainMenu)")
+        }
+    },
+    ScreenTransition(ScreenName.ServerReconnector, MainMenu) {
+        TODO("Implement this")
     },
     ScreenTransition(JoinGame, MainMenu) {
         joinGame.close()
@@ -106,17 +116,18 @@ val DEFAULT_TRANSITIONS = listOf(
     ScreenTransition(GamePlay, ToolbarConfig) {
         gamePlay.showToolbarConfig()
     },
+    ScreenTransition(Medicals, MainMenu) {
+        medicals.showMainMenu()
+    },
 )
-
 
 fun ScreenName.toNode(): spaceEngineers.graph.Node<ScreenName, Unit> {
     return DataNode(this, Unit)
 }
 
-fun ScreenTransition.toDirectedEdge(): DirectedEdge<String, ScreenName, ScreenTransition> {
-    return DirectedEdge(from, to, edgeId, this)
+fun ScreenTransition.toDirectedEdge(): DataEdge<String, ScreenName, ScreenTransition> {
+    return DataEdge(from, to, edgeId, this)
 }
-
 
 fun List<ScreenTransition>.toGraph(): DirectedGraph<ScreenName, Unit, String, ScreenTransition> {
     return DirectedGraph(
@@ -124,7 +135,6 @@ fun List<ScreenTransition>.toGraph(): DirectedGraph<ScreenName, Unit, String, Sc
         edges = map { it.toDirectedEdge() }
     )
 }
-
 
 class ScreenNavigation(
     val spaceEngineers: SpaceEngineers,

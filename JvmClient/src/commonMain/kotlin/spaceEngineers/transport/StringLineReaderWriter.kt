@@ -1,9 +1,9 @@
 package spaceEngineers.transport
 
-interface StringLineReaderWriter {
+interface StringLineReaderWriter : Closeable {
     fun sendAndReceiveLine(line: String): String
 }
 
-interface StringLineReaderWrapper: StringLineReaderWriter {
+interface StringLineReaderWrapper : StringLineReaderWriter {
     val rw: StringLineReaderWriter
 }

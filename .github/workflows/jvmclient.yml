@@ -1,0 +1,55 @@
+name: JvmClient
+
+on: 
+  push:
+  pull_request:
+  workflow_dispatch:
+
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+      - name: Change wrapper permissions
+        run: chmod +x JvmClient/gradlew
+
+      - name: Unit tests
+        run: |
+          echo Running JVM unit tests
+          cd JvmClient/
+          ./gradlew :cleanJvmTest :jvmTest
+
+      - name: Upload coverage to Codecov
+        run: |
+          echo Uploading coverage
+          cd JvmClient/
+          ./gradlew jacocoTestReport
+          curl -Os https://uploader.codecov.io/latest/linux/codecov
+          chmod +x codecov
+          ./codecov -f build/reports/jacoco/test/jacocoTestReport.xml
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+      - name: Change wrapper permissions
+        run: chmod +x JvmClient/gradlew
+      - name: Ktlint
+        run: |
+          echo Checking code style
+          cd JvmClient/
+          ./gradlew ktCheck

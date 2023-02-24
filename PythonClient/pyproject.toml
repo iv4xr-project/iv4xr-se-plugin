@@ -1,0 +1,42 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+
+[project]
+name = "space_engineers_iv4xr"
+version = "0.0.1beta"
+authors = [
+    { name="Karel Hovorka", email="karel.hovorka@goodai.com" },
+]
+license = "LGPL-3.0-only"
+maintainers = [
+    { name="Karel Hovorka", email="se@karel-hovorka.eu" },
+]
+description = "Client for iv4XR Space Engineers plugin."
+readme = "README.md"
+requires-python = ">=3"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)",
+    "Operating System :: OS Independent",
+    "Topic :: Games/Entertainment",
+    "Topic :: Software Development :: Testing",
+    "Development Status :: 4 - Beta",
+]
+keywords = ["Space Engineers", "iv4XR", "automation"]
+
+[project.urls]
+"Homepage" = "https://github.com/iv4xr-project/iv4xr-se-plugin/PythonClient"
+"Bug Tracker" = "https://github.com/iv4xr-project/iv4xr-se-plugin/issues"
+"Space Engineers Plugin" = "https://github.com/iv4xr-project/iv4xr-se-plugin/"
+"iv4XR project" = "https://iv4xr-project.eu/"
+
+[tool.hatch.build]
+exclude = [
+  "features/",
+  "examples/",
+  "scenarios/",
+  "resources/",
+  "venv/",
+]

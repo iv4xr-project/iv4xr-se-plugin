@@ -7,7 +7,6 @@ operator fun Position.plus(direction: Direction): DirectedPosition {
     )
 }
 
-
 operator fun Position.plus(position: Position): Position {
     return Position(this.x + position.x, this.y + position.y)
 }
@@ -17,7 +16,6 @@ data class Position(val x: Int, val y: Int) {
     fun down(): DirectedPosition {
         return this + Direction.DOWN
     }
-
 
     fun up(): DirectedPosition {
         return this + Direction.UP

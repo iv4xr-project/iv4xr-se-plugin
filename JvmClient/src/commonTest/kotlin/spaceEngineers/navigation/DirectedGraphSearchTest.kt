@@ -57,5 +57,4 @@ class DirectedGraphSearchTest {
     fun testNonExistent() {
         assertFails { findPath(GamePlay, ServerConnect) }
     }
-
 }
