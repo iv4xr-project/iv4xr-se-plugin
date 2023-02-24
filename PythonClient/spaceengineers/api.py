@@ -574,7 +574,6 @@ class ServerConnect:
 
 
 class CommsTab:
-
     pass
 
 
@@ -596,12 +595,10 @@ class ControlPanelTab:
 
 
 class FactionsTab:
-
     pass
 
 
 class GpsTab:
-
     pass
 
 
