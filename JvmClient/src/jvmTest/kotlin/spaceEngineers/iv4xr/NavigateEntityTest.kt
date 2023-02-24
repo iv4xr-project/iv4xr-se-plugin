@@ -15,6 +15,7 @@ import spaceEngineers.navigation.toRichGraph
 import testhelp.MockOrRealGameTest
 import testhelp.assertLessThan
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 import kotlin.time.Duration.Companion.seconds
 
@@ -23,6 +24,14 @@ class NavigateEntityTest : MockOrRealGameTest(
     forceRealGame = true,
     loadScenario = true
 ) {
+
+    @Disabled("This test required a game instance running, enable manually by uncommenting.")
+    @Test
+    fun test_observed_grids() = testContext {
+        assertEquals(observer.observeBlocks().grids.size, 1)
+        assertEquals(observer.observeBlocks().grids.size, 1)
+        assertEquals(observer.observeBlocks().grids.size, 1)
+    }
 
     @Disabled("This test required a game instance running, enable manually by uncommenting.")
     @Test
