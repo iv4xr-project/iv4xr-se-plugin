@@ -14,14 +14,11 @@ data class MutableCell(
     var customName: String? = null
 ) {
 
-    // constructor(cell: Cell) : this(cell.id, cell.orientations, cell.color, cell.customName)
-
     companion object {
         val WALL = MutableCell(
             id = DefinitionIds.CubeBlock.LargeHeavyBlockArmorBlock,
             orientations = listOf(Orientations()),
             color = null,
-            // customName = "default-custom-name",
         )
     }
 }
