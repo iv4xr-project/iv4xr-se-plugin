@@ -34,4 +34,12 @@ data class GameProcess(
     fun simpleString(): String {
         return "$address:$pluginPort($mainRole)"
     }
+
+    fun print(text: String) {
+        kotlin.io.print("${simpleString()}: $text")
+    }
+
+    fun println(text: String) {
+        kotlin.io.println("${simpleString()}: $text")
+    }
 }
