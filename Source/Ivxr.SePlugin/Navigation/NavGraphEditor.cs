@@ -178,12 +178,12 @@ namespace Iv4xr.SePlugin.Navigation
         internal static Vector3I GuessWhichSideIsUp(Vector3D characterOrientationUpInGridCoords)
         {
             var closestAngleVector = new StepVectors(Vector3I.Up).Enumerate()
-                    .Select(v => new Tuple<double, Vector3I>(characterOrientationUpInGridCoords.Dot(v), v))
+                    .Select(v => new Tuple<double, Vector3I>(characterOrientationUpInGridCoords.Dot((Vector3D)v), v))
                     .OrderBy(x => x.Item1)
                     .Select(pair => pair.Item2).First();
 
-            return ((characterOrientationUpInGridCoords + closestAngleVector).LengthSquared() >
-                    (characterOrientationUpInGridCoords - closestAngleVector).LengthSquared())
+            return ((characterOrientationUpInGridCoords + (Vector3D)closestAngleVector).LengthSquared() >
+                    (characterOrientationUpInGridCoords - (Vector3D)closestAngleVector).LengthSquared())
                     ? closestAngleVector
                     : -closestAngleVector;
         }
