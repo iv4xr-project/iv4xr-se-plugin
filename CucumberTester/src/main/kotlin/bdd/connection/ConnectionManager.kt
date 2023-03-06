@@ -121,7 +121,7 @@ class ConnectionManager(
             gameProcess: GameProcess,
             factory: JsonRpcSpaceEngineersBuilder
         ): ContextControllerWrapper {
-            gameProcess.print("Connecting to plugin...")
+            gameProcess.println("Connecting to plugin...")
             return ContextControllerWrapper(
                 spaceEngineers = factory.fromStringLineReaderWriter(
                     agentId = gameProcess.createId(),

@@ -1,18 +1,13 @@
 package bdd.setup.process
 
 import bdd.connection.ConnectionManager.Companion.createConnection
-import bdd.connection.ConnectionSetup
 import bdd.connection.GameProcess
 import bdd.connection.ProcessWithConnection
 import bdd.setup.process.SECommands.EXECUTABLE_FULL_DEFAULT_PATH
 import bdd.setup.process.SECommands.NO_TASKS_RUNNING
 import bdd.setup.process.SECommands.isRunningCmd
 import bdd.setup.process.SECommands.killCmd
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.yield
 import spaceEngineers.controller.JvmSpaceEngineersBuilder
 import spaceEngineers.controller.extensions.waitForScreen
@@ -21,16 +16,6 @@ import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
-
-
-suspend fun <In, Out> Collection<In>.parallelEach(block: suspend (In) -> Out): Collection<Out> =
-    coroutineScope {
-        this@parallelEach.map {
-            async {
-                block(it)
-            }
-        }.awaitAll()
-    }
 
 class GameProcessManager(
     val executor: ProcessExecutor,
