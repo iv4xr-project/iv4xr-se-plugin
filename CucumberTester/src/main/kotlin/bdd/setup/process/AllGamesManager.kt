@@ -29,13 +29,14 @@ class AllGamesManager(
         return DatagramSocket().use { socket ->
             socket.connect(InetAddress.getByName(ip), 10002)
             val localAddress = socket.localAddress.hostAddress
+            println("ip: $ip local ${localAddress}")
             ip == localAddress
         }
     }
 
     private fun GameProcess.toExecutor(): ProcessExecutor {
         return if (isRemote()) {
-            this.println("remove")
+            this.println("remote")
             toRemoteProcessExecutor()
         } else {
             this.println("local")
