@@ -9,7 +9,7 @@
                 "OBSERVER",
                 "MAIN_CLIENT"
             ],
-            "executablePath": "C:/Program Files (x86)/Steam/steamapps/common/SpaceEngineers/Bin64",
+            "executablePath": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\SpaceEngineers\\Bin64\\SpaceEngineers.exe",
             "configPath": "~/AppData/Roaming/SpaceEngineers",
             "gameVersion": "STEAM"
         },
@@ -20,7 +20,7 @@
             "roles": [
                 "OBSERVER"
             ],
-            "executablePath": "C:/Program Files (x86)/Steam/steamapps/common/SpaceEngineers/Bin64",
+            "executablePath": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\SpaceEngineers\\Bin64\\SpaceEngineers.exe",
             "configPath": "~/AppData/Roaming/SpaceEngineers",
             "gameVersion": "STEAM"
         }

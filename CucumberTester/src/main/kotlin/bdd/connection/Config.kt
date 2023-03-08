@@ -13,6 +13,9 @@ data class Config(
     val bddConfigPath: String,
     val scenarioPath: String,
     val ignoredTags: Set<String>,
+    val username: String,
+    val password: String,
+    val psExec: String,
 ) {
 
     val name: String
@@ -27,8 +30,11 @@ data class Config(
             bddConfigPath = CONNECTION_SETUP_DIR,
             scenarioPath = "./testrail/maps",
             ignoredTags = setOf(
-                "animation", "emotes", "ignore", "duplicate", "creative", "difficult", "todo"
+                "animation", "emotes", "ignore", "duplicate", "creative", "difficult", "todo", "redundant",
             ),
+            username = "",
+            password = "",
+            psExec = "",
         )
 
         fun fromEnv(): Config {
@@ -60,6 +66,9 @@ data class Config(
                 bddConfigPath = getter("bddConfigPath").toNullIfBlank() ?: default.bddConfigPath,
                 scenarioPath = getter("scenarioPath") ?: default.scenarioPath,
                 ignoredTags = getter("ignoredTags")?.split(",")?.toSet() ?: default.ignoredTags,
+                username = getter("ps.username") ?: default.username,
+                password = getter("ps.password") ?: default.password,
+                psExec = getter("psExec") ?: default.psExec,
             )
         }
 

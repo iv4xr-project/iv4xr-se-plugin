@@ -2,12 +2,17 @@ package bdd.setup
 
 import kotlinx.coroutines.delay
 import spaceEngineers.controller.ExtendedSpaceEngineers
+import spaceEngineers.controller.extensions.typedFocusedScreen
 import spaceEngineers.model.ScreenName
 import spaceEngineers.model.canUse
 import spaceEngineers.util.whileWithTimeout
 import kotlin.time.Duration.Companion.seconds
 
 suspend fun ExtendedSpaceEngineers.connectDirectly(address: String) {
+    // Client was probably at ServerReconnector screen and automatically connected when the server became available.
+    if (screens.typedFocusedScreen() == ScreenName.GamePlay) {
+        return
+    }
     extensions.screen.navigation.navigateTo(ScreenName.ServerConnect)
     screens.serverConnect.enterAddress("${address}:27016")
     screens.serverConnect.connect()

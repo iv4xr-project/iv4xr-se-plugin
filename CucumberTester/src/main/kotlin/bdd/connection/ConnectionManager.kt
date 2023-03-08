@@ -110,27 +110,30 @@ class ConnectionManager(
         block(this)
     }
 
-    private fun createConnection(
-        gameProcess: GameProcess,
-        factory: JsonRpcSpaceEngineersBuilder
-    ): ContextControllerWrapper {
-        print("Connecting to plugin ${gameProcess.simpleString()}...")
-        return ContextControllerWrapper(
-            spaceEngineers = factory.fromStringLineReaderWriter(
-                agentId = gameProcess.createId(),
-                stringLineReaderWriter = ReconnectingSocketReaderWriter(
-                    host = gameProcess.address,
-                    port = gameProcess.pluginPort
-                )
-            )
-        ).apply {
-            println(" connected")
-        }
-    }
-
     override fun close() {
         if (initiated) {
             connectionsById.values.forEach { it.spaceEngineers.close() }
         }
+    }
+
+    companion object {
+        fun createConnection(
+            gameProcess: GameProcess,
+            factory: JsonRpcSpaceEngineersBuilder
+        ): ContextControllerWrapper {
+            gameProcess.println("Connecting to plugin...")
+            return ContextControllerWrapper(
+                spaceEngineers = factory.fromStringLineReaderWriter(
+                    agentId = gameProcess.createId(),
+                    stringLineReaderWriter = ReconnectingSocketReaderWriter(
+                        host = gameProcess.address,
+                        port = gameProcess.pluginPort
+                    )
+                )
+            ).apply {
+                gameProcess.println(" connected")
+            }
+        }
+
     }
 }
