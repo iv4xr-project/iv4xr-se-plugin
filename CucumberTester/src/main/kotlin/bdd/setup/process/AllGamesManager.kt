@@ -33,7 +33,7 @@ class AllGamesManager(
     suspend fun kill() {
         connectionSetup.connections.parallelEach { gameProcess ->
             val gpm = GameProcessManager(gameProcess.toRemoteProcessExecutor(), gameProcess)
-            gpm.ensureGameIsReadyForTesting()
+            gpm.kill()
             gpm.close()
         }
     }

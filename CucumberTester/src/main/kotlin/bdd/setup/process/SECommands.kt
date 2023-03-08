@@ -12,6 +12,10 @@ object SECommands {
         return listOf("""C:\windows\system32/taskkill""", "/IM", executable, "/F")
     }
 
+    fun restartCmd(): List<String> {
+        return listOf("powershell", "Restart-Computer", "-Force")
+    }
+
     fun isRunningCmd(executable: String = EXECUTABLE, fo: String = "list"): List<String> {
         return listOf("tasklist", "/fi", """"ImageName eq $executable"""", "/fo", fo)
     }

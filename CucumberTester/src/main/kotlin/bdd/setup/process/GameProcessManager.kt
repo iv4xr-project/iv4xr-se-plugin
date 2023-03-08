@@ -77,8 +77,8 @@ class GameProcessManager(
         return executor.startGuiApp(listOf(fullPath))
     }
 
-    fun kill() {
-        executor.execute(killCmd(executable))
+    fun kill(): String {
+        return executor.execute(killCmd(executable))
     }
 
     fun getPID(): Long? {
