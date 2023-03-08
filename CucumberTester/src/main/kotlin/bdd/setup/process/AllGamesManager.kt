@@ -35,16 +35,16 @@ class AllGamesManager(
     }
 
     private fun GameProcess.toExecutor(): ProcessExecutor {
-        return if (isRemote()) {
-            this.println("remote")
-            toRemoteProcessExecutor()
-        } else {
+        return if (isLocal()) {
             this.println("local")
             toLocalProcessExecutor()
+        } else {
+            this.println("remote")
+            toRemoteProcessExecutor()
         }
     }
 
-    private fun GameProcess.isRemote(): Boolean {
+    private fun GameProcess.isLocal(): Boolean {
         return isIpLocal(address)
     }
 
