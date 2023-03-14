@@ -87,7 +87,10 @@ namespace Iv4xr.SePlugin.Control
         
         private List<MyEntity> EnumerateSurroundingEntities(BoundingSphereD sphere)
         {
-            return MyEntities.GetEntitiesInSphere(ref sphere);
+            var originalList = MyEntities.GetEntitiesInSphere(ref sphere);
+            var newList = originalList.ToList();
+            originalList.Clear();
+            return newList;
         }
 
         public List<FloatingObject> ObserveFloatingObjects(Vector3D? position = null)

@@ -63,7 +63,9 @@ namespace Iv4xr.SePlugin.Control
 
         private static IEnumerable<MySlimBlock> FoundBlocks(MyCubeGrid grid, BoundingSphereD sphere)
         {
-            return grid.CubeBlocks;
+            var foundBlocks = new HashSet<MySlimBlock>();
+            grid.GetBlocksInsideSphere(ref sphere, foundBlocks);
+            return foundBlocks;
         }
 
         public static UseObject CreateUseObject(IMyUseObject obj)
