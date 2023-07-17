@@ -10,11 +10,11 @@
       <MyObjectBuilder_GlobalEventBase>
         <SubtypeName>SpawnCargoShip</SubtypeName>
         <Enabled>true</Enabled>
-        <ActivationTimeMs>816821</ActivationTimeMs>
+        <ActivationTimeMs>524805</ActivationTimeMs>
       </MyObjectBuilder_GlobalEventBase>
     </Events>
   </SectorEvents>
-  <AppVersion>1201013</AppVersion>
+  <AppVersion>1202124</AppVersion>
   <Environment>
     <SunAzimuth>-0.5028429</SunAzimuth>
     <SunElevation>0.7892078</SunElevation>
@@ -337,19 +337,19 @@
       <GridPresenceTier>Tier1</GridPresenceTier>
     </MyObjectBuilder_EntityBase>
     <MyObjectBuilder_EntityBase xsi:type="MyObjectBuilder_Character">
-      <SubtypeName>Default_Astronaut</SubtypeName>
+      <SubtypeName>Default_Astronaut_Female</SubtypeName>
       <EntityId>124168712738897777</EntityId>
       <PersistentFlags>CastShadows InScene</PersistentFlags>
       <Name>124168712738897777</Name>
       <PositionAndOrientation>
-        <Position x="-50.607893955841035" y="-0.94878088835503149" z="-10.324497449460988" />
-        <Forward x="0.996298254" y="7.356918E-05" z="0.0859593153" />
-        <Up x="-7.380382E-05" y="1" z="-4.48300852E-07" />
+        <Position x="-50.607895884549151" y="-0.94878047112251807" z="-10.324497502442691" />
+        <Forward x="0.996617734" y="7.356175E-05" z="0.0821737051" />
+        <Up x="-7.377941E-05" y="1" z="-3.87750333E-07" />
         <Orientation>
-          <X>2.70404435E-05</X>
-          <Y>-0.736871541</Y>
-          <Z>2.51120819E-05</Z>
-          <W>0.6760328</W>
+          <X>2.70042219E-05</X>
+          <Y>-0.735586047</Y>
+          <Z>2.51328584E-05</Z>
+          <W>0.6774313</W>
         </Orientation>
       </PositionAndOrientation>
       <LocalPositionAndOrientation xsi:nil="true" />
@@ -442,7 +442,7 @@
                 </MyObjectBuilder_InventoryItem>
               </Items>
               <nextItemId>7</nextItemId>
-              <Volume>0.4</Volume>
+              <Volume>9223372036854.775807</Volume>
               <Mass>9223372036854.775807</Mass>
               <MaxItemCount>2147483647</MaxItemCount>
               <Size xsi:nil="true" />
@@ -452,7 +452,7 @@
           </ComponentData>
         </Components>
       </ComponentContainer>
-      <CharacterModel>Default_Astronaut</CharacterModel>
+      <CharacterModel>Default_Astronaut_Female</CharacterModel>
       <Inventory>
         <Items>
           <MyObjectBuilder_InventoryItem>
@@ -515,7 +515,7 @@
           </MyObjectBuilder_InventoryItem>
         </Items>
         <nextItemId>7</nextItemId>
-        <Volume>0.4</Volume>
+        <Volume>9223372036854.775807</Volume>
         <Mass>9223372036854.775807</Mass>
         <MaxItemCount>2147483647</MaxItemCount>
         <Size xsi:nil="true" />
@@ -532,9 +532,9 @@
       <LinearVelocity x="0" y="0" z="0" />
       <AutoenableJetpackDelay>0</AutoenableJetpackDelay>
       <JetpackEnabled>false</JetpackEnabled>
-      <ColorMaskHSV x="0" y="0.199999988" z="0.55" />
+      <ColorMaskHSV x="0.141666666" y="-0.03804356" z="0.5376748" />
       <LootingCounter>0</LootingCounter>
-      <DisplayName>John Cena</DisplayName>
+      <DisplayName>uprime812</DisplayName>
       <IsInFirstPersonView>false</IsInFirstPersonView>
       <EnableBroadcasting>true</EnableBroadcasting>
       <OxygenLevel>1</OxygenLevel>
@@ -550,8 +550,8 @@
         </StoredGas>
       </StoredGases>
       <EnabledComponents>
-        <string>RagdollComponent</string>
         <string>InventorySpawnComponent</string>
+        <string>RagdollComponent</string>
       </EnabledComponents>
       <NeedsOxygenFromSuit>false</NeedsOxygenFromSuit>
       <OwningPlayerIdentityId>144115188075855895</OwningPlayerIdentityId>
@@ -567,11 +567,11 @@
       <PersistentFlags>CastShadows InScene</PersistentFlags>
       <Name>143167029877106104</Name>
       <PositionAndOrientation>
-        <Position x="-4869.3031050948521" y="-7170.716300386599" z="5508.6439851294672" />
-        <Forward x="-0.371132255" y="0.9249875" z="-0.08160129" />
-        <Up x="0.849017441" y="0.373610348" z="0.3736102" />
+        <Position x="-7050.5325972823521" y="-1734.3431314412865" z="5029.0429109107172" />
+        <Forward x="-0.371132284" y="0.924987555" z="-0.08160129" />
+        <Up x="0.8490175" y="0.373610348" z="0.373610169" />
         <Orientation>
-          <X>0.479807347</X>
+          <X>0.479807317</X>
           <Y>0.478523016</Y>
           <Z>-0.2880621</Z>
           <W>0.6766246</W>
@@ -703,10 +703,10 @@
                       <PhysicalContent xsi:type="MyObjectBuilder_Ore">
                         <SubtypeName>Cobalt</SubtypeName>
                       </PhysicalContent>
-                      <ItemId>1</ItemId>
+                      <ItemId>0</ItemId>
                     </MyObjectBuilder_InventoryItem>
                   </Items>
-                  <nextItemId>2</nextItemId>
+                  <nextItemId>1</nextItemId>
                   <Volume>421.875008</Volume>
                   <Mass>9223372036854.775807</Mass>
                   <MaxItemCount>2147483647</MaxItemCount>
@@ -2574,7 +2574,7 @@
                   <TimerEnabled>true</TimerEnabled>
                   <RemoveEntityOnTimer>false</RemoveEntityOnTimer>
                   <TimerType>Frame10</TimerType>
-                  <FramesFromLastTrigger>10</FramesFromLastTrigger>
+                  <FramesFromLastTrigger>40</FramesFromLastTrigger>
                   <TimerTickInFrames>60</TimerTickInFrames>
                   <IsSessionUpdateEnabled>false</IsSessionUpdateEnabled>
                 </Component>
@@ -5957,7 +5957,7 @@
                   <TimerEnabled>true</TimerEnabled>
                   <RemoveEntityOnTimer>false</RemoveEntityOnTimer>
                   <TimerType>Frame10</TimerType>
-                  <FramesFromLastTrigger>0</FramesFromLastTrigger>
+                  <FramesFromLastTrigger>20</FramesFromLastTrigger>
                   <TimerTickInFrames>60</TimerTickInFrames>
                   <IsSessionUpdateEnabled>false</IsSessionUpdateEnabled>
                 </Component>
@@ -6812,6 +6812,88 @@
           <Owner>144115188075855896</Owner>
           <BuiltBy>144115188075855896</BuiltBy>
           <ShareMode>Faction</ShareMode>
+          <ComponentContainer>
+            <Components>
+              <ComponentData>
+                <TypeId>MyAutopilotComponent</TypeId>
+                <Component xsi:type="MyObjectBuilder_AutopilotComponent">
+                  <AutoPilotEnabled>true</AutoPilotEnabled>
+                  <FlightMode>2</FlightMode>
+                  <CurrentWaypointIndex>0</CurrentWaypointIndex>
+                  <Waypoints>
+                    <MyObjectBuilder_AutopilotWaypoint xsi:type="MyObjectBuilder_AutopilotWaypoint">
+                      <Coords>
+                        <X>-8204.9946552836</X>
+                        <Y>1238.7491193033866</Y>
+                        <Z>4779.7114554475165</Z>
+                      </Coords>
+                      <Name>endWaypoint</Name>
+                      <Actions />
+                      <Indexes />
+                      <Draw>false</Draw>
+                      <ForceRotation>false</ForceRotation>
+                      <RelatedEntityId>0</RelatedEntityId>
+                      <Matrix>
+                        <Position x="-8204.9946552836" y="1238.7491193033866" z="4779.7114554475165" />
+                        <Forward x="-0" y="-0" z="-0" />
+                        <Up x="0" y="0" z="0" />
+                        <Orientation>
+                          <X>NaN</X>
+                          <Y>NaN</Y>
+                          <Z>NaN</Z>
+                          <W>NaN</W>
+                        </Orientation>
+                      </Matrix>
+                      <RelatedEntityMatrix>
+                        <Position x="0" y="0" z="0" />
+                        <Forward x="NaN" y="NaN" z="NaN" />
+                        <Up x="NaN" y="NaN" z="NaN" />
+                        <Orientation>
+                          <X>NaN</X>
+                          <Y>NaN</Y>
+                          <Z>NaN</Z>
+                          <W>NaN</W>
+                        </Orientation>
+                      </RelatedEntityMatrix>
+                      <RelatedEntityWorldOffset>
+                        <X>0</X>
+                        <Y>0</Y>
+                        <Z>0</Z>
+                      </RelatedEntityWorldOffset>
+                      <StoppingTimeMultiplier>1</StoppingTimeMultiplier>
+                      <AdaptiveRotationSpeed>false</AdaptiveRotationSpeed>
+                      <AreaUp>
+                        <X>0</X>
+                        <Y>0</Y>
+                        <Z>0</Z>
+                      </AreaUp>
+                      <SerializeForCopy>false</SerializeForCopy>
+                    </MyObjectBuilder_AutopilotWaypoint>
+                  </Waypoints>
+                  <DockingModeEnabled>false</DockingModeEnabled>
+                  <CollisionAvoidance>true</CollisionAvoidance>
+                  <Direction>0</Direction>
+                  <AutopilotSpeedLimit>20</AutopilotSpeedLimit>
+                  <WaitForFreeWay>true</WaitForFreeWay>
+                  <WaypointThresholdDistance>1</WaypointThresholdDistance>
+                  <Coords />
+                  <Names />
+                  <LookAtPosition xsi:nil="true" />
+                  <FacingDirection>Forward</FacingDirection>
+                  <AlignToGravity>true</AlignToGravity>
+                  <MinHeightAboveTerrain>25</MinHeightAboveTerrain>
+                  <IsWorkAreaReturningToStart>false</IsWorkAreaReturningToStart>
+                  <WorkAreaStartForward>
+                    <X>0</X>
+                    <Y>0</Y>
+                    <Z>0</Z>
+                  </WorkAreaStartForward>
+                  <PitchAngle>0</PitchAngle>
+                  <RollAngle>0</RollAngle>
+                </Component>
+              </ComponentData>
+            </Components>
+          </ComponentContainer>
           <CustomName>Remote Control</CustomName>
           <ShowOnHUD>false</ShowOnHUD>
           <ShowInTerminal>true</ShowInTerminal>
@@ -6840,31 +6922,20 @@
           </OnLockedToolbar>
           <IsTargetLockingEnabled>false</IsTargetLockingEnabled>
           <PreviousControlledEntityId xsi:nil="true" />
-          <AutoPilotEnabled>true</AutoPilotEnabled>
-          <FlightMode>2</FlightMode>
+          <AutoPilotEnabled>false</AutoPilotEnabled>
+          <FlightMode>0</FlightMode>
           <BindedCamera>0</BindedCamera>
-          <CurrentWaypointIndex>0</CurrentWaypointIndex>
-          <Waypoints>
-            <MyObjectBuilder_AutopilotWaypoint xsi:type="MyObjectBuilder_AutopilotWaypoint">
-              <Coords>
-                <X>-8204.9946552836</X>
-                <Y>1238.7491193033866</Y>
-                <Z>4779.7114554475165</Z>
-              </Coords>
-              <Name>endWaypoint</Name>
-              <Actions />
-              <Indexes />
-            </MyObjectBuilder_AutopilotWaypoint>
-          </Waypoints>
+          <CurrentWaypointIndex>-1</CurrentWaypointIndex>
+          <Waypoints />
           <Direction>0</Direction>
           <DockingModeEnabled>false</DockingModeEnabled>
-          <CollisionAvoidance>true</CollisionAvoidance>
+          <CollisionAvoidance>false</CollisionAvoidance>
           <Coords />
           <Names />
-          <AutopilotSpeedLimit>20</AutopilotSpeedLimit>
-          <WaypointThresholdDistance>1</WaypointThresholdDistance>
+          <WaypointThresholdDistance>0</WaypointThresholdDistance>
           <IsMainRemoteControl>false</IsMainRemoteControl>
-          <WaitForFreeWay>true</WaitForFreeWay>
+          <WaitForFreeWay>false</WaitForFreeWay>
+          <IsUpdatedSave>true</IsUpdatedSave>
         </MyObjectBuilder_CubeBlock>
         <MyObjectBuilder_CubeBlock xsi:type="MyObjectBuilder_CubeBlock">
           <SubtypeName>LargeBlockArmorSlope2Tip</SubtypeName>
@@ -7623,7 +7694,7 @@
                   <TimerEnabled>true</TimerEnabled>
                   <RemoveEntityOnTimer>false</RemoveEntityOnTimer>
                   <TimerType>Frame10</TimerType>
-                  <FramesFromLastTrigger>50</FramesFromLastTrigger>
+                  <FramesFromLastTrigger>10</FramesFromLastTrigger>
                   <TimerTickInFrames>60</TimerTickInFrames>
                   <IsSessionUpdateEnabled>false</IsSessionUpdateEnabled>
                 </Component>
@@ -8653,8 +8724,8 @@
           <BuiltBy>144115188075855896</BuiltBy>
         </MyObjectBuilder_CubeBlock>
       </CubeBlocks>
-      <LinearVelocity x="-7.47928429" y="18.58464" z="-1.56495523" />
-      <AngularVelocity x="-1.63761655E-07" y="-1.13279405E-07" z="1.43710359E-08" />
+      <LinearVelocity x="-7.480608" y="18.5519943" z="-1.626553" />
+      <AngularVelocity x="-1.759058E-08" y="1.197084E-08" z="7.029215E-08" />
       <ConveyorLines>
         <MyObjectBuilder_ConveyorLine>
           <StartPosition x="0" y="17" z="29" />

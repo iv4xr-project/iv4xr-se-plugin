@@ -10,7 +10,6 @@
     <OnlineMode>OFFLINE</OnlineMode>
     <MaxPlayers>4</MaxPlayers>
     <MaxFloatingObjects>56</MaxFloatingObjects>
-    <TotalBotLimit>32</TotalBotLimit>
     <MaxBackupSaves>5</MaxBackupSaves>
     <MaxGridSize>0</MaxGridSize>
     <MaxBlocksPerPlayer>0</MaxBlocksPerPlayer>
@@ -19,7 +18,7 @@
     <MaxFactionsCount>0</MaxFactionsCount>
     <BlockLimitsEnabled>GLOBALLY</BlockLimitsEnabled>
     <EnableRemoteBlockRemoval>true</EnableRemoteBlockRemoval>
-    <EnvironmentHostility>SAFE</EnvironmentHostility>
+    <EnvironmentHostility>NORMAL</EnvironmentHostility>
     <AutoHealing>true</AutoHealing>
     <EnableCopyPaste>true</EnableCopyPaste>
     <WeaponsEnabled>true</WeaponsEnabled>
@@ -35,15 +34,15 @@
     <RealisticSound>false</RealisticSound>
     <HackSpeedMultiplier>0.33</HackSpeedMultiplier>
     <PermanentDeath>false</PermanentDeath>
-    <AutoSaveInMinutes>5</AutoSaveInMinutes>
+    <AutoSaveInMinutes>0</AutoSaveInMinutes>
     <EnableSaving>true</EnableSaving>
     <InfiniteAmmo>false</InfiniteAmmo>
     <EnableContainerDrops>true</EnableContainerDrops>
     <SpawnShipTimeMultiplier>0</SpawnShipTimeMultiplier>
     <ProceduralDensity>0.35</ProceduralDensity>
-    <ProceduralSeed>0</ProceduralSeed>
+    <ProceduralSeed>843101749</ProceduralSeed>
     <DestructibleBlocks>true</DestructibleBlocks>
-    <EnableIngameScripts>true</EnableIngameScripts>
+    <EnableIngameScripts>false</EnableIngameScripts>
     <ViewDistance>15000</ViewDistance>
     <EnableToolShake>true</EnableToolShake>
     <VoxelGeneratorVersion>4</VoxelGeneratorVersion>
@@ -80,7 +79,7 @@
     <EnableTurretsFriendlyFire>false</EnableTurretsFriendlyFire>
     <EnableSubgridDamage>false</EnableSubgridDamage>
     <SyncDistance>3000</SyncDistance>
-    <ExperimentalMode>true</ExperimentalMode>
+    <ExperimentalMode>false</ExperimentalMode>
     <AdaptiveSimulationQuality>true</AdaptiveSimulationQuality>
     <EnableVoxelHand>true</EnableVoxelHand>
     <RemoveOldIdentitiesH>0</RemoveOldIdentitiesH>
@@ -122,26 +121,8 @@
     <MaxPlanets>99</MaxPlanets>
     <OffensiveWordsFiltering>false</OffensiveWordsFiltering>
     <AdjustableMaxVehicleSpeed>true</AdjustableMaxVehicleSpeed>
-    <EnableMatchComponent>false</EnableMatchComponent>
-    <PreMatchDuration>0</PreMatchDuration>
-    <MatchDuration>0</MatchDuration>
-    <PostMatchDuration>0</PostMatchDuration>
-    <EnableFriendlyFire>true</EnableFriendlyFire>
-    <EnableTeamBalancing>false</EnableTeamBalancing>
-    <CharacterSpeedMultiplier>1</CharacterSpeedMultiplier>
-    <EnableRecoil>true</EnableRecoil>
-    <EnvironmentDamageMultiplier>1</EnvironmentDamageMultiplier>
-    <EnableGamepadAimAssist>false</EnableGamepadAimAssist>
-    <BackpackDespawnTimer>5</BackpackDespawnTimer>
-    <EnableFactionPlayerNames>false</EnableFactionPlayerNames>
-    <EnableTeamScoreCounters>true</EnableTeamScoreCounters>
-    <EnableSpaceSuitRespawn>true</EnableSpaceSuitRespawn>
-    <MatchRestartWhenEmptyTime>0</MatchRestartWhenEmptyTime>
-    <EnableFactionVoiceChat>false</EnableFactionVoiceChat>
-    <EnableOrca>true</EnableOrca>
-    <MaxProductionQueueLength>50</MaxProductionQueueLength>
   </Settings>
   <Mods />
-  <SessionName>Empty World test observe</SessionName>
-  <LastSaveTime>2023-07-17T18:23:29.6670756+02:00</LastSaveTime>
+  <SessionName>simple-place-grind-torch-with-tools</SessionName>
+  <LastSaveTime>2021-03-10T14:46:39.6184787+01:00</LastSaveTime>
 </MyObjectBuilder_WorldConfiguration>

@@ -6,6 +6,8 @@ import spaceEngineers.controller.Observer
 import spaceEngineers.controller.SpaceEngineers
 import spaceEngineers.iv4xr.navigation.Iv4XRAStarPathFinder
 import spaceEngineers.iv4xr.navigation.NavigableGraph
+import spaceEngineers.model.DefinitionId
+import spaceEngineers.model.ToolbarLocation
 import spaceEngineers.model.Vec3F
 import spaceEngineers.model.extensions.allBlocks
 import spaceEngineers.model.extensions.largestGrid
@@ -33,7 +35,7 @@ class NavigateEntityTest : MockOrRealGameTest(
         assertEquals(observer.observeBlocks().grids.size, 1)
     }
 
-    @Disabled("This test required a game instance running, enable manually by uncommenting.")
+    //@Disabled("This test required a game instance running, enable manually by uncommenting.")
     @Test
     fun navigateMaze() = testContext {
         val graph = observer.navigationGraph(observer.observeBlocks().largestGrid().id)
@@ -65,6 +67,10 @@ class NavigateEntityTest : MockOrRealGameTest(
 
         System.out.println("reachablePosition: " + reachablePosition)
         System.out.println("reachableNode: " + reachableNode)
+
+        //items.setToolbarItem(DefinitionId.physicalGun("AngleGrinder2Item"), ToolbarLocation(3, 0))
+        //val grinderLocation = items.toolbar().findLocation("AngleGrinder2Item") ?: error("No grinder found")
+        //items.equip(grinderLocation)
 
         val navigableGraph = NavigableGraph(graph)
         val targetNode = navigableGraph.node(nodeId = reachableNode)
