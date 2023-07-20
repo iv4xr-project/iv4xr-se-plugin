@@ -61,6 +61,7 @@ public class PrintInfos {
     public static String showWOMAgent(WorldModel wm) {
         StringBuffer z = new StringBuffer() ;
         z.append(">> agent " + wm.agentId + " @" + wm.position) ;
+        //System.out.println(">>> wm.agentid:" + wm.agentId) ;
         var info = wm.elements.get(wm.agentId) ;
         z.append(", hdir:" + info.properties.get("orientationForward")) ;
         z.append(", vdir:" + info.properties.get("orientationUp")) ;

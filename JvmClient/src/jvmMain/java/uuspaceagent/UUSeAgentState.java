@@ -54,6 +54,7 @@ public class UUSeAgentState extends State {
         agentWE.properties.put("jetpackRunning", obs.getJetpackRunning()) ;
         agentWE.properties.put("health", obs.getHealth()) ;
         agentWE.properties.put("targetBlock", targetBlock == null ? null : targetBlock.getId()) ;
+       //System.out.println(">>> constructing extra info for agent") ;
         return agentWE ;
     }
 
@@ -65,6 +66,8 @@ public class UUSeAgentState extends State {
         // get the new WOM. Currently it does not include agent's extended properties, so we add them
         // explicitly here:
         WorldModel newWom = env().observe() ;
+        // HACK: SE gives generated-id to the agent, replace that:
+        newWom.agentId = this.agentId ;
         // HACK: because wom that comes from SE has its wom.elements read-only :|
         var origElements = newWom.elements ;
         newWom.elements = new HashMap<>() ;
