@@ -6,6 +6,8 @@ import nl.uu.cs.aplib.utils.Pair;
 import spaceEngineers.controller.*;
 import spaceEngineers.model.ToolbarLocation;
 
+import java.io.IOException;
+
 public class TestUtils {
 
     public static void console(String str) {
@@ -48,5 +50,14 @@ public class TestUtils {
                 .attachEnvironment(theEnv) ;
 
         return new Pair<>(testAgent,myAgentState) ;
+    }
+
+    public static void closeConnectionToSE(UUSeAgentState state){
+        try {
+            state.env().getController().close();
+        }
+        catch (Exception e) {
+            // swallow...
+        }
     }
 }

@@ -58,14 +58,15 @@ public class UUSeAgentState extends State {
         return agentWE ;
     }
 
-    //@Override
-    public void updateState() {
+    @Override
+    public void updateState(String agentId) {
 
         super.updateState(agentId);
 
         // get the new WOM. Currently it does not include agent's extended properties, so we add them
         // explicitly here:
         WorldModel newWom = env().observe() ;
+        //System.out.println(">>>-- agent pos as received from SE:" + newWom.position);
         // HACK: SE gives generated-id to the agent, replace that:
         newWom.agentId = this.agentId ;
         // HACK: because wom that comes from SE has its wom.elements read-only :|

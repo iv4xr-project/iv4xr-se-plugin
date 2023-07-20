@@ -13,10 +13,10 @@ import static uuspaceagent.TestUtils.loadSE;
 public class Coba_moveToward_and_yTurnToward {
 
     void moveTo(UUSeAgentState state, Vec3 destination) {
-        state.updateState();
+        state.updateState(state.agentId);
         for (int k = 0 ; k<40; k++) {
             UUTacticLib.moveToward(state, destination,100) ;
-            state.updateState();
+            state.updateState(state.agentId);
             float distance = Vec3.sub(destination,state.wom.position).length() ;
             console(">>> dist to dest: " + distance);
             if(distance <= 0.5) {
@@ -30,11 +30,11 @@ public class Coba_moveToward_and_yTurnToward {
 
         var state = loadSE("myworld-3").snd;
 
-        state.updateState();
+        state.updateState(state.agentId);
 
-        state.updateState();
+        state.updateState(state.agentId);
         state.navgrid.enableFlying = true ;
-        state.updateState();
+        state.updateState(state.agentId);
 
         WorldEntity agentInfo = state.wom.elements.get(state.agentId);
         console("** Agent's info: " + PrintInfos.showWorldEntity(agentInfo));
@@ -43,12 +43,12 @@ public class Coba_moveToward_and_yTurnToward {
 
         //Vec3 destination = new Vec3(11.5f,-1.5f,60f) ;
         console("####  to z+");
-        state.updateState();
+        state.updateState(state.agentId);
         Vec3 destination = new Vec3(9.54f,-5f,60f) ;
         moveTo(state, destination) ;
 
         console("####  Moving to z-:");
-        state.updateState();
+        state.updateState(state.agentId);
         destination = new Vec3(9.54f,-5f,54.2f) ;
         moveTo(state, destination) ;
     }
@@ -58,11 +58,11 @@ public class Coba_moveToward_and_yTurnToward {
 
         var state = loadSE("myworld-3").snd;
 
-        state.updateState();
+        state.updateState(state.agentId);
 
-        state.updateState();
+        state.updateState(state.agentId);
         state.navgrid.enableFlying = true ;
-        state.updateState();
+        state.updateState(state.agentId);
 
         WorldEntity agentInfo = state.wom.elements.get(state.agentId);
         console("** Agent's info: " + PrintInfos.showWorldEntity(agentInfo));
@@ -70,12 +70,12 @@ public class Coba_moveToward_and_yTurnToward {
         // agent se0 @<9.549925,-5.0025005,54.149185>, hdir:<-0.0064151124,1.6736684E-4,0.99997944>, vdir:<-3.9837923E-5,1.0,-1.6762585E-4>, health:1.0, jet:true
 
         console("####  to x+");
-        state.updateState();
+        state.updateState(state.agentId);
         Vec3 destination = new Vec3(10.2f,-5f,54.14f) ;
         moveTo(state, destination) ;
 
         console("####  Moving to z-:");
-        state.updateState();
+        state.updateState(state.agentId);
         destination = new Vec3(10.2f,-5f,53.14f) ;
         moveTo(state, destination) ;
     }
@@ -85,11 +85,11 @@ public class Coba_moveToward_and_yTurnToward {
 
         var state = loadSE("myworld-3").snd;
 
-        state.updateState();
+        state.updateState(state.agentId);
 
-        state.updateState();
+        state.updateState(state.agentId);
         state.navgrid.enableFlying = true ;
-        state.updateState();
+        state.updateState(state.agentId);
 
         WorldEntity agentInfo = state.wom.elements.get(state.agentId);
         console("** Agent's info: " + PrintInfos.showWorldEntity(agentInfo));
@@ -97,12 +97,12 @@ public class Coba_moveToward_and_yTurnToward {
         // agent se0 @<9.549925,-5.0025005,54.149185>, hdir:<-0.0064151124,1.6736684E-4,0.99997944>, vdir:<-3.9837923E-5,1.0,-1.6762585E-4>, health:1.0, jet:true
 
         console("####  turning to left +x");
-        state.updateState();
+        state.updateState(state.agentId);
         Vec3 destination = new Vec3(12f,-5f,54.15f) ;
         UUTacticLib.yTurnTowardACT(state,destination,0.99f,200) ;
 
         console("####  turning to left -x");
-        state.updateState();
+        state.updateState(state.agentId);
         destination = new Vec3(0f,-5f,54.15f) ;
         UUTacticLib.yTurnTowardACT(state,destination,0.99f,200) ;
 

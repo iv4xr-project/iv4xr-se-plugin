@@ -35,7 +35,7 @@ public class Test_NavGrid_pathfinding {
         UUSeAgentState state = agentAndState.snd ;
         Thread.sleep(1000);
         // do a single update, and check that we if we have the structures:
-        state.updateState();
+        state.updateState(state.agentId);
 
         assertTrue(state.navgrid.allObstacleIDs.size() > 0 ) ;
         console(showWOMElements(state.wom)) ;
@@ -60,11 +60,7 @@ public class Test_NavGrid_pathfinding {
                 .anyMatch(id -> findWorldEntity(state.wom,id).properties.get("blockType").equals("LargeBlockBatteryBlock")));
 
         //SocketReaderWriterKt.closeIfCloseable(state.env().getController());
-        Closeable cs = state.env().getController() ;
-        try {
-            cs.close() ;
-        } catch (Exception e) {
-        }
+        TestUtils.closeConnectionToSE(state);
     }
 
     /**
@@ -79,8 +75,8 @@ public class Test_NavGrid_pathfinding {
             state = agentAndState.snd ;
             Thread.sleep(1000);
             state.navgrid.enableFlying = enable3D ;
-            state.updateState();
-            state.updateState();
+            state.updateState(state.agentId);
+            state.updateState(state.agentId);
 
         }
 
@@ -94,11 +90,8 @@ public class Test_NavGrid_pathfinding {
         var sqDesitnation = state.navgrid.gridProjectedLocation(destination) ;
         List<DPos3> path = state.pathfinder2D.findPath(state.navgrid,sqAgent,sqDesitnation) ;
         //SocketReaderWriterKt.closeIfCloseable(state.env().getController());
-        Closeable cs = state.env().getController() ;
-        try {
-            cs.close() ;
-        } catch (Exception e) {
-        }
+        TestUtils.closeConnectionToSE(state);
+
         return new Pair<>(state,path) ;
     }
 

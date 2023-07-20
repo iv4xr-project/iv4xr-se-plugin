@@ -20,6 +20,7 @@ import spaceEngineers.controller.SpaceEngineersJavaProxyBuilder;
 import spaceEngineers.controller.SpaceEngineersTestContext;
 import spaceEngineers.iv4xr.goal.TacticLib;
 import spaceEngineers.model.*;
+import uuspaceagent.TestUtils;
 
 public class Test_SimpleInteractionsWithSE {
 
@@ -58,7 +59,7 @@ public class Test_SimpleInteractionsWithSE {
 
         // set a goal ... does not matter what. This one cannot be solved.
         GoalStructure G = goal("dummy").toSolve((SeAgentState S) -> false)
-                .withTactic(tactics.moveForward(1f))
+                .withTactic(tactics.moveForward())
                 .lift()
                 ;
         testAgent.setGoal(G) ;
@@ -66,13 +67,20 @@ public class Test_SimpleInteractionsWithSE {
         int i = 0 ;
         while(i<200) {
             testAgent.update();
-            console("*** " + i + " " + myAgentState.wom.agentId +  " @" + myAgentState.wom.position) ;
+            console("*** " + i + " "
+                    + myAgentState.worldmodel.agentId
+                    +  " @" + myAgentState.worldmodel.position) ;
             if(i==2) {
                 // debug here...
+                // System.out.println(">> debug") ;
             }
             Thread.sleep(10);
             i++ ;
         }
+        try {
+            controllerWrapper.close();
+        }
+        catch(Exception e) { }
     }
 
     double angle(double x, double z) {
@@ -121,12 +129,13 @@ public class Test_SimpleInteractionsWithSE {
 
         int i = 0 ;
         while(i<20) {
-            obs = theEnv.moveForward(5f) ;
+            //obs = theEnv.moveForward(5f) ;
+            obs = theEnv.moveForward() ;
             if (i<20) {
-                theEnv.getController().getCharacter().moveAndRotate(new Vec3F(0,0,0), new Vec2F(0,20),0) ;
+                theEnv.getController().getCharacter().moveAndRotate(new Vec3F(0,0,0), new Vec2F(0,20),0,1) ;
             }
             else {
-                theEnv.getController().getCharacter().moveAndRotate(new Vec3F(0,0,-36), new Vec2F(0,0),0) ;
+                theEnv.getController().getCharacter().moveAndRotate(new Vec3F(0,0,-36), new Vec2F(0,0),0,1) ;
             }
             obs = theEnv.observe() ;
             primObs = theEnv.getController().getObserver().observe() ;
@@ -172,6 +181,10 @@ public class Test_SimpleInteractionsWithSE {
              }
              i++ ;
         }
+        try {
+            controllerWrapper.close();
+        }
+        catch(Exception e) { }
 
     }
 
