@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <MyObjectBuilder_WorldConfiguration xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Settings xsi:type="MyObjectBuilder_SessionSettings">
-    <GameMode>Survival</GameMode>
+    <GameMode>Creative</GameMode>
     <InventorySizeMultiplier>3</InventorySizeMultiplier>
     <BlocksInventorySizeMultiplier>1</BlocksInventorySizeMultiplier>
     <AssemblerSpeedMultiplier>3</AssemblerSpeedMultiplier>
@@ -21,13 +21,13 @@
     <EnableRemoteBlockRemoval>true</EnableRemoteBlockRemoval>
     <EnvironmentHostility>NORMAL</EnvironmentHostility>
     <AutoHealing>true</AutoHealing>
-    <EnableCopyPaste>false</EnableCopyPaste>
+    <EnableCopyPaste>true</EnableCopyPaste>
     <WeaponsEnabled>true</WeaponsEnabled>
     <ShowPlayerNamesOnHud>true</ShowPlayerNamesOnHud>
     <ThrusterDamage>true</ThrusterDamage>
     <CargoShipsEnabled>true</CargoShipsEnabled>
     <EnableSpectator>false</EnableSpectator>
-    <WorldSizeKm>10</WorldSizeKm>
+    <WorldSizeKm>0</WorldSizeKm>
     <RespawnShipDelete>false</RespawnShipDelete>
     <ResetOwnership>false</ResetOwnership>
     <WelderSpeedMultiplier>2</WelderSpeedMultiplier>
@@ -44,7 +44,7 @@
     <ProceduralSeed>1041586795</ProceduralSeed>
     <DestructibleBlocks>true</DestructibleBlocks>
     <EnableIngameScripts>false</EnableIngameScripts>
-    <ViewDistance>5000</ViewDistance>
+    <ViewDistance>15000</ViewDistance>
     <EnableToolShake>true</EnableToolShake>
     <VoxelGeneratorVersion>4</VoxelGeneratorVersion>
     <EnableOxygen>true</EnableOxygen>
@@ -99,7 +99,7 @@
     <VoxelAgeThreshold>24</VoxelAgeThreshold>
     <EnableResearch>true</EnableResearch>
     <EnableGoodBotHints>true</EnableGoodBotHints>
-    <OptimalSpawnDistance>900</OptimalSpawnDistance>
+    <OptimalSpawnDistance>16000</OptimalSpawnDistance>
     <EnableAutorespawn>true</EnableAutorespawn>
     <EnableBountyContracts>true</EnableBountyContracts>
     <EnableSupergridding>false</EnableSupergridding>
@@ -142,6 +142,6 @@
     <MaxProductionQueueLength>50</MaxProductionQueueLength>
   </Settings>
   <Mods />
-  <SessionName>myworld-3 with open door</SessionName>
-  <LastSaveTime>2023-08-10T17:34:34.5109413+02:00</LastSaveTime>
+  <SessionName>world-3 blocks</SessionName>
+  <LastSaveTime>2023-08-16T11:25:29.6843031+02:00</LastSaveTime>
 </MyObjectBuilder_WorldConfiguration>

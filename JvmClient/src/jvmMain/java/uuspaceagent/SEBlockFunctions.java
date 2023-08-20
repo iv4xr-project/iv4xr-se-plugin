@@ -39,6 +39,7 @@ public class SEBlockFunctions {
         Vec3 logicalSize = block.extent ;
         boolean isLargeBlock = block.getStringProperty("blockType").contains("Large")
                 ||  block.getStringProperty("blockType").contains("Window1x1Flat")
+                || block.getStringProperty("blockType").contains("BasicAssembler")
                 ;
         if(isLargeBlock)  {
             var size = Vec3.mul(logicalSize,CubeSize.Large.getValue()) ;
@@ -192,7 +193,8 @@ public class SEBlockFunctions {
                 .filter(e -> selector.test(e))
                 .collect(Collectors.toList());
         if(candidates.isEmpty()) return null ;
-
+        System.out.println("candidate in find close block " + candidates.size());
+        candidates.forEach(e -> System.out.println("candidator to move" + e));
         if(candidates.size() == 1) return candidates.get(0) ;
 
         // if there are more than one, sort the candidates to get the closest one:

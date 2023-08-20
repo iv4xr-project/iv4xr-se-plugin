@@ -1,5 +1,6 @@
 package uuspaceagent;
 
+import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.spatial.Vec3;
 import nl.uu.cs.aplib.mainConcepts.Action;
 import nl.uu.cs.aplib.mainConcepts.Tactic;
@@ -346,12 +347,12 @@ public class UUTacticLib {
 
                     // check first if we should turn on/off jetpack:
                     if(state.wom.position.y - state.navgrid.origin.y <= NavGrid.AGENT_HEIGHT
-                       && path.get(0).y == 0 && state.jetpackRunning()
+                       &&  !path.isEmpty() && path.get(0).y == 0 && state.jetpackRunning()
                     ) {
                         state.env().getController().getCharacter().turnOffJetpack() ;
                     }
                     else {
-                        if (path.get(0).y > 0 && !state.jetpackRunning()) {
+                        if (!path.isEmpty() && path.get(0).y > 0 && !state.jetpackRunning()) {
                             state.env().getController().getCharacter().turnOnJetpack() ;
                         }
                     }
@@ -450,5 +451,18 @@ public class UUTacticLib {
             }
         }
         return path ;
+    }
+
+    /**
+     * Interact with an object like door
+     * @param state
+     * @param duration
+     */
+    public static void interacted(UUSeAgentState state, int duration) {
+        WorldEntity target = state.targetBlock() ;
+        String targetId = target.id ;
+        for(int k=0; k<duration; k++) {
+            state.env().getController().getAdmin().getCharacter().use(targetId,k,1);
+        }
     }
 }

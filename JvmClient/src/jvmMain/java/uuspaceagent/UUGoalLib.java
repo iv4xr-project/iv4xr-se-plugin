@@ -13,8 +13,10 @@ import spaceEngineers.model.Observation;
 import spaceEngineers.model.ToolbarLocation;
 
 
+import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class UUGoalLib {
 
@@ -78,6 +80,20 @@ public class UUGoalLib {
                 ) ;
     }
 
+    public static Function<UUSeAgentState,GoalStructure> closeTo(TestAgent agent,
+                                                                 String blockType,
+                                                                 SEBlockFunctions.BlockSides side,
+                                                                 float delta) {
+        return closeTo(agent,
+                "type " + blockType,
+                (UUSeAgentState state) -> (WorldEntity e)
+                        ->
+                        blockType.equals(e.getStringProperty("blockType")),
+                side,
+                delta
+        ) ;
+    }
+
     /**
      * Use this to target a block using a generic selector function.
      */
@@ -119,6 +135,25 @@ public class UUGoalLib {
                     ) ;
         } ;
     }
+
+    public static Function<UUSeAgentState,GoalStructure> closeToPosition(TestAgent agent,
+                                                                 String blockType,
+                                                                 SEBlockFunctions.BlockSides side,
+                                                                 Vec3 targetPosition,
+                                                                 float radius,
+                                                                 float delta) {
+        float sqradius = radius * radius ;
+        return closeTo(agent,
+                "type " + blockType,
+                (UUSeAgentState state) -> (WorldEntity e)
+                        ->
+                        blockType.equals(e.getStringProperty("blockType"))
+                                && Vec3.sub(e.position, targetPosition ).lengthSq() <= sqradius,
+                side,
+                delta
+        ) ;
+    }
+
 
     public static GoalStructure grinderEquiped() {
         return lift("Grinder equiped",
@@ -189,7 +224,8 @@ public class UUGoalLib {
 
     public static GoalStructure grinded(TestAgent agent, float targetIntegrity) {
 
-        GoalStructure grind = DEPLOYonce(agent, (UUSeAgentState state) -> {
+        // changing DEPLOYONCE to DEPLOY. in order to be ablabe to call this goal for different blocks
+        GoalStructure grind = DEPLOY(agent, (UUSeAgentState state) -> {
             WorldEntity target = state.targetBlock() ;
             if(target == null) {
                 return FAIL("Grinding autofail: there is no target block.") ;
@@ -229,7 +265,7 @@ public class UUGoalLib {
         }
         return goal(goalname)
                 .toSolve((Float square_distance) -> {
-                    //System.out.println(">> sq-dist " + square_distance) ;
+                    System.out.println(">> sq-dist " + square_distance ) ;
                     return square_distance <= UUTacticLib.THRESHOLD_SQUARED_DISTANCE_TO_POINT ;
                 })
                 .withTactic(FIRSTof(UUTacticLib.straightline2DMoveTowardsACT(p).lift() , ABORT()))
@@ -244,6 +280,70 @@ public class UUGoalLib {
                 .toSolve((Float cos_alpha) -> 1 - cos_alpha <= 0.01)
                 .withTactic(FIRSTof(UUTacticLib.yTurnTowardACT(p).lift() , ABORT()))
                 .lift() ;
+    }
+
+
+    public static boolean  findItemPredicate(UUSeAgentState st, String blockType){
+            List<WorldEntity> blocks =  SEBlockFunctions.getAllBlocks(st.wom).stream().filter(e -> blockType.equals(e.getStringProperty("blockType"))).collect(Collectors.toList());
+            System.out.println(" === #wom=" + st.wom.elements.size());
+            System.out.println("number of blocks" + blocks.size()  );
+            for(var block : blocks) {
+                System.out.println("Candidates: " + block.id + " type and properties" + block);
+            }
+            var numberofBlocks = SEBlockFunctions.getAllBlocks(st.wom);
+            System.out.println("number of Blocks: "+ numberofBlocks.size());
+
+            //get blocks in different way
+//                    Observation rawGridsAndBlocksStates = st.env().getController().getObserver().observeBlocks() ;
+//                    WorldModel gridsAndBlocksStates = SeEnvironmentKt.toWorldModel(rawGridsAndBlocksStates) ;
+//                    var candidates = SEBlockFunctions.getAllBlocks(gridsAndBlocksStates);
+//                    for(var block : SEBlockFunctions.getAllBlocks(gridsAndBlocksStates)) {
+//                        if(block.getProperty("blockType").equals(blockType)) i++;
+//
+//                    }
+
+            //print distance to each block
+//                     candidates.forEach(e ->
+//                            System.out.println("distance: "+  Vec3.dist(e.position, st.wom.position) + " block type" + e.getStringProperty("blockType") +  "position: " + e.position)
+//                     );
+
+
+            if(blocks.size()>0) return false;
+            return true ;
+    }
+    public static GoalStructure interacted(TestAgent agent, float targetIntegrity) {
+
+        GoalStructure grind = DEPLOY(agent, (UUSeAgentState state) -> {
+            WorldEntity target = state.targetBlock() ;
+            if(target == null) {
+                return FAIL("interacting autofail: there is no target block.") ;
+            }
+            String targetId = target.id ;
+            float precentageTagetIntegrity = 100 * targetIntegrity ;
+            float integrityThreshold = ((float) target.getProperty("maxIntegrity")) * targetIntegrity ;
+
+            return goal("block " + targetId + "(" + target.getStringProperty("blockType") + ") is grinded to integrity <= " + precentageTagetIntegrity + "%")
+                    .toSolve((WorldEntity e) -> e == null || ((float) e.getProperty("integrity") <= integrityThreshold))
+                    .withTactic(action("Grinding")
+                            .do1((UUSeAgentState st) -> {
+                                UUTacticLib.interacted(state,50);
+                                Observation rawGridsAndBlocksStates = st.env().getController().getObserver().observeBlocks() ;
+                                WorldModel gridsAndBlocksStates = SeEnvironmentKt.toWorldModel(rawGridsAndBlocksStates) ;
+                                return SEBlockFunctions.findWorldEntity(st.wom,targetId) ;
+                            })
+                            .lift())
+                    .lift() ;
+        }) ;
+
+        GoalStructure stopGrinding = lift("Grinding stopped",
+                action("stop grinding")
+                        .do1((UUSeAgentState st) -> {
+                            st.env().endUsingTool();
+                            return true ;
+                        })
+        ) ;
+
+        return SEQ(grinderEquiped(), grind, stopGrinding, barehandEquiped()) ;
     }
 
 }
