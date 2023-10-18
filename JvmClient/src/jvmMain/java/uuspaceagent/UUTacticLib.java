@@ -5,7 +5,10 @@ import eu.iv4xr.framework.spatial.Vec3;
 import nl.uu.cs.aplib.mainConcepts.Action;
 import nl.uu.cs.aplib.mainConcepts.Tactic;
 import nl.uu.cs.aplib.utils.Pair;
+import spaceEngineers.controller.useobject.UseObjectExtensions;
+import spaceEngineers.model.Block;
 import spaceEngineers.model.CharacterObservation;
+import spaceEngineers.model.DoorBase;
 import spaceEngineers.model.Vec2F;
 
 import java.util.List;
@@ -280,7 +283,8 @@ public class UUTacticLib {
                     forwardOrientation = forwardOrientation.normalized() ;
                     var cos_alpha = Vec3.dot(forwardOrientation,dirToGo) ;
                     if(cos_alpha >= cosAlphaThreshold) { // the angle is quite aligned, the action is disabled
-                        return null ;
+                        //return null ;
+                        return cosAlphaThreshold;
                     }
                     return cos_alpha ;
                 })
@@ -456,13 +460,39 @@ public class UUTacticLib {
     /**
      * Interact with an object like door
      * @param state
-     * @param duration
      */
-    public static void interacted(UUSeAgentState state, int duration) {
-        WorldEntity target = state.targetBlock() ;
-        String targetId = target.id ;
-        for(int k=0; k<duration; k++) {
-            state.env().getController().getAdmin().getCharacter().use(targetId,k,1);
-        }
+    public static Tactic interacted(UUSeAgentState state, Block targetBlock) {
+        return action("Interacting")
+                .do1((UUSeAgentState st) -> {
+                    UseObjectExtensions useUtil = new UseObjectExtensions(state.env().getController().getSpaceEngineers()) ;
+                    useUtil.openIfNotOpened((DoorBase) targetBlock);
+                    var checkIsOpen  = SEBlockFunctions.findWorldEntity(st.wom,targetBlock.getId()) ;
+                    var isOpen = checkIsOpen.getProperty("isOpen").toString();
+                    if(isOpen.equals("true")) return null;
+                    return true;
+                })
+                .on((UUSeAgentState st)  -> {
+                    if (st.wom==null) return null ;
+                    var checkIsOpen  = SEBlockFunctions.findWorldEntity(st.wom,targetBlock.getId()) ;
+                    var isOpen = checkIsOpen.getProperty("isOpen").toString();
+                    if(isOpen.equals("true")) return null;
+                    return true;
+                })
+                .lift();
+    }
+
+//    public static void interact(UUSeAgentState state, Block targetBlock) {
+//        UseObjectExtensions useUtil = new UseObjectExtensions(state.env().getController().getSpaceEngineers()) ;
+//        useUtil.openIfNotOpened((DoorBase) targetBlock);
+//    }
+
+    public static Tactic observe(UUSeAgentState state, Block targetBlock){
+        return action("Interacting").do1((UUSeAgentState st) -> {
+        var checkIsOpen  = SEBlockFunctions.findWorldEntity(state.wom,targetBlock.getId()) ;
+        var isOpen =  checkIsOpen.getProperty("isOpen").toString();
+        if(isOpen.equals("true")) return true;
+        return false;
+        })
+       .lift();
     }
 }

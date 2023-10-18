@@ -2,7 +2,6 @@ package uuspaceagent;
 
 import eu.iv4xr.framework.mainConcepts.TestAgent;
 import eu.iv4xr.framework.mainConcepts.TestDataCollector;
-import eu.iv4xr.framework.mainConcepts.WorldModel;
 import nl.uu.cs.aplib.mainConcepts.GoalStructure;
 import nl.uu.cs.aplib.utils.Pair;
 import org.junit.jupiter.api.Test;
@@ -13,10 +12,10 @@ import static uuspaceagent.PrintInfos.showWOMAgent;
 import static uuspaceagent.TestUtils.console;
 import static uuspaceagent.TestUtils.loadSE;
 
-public class Test_Grinding_ForAll {
+public class Test_ChainPattern {
 
     public Pair<TestAgent, UUSeAgentState> deployAgent() throws InterruptedException {
-        var agentAndState = loadSE("new-3 islands") ; // loadSE("myworld-3")  ;
+        var agentAndState = loadSE("islanddswithdoorsWithDoors") ; // loadSE("myworld-3")  ;
         TestAgent agent = agentAndState.fst ;
         UUSeAgentState state = agentAndState.snd ;
         Thread.sleep(1000);
@@ -35,12 +34,11 @@ public class Test_Grinding_ForAll {
             agent.update();
             //Thread.sleep(50);
             turn++ ;
-            if (turn >= 20000) break ;
+            if (turn >= 1400) break ;
         }
         //closeIfCloseable(state.env().getController());
         TestUtils.closeConnectionToSE(state);
     }
-
 
     @Test
     public void test_navigate_and_grind() throws InterruptedException {
@@ -52,29 +50,67 @@ public class Test_Grinding_ForAll {
         state.navgrid.enableFlying = true ;
         agent.setTestDataCollector(new TestDataCollector()) ;
 
-        GoalStructure G =
-                // a predicate to check all the existing object
-                REPEAT(
-                SEQ(
-                        DEPLOY(agent, UUGoalLib.closeTo(agent,
+      //  GoalStructure G = SEQ(DEPLOYonce(agent, UUGoalLib.closeTo(new Vec3(2.5f,-3.75f,-3f))),
+        GoalStructure G = SEQ(
+                DEPLOYonce(agent, UUGoalLib.closeTo(agent,
                         "BasicAssembler",
                         SEBlockFunctions.BlockSides.FRONT,
+                        20f,
                         0.5f)),
                 UUGoalLib.targetBlockOK(agent, e ->
                         "BasicAssembler".equals(e.getStringProperty("blockType"))
                         && (float) e.getProperty("integrity") == (float) e.getProperty("maxIntegrity"),
                         false
                 ),
+              //  UUGoalLib.photo("C:\\workshop\\projects\\iv4xr\\Screenshots\\LargeBlockBatteryBlock.png"),
+                UUGoalLib.grinded(agent,0.1f),
+                UUGoalLib.targetBlockOK(agent, e ->
+                                (float) e.getProperty("integrity") <= 0.1f * (float) e.getProperty("maxIntegrity"),
+                        false
+                ),
+                //Open door
+                DEPLOYonce(agent, UUGoalLib.closeTo(agent,
+                        "LargeBlockSlideDoor",
+                        SEBlockFunctions.BlockSides.BACK,
+                        20f,
+                        0.1f))
+                ,
+                UUGoalLib.interacted(agent),
+                //look for the second assembler
+                DEPLOY(agent, UUGoalLib.closeTo(agent,
+                        "BasicAssembler",
+                        SEBlockFunctions.BlockSides.FRONT,
+                        0.5f)),
+                UUGoalLib.targetBlockOK(agent, e ->
+                                "BasicAssembler".equals(e.getStringProperty("blockType"))
+                                        && (float) e.getProperty("integrity") == (float) e.getProperty("maxIntegrity"),
+                        false
+                ),
+                //  UUGoalLib.photo("C:\\workshop\\projects\\iv4xr\\Screenshots\\LargeBlockBatteryBlock.png"),
+                UUGoalLib.grinded(agent,0.1f),
+                UUGoalLib.targetBlockOK(agent, e ->
+                                (float) e.getProperty("integrity") <= 0.1f * (float) e.getProperty("maxIntegrity"),
+                        false
+                ),
+
+                //fly to last block
+                DEPLOY(agent, UUGoalLib.closeTo(agent,
+                        "BasicAssembler",
+                        SEBlockFunctions.BlockSides.FRONT,
+                        0.5f)),
+                UUGoalLib.targetBlockOK(agent, e ->
+                                "BasicAssembler".equals(e.getStringProperty("blockType"))
+                                        && (float) e.getProperty("integrity") == (float) e.getProperty("maxIntegrity"),
+                        false
+                ),
+                //  UUGoalLib.photo("C:\\workshop\\projects\\iv4xr\\Screenshots\\LargeBlockBatteryBlock.png"),
                 UUGoalLib.grinded(agent,0.1f),
                 UUGoalLib.targetBlockOK(agent, e ->
                                 (float) e.getProperty("integrity") <= 0.1f * (float) e.getProperty("maxIntegrity"),
                         false
                 )
-            )
-            , (UUSeAgentState agentState) -> UUGoalLib.findItemPredicate(agentState,"BasicAssembler")
-                );
 
-
+        );
         Thread.sleep(5000);
         test_Goal(agent, agentAndState.snd, G) ;
         G.printGoalStructureStatus();

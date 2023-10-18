@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <MyObjectBuilder_Checkpoint xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <CurrentSector x="0" y="0" z="0" />
-  <ElapsedGameTime>10200800000</ElapsedGameTime>
-  <SessionName>islanddswithdoors</SessionName>
+  <ElapsedGameTime>15798240000</ElapsedGameTime>
+  <SessionName>islanddswithdoorsWithDoors-second</SessionName>
   <SpectatorPosition>
     <Position x="-0.32934382554148806" y="-0.074394008015407867" z="1.5750704078872861" />
     <Forward x="0.145073712" y="0.6612421" z="-0.7360112" />
@@ -21,8 +21,8 @@
   <ControlledObject>124168712738897777</ControlledObject>
   <Password />
   <Description />
-  <LastSaveTime>2023-08-23T13:39:22.1725918+02:00</LastSaveTime>
-  <SpectatorDistance>1.64200318</SpectatorDistance>
+  <LastSaveTime>2023-09-09T09:42:55.4869345+02:00</LastSaveTime>
+  <SpectatorDistance>2.5</SpectatorDistance>
   <WorkshopId xsi:nil="true" />
   <WorkshopId1 xsi:nil="true" />
   <CharacterToolbar>
@@ -32,22 +32,22 @@
       <Slot>
         <Index>0</Index>
         <Item />
-        <Data xsi:type="MyObjectBuilder_ToolbarItemCubeBlock">
-          <DefinitionId Type="MyObjectBuilder_CubeBlock" Subtype="LargeBlockArmorBlock" />
+        <Data xsi:type="MyObjectBuilder_ToolbarItemWeapon">
+          <DefinitionId Type="MyObjectBuilder_PhysicalGunObject" Subtype="AngleGrinderItem" />
         </Data>
       </Slot>
       <Slot>
         <Index>1</Index>
         <Item />
         <Data xsi:type="MyObjectBuilder_ToolbarItemCubeBlock">
-          <DefinitionId Type="MyObjectBuilder_CubeBlock" Subtype="LargeHeavyBlockArmorBlock" />
+          <DefinitionId Type="MyObjectBuilder_Assembler" Subtype="BasicAssembler" />
         </Data>
       </Slot>
       <Slot>
         <Index>2</Index>
         <Item />
         <Data xsi:type="MyObjectBuilder_ToolbarItemCubeBlock">
-          <DefinitionId Type="MyObjectBuilder_Cockpit" Subtype="LargeBlockCockpitSeat" />
+          <DefinitionId Type="MyObjectBuilder_CubeBlock" Subtype="LargeHeavyBlockArmorBlock" />
         </Data>
       </Slot>
       <Slot>
@@ -317,11 +317,11 @@
       <Model>Default_Astronaut</Model>
       <ColorMask x="0" y="-0.96" z="-0.5" />
       <BlockLimitModifier>0</BlockLimitModifier>
-      <LastLoginTime>2023-08-23T13:38:54.2148502+02:00</LastLoginTime>
+      <LastLoginTime>2023-09-09T09:40:52.3093276+02:00</LastLoginTime>
       <SavedCharacters>
         <long>124168712738897777</long>
       </SavedCharacters>
-      <LastLogoutTime>2023-08-23T13:39:22.1725918+02:00</LastLogoutTime>
+      <LastLogoutTime>2023-09-09T09:42:55.4869345+02:00</LastLogoutTime>
       <RespawnShips />
       <LastDeathPosition xsi:nil="true" />
       <ActiveContracts />
@@ -332,7 +332,7 @@
       <DisplayName>Space Pirates</DisplayName>
       <CharacterEntityId>0</CharacterEntityId>
       <BlockLimitModifier>0</BlockLimitModifier>
-      <LastLoginTime>2023-08-23T13:38:54.2942428+02:00</LastLoginTime>
+      <LastLoginTime>2023-09-09T09:40:52.4487885+02:00</LastLoginTime>
       <SavedCharacters />
       <LastLogoutTime>0001-01-01T00:00:00</LastLogoutTime>
       <RespawnShips />
@@ -362,22 +362,22 @@
               <Slot>
                 <Index>0</Index>
                 <Item />
-                <Data xsi:type="MyObjectBuilder_ToolbarItemCubeBlock">
-                  <DefinitionId Type="MyObjectBuilder_CubeBlock" Subtype="LargeBlockArmorBlock" />
+                <Data xsi:type="MyObjectBuilder_ToolbarItemWeapon">
+                  <DefinitionId Type="MyObjectBuilder_PhysicalGunObject" Subtype="AngleGrinderItem" />
                 </Data>
               </Slot>
               <Slot>
                 <Index>1</Index>
                 <Item />
                 <Data xsi:type="MyObjectBuilder_ToolbarItemCubeBlock">
-                  <DefinitionId Type="MyObjectBuilder_CubeBlock" Subtype="LargeHeavyBlockArmorBlock" />
+                  <DefinitionId Type="MyObjectBuilder_Assembler" Subtype="BasicAssembler" />
                 </Data>
               </Slot>
               <Slot>
                 <Index>2</Index>
                 <Item />
                 <Data xsi:type="MyObjectBuilder_ToolbarItemCubeBlock">
-                  <DefinitionId Type="MyObjectBuilder_Cockpit" Subtype="LargeBlockCockpitSeat" />
+                  <DefinitionId Type="MyObjectBuilder_CubeBlock" Subtype="LargeHeavyBlockArmorBlock" />
                 </Data>
               </Slot>
               <Slot>
@@ -428,8 +428,8 @@
           <EntityCameraData>
             <CameraControllerSettings EntityId="124168712738897777">
               <IsFirstPerson>false</IsFirstPerson>
-              <Distance>1.6420031834736588</Distance>
-              <HeadAngle x="-21.6386776" y="0" />
+              <Distance>2.5</Distance>
+              <HeadAngle x="-20.3316936" y="0" />
             </CameraControllerSettings>
           </EntityCameraData>
           <BuildColorSlots>
@@ -718,7 +718,7 @@
     </MyObjectBuilder_SessionComponent>
     <MyObjectBuilder_SessionComponent xsi:type="MyObjectBuilder_SectorWeatherComponent">
       <BaseSunDirection x="0.339467347" y="0.709795356" z="-0.617213368" />
-      <SunDirectionNormalized x="-0.467371017" y="0.4466502" z="-0.7629338" />
+      <SunDirectionNormalized x="-0.7952673" y="0.135542318" z="-0.5909131" />
       <WeatherPlanetData />
     </MyObjectBuilder_SessionComponent>
     <MyObjectBuilder_SessionComponent xsi:type="MyObjectBuilder_SessionComponentAssetModifiers" />
@@ -6880,7 +6880,7 @@
     </MyObjectBuilder_SessionComponent>
     <MyObjectBuilder_SessionComponent xsi:type="MyObjectBuilder_AntennaSessionComponent" />
     <MyObjectBuilder_SessionComponent xsi:type="MyObjectBuilder_EnvironmentBotSpawningSystem">
-      <TimeSinceLastEventInMs>113517</TimeSinceLastEventInMs>
+      <TimeSinceLastEventInMs>96483</TimeSinceLastEventInMs>
     </MyObjectBuilder_SessionComponent>
     <MyObjectBuilder_SessionComponent xsi:type="MyObjectBuilder_TradingManager" />
     <MyObjectBuilder_SessionComponent xsi:type="MyObjectBuilder_CoordinateSystem">
@@ -6922,9 +6922,15 @@
       <ShipsInProgress>
         <ShipTimePair>
           <EntityIds>
-            <long>86014713599571267</long>
+            <long>130664260262207004</long>
           </EntityIds>
-          <TimeTicks>28037760000</TimeTicks>
+          <TimeTicks>33631360000</TimeTicks>
+        </ShipTimePair>
+        <ShipTimePair>
+          <EntityIds>
+            <long>129226268627730675</long>
+          </EntityIds>
+          <TimeTicks>33630240000</TimeTicks>
         </ShipTimePair>
       </ShipsInProgress>
     </MyObjectBuilder_SessionComponent>
@@ -6954,11 +6960,12 @@
     <string>Models\Cubes\Large\SlideDoor.mwm</string>
     <string>Models\Cubes\Large\GeneratorSmall.mwm</string>
     <string>Models\Cubes\Large\GravityGenerator.mwm</string>
-    <string>Models\Cubes\Large\MedicalRoom.mwm</string>
+    <string>Models\Cubes\Large\BasicAssembler.mwm</string>
   </VicinityModelsCache>
   <VicinityArmorModelsCache>
     <string>Models\Characters\Astronaut\SE_astronaut.mwm</string>
     <string>Models\Cubes\Large\Armor\HeavySquarePlate.mwm</string>
+    <string>Models\Cubes\Large\Armor\SquarePlate.mwm</string>
   </VicinityArmorModelsCache>
   <VicinityVoxelCache />
   <WorldId>dd5139a0-a776-4b1d-a075-50e7e316b75b</WorldId>

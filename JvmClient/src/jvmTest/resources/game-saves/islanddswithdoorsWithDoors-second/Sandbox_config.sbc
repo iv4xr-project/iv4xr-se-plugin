@@ -142,6 +142,6 @@
     <MaxProductionQueueLength>50</MaxProductionQueueLength>
   </Settings>
   <Mods />
-  <SessionName>islanddswithdoors</SessionName>
-  <LastSaveTime>2023-08-23T13:39:22.1725918+02:00</LastSaveTime>
+  <SessionName>islanddswithdoorsWithDoors-second</SessionName>
+  <LastSaveTime>2023-09-09T09:42:55.4869345+02:00</LastSaveTime>
 </MyObjectBuilder_WorldConfiguration>

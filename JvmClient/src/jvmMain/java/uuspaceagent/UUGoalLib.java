@@ -1,6 +1,7 @@
 package uuspaceagent;
 
 import environments.SeEnvironmentKt;
+import eu.iv4xr.framework.goalsAndTactics.IInteractiveWorldGoalLib;
 import eu.iv4xr.framework.mainConcepts.ObservationEvent;
 import eu.iv4xr.framework.mainConcepts.TestAgent;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
@@ -9,6 +10,9 @@ import eu.iv4xr.framework.spatial.Vec3;
 import nl.uu.cs.aplib.mainConcepts.*;
 import static nl.uu.cs.aplib.AplibEDSL.* ;
 import nl.uu.cs.aplib.utils.Pair;
+import spaceEngineers.controller.useobject.UseObjectExtensions;
+import spaceEngineers.model.Block;
+import spaceEngineers.model.DoorBase;
 import spaceEngineers.model.Observation;
 import spaceEngineers.model.ToolbarLocation;
 
@@ -105,7 +109,6 @@ public class UUGoalLib {
 
 
         return  (UUSeAgentState state) -> {
-
             WorldEntity block = SEBlockFunctions.findClosestBlock(state.wom,selector.apply(state)) ;
             if (block == null) return FAIL("Navigating autofail; no block can be found: " + selectorDesc) ;
 
@@ -142,7 +145,7 @@ public class UUGoalLib {
                                                                  Vec3 targetPosition,
                                                                  float radius,
                                                                  float delta) {
-        float sqradius = radius * radius ;
+        float sqradius = radius * radius ;;
         return closeTo(agent,
                 "type " + blockType,
                 (UUSeAgentState state) -> (WorldEntity e)
@@ -227,6 +230,9 @@ public class UUGoalLib {
         // changing DEPLOYONCE to DEPLOY. in order to be ablabe to call this goal for different blocks
         GoalStructure grind = DEPLOY(agent, (UUSeAgentState state) -> {
             WorldEntity target = state.targetBlock() ;
+            state.wom.elements.get(agent.getId()).properties.put("previousTargetBlock",target );
+            //state.assignTargetBlock(target);
+            if (target != null) state.previousTargetBlock = target;
             if(target == null) {
                 return FAIL("Grinding autofail: there is no target block.") ;
             }
@@ -285,14 +291,14 @@ public class UUGoalLib {
 
     public static boolean  findItemPredicate(UUSeAgentState st, String blockType){
             List<WorldEntity> blocks =  SEBlockFunctions.getAllBlocks(st.wom).stream().filter(e -> blockType.equals(e.getStringProperty("blockType"))).collect(Collectors.toList());
-            System.out.println(" === #wom=" + st.wom.elements.size());
             System.out.println("number of blocks" + blocks.size()  );
             for(var block : blocks) {
                 System.out.println("Candidates: " + block.id + " type and properties" + block);
             }
             var numberofBlocks = SEBlockFunctions.getAllBlocks(st.wom);
-            System.out.println("number of Blocks: "+ numberofBlocks.size());
-
+//            for(var block : numberofBlocks) {
+//                System.out.println("All blockes Candidates: " + block.id + " type and properties" + block.getStringProperty("blockType"));
+//            }
             //get blocks in different way
 //                    Observation rawGridsAndBlocksStates = st.env().getController().getObserver().observeBlocks() ;
 //                    WorldModel gridsAndBlocksStates = SeEnvironmentKt.toWorldModel(rawGridsAndBlocksStates) ;
@@ -311,39 +317,28 @@ public class UUGoalLib {
             if(blocks.size()>0) return false;
             return true ;
     }
-    public static GoalStructure interacted(TestAgent agent, float targetIntegrity) {
+    public static GoalStructure interacted(TestAgent agent) {
 
-        GoalStructure grind = DEPLOY(agent, (UUSeAgentState state) -> {
-            WorldEntity target = state.targetBlock() ;
-            if(target == null) {
-                return FAIL("interacting autofail: there is no target block.") ;
-            }
-            String targetId = target.id ;
-            float precentageTagetIntegrity = 100 * targetIntegrity ;
-            float integrityThreshold = ((float) target.getProperty("maxIntegrity")) * targetIntegrity ;
+        return  DEPLOY(agent, (UUSeAgentState state) -> {
 
-            return goal("block " + targetId + "(" + target.getStringProperty("blockType") + ") is grinded to integrity <= " + precentageTagetIntegrity + "%")
-                    .toSolve((WorldEntity e) -> e == null || ((float) e.getProperty("integrity") <= integrityThreshold))
-                    .withTactic(action("Grinding")
-                            .do1((UUSeAgentState st) -> {
-                                UUTacticLib.interacted(state,50);
-                                Observation rawGridsAndBlocksStates = st.env().getController().getObserver().observeBlocks() ;
-                                WorldModel gridsAndBlocksStates = SeEnvironmentKt.toWorldModel(rawGridsAndBlocksStates) ;
-                                return SEBlockFunctions.findWorldEntity(st.wom,targetId) ;
-                            })
-                            .lift())
+            WorldEntity target = SEBlockFunctions.findClosestBlock(state.wom, "LargeBlockSlideDoor", 10) ;
+            System.out.println("** door state: " + PrintInfos.showWorldEntity(target));
+
+
+            Block targetBlock = state.env().getController().getObserver().observe().getTargetBlock() ;
+            if (target != null) state.previousTargetBlock = target;
+            return goal("block is interacted" )
+                    .toSolve((Boolean e)  ->{
+                        return e;
+                    })
+                    .withTactic(
+                            SEQ(
+                            UUTacticLib.interacted( state,targetBlock)
+                            ,UUTacticLib.observe(state,targetBlock)
+                            )
+                    )
                     .lift() ;
         }) ;
-
-        GoalStructure stopGrinding = lift("Grinding stopped",
-                action("stop grinding")
-                        .do1((UUSeAgentState st) -> {
-                            st.env().endUsingTool();
-                            return true ;
-                        })
-        ) ;
-
-        return SEQ(grinderEquiped(), grind, stopGrinding, barehandEquiped()) ;
     }
 
 }

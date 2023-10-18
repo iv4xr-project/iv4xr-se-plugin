@@ -1,5 +1,6 @@
 package uuspaceagent;
 
+import eu.iv4xr.framework.extensions.ltl.SATVerdict;
 import eu.iv4xr.framework.mainConcepts.TestAgent;
 import eu.iv4xr.framework.mainConcepts.TestDataCollector;
 import nl.uu.cs.aplib.mainConcepts.GoalStructure;
@@ -62,18 +63,25 @@ public class Test_GrindingNearest {
                         false
                 ),
               //  UUGoalLib.photo("C:\\workshop\\projects\\iv4xr\\Screenshots\\LargeBlockBatteryBlock.png"),
-                UUGoalLib.grinded(agent,0.5f),
+                UUGoalLib.grinded(agent,0.1f),
                 UUGoalLib.targetBlockOK(agent, e ->
-                                (float) e.getProperty("integrity") <= 0.5f * (float) e.getProperty("maxIntegrity"),
+                                (float) e.getProperty("integrity") <= 0.1f * (float) e.getProperty("maxIntegrity"),
                         false
                 )
                 //,
              //   UUGoalLib.photo("C:\\workshop\\projects\\iv4xr\\Screenshots\\LargeBlockBatteryBlock_at_50.png")
         );
         Thread.sleep(5000);
+        var specs = new Specifications();
+        var psi1 = specs.scenarioSpec1();
+        agent.addLTL(psi1);
+        agent.resetLTLs();
         test_Goal(agent, agentAndState.snd, G) ;
         G.printGoalStructureStatus();
         assertTrue(G.getStatus().success());
-        assertTrue(agent.getTestDataCollector().getNumberOfPassVerdictsSeen() == 2) ;
+        var ok = agent.evaluateLTLs();
+        System.out.println(">>>> LTL results: " + ok);
+        System.out.println(">>>> psi1 : " + psi1.sat());
+        assertTrue(psi1.sat() == SATVerdict.SAT);
     }
 }

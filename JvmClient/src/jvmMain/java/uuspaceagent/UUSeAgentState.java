@@ -10,7 +10,6 @@ import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
 import eu.iv4xr.framework.spatial.Vec3;
 import nl.uu.cs.aplib.agents.State ;
-import nl.uu.cs.aplib.utils.Pair;
 import spaceEngineers.model.Block;
 import spaceEngineers.model.CharacterObservation;
 import spaceEngineers.model.Observation;
@@ -29,6 +28,8 @@ public class UUSeAgentState extends State {
     public NavGrid navgrid = new NavGrid() ;
     public Pathfinder<DPos3> pathfinder2D = new AStar<>() ;
     public List<DPos3> currentPathToFollow = new LinkedList<>();
+
+    public WorldEntity previousTargetBlock;
 
     /**
      * SE does not seem to send time-stamp, so we will keep track the number of state-updates
@@ -54,6 +55,7 @@ public class UUSeAgentState extends State {
         agentWE.properties.put("jetpackRunning", obs.getJetpackRunning()) ;
         agentWE.properties.put("health", obs.getHealth()) ;
         agentWE.properties.put("targetBlock", targetBlock == null ? null : targetBlock.getId()) ;
+        agentWE.properties.put("previousTargetBlock", null) ;
        //System.out.println(">>> constructing extra info for agent") ;
         return agentWE ;
     }
@@ -161,6 +163,16 @@ public class UUSeAgentState extends State {
         return SEBlockFunctions.findWorldEntity(wom,targetId) ;
     }
 
+    WorldEntity getPreviousTargetBlock() {
+        var target = wom.elements.get(agentId).getProperty("previousTargetBlock") ;
+        if (target == null) return null ;
+        return (WorldEntity) target;
+    }
+
+    WorldEntity  assignTargetBlock(WorldEntity e) {
+        this.previousTargetBlock =  e;
+        return e;
+    }
     float healthRatio() {
         return (float) wom.elements.get(agentId).properties.get("healthRatio") ;
     }

@@ -193,10 +193,9 @@ public class SEBlockFunctions {
                 .filter(e -> selector.test(e))
                 .collect(Collectors.toList());
         if(candidates.isEmpty()) return null ;
-        System.out.println("candidate in find close block " + candidates.size());
-        candidates.forEach(e -> System.out.println("candidator to move" + e));
+        //System.out.println("candidates in find close block " + candidates.size());
+        candidates.forEach(e -> System.out.println("candidate to move" + e));
         if(candidates.size() == 1) return candidates.get(0) ;
-
         // if there are more than one, sort the candidates to get the closest one:
         candidates.sort((e1,e2) -> Float.compare(
                  Vec3.sub(e1.position,wom.position).lengthSq()
