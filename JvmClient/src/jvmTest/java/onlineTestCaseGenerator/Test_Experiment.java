@@ -28,7 +28,7 @@ import static uuspaceagent.PrintInfos.showWOMAgent;
 import static uuspaceagent.TestUtils.console;
 import static uuspaceagent.TestUtils.loadSE;
 
-public class Test_Generate {
+public class Test_Experiment {
 
     //a door is open -->  type disjunctive
     Predicate<SimpleState> q2() {
