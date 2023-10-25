@@ -3,7 +3,6 @@ package onlineTestCaseGenerator;
 import eu.iv4xr.framework.extensions.ltl.SATVerdict;
 import eu.iv4xr.framework.mainConcepts.*;
 import eu.iv4xr.framework.spatial.Vec3;
-import experiment.Solver;
 import nl.uu.cs.aplib.mainConcepts.GoalStructure;
 import nl.uu.cs.aplib.mainConcepts.SimpleState;
 import nl.uu.cs.aplib.utils.Pair;
