@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <MyObjectBuilder_Checkpoint xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <CurrentSector x="0" y="0" z="0" />
-  <ElapsedGameTime>22124480000</ElapsedGameTime>
+  <ElapsedGameTime>24919200000</ElapsedGameTime>
   <SessionName>world-4 blocks</SessionName>
   <SpectatorPosition>
     <Position x="5.3743765662761174" y="-5.0150046348571786" z="24.958199155320177" />
@@ -21,7 +21,7 @@
   <ControlledObject>88034022095450917</ControlledObject>
   <Password />
   <Description />
-  <LastSaveTime>2023-08-15T11:12:16.5667857+02:00</LastSaveTime>
+  <LastSaveTime>2023-10-25T17:23:17.7898946+02:00</LastSaveTime>
   <SpectatorDistance>4.420889</SpectatorDistance>
   <WorkshopId xsi:nil="true" />
   <WorkshopId1 xsi:nil="true" />
@@ -338,11 +338,11 @@
       <Model>Default_Astronaut</Model>
       <ColorMask x="0" y="-0.96" z="-0.5" />
       <BlockLimitModifier>0</BlockLimitModifier>
-      <LastLoginTime>2023-08-15T11:11:53.5173609+02:00</LastLoginTime>
+      <LastLoginTime>2023-10-25T17:22:46.7116603+02:00</LastLoginTime>
       <SavedCharacters>
         <long>88034022095450917</long>
       </SavedCharacters>
-      <LastLogoutTime>2023-08-15T11:12:16.5667857+02:00</LastLogoutTime>
+      <LastLogoutTime>2023-10-25T17:23:17.7898946+02:00</LastLogoutTime>
       <RespawnShips />
       <LastDeathPosition xsi:nil="true" />
       <ActiveContracts />
@@ -353,7 +353,7 @@
       <DisplayName>Space Pirates</DisplayName>
       <CharacterEntityId>0</CharacterEntityId>
       <BlockLimitModifier>0</BlockLimitModifier>
-      <LastLoginTime>2023-08-15T11:11:53.638115+02:00</LastLoginTime>
+      <LastLoginTime>2023-10-25T17:22:46.9231346+02:00</LastLoginTime>
       <SavedCharacters />
       <LastLogoutTime>0001-01-01T00:00:00</LastLogoutTime>
       <RespawnShips />
@@ -471,7 +471,7 @@
             <CameraControllerSettings EntityId="88034022095450917">
               <IsFirstPerson>false</IsFirstPerson>
               <Distance>4.4208887605476992</Distance>
-              <HeadAngle x="4.78748655" y="0" />
+              <HeadAngle x="-20.0462151" y="0" />
             </CameraControllerSettings>
           </EntityCameraData>
           <BuildColorSlots>
@@ -677,7 +677,7 @@
     </MyObjectBuilder_SessionComponent>
     <MyObjectBuilder_SessionComponent xsi:type="MyObjectBuilder_SectorWeatherComponent">
       <BaseSunDirection x="0.339467347" y="0.709795356" z="-0.617213368" />
-      <SunDirectionNormalized x="-0.9396327" y="-0.249995485" z="-0.233650774" />
+      <SunDirectionNormalized x="-0.9140248" y="-0.403012335" z="-0.04625828" />
       <WeatherPlanetData />
     </MyObjectBuilder_SessionComponent>
     <MyObjectBuilder_SessionComponent xsi:type="MyObjectBuilder_SessionComponentAssetModifiers" />
@@ -6839,7 +6839,7 @@
     </MyObjectBuilder_SessionComponent>
     <MyObjectBuilder_SessionComponent xsi:type="MyObjectBuilder_AntennaSessionComponent" />
     <MyObjectBuilder_SessionComponent xsi:type="MyObjectBuilder_EnvironmentBotSpawningSystem">
-      <TimeSinceLastEventInMs>77300</TimeSinceLastEventInMs>
+      <TimeSinceLastEventInMs>8349</TimeSinceLastEventInMs>
     </MyObjectBuilder_SessionComponent>
     <MyObjectBuilder_SessionComponent xsi:type="MyObjectBuilder_TradingManager" />
     <MyObjectBuilder_SessionComponent xsi:type="MyObjectBuilder_CoordinateSystem">
@@ -6878,20 +6878,7 @@
       <OverallBalance>20000</OverallBalance>
     </MyObjectBuilder_SessionComponent>
     <MyObjectBuilder_SessionComponent xsi:type="MyObjectBuilder_NeutralShipSpawner">
-      <ShipsInProgress>
-        <ShipTimePair>
-          <EntityIds>
-            <long>138609962312161717</long>
-          </EntityIds>
-          <TimeTicks>35199360000</TimeTicks>
-        </ShipTimePair>
-        <ShipTimePair>
-          <EntityIds>
-            <long>106057604317591819</long>
-          </EntityIds>
-          <TimeTicks>36030880000</TimeTicks>
-        </ShipTimePair>
-      </ShipsInProgress>
+      <ShipsInProgress />
     </MyObjectBuilder_SessionComponent>
     <MyObjectBuilder_SessionComponent xsi:type="MyObjectBuilder_PirateAntennas">
       <PiratesIdentity>144115188075855876</PiratesIdentity>
@@ -6933,16 +6920,16 @@
   <VicinityArmorModelsCache>
     <string>Models\Characters\Astronaut\SE_astronaut.mwm</string>
     <string>Models\Cubes\Large\Armor\SquarePlate.mwm</string>
-    <string>Models\Cubes\Large\Armor\SlopePlate.mwm</string>
     <string>Models\Cubes\Large\Armor\CornerTriangleLeftPlate.mwm</string>
+    <string>Models\Cubes\Large\Armor\SlopePlate.mwm</string>
     <string>Models\Cubes\Large\Armor\CornerTriangleRightPlate.mwm</string>
     <string>Models\Cubes\Large\Armor\FaceTrianglePlate.mwm</string>
     <string>Models\Cubes\Large\InteriorWallSide.mwm</string>
     <string>Models\Cubes\Large\InteriorWallTop.mwm</string>
   </VicinityArmorModelsCache>
   <VicinityVoxelCache>
-    <string>Iron_02</string>
     <string>Ice_02</string>
+    <string>Iron_02</string>
     <string>Stone_03</string>
   </VicinityVoxelCache>
   <WorldId>6c329bd5-7f8d-4a64-ab09-cfe24fc35d39</WorldId>

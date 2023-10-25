@@ -10,7 +10,7 @@
       <MyObjectBuilder_GlobalEventBase>
         <SubtypeName>SpawnCargoShip</SubtypeName>
         <Enabled>true</Enabled>
-        <ActivationTimeMs>93069</ActivationTimeMs>
+        <ActivationTimeMs>45069</ActivationTimeMs>
       </MyObjectBuilder_GlobalEventBase>
     </Events>
   </SectorEvents>
@@ -233,14 +233,14 @@
       <PersistentFlags>CastShadows InScene</PersistentFlags>
       <Name>124168712738897777</Name>
       <PositionAndOrientation>
-        <Position x="7.3617063684000916" y="1.247499966993928" z="32.860442021233624" />
-        <Forward x="0.8858408" y="-0.000210998565" z="0.4639889" />
-        <Up x="0.000170171523" y="1" z="0.000129860084" />
+        <Position x="17.301930002291837" y="1.247499966993928" z="37.20534772055013" />
+        <Forward x="0.12605831" y="-0.000175343346" z="0.992022634" />
+        <Up x="0.000161793214" y="1" z="0.000156193957" />
         <Orientation>
-          <X>-3.918277E-05</X>
-          <Y>-0.8555668</Y>
-          <Z>-9.960027E-05</Z>
-          <W>0.517692447</W>
+          <X>7.580288E-05</X>
+          <Y>0.9980037</Y>
+          <Z>8.305012E-05</Z>
+          <W>-0.06315524</W>
         </Orientation>
       </PositionAndOrientation>
       <LocalPositionAndOrientation xsi:nil="true" />
@@ -4725,72 +4725,6 @@
         </MyObjectBuilder_CubeBlock>
         <MyObjectBuilder_CubeBlock xsi:type="MyObjectBuilder_Assembler">
           <SubtypeName>BasicAssembler</SubtypeName>
-          <EntityId>137072396920144335</EntityId>
-          <Name>137072396920144335</Name>
-          <Min x="7" y="1" z="16" />
-          <Owner>144115188075855895</Owner>
-          <BuiltBy>144115188075855895</BuiltBy>
-          <ShareMode>Faction</ShareMode>
-          <ComponentContainer>
-            <Components>
-              <ComponentData>
-                <TypeId>MyInventoryBase</TypeId>
-                <Component xsi:type="MyObjectBuilder_InventoryAggregate">
-                  <InventoryId>Inventory</InventoryId>
-                  <Inventories>
-                    <MyObjectBuilder_InventoryBase xsi:type="MyObjectBuilder_Inventory">
-                      <Items />
-                      <nextItemId>0</nextItemId>
-                      <Volume>2</Volume>
-                      <Mass>9223372036854.775807</Mass>
-                      <MaxItemCount>2147483647</MaxItemCount>
-                      <Size xsi:nil="true" />
-                      <InventoryFlags>CanReceive</InventoryFlags>
-                      <RemoveEntityOnEmpty>false</RemoveEntityOnEmpty>
-                    </MyObjectBuilder_InventoryBase>
-                    <MyObjectBuilder_InventoryBase xsi:type="MyObjectBuilder_Inventory">
-                      <Items />
-                      <nextItemId>0</nextItemId>
-                      <Volume>2</Volume>
-                      <Mass>9223372036854.775807</Mass>
-                      <MaxItemCount>2147483647</MaxItemCount>
-                      <Size xsi:nil="true" />
-                      <InventoryFlags>CanSend</InventoryFlags>
-                      <RemoveEntityOnEmpty>false</RemoveEntityOnEmpty>
-                    </MyObjectBuilder_InventoryBase>
-                  </Inventories>
-                </Component>
-              </ComponentData>
-              <ComponentData>
-                <TypeId>MyTimerComponent</TypeId>
-                <Component xsi:type="MyObjectBuilder_TimerComponent">
-                  <Repeat>true</Repeat>
-                  <TimeToEvent>0</TimeToEvent>
-                  <SetTimeMinutes>0</SetTimeMinutes>
-                  <TimerEnabled>true</TimerEnabled>
-                  <RemoveEntityOnTimer>false</RemoveEntityOnTimer>
-                  <TimerType>Frame10</TimerType>
-                  <FramesFromLastTrigger>10</FramesFromLastTrigger>
-                  <TimerTickInFrames>60</TimerTickInFrames>
-                  <IsSessionUpdateEnabled>false</IsSessionUpdateEnabled>
-                </Component>
-              </ComponentData>
-            </Components>
-          </ComponentContainer>
-          <ShowOnHUD>false</ShowOnHUD>
-          <ShowInTerminal>true</ShowInTerminal>
-          <ShowInToolbarConfig>true</ShowInToolbarConfig>
-          <ShowInInventory>true</ShowInInventory>
-          <NumberInGrid>1</NumberInGrid>
-          <Enabled>true</Enabled>
-          <CurrentProgress>0</CurrentProgress>
-          <DisassembleEnabled>false</DisassembleEnabled>
-          <RepeatAssembleEnabled>false</RepeatAssembleEnabled>
-          <RepeatDisassembleEnabled>false</RepeatDisassembleEnabled>
-          <SlaveEnabled>false</SlaveEnabled>
-        </MyObjectBuilder_CubeBlock>
-        <MyObjectBuilder_CubeBlock xsi:type="MyObjectBuilder_Assembler">
-          <SubtypeName>BasicAssembler</SubtypeName>
           <EntityId>109684528774840374</EntityId>
           <Name>109684528774840374</Name>
           <Min x="18" y="1" z="12" />
@@ -4836,7 +4770,7 @@
                   <TimerEnabled>true</TimerEnabled>
                   <RemoveEntityOnTimer>false</RemoveEntityOnTimer>
                   <TimerType>Frame10</TimerType>
-                  <FramesFromLastTrigger>20</FramesFromLastTrigger>
+                  <FramesFromLastTrigger>10</FramesFromLastTrigger>
                   <TimerTickInFrames>60</TimerTickInFrames>
                   <IsSessionUpdateEnabled>false</IsSessionUpdateEnabled>
                 </Component>
@@ -4902,7 +4836,7 @@
                   <TimerEnabled>true</TimerEnabled>
                   <RemoveEntityOnTimer>false</RemoveEntityOnTimer>
                   <TimerType>Frame10</TimerType>
-                  <FramesFromLastTrigger>50</FramesFromLastTrigger>
+                  <FramesFromLastTrigger>40</FramesFromLastTrigger>
                   <TimerTickInFrames>60</TimerTickInFrames>
                   <IsSessionUpdateEnabled>false</IsSessionUpdateEnabled>
                 </Component>
@@ -4950,14 +4884,14 @@
       <PersistentFlags>CastShadows InScene</PersistentFlags>
       <Name>86014713599571267</Name>
       <PositionAndOrientation>
-        <Position x="-2168.0830078125" y="-6453.70654296875" z="3030.996826171875" />
-        <Forward x="-0.991469741" y="0.113206372" z="0.06459141" />
-        <Up x="0.129216731" y="0.78891927" z="0.60075736" />
+        <Position x="-2275.398193359375" y="-7109.51220703125" z="2531.45654296875" />
+        <Forward x="-0.991404235" y="0.114917934" z="0.06254071" />
+        <Up x="0.129345641" y="0.7890035" z="0.600618958" />
         <Orientation>
-          <X>0.27052</X>
-          <Y>0.67758</Y>
-          <Z>0.179886878</Z>
-          <W>0.6598068</W>
+          <X>0.2707463</X>
+          <Y>0.6767324</Y>
+          <Z>0.179428741</Z>
+          <W>0.660707951</W>
         </Orientation>
       </PositionAndOrientation>
       <LocalPositionAndOrientation xsi:nil="true" />
@@ -9024,7 +8958,7 @@
           <PilotRelativeWorld>
             <Position x="0.16065528988838196" y="-1.1123760938644409" z="3.7976107597351074" />
             <Forward x="-0.0152823813" y="-0.0994352251" z="-0.9949267" />
-            <Up x="2.06700179E-07" y="0.995042861" z="-0.09944684" />
+            <Up x="2.06731229E-07" y="0.995042861" z="-0.09944684" />
             <Orientation>
               <X>-0.0497837067</X>
               <Y>0.00763193332</Y>
@@ -9755,7 +9689,7 @@
                   <TimerEnabled>true</TimerEnabled>
                   <RemoveEntityOnTimer>false</RemoveEntityOnTimer>
                   <TimerType>Frame10</TimerType>
-                  <FramesFromLastTrigger>20</FramesFromLastTrigger>
+                  <FramesFromLastTrigger>10</FramesFromLastTrigger>
                   <TimerTickInFrames>60</TimerTickInFrames>
                   <IsSessionUpdateEnabled>false</IsSessionUpdateEnabled>
                 </Component>
@@ -11904,8 +11838,8 @@
           <Enabled>true</Enabled>
         </MyObjectBuilder_CubeBlock>
       </CubeBlocks>
-      <LinearVelocity x="-2.19595528" y="-13.4097519" z="-10.22176" />
-      <AngularVelocity x="-1.40252414E-05" y="-5.11081271E-05" z="-3.101085E-05" />
+      <LinearVelocity x="-2.21540737" y="-13.3821678" z="-10.2129707" />
+      <AngularVelocity x="-1.6097656E-05" y="-4.08929918E-05" z="-2.87965831E-05" />
       <ConveyorLines>
         <MyObjectBuilder_ConveyorLine>
           <StartPosition x="-2" y="7" z="-1" />

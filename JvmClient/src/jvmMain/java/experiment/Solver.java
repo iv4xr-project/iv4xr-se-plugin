@@ -1,10 +1,12 @@
-package uuspaceagent;
+package experiment;
 
 import eu.iv4xr.framework.mainConcepts.Iv4xrAgentState;
 import eu.iv4xr.framework.mainConcepts.TestAgent;
 import eu.iv4xr.framework.spatial.Vec3;
 import nl.uu.cs.aplib.mainConcepts.GoalStructure;
 import nl.uu.cs.aplib.mainConcepts.SimpleState;
+import uuspaceagent.SEBlockFunctions;
+import uuspaceagent.UUGoalLib;
 
 import java.util.function.Predicate;
 

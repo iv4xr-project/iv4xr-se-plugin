@@ -1,13 +1,18 @@
-package uuspaceagent;
+package onlineTestCaseGenerator;
 
 import eu.iv4xr.framework.extensions.ltl.SATVerdict;
 import eu.iv4xr.framework.mainConcepts.*;
 import eu.iv4xr.framework.spatial.Vec3;
+import experiment.Solver;
 import nl.uu.cs.aplib.mainConcepts.GoalStructure;
 import nl.uu.cs.aplib.mainConcepts.SimpleState;
 import nl.uu.cs.aplib.utils.Pair;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import spaceEngineers.model.Block;
+import uuspaceagent.SEBlockFunctions;
+import uuspaceagent.TestUtils;
+import uuspaceagent.UUSeAgentState;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -17,16 +22,13 @@ import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static io.ktor.http.URLBuilderKt.path;
-import static nl.uu.cs.aplib.AplibEDSL.DEPLOYonce;
 import static nl.uu.cs.aplib.AplibEDSL.SEQ;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static uuspaceagent.PrintInfos.showPath;
 import static uuspaceagent.PrintInfos.showWOMAgent;
 import static uuspaceagent.TestUtils.console;
 import static uuspaceagent.TestUtils.loadSE;
 
-public class Generate {
+public class Test_Generate {
 
     //a door is open -->  type disjunctive
     Predicate<SimpleState> q2() {
@@ -112,9 +114,11 @@ public class Generate {
     int turn= 0 ;
     TestDataCollector dataCollector = new TestDataCollector();
 
+    //***************************************conjunctive**********
+    @Disabled
     @Test
-    public void test_generator() throws InterruptedException, IOException {
-        var agentAndState = deployAgent();
+    public void test_generator_conjunctive() throws InterruptedException, IOException {
+        var agentAndState = deployAgent("new-3 islands");
         TestAgent agent = agentAndState.fst ;
         agent.setTestDataCollector(dataCollector) ;
         var specs = new Specifications();
@@ -123,44 +127,7 @@ public class Generate {
         agent.addLTL( psi2);
         agent.resetLTLs();
 
-
         List<Map<String, List<Object>>>  Specifications= new ArrayList<>();
-
-        //test type basic
-//        String specificationType = "basic";
-//          String itemType = "BasicAssembler";
-//          Specifications.add(new HashMap<String, List<Object>>() {{
-//            put("basic",
-//                    new ArrayList<Object>() {{
-//                        add(q3());
-//                        add("BasicAssembler");
-//                    }}
-//            );
-//        }} );
-//        generatore(agentAndState, Specifications, specificationType);
-//***************************************disjunctive********
-        //disjunctive scenario when it is a door
-//         String specificationType = "disjunctive";
-//        Specifications.add(new HashMap<String, List<Object>>() {{
-//            put("disjunctive",
-//                    new ArrayList<Object>() {{
-//                        add(q2());
-//                        add("LargeBlockSlideDoor");
-//                    }}
-//            );
-//        }} );
-//        String specificationType = "disjunctive";
-//        Specifications.add(new HashMap<String, List<Object>>() {{
-//            put("disjunctive",
-//                    new ArrayList<Object>() {{
-//                        add(q4());
-//                        add("BasicAssembler");
-//                    }}
-//            );
-//        }} );
- //       generatore(agentAndState, Specifications, specificationType);
-
-        //***************************************conjunctive**********
         String specificationType = "conjunctive";
           String itemType = "BasicAssembler";
           Specifications.add(new HashMap<String, List<Object>>() {{
@@ -173,45 +140,7 @@ public class Generate {
         }} );
         generatore(agentAndState,Specifications, specificationType);
 
-//***************************************chain**********
-      //   test type chain, a specific blocker should be grind then a nearest door be open, then all blocks should be grind
-//        String specificationType = "chain";
-//
-//        Specifications.add(new HashMap<String, List<Object>>() {{
-//            put("disjunctive",
-//                    new ArrayList<Object>() {{
-//                        add(q4());
-//                        add("BasicAssembler");
-//                    }}
-//            );
-//        }} );
-//        Specifications.add(new HashMap<String, List<Object>>() {{
-//            put("basic",
-//                new ArrayList<Object>() {{
-//                    add(q3());
-//                    add("BasicAssembler");
-//                }}
-//                );
-//        }} );
-//        Specifications.add(new HashMap<String, List<Object>>() {{
-//            put("disjunctive",
-//                    new ArrayList<Object>() {{
-//                        add(q2());
-//                        add("LargeBlockSlideDoor");
-//                    }}
-//            );
-//        }} );
-        Specifications.add(new HashMap<String, List<Object>>() {{
-            put("disjunctive",
-                    new ArrayList<Object>() {{
-                        add(q4());
-                        add("BasicAssembler");
-                    }}
-            );
-        }} );
-        generatore(agentAndState, Specifications, specificationType);
-
-        //save position in csv file:
+        //save position in csv file: generating heat map
         dataCollector.saveTestAgentScalarsTraceAsCSV(agentAndState.fst.getId(),"visits.csv");
         List<Map<String,Number>> tracePosition = agentAndState.fst
                 . getTestDataCollector()
@@ -238,16 +167,236 @@ public class Generate {
         }
         br.write(sb.toString());
         br.close();
-
+    // End generating heat map
         var ok = agentAndState.fst.evaluateLTLs();
         System.out.println(">>>> LTL results: " + ok);
         //  System.out.println(">>>> psi1 : " + psi1.sat());
         //  assertTrue(psi1.sat() == SATVerdict.SAT);
         assertTrue(psi2.sat() == SATVerdict.SAT);
-        //closeIfCloseable(state.env().getController());
         TestUtils.closeConnectionToSE(agentAndState.snd);
     }
 
+    //***************************************disjunctive********
+
+   @Disabled
+    @Test
+    public void test_generator_disjunctive() throws InterruptedException, IOException {
+        var agentAndState = deployAgent("world-4 blocks");
+        TestAgent agent = agentAndState.fst ;
+        agent.setTestDataCollector(dataCollector) ;
+        var specs = new Specifications();
+        var psi1 = specs.scenarioSpec0();  //eventually integrity of some blocks will decrease.
+        var psi2 = specs.scenarioSpec1();  //eventually some assembler blocks will disappear
+        agent.addLTL( psi2);
+        agent.resetLTLs();
+
+        List<Map<String, List<Object>>>  Specifications= new ArrayList<>();
+
+         String specificationType = "disjunctive";
+        //disjunctive scenario to check an item in the type door
+//        Specifications.add(new HashMap<String, List<Object>>() {{
+//            put("disjunctive",
+//                    new ArrayList<Object>() {{
+//                        add(q2());
+//                        add("LargeBlockSlideDoor");
+//                    }}
+//            );
+//        }} );
+        Specifications.add(new HashMap<String, List<Object>>() {{
+            put("disjunctive",
+                    new ArrayList<Object>() {{
+                        add(q4());
+                        add("BasicAssembler");
+                    }}
+            );
+        }} );
+        generatore(agentAndState, Specifications, specificationType);
+
+        //save position in csv file:
+        dataCollector.saveTestAgentScalarsTraceAsCSV(agentAndState.fst.getId(),"visits.csv");
+        List<Map<String,Number>> tracePosition = agentAndState.fst
+                . getTestDataCollector()
+                . getTestAgentScalarsTrace(agentAndState.fst.getId())
+                . stream()
+                . map(event -> event.values) . collect(Collectors.toList());
+
+        String newFileLocation = System.getProperty("user.dir") +  File.separator+"positions.csv" ;
+        BufferedWriter br = new BufferedWriter(new FileWriter(newFileLocation));
+        StringBuilder sb = new StringBuilder();
+        Map<String, Number> firstRow = tracePosition.get(0);
+        for (String key : firstRow.keySet()) {
+            sb.append(key);
+            sb.append(",");
+        }
+        sb.append("\n");
+        for (Map<String,Number> map : tracePosition) {
+            for (Map.Entry<String, Number> entry : map.entrySet()) {
+                sb.append(entry.getValue().toString());
+                sb.append(",");
+            }
+            sb.append("\n");
+        }
+        br.write(sb.toString());
+        br.close();
+        //end saving file
+        var ok = agentAndState.fst.evaluateLTLs();
+        System.out.println(">>>> LTL results: " + ok);
+        //  System.out.println(">>>> psi1 : " + psi1.sat());
+        //  assertTrue(psi1.sat() == SATVerdict.SAT);
+        assertTrue(psi2.sat() == SATVerdict.SAT);
+        TestUtils.closeConnectionToSE(agentAndState.snd);
+    }
+
+
+    @Disabled
+    @Test
+    public void test_generator_basic() throws InterruptedException, IOException {
+        var agentAndState = deployAgent("islanddswithdoorsWithDoors");
+        TestAgent agent = agentAndState.fst ;
+        agent.setTestDataCollector(dataCollector) ;
+        var specs = new Specifications();
+        var psi1 = specs.scenarioSpec0();  //eventually integrity of some blocks will decrease.
+        var psi2 = specs.scenarioSpec1();  //eventually some assembler blocks will disappear
+        agent.addLTL( psi2);
+        agent.resetLTLs();
+
+        List<Map<String, List<Object>>>  Specifications= new ArrayList<>();
+
+        //test type basic
+        String specificationType = "basic";
+          String itemType = "BasicAssembler";
+          Specifications.add(new HashMap<String, List<Object>>() {{
+            put("basic",
+                    new ArrayList<Object>() {{
+                        add(q3());
+                        add("BasicAssembler");
+                    }}
+            );
+        }} );
+        generatore(agentAndState, Specifications, specificationType);
+
+        //save position in csv file:
+        dataCollector.saveTestAgentScalarsTraceAsCSV(agentAndState.fst.getId(),"visits.csv");
+        List<Map<String,Number>> tracePosition = agentAndState.fst
+                . getTestDataCollector()
+                . getTestAgentScalarsTrace(agentAndState.fst.getId())
+                . stream()
+                . map(event -> event.values) . collect(Collectors.toList());
+
+        String newFileLocation = System.getProperty("user.dir") +  File.separator+"positions.csv" ;
+        BufferedWriter br = new BufferedWriter(new FileWriter(newFileLocation));
+        StringBuilder sb = new StringBuilder();
+        Map<String, Number> firstRow = tracePosition.get(0);
+        for (String key : firstRow.keySet()) {
+            sb.append(key);
+            sb.append(",");
+        }
+        sb.append("\n");
+        for (Map<String,Number> map : tracePosition) {
+            for (Map.Entry<String, Number> entry : map.entrySet()) {
+                sb.append(entry.getValue().toString());
+                sb.append(",");
+            }
+            sb.append("\n");
+        }
+        br.write(sb.toString());
+        br.close();
+        //end saving file
+        var ok = agentAndState.fst.evaluateLTLs();
+        System.out.println(">>>> LTL results: " + ok);
+        //  System.out.println(">>>> psi1 : " + psi1.sat());
+        //  assertTrue(psi1.sat() == SATVerdict.SAT);
+        assertTrue(psi2.sat() == SATVerdict.SAT);
+        TestUtils.closeConnectionToSE(agentAndState.snd);
+    }
+
+
+    //***************************************chain**********
+    @Test
+    public void test_generator_chain() throws InterruptedException, IOException {
+        var agentAndState = deployAgent("islanddswithdoorsWithDoors-second"); // world/platform name
+        TestAgent agent = agentAndState.fst ;
+        agent.setTestDataCollector(dataCollector) ;
+        var specs = new Specifications();
+        var psi1 = specs.scenarioSpec0();  //eventually integrity of some blocks will decrease.
+        var psi2 = specs.scenarioSpec1();  //eventually some assembler blocks will disappear
+        agent.addLTL( psi2);
+        agent.resetLTLs();
+
+
+        List<Map<String, List<Object>>>  Specifications= new ArrayList<>();
+
+        //   test type chain, a specific blocker should be grind then a nearest door be open, then all blocks should be grinded
+        String specificationType = "chain";
+
+        Specifications.add(new HashMap<String, List<Object>>() {{
+            put("disjunctive",
+                    new ArrayList<Object>() {{
+                        add(q4());
+                        add("BasicAssembler");
+                    }}
+            );
+        }} );
+        Specifications.add(new HashMap<String, List<Object>>() {{
+            put("basic",
+                new ArrayList<Object>() {{
+                    add(q3());
+                    add("BasicAssembler");
+                }}
+                );
+        }} );
+        Specifications.add(new HashMap<String, List<Object>>() {{
+            put("disjunctive",
+                    new ArrayList<Object>() {{
+                        add(q2());
+                        add("LargeBlockSlideDoor");
+                    }}
+            );
+        }} );
+        Specifications.add(new HashMap<String, List<Object>>() {{
+            put("disjunctive",
+                    new ArrayList<Object>() {{
+                        add(q4());
+                        add("BasicAssembler");
+                    }}
+            );
+        }} );
+        generatore(agentAndState, Specifications, specificationType);
+
+        //save position in csv file:
+        dataCollector.saveTestAgentScalarsTraceAsCSV(agentAndState.fst.getId(),"visits.csv");
+        List<Map<String,Number>> tracePosition = agentAndState.fst
+                . getTestDataCollector()
+                . getTestAgentScalarsTrace(agentAndState.fst.getId())
+                . stream()
+                . map(event -> event.values) . collect(Collectors.toList());
+
+        String newFileLocation = System.getProperty("user.dir") +  File.separator+"positions.csv" ;
+        BufferedWriter br = new BufferedWriter(new FileWriter(newFileLocation));
+        StringBuilder sb = new StringBuilder();
+        Map<String, Number> firstRow = tracePosition.get(0);
+        for (String key : firstRow.keySet()) {
+            sb.append(key);
+            sb.append(",");
+        }
+        sb.append("\n");
+        for (Map<String,Number> map : tracePosition) {
+            for (Map.Entry<String, Number> entry : map.entrySet()) {
+                sb.append(entry.getValue().toString());
+                sb.append(",");
+            }
+            sb.append("\n");
+        }
+        br.write(sb.toString());
+        br.close();
+        //end saving file
+        var ok = agentAndState.fst.evaluateLTLs();
+        System.out.println(">>>> LTL results: " + ok);
+        //  System.out.println(">>>> psi1 : " + psi1.sat());
+        //  assertTrue(psi1.sat() == SATVerdict.SAT);
+        assertTrue(psi2.sat() == SATVerdict.SAT);
+        TestUtils.closeConnectionToSE(agentAndState.snd);
+    }
 
     public void generatore( Pair<TestAgent, UUSeAgentState> agentAndState, List<Map<String, List<Object>>> specification, String specificationType) throws InterruptedException, IOException {
         int  budgetExhausted = 1400; //number of turns
@@ -258,7 +407,6 @@ public class Generate {
 
         if(specificationType.equals("basic")){
             //setting the e
-          //  var position = new Vec3(3.75f,-3.75f,-5.0f) ;
             var position = new Vec3(17.5f,2.5f,40.0f) ;
             helper(agentAndState, (Predicate<SimpleState>) firstSpecification.get(specificationType).get(0), position, (String) firstSpecification.get(specificationType).get(1));
         }
@@ -285,22 +433,19 @@ public class Generate {
     }
 
 
-    public Pair<TestAgent, UUSeAgentState> deployAgent() throws InterruptedException {
+    public Pair<TestAgent, UUSeAgentState> deployAgent(String worldName) throws InterruptedException {
         //worlds should change based on the type --  for type basic and conjunctive : world-4 blocks
         //for disjunctive: new-3 islands
         //for chain: islanddswithdoorsWithDoors
-     //   var agentAndState = loadSE("islanddswithdoorsWithDoors-second") ; // for type chain. the same world just the start is in different location
+        var agentAndState = loadSE(worldName) ;
       //  var agentAndState = loadSE("islanddswithdoorsWithDoors") ;
-        var agentAndState = loadSE("new-3 islands") ; // for conjunctive type, if there is a door
-        // the agent can not recognize if it is open or not.
+
 
         TestAgent agent = agentAndState.fst ;
         UUSeAgentState state = agentAndState.snd ;
         state.navgrid.enableFlying = true ;
         Thread.sleep(1000);
         state.updateState(state.agentId);
-        // agent start location should be around:<10.22475,-5.0025,53.75382>,
-        //  orientationForward: <-0.08024501,7.549446E-5,0.99677515> ... so looking towards z-axis
         console(showWOMAgent(state.wom));
         return new Pair<TestAgent, UUSeAgentState>(agent,state) ;
     }
@@ -345,27 +490,10 @@ public class Generate {
             goal = G.solver(agentAndState.fst, p,  Type);
         }
 
-
-//        var specs = new Specifications();
-//        var psi1 = specs.scenarioSpec0();  //eventually integrity of some blocks will decrease.
-//        var psi2 = specs.scenarioSpec1();  //eventually some assembler blocks will disappear
-//        agent.addLTL( psi2);
-//        agent.resetLTLs();
         Thread.sleep(5000);
-
         test_Goal(agentAndState.fst, agentAndState.snd, goal ) ;
-
-
-
-
-
         goal.printGoalStructureStatus();
         assertTrue(goal.getStatus().success());
-//        var ok = agentAndState.fst.evaluateLTLs();
-//        System.out.println(">>>> LTL results: " + ok);
-//      //  System.out.println(">>>> psi1 : " + psi1.sat());
-//      //  assertTrue(psi1.sat() == SATVerdict.SAT);
-//        assertTrue(psi2.sat() == SATVerdict.SAT);
    }
 
 

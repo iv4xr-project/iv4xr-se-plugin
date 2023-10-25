@@ -1,28 +1,28 @@
 <?xml version="1.0"?>
 <MyObjectBuilder_Checkpoint xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <CurrentSector x="0" y="0" z="0" />
-  <ElapsedGameTime>88390400000</ElapsedGameTime>
+  <ElapsedGameTime>91218400000</ElapsedGameTime>
   <SessionName>myworld-3 with open door</SessionName>
   <SpectatorPosition>
-    <Position x="18.779428348906464" y="-3.0129752447234392" z="56.906262603949017" />
-    <Forward x="0.5187069" y="-0.20716396" z="-0.8294735" />
-    <Up x="-0.0033244635" y="0.969702661" z="-0.244265631" />
+    <Position x="18.779428348906475" y="-3.0129752447234424" z="56.906262603949017" />
+    <Forward x="0.919225633" y="-0.3437282" z="0.192029074" />
+    <Up x="0.0164092332" y="0.520737052" z="0.8535594" />
     <Orientation>
-      <X>-0.118077867</X>
-      <Y>-0.267059684</Y>
-      <Z>0.03473163</Z>
-      <W>0.9557879</W>
+      <X>-0.2635825</X>
+      <Y>0.7256299</Y>
+      <Z>0.412499368</Z>
+      <W>-0.48355943</W>
     </Orientation>
   </SpectatorPosition>
   <SpectatorSpeed x="0.1" y="1" />
   <SpectatorIsLightOn>false</SpectatorIsLightOn>
   <CameraController>ThirdPersonSpectator</CameraController>
   <CameraEntity>0</CameraEntity>
-  <ControlledObject>88034022095450917</ControlledObject>
+  <ControlledObject>79682662949435839</ControlledObject>
   <Password />
   <Description />
-  <LastSaveTime>2023-08-10T17:34:34.5109413+02:00</LastSaveTime>
-  <SpectatorDistance>1.86847675</SpectatorDistance>
+  <LastSaveTime>2023-10-25T14:22:10.2972364+02:00</LastSaveTime>
+  <SpectatorDistance>2.5</SpectatorDistance>
   <WorkshopId xsi:nil="true" />
   <WorkshopId1 xsi:nil="true" />
   <CharacterToolbar>
@@ -98,7 +98,7 @@
   <ControlledEntities>
     <dictionary>
       <item>
-        <Key>88034022095450917</Key>
+        <Key>79682662949435839</Key>
         <Value>
           <ClientId>0</ClientId>
           <SerialId>0</SerialId>
@@ -313,17 +313,21 @@
     <MyObjectBuilder_Identity>
       <IdentityId>144115188075855875</IdentityId>
       <DisplayName>sa.shirzadeh</DisplayName>
-      <CharacterEntityId>88034022095450917</CharacterEntityId>
+      <CharacterEntityId>79682662949435839</CharacterEntityId>
       <Model>Default_Astronaut</Model>
       <ColorMask x="0" y="-0.96" z="-0.5" />
       <BlockLimitModifier>0</BlockLimitModifier>
-      <LastLoginTime>2023-08-10T17:19:46.2822691+02:00</LastLoginTime>
+      <LastLoginTime>2023-10-25T14:17:14.3915279+02:00</LastLoginTime>
       <SavedCharacters>
-        <long>88034022095450917</long>
+        <long>79682662949435839</long>
       </SavedCharacters>
-      <LastLogoutTime>2023-08-10T17:34:34.511443+02:00</LastLogoutTime>
+      <LastLogoutTime>2023-10-25T14:22:10.3024924+02:00</LastLogoutTime>
       <RespawnShips />
-      <LastDeathPosition xsi:nil="true" />
+      <LastDeathPosition>
+        <X>22.466330109578646</X>
+        <Y>-5.0023702864364168</Y>
+        <Z>57.556662685787842</Z>
+      </LastDeathPosition>
       <ActiveContracts />
       <TransferedPCUDelta>0</TransferedPCUDelta>
     </MyObjectBuilder_Identity>
@@ -332,7 +336,7 @@
       <DisplayName>Space Pirates</DisplayName>
       <CharacterEntityId>0</CharacterEntityId>
       <BlockLimitModifier>0</BlockLimitModifier>
-      <LastLoginTime>2023-08-10T17:19:46.4716649+02:00</LastLoginTime>
+      <LastLoginTime>2023-10-25T14:17:14.6161025+02:00</LastLoginTime>
       <SavedCharacters />
       <LastLogoutTime>0001-01-01T00:00:00</LastLogoutTime>
       <RespawnShips />
@@ -426,9 +430,9 @@
             <SlotsGamepad />
           </Toolbar>
           <EntityCameraData>
-            <CameraControllerSettings EntityId="88034022095450917">
+            <CameraControllerSettings EntityId="79682662949435839">
               <IsFirstPerson>false</IsFirstPerson>
-              <Distance>1.8684767136886102</Distance>
+              <Distance>2.5</Distance>
               <HeadAngle x="-22.6555" y="0" />
             </CameraControllerSettings>
           </EntityCameraData>
@@ -518,10 +522,77 @@
     <long>144115188075855876</long>
   </NonPlayerIdentities>
   <Gps>
-    <dictionary />
+    <dictionary>
+      <item>
+        <Key>144115188075855875</Key>
+        <Value>
+          <Entries>
+            <Entry>
+              <name>Unknown signal 1</name>
+              <description />
+              <coords>
+                <X>-165.41086411592914</X>
+                <Y>-423.08602793298815</Y>
+                <Z>2273.0804399508997</Z>
+              </coords>
+              <isFinal>true</isFinal>
+              <showOnHud>true</showOnHud>
+              <alwaysVisible>true</alwaysVisible>
+              <color>
+                <PackedValue>4281335725</PackedValue>
+                <X>173</X>
+                <Y>255</Y>
+                <Z>47</Z>
+                <R>173</R>
+                <G>255</G>
+                <B>47</B>
+                <A>255</A>
+              </color>
+              <entityId>139029244742312489</entityId>
+              <isObjective>false</isObjective>
+              <contractId>0</contractId>
+              <DisplayName>Unknown signal</DisplayName>
+            </Entry>
+            <Entry>
+              <name>Body Location - 25/10/2023 14:18:49</name>
+              <description />
+              <coords>
+                <X>21.82458397629307</X>
+                <Y>-4.9244331844911358</Y>
+                <Z>58.168488587813044</Z>
+              </coords>
+              <isFinal>true</isFinal>
+              <showOnHud>true</showOnHud>
+              <alwaysVisible>true</alwaysVisible>
+              <color>
+                <PackedValue>4294035829</PackedValue>
+                <X>117</X>
+                <Y>201</Y>
+                <Z>241</Z>
+                <R>117</R>
+                <G>201</G>
+                <B>241</B>
+                <A>255</A>
+              </color>
+              <entityId>94402145561679722</entityId>
+              <isObjective>false</isObjective>
+              <contractId>0</contractId>
+              <DisplayName>Body Location</DisplayName>
+            </Entry>
+          </Entries>
+        </Value>
+      </item>
+    </dictionary>
   </Gps>
   <ContainerGridIds>
-    <dictionary />
+    <dictionary>
+      <item>
+        <Key>76561199517107115</Key>
+        <Value>
+          <long>77987883117920448</long>
+        </Value>
+      </item>
+    </dictionary>
   </ContainerGridIds>
   <SessionComponents>
     <MyObjectBuilder_SessionComponent xsi:type="MyObjectBuilder_LocalizationSessionComponent">
@@ -636,7 +707,7 @@
     </MyObjectBuilder_SessionComponent>
     <MyObjectBuilder_SessionComponent xsi:type="MyObjectBuilder_SectorWeatherComponent">
       <BaseSunDirection x="0.339467347" y="0.709795356" z="-0.617213368" />
-      <SunDirectionNormalized x="-0.8200541" y="0.0993823" z="-0.5635907" />
+      <SunDirectionNormalized x="-0.9072908" y="-0.07531838" z="-0.413703471" />
       <WeatherPlanetData />
     </MyObjectBuilder_SessionComponent>
     <MyObjectBuilder_SessionComponent xsi:type="MyObjectBuilder_SessionComponentAssetModifiers" />
@@ -645,15 +716,20 @@
       <PlayerData>
         <PlayerContainerData>
           <PlayerId>144115188075855875</PlayerId>
-          <Timer>92</Timer>
-          <Active>true</Active>
+          <Timer>574</Timer>
+          <Active>false</Active>
           <Competetive>false</Competetive>
-          <ContainerId>0</ContainerId>
+          <ContainerId>139029244742312489</ContainerId>
         </PlayerContainerData>
       </PlayerData>
       <GPSForRemoval />
-      <EntitiesForRemoval />
-      <ContainerIdSmall>1</ContainerIdSmall>
+      <EntitiesForRemoval>
+        <MyEntityForRemoval>
+          <TimeLeft>696</TimeLeft>
+          <EntityId>77987883117920448</EntityId>
+        </MyEntityForRemoval>
+      </EntitiesForRemoval>
+      <ContainerIdSmall>2</ContainerIdSmall>
       <ContainerIdLarge>1</ContainerIdLarge>
     </MyObjectBuilder_SessionComponent>
     <MyObjectBuilder_SessionComponent xsi:type="MyObjectBuilder_SessionComponentContractSystem">
@@ -6796,7 +6872,7 @@
           </MultilineData>
         </LineData>
         <Title>Good.bot: Introduction</Title>
-        <Visible>true</Visible>
+        <Visible>false</Visible>
         <IsUsedByVisualScripting>false</IsUsedByVisualScripting>
       </Questlog>
       <ExclusiveHighlights>
@@ -6806,7 +6882,7 @@
     </MyObjectBuilder_SessionComponent>
     <MyObjectBuilder_SessionComponent xsi:type="MyObjectBuilder_AntennaSessionComponent" />
     <MyObjectBuilder_SessionComponent xsi:type="MyObjectBuilder_EnvironmentBotSpawningSystem">
-      <TimeSinceLastEventInMs>19200</TimeSinceLastEventInMs>
+      <TimeSinceLastEventInMs>73766</TimeSinceLastEventInMs>
     </MyObjectBuilder_SessionComponent>
     <MyObjectBuilder_SessionComponent xsi:type="MyObjectBuilder_TradingManager" />
     <MyObjectBuilder_SessionComponent xsi:type="MyObjectBuilder_CoordinateSystem">
@@ -6845,7 +6921,26 @@
       <OverallBalance>20000</OverallBalance>
     </MyObjectBuilder_SessionComponent>
     <MyObjectBuilder_SessionComponent xsi:type="MyObjectBuilder_NeutralShipSpawner">
-      <ShipsInProgress />
+      <ShipsInProgress>
+        <ShipTimePair>
+          <EntityIds>
+            <long>130922320775983831</long>
+          </EntityIds>
+          <TimeTicks>108115840000</TimeTicks>
+        </ShipTimePair>
+        <ShipTimePair>
+          <EntityIds>
+            <long>89865392621372493</long>
+          </EntityIds>
+          <TimeTicks>108132320000</TimeTicks>
+        </ShipTimePair>
+        <ShipTimePair>
+          <EntityIds>
+            <long>84569811659230451</long>
+          </EntityIds>
+          <TimeTicks>108485440000</TimeTicks>
+        </ShipTimePair>
+      </ShipsInProgress>
     </MyObjectBuilder_SessionComponent>
     <MyObjectBuilder_SessionComponent xsi:type="MyObjectBuilder_PirateAntennas">
       <PiratesIdentity>144115188075855876</PiratesIdentity>
@@ -6892,12 +6987,12 @@
     <string>Models\Characters\Astronaut\SE_astronaut.mwm</string>
     <string>Models\Cubes\Large\Armor\SquarePlate.mwm</string>
     <string>Models\Cubes\Large\Armor\CornerTriangleRightPlate.mwm</string>
-    <string>Models\Cubes\Large\Armor\FaceTrianglePlate.mwm</string>
     <string>Models\Cubes\Large\Armor\SlopePlate.mwm</string>
     <string>Models\Cubes\Large\Armor\CornerTriangleLeftPlate.mwm</string>
+    <string>Models\Cubes\Large\Armor\FaceTrianglePlate.mwm</string>
     <string>Models\Cubes\Large\InteriorWallSide.mwm</string>
-    <string>Models\Cubes\Large\InteriorWallTop.mwm</string>
     <string>Models\Cubes\Large\Armor\HeavySquarePlate.mwm</string>
+    <string>Models\Cubes\Large\InteriorWallTop.mwm</string>
   </VicinityArmorModelsCache>
   <VicinityVoxelCache>
     <string>Iron_02</string>

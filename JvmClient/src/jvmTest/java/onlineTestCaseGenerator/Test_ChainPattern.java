@@ -1,23 +1,26 @@
-package uuspaceagent;
+package onlineTestCaseGenerator;
 
-import eu.iv4xr.framework.extensions.ltl.SATVerdict;
 import eu.iv4xr.framework.mainConcepts.TestAgent;
 import eu.iv4xr.framework.mainConcepts.TestDataCollector;
+import nl.uu.cs.aplib.AplibEDSL;
 import nl.uu.cs.aplib.mainConcepts.GoalStructure;
 import nl.uu.cs.aplib.utils.Pair;
 import org.junit.jupiter.api.Test;
+import uuspaceagent.SEBlockFunctions;
+import uuspaceagent.TestUtils;
+import uuspaceagent.UUGoalLib;
+import uuspaceagent.UUSeAgentState;
 
-import static nl.uu.cs.aplib.AplibEDSL.DEPLOYonce;
-import static nl.uu.cs.aplib.AplibEDSL.SEQ;
+import static nl.uu.cs.aplib.AplibEDSL.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static uuspaceagent.PrintInfos.showWOMAgent;
 import static uuspaceagent.TestUtils.console;
 import static uuspaceagent.TestUtils.loadSE;
 
-public class Test_GrindingNearest {
+public class Test_ChainPattern {
 
     public Pair<TestAgent, UUSeAgentState> deployAgent() throws InterruptedException {
-        var agentAndState = loadSE("world-4 blocks") ; // loadSE("myworld-3")  ;
+        var agentAndState = loadSE("islanddswithdoorsWithDoors") ; // loadSE("myworld-3")  ;
         TestAgent agent = agentAndState.fst ;
         UUSeAgentState state = agentAndState.snd ;
         Thread.sleep(1000);
@@ -48,10 +51,12 @@ public class Test_GrindingNearest {
         console("*** start test...") ;
         var agentAndState = deployAgent();
         TestAgent agent = agentAndState.fst ;
+        var state = agentAndState.snd ;
+        state.navgrid.enableFlying = true ;
         agent.setTestDataCollector(new TestDataCollector()) ;
 
       //  GoalStructure G = SEQ(DEPLOYonce(agent, UUGoalLib.closeTo(new Vec3(2.5f,-3.75f,-3f))),
-        GoalStructure G = SEQ(
+        GoalStructure G = AplibEDSL.SEQ(
                 DEPLOYonce(agent, UUGoalLib.closeTo(agent,
                         "BasicAssembler",
                         SEBlockFunctions.BlockSides.FRONT,
@@ -67,21 +72,54 @@ public class Test_GrindingNearest {
                 UUGoalLib.targetBlockOK(agent, e ->
                                 (float) e.getProperty("integrity") <= 0.1f * (float) e.getProperty("maxIntegrity"),
                         false
+                ),
+                //Open door
+                DEPLOYonce(agent, UUGoalLib.closeTo(agent,
+                        "LargeBlockSlideDoor",
+                        SEBlockFunctions.BlockSides.BACK,
+                        20f,
+                        0.1f))
+                ,
+                UUGoalLib.interacted(agent),
+                //look for the second assembler
+                DEPLOY(agent, UUGoalLib.closeTo(agent,
+                        "BasicAssembler",
+                        SEBlockFunctions.BlockSides.FRONT,
+                        0.5f)),
+                UUGoalLib.targetBlockOK(agent, e ->
+                                "BasicAssembler".equals(e.getStringProperty("blockType"))
+                                        && (float) e.getProperty("integrity") == (float) e.getProperty("maxIntegrity"),
+                        false
+                ),
+                //  UUGoalLib.photo("C:\\workshop\\projects\\iv4xr\\Screenshots\\LargeBlockBatteryBlock.png"),
+                UUGoalLib.grinded(agent,0.1f),
+                UUGoalLib.targetBlockOK(agent, e ->
+                                (float) e.getProperty("integrity") <= 0.1f * (float) e.getProperty("maxIntegrity"),
+                        false
+                ),
+
+                //fly to last block
+                DEPLOY(agent, UUGoalLib.closeTo(agent,
+                        "BasicAssembler",
+                        SEBlockFunctions.BlockSides.FRONT,
+                        0.5f)),
+                UUGoalLib.targetBlockOK(agent, e ->
+                                "BasicAssembler".equals(e.getStringProperty("blockType"))
+                                        && (float) e.getProperty("integrity") == (float) e.getProperty("maxIntegrity"),
+                        false
+                ),
+                //  UUGoalLib.photo("C:\\workshop\\projects\\iv4xr\\Screenshots\\LargeBlockBatteryBlock.png"),
+                UUGoalLib.grinded(agent,0.1f),
+                UUGoalLib.targetBlockOK(agent, e ->
+                                (float) e.getProperty("integrity") <= 0.1f * (float) e.getProperty("maxIntegrity"),
+                        false
                 )
-                //,
-             //   UUGoalLib.photo("C:\\workshop\\projects\\iv4xr\\Screenshots\\LargeBlockBatteryBlock_at_50.png")
+
         );
         Thread.sleep(5000);
-        var specs = new Specifications();
-        var psi1 = specs.scenarioSpec1();
-        agent.addLTL(psi1);
-        agent.resetLTLs();
         test_Goal(agent, agentAndState.snd, G) ;
         G.printGoalStructureStatus();
         assertTrue(G.getStatus().success());
-        var ok = agent.evaluateLTLs();
-        System.out.println(">>>> LTL results: " + ok);
-        System.out.println(">>>> psi1 : " + psi1.sat());
-        assertTrue(psi1.sat() == SATVerdict.SAT);
+      //  assertTrue(agent.getTestDataCollector().getNumberOfPassVerdictsSeen() == 2) ;
     }
 }

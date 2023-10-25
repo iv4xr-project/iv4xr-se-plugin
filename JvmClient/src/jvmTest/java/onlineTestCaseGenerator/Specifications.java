@@ -1,10 +1,12 @@
-package uuspaceagent;
+package onlineTestCaseGenerator;
 
 import eu.iv4xr.framework.extensions.ltl.LTL;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import nl.uu.cs.aplib.exampleUsages.miniDungeon.testAgent.MyAgentState;
 import nl.uu.cs.aplib.mainConcepts.SimpleState;
 import spaceEngineers.model.Block;
+import uuspaceagent.SEBlockFunctions;
+import uuspaceagent.UUSeAgentState;
 
 import java.util.List;
 import java.util.function.Predicate;
