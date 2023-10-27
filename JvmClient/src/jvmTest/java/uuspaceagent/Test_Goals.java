@@ -71,7 +71,6 @@ public class Test_Goals {
 
     //@Test
     public void test_closeTo_Block_1() throws InterruptedException {
-        // This is a position that is unreachable, so this goal should abort
         console("*** start test...") ;
         var agentAndState = deployAgent();
         var agent = agentAndState.fst ;
@@ -87,7 +86,6 @@ public class Test_Goals {
 
     //@Test
     public void test_closeTo_Block_2() throws InterruptedException {
-        // This is a position that is unreachable, so this goal should abort
         console("*** start test...") ;
         var agentAndState = deployAgent();
         var agent = agentAndState.fst ;
@@ -98,12 +96,11 @@ public class Test_Goals {
                 0.5f));
         test_Goal(agentAndState.fst, agentAndState.snd, G) ;
         G.printGoalStructureStatus();
-        assertTrue(G.getStatus().failed());
+        assertTrue(G.getStatus().success());
     }
 
     @Test
     public void test_navigate_and_grind() throws InterruptedException {
-        // This is a position that is unreachable, so this goal should abort
         console("*** start test...") ;
         var agentAndState = deployAgent();
         TestAgent agent = agentAndState.fst ;
