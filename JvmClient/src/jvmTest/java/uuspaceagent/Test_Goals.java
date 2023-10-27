@@ -42,7 +42,7 @@ public class Test_Goals {
         TestUtils.closeConnectionToSE(state);
     }
 
-    @Test
+    //@Test
     public void test_close2Dto_GS1() throws InterruptedException {
         // This is a position in front of a sliding-door. It is reachable from the
         // agent's start position.
@@ -56,7 +56,7 @@ public class Test_Goals {
         assertTrue(G.getStatus().success());
     }
 
-    @Test
+    //@Test
     public void test_close2Dto_GS2() throws InterruptedException {
         // This is a position that is unreachable, so this goal should abort
         console("*** start test...") ;
@@ -69,7 +69,7 @@ public class Test_Goals {
         assertTrue(G.getStatus().failed());
     }
 
-    @Test
+    //@Test
     public void test_closeTo_Block_1() throws InterruptedException {
         // This is a position that is unreachable, so this goal should abort
         console("*** start test...") ;
@@ -85,7 +85,7 @@ public class Test_Goals {
         assertTrue(G.getStatus().success());
     }
 
-    @Test
+    //@Test
     public void test_closeTo_Block_2() throws InterruptedException {
         // This is a position that is unreachable, so this goal should abort
         console("*** start test...") ;

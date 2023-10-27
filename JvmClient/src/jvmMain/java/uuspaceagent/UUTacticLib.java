@@ -353,6 +353,7 @@ public class UUTacticLib {
                     else {
                         if (path.get(0).y > 0 && !state.jetpackRunning()) {
                             state.env().getController().getCharacter().turnOnJetpack() ;
+                            //state.env().getController().getAdmin().getCharacter().use();
                         }
                     }
 

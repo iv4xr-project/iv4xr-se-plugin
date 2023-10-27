@@ -8,7 +8,8 @@ import spaceEngineers.util.generator.map.labrecruits.LabRecruitsMapBuilder
 import java.io.File
 
 fun main() {
-    val text = File("./src/jvmTest/resources/labrecruits/maps/large_1928672215.csv").readText()
+    //val text = File("./src/jvmTest/resources/labrecruits/maps/large_1928672215.csv").readText()
+    val text = File("./src/jvmTest/resources/labrecruits/maps/original/simple.csv").readText()
     val labRecruitsMap = LabRecruitsMap.fromString(text).toSimplified()
     val batch = SpaceEngineersJavaProxyBuilder().localhost()
     val se = batch.extend()

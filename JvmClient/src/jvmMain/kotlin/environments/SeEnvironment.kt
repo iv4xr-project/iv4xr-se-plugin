@@ -7,13 +7,7 @@ import eu.iv4xr.framework.spatial.meshes.Mesh
 import spaceEngineers.controller.ContextControllerWrapper
 import spaceEngineers.controller.SpaceEngineersTestContext
 import spaceEngineers.controller.extensions.moveForward
-import spaceEngineers.model.Block
-import spaceEngineers.model.CharacterMovementType
-import spaceEngineers.model.CharacterObservation
-import spaceEngineers.model.CubeGrid
-import spaceEngineers.model.Observation
-import spaceEngineers.model.ToolbarLocation
-import spaceEngineers.model.Vec3F
+import spaceEngineers.model.*
 import spaceEngineers.model.extensions.centerPosition
 import java.io.File
 import java.lang.Thread.sleep
@@ -62,6 +56,10 @@ fun Block.toWorldEntity(): WorldEntity {
         we.properties["minPosition"] = minPosition.toIv4xrVec3()
         we.properties["orientationForward"] = orientationForward.toIv4xrVec3()
         we.properties["orientationUp"] = orientationUp.toIv4xrVec3()
+        // Wishpr Hack
+        if (this is DoorBase) {
+            we.properties["isOpen"] = this.open ;
+        }
     }
 }
 
