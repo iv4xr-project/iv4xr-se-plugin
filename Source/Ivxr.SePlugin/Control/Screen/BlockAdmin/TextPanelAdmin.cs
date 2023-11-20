@@ -38,7 +38,8 @@ namespace Iv4xr.SePlugin.Control.Screen.BlockAdmin
 
         public void SetText(string blockId, string text)
         {
-            BlockById(blockId).PanelComponent.Text = new StringBuilder(text);
+            // TODO: PanelComponent.Text seems to be only a reading variable
+            //BlockById(blockId).PanelComponent.Text = new StringBuilder(text);
         }
 
         public void SetAlignment(string blockId, int alignment)
