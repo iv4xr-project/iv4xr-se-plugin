@@ -15,6 +15,45 @@ Space Engineers is a sandbox game by [Keen Software House](https://www.keenswh.c
 
 The plugin exposes the game structured data, functionality and allows remote control.
 
+## Game version 203
+
+Keen Software House has removed the usage of the `-plugin` launcher parameter to protect players' systems for security reasons: [SpaceEngineers plugins](https://www.spaceengineersgame.com/plugins/)
+
+They have partnered with the community to provide an open-source plugin solution via GitHub: [PluginLoader GitHub](https://github.com/sepluginloader/PluginLoader)
+
+### How to run the game with the plugin for the game version 203
+
+1. If you have been using the plugin with previous versions:
+
+    - In SpaceEngineers game directory: `C:\Program Files (x86)\Steam\steamapps\common\SpaceEngineers\Bin64`
+    - Delete all possible Ivxr DLLs files (`Ivxr.SePlugin & Ivxr.SpaceEngineers & Ivxr.PlugIndependentLib`)
+    - Delete all Ivxr DLLs dependencies (`ImpromptuInterface & AustinHarris.JsonRpc & Newtonsoft.Json`)
+
+
+2. Create two new `\Plugins\Local` folders in the SpaceEngineers game directory:
+    - `C:\Program Files (x86)\Steam\steamapps\common\SpaceEngineers\Bin64\Plugins\Local`
+
+
+3. In the new `\Plugins\Local` folder:
+
+    - Extract the Ivxr DLLs files (`Ivxr.SePlugin & Ivxr.SpaceEngineers & Ivxr.PlugIndependentLib`) 
+and DLLs dependencies (`ImpromptuInterface & AustinHarris.JsonRpc & Newtonsoft.Json`)
+    - You can use these compiled DLLs if needed: [SpaceEngineers_iv4xr_0.9.0_game_v203.zip](https://github.com/iv4xr-project/TESTAR_iv4xr/releases/download/v3.6/SpaceEngineers_iv4xr_0.9.0_game_v203.zip)
+
+
+4. Follow [PluginLoader SpaceEngineersLauncher](https://github.com/sepluginloader/SpaceEngineersLauncher) instructions to install the new PluginLoader for the SpaceEngineers game.
+
+5. The new launcher you will need to use is the executable: `SpaceEngineersLauncher.exe`
+
+6. If PluginLoader is downloaded and launched correctly, a new `Plugins` button will appear in the SpaceEngineers game main GUI:
+
+    - Click `Plugins` button --> Click `Add button` icon
+	- Type and select the `Ivxr.SePlugin`
+	- Apply changes. Then, the SpaceEngineers game will restart with the plugin running.
+
+`INFO:` If you see error pop-ups, allowing you to open a log file with DLL exceptions, I recommend doing a clean install of the SpaceEngineers v203 game. This could be due to the Plugin Loaders working with different DLLs function dependencies in the `\SpaceEngineers\Bin64` folder.
+
+
 ## (OLD game version 202) How to run the game with plugin until game version 202
 
 1. Clone this repository or download as zip.
@@ -26,33 +65,6 @@ The plugin exposes the game structured data, functionality and allows remote con
 5. Use [Kotlin](JvmClient/README.md) or [Python](PythonClient/README.md) client to communicate with the game.
 
 To get more detailed information about these steps, check [manual installation](Docs/manual-installation.md), you can also [build manually](Docs/how-to-build.md).
-
-## Game version 203
-
-Keen Software House has removed the usage of the `-plugin` launcher parameter to protect players' systems for security reasons: [SpaceEngineers plugins](https://www.spaceengineersgame.com/plugins/)
-
-They have partnered with the community to provide an open-source plugin solution via GitHub: [PluginLoader GitHub](https://github.com/sepluginloader/PluginLoader)
-
-### How to run the game with the plugin for the game version 203
-
-1. If you have been using the plugin with previous versions:
-    - Delete all possible Ivxr DLLs files (`Ivxr.SePlugin & Ivxr.SpaceEngineers & Ivxr.PlugIndependentLib`) 
-    - Delete all DLLs dependencies (`ImpromptuInterface & AustinHarris.JsonRpc & Newtonsoft.Json`) 
-    - That exist in the SpaceEngineers game directory: `C:\Program Files (x86)\Steam\steamapps\common\SpaceEngineers\Bin64`
-2. Create two new `\Plugins\Local` folders in the SpaceEngineers game directory:  
-    - `C:\Program Files (x86)\Steam\steamapps\common\SpaceEngineers\Bin64\Plugins\Local`
-3. In the new `\Plugins\Local` folder:
-    - Extract the Ivxr DLLs files (`Ivxr.SePlugin & Ivxr.SpaceEngineers & Ivxr.PlugIndependentLib`) 
-and DLLs dependencies (`ImpromptuInterface & AustinHarris.JsonRpc & Newtonsoft.Json`)
-    - You can use these compiled DLLs if needed: [SpaceEngineers_iv4xr_0.9.0_game_v203.zip](https://github.com/iv4xr-project/TESTAR_iv4xr/releases/download/v3.6/SpaceEngineers_iv4xr_0.9.0_game_v203.zip)
-4. Follow [PluginLoader SpaceEngineersLauncher](https://github.com/sepluginloader/SpaceEngineersLauncher) instructions to install SpaceEngineers game with the new Plugin Loader.
-5. The new launcher you will need to use is the executable: `SpaceEngineersLauncher.exe`
-6. If Plugin Loader is downloaded and launched correctly, a new `Plugins` button will appear in the SpaceEngineers game main GUI:
-    - Click `Plugins` button --> Click `Add button` icon --> Scroll down and Click `Add local file` button.
-	- Type and select the `Ivxr.SePlugin`
-	- Apply changes. Then the SpaceEngineers game will restart with the plugin running.
-
-`INFO:` If you see error pop-ups, allowing you to open a log file with DLL exceptions, I recommend doing a clean install of the SpaceEngineers v203 game. This could be due to the Plugin Loaders working with different DLLs function dependencies in the `\SpaceEngineers\Bin64` folder.
 
 ## Troubleshooting
 
