@@ -8,6 +8,7 @@ import spaceEngineers.controller.ContextControllerWrapper
 import spaceEngineers.controller.SpaceEngineersTestContext
 import spaceEngineers.controller.extensions.moveForward
 import spaceEngineers.model.*
+import spaceEngineers.model.extensions.blockById
 import spaceEngineers.model.extensions.centerPosition
 import java.io.File
 import java.lang.Thread.sleep
@@ -105,6 +106,10 @@ class SeEnvironment @JvmOverloads constructor(
 
     fun observeForNewBlocks(): WorldModel {
         return controller.observer.observeNewBlocks().toWorldModel()
+    }
+
+    fun getBlock(id: String): Block {
+        return controller.observer.blockById(id)
     }
 
     fun equipAndPlace(toolbarLocation: ToolbarLocation) {

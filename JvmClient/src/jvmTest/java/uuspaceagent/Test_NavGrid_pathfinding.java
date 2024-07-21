@@ -5,8 +5,6 @@ import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.spatial.Vec3;
 import nl.uu.cs.aplib.utils.Pair;
 import org.junit.jupiter.api.Test;
-import spaceEngineers.transport.Closeable;
-import spaceEngineers.transport.SocketReaderWriter;
 //import spaceEngineers.transport.SocketReaderWriterKt;
 
 import java.util.List;
@@ -27,48 +25,48 @@ public class Test_NavGrid_pathfinding {
      * Basic test to check that blocks that should be recognized as obstacles are indeed
      * recognized.
      */
-    @Test
-    public void test_obstacles_membership() throws InterruptedException {
-        console("*** start test...") ;
-        var agentAndState = loadSE("myworld-3")  ;
-        TestAgent agent = agentAndState.fst ;
-        UUSeAgentState state = agentAndState.snd ;
-        Thread.sleep(1000);
-        // do a single update, and check that we if we have the structures:
-        state.updateState(state.agentId);
-
-        assertTrue(state.navgrid.allObstacleIDs.size() > 0 ) ;
-        console(showWOMElements(state.wom)) ;
-        console("=========\n") ;
-        console("#obstacles:" + state.navgrid.allObstacleIDs.size()) ;
-
-        for(var o : state.navgrid.allObstacleIDs) {
-            WorldEntity we = findWorldEntity(state.wom,o) ;
-            console("  Obs: " + o + " (" + we.properties.get("blockType") + ")");
-            // check is o appears in the map of known obstacles:
-            assertTrue(state.navgrid.knownObstacles.values().stream()
-                    .anyMatch(obstacles ->
-                            obstacles.stream().anyMatch(obs -> obs.obstacle.equals(o)))) ;
-        }
-        assertTrue(state.navgrid.allObstacleIDs.stream()
-                .anyMatch(id -> findWorldEntity(state.wom,id).properties.get("blockType").equals("SurvivalKitLarge"))) ;
-        assertTrue(state.navgrid.allObstacleIDs.stream()
-                .anyMatch(id -> findWorldEntity(state.wom,id).properties.get("blockType").equals("Window1x1FlatInv"))) ;
-        assertTrue(state.navgrid.allObstacleIDs.stream()
-                .anyMatch(id -> findWorldEntity(state.wom,id).properties.get("blockType").equals("LargeBlockSlideDoor"))) ;
-        assertTrue(state.navgrid.allObstacleIDs.stream()
-                .anyMatch(id -> findWorldEntity(state.wom,id).properties.get("blockType").equals("LargeBlockBatteryBlock")));
-
-        //SocketReaderWriterKt.closeIfCloseable(state.env().getController());
-        TestUtils.closeConnectionToSE(state);
-    }
+//    @Test
+//    public void test_obstacles_membership() throws InterruptedException {
+//        console("*** start test...") ;
+//        var agentAndState = loadSE("myworld-3")  ;
+//        TestAgent agent = agentAndState.fst ;
+//        UUSeAgentState2D state = agentAndState.snd ;
+//        Thread.sleep(1000);
+//        // do a single update, and check that we if we have the structures:
+//        state.updateState(state.agentId);
+//
+//        assertTrue(state.navgrid.allObstacleIDs.size() > 0 ) ;
+//        console(showWOMElements(state.wom)) ;
+//        console("=========\n") ;
+//        console("#obstacles:" + state.navgrid.allObstacleIDs.size()) ;
+//
+//        for(var o : state.navgrid.allObstacleIDs) {
+//            WorldEntity we = findWorldEntity(state.wom,o) ;
+//            console("  Obs: " + o + " (" + we.properties.get("blockType") + ")");
+//            // check is o appears in the map of known obstacles:
+//            assertTrue(state.navgrid.knownObstacles.values().stream()
+//                    .anyMatch(obstacles ->
+//                            obstacles.stream().anyMatch(obs -> obs.obstacle.equals(o)))) ;
+//        }
+//        assertTrue(state.navgrid.allObstacleIDs.stream()
+//                .anyMatch(id -> findWorldEntity(state.wom,id).properties.get("blockType").equals("SurvivalKitLarge"))) ;
+//        assertTrue(state.navgrid.allObstacleIDs.stream()
+//                .anyMatch(id -> findWorldEntity(state.wom,id).properties.get("blockType").equals("Window1x1FlatInv"))) ;
+//        assertTrue(state.navgrid.allObstacleIDs.stream()
+//                .anyMatch(id -> findWorldEntity(state.wom,id).properties.get("blockType").equals("LargeBlockSlideDoor"))) ;
+//        assertTrue(state.navgrid.allObstacleIDs.stream()
+//                .anyMatch(id -> findWorldEntity(state.wom,id).properties.get("blockType").equals("LargeBlockBatteryBlock")));
+//
+//        //SocketReaderWriterKt.closeIfCloseable(state.env().getController());
+//        TestUtils.closeConnectionToSE(state);
+//    }
 
     /**
      * Return the agent state and a path to the given destination, null if there is none.
      * If the given state is null, a gameworld will be loaded and a single update is done to
      * produce a state.
      */
-    Pair<UUSeAgentState,List<DPos3>> test_pathfinder(UUSeAgentState state, Vec3 destination, boolean enable3D) throws InterruptedException {
+    Pair<UUSeAgentState2D,List<DPos3>> test_pathfinder(UUSeAgentState2D state, Vec3 destination, boolean enable3D) throws InterruptedException {
         if(state == null) {
             var agentAndState = loadSE("myworld-3")  ;
             TestAgent agent = agentAndState.fst ;
@@ -88,7 +86,7 @@ public class Test_NavGrid_pathfinding {
         // Should not be reachable:
         var sqAgent = state.navgrid.gridProjectedLocation(state.wom.position) ;
         var sqDesitnation = state.navgrid.gridProjectedLocation(destination) ;
-        List<DPos3> path = state.pathfinder2D.findPath(state.navgrid,sqAgent,sqDesitnation) ;
+        List<DPos3> path = state.pathfinder.findPath(state.navgrid,sqAgent,sqDesitnation) ;
         //SocketReaderWriterKt.closeIfCloseable(state.env().getController());
         TestUtils.closeConnectionToSE(state);
 

@@ -14,16 +14,16 @@ import static uuspaceagent.TestUtils.loadSE;
 
 public class Test_Flying {
 
-    public Pair<TestAgent, UUSeAgentState> deployAgent() throws InterruptedException {
+    public Pair<TestAgent, UUSeAgentState2D> deployAgent() throws InterruptedException {
         var agentAndState = loadSE("myworld-3 with open door") ; // loadSE("myworld-3")  ;
         TestAgent agent = agentAndState.fst ;
-        UUSeAgentState state = agentAndState.snd ;
+        UUSeAgentState2D state = agentAndState.snd ;
         Thread.sleep(1000);
         state.updateState(state.agentId);
         // agent start location
         // agent se0 @<10.22475,-5.0025,53.75382>, hdir:<-0.08024501,7.549446E-5,0.99677515>, vdir:<-4.629542E-5,1.0,-7.94657E-5>, health:1.0, jet:false
         console(showWOMAgent(state.wom));
-        return new Pair<TestAgent, UUSeAgentState>(agent,state) ;
+        return new Pair<TestAgent, UUSeAgentState2D>(agent,state) ;
     }
 
     public void test_Goal(TestAgent agent, UUSeAgentState state, GoalStructure G) throws InterruptedException {

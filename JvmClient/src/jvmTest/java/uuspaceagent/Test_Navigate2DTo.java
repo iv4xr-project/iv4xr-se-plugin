@@ -25,7 +25,7 @@ public class Test_Navigate2DTo {
         console("*** start test...") ;
         var agentAndState = loadSE("myworld-3 with open door") ; // loadSE("myworld-3")  ;
         TestAgent agent = agentAndState.fst ;
-        UUSeAgentState state = agentAndState.snd ;
+        UUSeAgentState2D state = agentAndState.snd ;
         Thread.sleep(1000);
         state.updateState(state.agentId);
 

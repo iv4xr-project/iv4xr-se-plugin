@@ -75,7 +75,7 @@ public class Rotation {
         // the same or opposite directgion), because the cross product would then be
         // (0,0,0), with length 0.
         // In that case we either do not rotate t, or reverse it.
-        System.out.println(">>> cross:" + cross + ", len=" + sinalpha) ;
+        //System.out.println(">>> cross:" + cross + ", len=" + sinalpha) ;
         Vec3 k = null ;
         try {
             // System.out.println(">>> cross:" + cross + ", len=" + sinalpha) ;
@@ -107,6 +107,25 @@ public class Rotation {
         var w2 = Vec3.mul(Vec3.cross(k,t), sinalpha) ;
         var w3 = Vec3.mul(k, Vec3.dot(k,t) * (1 - cosalpha)) ;
         return Vec3.add(w1, Vec3.add(w2,w3)) ;
+    }
+
+    public static Vec3 rotate3d(Vec3 gForward, Vec3 gUp, Vec3 target) {
+        Vec3 lForward = new Vec3(0,0,1);
+        Vec3 lUp      = new Vec3(0,1,0);
+        Vec3 lRight   = new Vec3(1,0,0);
+        gForward      = gForward.normalized();
+        gUp           = gUp.normalized();
+        Vec3 gRight   = Vec3.cross(gUp, gForward) ;
+
+        /* source: https://en.wikipedia.org/wiki/Rotation_matrix
+         * source dot-product version: https://phys.libretexts.org/Bookshelves/Classical_Mechanics/Variational_Principles_in_Classical_Mechanics_(Cline)/19%3A_Mathematical_Methods_for_Classical_Mechanics/19.05%3A_Appendix_-_Coordinate_transformations
+         */
+        Matrix3D R = new Matrix3D(
+            Vec3.dot(gRight,   lRight), Vec3.dot(gRight,   lUp), Vec3.dot(gRight,   lForward),
+            Vec3.dot(gUp,      lRight), Vec3.dot(gUp,      lUp), Vec3.dot(gUp,      lForward),
+            Vec3.dot(gForward, lRight), Vec3.dot(gForward, lUp), Vec3.dot(gForward, lForward)
+        );
+        return R.apply(target);
     }
 
     public static Vec3 rotateOLD(Vec3 t, Vec3 v, Vec3 target) {

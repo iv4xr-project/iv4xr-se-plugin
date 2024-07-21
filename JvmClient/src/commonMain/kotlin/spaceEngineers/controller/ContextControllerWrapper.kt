@@ -13,11 +13,11 @@ class ContextControllerWrapper(
 ) : SpaceEngineers by spaceEngineers {
 
     private fun addToHistory(observation: Observation) {
-        context.addToHistory(observation)
+        //context.addToHistory(observation)
     }
 
     private fun addToHistory(observation: CharacterObservation) {
-        context.addToHistory(observation)
+        //context.addToHistory(observation)
     }
 
     override val observer: Observer = object : Observer {

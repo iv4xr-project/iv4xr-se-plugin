@@ -39,6 +39,7 @@ public class SEBlockFunctions {
         Vec3 logicalSize = block.extent ;
         boolean isLargeBlock = block.getStringProperty("blockType").contains("Large")
                 ||  block.getStringProperty("blockType").contains("Window1x1Flat")
+                ||  block.getStringProperty("blockType").contains("TargetDummy")
                 ;
         if(isLargeBlock)  {
             var size = Vec3.mul(logicalSize,CubeSize.Large.getValue()) ;
@@ -164,10 +165,10 @@ public class SEBlockFunctions {
      * NOTE: for now, because SE does not propagate open/close state of doors, this will
      * always return true.
      */
-    public static Boolean geSlideDoorState(WorldEntity block) {
+    public static Boolean getSlideDoorState(WorldEntity block) {
         if(!block.type.equals("block")) return null ;
         if (block.getStringProperty("blockType").contains("SlideDoor")) {
-            return true ;
+            return block.getBooleanProperty("isOpen") ;
         }
         return null ;
     }
@@ -201,6 +202,26 @@ public class SEBlockFunctions {
                 ,Vec3.sub(e2.position,wom.position).lengthSq())) ;
 
         return candidates.get(0) ;
+    }
+
+    /**
+     * Return all blocks with the specified property (the selector), sorted on distance.
+     */
+    public static List<WorldEntity> findBlocksOfType(WorldModel wom, Predicate<WorldEntity> selector) {
+        var candidates =  SEBlockFunctions.getAllBlocks(wom)
+                .stream()
+                .filter(e -> selector.test(e))
+                .collect(Collectors.toList());
+        if(candidates.isEmpty()) return null ;
+
+        if(candidates.size() == 1) return candidates ;
+
+        // if there are more than one, sort them
+        candidates.sort((e1,e2) -> Float.compare(
+                Vec3.sub(e1.position,wom.position).lengthSq(),
+                Vec3.sub(e2.position,wom.position).lengthSq())) ;
+
+        return candidates ;
     }
 
     /**

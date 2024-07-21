@@ -28,6 +28,19 @@ public class DPos3 implements Serializable {
         y = (int) Math.floor(v.y) ;
         z = (int) Math.floor(v.z) ;
     }
+    /**
+     * @return A + B
+     */
+    public static DPos3 add(DPos3 a, DPos3 b) {
+        return new DPos3(a.x + b.x, a.y + b.y, a.z + b.z);
+    }
+
+    /**
+     * @return A - B
+     */
+    public static DPos3 sub(DPos3 a, DPos3 b) {
+        return new DPos3(a.x - b.x, a.y - b.y, a.z - b.z);
+    }
 
     @Override
     public boolean equals(Object o) {
