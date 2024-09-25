@@ -5,8 +5,6 @@ import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.spatial.Vec3;
 import nl.uu.cs.aplib.utils.Pair;
 import org.junit.jupiter.api.Test;
-import spaceEngineers.transport.Closeable;
-import spaceEngineers.transport.SocketReaderWriter;
 //import spaceEngineers.transport.SocketReaderWriterKt;
 
 import java.util.List;
@@ -38,12 +36,12 @@ public class Test_NavGrid_pathfinding {
         state.updateState(state.agentId);
 
         assertTrue(state.navgrid.allObstacleIDs.size() > 0 ) ;
-        console(showWOMElements(state.wom)) ;
+        console(showWOMElements(state.worldmodel)) ;
         console("=========\n") ;
         console("#obstacles:" + state.navgrid.allObstacleIDs.size()) ;
 
         for(var o : state.navgrid.allObstacleIDs) {
-            WorldEntity we = findWorldEntity(state.wom,o) ;
+            WorldEntity we = findWorldEntity(state.worldmodel,o) ;
             console("  Obs: " + o + " (" + we.properties.get("blockType") + ")");
             // check is o appears in the map of known obstacles:
             assertTrue(state.navgrid.knownObstacles.values().stream()
@@ -51,13 +49,13 @@ public class Test_NavGrid_pathfinding {
                             obstacles.stream().anyMatch(obs -> obs.obstacle.equals(o)))) ;
         }
         assertTrue(state.navgrid.allObstacleIDs.stream()
-                .anyMatch(id -> findWorldEntity(state.wom,id).properties.get("blockType").equals("SurvivalKitLarge"))) ;
+                .anyMatch(id -> findWorldEntity(state.worldmodel,id).properties.get("blockType").equals("SurvivalKitLarge"))) ;
         assertTrue(state.navgrid.allObstacleIDs.stream()
-                .anyMatch(id -> findWorldEntity(state.wom,id).properties.get("blockType").equals("Window1x1FlatInv"))) ;
+                .anyMatch(id -> findWorldEntity(state.worldmodel,id).properties.get("blockType").equals("Window1x1FlatInv"))) ;
         assertTrue(state.navgrid.allObstacleIDs.stream()
-                .anyMatch(id -> findWorldEntity(state.wom,id).properties.get("blockType").equals("LargeBlockSlideDoor"))) ;
+                .anyMatch(id -> findWorldEntity(state.worldmodel,id).properties.get("blockType").equals("LargeBlockSlideDoor"))) ;
         assertTrue(state.navgrid.allObstacleIDs.stream()
-                .anyMatch(id -> findWorldEntity(state.wom,id).properties.get("blockType").equals("LargeBlockBatteryBlock")));
+                .anyMatch(id -> findWorldEntity(state.worldmodel,id).properties.get("blockType").equals("LargeBlockBatteryBlock")));
 
         //SocketReaderWriterKt.closeIfCloseable(state.env().getController());
         TestUtils.closeConnectionToSE(state);
@@ -82,11 +80,11 @@ public class Test_NavGrid_pathfinding {
 
         // agent start location should be around: <10.119276,-5.0025,55.681934>
         //  orientationForward: <-0.043967947,-2.0614608E-4,0.9990329> ... so looking towards z-axis
-        console(showWOMAgent(state.wom));
+        console(showWOMAgent(state.worldmodel));
 
         // navigating to (10,-5,40) ... this is beyond the closed maze where the agent now is.
         // Should not be reachable:
-        var sqAgent = state.navgrid.gridProjectedLocation(state.wom.position) ;
+        var sqAgent = state.navgrid.gridProjectedLocation(state.worldmodel.position) ;
         var sqDesitnation = state.navgrid.gridProjectedLocation(destination) ;
         List<DPos3> path = state.pathfinder2D.findPath(state.navgrid,sqAgent,sqDesitnation) ;
         //SocketReaderWriterKt.closeIfCloseable(state.env().getController());
@@ -109,7 +107,7 @@ public class Test_NavGrid_pathfinding {
         var state = agent_and_path.fst ;
         var path = agent_and_path.snd ;
 
-        var sqAgent = state.navgrid.gridProjectedLocation(state.wom.position) ;
+        var sqAgent = state.navgrid.gridProjectedLocation(state.worldmodel.position) ;
         var sqDesitnation = state.navgrid.gridProjectedLocation(destination) ;
 
         console(PrintInfos.showObstacle(state,sqAgent));
@@ -239,7 +237,7 @@ public class Test_NavGrid_pathfinding {
         var agent_and_path = test_pathfinder(null,dest,false) ;
         var state = agent_and_path.fst ;
         var path = agent_and_path.snd ;
-        var sqAgent = state.navgrid.gridProjectedLocation(state.wom.position) ;
+        var sqAgent = state.navgrid.gridProjectedLocation(state.worldmodel.position) ;
         var sqDesitnation1 = state.navgrid.gridProjectedLocation(dest) ;
         assertTrue(path.size() > 0) ;
 

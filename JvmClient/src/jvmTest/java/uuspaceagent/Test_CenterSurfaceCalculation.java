@@ -19,17 +19,17 @@ public class Test_CenterSurfaceCalculation {
         Thread.sleep(1000);
         state.updateState(state.agentId);
 
-        WorldEntity survivalKit = SEBlockFunctions.findClosestBlock(state.wom,"SurvivalKitLarge", 10) ;
+        WorldEntity survivalKit = SEBlockFunctions.findClosestBlock(state.worldmodel,"SurvivalKitLarge", 10) ;
 
         assertTrue(survivalKit != null) ;
         assertTrue(survivalKit.getStringProperty("blockType").equals("SurvivalKitLarge")) ;
-        assertTrue(Vec3.sub(survivalKit.position, state.wom.position).length() <= 10) ;
+        assertTrue(Vec3.sub(survivalKit.position, state.worldmodel.position).length() <= 10) ;
 
-        WorldEntity battery = SEBlockFunctions.findClosestBlock(state.wom,"LargeBlockBatteryBlock", 8) ;
+        WorldEntity battery = SEBlockFunctions.findClosestBlock(state.worldmodel,"LargeBlockBatteryBlock", 8) ;
         assertTrue(battery == null) ;
-        battery = SEBlockFunctions.findClosestBlock(state.wom,"LargeBlockBatteryBlock", 20) ;
+        battery = SEBlockFunctions.findClosestBlock(state.worldmodel,"LargeBlockBatteryBlock", 20) ;
         assertTrue(battery.getStringProperty("blockType").equals("LargeBlockBatteryBlock")) ;
-        assertTrue(Vec3.sub(battery.position, state.wom.position).length() <= 20) ;
+        assertTrue(Vec3.sub(battery.position, state.worldmodel.position).length() <= 20) ;
 
         Vec3 survivalKitFrontSidePoint  = SEBlockFunctions.getSideCenterPoint(survivalKit, SEBlockFunctions.BlockSides.FRONT,0) ;
         Vec3 survivalKitBackSidePoint  = SEBlockFunctions.getSideCenterPoint(survivalKit, SEBlockFunctions.BlockSides.BACK,0) ;

@@ -22,7 +22,7 @@ public class Test_Flying {
         state.updateState(state.agentId);
         // agent start location
         // agent se0 @<10.22475,-5.0025,53.75382>, hdir:<-0.08024501,7.549446E-5,0.99677515>, vdir:<-4.629542E-5,1.0,-7.94657E-5>, health:1.0, jet:false
-        console(showWOMAgent(state.wom));
+        console(showWOMAgent(state.worldmodel));
         return new Pair<TestAgent, UUSeAgentState>(agent,state) ;
     }
 
@@ -30,7 +30,8 @@ public class Test_Flying {
         agent.setGoal(G) ;
         int turn= 0 ;
         while(G.getStatus().inProgress()) {
-            console(">> [" + turn + "] " + showWOMAgent(state.wom));
+            console(">> [" + turn + "] " + showWOMAgent(state.worldmodel));
+            //console(">> agent: " + PrintInfos.showWorldEntity(state.worldmodel.elements.get(state.agentId))) ;
             agent.update();
             //Thread.sleep(50);
             turn++ ;
@@ -43,8 +44,8 @@ public class Test_Flying {
     public void test_flying_to_some_location() throws InterruptedException {
         console("*** start test...") ;
         //Thread.sleep(5000);
-        Vec3 dest = new Vec3(10,-5,30) ;
-        //Vec3 dest = new Vec3(10,5,53.7f) ;
+        //Vec3 dest = new Vec3(10,-5,30) ;
+        Vec3 dest = new Vec3(10,5,53.7f) ;
         //Vec3 dest = new Vec3(25,-5,60) ;
         //Vec3 dest = new Vec3(10,3,56) ;
         var agentAndState = deployAgent();

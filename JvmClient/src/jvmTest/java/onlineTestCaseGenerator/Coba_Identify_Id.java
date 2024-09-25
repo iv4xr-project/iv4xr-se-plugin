@@ -21,10 +21,12 @@ public class Coba_Identify_Id {
 
         state.updateState(state.agentId);
 
-        WorldEntity agentInfo = state.wom.elements.get(state.agentId);
+        WorldEntity agentInfo = state.worldmodel.elements.get(state.agentId);
+        WorldEntity inv = state.worldmodel.elements.get("inv") ;
         System.out.println("** Agent's info: " + PrintInfos.showWorldEntity(agentInfo));
+        System.out.println("** Agent's inv : " + PrintInfos.showWorldEntity(inv));
 
-        System.out.println("** Agent's info: " + PrintInfos.showWOMElements(state.wom));
+        System.out.println("** Agent's info: " + PrintInfos.showWOMElements(state.worldmodel));
 
         /*
         System.out.println("======");
@@ -34,7 +36,7 @@ public class Coba_Identify_Id {
         }
         */
 
-        WorldEntity target = SEBlockFunctions.findClosestBlock(state.wom, "BasicAssembler", 10);
+        WorldEntity target = SEBlockFunctions.findClosestBlock(state.worldmodel, "BasicAssembler", 10);
         String batteryId = target.id;
         System.out.println("** target state: " + PrintInfos.showWorldEntity(target));
 

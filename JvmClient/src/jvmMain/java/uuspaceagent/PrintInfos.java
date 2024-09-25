@@ -85,7 +85,7 @@ public class PrintInfos {
         int k = 0 ;
         for(var o : obstacles) {
             z.append("") ;
-            WorldEntity e = SEBlockFunctions.findWorldEntity(state.wom,o.obstacle) ;
+            WorldEntity e = SEBlockFunctions.findWorldEntity(state.worldmodel,o.obstacle) ;
             String estr = "\n" + indent("> " + showWorldEntity(e),5) ;
             z.append(estr) ;
             k++ ;
@@ -115,7 +115,7 @@ public class PrintInfos {
                 z.append(", obstacles: ") ;
                 int m = 0 ;
                 for (var o : obstacles) {
-                    WorldEntity e = SEBlockFunctions.findWorldEntity(state.wom,o.obstacle) ;
+                    WorldEntity e = SEBlockFunctions.findWorldEntity(state.worldmodel,o.obstacle) ;
                     if (m>0) z.append(", ") ;
                     z.append(o.obstacle + "("
                             + e.properties.get("blockType")

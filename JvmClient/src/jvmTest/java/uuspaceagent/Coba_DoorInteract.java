@@ -27,14 +27,14 @@ public class Coba_DoorInteract {
 
         state.updateState(state.agentId);
 
-        WorldEntity agentInfo = state.wom.elements.get(state.agentId) ;
+        WorldEntity agentInfo = state.worldmodel.elements.get(state.agentId) ;
         System.out.println("** Agent's info: " + PrintInfos.showWorldEntity(agentInfo));
 
         CharacterObservation cobs = state.env().getController().getObserver().observe() ;
         if(cobs.getTargetBlock() != null) {
             System.out.println("=== target block: " + cobs.getTargetBlock().getId());
         }
-        WorldEntity target = SEBlockFunctions.findClosestBlock(state.wom, "LargeBlockSlideDoor", 10) ;
+        WorldEntity target = SEBlockFunctions.findClosestBlock(state.worldmodel, "LargeBlockSlideDoor", 10) ;
         String doorId = target.id ;
         System.out.println("** door state 1: " + PrintInfos.showWorldEntity(target));
 
@@ -46,7 +46,7 @@ public class Coba_DoorInteract {
         Thread.sleep(2000);
         state.updateState(state.agentId);
 
-        target = SEBlockFunctions.findClosestBlock(state.wom, "LargeBlockSlideDoor", 10) ;
+        target = SEBlockFunctions.findClosestBlock(state.worldmodel, "LargeBlockSlideDoor", 10) ;
         //doorId = target.id ;
         System.out.println("** door state 2: " + PrintInfos.showWorldEntity(target));
         

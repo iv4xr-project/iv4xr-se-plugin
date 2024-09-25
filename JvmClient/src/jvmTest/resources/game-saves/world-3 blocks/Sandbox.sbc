@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <MyObjectBuilder_Checkpoint xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <CurrentSector x="0" y="0" z="0" />
-  <ElapsedGameTime>34325600000</ElapsedGameTime>
+  <ElapsedGameTime>34447040000</ElapsedGameTime>
   <SessionName>world-3 blocks</SessionName>
   <SpectatorPosition>
     <Position x="5.3743765662761174" y="-5.0150046348571786" z="24.958199155320177" />
@@ -21,7 +21,7 @@
   <ControlledObject>88034022095450917</ControlledObject>
   <Password />
   <Description />
-  <LastSaveTime>2023-08-16T11:25:29.6843031+02:00</LastSaveTime>
+  <LastSaveTime>2024-09-25T15:35:48.7222798+02:00</LastSaveTime>
   <SpectatorDistance>2.83315229</SpectatorDistance>
   <WorkshopId xsi:nil="true" />
   <WorkshopId1 xsi:nil="true" />
@@ -32,8 +32,8 @@
       <Slot>
         <Index>0</Index>
         <Item />
-        <Data xsi:type="MyObjectBuilder_ToolbarItemWeapon">
-          <DefinitionId Type="MyObjectBuilder_PhysicalGunObject" Subtype="AngleGrinderItem" />
+        <Data xsi:type="MyObjectBuilder_ToolbarItemCubeBlock">
+          <DefinitionId Type="MyObjectBuilder_CubeBlock" Subtype="LargeBlockArmorBlock" />
         </Data>
       </Slot>
       <Slot>
@@ -92,27 +92,6 @@
           <DefinitionId Type="MyObjectBuilder_AirtightSlideDoor" Subtype="LargeBlockSlideDoor" />
         </Data>
       </Slot>
-      <Slot>
-        <Index>9</Index>
-        <Item />
-        <Data xsi:type="MyObjectBuilder_ToolbarItemWeapon">
-          <DefinitionId Type="MyObjectBuilder_PhysicalGunObject" Subtype="AngleGrinderItem" />
-        </Data>
-      </Slot>
-      <Slot>
-        <Index>10</Index>
-        <Item />
-        <Data xsi:type="MyObjectBuilder_ToolbarItemWeapon">
-          <DefinitionId Type="MyObjectBuilder_PhysicalGunObject" Subtype="WelderItem" />
-        </Data>
-      </Slot>
-      <Slot>
-        <Index>11</Index>
-        <Item />
-        <Data xsi:type="MyObjectBuilder_ToolbarItemWeapon">
-          <DefinitionId Type="MyObjectBuilder_PhysicalGunObject" Subtype="HandDrillItem" />
-        </Data>
-      </Slot>
     </Slots>
     <SlotsGamepad />
   </CharacterToolbar>
@@ -123,7 +102,7 @@
         <Value>
           <ClientId>0</ClientId>
           <SerialId>0</SerialId>
-          <HashedId>18195075058561875270</HashedId>
+          <HashedId>14150451726126344675</HashedId>
         </Value>
       </item>
     </dictionary>
@@ -333,16 +312,16 @@
   <Identities>
     <MyObjectBuilder_Identity>
       <IdentityId>144115188075855875</IdentityId>
-      <DisplayName>sa.shirzadeh</DisplayName>
+      <DisplayName>uprime812</DisplayName>
       <CharacterEntityId>88034022095450917</CharacterEntityId>
-      <Model>Default_Astronaut</Model>
-      <ColorMask x="0" y="-0.96" z="-0.5" />
+      <Model>Default_Astronaut_Female</Model>
+      <ColorMask x="0.141666666" y="-0.03804356" z="0.5376748" />
       <BlockLimitModifier>0</BlockLimitModifier>
-      <LastLoginTime>2023-08-16T11:24:24.4005012+02:00</LastLoginTime>
+      <LastLoginTime>2024-09-25T14:53:04.9295235+02:00</LastLoginTime>
       <SavedCharacters>
         <long>88034022095450917</long>
       </SavedCharacters>
-      <LastLogoutTime>2023-08-16T11:25:29.6853168+02:00</LastLogoutTime>
+      <LastLogoutTime>2024-09-25T15:35:48.7512808+02:00</LastLogoutTime>
       <RespawnShips />
       <LastDeathPosition xsi:nil="true" />
       <ActiveContracts />
@@ -353,7 +332,7 @@
       <DisplayName>Space Pirates</DisplayName>
       <CharacterEntityId>0</CharacterEntityId>
       <BlockLimitModifier>0</BlockLimitModifier>
-      <LastLoginTime>2023-08-16T11:24:24.4573059+02:00</LastLoginTime>
+      <LastLoginTime>2024-09-25T14:53:05.0065253+02:00</LastLoginTime>
       <SavedCharacters />
       <LastLogoutTime>0001-01-01T00:00:00</LastLogoutTime>
       <RespawnShips />
@@ -369,10 +348,10 @@
         <Key>
           <ClientId>0</ClientId>
           <SerialId>0</SerialId>
-          <HashedId>18195075058561875270</HashedId>
+          <HashedId>14150451726126344675</HashedId>
         </Key>
         <Value>
-          <DisplayName>sa.shirzadeh</DisplayName>
+          <DisplayName>uprime812</DisplayName>
           <IdentityId>144115188075855875</IdentityId>
           <Connected>true</Connected>
           <ForceRealPlayer>false</ForceRealPlayer>
@@ -383,8 +362,8 @@
               <Slot>
                 <Index>0</Index>
                 <Item />
-                <Data xsi:type="MyObjectBuilder_ToolbarItemWeapon">
-                  <DefinitionId Type="MyObjectBuilder_PhysicalGunObject" Subtype="AngleGrinderItem" />
+                <Data xsi:type="MyObjectBuilder_ToolbarItemCubeBlock">
+                  <DefinitionId Type="MyObjectBuilder_CubeBlock" Subtype="LargeBlockArmorBlock" />
                 </Data>
               </Slot>
               <Slot>
@@ -443,35 +422,14 @@
                   <DefinitionId Type="MyObjectBuilder_AirtightSlideDoor" Subtype="LargeBlockSlideDoor" />
                 </Data>
               </Slot>
-              <Slot>
-                <Index>9</Index>
-                <Item />
-                <Data xsi:type="MyObjectBuilder_ToolbarItemWeapon">
-                  <DefinitionId Type="MyObjectBuilder_PhysicalGunObject" Subtype="AngleGrinderItem" />
-                </Data>
-              </Slot>
-              <Slot>
-                <Index>10</Index>
-                <Item />
-                <Data xsi:type="MyObjectBuilder_ToolbarItemWeapon">
-                  <DefinitionId Type="MyObjectBuilder_PhysicalGunObject" Subtype="WelderItem" />
-                </Data>
-              </Slot>
-              <Slot>
-                <Index>11</Index>
-                <Item />
-                <Data xsi:type="MyObjectBuilder_ToolbarItemWeapon">
-                  <DefinitionId Type="MyObjectBuilder_PhysicalGunObject" Subtype="HandDrillItem" />
-                </Data>
-              </Slot>
             </Slots>
             <SlotsGamepad />
           </Toolbar>
           <EntityCameraData>
             <CameraControllerSettings EntityId="88034022095450917">
               <IsFirstPerson>false</IsFirstPerson>
-              <Distance>2.8331522043535973</Distance>
-              <HeadAngle x="-18.4487286" y="0" />
+              <Distance>2.8331522941589355</Distance>
+              <HeadAngle x="-15.6894312" y="0" />
             </CameraControllerSettings>
           </EntityCameraData>
           <BuildColorSlots>
@@ -677,7 +635,7 @@
     </MyObjectBuilder_SessionComponent>
     <MyObjectBuilder_SessionComponent xsi:type="MyObjectBuilder_SectorWeatherComponent">
       <BaseSunDirection x="0.339467347" y="0.709795356" z="-0.617213368" />
-      <SunDirectionNormalized x="-0.463426143" y="-0.7022317" z="0.54046917" />
+      <SunDirectionNormalized x="-0.4547486" y="-0.7032862" z="0.546436131" />
       <WeatherPlanetData />
     </MyObjectBuilder_SessionComponent>
     <MyObjectBuilder_SessionComponent xsi:type="MyObjectBuilder_SessionComponentAssetModifiers" />
@@ -6818,17 +6776,35 @@
           <MultilineData>
             <Completed>false</Completed>
             <IsObjective>false</IsObjective>
-            <Data>Hello, Engineer! My name is Good.bot. I am an AI teacher that helps you by offering directions. Let's get you started! You can access useful information in the help screen.</Data>
+            <Data>Your jetpack runs on hydrogen fuel. Be careful not to run out of it while flying.</Data>
             <CharactersDisplayed>-1</CharactersDisplayed>
           </MultilineData>
           <MultilineData>
             <Completed>false</Completed>
             <IsObjective>true</IsObjective>
-            <Data>Press [F1] to open help screen.</Data>
+            <Data>Toggle jetpack with [X].</Data>
+            <CharactersDisplayed>-1</CharactersDisplayed>
+          </MultilineData>
+          <MultilineData>
+            <Completed>false</Completed>
+            <IsObjective>true</IsObjective>
+            <Data>[Space] and [C] to fly up and down.</Data>
+            <CharactersDisplayed>-1</CharactersDisplayed>
+          </MultilineData>
+          <MultilineData>
+            <Completed>false</Completed>
+            <IsObjective>true</IsObjective>
+            <Data>Use [W] [S] [A] [D] to move and strafe.</Data>
+            <CharactersDisplayed>-1</CharactersDisplayed>
+          </MultilineData>
+          <MultilineData>
+            <Completed>false</Completed>
+            <IsObjective>true</IsObjective>
+            <Data>Press [Q] and [E] to roll.</Data>
             <CharactersDisplayed>-1</CharactersDisplayed>
           </MultilineData>
         </LineData>
-        <Title>Good.bot: Introduction</Title>
+        <Title>Good.bot: Jetpack</Title>
         <Visible>true</Visible>
         <IsUsedByVisualScripting>false</IsUsedByVisualScripting>
       </Questlog>
@@ -6839,7 +6815,7 @@
     </MyObjectBuilder_SessionComponent>
     <MyObjectBuilder_SessionComponent xsi:type="MyObjectBuilder_AntennaSessionComponent" />
     <MyObjectBuilder_SessionComponent xsi:type="MyObjectBuilder_EnvironmentBotSpawningSystem">
-      <TimeSinceLastEventInMs>28067</TimeSinceLastEventInMs>
+      <TimeSinceLastEventInMs>40701</TimeSinceLastEventInMs>
     </MyObjectBuilder_SessionComponent>
     <MyObjectBuilder_SessionComponent xsi:type="MyObjectBuilder_TradingManager" />
     <MyObjectBuilder_SessionComponent xsi:type="MyObjectBuilder_CoordinateSystem">
@@ -6918,12 +6894,12 @@
     <string>Models\Cubes\Large\BasicAssembler.mwm</string>
   </VicinityModelsCache>
   <VicinityArmorModelsCache>
-    <string>Models\Characters\Astronaut\SE_astronaut.mwm</string>
+    <string>Models\Characters\Astronaut\Female\SE_astronaut.mwm</string>
     <string>Models\Cubes\Large\Armor\SquarePlate.mwm</string>
-    <string>Models\Cubes\Large\Armor\CornerTriangleLeftPlate.mwm</string>
-    <string>Models\Cubes\Large\Armor\SlopePlate.mwm</string>
     <string>Models\Cubes\Large\Armor\CornerTriangleRightPlate.mwm</string>
+    <string>Models\Cubes\Large\Armor\CornerTriangleLeftPlate.mwm</string>
     <string>Models\Cubes\Large\Armor\FaceTrianglePlate.mwm</string>
+    <string>Models\Cubes\Large\Armor\SlopePlate.mwm</string>
     <string>Models\Cubes\Large\Armor\HeavySquarePlate.mwm</string>
     <string>Models\Cubes\Large\InteriorWallSide.mwm</string>
     <string>Models\Cubes\Large\InteriorWallTop.mwm</string>

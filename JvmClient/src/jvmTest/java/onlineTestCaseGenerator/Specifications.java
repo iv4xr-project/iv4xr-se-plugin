@@ -23,7 +23,7 @@ public class Specifications {
 
     static List<WorldEntity> allAssemblers(UUSeAgentState S) {
         String blockType = "BasicAssembler";
-        return SEBlockFunctions.getAllBlocks(S.wom).stream().filter(e -> blockType.equals(e.getStringProperty("blockType"))).collect(Collectors.toList()) ;
+        return SEBlockFunctions.getAllBlocks(S.worldmodel).stream().filter(e -> blockType.equals(e.getStringProperty("blockType"))).collect(Collectors.toList()) ;
 
     }
 
@@ -33,11 +33,11 @@ public class Specifications {
             var S_ = (UUSeAgentState) S ;
 
             var assemblers = allAssemblers(S_) ;
-            if(S_.wom != null){
+            if(S_.worldmodel != null){
                 var ok = assemblers.stream().allMatch(
                         assembler -> (Float) assembler.getProperty("integrity") >= 0
                                 && (Float) assembler.getProperty("integrity") <=
-                                (Float) S_.wom.before(assembler.id,"integrity")
+                                (Float) S_.worldmodel.before(assembler.id,"integrity")
                 ) ;
                 return ok ;
             }else return false;
@@ -71,7 +71,7 @@ public class Specifications {
             var isOpen = false;
             Block targetBlock = S_.env().getController().getObserver().observe().getTargetBlock() ;
             if(targetBlock.getDefinitionId().toString().contains("LargeBlockSlideDoor")){
-                var checkIsOpen  = SEBlockFunctions.findWorldEntity(S_.wom,targetBlock.getId()) ;
+                var checkIsOpen  = SEBlockFunctions.findWorldEntity(S_.worldmodel,targetBlock.getId()) ;
                 isOpen = (boolean) checkIsOpen.getProperty("isOpen");
             }
 

@@ -16,9 +16,18 @@ public class TestUtils {
 
     /**
      * For creating an SE-env, loading a gameworld into SE, then creating a test-agent bound to
-     * the gameworld through the SE-env.
+     * the gameworld through the SE-env. The world is assume to be located in the worlds-folder
+     * specified by SeEnvironment.Companion.getDEFAULT_SCENARIO_DIR().
      */
     public static Pair<TestAgent, UUSeAgentState> loadSE(String worldName) {
+        return loadSE(worldName,null) ;
+    }
+    /**
+     * For creating an SE-env, loading a gameworld into SE, then creating a test-agent bound to
+     * the gameworld through the SE-env.
+     * The parameter worldsFolder specifies a path to where worlds are saved.
+     */
+    public static Pair<TestAgent, UUSeAgentState> loadSE(String worldName, String worldsFolder) {
         var agentId = "se0" ; // ""agentId" ;
         var blockType = "LargeHeavyBlockArmorBlock" ;
         var context = new SpaceEngineersTestContext() ;
@@ -34,11 +43,14 @@ public class TestUtils {
                 context
         ) ;
 
+        if (worldsFolder == null) {
+            worldsFolder = SeEnvironment.Companion.getDEFAULT_SCENARIO_DIR() ;
+        }
         console("** Loading the world " + worldName) ;
         var theEnv = new SeEnvironment( worldName,
                 controllerWrapper,
-                //context
-                SeEnvironment.Companion.getDEFAULT_SCENARIO_DIR()
+                //SeEnvironment.Companion.getDEFAULT_SCENARIO_DIR()
+                worldsFolder
         ) ;
         theEnv.loadWorld() ;
 

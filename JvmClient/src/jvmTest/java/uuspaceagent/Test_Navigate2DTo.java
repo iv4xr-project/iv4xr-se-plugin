@@ -31,9 +31,9 @@ public class Test_Navigate2DTo {
 
         // agent start location should be around: <10.119276,-5.0025,55.681934>
         //  orientationForward: <-0.043967947,-2.0614608E-4,0.9990329> ... so looking towards z-axis
-        console(showWOMAgent(state.wom));
+        console(showWOMAgent(state.worldmodel));
 
-        var sqAgent = state.navgrid.gridProjectedLocation(state.wom.position) ;
+        var sqAgent = state.navgrid.gridProjectedLocation(state.worldmodel.position) ;
         var sqDestination = state.navgrid.gridProjectedLocation(destination) ;
         var centerOfSqDestination = state.navgrid.getSquareCenterLocation(sqDestination) ;
 
@@ -54,7 +54,7 @@ public class Test_Navigate2DTo {
 
         int turn= 0 ;
         while(G.getStatus().inProgress()) {
-            console(">> [" + turn + "] " + showWOMAgent(state.wom));
+            console(">> [" + turn + "] " + showWOMAgent(state.worldmodel));
             agent.update();
             //Thread.sleep(50);
             turn++ ;

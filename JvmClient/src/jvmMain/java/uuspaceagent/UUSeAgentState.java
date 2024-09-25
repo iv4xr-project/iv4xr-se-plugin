@@ -10,10 +10,12 @@ import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
 import eu.iv4xr.framework.spatial.Vec3;
 import nl.uu.cs.aplib.agents.State ;
+import nl.uu.cs.aplib.utils.Pair;
 import spaceEngineers.model.Block;
 import spaceEngineers.model.CharacterObservation;
 import spaceEngineers.model.Observation;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -24,7 +26,7 @@ import static uuspaceagent.SEBlockFunctions.fromSEVec3;
 public class UUSeAgentState extends State {
 
     public String agentId ;
-    public WorldModel wom ;
+    public WorldModel worldmodel;
     public NavGrid navgrid = new NavGrid() ;
     public Pathfinder<DPos3> pathfinder2D = new AStar<>() ;
     public List<DPos3> currentPathToFollow = new LinkedList<>();
@@ -50,14 +52,39 @@ public class UUSeAgentState extends State {
     WorldEntity agentAdditionalInfo(CharacterObservation obs) {
         Block targetBlock = obs.getTargetBlock();
         WorldEntity agentWE = new WorldEntity(this.agentId, "agentMoreInfo", true) ;
+        agentWE.properties.put("velocity", fromSEVec3(obs.getVelocity())) ;
+        agentWE.properties.put("gravity", fromSEVec3(obs.getGravity())) ;
         agentWE.properties.put("orientationForward", fromSEVec3(obs.getOrientationForward())) ;
         agentWE.properties.put("orientationUp", fromSEVec3(obs.getOrientationUp())) ;
         agentWE.properties.put("jetpackRunning", obs.getJetpackRunning()) ;
+        agentWE.properties.put("dampenersOn", obs.getDampenersOn()) ;
+        agentWE.properties.put("helmetEnabled", obs.getHelmetEnabled()) ;
+        agentWE.properties.put("currentLightPower", obs.getCurrentLightPower()) ;
+        agentWE.properties.put("energy", obs.getEnergy()) ;
+        agentWE.properties.put("oxygen", obs.getOxygen()) ;
+        agentWE.properties.put("hydrogen", obs.getHydrogen()) ;
         agentWE.properties.put("health", obs.getHealth()) ;
+        agentWE.properties.put("displayName", obs.getDisplayName()) ;
         agentWE.properties.put("targetBlock", targetBlock == null ? null : targetBlock.getId()) ;
         agentWE.properties.put("previousTargetBlock", null) ;
        //System.out.println(">>> constructing extra info for agent") ;
         return agentWE ;
+    }
+
+    WorldEntity agentInventory(CharacterObservation obs) {
+        var inv = obs.getInventory() ;
+        WorldEntity invWE = new WorldEntity("inv", "bag", true) ;
+        invWE.properties.put("mass",inv.getCurrentMass()) ;
+        invWE.properties.put("numOfItems",inv.getItems().size()) ;
+        List<Pair<String,Integer>> content = new LinkedList<>() ;
+        invWE.properties.put("content", (Serializable) content) ;
+        var items = inv.getItems() ;
+        for (var I : items) {
+            String id = I.getId().getType();
+            Integer amount = I.getAmount() ;
+            content.add(new Pair<>(id,amount)) ;
+        }
+        return invWE ;
     }
 
     @Override
@@ -77,6 +104,8 @@ public class UUSeAgentState extends State {
         for (var e : origElements.entrySet()) newWom.elements.put(e.getKey(),e.getValue()) ;
         CharacterObservation agentObs = env().getController().getObserver().observe() ;
         newWom.elements.put(this.agentId, agentAdditionalInfo(agentObs)) ;
+        WorldEntity inv =  agentInventory(agentObs) ;
+        newWom.elements.put(inv.id,inv) ;
         assignTimeStamp(newWom,updateCount) ;
 
         // The obtained wom also does not include blocks observed. So we get them explicitly here:
@@ -99,24 +128,24 @@ public class UUSeAgentState extends State {
             // TODO .. we should also reset the grid if the agent flies to a new plane.
             navgrid.resetGrid(newWom.position);
         }
-        if(wom == null) {
+        if(worldmodel == null) {
             // this is the first observation
-            wom = newWom ;
+            worldmodel = newWom ;
         }
         else {
             // MERGING the two woms:
-            wom.mergeNewObservation(newWom) ;
+            worldmodel.mergeNewObservation(newWom) ;
 
             // HOWEVER, some blocks and grids-of-blocks may have been destroyed, hence
             // do not exist anymore. We need to remove them from state.wom. This is handled
             // below.
             // First, remove disappearing "cube-grids" (composition of blocks)
-            List<String> tobeRemoved = wom.elements.keySet().stream()
+            List<String> tobeRemoved = worldmodel.elements.keySet().stream()
                     .filter(id -> ! newWom.elements.keySet().contains(id))
                     .collect(Collectors.toList());
-            for(var id : tobeRemoved) wom.elements.remove(id) ;
+            for(var id : tobeRemoved) worldmodel.elements.remove(id) ;
             // Then, we remove disappearing blocks (from grids that remain):
-            for(var cubegridOld : wom.elements.values()) {
+            for(var cubegridOld : worldmodel.elements.values()) {
                 var cubeGridNew = newWom.elements.get(cubegridOld.id) ;
                 tobeRemoved.clear();
                 tobeRemoved = cubegridOld.elements.keySet().stream()
@@ -126,7 +155,7 @@ public class UUSeAgentState extends State {
             }
 
             // updating the "navigational-2DGrid:
-            var blocksInWom =  SEBlockFunctions.getAllBlockIDs(wom) ;
+            var blocksInWom =  SEBlockFunctions.getAllBlockIDs(worldmodel) ;
             List<String> toBeRemoved = navgrid.allObstacleIDs.stream()
                     .filter(id -> !blocksInWom.contains(id))
                     .collect(Collectors.toList());
@@ -153,32 +182,41 @@ public class UUSeAgentState extends State {
 
     // bunch of getters:
 
-    Vec3 orientationForward() {
-        return (Vec3) wom.elements.get(agentId).properties.get("orientationForward") ;
+    public Vec3 orientationForward() {
+        return (Vec3) worldmodel.elements.get(agentId).properties.get("orientationForward") ;
     }
 
-    WorldEntity targetBlock() {
-        var targetId = wom.elements.get(agentId).getStringProperty ("targetBlock") ;
+    public WorldEntity targetBlock() {
+        var targetId = worldmodel.elements.get(agentId).getStringProperty ("targetBlock") ;
         if (targetId == null) return null ;
-        return SEBlockFunctions.findWorldEntity(wom,targetId) ;
+        return SEBlockFunctions.findWorldEntity(worldmodel,targetId) ;
     }
 
-    WorldEntity getPreviousTargetBlock() {
-        var target = wom.elements.get(agentId).getProperty("previousTargetBlock") ;
-        if (target == null) return null ;
-        return (WorldEntity) target;
+    public Serializable val(String id, String property) {
+        var e = this.worldmodel.elements.get(id) ;
+        if (e == null)
+            return null ;
+        return e.properties.get(property) ;
     }
 
-    WorldEntity  assignTargetBlock(WorldEntity e) {
-        this.previousTargetBlock =  e;
-        return e;
-    }
-    float healthRatio() {
-        return (float) wom.elements.get(agentId).properties.get("healthRatio") ;
+    public Serializable val(String property) {
+        return val(this.agentId,property) ;
     }
 
-    boolean jetpackRunning() {
-        return (boolean) wom.elements.get(agentId).properties.get("jetpackRunning") ;
+    public Serializable before(String id, String property) {
+        return this.worldmodel.before(id,property) ;
+    }
+
+    public Serializable before(String property) {
+        return this.worldmodel.before(property) ;
+    }
+
+    public float health() {
+        return (float) worldmodel.elements.get(agentId).properties.get("health") ;
+    }
+
+    public boolean jetpackRunning() {
+        return (boolean) worldmodel.elements.get(agentId).properties.get("jetpackRunning") ;
 
     }
 

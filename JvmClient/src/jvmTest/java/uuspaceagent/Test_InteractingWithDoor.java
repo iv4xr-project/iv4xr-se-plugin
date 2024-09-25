@@ -2,7 +2,6 @@ package uuspaceagent;
 
 import eu.iv4xr.framework.mainConcepts.TestAgent;
 import eu.iv4xr.framework.mainConcepts.TestDataCollector;
-import eu.iv4xr.framework.spatial.Vec3;
 import nl.uu.cs.aplib.mainConcepts.GoalStructure;
 import nl.uu.cs.aplib.utils.Pair;
 import org.junit.jupiter.api.Test;
@@ -24,7 +23,7 @@ public class Test_InteractingWithDoor {
         state.updateState(state.agentId);
         // agent start location should be around:<10.22475,-5.0025,53.75382>,
         //  orientationForward: <-0.08024501,7.549446E-5,0.99677515> ... so looking towards z-axis
-        console(showWOMAgent(state.wom));
+        console(showWOMAgent(state.worldmodel));
         return new Pair<TestAgent, UUSeAgentState>(agent,state) ;
     }
 

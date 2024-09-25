@@ -1,7 +1,6 @@
 package uuspaceagent;
 
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
-import eu.iv4xr.framework.mainConcepts.WorldModel;
 import org.junit.jupiter.api.Test;
 import spaceEngineers.model.*;
 
@@ -24,7 +23,7 @@ public class Coba_Grinding {
 
         state.updateState(state.agentId);
 
-        WorldEntity agentInfo = state.wom.elements.get(state.agentId) ;
+        WorldEntity agentInfo = state.worldmodel.elements.get(state.agentId) ;
         System.out.println("** Agent's info: " + PrintInfos.showWorldEntity(agentInfo));
 
         /*
@@ -35,7 +34,7 @@ public class Coba_Grinding {
         }
         */
 
-        WorldEntity target = SEBlockFunctions.findClosestBlock(state.wom, "LargeBlockBatteryBlock", 10) ;
+        WorldEntity target = SEBlockFunctions.findClosestBlock(state.worldmodel, "LargeBlockBatteryBlock", 10) ;
         String batteryId = target.id ;
         System.out.println("** target state: " + PrintInfos.showWorldEntity(target));
 
@@ -45,7 +44,7 @@ public class Coba_Grinding {
             if(k % 200 == 0) {
                 state.updateState(state.agentId);
                 System.out.println(" >>> k=" + k) ;
-                target = SEBlockFunctions.findWorldEntity(state.wom,batteryId) ;
+                target = SEBlockFunctions.findWorldEntity(state.worldmodel,batteryId) ;
                 if (target == null) {
                     System.out.println("** target is gone");
                     break ;

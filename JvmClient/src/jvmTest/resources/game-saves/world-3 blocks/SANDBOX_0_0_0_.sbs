@@ -10,12 +10,12 @@
       <MyObjectBuilder_GlobalEventBase>
         <SubtypeName>MeteorWave</SubtypeName>
         <Enabled>true</Enabled>
-        <ActivationTimeMs>549569</ActivationTimeMs>
+        <ActivationTimeMs>537569</ActivationTimeMs>
       </MyObjectBuilder_GlobalEventBase>
       <MyObjectBuilder_GlobalEventBase>
         <SubtypeName>SpawnCargoShip</SubtypeName>
         <Enabled>true</Enabled>
-        <ActivationTimeMs>1737039</ActivationTimeMs>
+        <ActivationTimeMs>1725039</ActivationTimeMs>
       </MyObjectBuilder_GlobalEventBase>
     </Events>
   </SectorEvents>
@@ -32,19 +32,19 @@
   <VoxelHandVolumeChanged>0</VoxelHandVolumeChanged>
   <SectorObjects>
     <MyObjectBuilder_EntityBase xsi:type="MyObjectBuilder_Character">
-      <SubtypeName>Default_Astronaut</SubtypeName>
+      <SubtypeName>Default_Astronaut_Female</SubtypeName>
       <EntityId>88034022095450917</EntityId>
       <PersistentFlags>CastShadows InScene</PersistentFlags>
       <Name>88034022095450917</Name>
       <PositionAndOrientation>
-        <Position x="7.1968839190317162" y="-5.0025002459242387" z="26.339879749018341" />
-        <Forward x="-0.354618728" y="-3.40111146E-05" z="0.9350109" />
-        <Up x="-0.000169741528" y="1" z="-2.800225E-05" />
+        <Position x="7.1968796674866713" y="-5.0024984189494717" z="26.339879047148042" />
+        <Forward x="-0.999050856" y="-0.000168452141" z="0.0435512066" />
+        <Up x="-0.000169833482" y="1" z="-2.8017108E-05" />
         <Orientation>
-          <X>-8.600434E-05</X>
-          <Y>0.983618557</Y>
-          <Z>1.527235E-06</Z>
-          <W>0.180262327</W>
+          <X>-7.102625E-05</X>
+          <Y>0.7223404</Y>
+          <Z>4.86041972E-05</Z>
+          <W>0.6915377</W>
         </Orientation>
       </PositionAndOrientation>
       <LocalPositionAndOrientation xsi:nil="true" />
@@ -137,7 +137,7 @@
                 </MyObjectBuilder_InventoryItem>
               </Items>
               <nextItemId>7</nextItemId>
-              <Volume>0.4</Volume>
+              <Volume>9223372036854.775807</Volume>
               <Mass>9223372036854.775807</Mass>
               <MaxItemCount>2147483647</MaxItemCount>
               <Size xsi:nil="true" />
@@ -147,7 +147,7 @@
           </ComponentData>
         </Components>
       </ComponentContainer>
-      <CharacterModel>Default_Astronaut</CharacterModel>
+      <CharacterModel>Default_Astronaut_Female</CharacterModel>
       <Inventory>
         <Items>
           <MyObjectBuilder_InventoryItem>
@@ -210,7 +210,7 @@
           </MyObjectBuilder_InventoryItem>
         </Items>
         <nextItemId>7</nextItemId>
-        <Volume>0.4</Volume>
+        <Volume>9223372036854.775807</Volume>
         <Mass>9223372036854.775807</Mass>
         <MaxItemCount>2147483647</MaxItemCount>
         <Size xsi:nil="true" />
@@ -223,13 +223,13 @@
       </Battery>
       <LightEnabled>false</LightEnabled>
       <UsingLadder xsi:nil="true" />
-      <HeadAngle x="-18.4487286" y="0" />
+      <HeadAngle x="-15.6894312" y="0" />
       <LinearVelocity x="0" y="0" z="0" />
       <AutoenableJetpackDelay>0</AutoenableJetpackDelay>
       <JetpackEnabled>false</JetpackEnabled>
-      <ColorMaskHSV x="0" y="-0.96" z="-0.5" />
+      <ColorMaskHSV x="0.141666666" y="-0.03804356" z="0.5376748" />
       <LootingCounter>0</LootingCounter>
-      <DisplayName>sa.shirzadeh</DisplayName>
+      <DisplayName>uprime812</DisplayName>
       <IsInFirstPersonView>false</IsInFirstPersonView>
       <EnableBroadcasting>true</EnableBroadcasting>
       <OxygenLevel>1</OxygenLevel>
@@ -245,8 +245,8 @@
         </StoredGas>
       </StoredGases>
       <EnabledComponents>
-        <string>RagdollComponent</string>
         <string>InventorySpawnComponent</string>
+        <string>RagdollComponent</string>
       </EnabledComponents>
       <NeedsOxygenFromSuit>false</NeedsOxygenFromSuit>
       <OwningPlayerIdentityId>144115188075855875</OwningPlayerIdentityId>
@@ -542,7 +542,7 @@
                   <TimerEnabled>true</TimerEnabled>
                   <RemoveEntityOnTimer>false</RemoveEntityOnTimer>
                   <TimerType>Frame10</TimerType>
-                  <FramesFromLastTrigger>10</FramesFromLastTrigger>
+                  <FramesFromLastTrigger>20</FramesFromLastTrigger>
                   <TimerTickInFrames>60</TimerTickInFrames>
                   <IsSessionUpdateEnabled>false</IsSessionUpdateEnabled>
                 </Component>
@@ -2771,7 +2771,7 @@
                   <TimerEnabled>true</TimerEnabled>
                   <RemoveEntityOnTimer>false</RemoveEntityOnTimer>
                   <TimerType>Frame10</TimerType>
-                  <FramesFromLastTrigger>30</FramesFromLastTrigger>
+                  <FramesFromLastTrigger>40</FramesFromLastTrigger>
                   <TimerTickInFrames>60</TimerTickInFrames>
                   <IsSessionUpdateEnabled>false</IsSessionUpdateEnabled>
                 </Component>
@@ -3075,7 +3075,7 @@
                   <TimerEnabled>true</TimerEnabled>
                   <RemoveEntityOnTimer>false</RemoveEntityOnTimer>
                   <TimerType>Frame10</TimerType>
-                  <FramesFromLastTrigger>30</FramesFromLastTrigger>
+                  <FramesFromLastTrigger>40</FramesFromLastTrigger>
                   <TimerTickInFrames>60</TimerTickInFrames>
                   <IsSessionUpdateEnabled>false</IsSessionUpdateEnabled>
                 </Component>
@@ -3141,7 +3141,7 @@
                   <TimerEnabled>true</TimerEnabled>
                   <RemoveEntityOnTimer>false</RemoveEntityOnTimer>
                   <TimerType>Frame10</TimerType>
-                  <FramesFromLastTrigger>40</FramesFromLastTrigger>
+                  <FramesFromLastTrigger>50</FramesFromLastTrigger>
                   <TimerTickInFrames>60</TimerTickInFrames>
                   <IsSessionUpdateEnabled>false</IsSessionUpdateEnabled>
                 </Component>
@@ -3207,7 +3207,7 @@
                   <TimerEnabled>true</TimerEnabled>
                   <RemoveEntityOnTimer>false</RemoveEntityOnTimer>
                   <TimerType>Frame10</TimerType>
-                  <FramesFromLastTrigger>20</FramesFromLastTrigger>
+                  <FramesFromLastTrigger>30</FramesFromLastTrigger>
                   <TimerTickInFrames>60</TimerTickInFrames>
                   <IsSessionUpdateEnabled>false</IsSessionUpdateEnabled>
                 </Component>

@@ -174,6 +174,15 @@ public class SEBlockFunctions {
     }
 
     /**
+     * Return all blocks of the specified type.
+     */
+    public static List<WorldEntity> getAllBlocks(WorldModel wom, String blockType) {
+        return getAllBlocks(wom).stream()
+                .filter(e -> blockType.equals(e.getStringProperty("blockType")))
+                .collect(Collectors.toList());
+    }
+
+    /**
      * Find the closest block (from the agent's current position) with the given block-type,
      * within the given radius.
      */

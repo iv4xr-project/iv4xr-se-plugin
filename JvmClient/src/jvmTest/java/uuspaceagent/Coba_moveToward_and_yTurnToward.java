@@ -17,7 +17,7 @@ public class Coba_moveToward_and_yTurnToward {
         for (int k = 0 ; k<40; k++) {
             UUTacticLib.moveToward(state, destination,100) ;
             state.updateState(state.agentId);
-            float distance = Vec3.sub(destination,state.wom.position).length() ;
+            float distance = Vec3.sub(destination,state.worldmodel.position).length() ;
             console(">>> dist to dest: " + distance);
             if(distance <= 0.5) {
                 break ;
@@ -36,7 +36,7 @@ public class Coba_moveToward_and_yTurnToward {
         state.navgrid.enableFlying = true ;
         state.updateState(state.agentId);
 
-        WorldEntity agentInfo = state.wom.elements.get(state.agentId);
+        WorldEntity agentInfo = state.worldmodel.elements.get(state.agentId);
         console("** Agent's info: " + PrintInfos.showWorldEntity(agentInfo));
 
         // agent se0 @<9.549925,-5.0025005,54.149185>, hdir:<-0.0064151124,1.6736684E-4,0.99997944>, vdir:<-3.9837923E-5,1.0,-1.6762585E-4>, health:1.0, jet:true
@@ -64,7 +64,7 @@ public class Coba_moveToward_and_yTurnToward {
         state.navgrid.enableFlying = true ;
         state.updateState(state.agentId);
 
-        WorldEntity agentInfo = state.wom.elements.get(state.agentId);
+        WorldEntity agentInfo = state.worldmodel.elements.get(state.agentId);
         console("** Agent's info: " + PrintInfos.showWorldEntity(agentInfo));
 
         // agent se0 @<9.549925,-5.0025005,54.149185>, hdir:<-0.0064151124,1.6736684E-4,0.99997944>, vdir:<-3.9837923E-5,1.0,-1.6762585E-4>, health:1.0, jet:true
@@ -91,7 +91,7 @@ public class Coba_moveToward_and_yTurnToward {
         state.navgrid.enableFlying = true ;
         state.updateState(state.agentId);
 
-        WorldEntity agentInfo = state.wom.elements.get(state.agentId);
+        WorldEntity agentInfo = state.worldmodel.elements.get(state.agentId);
         console("** Agent's info: " + PrintInfos.showWorldEntity(agentInfo));
 
         // agent se0 @<9.549925,-5.0025005,54.149185>, hdir:<-0.0064151124,1.6736684E-4,0.99997944>, vdir:<-3.9837923E-5,1.0,-1.6762585E-4>, health:1.0, jet:true

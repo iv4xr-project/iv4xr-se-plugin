@@ -1,6 +1,5 @@
 package uuspaceagent;
 
-import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.spatial.Vec3;
 import nl.uu.cs.aplib.mainConcepts.Action;
 import nl.uu.cs.aplib.mainConcepts.Tactic;
@@ -87,13 +86,13 @@ public class UUTacticLib {
      * return null.
      */
     public static CharacterObservation moveToward(UUSeAgentState agentState, Vec3 destination, int duration) {
-        Vec3 destinationRelativeLocation = Vec3.sub(destination,agentState.wom.position) ;
+        Vec3 destinationRelativeLocation = Vec3.sub(destination,agentState.worldmodel.position) ;
         float sqDistance = destinationRelativeLocation.lengthSq() ;
         if (sqDistance <= 0.01) {
             // already very close to the destination
             return null ;
         }
-        System.out.println(">>> agent @ " + agentState.wom.position + ", dest: " + destination
+        System.out.println(">>> agent @ " + agentState.worldmodel.position + ", dest: " + destination
            + ", rel-direction: " + destinationRelativeLocation);
         System.out.println("    forward-vector: " + agentState.orientationForward());
         // else, decide if we should run or walk:
@@ -163,7 +162,7 @@ public class UUTacticLib {
      */
     public static CharacterObservation yTurnTowardACT(UUSeAgentState agentState, Vec3 destination, float cosAlphaThreshold, Integer duration) {
         // direction vector to the next node:
-        Vec3 dirToGo = Vec3.sub(destination,agentState.wom.position) ;
+        Vec3 dirToGo = Vec3.sub(destination,agentState.worldmodel.position) ;
         Vec3 agentHdir = agentState.orientationForward() ;
         // for calculating 2D rotation we ignore the y-value:
         dirToGo.y = 0 ;
@@ -275,7 +274,7 @@ public class UUTacticLib {
 
         return action("turning towards " + destination)
                 .on((UUSeAgentState state) ->{
-                    Vec3 dirToGo = Vec3.sub(destination,state.wom.position) ;
+                    Vec3 dirToGo = Vec3.sub(destination,state.worldmodel.position) ;
                     Vec3 forwardOrientation = state.orientationForward() ;
                     dirToGo.y = 0 ;
                     forwardOrientation.y = 0 ;
@@ -293,7 +292,7 @@ public class UUTacticLib {
                     if(obs == null) {
                         return cos_alpha ;
                     }
-                    Vec3 dirToGo = Vec3.sub(destination,state.wom.position) ;
+                    Vec3 dirToGo = Vec3.sub(destination,state.worldmodel.position) ;
                     Vec3 forwardOrientation = SEBlockFunctions.fromSEVec3(obs.getOrientationForward()) ;
                     dirToGo.y = 0 ;
                     forwardOrientation.y = 0 ;
@@ -321,7 +320,7 @@ public class UUTacticLib {
 
         return action("straight line move to " + destination)
                 .do1((UUSeAgentState state) -> {
-                    var sqDistance = Vec3.sub(destination,state.wom.position).lengthSq() ;
+                    var sqDistance = Vec3.sub(destination,state.worldmodel.position).lengthSq() ;
                     CharacterObservation obs = moveToward(state,destination,7) ;
                     if(obs ==null) {
                         return sqDistance ;
@@ -329,7 +328,7 @@ public class UUTacticLib {
                     return Vec3.sub(destination,SEBlockFunctions.fromSEVec3(obs.getPosition())).lengthSq() ;
 
                 })
-                .on_((UUSeAgentState state) -> Vec3.sub(destination, state.wom.position).lengthSq() >= 0.01)
+                .on_((UUSeAgentState state) -> Vec3.sub(destination, state.worldmodel.position).lengthSq() >= 0.01)
                 ;
     }
 
@@ -350,7 +349,7 @@ public class UUTacticLib {
                     var arrivedAtDestination = queryResult.snd ;
 
                     // check first if we should turn on/off jetpack:
-                    if(state.wom.position.y - state.navgrid.origin.y <= NavGrid.AGENT_HEIGHT
+                    if(state.worldmodel.position.y - state.navgrid.origin.y <= NavGrid.AGENT_HEIGHT
                        &&  !path.isEmpty() && path.get(0).y == 0 && state.jetpackRunning()
                     ) {
                         state.env().getController().getCharacter().turnOffJetpack() ;
@@ -363,7 +362,7 @@ public class UUTacticLib {
 
                     if (arrivedAtDestination) {
                         state.currentPathToFollow.clear();
-                        return new Pair<>(state.wom.position, state.orientationForward()) ;
+                        return new Pair<>(state.worldmodel.position, state.orientationForward()) ;
                     }
                     // else we are not at the destination yet...
 
@@ -374,13 +373,13 @@ public class UUTacticLib {
                     // node in the path, since we remove a node if it is passed):
                     var nextNode = state.currentPathToFollow.get(0) ;
                     var nextNodePos = state.navgrid.getSquareCenterLocation(nextNode) ;
-                    var agentSq = state.navgrid.gridProjectedLocation(state.wom.position) ;
+                    var agentSq = state.navgrid.gridProjectedLocation(state.worldmodel.position) ;
                     //if(agentSq.equals(nextNode)) {
-                    if(Vec3.sub(nextNodePos,state.wom.position).lengthSq() <= THRESHOLD_SQUARED_DISTANCE_TO_SQUARE) {
+                    if(Vec3.sub(nextNodePos,state.worldmodel.position).lengthSq() <= THRESHOLD_SQUARED_DISTANCE_TO_SQUARE) {
                         // agent is already in the same square as the next-node destination-square. Mark the node
                         // as reached (so, we remove it from the plan):
                         state.currentPathToFollow.remove(0) ;
-                        return new Pair<>(state.wom.position, state.orientationForward()) ;
+                        return new Pair<>(state.worldmodel.position, state.orientationForward()) ;
                     }
                     CharacterObservation obs = null ;
                     // disabling rotation for now
@@ -393,14 +392,14 @@ public class UUTacticLib {
                     return new Pair<>(SEBlockFunctions.fromSEVec3(obs.getPosition()), SEBlockFunctions.fromSEVec3(obs.getOrientationForward()))  ;
                 } )
                 .on((UUSeAgentState state)  -> {
-                    if (state.wom==null) return null ;
+                    if (state.worldmodel ==null) return null ;
                     //var agentPos = state.wom.position ;
-                    var agentSq = state.navgrid.gridProjectedLocation(state.wom.position) ;
+                    var agentSq = state.navgrid.gridProjectedLocation(state.worldmodel.position) ;
                     var destinationSq = state.navgrid.gridProjectedLocation(destination) ;
                     var destinationSqCenterPos = state.navgrid.getSquareCenterLocation(destinationSq) ;
                     //if (state.grid2D.squareDistanceToSquare(agentPos,destinationSq) <= SQEPSILON_TO_NODE_IN_2D_PATH_NAVIGATION) {
                     //if(agentSq.equals(destinationSq)) {
-                    if(Vec3.sub(destinationSqCenterPos,state.wom.position).lengthSq() <= THRESHOLD_SQUARED_DISTANCE_TO_SQUARE) {
+                    if(Vec3.sub(destinationSqCenterPos,state.worldmodel.position).lengthSq() <= THRESHOLD_SQUARED_DISTANCE_TO_SQUARE) {
 
                             // the agent is already at the destination. Just return the path, and indicate that
                         // we have arrived at the destination:
@@ -466,14 +465,14 @@ public class UUTacticLib {
                 .do1((UUSeAgentState st) -> {
                     UseObjectExtensions useUtil = new UseObjectExtensions(state.env().getController().getSpaceEngineers()) ;
                     useUtil.openIfNotOpened((DoorBase) targetBlock);
-                    var checkIsOpen  = SEBlockFunctions.findWorldEntity(st.wom,targetBlock.getId()) ;
+                    var checkIsOpen  = SEBlockFunctions.findWorldEntity(st.worldmodel,targetBlock.getId()) ;
                     var isOpen = checkIsOpen.getProperty("isOpen").toString();
                     if(isOpen.equals("true")) return null;
                     return true;
                 })
                 .on((UUSeAgentState st)  -> {
-                    if (st.wom==null) return null ;
-                    var checkIsOpen  = SEBlockFunctions.findWorldEntity(st.wom,targetBlock.getId()) ;
+                    if (st.worldmodel ==null) return null ;
+                    var checkIsOpen  = SEBlockFunctions.findWorldEntity(st.worldmodel,targetBlock.getId()) ;
                     var isOpen = checkIsOpen.getProperty("isOpen").toString();
                     if(isOpen.equals("true")) return null;
                     return true;
@@ -488,7 +487,7 @@ public class UUTacticLib {
 
     public static Tactic observe(UUSeAgentState state, Block targetBlock){
         return action("Interacting").do1((UUSeAgentState st) -> {
-        var checkIsOpen  = SEBlockFunctions.findWorldEntity(state.wom,targetBlock.getId()) ;
+        var checkIsOpen  = SEBlockFunctions.findWorldEntity(state.worldmodel,targetBlock.getId()) ;
         var isOpen =  checkIsOpen.getProperty("isOpen").toString();
         if(isOpen.equals("true")) return true;
         return false;

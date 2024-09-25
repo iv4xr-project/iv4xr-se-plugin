@@ -37,7 +37,7 @@ public class Test_Experiment {
             WorldEntity targetBlock = S_.previousTargetBlock;
             if(targetBlock != null){
                 if(targetBlock.getStringProperty("blockType").contains("LargeBlockSlideDoor")){
-                    var checkIsOpen  = SEBlockFunctions.findWorldEntity(S_.wom,targetBlock.id) ;
+                    var checkIsOpen  = SEBlockFunctions.findWorldEntity(S_.worldmodel,targetBlock.id) ;
                     isOpen = (boolean) checkIsOpen.getProperty("isOpen");
                 }
             }
@@ -53,7 +53,7 @@ public class Test_Experiment {
             Vec3 position =  new Vec3(17.5f,2.5f,40.0f) ;
             WorldEntity targetBlock = S_.previousTargetBlock;
             if(targetBlock != null) {;
-                var entity = SEBlockFunctions.findWorldEntity(S_.wom, targetBlock.id);
+                var entity = SEBlockFunctions.findWorldEntity(S_.worldmodel, targetBlock.id);
                 if (targetBlock.position.equals(position) && entity == null) {
                     return true;
                 }
@@ -69,7 +69,7 @@ public class Test_Experiment {
         return S -> {
             var S_ = (UUSeAgentState) S ;
             String blockType = "BasicAssembler";
-            var assemblers = SEBlockFunctions.getAllBlocks(S_.wom).stream().filter(e -> blockType.equals(e.getStringProperty("blockType"))).collect(Collectors.toList()) ;
+            var assemblers = SEBlockFunctions.getAllBlocks(S_.worldmodel).stream().filter(e -> blockType.equals(e.getStringProperty("blockType"))).collect(Collectors.toList()) ;
             int newNumberOfAssemblers = assemblers.size() ;
             var ok = false ;
 
@@ -87,7 +87,7 @@ public class Test_Experiment {
         return S -> {
             var S_ = (UUSeAgentState) S ;
             String blockType = "BasicAssembler";
-            var assemblers = SEBlockFunctions.getAllBlocks(S_.wom).stream().filter(e -> blockType.equals(e.getStringProperty("blockType"))).collect(Collectors.toList()) ;
+            var assemblers = SEBlockFunctions.getAllBlocks(S_.worldmodel).stream().filter(e -> blockType.equals(e.getStringProperty("blockType"))).collect(Collectors.toList()) ;
             int newNumberOfAssemblers = assemblers.size() ;
             var ok = false ;
             if(newNumberOfAssemblers == 0) ok= true;
@@ -103,9 +103,9 @@ public class Test_Experiment {
             Block targetBlock = S_.env().getController().getObserver().observe().getTargetBlock() ;
             Vec3 position =  new Vec3(3.75f,-3.75f,-5.0f);
             if(targetBlock.getDefinitionId().toString().contains("BasicAssembler") && position.equals(targetBlock.getMaxPosition())){
-                var entity = SEBlockFunctions.findWorldEntity(S_.wom,targetBlock.getId()) ;;
+                var entity = SEBlockFunctions.findWorldEntity(S_.worldmodel,targetBlock.getId()) ;;
                 return (Float) entity.getProperty("integrity") <=
-                        (Float) S_.wom.before(entity.id,"integrity");
+                        (Float) S_.worldmodel.before(entity.id,"integrity");
             }
             return false;
         };
@@ -445,7 +445,7 @@ public class Test_Experiment {
         state.navgrid.enableFlying = true ;
         Thread.sleep(1000);
         state.updateState(state.agentId);
-        console(showWOMAgent(state.wom));
+        console(showWOMAgent(state.worldmodel));
         return new Pair<TestAgent, UUSeAgentState>(agent,state) ;
     }
 
@@ -455,13 +455,13 @@ public class Test_Experiment {
        // agent . setTestDataCollector(dataCollector).setGoal(G) ;
 
         while(G.getStatus().inProgress()) {
-            console(">> numbre of turns [" + turn + "] " + showWOMAgent(state.wom));
-            if (state.wom.position != null) {
+            console(">> numbre of turns [" + turn + "] " + showWOMAgent(state.worldmodel));
+            if (state.worldmodel.position != null) {
                 dataCollector.registerEvent(agent.getId(),
                         new ObservationEvent.ScalarTracingEvent(
-                                new Pair("posx",state.wom.position.x),
-                                new Pair("posy",state.wom.position.y),
-                                new Pair("posz", state.wom.position.z),
+                                new Pair("posx",state.worldmodel.position.x),
+                                new Pair("posy",state.worldmodel.position.y),
+                                new Pair("posz", state.worldmodel.position.z),
                                 new Pair("turn",turn),
                                 new Pair("tick",1)));
             }

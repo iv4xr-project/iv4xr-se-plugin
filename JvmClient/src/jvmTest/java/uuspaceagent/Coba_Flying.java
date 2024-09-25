@@ -26,13 +26,13 @@ public class Coba_Flying {
         state.navgrid.enableFlying = true ;
         state.env().getController().getCharacter().turnOnJetpack() ;
 
-        WorldEntity agentInfo = state.wom.elements.get(state.agentId);
+        WorldEntity agentInfo = state.worldmodel.elements.get(state.agentId);
         System.out.println("** Agent's info: " + PrintInfos.showWorldEntity(agentInfo));
 
         int k = 0 ;
         while (k<100) {
             state.updateState(state.agentId);
-            console("** k=" + k + ", agent: " + PrintInfos.showWOMAgent(state.wom)) ;
+            console("** k=" + k + ", agent: " + PrintInfos.showWOMAgent(state.worldmodel)) ;
             state.env().getController().getCharacter().moveAndRotate(
                     new spaceEngineers.model.Vec3F(0,0.3,0),
                     new spaceEngineers.model.Vec2F(0,0),
@@ -47,7 +47,7 @@ public class Coba_Flying {
         for (int k = 0 ; k<20; k++) {
             UUTacticLib.moveToward(state, destination,10) ;
             state.updateState(state.agentId);
-            float distance = Vec3.sub(destination,state.wom.position).length() ;
+            float distance = Vec3.sub(destination,state.worldmodel.position).length() ;
             console(">>> dist to dest: " + distance);
             if(distance <= 0.5) {
                 break ;
@@ -70,7 +70,7 @@ public class Coba_Flying {
         state.env().getController().getCharacter().turnOnJetpack() ;
         state.updateState(state.agentId);
 
-        WorldEntity agentInfo = state.wom.elements.get(state.agentId);
+        WorldEntity agentInfo = state.worldmodel.elements.get(state.agentId);
         console("** Agent's info: " + PrintInfos.showWorldEntity(agentInfo));
 
         // agent se0 @<9.549925,-5.0025005,54.149185>, hdir:<-0.0064151124,1.6736684E-4,0.99997944>, vdir:<-3.9837923E-5,1.0,-1.6762585E-4>, health:1.0, jet:true
@@ -121,9 +121,9 @@ public class Coba_Flying {
         state.env().getController().getCharacter().turnOnJetpack() ;
         state.updateState(state.agentId);
 
-        WorldEntity agentInfo = state.wom.elements.get(state.agentId);
+        WorldEntity agentInfo = state.worldmodel.elements.get(state.agentId);
         console("** Agent's info: " + PrintInfos.showWorldEntity(agentInfo));
-        console("** Agent @ " + state.wom.position);
+        console("** Agent @ " + state.worldmodel.position);
 
         //Thread.sleep(5000) ;
 
@@ -147,11 +147,11 @@ public class Coba_Flying {
         // rotate
         console("####  rotating around Y:");
         state.updateState(state.agentId);
-        console("** Agent @ " + state.wom.position);
+        console("** Agent @ " + state.worldmodel.position);
         destination = new Vec3(9.54f,4f,50f) ;
         UUTacticLib.yTurnTowardACT(state, destination, 0.98f, 400) ;
 
         state.updateState(state.agentId);
-        console("** Agent @ " + state.wom.position);
+        console("** Agent @ " + state.worldmodel.position);
     }
 }

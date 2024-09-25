@@ -1,7 +1,6 @@
 package uuspaceagent;
 
 import environments.SeEnvironmentKt;
-import eu.iv4xr.framework.goalsAndTactics.IInteractiveWorldGoalLib;
 import eu.iv4xr.framework.mainConcepts.ObservationEvent;
 import eu.iv4xr.framework.mainConcepts.TestAgent;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
@@ -10,9 +9,7 @@ import eu.iv4xr.framework.spatial.Vec3;
 import nl.uu.cs.aplib.mainConcepts.*;
 import static nl.uu.cs.aplib.AplibEDSL.* ;
 import nl.uu.cs.aplib.utils.Pair;
-import spaceEngineers.controller.useobject.UseObjectExtensions;
 import spaceEngineers.model.Block;
-import spaceEngineers.model.DoorBase;
 import spaceEngineers.model.Observation;
 import spaceEngineers.model.ToolbarLocation;
 
@@ -78,7 +75,7 @@ public class UUGoalLib {
                 (UUSeAgentState state) -> (WorldEntity e)
                         ->
                         blockType.equals(e.getStringProperty("blockType"))
-                        && Vec3.sub(e.position, state.wom.position).lengthSq() <= sqradius,
+                        && Vec3.sub(e.position, state.worldmodel.position).lengthSq() <= sqradius,
                 side,
                 delta
                 ) ;
@@ -109,7 +106,7 @@ public class UUGoalLib {
 
 
         return  (UUSeAgentState state) -> {
-            WorldEntity block = SEBlockFunctions.findClosestBlock(state.wom,selector.apply(state)) ;
+            WorldEntity block = SEBlockFunctions.findClosestBlock(state.worldmodel,selector.apply(state)) ;
             if (block == null) return FAIL("Navigating autofail; no block can be found: " + selectorDesc) ;
 
             Vec3 intermediatePosition = SEBlockFunctions.getSideCenterPoint(block,side,delta + 1.5f) ;
@@ -230,7 +227,7 @@ public class UUGoalLib {
         // changing DEPLOYONCE to DEPLOY. in order to be ablabe to call this goal for different blocks
         GoalStructure grind = DEPLOY(agent, (UUSeAgentState state) -> {
             WorldEntity target = state.targetBlock() ;
-            state.wom.elements.get(agent.getId()).properties.put("previousTargetBlock",target );
+            state.worldmodel.elements.get(agent.getId()).properties.put("previousTargetBlock",target );
             //state.assignTargetBlock(target);
             if (target != null) state.previousTargetBlock = target;
             if(target == null) {
@@ -247,7 +244,7 @@ public class UUGoalLib {
                                     UUTacticLib.grind(state,50);
                                     Observation rawGridsAndBlocksStates = st.env().getController().getObserver().observeBlocks() ;
                                     WorldModel gridsAndBlocksStates = SeEnvironmentKt.toWorldModel(rawGridsAndBlocksStates) ;
-                                    return SEBlockFunctions.findWorldEntity(st.wom,targetId) ;
+                                    return SEBlockFunctions.findWorldEntity(st.worldmodel,targetId) ;
                                 })
                         .lift())
                     .lift() ;
@@ -290,12 +287,12 @@ public class UUGoalLib {
 
 
     public static boolean  findItemPredicate(UUSeAgentState st, String blockType){
-            List<WorldEntity> blocks =  SEBlockFunctions.getAllBlocks(st.wom).stream().filter(e -> blockType.equals(e.getStringProperty("blockType"))).collect(Collectors.toList());
+            List<WorldEntity> blocks =  SEBlockFunctions.getAllBlocks(st.worldmodel).stream().filter(e -> blockType.equals(e.getStringProperty("blockType"))).collect(Collectors.toList());
             System.out.println("number of blocks" + blocks.size()  );
             for(var block : blocks) {
                 System.out.println("Candidates: " + block.id + " type and properties" + block);
             }
-            var numberofBlocks = SEBlockFunctions.getAllBlocks(st.wom);
+            var numberofBlocks = SEBlockFunctions.getAllBlocks(st.worldmodel);
 //            for(var block : numberofBlocks) {
 //                System.out.println("All blockes Candidates: " + block.id + " type and properties" + block.getStringProperty("blockType"));
 //            }
@@ -321,7 +318,7 @@ public class UUGoalLib {
 
         return  DEPLOY(agent, (UUSeAgentState state) -> {
 
-            WorldEntity target = SEBlockFunctions.findClosestBlock(state.wom, "LargeBlockSlideDoor", 10) ;
+            WorldEntity target = SEBlockFunctions.findClosestBlock(state.worldmodel, "LargeBlockSlideDoor", 10) ;
             System.out.println("** door state: " + PrintInfos.showWorldEntity(target));
 
 
