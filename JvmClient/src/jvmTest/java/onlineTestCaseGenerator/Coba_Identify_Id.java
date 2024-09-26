@@ -14,6 +14,7 @@ public class Coba_Identify_Id {
     @Test
     public void test() throws InterruptedException {
         var state = loadSE("world-3 blocks").snd;
+        //state.stripOutTopLevelGrid = true ;
 
         state.updateState(state.agentId);
 

@@ -6,6 +6,7 @@ import environments.SeEnvironment;
 import environments.SeEnvironmentKt;
 import eu.iv4xr.framework.extensions.pathfinding.AStar;
 import eu.iv4xr.framework.extensions.pathfinding.Pathfinder;
+import eu.iv4xr.framework.mainConcepts.Iv4xrAgentState;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.mainConcepts.WorldModel;
 import eu.iv4xr.framework.spatial.Vec3;
@@ -23,15 +24,24 @@ import java.util.stream.Collectors;
 
 import static uuspaceagent.SEBlockFunctions.fromSEVec3;
 
-public class UUSeAgentState extends State {
+public class UUSeAgentState extends Iv4xrAgentState<Void> {
 
     public String agentId ;
-    public WorldModel worldmodel;
+    //public WorldModel worldmodel;
     public NavGrid navgrid = new NavGrid() ;
     public Pathfinder<DPos3> pathfinder2D = new AStar<>() ;
     public List<DPos3> currentPathToFollow = new LinkedList<>();
 
     public WorldEntity previousTargetBlock;
+
+    /**
+     * If this is set to true, top-level grid (e.g. a space-platform) will be stripped
+     * out. That is, we will not store such a grid in the world-model, but instead
+     * store its direct-children as top-level entities.
+     *
+     * <p>Default: false
+     */
+    public boolean stripOutTopLevelGrid = false ;
 
     /**
      * SE does not seem to send time-stamp, so we will keep track the number of state-updates
@@ -90,7 +100,8 @@ public class UUSeAgentState extends State {
     @Override
     public void updateState(String agentId) {
 
-        super.updateState(agentId);
+        // Deliberately not invoking super-UpdateState !
+        // super.updateState(agentId);
 
         // get the new WOM. Currently it does not include agent's extended properties, so we add them
         // explicitly here:
@@ -99,9 +110,25 @@ public class UUSeAgentState extends State {
         // HACK: SE gives generated-id to the agent, replace that:
         newWom.agentId = this.agentId ;
         // HACK: because wom that comes from SE has its wom.elements read-only :|
+        // WP: this elems seem to be empty??
         var origElements = newWom.elements ;
+        //System.out.println(">>> #elements in observed-wom: " + origElements.size()) ;
         newWom.elements = new HashMap<>() ;
-        for (var e : origElements.entrySet()) newWom.elements.put(e.getKey(),e.getValue()) ;
+        for (var e : origElements.entrySet()) {
+            WorldEntity entity = e.getValue() ;
+            if (entity.type.equals("grid") && stripOutTopLevelGrid) {
+                // a top-level grid, and the option wants to strip it:
+                var grid = entity ;
+                for (var child : grid.elements.values()) {
+                    newWom.elements.put(child.id,child) ;
+                }
+            }
+            else {
+                // no stripping:
+                newWom.elements.put(e.getKey(),entity) ;
+            }
+        }
+
         CharacterObservation agentObs = env().getController().getObserver().observe() ;
         newWom.elements.put(this.agentId, agentAdditionalInfo(agentObs)) ;
         WorldEntity inv =  agentInventory(agentObs) ;
@@ -119,7 +146,17 @@ public class UUSeAgentState extends State {
         // assign a fresh timestamp too:
         assignTimeStamp(gridsAndBlocksStates,updateCount) ;
         for(var e : gridsAndBlocksStates.elements.entrySet()) {
-            newWom.elements.put(e.getKey(), e.getValue()) ;
+            WorldEntity entity = e.getValue() ;
+            if (entity.type.equals("grid") && stripOutTopLevelGrid) {
+                // a top-level grid, and the option wants to strip it:
+                var grid = entity ;
+                for (var child : grid.elements.values()) {
+                    newWom.elements.put(child.id,child) ;
+                }
+            }
+            else {
+                newWom.elements.put(e.getKey(), e.getValue()) ;
+            }
         }
         // updating the count:
         updateCount++ ;
@@ -199,6 +236,7 @@ public class UUSeAgentState extends State {
         return e.properties.get(property) ;
     }
 
+    /*
     public Serializable val(String property) {
         return val(this.agentId,property) ;
     }
@@ -210,6 +248,7 @@ public class UUSeAgentState extends State {
     public Serializable before(String property) {
         return this.worldmodel.before(property) ;
     }
+    */
 
     public float health() {
         return (float) worldmodel.elements.get(agentId).properties.get("health") ;
