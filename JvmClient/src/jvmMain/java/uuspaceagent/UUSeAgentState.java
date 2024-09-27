@@ -45,9 +45,16 @@ public class UUSeAgentState extends Iv4xrAgentState<Void> {
 
     /**
      * SE does not seem to send time-stamp, so we will keep track the number of state-updates
-     * as a replacement of time-stamp.
+     * as a replacement of time-stamp. Alternatively, we can use system-time if the flag
+     * useSystemTimeForTimeStamping below is turned-on.
      */
     long updateCount = 0 ;
+
+    /**
+     * If this flag is on, we will use system-time (expressed in current ms) as the time
+     * stamp (instead of turn-nr). Default is false.
+     */
+    public boolean useSystemTimeForTimeStamping = false ;
 
     public UUSeAgentState(String agentId) {
         this.agentId = agentId ;
@@ -133,7 +140,6 @@ public class UUSeAgentState extends Iv4xrAgentState<Void> {
         newWom.elements.put(this.agentId, agentAdditionalInfo(agentObs)) ;
         WorldEntity inv =  agentInventory(agentObs) ;
         newWom.elements.put(inv.id,inv) ;
-        assignTimeStamp(newWom,updateCount) ;
 
         // The obtained wom also does not include blocks observed. So we get them explicitly here:
         // Well, we will get ALL blocks. Note that S=some blocks may change state or disappear,
@@ -158,7 +164,13 @@ public class UUSeAgentState extends Iv4xrAgentState<Void> {
                 newWom.elements.put(e.getKey(), e.getValue()) ;
             }
         }
-        // updating the count:
+        // assigning a time-stamp and updating the count:
+        if (useSystemTimeForTimeStamping) {
+            assignTimeStamp(newWom,System.currentTimeMillis()) ;
+        }
+        else {
+            assignTimeStamp(newWom,updateCount) ;
+        }
         updateCount++ ;
 
         if(navgrid.origin == null) {
