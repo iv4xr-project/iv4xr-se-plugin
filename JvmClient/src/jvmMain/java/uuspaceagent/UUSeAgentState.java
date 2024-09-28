@@ -113,6 +113,7 @@ public class UUSeAgentState extends Iv4xrAgentState<Void> {
         // get the new WOM. Currently it does not include agent's extended properties, so we add them
         // explicitly here:
         WorldModel newWom = env().observe() ;
+
         //System.out.println(">>>-- agent pos as received from SE:" + newWom.position);
         // HACK: SE gives generated-id to the agent, replace that:
         newWom.agentId = this.agentId ;
