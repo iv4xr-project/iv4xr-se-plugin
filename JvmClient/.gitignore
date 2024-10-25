@@ -58,3 +58,6 @@
 **/game-saves/**/Backup/
 ./reports/
 /reports/
+
+# other
+/out

@@ -135,8 +135,13 @@
     <BackpackDespawnTimer>5</BackpackDespawnTimer>
     <EnableFactionPlayerNames>false</EnableFactionPlayerNames>
     <EnableTeamScoreCounters>true</EnableTeamScoreCounters>
+    <EnableSpaceSuitRespawn>true</EnableSpaceSuitRespawn>
+    <MatchRestartWhenEmptyTime>0</MatchRestartWhenEmptyTime>
+    <EnableFactionVoiceChat>false</EnableFactionVoiceChat>
+    <EnableOrca>true</EnableOrca>
+    <MaxProductionQueueLength>50</MaxProductionQueueLength>
   </Settings>
   <Mods />
   <SessionName>Empty World test observe</SessionName>
-  <LastSaveTime>2022-09-19T12:32:02.6017611+02:00</LastSaveTime>
+  <LastSaveTime>2023-07-18T13:02:11.1921938+02:00</LastSaveTime>
 </MyObjectBuilder_WorldConfiguration>

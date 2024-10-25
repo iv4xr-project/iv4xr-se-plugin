@@ -21,7 +21,7 @@ import kotlin.test.assertTrue
 
 class BasicIv4xrTest {
 
-    @Disabled("Disabled for building whole project, enable manually by uncommenting.")
+    //@Disabled("Disabled for building whole project, enable manually by uncommenting.")
     @Test
     fun placeGrindDownTorchUp() {
         // Setup constants to use later.

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <MyObjectBuilder_Checkpoint xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <CurrentSector x="0" y="0" z="0" />
-  <ElapsedGameTime>43102720000</ElapsedGameTime>
+  <ElapsedGameTime>48748800000</ElapsedGameTime>
   <SessionName>Empty World test observe</SessionName>
   <SpectatorPosition>
     <Position x="-0.32934382554148806" y="-0.074394008015407867" z="1.5750704078872861" />
@@ -21,7 +21,7 @@
   <ControlledObject>124168712738897777</ControlledObject>
   <Password />
   <Description />
-  <LastSaveTime>2022-09-19T12:32:02.6017611+02:00</LastSaveTime>
+  <LastSaveTime>2023-07-18T13:02:11.1921938+02:00</LastSaveTime>
   <SpectatorDistance>4.420889</SpectatorDistance>
   <WorkshopId xsi:nil="true" />
   <WorkshopId1 xsi:nil="true" />
@@ -61,28 +61,28 @@
         <Index>4</Index>
         <Item />
         <Data xsi:type="MyObjectBuilder_ToolbarItemCubeBlock">
-          <DefinitionId Type="MyObjectBuilder_GravityGenerator" Subtype="" />
+          <DefinitionId Type="MyObjectBuilder_Thrust" Subtype="LargeBlockSmallThrust" />
         </Data>
       </Slot>
       <Slot>
         <Index>5</Index>
         <Item />
-        <Data xsi:type="MyObjectBuilder_ToolbarItemWeapon">
-          <DefinitionId Type="MyObjectBuilder_PhysicalGunObject" Subtype="AngleGrinder4Item" />
+        <Data xsi:type="MyObjectBuilder_ToolbarItemCubeBlock">
+          <DefinitionId Type="MyObjectBuilder_Thrust" Subtype="LargeBlockSmallAtmosphericThrust" />
         </Data>
       </Slot>
       <Slot>
         <Index>6</Index>
         <Item />
         <Data xsi:type="MyObjectBuilder_ToolbarItemCubeBlock">
-          <DefinitionId Type="MyObjectBuilder_TerminalBlock" Subtype="ControlPanel" />
+          <DefinitionId Type="MyObjectBuilder_Gyro" Subtype="LargeBlockGyro" />
         </Data>
       </Slot>
       <Slot>
         <Index>7</Index>
         <Item />
         <Data xsi:type="MyObjectBuilder_ToolbarItemCubeBlock">
-          <DefinitionId Type="MyObjectBuilder_CryoChamber" Subtype="LargeBlockCryoChamber" />
+          <DefinitionId Type="MyObjectBuilder_MotorSuspension" Subtype="Suspension3x3" />
         </Data>
       </Slot>
       <Slot>
@@ -93,7 +93,71 @@
         </Data>
       </Slot>
     </Slots>
-    <SlotsGamepad />
+    <SlotsGamepad>
+      <Slot>
+        <Index>0</Index>
+        <Item />
+        <Data xsi:type="MyObjectBuilder_ToolbarItemCubeBlock">
+          <DefinitionId Type="MyObjectBuilder_CubeBlock" Subtype="LargeBlockArmorBlock" />
+        </Data>
+      </Slot>
+      <Slot>
+        <Index>1</Index>
+        <Item />
+        <Data xsi:type="MyObjectBuilder_ToolbarItemCubeBlock">
+          <DefinitionId Type="MyObjectBuilder_CubeBlock" Subtype="LargeHeavyBlockArmorBlock" />
+        </Data>
+      </Slot>
+      <Slot>
+        <Index>2</Index>
+        <Item />
+        <Data xsi:type="MyObjectBuilder_ToolbarItemCubeBlock">
+          <DefinitionId Type="MyObjectBuilder_Cockpit" Subtype="LargeBlockCockpitSeat" />
+        </Data>
+      </Slot>
+      <Slot>
+        <Index>3</Index>
+        <Item />
+        <Data xsi:type="MyObjectBuilder_ToolbarItemCubeBlock">
+          <DefinitionId Type="MyObjectBuilder_Reactor" Subtype="LargeBlockSmallGenerator" />
+        </Data>
+      </Slot>
+      <Slot>
+        <Index>4</Index>
+        <Item />
+        <Data xsi:type="MyObjectBuilder_ToolbarItemCubeBlock">
+          <DefinitionId Type="MyObjectBuilder_Thrust" Subtype="LargeBlockSmallThrust" />
+        </Data>
+      </Slot>
+      <Slot>
+        <Index>5</Index>
+        <Item />
+        <Data xsi:type="MyObjectBuilder_ToolbarItemCubeBlock">
+          <DefinitionId Type="MyObjectBuilder_Thrust" Subtype="LargeBlockSmallAtmosphericThrust" />
+        </Data>
+      </Slot>
+      <Slot>
+        <Index>6</Index>
+        <Item />
+        <Data xsi:type="MyObjectBuilder_ToolbarItemCubeBlock">
+          <DefinitionId Type="MyObjectBuilder_Gyro" Subtype="LargeBlockGyro" />
+        </Data>
+      </Slot>
+      <Slot>
+        <Index>7</Index>
+        <Item />
+        <Data xsi:type="MyObjectBuilder_ToolbarItemCubeBlock">
+          <DefinitionId Type="MyObjectBuilder_MotorSuspension" Subtype="Suspension3x3" />
+        </Data>
+      </Slot>
+      <Slot>
+        <Index>8</Index>
+        <Item />
+        <Data xsi:type="MyObjectBuilder_ToolbarItemCubeBlock">
+          <DefinitionId Type="MyObjectBuilder_AirtightSlideDoor" Subtype="LargeBlockSlideDoor" />
+        </Data>
+      </Slot>
+    </SlotsGamepad>
   </CharacterToolbar>
   <ControlledEntities>
     <dictionary>
@@ -102,7 +166,7 @@
         <Value>
           <ClientId>0</ClientId>
           <SerialId>0</SerialId>
-          <HashedId>11241088793314832044</HashedId>
+          <HashedId>14150451726126344675</HashedId>
         </Value>
       </item>
     </dictionary>
@@ -242,13 +306,18 @@
     <BackpackDespawnTimer>5</BackpackDespawnTimer>
     <EnableFactionPlayerNames>false</EnableFactionPlayerNames>
     <EnableTeamScoreCounters>true</EnableTeamScoreCounters>
+    <EnableSpaceSuitRespawn>true</EnableSpaceSuitRespawn>
+    <MatchRestartWhenEmptyTime>0</MatchRestartWhenEmptyTime>
+    <EnableFactionVoiceChat>false</EnableFactionVoiceChat>
+    <EnableOrca>true</EnableOrca>
+    <MaxProductionQueueLength>50</MaxProductionQueueLength>
   </Settings>
   <ScriptManagerData>
     <variables>
       <dictionary />
     </variables>
   </ScriptManagerData>
-  <AppVersion>1201013</AppVersion>
+  <AppVersion>1202124</AppVersion>
   <Factions>
     <Factions>
       <MyObjectBuilder_Faction>
@@ -307,16 +376,16 @@
   <Identities>
     <MyObjectBuilder_Identity>
       <IdentityId>144115188075855895</IdentityId>
-      <DisplayName>John Cena</DisplayName>
+      <DisplayName>uprime812</DisplayName>
       <CharacterEntityId>124168712738897777</CharacterEntityId>
-      <Model>Default_Astronaut</Model>
-      <ColorMask x="0" y="0.199999988" z="0.55" />
+      <Model>Default_Astronaut_Female</Model>
+      <ColorMask x="0.141666666" y="-0.03804356" z="0.5376748" />
       <BlockLimitModifier>0</BlockLimitModifier>
-      <LastLoginTime>2022-09-19T12:30:53.6085167+02:00</LastLoginTime>
+      <LastLoginTime>2023-07-18T12:57:14.0780468+02:00</LastLoginTime>
       <SavedCharacters>
         <long>124168712738897777</long>
       </SavedCharacters>
-      <LastLogoutTime>2022-09-19T12:32:02.6017611+02:00</LastLogoutTime>
+      <LastLogoutTime>2023-07-18T13:02:11.2103936+02:00</LastLogoutTime>
       <RespawnShips />
       <LastDeathPosition xsi:nil="true" />
       <ActiveContracts />
@@ -327,7 +396,7 @@
       <DisplayName>Space Pirates</DisplayName>
       <CharacterEntityId>0</CharacterEntityId>
       <BlockLimitModifier>0</BlockLimitModifier>
-      <LastLoginTime>2022-09-19T12:30:54.5076749+02:00</LastLoginTime>
+      <LastLoginTime>2023-07-18T12:57:14.3601737+02:00</LastLoginTime>
       <SavedCharacters />
       <LastLogoutTime>0001-01-01T00:00:00</LastLogoutTime>
       <RespawnShips />
@@ -343,10 +412,10 @@
         <Key>
           <ClientId>0</ClientId>
           <SerialId>0</SerialId>
-          <HashedId>11241088793314832044</HashedId>
+          <HashedId>14150451726126344675</HashedId>
         </Key>
         <Value>
-          <DisplayName>John Cena</DisplayName>
+          <DisplayName>uprime812</DisplayName>
           <IdentityId>144115188075855895</IdentityId>
           <Connected>true</Connected>
           <ForceRealPlayer>false</ForceRealPlayer>
@@ -386,28 +455,28 @@
                 <Index>4</Index>
                 <Item />
                 <Data xsi:type="MyObjectBuilder_ToolbarItemCubeBlock">
-                  <DefinitionId Type="MyObjectBuilder_GravityGenerator" Subtype="" />
+                  <DefinitionId Type="MyObjectBuilder_Thrust" Subtype="LargeBlockSmallThrust" />
                 </Data>
               </Slot>
               <Slot>
                 <Index>5</Index>
                 <Item />
-                <Data xsi:type="MyObjectBuilder_ToolbarItemWeapon">
-                  <DefinitionId Type="MyObjectBuilder_PhysicalGunObject" Subtype="AngleGrinder4Item" />
+                <Data xsi:type="MyObjectBuilder_ToolbarItemCubeBlock">
+                  <DefinitionId Type="MyObjectBuilder_Thrust" Subtype="LargeBlockSmallAtmosphericThrust" />
                 </Data>
               </Slot>
               <Slot>
                 <Index>6</Index>
                 <Item />
                 <Data xsi:type="MyObjectBuilder_ToolbarItemCubeBlock">
-                  <DefinitionId Type="MyObjectBuilder_TerminalBlock" Subtype="ControlPanel" />
+                  <DefinitionId Type="MyObjectBuilder_Gyro" Subtype="LargeBlockGyro" />
                 </Data>
               </Slot>
               <Slot>
                 <Index>7</Index>
                 <Item />
                 <Data xsi:type="MyObjectBuilder_ToolbarItemCubeBlock">
-                  <DefinitionId Type="MyObjectBuilder_CryoChamber" Subtype="LargeBlockCryoChamber" />
+                  <DefinitionId Type="MyObjectBuilder_MotorSuspension" Subtype="Suspension3x3" />
                 </Data>
               </Slot>
               <Slot>
@@ -423,8 +492,13 @@
           <EntityCameraData>
             <CameraControllerSettings EntityId="124168712738897777">
               <IsFirstPerson>false</IsFirstPerson>
-              <Distance>4.4208887605476992</Distance>
-              <HeadAngle x="-19.4603" y="0" />
+              <Distance>4.4208889007568359</Distance>
+              <HeadAngle x="-35.8708725" y="0" />
+            </CameraControllerSettings>
+            <CameraControllerSettings EntityId="96157458621170510">
+              <IsFirstPerson>true</IsFirstPerson>
+              <Distance>4.4208889007568359</Distance>
+              <HeadAngle x="0" y="0" />
             </CameraControllerSettings>
           </EntityCameraData>
           <BuildColorSlots>
@@ -693,6 +767,12 @@
         <dictionary />
       </Vector3DListStorageSecondary>
     </MyObjectBuilder_SessionComponent>
+    <MyObjectBuilder_SessionComponent xsi:type="MyObjectBuilder_AiRvoComponent">
+      <Definition Type="MyObjectbuilder_AiRvoComponentDefinition" Subtype="Default" />
+    </MyObjectBuilder_SessionComponent>
+    <MyObjectBuilder_SessionComponent xsi:type="MyObjectBuilder_AutopilotPathfindingComponent">
+      <Definition Type="MyObjectbuilder_AutopilotPathfindingComponentDefinition" Subtype="Default" />
+    </MyObjectBuilder_SessionComponent>
     <MyObjectBuilder_SessionComponent xsi:type="MyObjectBuilder_SpaceFaunaComponent">
       <SpawnInfos />
       <TimeoutInfos />
@@ -707,7 +787,7 @@
     </MyObjectBuilder_SessionComponent>
     <MyObjectBuilder_SessionComponent xsi:type="MyObjectBuilder_SectorWeatherComponent">
       <BaseSunDirection x="0.339467347" y="0.709795356" z="-0.617213368" />
-      <SunDirectionNormalized x="0.23267217" y="-0.577757657" z="0.7823426" />
+      <SunDirectionNormalized x="0.635630131" y="-0.3140097" z="0.7052462" />
       <WeatherPlanetData />
     </MyObjectBuilder_SessionComponent>
     <MyObjectBuilder_SessionComponent xsi:type="MyObjectBuilder_SessionComponentAssetModifiers" />
@@ -6848,18 +6928,36 @@
           <MultilineData>
             <Completed>false</Completed>
             <IsObjective>false</IsObjective>
-            <Data>Hello, Engineer! My name is Good.bot. I am an AI teacher that helps you by offering directions. Let's get you started! You can access useful information in the help screen.</Data>
+            <Data>Let's get you started on the basics of movement. Don't forget to stay on the ground.</Data>
             <CharactersDisplayed>-1</CharactersDisplayed>
           </MultilineData>
           <MultilineData>
             <Completed>false</Completed>
             <IsObjective>true</IsObjective>
-            <Data>Press [F1] to open help screen.</Data>
+            <Data>Use [W] [S] [A] [D] to walk and strafe.</Data>
+            <CharactersDisplayed>-1</CharactersDisplayed>
+          </MultilineData>
+          <MultilineData>
+            <Completed>false</Completed>
+            <IsObjective>true</IsObjective>
+            <Data>Hold [Shift]+[W] to sprint.</Data>
+            <CharactersDisplayed>-1</CharactersDisplayed>
+          </MultilineData>
+          <MultilineData>
+            <Completed>false</Completed>
+            <IsObjective>true</IsObjective>
+            <Data>Use [Space] to jump.</Data>
+            <CharactersDisplayed>-1</CharactersDisplayed>
+          </MultilineData>
+          <MultilineData>
+            <Completed>false</Completed>
+            <IsObjective>true</IsObjective>
+            <Data>Toggle [C] to crouch.</Data>
             <CharactersDisplayed>-1</CharactersDisplayed>
           </MultilineData>
         </LineData>
-        <Title>Good.bot: Introduction</Title>
-        <Visible>true</Visible>
+        <Title>Good.bot: Movement</Title>
+        <Visible>false</Visible>
         <IsUsedByVisualScripting>false</IsUsedByVisualScripting>
       </Questlog>
       <ExclusiveHighlights>
@@ -6869,7 +6967,7 @@
     </MyObjectBuilder_SessionComponent>
     <MyObjectBuilder_SessionComponent xsi:type="MyObjectBuilder_AntennaSessionComponent" />
     <MyObjectBuilder_SessionComponent xsi:type="MyObjectBuilder_EnvironmentBotSpawningSystem">
-      <TimeSinceLastEventInMs>60250</TimeSinceLastEventInMs>
+      <TimeSinceLastEventInMs>48300</TimeSinceLastEventInMs>
     </MyObjectBuilder_SessionComponent>
     <MyObjectBuilder_SessionComponent xsi:type="MyObjectBuilder_TradingManager" />
     <MyObjectBuilder_SessionComponent xsi:type="MyObjectBuilder_CoordinateSystem">
@@ -6908,14 +7006,7 @@
       <OverallBalance>20000</OverallBalance>
     </MyObjectBuilder_SessionComponent>
     <MyObjectBuilder_SessionComponent xsi:type="MyObjectBuilder_NeutralShipSpawner">
-      <ShipsInProgress>
-        <ShipTimePair>
-          <EntityIds>
-            <long>143167029877106104</long>
-          </EntityIds>
-          <TimeTicks>60679680000</TimeTicks>
-        </ShipTimePair>
-      </ShipsInProgress>
+      <ShipsInProgress />
     </MyObjectBuilder_SessionComponent>
     <MyObjectBuilder_SessionComponent xsi:type="MyObjectBuilder_PirateAntennas">
       <PiratesIdentity>144115188075855896</PiratesIdentity>
@@ -6945,8 +7036,9 @@
     <string>Models\Cubes\Large\CryoPod.mwm</string>
   </VicinityModelsCache>
   <VicinityArmorModelsCache>
-    <string>Models\Characters\Astronaut\SE_astronaut.mwm</string>
+    <string>Models\Characters\Astronaut\Female\SE_astronaut.mwm</string>
     <string>Models\Cubes\Large\Armor\HeavySquarePlate.mwm</string>
   </VicinityArmorModelsCache>
   <VicinityVoxelCache />
+  <WorldId>00000000-0000-0000-0000-000000000000</WorldId>
 </MyObjectBuilder_Checkpoint>
