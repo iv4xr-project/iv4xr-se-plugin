@@ -1,6 +1,7 @@
 """
 Records input of the game for 5 seconds and then saves it into a json file.
 """
+
 import json
 from time import sleep
 

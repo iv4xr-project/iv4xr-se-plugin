@@ -1,6 +1,7 @@
 """
 Replays input recorded previously by record_input.py
 """
+
 import json
 
 from spaceengineers.proxy import SpaceEngineersProxy

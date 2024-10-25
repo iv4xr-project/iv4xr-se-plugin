@@ -1,6 +1,7 @@
 """
 Sets up the whole scenario, connects to a local SE plugin instance.
 """
+
 from unittest import TestCase
 
 from behave.runner import Context
