@@ -1,13 +1,10 @@
 package spaceEngineers.iv4xr
 
 import eu.iv4xr.framework.extensions.pathfinding.AStar
-import org.junit.jupiter.api.Disabled
 import spaceEngineers.controller.Observer
 import spaceEngineers.controller.SpaceEngineers
 import spaceEngineers.iv4xr.navigation.Iv4XRAStarPathFinder
 import spaceEngineers.iv4xr.navigation.NavigableGraph
-import spaceEngineers.model.DefinitionId
-import spaceEngineers.model.ToolbarLocation
 import spaceEngineers.model.Vec3F
 import spaceEngineers.model.extensions.allBlocks
 import spaceEngineers.model.extensions.largestGrid
@@ -17,25 +14,16 @@ import spaceEngineers.navigation.toRichGraph
 import testhelp.MockOrRealGameTest
 import testhelp.assertLessThan
 import kotlin.test.Test
-import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 import kotlin.time.Duration.Companion.seconds
 
 class NavigateEntityTest : MockOrRealGameTest(
-    scenarioId = "small",
-    forceRealGame = true,
-    loadScenario = true
+    inMockResourcesDirectory("NavigateEntityTest.txt") // scenarioId = "small",
+    // forceRealGame = true,
+    // loadScenario = true
 ) {
 
-    @Disabled("This test required a game instance running, enable manually by uncommenting.")
-    @Test
-    fun test_observed_grids() = testContext {
-        assertEquals(observer.observeBlocks().grids.size, 1)
-        assertEquals(observer.observeBlocks().grids.size, 1)
-        assertEquals(observer.observeBlocks().grids.size, 1)
-    }
-
-    //@Disabled("This test required a game instance running, enable manually by uncommenting.")
+    // @Disabled("This test required a game instance running, enable manually by uncommenting.")
     @Test
     fun navigateMaze() = testContext {
         val graph = observer.navigationGraph(observer.observeBlocks().largestGrid().id)
@@ -68,9 +56,9 @@ class NavigateEntityTest : MockOrRealGameTest(
         System.out.println("reachablePosition: " + reachablePosition)
         System.out.println("reachableNode: " + reachableNode)
 
-        //items.setToolbarItem(DefinitionId.physicalGun("AngleGrinder2Item"), ToolbarLocation(3, 0))
-        //val grinderLocation = items.toolbar().findLocation("AngleGrinder2Item") ?: error("No grinder found")
-        //items.equip(grinderLocation)
+        // items.setToolbarItem(DefinitionId.physicalGun("AngleGrinder2Item"), ToolbarLocation(3, 0))
+        // val grinderLocation = items.toolbar().findLocation("AngleGrinder2Item") ?: error("No grinder found")
+        // items.equip(grinderLocation)
 
         val navigableGraph = NavigableGraph(graph)
         val targetNode = navigableGraph.node(nodeId = reachableNode)

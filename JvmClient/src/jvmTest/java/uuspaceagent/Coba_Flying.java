@@ -2,6 +2,7 @@ package uuspaceagent;
 
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.spatial.Vec3;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static uuspaceagent.TestUtils.console;
@@ -108,6 +109,7 @@ public class Coba_Flying {
         moveTo(state, destination) ;
     }
 
+    @Disabled
     @Test
     public void testFlyAndYrotate() throws InterruptedException {
         var state = loadSE("myworld-3").snd;

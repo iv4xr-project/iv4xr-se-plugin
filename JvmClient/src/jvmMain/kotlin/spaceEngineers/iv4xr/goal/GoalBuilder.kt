@@ -99,6 +99,55 @@ class GoalBuilder(
             ).lift()
     }
 
+    fun typeBuiltBlockIntegrityIsAbove(
+        blockType: String,
+        percentage: Double,
+        tactic: Tactic = tactics.doNothing()
+    ): GoalStructure {
+        Thread.sleep(500)
+        return typeBuiltBlockIntegrityCheck(
+            blockType,
+            percentage = percentage,
+            checkFunction = blockIntegrityIsAbove(percentage),
+            tactic = tactic
+        )
+    }
+
+    fun typeBuiltBlockIntegrityIsBelow(
+        blockType: String,
+        percentage: Double,
+        tactic: Tactic = tactics.doNothing()
+    ): GoalStructure {
+        Thread.sleep(500)
+        return typeBuiltBlockIntegrityCheck(
+            blockType,
+            percentage = percentage,
+            checkFunction = blockIntegrityIsBelow(percentage),
+            tactic = tactic
+        )
+    }
+
+    private fun typeBuiltBlockIntegrityCheck(
+        blockType: String,
+        percentage: Double,
+        checkFunction: (Block) -> Boolean,
+        tactic: Tactic = tactics.doNothing()
+    ): GoalStructure {
+        Thread.sleep(500)
+        return Goal("lastBuiltBlockIsAtPercentageIntegrity($percentage)")
+            .toSolve { belief: SeAgentState ->
+                belief.seEnv.run {
+                    belief.seEnv.controller.observer.observeBlocks().allBlocks.find { it.definitionId.type == blockType }
+                        ?.let { foundBlock ->
+                            checkFunction(foundBlock)
+                        } ?: false
+                }
+            }
+            .withTactic(
+                tactic
+            ).lift()
+    }
+
     private fun blockIntegrityIsAbove(percentage: Double): (Block) -> Boolean {
         return fun(block): Boolean {
             val requiredIntegrity = block.maxIntegrity * percentage

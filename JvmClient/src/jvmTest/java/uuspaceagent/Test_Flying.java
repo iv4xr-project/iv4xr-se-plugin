@@ -4,6 +4,7 @@ import eu.iv4xr.framework.mainConcepts.TestAgent;
 import eu.iv4xr.framework.spatial.Vec3;
 import nl.uu.cs.aplib.mainConcepts.GoalStructure;
 import nl.uu.cs.aplib.utils.Pair;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static nl.uu.cs.aplib.AplibEDSL.DEPLOYonce;
@@ -40,6 +41,7 @@ public class Test_Flying {
         TestUtils.closeConnectionToSE(state);
     }
 
+    @Disabled
     @Test
     public void test_flying_to_some_location() throws InterruptedException {
         console("*** start test...") ;

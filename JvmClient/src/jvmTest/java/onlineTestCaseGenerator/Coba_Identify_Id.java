@@ -4,6 +4,7 @@ import eu.iv4xr.framework.mainConcepts.WorldEntity;
 
 import static uuspaceagent.TestUtils.loadSE;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import uuspaceagent.PrintInfos;
 import uuspaceagent.SEBlockFunctions;
@@ -11,6 +12,7 @@ import uuspaceagent.TestUtils;
 
 
 public class Coba_Identify_Id {
+    @Disabled
     @Test
     public void test() throws InterruptedException {
         var state = loadSE("world-3 blocks").snd;

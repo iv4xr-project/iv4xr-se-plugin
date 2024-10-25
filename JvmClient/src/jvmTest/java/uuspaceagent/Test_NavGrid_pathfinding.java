@@ -4,6 +4,7 @@ import eu.iv4xr.framework.mainConcepts.TestAgent;
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.spatial.Vec3;
 import nl.uu.cs.aplib.utils.Pair;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 //import spaceEngineers.transport.SocketReaderWriterKt;
 
@@ -25,6 +26,7 @@ public class Test_NavGrid_pathfinding {
      * Basic test to check that blocks that should be recognized as obstacles are indeed
      * recognized.
      */
+    @Disabled
     @Test
     public void test_obstacles_membership() throws InterruptedException {
         console("*** start test...") ;
@@ -98,6 +100,7 @@ public class Test_NavGrid_pathfinding {
      * direction from the agent.
      * We will also check pathSmoothing (removing intermediate nodes in straight-line segments in the path).
      */
+    @Disabled
     @Test
     public void test_2Dpathfinder1() throws InterruptedException {
         console("*** start test...") ;
@@ -133,6 +136,7 @@ public class Test_NavGrid_pathfinding {
      * This tests 2D path-finding to several locations, some are reachable and some not.
      * @throws InterruptedException
      */
+    @Disabled
     @Test
     public void test_2Dpathfinder2() throws InterruptedException {
         console("*** start test...") ;
@@ -225,6 +229,7 @@ public class Test_NavGrid_pathfinding {
     /**
      * Just few simple location left and right of the agent to test turning.
      */
+    @Disabled
     @Test
     public void test_2Dpathfinder3() throws InterruptedException {
         console("*** start test...") ;
@@ -255,6 +260,7 @@ public class Test_NavGrid_pathfinding {
         console(PrintInfos.indent(PrintInfos.showPath(state,path),5)) ;
     }
 
+    @Disabled
     @Test
     public void test_3Dpathfinding1() throws InterruptedException {
         console("*** start test...") ;

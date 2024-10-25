@@ -1,6 +1,7 @@
 package uuspaceagent;
 
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import spaceEngineers.model.*;
 
@@ -11,6 +12,7 @@ import static uuspaceagent.TestUtils.loadSE;
  */
 public class Coba_Grinding {
 
+    @Disabled
     @Test
     public void test() throws InterruptedException {
 

@@ -16,6 +16,7 @@
     <MaxBlocksPerPlayer>0</MaxBlocksPerPlayer>
     <TotalPCU>100000</TotalPCU>
     <PiratePCU>50000</PiratePCU>
+    <GlobalEncounterPCU>25000</GlobalEncounterPCU>
     <MaxFactionsCount>0</MaxFactionsCount>
     <BlockLimitsEnabled>GLOBALLY</BlockLimitsEnabled>
     <EnableRemoteBlockRemoval>true</EnableRemoteBlockRemoval>
@@ -57,11 +58,14 @@
     <EnableRespawnShips>true</EnableRespawnShips>
     <ScenarioEditMode>false</ScenarioEditMode>
     <Scenario>false</Scenario>
+    <UpdateRespawnDictionary>false</UpdateRespawnDictionary>
     <CanJoinRunning>false</CanJoinRunning>
     <PhysicsIterations>8</PhysicsIterations>
     <SunRotationIntervalMinutes>119.999992</SunRotationIntervalMinutes>
     <EnableJetpack>true</EnableJetpack>
     <SpawnWithTools>true</SpawnWithTools>
+    <BlueprintShareTimeout>30</BlueprintShareTimeout>
+    <BlueprintShare>true</BlueprintShare>
     <StartInRespawnScreen>false</StartInRespawnScreen>
     <EnableVoxelDestruction>true</EnableVoxelDestruction>
     <MaxDrones>5</MaxDrones>
@@ -107,12 +111,14 @@
     <DepositsCountCoefficient>2</DepositsCountCoefficient>
     <DepositSizeDenominator>30</DepositSizeDenominator>
     <WeatherSystem>true</WeatherSystem>
+    <WeatherLightingDamage>false</WeatherLightingDamage>
     <HarvestRatioMultiplier>1</HarvestRatioMultiplier>
     <TradeFactionsCount>15</TradeFactionsCount>
     <StationsDistanceInnerRadius>10000000</StationsDistanceInnerRadius>
     <StationsDistanceOuterRadiusStart>10000000</StationsDistanceOuterRadiusStart>
     <StationsDistanceOuterRadiusEnd>30000000</StationsDistanceOuterRadiusEnd>
     <EconomyTickInSeconds>1200</EconomyTickInSeconds>
+    <NPCGridClaimTimeLimit>120</NPCGridClaimTimeLimit>
     <SimplifiedSimulation>false</SimplifiedSimulation>
     <EnablePcuTrading>true</EnablePcuTrading>
     <FamilySharing>true</FamilySharing>
@@ -140,8 +146,35 @@
     <EnableFactionVoiceChat>false</EnableFactionVoiceChat>
     <EnableOrca>true</EnableOrca>
     <MaxProductionQueueLength>50</MaxProductionQueueLength>
+    <PrefetchShapeRayLengthLimit>15000</PrefetchShapeRayLengthLimit>
+    <EnemyTargetIndicatorDistance>20</EnemyTargetIndicatorDistance>
+    <EnableTrashSettingsPlatformOverride>true</EnableTrashSettingsPlatformOverride>
+    <MinimumWorldSize>0</MinimumWorldSize>
+    <MaxCargoBags>100</MaxCargoBags>
+    <TrashCleanerCargoBagsMaxLiveTime>30</TrashCleanerCargoBagsMaxLiveTime>
+    <ScrapEnabled>true</ScrapEnabled>
+    <BroadcastControllerMaxOfflineTransmitDistance>200</BroadcastControllerMaxOfflineTransmitDistance>
+    <TemporaryContainers>true</TemporaryContainers>
+    <GlobalEncounterTimer>15</GlobalEncounterTimer>
+    <GlobalEncounterCap>1</GlobalEncounterCap>
+    <GlobalEncounterEnableRemovalTimer>true</GlobalEncounterEnableRemovalTimer>
+    <GlobalEncounterMinRemovalTimer>90</GlobalEncounterMinRemovalTimer>
+    <GlobalEncounterMaxRemovalTimer>180</GlobalEncounterMaxRemovalTimer>
+    <GlobalEncounterRemovalTimeClock>30</GlobalEncounterRemovalTimeClock>
+    <EncounterDensity>0.35</EncounterDensity>
+    <EncounterGeneratorVersion>6</EncounterGeneratorVersion>
+    <EnablePlanetaryEncounters>true</EnablePlanetaryEncounters>
+    <PlanetaryEncounterTimerMin>15</PlanetaryEncounterTimerMin>
+    <PlanetaryEncounterTimerMax>30</PlanetaryEncounterTimerMax>
+    <PlanetaryEncounterExistingStructuresRange>7000</PlanetaryEncounterExistingStructuresRange>
+    <PlanetaryEncounterAreaLockdownRange>10000</PlanetaryEncounterAreaLockdownRange>
+    <PlanetaryEncounterDesiredSpawnRange>6000</PlanetaryEncounterDesiredSpawnRange>
+    <PlanetaryEncounterPresenceRange>20000</PlanetaryEncounterPresenceRange>
+    <PlanetaryEncounterDespawnTimeout>120</PlanetaryEncounterDespawnTimeout>
+    <LimitBlocksBy>BlockPairName</LimitBlocksBy>
+    <MaxHudChatMessageCount>100</MaxHudChatMessageCount>
   </Settings>
   <Mods />
   <SessionName>Empty World test observe</SessionName>
-  <LastSaveTime>2023-07-18T13:02:11.1921938+02:00</LastSaveTime>
+  <LastSaveTime>2024-10-25T16:35:13.0049349+02:00</LastSaveTime>
 </MyObjectBuilder_WorldConfiguration>

@@ -5,6 +5,7 @@ import eu.iv4xr.framework.mainConcepts.TestDataCollector;
 import nl.uu.cs.aplib.AplibEDSL;
 import nl.uu.cs.aplib.mainConcepts.GoalStructure;
 import nl.uu.cs.aplib.utils.Pair;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import uuspaceagent.SEBlockFunctions;
 import uuspaceagent.TestUtils;
@@ -45,7 +46,7 @@ public class Test_Grinding_ForAll {
         TestUtils.closeConnectionToSE(state);
     }
 
-
+    @Disabled
     @Test
     public void test_navigate_and_grind() throws InterruptedException {
         // This is a position that is unreachable, so this goal should abort

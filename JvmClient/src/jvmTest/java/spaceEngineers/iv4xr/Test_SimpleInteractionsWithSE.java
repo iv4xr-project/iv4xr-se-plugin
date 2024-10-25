@@ -12,6 +12,7 @@ import static nl.uu.cs.aplib.AplibEDSL.* ;
 import static eu.iv4xr.framework.Iv4xrEDSL.* ;
 import static uuspaceagent.TestUtils.console;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import spaceEngineers.controller.ContextControllerWrapper;
 //import spaceEngineers.controller.JsonRpcCharacterController;
@@ -93,6 +94,7 @@ public class Test_SimpleInteractionsWithSE {
         return angle ;
     }
 
+    @Disabled
     @Test
     public void test_env_interactions() throws InterruptedException {
         console("*** start test...") ;

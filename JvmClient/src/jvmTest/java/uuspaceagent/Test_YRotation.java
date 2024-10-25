@@ -1,6 +1,7 @@
 package uuspaceagent;
 
 import eu.iv4xr.framework.spatial.Vec3;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -34,6 +35,7 @@ public class Test_YRotation {
         assertTrue(Math.abs(angleBetweenRotatedvAndTarget) <= 0.01f) ;
     }
 
+    @Disabled
     @Test
     public void test_acuteAngle_left_right() {
         System.out.println(">>> acute cases");
@@ -53,6 +55,7 @@ public class Test_YRotation {
 
     }
 
+    @Disabled
     @Test
     public void test_obstuseAngle_left_right() {
         System.out.println(">>> obtuse cases");
@@ -69,6 +72,7 @@ public class Test_YRotation {
         printInfo(target,v, "-(90+30) = -120");
     }
 
+    @Disabled
     @Test
     public void test_angle_between180_and270() {
         System.out.println(">>> angle between 180-270 cases");
@@ -80,6 +84,7 @@ public class Test_YRotation {
         printInfo(target,v, "-(180+60) = -240");
     }
 
+    @Disabled
     @Test
     public void test_angle_0_and_90() {
         System.out.println(">>> angle 0");

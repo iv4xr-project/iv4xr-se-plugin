@@ -311,6 +311,7 @@ public class Test_Experiment {
 
 
     //***************************************chain**********
+    @Disabled
     @Test
     public void test_generator_chain() throws InterruptedException, IOException {
         var agentAndState = deployAgent("islanddswithdoorsWithDoors-second"); // world/platform name

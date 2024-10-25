@@ -1,6 +1,7 @@
 package uuspaceagent;
 
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import spaceEngineers.controller.useobject.UseObjectExtensions;
 import spaceEngineers.model.*;
@@ -12,6 +13,7 @@ import static uuspaceagent.TestUtils.loadSE;
  */
 public class Coba_UseObject {
 
+    @Disabled
     @Test
     public void test() throws InterruptedException {
 

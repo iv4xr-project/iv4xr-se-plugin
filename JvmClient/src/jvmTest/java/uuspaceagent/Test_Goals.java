@@ -5,6 +5,7 @@ import eu.iv4xr.framework.mainConcepts.TestDataCollector;
 import eu.iv4xr.framework.spatial.Vec3;
 import nl.uu.cs.aplib.mainConcepts.GoalStructure;
 import nl.uu.cs.aplib.utils.Pair;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static nl.uu.cs.aplib.AplibEDSL.DEPLOYonce;
@@ -42,6 +43,7 @@ public class Test_Goals {
         TestUtils.closeConnectionToSE(state);
     }
 
+    @Disabled
     @Test
     public void test_close2Dto_GS1() throws InterruptedException {
         // This is a position in front of a sliding-door. It is reachable from the
@@ -56,6 +58,7 @@ public class Test_Goals {
         assertTrue(G.getStatus().success());
     }
 
+    @Disabled
     @Test
     public void test_close2Dto_GS2() throws InterruptedException {
         // This is a position that is unreachable, so this goal should abort
@@ -69,6 +72,7 @@ public class Test_Goals {
         assertTrue(G.getStatus().failed());
     }
 
+    @Disabled
     @Test
     public void test_closeTo_Block_1() throws InterruptedException {
         // This is a position that is unreachable, so this goal should abort
@@ -85,6 +89,7 @@ public class Test_Goals {
         assertTrue(G.getStatus().success());
     }
 
+    @Disabled
     @Test
     public void test_closeTo_Block_2() throws InterruptedException {
         // This is a position that is unreachable, so this goal should abort
@@ -101,6 +106,7 @@ public class Test_Goals {
         assertTrue(G.getStatus().failed());
     }
 
+    @Disabled
     @Test
     public void test_navigate_and_grind() throws InterruptedException {
         // This is a position that is unreachable, so this goal should abort

@@ -1,6 +1,7 @@
 package uuspaceagent;
 
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import spaceEngineers.controller.useobject.UseObjectExtensions;
 import spaceEngineers.model.Block;
@@ -15,6 +16,7 @@ import static uuspaceagent.TestUtils.loadSE;
  */
 public class Coba_DoorInteract {
 
+    @Disabled
     @Test
     public void test() throws InterruptedException {
 

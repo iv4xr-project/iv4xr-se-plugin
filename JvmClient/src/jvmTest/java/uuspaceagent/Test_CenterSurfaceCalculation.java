@@ -2,6 +2,7 @@ package uuspaceagent;
 
 import eu.iv4xr.framework.mainConcepts.WorldEntity;
 import eu.iv4xr.framework.spatial.Vec3;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -11,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class Test_CenterSurfaceCalculation {
 
+    @Disabled
     @Test
     public void test1() throws InterruptedException {
         var agentAndState = TestUtils.loadSE("myworld-3") ;

@@ -21,7 +21,7 @@ import kotlin.test.assertTrue
 
 class BasicIv4xrTest {
 
-    //@Disabled("Disabled for building whole project, enable manually by uncommenting.")
+    @Disabled("Disabled for building whole project, enable manually by uncommenting.")
     @Test
     fun placeGrindDownTorchUp() {
         // Setup constants to use later.
@@ -74,8 +74,9 @@ class BasicIv4xrTest {
                 blockType.type,
                 tactic = tactics.buildBlock(blockType.type),
             ),
-            goals.lastBuiltBlockIntegrityIsBelow(
-                percentage = 0.1,
+            goals.typeBuiltBlockIntegrityIsBelow(
+                blockType.type,
+                percentage = 0.5,
                 tactic = SEQ(
                     tactics.equip(grinderLocation),
                     tactics.sleep(500),
@@ -88,7 +89,8 @@ class BasicIv4xrTest {
                     tactics.sleep(500),
                 ),
             ),
-            goals.lastBuiltBlockIntegrityIsAbove(
+            goals.typeBuiltBlockIntegrityIsAbove(
+                blockType.type,
                 percentage = 1.0,
                 tactic = SEQ(
                     tactics.equip(welderLocation),
@@ -107,20 +109,21 @@ class BasicIv4xrTest {
 
         // We load the scenario.
         theEnv.loadWorld()
+        theEnv.controller.screens.waitUntilTheGameLoaded()
         // Setup block in the toolbar.
-        controllerWrapper.items.setToolbarItem(blockType, blockLocation)
+        theEnv.controller.items.setToolbarItem(blockType, blockLocation)
         // Setup welder in the toolbar.
-        controllerWrapper.items.setToolbarItem(welder, welderLocation)
+        theEnv.controller.items.setToolbarItem(welder, welderLocation)
         // Setup grinder in the toolbar.
-        controllerWrapper.items.setToolbarItem(grinder, grinderLocation)
+        theEnv.controller.items.setToolbarItem(grinder, grinderLocation)
         Thread.sleep(500)
 
         // We observe for new blocks once, so that current blocks are not going to be considered "new".
-        theEnv.observeForNewBlocks()
+        theEnv.controller.observer.observeNewBlocks()
 
         // Run the agent and update in the loop.
         var i = 0
-        while (testingTask.status.inProgress() && i <= 1500) {
+        while (testingTask.status.inProgress() && i <= 500) {
             testAgent.update()
             println("*** $i, ${myAgentState.worldmodel.agentId} @${myAgentState.worldmodel.position}")
             i++

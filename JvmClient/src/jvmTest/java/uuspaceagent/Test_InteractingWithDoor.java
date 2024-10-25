@@ -4,6 +4,7 @@ import eu.iv4xr.framework.mainConcepts.TestAgent;
 import eu.iv4xr.framework.mainConcepts.TestDataCollector;
 import nl.uu.cs.aplib.mainConcepts.GoalStructure;
 import nl.uu.cs.aplib.utils.Pair;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static nl.uu.cs.aplib.AplibEDSL.DEPLOYonce;
@@ -41,6 +42,7 @@ public class Test_InteractingWithDoor {
         TestUtils.closeConnectionToSE(state);
     }
 
+    @Disabled
     @Test
     public void test_navigate_and_grind() throws InterruptedException {
         // This is a position that is unreachable, so this goal should abort

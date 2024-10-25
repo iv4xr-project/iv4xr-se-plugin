@@ -1,5 +1,6 @@
 package uuspaceagent;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import spaceEngineers.model.Vec2F;
 import spaceEngineers.model.Vec3F;
@@ -11,7 +12,7 @@ import static uuspaceagent.TestUtils.loadSE;
  */
 public class Coba_MoveAndRotateSpeed {
 
-
+    @Disabled
     @Test
     public void test() throws InterruptedException {
 

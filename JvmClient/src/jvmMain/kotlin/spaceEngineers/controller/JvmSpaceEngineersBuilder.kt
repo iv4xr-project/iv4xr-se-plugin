@@ -3,11 +3,11 @@ package spaceEngineers.controller
 class JvmSpaceEngineersBuilder {
 
     companion object {
-        //@JvmStatic
+        // @JvmStatic
         fun default(): JsonRpcSpaceEngineersBuilder {
             return SpaceEngineersJavaProxyBuilder()
         }
 
-        fun foo() : Int { return 10 }
+        fun foo(): Int { return 10 }
     }
 }

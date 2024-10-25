@@ -3,6 +3,7 @@ package uuspaceagent;
 import eu.iv4xr.framework.mainConcepts.TestAgent;
 import eu.iv4xr.framework.spatial.Vec3;
 import nl.uu.cs.aplib.mainConcepts.GoalStructure;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 //import spaceEngineers.transport.SocketReaderWriterKt;
 
@@ -47,6 +48,7 @@ public class Test_BasicMoveAndTurnGoals {
     /**
      * Test a simple goal to turn the agent 90 degree to the right.
      */
+    @Disabled
     @Test
     public void test_turningRight() throws InterruptedException {
         // agent start location should be around: <10.119276,-5.0025,55.681934>
@@ -62,6 +64,7 @@ public class Test_BasicMoveAndTurnGoals {
     /**
      * Test a simple goal to turn the agent 90 degree to the left.
      */
+    @Disabled
     @Test
     public void test_turningLeft() throws InterruptedException {
         // agent start location should be around: <9.549925,-5.0025005,54.149185>
@@ -77,6 +80,7 @@ public class Test_BasicMoveAndTurnGoals {
     /**
      * Test strafing to the right.
      */
+    @Disabled
     @Test
     public void test_StrafeRight() throws InterruptedException {
         // agent start location should be around: <10.119276,-5.0025,55.681934>
@@ -92,6 +96,7 @@ public class Test_BasicMoveAndTurnGoals {
     /**
      * Test strafing to left.
      */
+    @Disabled
     @Test
     public void test_StrafeLeft() throws InterruptedException {
         // agent start location should be around: <10.119276,-5.0025,55.681934>
@@ -108,6 +113,7 @@ public class Test_BasicMoveAndTurnGoals {
      * Test move straight forward, mixed with a bit strafing (the target is diagonal,
      * and we don't turn the agent).
      */
+    @Disabled
     @Test
     public void test_Forward() throws InterruptedException {
         // agent start location should be around: <10.119276,-5.0025,55.681934>

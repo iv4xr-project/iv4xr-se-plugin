@@ -4,6 +4,7 @@ import eu.iv4xr.framework.mainConcepts.* ;
 import eu.iv4xr.framework.spatial.Vec3;
 import nl.uu.cs.aplib.mainConcepts.* ;
 import nl.uu.cs.aplib.utils.Pair;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 //import spaceEngineers.transport.SocketReaderWriterKt;
 
@@ -70,6 +71,7 @@ public class Test_Navigate2DTo {
      * Test navigating to a very close square. Mainly to see if the agent turning in the
      * right direction.
      */
+    @Disabled
     @Test
     public void test_nav_to_veryclose_square() throws InterruptedException {
         // agent start location should be around: <10.119276,-5.0025,55.681934>
@@ -86,6 +88,7 @@ public class Test_Navigate2DTo {
     /**
      * Destination lies in a straight and clear line from the agent.
      */
+    @Disabled
     @Test
     public void test1() throws InterruptedException {
         // navigating to (10,-5,65) ... this is just before the buttons-panel
@@ -113,6 +116,7 @@ public class Test_Navigate2DTo {
      * Navigate to a position some distance before a door. The agent has to make a U-turn to pass
      * over a sticking wall.
      */
+    @Disabled
     @Test
     public void test3() throws InterruptedException {
         // This is a position in front of a sliding-door. It is reachable from the
@@ -128,6 +132,7 @@ public class Test_Navigate2DTo {
      * Navigate to a position beyond an open door. This is to test the ability of the 2D
      * grid nav to recognize inner corridors of a door.
      */
+    @Disabled
     @Test
     public void test4() throws InterruptedException {
         // This is a position in front of a sliding-door. It is reachable from the

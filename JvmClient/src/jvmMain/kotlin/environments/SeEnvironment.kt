@@ -57,7 +57,7 @@ fun Block.toWorldEntity(): WorldEntity {
         we.properties["orientationForward"] = orientationForward.toIv4xrVec3()
         we.properties["orientationUp"] = orientationUp.toIv4xrVec3()
         if (this is DoorBase) {
-            we.properties["isOpen"] = this.open ;
+            we.properties["isOpen"] = this.open
         }
     }
 }
