@@ -92,6 +92,7 @@ class SeEnvironment @JvmOverloads constructor(
     override fun loadWorld() {
         val scenario = File("$scenarioDir$worldId").absolutePath
         controller.session.loadScenario(scenario)
+        controller.screens.waitUntilTheGameLoaded()
     }
 
     override fun observe(agentId: String): WorldModel {
@@ -130,6 +131,20 @@ class SeEnvironment @JvmOverloads constructor(
 
     fun equipAndPlace(blockType: String) {
         return equipAndPlace(context.blockToolbarLocation(blockType))
+    }
+
+    fun interact() {
+        return controller.character.use()
+    }
+
+    fun closeTerminal() {
+        controller.screens.terminal.close()
+    }
+
+    fun exitLevelWithoutSaving() {
+        controller.screens.gamePlay.showMainMenu()
+        controller.screens.mainMenu.exitToMainMenu()
+        controller.screens.messageBox.pressNo()
     }
 
     override fun close() {

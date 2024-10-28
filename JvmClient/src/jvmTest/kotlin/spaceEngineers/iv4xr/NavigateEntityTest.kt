@@ -1,21 +1,11 @@
 package spaceEngineers.iv4xr
 
-import eu.iv4xr.framework.extensions.pathfinding.AStar
-import spaceEngineers.controller.Observer
-import spaceEngineers.controller.SpaceEngineers
-import spaceEngineers.iv4xr.navigation.Iv4XRAStarPathFinder
-import spaceEngineers.iv4xr.navigation.NavigableGraph
+import spaceEngineers.controller.extensions.distanceTo
+import spaceEngineers.iv4xr.navigation.NavigableSystem
 import spaceEngineers.model.Vec3F
-import spaceEngineers.model.extensions.allBlocks
-import spaceEngineers.model.extensions.largestGrid
-import spaceEngineers.navigation.CharacterNavigation
-import spaceEngineers.navigation.NodeId
-import spaceEngineers.navigation.toRichGraph
 import testhelp.MockOrRealGameTest
-import testhelp.assertLessThan
 import kotlin.test.Test
 import kotlin.test.assertNotEquals
-import kotlin.time.Duration.Companion.seconds
 
 class NavigateEntityTest : MockOrRealGameTest(
     inMockResourcesDirectory("NavigateEntityTest.txt") // scenarioId = "small",
@@ -23,75 +13,23 @@ class NavigateEntityTest : MockOrRealGameTest(
     // loadScenario = true
 ) {
 
-    // @Disabled("This test required a game instance running, enable manually by uncommenting.")
     @Test
     fun navigateMaze() = testContext {
-        val graph = observer.navigationGraph(observer.observeBlocks().largestGrid().id)
-
-        // Functional blocks are not included in the navigational graph as nodes
-        // We need to find the closest nav node related to the desired block position
-        val blockPosition = desiredBlockPosition("BlockCryoChamber", observer)
+        val navigableSystem = NavigableSystem(this, observer)
+        val blockPosition = navigableSystem.setDesiredBlockPosition("BlockCryoChamber")
         assertNotEquals(blockPosition, Vec3F(0, 0, 0))
 
-        var reachablePosition = Vec3F(0, 0, 0)
-        var reachableNode = ""
-        var closestDistance = 3f
+        val closestDistance = 3f
 
-        val richGraph = graph.toRichGraph()
-        System.out.println("richGraph.nodeMap.size: " + richGraph.nodeMap.size)
-        richGraph.nodeMap.forEach { entry ->
-            println("${entry.key} : ${entry.value}")
-            val distance = entry.value.data.distanceTo(blockPosition)
-            println(" --> distance: $distance ")
-            if (distance < closestDistance) {
-                reachablePosition = entry.value.data
-                reachableNode = entry.value.id
-                closestDistance = distance
-            }
-        }
+        val navigableGraph = navigableSystem.getNavigableGraph()
+        val navigablePath = navigableSystem.getClosestPathToDesiredBlock(closestDistance)
 
-        assertNotEquals(reachableNode, "")
-        assertLessThan(closestDistance, 3f)
+        navigableSystem.navigateGroundedPath(navigableGraph, navigablePath)
 
-        System.out.println("reachablePosition: " + reachablePosition)
-        System.out.println("reachableNode: " + reachableNode)
+        val finalDistance = observer.distanceTo(blockPosition)
+        println("finalDistance: $finalDistance")
 
-        // items.setToolbarItem(DefinitionId.physicalGun("AngleGrinder2Item"), ToolbarLocation(3, 0))
-        // val grinderLocation = items.toolbar().findLocation("AngleGrinder2Item") ?: error("No grinder found")
-        // items.equip(grinderLocation)
-
-        val navigableGraph = NavigableGraph(graph)
-        val targetNode = navigableGraph.node(nodeId = reachableNode)
-        val startNode: NodeId = richGraph.nodeMap.minByOrNull { it.value.data.distanceTo(observer.observeBlocks().character.position) }?.key ?: ""
-        val path = getPath(navigableGraph, startNode, targetNode.id)
-
-        val navigator = CharacterNavigation(this, pathFinder = Iv4XRAStarPathFinder())
-        for (nodeId in path) {
-            navigator.moveInLine(navigableGraph.node(nodeId).data, timeout = 5.seconds)
-        }
-    }
-
-    private fun SpaceEngineers.getPath(
-        navigableGraph: NavigableGraph,
-        startNodeId: NodeId,
-        targetNodeId: NodeId
-    ): List<NodeId> {
-        val pathfinder = AStar<NodeId>()
-        return pathfinder.findPath(navigableGraph, startNodeId, targetNodeId)
-    }
-
-    private fun desiredBlockPosition(
-        desiredBlock: String,
-        observer: Observer
-    ): Vec3F {
-        for (block in observer.observeBlocks().allBlocks) {
-            if (desiredBlock in block.definitionId.toString()) {
-                System.out.println("Math desired block in position: " + block.position)
-                System.out.println("block.definitionId: " + block.definitionId)
-                System.out.println("block.id: " + block.id)
-                return block.position
-            }
-        }
-        return Vec3F(0, 0, 0)
+        // Check the agent is near the desired block
+        assert(finalDistance < closestDistance)
     }
 }

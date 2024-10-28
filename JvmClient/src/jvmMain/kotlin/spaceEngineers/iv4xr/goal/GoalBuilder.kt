@@ -5,6 +5,7 @@ import eu.iv4xr.framework.spatial.Vec3
 import nl.uu.cs.aplib.mainConcepts.Goal
 import nl.uu.cs.aplib.mainConcepts.GoalStructure
 import nl.uu.cs.aplib.mainConcepts.Tactic
+import spaceEngineers.controller.extensions.distanceTo
 import spaceEngineers.model.Block
 import spaceEngineers.model.extensions.allBlocks
 import kotlin.math.abs
@@ -137,7 +138,7 @@ class GoalBuilder(
         return Goal("lastBuiltBlockIsAtPercentageIntegrity($percentage)")
             .toSolve { belief: SeAgentState ->
                 belief.seEnv.run {
-                    belief.seEnv.controller.observer.observeBlocks().allBlocks.find { it.definitionId.type == blockType }
+                    belief.seEnv.controller.observer.observeBlocks().allBlocks.find { blockType in it.definitionId.toString() }
                         ?.let { foundBlock ->
                             checkFunction(foundBlock)
                         } ?: false
@@ -160,5 +161,70 @@ class GoalBuilder(
             val requiredIntegrity = block.maxIntegrity * percentage
             return block.integrity <= requiredIntegrity
         }
+    }
+
+    fun terminalIsOpened(
+        tactic: Tactic = tactics.doNothing()
+    ): GoalStructure.PrimitiveGoal {
+        val goal = Goal("terminalIsOpened()")
+            .toSolve { belief: SeAgentState ->
+                return@toSolve belief.seEnv.controller.screens.terminal.inventory != null
+            }
+            .withTactic(
+                tactic
+            )
+        return goal.lift()
+    }
+
+    fun aimToBlock(
+        blockType: String,
+        tactic: Tactic = tactics.doNothing()
+    ): GoalStructure.PrimitiveGoal {
+        val goal =
+            Goal("aimToBlock($blockType)")
+                .toSolve { belief: SeAgentState ->
+                    val targetBlock = belief.seEnv.controller.observer.observe().targetBlock
+                    if (targetBlock != null) {
+                        println("targetBlock $targetBlock")
+                        if (blockType in targetBlock.definitionId.toString()) {
+                            // Agent is aiming the block
+                            return@toSolve true
+                        }
+                    }
+                    // targetBlock not found or agent not aiming the targetBlock
+                    false
+                }
+                .withTactic(
+                    tactic
+                )
+        return goal.lift()
+    }
+
+    fun navigateNearToBlock(
+        blockType: String,
+        distance: Float,
+        tactic: Tactic = tactics.doNothing()
+    ): GoalStructure.PrimitiveGoal {
+        val goal =
+            Goal("navigateNearToBlock($blockType)")
+                .toSolve { belief: SeAgentState ->
+                    val foundBlock = belief.seEnv.controller.observer.observeBlocks().allBlocks.find {
+                        it.definitionId.toString().contains(blockType)
+                    }
+                    val blockPosition = foundBlock?.position
+                    if (blockPosition != null) {
+                        val agentIsNearBlock = belief.seEnv.controller.observer.distanceTo(blockPosition) < distance
+                        if (agentIsNearBlock) {
+                            // Agent is near the block
+                            return@toSolve true
+                        }
+                    }
+                    // Block not found or not close enough
+                    false
+                }
+                .withTactic(
+                    tactic
+                )
+        return goal.lift()
     }
 }
