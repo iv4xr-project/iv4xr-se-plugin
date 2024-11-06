@@ -133,8 +133,14 @@ class SeEnvironment @JvmOverloads constructor(
         return equipAndPlace(context.blockToolbarLocation(blockType))
     }
 
-    fun interact() {
+    fun use() {
         return controller.character.use()
+    }
+
+    fun setHelmet(
+        enabled: Boolean
+    ) {
+        return controller.character.setHelmet(enabled)
     }
 
     fun closeTerminal() {

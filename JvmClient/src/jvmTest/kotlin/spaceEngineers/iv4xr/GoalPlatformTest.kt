@@ -72,13 +72,13 @@ class GoalPlatformTest {
                 tactic = tactics.rotateToBlock(cryoChamber.first)
             ),
             goals.alwaysSolved(
-                tactic = tactics.interact()
+                tactic = tactics.use()
             ),
             goals.alwaysSolved(
                 tactic = tactics.sleep(1000)
             ),
             goals.alwaysSolved(
-                tactic = tactics.interact()
+                tactic = tactics.use()
             ),
             // Navigate Grinder and Welder Gravity block
             goals.navigateNearToBlock(
@@ -129,7 +129,7 @@ class GoalPlatformTest {
                 )
             ),
             goals.terminalIsOpened(
-                tactic = tactics.interact()
+                tactic = tactics.use()
             ),
             goals.alwaysSolved(
                 tactic = tactics.sleep(1000)
@@ -154,7 +154,7 @@ class GoalPlatformTest {
 
         // Run the test agent to accomplish the attached Goal
         var i = 0
-        while (goalStructure.status.inProgress() && i <= 200) {
+        while (goalStructure.status.inProgress() && i <= 20) {
             testAgent.update()
             println("*** $i, ${myAgentState.worldmodel.agentId} @${myAgentState.worldmodel.position}")
             i++

@@ -35,6 +35,90 @@ class GoalBuilder(
         return goal.lift()
     }
 
+    fun agentHealthIsBelow(
+        percentage: Double,
+        tactic: Tactic = tactics.doNothing()
+    ): GoalStructure {
+        Thread.sleep(500)
+        return Goal("agentHealthIsBelow($percentage)")
+            .toSolve { belief: SeAgentState ->
+                return@toSolve belief.seEnv.controller.observer.observe().health * 100 < percentage
+            }
+            .withTactic(
+                tactic
+            ).lift()
+    }
+
+    fun agentHealthIsAbove(
+        percentage: Double,
+        tactic: Tactic = tactics.doNothing()
+    ): GoalStructure {
+        Thread.sleep(500)
+        return Goal("agentHealthIsAbove($percentage)")
+            .toSolve { belief: SeAgentState ->
+                return@toSolve belief.seEnv.controller.observer.observe().health * 100 > percentage
+            }
+            .withTactic(
+                tactic
+            ).lift()
+    }
+
+    fun agentOxygenIsBelow(
+        percentage: Double,
+        tactic: Tactic = tactics.doNothing()
+    ): GoalStructure {
+        Thread.sleep(500)
+        return Goal("agentOxygenIsBelow($percentage)")
+            .toSolve { belief: SeAgentState ->
+                return@toSolve belief.seEnv.controller.observer.observe().oxygen * 100 < percentage
+            }
+            .withTactic(
+                tactic
+            ).lift()
+    }
+
+    fun agentOxygenIsAbove(
+        percentage: Double,
+        tactic: Tactic = tactics.doNothing()
+    ): GoalStructure {
+        Thread.sleep(500)
+        return Goal("agentOxygenIsAbove($percentage)")
+            .toSolve { belief: SeAgentState ->
+                return@toSolve belief.seEnv.controller.observer.observe().oxygen * 100 > percentage
+            }
+            .withTactic(
+                tactic
+            ).lift()
+    }
+
+    fun agentEnergyIsBelow(
+        percentage: Double,
+        tactic: Tactic = tactics.doNothing()
+    ): GoalStructure {
+        Thread.sleep(500)
+        return Goal("agentEnergyIsBelow($percentage)")
+            .toSolve { belief: SeAgentState ->
+                return@toSolve belief.seEnv.controller.observer.observe().energy * 100 < percentage
+            }
+            .withTactic(
+                tactic
+            ).lift()
+    }
+
+    fun agentEnergyIsAbove(
+        percentage: Double,
+        tactic: Tactic = tactics.doNothing()
+    ): GoalStructure {
+        Thread.sleep(500)
+        return Goal("agentEnergyIsAbove($percentage)")
+            .toSolve { belief: SeAgentState ->
+                return@toSolve belief.seEnv.controller.observer.observe().energy * 100 > percentage
+            }
+            .withTactic(
+                tactic
+            ).lift()
+    }
+
     fun blockOfTypeExists(blockType: String, tactic: Tactic = tactics.doNothing()): GoalStructure {
         return Goal("Block of type $blockType exists")
             .toSolve { belief: SeAgentState ->

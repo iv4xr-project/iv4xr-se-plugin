@@ -3,6 +3,7 @@ package spaceEngineers.iv4xr.navigation
 import eu.iv4xr.framework.extensions.pathfinding.AStar
 import spaceEngineers.controller.Observer
 import spaceEngineers.controller.SpaceEngineers
+import spaceEngineers.model.Block
 import spaceEngineers.model.CharacterMovementType
 import spaceEngineers.model.Vec3F
 import spaceEngineers.model.extensions.allBlocks
@@ -31,11 +32,12 @@ class NavigableSystem(
      * We need to find the closest nav node related to the desired block position.
      */
     fun setDesiredBlockPosition(
-        desiredBlock: String
+        desiredBlock: String,
+        blockPosition: (Block) -> Vec3F = { it.position }
     ): Vec3F {
         for (block in observer.observeBlocks().allBlocks) {
             if (desiredBlock in block.definitionId.toString()) {
-                desiredBlockPosition = block.position
+                desiredBlockPosition = blockPosition(block)
                 return desiredBlockPosition
             }
         }

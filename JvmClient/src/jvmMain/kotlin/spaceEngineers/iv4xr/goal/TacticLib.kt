@@ -6,6 +6,7 @@ import nl.uu.cs.aplib.AplibEDSL
 import nl.uu.cs.aplib.mainConcepts.Tactic
 import spaceEngineers.controller.extensions.distanceTo
 import spaceEngineers.iv4xr.navigation.NavigableSystem
+import spaceEngineers.model.Block
 import spaceEngineers.model.ToolbarLocation
 import spaceEngineers.model.Vec3F
 
@@ -69,9 +70,46 @@ class TacticLib {
         }.lift()
     }
 
-    fun interact(): Tactic {
-        return AplibEDSL.action("interact()").do1 { belief: SeAgentState ->
-            belief.apply { seEnv.interact() }
+    fun use(
+        waitMillis: Long = 0
+    ): Tactic {
+        return AplibEDSL.action("use()").do1 { belief: SeAgentState ->
+            belief.apply {
+                seEnv.use()
+                Thread.sleep(waitMillis)
+            }
+        }.lift()
+    }
+
+    fun continuousUse(
+        useMillis: Long,
+        waitMillis: Long = 0
+    ): Tactic {
+        return AplibEDSL.action("continuousUse($useMillis)").do1 { belief: SeAgentState ->
+            belief.apply {
+
+                val startTime = System.currentTimeMillis()
+                var elapsedTime = 0L
+
+                while (elapsedTime < useMillis) {
+                    seEnv.use()
+                    elapsedTime = System.currentTimeMillis() - startTime
+                }
+
+                Thread.sleep(waitMillis)
+            }
+        }.lift()
+    }
+
+    fun setHelmet(
+        enabled: Boolean,
+        waitMillis: Long = 0
+    ): Tactic {
+        return AplibEDSL.action("setHelmet($enabled)").do1 { belief: SeAgentState ->
+            belief.apply {
+                seEnv.setHelmet(enabled)
+                Thread.sleep(waitMillis)
+            }
         }.lift()
     }
 
@@ -101,12 +139,13 @@ class TacticLib {
      */
     fun groundedNavigationNearToBlock(
         desiredBlock: String,
-        closestDistance: Float
+        closestDistance: Float,
+        blockPosition: (Block) -> Vec3F = { it.position }
     ): Tactic {
         return AplibEDSL.action("groundedNavigationNearToBlock($desiredBlock)").do1 { belief: SeAgentState ->
             belief.apply {
                 val navigableSystem = NavigableSystem(seEnv.controller, seEnv.controller.observer)
-                val blockPosition = navigableSystem.setDesiredBlockPosition(desiredBlock)
+                val blockPosition = navigableSystem.setDesiredBlockPosition(desiredBlock, blockPosition)
 
                 println("groundedNavigationNearToBlock($desiredBlock): agentPosition is (${seEnv.controller.observer.observe().position})")
 
