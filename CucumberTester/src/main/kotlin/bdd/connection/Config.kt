@@ -20,12 +20,12 @@ data class Config(
 
     companion object {
         val DEFAULT = Config(
-            connectionSetupName = "SINGLE_COMPUTER_DEDICATED_DEV_KAREL.json",
+            connectionSetupName = "OFFLINE_STEAM.json",
             outputDirectory = File("./reports/"),
             screenshotMode = ScreenshotMode.ALWAYS,
             exitMode = ExitMode.AFTER_LAST_SCENARIO,
             bddConfigPath = CONNECTION_SETUP_DIR,
-            scenarioPath = "./testrail/maps",
+            scenarioPath = "../JvmClient/src/jvmTest/resources/game-saves",
             ignoredTags = setOf(
                 "animation", "emotes", "ignore", "duplicate", "creative", "difficult", "todo"
             ),

@@ -72,6 +72,21 @@ class ScenarioSetupSteps(connectionManager: ConnectionManager) : AbstractMultipl
         }
     }
 
+    @Given("the scenario {string} is loaded from the directory {string}.")
+    fun scenario_used_is_at_directory(
+        scenarioId: String,
+        scenarioDir: String
+    ) = hideUndeclaredThrowableException {
+        mainClient {
+            session.loadFromTestResources(scenarioId, scenarioDir)
+            screens.waitUntilTheGameLoaded()
+            delay(1.seconds)
+        }
+        observers {
+            observer.observeNewBlocks()
+        }
+    }
+
     @Given("Scenario config:")
     fun scenario_config(dataTable: DataTable) = hideUndeclaredThrowableException {
         testSetup.scenarioConfig(dataTable.asMaps())

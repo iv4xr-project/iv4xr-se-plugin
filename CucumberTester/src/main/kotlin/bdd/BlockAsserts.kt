@@ -4,6 +4,7 @@ import bdd.repetitiveassert.repeatUntilSuccess
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import bdd.connection.ConnectionManager
+import io.cucumber.java.en.Given
 import spaceEngineers.model.Block
 import spaceEngineers.model.DefinitionId
 import spaceEngineers.model.extensions.allBlocks
@@ -17,6 +18,31 @@ import kotlin.test.assertTrue
 
 class BlockAsserts(connectionManager: ConnectionManager) : AbstractMultiplayerSteps(connectionManager) {
 
+    @Given("the agent observes the block type {string}.")
+    fun blockTypeObserved(blockType: String) = observers {
+        val observedBlock = observer.observeBlocks().allBlocks.find{
+            blockType in it.definitionId.toString()
+        }
+        assertNotNull(
+            observedBlock,
+            message = "The block of type $blockType is not within the observation range"
+        )
+    }
+
+    @Then("the integrity of the observed block type {string} should be {float}.")
+    fun observedIntegrityIs(blockType: String, integrity: Float) = observers {
+        val observedBlock = observer.observeBlocks().allBlocks.find{
+            blockType in it.definitionId.toString()
+        }
+        assertNotNull(
+            observedBlock,
+            message = "The block of type $blockType is not within the observation range"
+        )
+        assertEquals(
+            observedBlock.integrity, integrity,
+            message = "The integrity of the block type $blockType does not match the expected value of $integrity"
+        )
+    }
 
     @Then("Observed grid mass is {double}.")
     fun observed_grid_mass_is(mass: Double) = observers {
