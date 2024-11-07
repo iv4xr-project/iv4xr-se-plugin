@@ -35,6 +35,8 @@ dependencies {
     implementation group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.8.2'
     implementation group: 'io.cucumber', name: 'cucumber-java', version: '7.2.3'
     implementation group: 'io.cucumber', name: 'cucumber-junit', version: '7.2.3'
+
+    implementation "com.github.iv4xr-project:aplib:$aplib_version"
 }
 
 test {

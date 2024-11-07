@@ -18,14 +18,14 @@ import kotlin.test.assertTrue
 
 class BlockAsserts(connectionManager: ConnectionManager) : AbstractMultiplayerSteps(connectionManager) {
 
-    @Given("the agent observes the block type {string}.")
-    fun blockTypeObserved(blockType: String) = observers {
+    @Given("observed block type {string} exists.")
+    fun observedBlockTypeExists(blockType: String) = observers {
         val observedBlock = observer.observeBlocks().allBlocks.find{
             blockType in it.definitionId.toString()
         }
         assertNotNull(
             observedBlock,
-            message = "The block of type $blockType is not within the observation range"
+            message = "The block of type $blockType does not exists within the observation range"
         )
     }
 
@@ -36,7 +36,7 @@ class BlockAsserts(connectionManager: ConnectionManager) : AbstractMultiplayerSt
         }
         assertNotNull(
             observedBlock,
-            message = "The block of type $blockType is not within the observation range"
+            message = "The block of type $blockType does not exists within the observation range"
         )
         assertEquals(
             observedBlock.integrity, integrity,
