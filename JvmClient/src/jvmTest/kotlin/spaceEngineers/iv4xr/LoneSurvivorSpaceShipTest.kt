@@ -49,19 +49,16 @@ class LoneSurvivorSpaceShipTest {
         val goals = GoalBuilder()
         val tactics = TacticLib()
 
-        val door = Pair("Door", 3.5f)
-        val cockpit = Pair("Cockpit", 3f)
-
         val goalStructure: GoalStructure = SEQ(
             // Navigate Interact with the door
             goals.navigateNearToBlock(
-                door.first,
-                door.second,
-                tactic = tactics.groundedNavigationNearToBlock(door.first, door.second),
+                "Door",
+                3.5f,
+                tactic = tactics.navigateToBlock("Door", 3.5f),
             ),
             goals.aimToBlock(
-                door.first,
-                tactic = tactics.rotateToBlock(door.first)
+                "Door",
+                tactic = tactics.rotateToBlock("Door")
             ),
             goals.agentEnergyIsBelow(
                 98.00,
@@ -69,13 +66,13 @@ class LoneSurvivorSpaceShipTest {
             ),
             // Navigate Interact with the space-ship cockpit
             goals.navigateNearToBlock(
-                cockpit.first,
-                cockpit.second,
-                tactic = tactics.groundedNavigationNearToBlock(cockpit.first, cockpit.second),
+                "Cockpit",
+                3f,
+                tactic = tactics.navigateToBlock("Cockpit", 3f),
             ),
             goals.aimToBlock(
-                cockpit.first,
-                tactic = tactics.rotateToBlock(cockpit.first)
+                "Cockpit",
+                tactic = tactics.rotateToBlock("Cockpit")
             ),
             goals.agentEnergyIsAbove(
                 99.99,

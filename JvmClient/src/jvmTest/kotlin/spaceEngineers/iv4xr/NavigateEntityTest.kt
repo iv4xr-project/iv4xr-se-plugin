@@ -24,7 +24,7 @@ class NavigateEntityTest : MockOrRealGameTest(
         val navigableGraph = navigableSystem.getNavigableGraph()
         val navigablePath = navigableSystem.getClosestPathToDesiredBlock(closestDistance)
 
-        navigableSystem.navigateGroundedPath(navigableGraph, navigablePath)
+        navigableSystem.navigatePath(navigableGraph, navigablePath)
 
         val finalDistance = observer.distanceTo(blockPosition)
         println("finalDistance: $finalDistance")

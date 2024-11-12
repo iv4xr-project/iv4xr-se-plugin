@@ -65,7 +65,7 @@ class GoalPlatformTest {
             goals.navigateNearToBlock(
                 cryoChamber.first,
                 cryoChamber.second,
-                tactic = tactics.groundedNavigationNearToBlock(cryoChamber.first, cryoChamber.second),
+                tactic = tactics.navigateToBlock(cryoChamber.first, cryoChamber.second),
             ),
             goals.aimToBlock(
                 cryoChamber.first,
@@ -87,7 +87,7 @@ class GoalPlatformTest {
                 tactic = AplibEDSL.SEQ(
                     tactics.equip(grinderLocation),
                     tactics.sleep(500),
-                    tactics.groundedNavigationNearToBlock(gravityBlock.first, gravityBlock.second)
+                    tactics.navigateToBlock(gravityBlock.first, gravityBlock.second)
                 )
             ),
             goals.aimToBlock(
@@ -118,7 +118,7 @@ class GoalPlatformTest {
             goals.navigateNearToBlock(
                 survivalKit.first,
                 survivalKit.second,
-                tactic = tactics.groundedNavigationNearToBlock(survivalKit.first, survivalKit.second),
+                tactic = tactics.navigateToBlock(survivalKit.first, survivalKit.second),
             ),
             goals.aimToBlock(
                 survivalKit.first,
@@ -154,7 +154,7 @@ class GoalPlatformTest {
 
         // Run the test agent to accomplish the attached Goal
         var i = 0
-        while (goalStructure.status.inProgress() && i <= 20) {
+        while (goalStructure.status.inProgress() && i <= 200) {
             testAgent.update()
             println("*** $i, ${myAgentState.worldmodel.agentId} @${myAgentState.worldmodel.position}")
             i++

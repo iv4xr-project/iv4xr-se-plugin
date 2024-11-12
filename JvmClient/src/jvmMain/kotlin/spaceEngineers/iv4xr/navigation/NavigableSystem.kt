@@ -3,7 +3,6 @@ package spaceEngineers.iv4xr.navigation
 import eu.iv4xr.framework.extensions.pathfinding.AStar
 import spaceEngineers.controller.Observer
 import spaceEngineers.controller.SpaceEngineers
-import spaceEngineers.model.Block
 import spaceEngineers.model.CharacterMovementType
 import spaceEngineers.model.Vec3F
 import spaceEngineers.model.extensions.allBlocks
@@ -32,21 +31,23 @@ class NavigableSystem(
      * We need to find the closest nav node related to the desired block position.
      */
     fun setDesiredBlockPosition(
-        desiredBlock: String,
-        blockPosition: (Block) -> Vec3F = { it.position }
+        desiredBlock: String
     ): Vec3F {
+        // Reset position values
+        desiredBlockPosition = Vec3F(0, 0, 0)
+
         for (block in observer.observeBlocks().allBlocks) {
             if (desiredBlock in block.definitionId.toString()) {
-                desiredBlockPosition = blockPosition(block)
+                desiredBlockPosition = block.position
                 return desiredBlockPosition
             }
         }
-        desiredBlockPosition = Vec3F(0, 0, 0)
+
         return desiredBlockPosition
     }
 
     fun getClosestPathToDesiredBlock(
-        closestDistance: Float
+        closestDistance: Float = 9f
     ): List<NodeId> {
         var reachablePosition = Vec3F(0, 0, 0)
         var reachableNode = ""
@@ -92,9 +93,10 @@ class NavigableSystem(
         return (desiredBlock in observer.observe().targetBlock?.definitionId.toString())
     }
 
-    suspend fun navigateGroundedPath(
+    suspend fun navigatePath(
         navigableGraph: NavigableGraph,
-        navigablePath: List<NodeId>
+        navigablePath: List<NodeId>,
+        distancePathTolerance: Float = 1.2f
     ) {
         val navigator = CharacterNavigation(spaceEngineers = spaceEngineers, pathFinder = Iv4XRAStarPathFinder())
 
@@ -105,22 +107,32 @@ class NavigableSystem(
 
         for (nodeId in navigablePath) {
             println("Next navigatePath node: ${navigableGraph.node(nodeId).data}")
-            navigator.moveInLine(navigableGraph.node(nodeId).data, movementType = CharacterMovementType.RUN, timeout = 10.seconds)
+            navigator.moveInLine(
+                navigableGraph.node(nodeId).data,
+                movementType = CharacterMovementType.RUN,
+                distanceTolerance = distancePathTolerance,
+                timeout = 10.seconds
+            )
         }
     }
 
     suspend fun navigateDynamicPath(
         navigableSystem: NavigableSystem,
-        closestDistance: Float
+        distanceTolerance: Float
     ) {
         val navigableGraph = navigableSystem.getNavigableGraph()
-        val navigablePath = navigableSystem.getClosestPathToDesiredBlock(closestDistance)
+        val navigablePath = navigableSystem.getClosestPathToDesiredBlock(distanceTolerance)
 
         val navigator = CharacterNavigation(spaceEngineers = spaceEngineers, pathFinder = Iv4XRAStarPathFinder())
 
         val firstNavigableNode = navigablePath.first()
 
         println("Next navigateDynamicPath node: ${navigableGraph.node(firstNavigableNode).data}")
-        navigator.moveInLine(navigableGraph.node(firstNavigableNode).data, movementType = CharacterMovementType.RUN, timeout = 10.seconds)
+        navigator.moveInLine(
+            navigableGraph.node(firstNavigableNode).data,
+            movementType = CharacterMovementType.RUN,
+            distanceTolerance = distanceTolerance,
+            timeout = 10.seconds
+        )
     }
 }

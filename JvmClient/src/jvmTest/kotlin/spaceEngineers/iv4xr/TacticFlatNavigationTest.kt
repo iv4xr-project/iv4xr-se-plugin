@@ -16,7 +16,7 @@ import spaceEngineers.iv4xr.goal.GoalBuilder
 import spaceEngineers.iv4xr.goal.TacticLib
 import kotlin.test.assertTrue
 
-class TacticGroundedNavigationTest {
+class TacticFlatNavigationTest {
 
     @Disabled
     @Test
@@ -53,7 +53,7 @@ class TacticGroundedNavigationTest {
             goals.navigateNearToBlock(
                 cryoChamber.first,
                 cryoChamber.second,
-                tactic = tactics.groundedNavigationNearToBlock(cryoChamber.first, cryoChamber.second),
+                tactic = tactics.navigateToBlock(cryoChamber.first, cryoChamber.second),
             )
         )
         testAgent.setGoal(testingTask)

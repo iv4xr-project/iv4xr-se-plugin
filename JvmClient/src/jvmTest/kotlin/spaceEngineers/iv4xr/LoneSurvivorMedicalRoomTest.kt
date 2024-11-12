@@ -3,7 +3,6 @@ package spaceEngineers.iv4xr
 import environments.SeAgentState
 import environments.SeEnvironment
 import eu.iv4xr.framework.mainConcepts.TestAgent
-import eu.iv4xr.framework.mainConcepts.TestDataCollector
 import nl.uu.cs.aplib.AplibEDSL.SEQ
 import nl.uu.cs.aplib.mainConcepts.GoalStructure
 import org.junit.jupiter.api.Disabled
@@ -20,7 +19,7 @@ class LoneSurvivorMedicalRoomTest {
 
     @Disabled
     @Test
-    fun test_health_navigation_to_medical() {
+    fun test_navigate_medical_room_and_restore_health() {
         val agentId = SpaceEngineers.DEFAULT_AGENT_ID
         val context = SpaceEngineersTestContext()
 
@@ -32,60 +31,57 @@ class LoneSurvivorMedicalRoomTest {
             )
 
         // Create iv4xr environment and pass ID of the world (scenario to load).
-        val theEnv = SeEnvironment(
+        val seEnv = SeEnvironment(
             controller = controllerWrapper,
             worldId = "LoneSurvivor_SpaceShip"
         )
 
         // Create the iv4XR test agent
-        val myAgentState = SeAgentState(agentId = agentId)
-        val dataCollector = TestDataCollector()
-        val testAgent = TestAgent(agentId, "goal solving agent")
-            .attachState(myAgentState)
-            .attachEnvironment(theEnv)
-            .setTestDataCollector(dataCollector)
+        val seAgentState = SeAgentState(agentId = agentId)
+        val testAgent = TestAgent(agentId, "long play goal solving agent")
+            .attachState(seAgentState)
+            .attachEnvironment(seEnv)
 
-        // Create the desired testing goals and tactics.
-        val goals = GoalBuilder()
-        val tactics = TacticLib()
-
-        val medical = Pair("Medical", 7f)
-
-        val goalStructure: GoalStructure = SEQ(
-            // Navigate Interact with the medical room
-            goals.navigateNearToBlock(
-                medical.first,
-                medical.second,
-                tactic = tactics.groundedNavigationNearToBlock(medical.first, medical.second) { it.maxPosition },
-            ),
-            goals.aimToBlock(
-                medical.first,
-                tactic = tactics.rotateToBlock(medical.first)
-            ),
-            goals.agentHealthIsBelow(
-                90.00,
-                tactic = tactics.setHelmet(false, 5000)
-            ),
-            goals.agentHealthIsAbove(
-                99.99,
-                tactic = SEQ(
-                    tactics.setHelmet(true),
-                    tactics.continuousUse(5000, 1000)
-                )
+        val navigateAimToBlock = GoalBuilder().navigateAimToBlock(
+            "MedicalRoom",
+            5f, // Maximum distance allowed
+            tactic = SEQ(
+                TacticLib().navigateToBlock("MedicalRoom", 5f, 3f),
+                TacticLib().rotateToBlock("MedicalRoom")
             )
         )
+
+        val reduceHealthBelow = GoalBuilder().agentHealthIsBelow(
+            90.00, // Maximum health allowed
+            tactic = SEQ(
+                TacticLib().setHelmet(false, 5000),
+                TacticLib().setHelmet(true)
+            )
+        )
+
+        val restoreHealthAbove = GoalBuilder().agentHealthIsAbove(
+            99.99, // Minimum health allowed
+            tactic = TacticLib().continuousUse(5000)
+        )
+
+        val goalStructure: GoalStructure = SEQ(
+            navigateAimToBlock,
+            reduceHealthBelow,
+            restoreHealthAbove
+        )
+
         testAgent.setGoal(goalStructure)
 
         // Load the scenario.
-        theEnv.loadWorld()
-        theEnv.controller.screens.waitUntilTheGameLoaded()
+        seEnv.loadWorld()
+        seEnv.controller.screens.waitUntilTheGameLoaded()
         Thread.sleep(500)
 
         // Run the test agent to accomplish the attached Goal
         var i = 0
         while (goalStructure.status.inProgress() && i <= 10) {
             testAgent.update()
-            println("*** $i, ${myAgentState.worldmodel.agentId} @${myAgentState.worldmodel.position}")
+            println("*** $i, ${seAgentState.worldmodel.agentId} @${seAgentState.worldmodel.position}")
             i++
         }
 
@@ -94,7 +90,7 @@ class LoneSurvivorMedicalRoomTest {
         assertTrue { goalStructure.status.success() }
 
         // Exit the scenario
-        theEnv.exitLevelWithoutSaving()
-        theEnv.close()
+        seEnv.exitLevelWithoutSaving()
+        seEnv.close()
     }
 }

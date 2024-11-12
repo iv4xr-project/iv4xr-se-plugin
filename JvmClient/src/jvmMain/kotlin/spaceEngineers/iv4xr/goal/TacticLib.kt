@@ -6,7 +6,6 @@ import nl.uu.cs.aplib.AplibEDSL
 import nl.uu.cs.aplib.mainConcepts.Tactic
 import spaceEngineers.controller.extensions.distanceTo
 import spaceEngineers.iv4xr.navigation.NavigableSystem
-import spaceEngineers.model.Block
 import spaceEngineers.model.ToolbarLocation
 import spaceEngineers.model.Vec3F
 
@@ -137,30 +136,30 @@ class TacticLib {
      * Navigation tactic on flat plane or ground levels.
      * NavigableSystem calculates and follows a path with a fixed Y-axis.
      */
-    fun groundedNavigationNearToBlock(
+    fun navigateToBlock(
         desiredBlock: String,
         closestDistance: Float,
-        blockPosition: (Block) -> Vec3F = { it.position }
+        distancePathTolerance: Float = 1.2f
     ): Tactic {
-        return AplibEDSL.action("groundedNavigationNearToBlock($desiredBlock)").do1 { belief: SeAgentState ->
+        return AplibEDSL.action("navigateToBlock($desiredBlock)").do1 { belief: SeAgentState ->
             belief.apply {
                 val navigableSystem = NavigableSystem(seEnv.controller, seEnv.controller.observer)
-                val blockPosition = navigableSystem.setDesiredBlockPosition(desiredBlock, blockPosition)
+                val blockPosition = navigableSystem.setDesiredBlockPosition(desiredBlock)
 
-                println("groundedNavigationNearToBlock($desiredBlock): agentPosition is (${seEnv.controller.observer.observe().position})")
+                println("navigateToBlock($desiredBlock): agentPosition is (${seEnv.controller.observer.observe().position})")
 
                 if (blockPosition == Vec3F(0, 0, 0)) {
-                    println("groundedNavigationNearToBlock($desiredBlock): blockPosition not found")
+                    println("navigateToBlock($desiredBlock): blockPosition not found")
                     doNothing()
                 } else {
-                    println("groundedNavigationNearToBlock($desiredBlock): blockPosition is ($blockPosition)")
-                    println("groundedNavigationNearToBlock($desiredBlock): distance is (${seEnv.controller.observer.distanceTo(blockPosition)})")
+                    println("navigateToBlock($desiredBlock): blockPosition is ($blockPosition)")
+                    println("navigateToBlock($desiredBlock): distance is (${seEnv.controller.observer.distanceTo(blockPosition)})")
 
                     val navigableGraph = navigableSystem.getNavigableGraph()
                     val navigablePath = navigableSystem.getClosestPathToDesiredBlock(closestDistance)
 
                     runBlocking {
-                        navigableSystem.navigateGroundedPath(navigableGraph, navigablePath)
+                        navigableSystem.navigatePath(navigableGraph, navigablePath, distancePathTolerance)
                     }
                 }
             }
@@ -173,7 +172,7 @@ class TacticLib {
      */
     fun dynamicNavigationNearToBlock(
         desiredBlock: String,
-        closestDistance: Float
+        distancePathTolerance: Float = 1.2f,
     ): Tactic {
         return AplibEDSL.action("dynamicNavigationNearToBlock($desiredBlock)").do1 { belief: SeAgentState ->
             belief.apply {
@@ -190,7 +189,7 @@ class TacticLib {
                     println("dynamicNavigationNearToBlock($desiredBlock): distance is (${seEnv.controller.observer.distanceTo(blockPosition)})")
 
                     runBlocking {
-                        navigableSystem.navigateDynamicPath(navigableSystem, closestDistance)
+                        navigableSystem.navigateDynamicPath(navigableSystem, distancePathTolerance)
                     }
                 }
             }

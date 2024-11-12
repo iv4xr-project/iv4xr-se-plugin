@@ -2,6 +2,7 @@ package spaceEngineers.iv4xr.goal
 
 import environments.SeAgentState
 import eu.iv4xr.framework.spatial.Vec3
+import nl.uu.cs.aplib.AplibEDSL.SEQ
 import nl.uu.cs.aplib.mainConcepts.Goal
 import nl.uu.cs.aplib.mainConcepts.GoalStructure
 import nl.uu.cs.aplib.mainConcepts.Tactic
@@ -286,7 +287,7 @@ class GoalBuilder(
 
     fun navigateNearToBlock(
         blockType: String,
-        distance: Float,
+        goalDistance: Float = 3f,
         tactic: Tactic = tactics.doNothing()
     ): GoalStructure.PrimitiveGoal {
         val goal =
@@ -297,7 +298,7 @@ class GoalBuilder(
                     }
                     val blockPosition = foundBlock?.position
                     if (blockPosition != null) {
-                        val agentIsNearBlock = belief.seEnv.controller.observer.distanceTo(blockPosition) < distance
+                        val agentIsNearBlock = belief.seEnv.controller.observer.distanceTo(blockPosition) < goalDistance
                         if (agentIsNearBlock) {
                             // Agent is near the block
                             return@toSolve true
@@ -310,5 +311,15 @@ class GoalBuilder(
                     tactic
                 )
         return goal.lift()
+    }
+
+    fun navigateAimToBlock(
+        blockType: String,
+        goalDistance: Float = 3f,
+        tactic: Tactic = tactics.doNothing()
+    ): GoalStructure {
+        val navigateBlockGoal = navigateNearToBlock(blockType, goalDistance, tactic)
+        val aimBlockGoal = aimToBlock(blockType, tactic)
+        return SEQ(navigateBlockGoal, aimBlockGoal)
     }
 }
