@@ -1,19 +1,19 @@
 Feature: Navigate Medical Room and Restore Health
 
   Background:
-    Given the agent loads the world "LoneSurvivor_SpaceShip".
+    Given the agent-id is 'se0'
+    And the agent loads the world 'LoneSurvivor_SpaceShip'
 
-  Scenario Outline: The agent navigates to the medical room and restores is health
-    Given the agent observes the block type "<blockType>".
-    When the agent navigates to the 2x2 block type "<blockType>" with a maximum <distance>.
-    When the agent aims the block type "<blockType>".
-    When the agent removes the helmet <wait> milliseconds.
-    Then the agent health is below <minimum> percentage.
+  Scenario: The agent navigates to the medical room and restores is health
+    Given the agent observes the block 'LargeMedicalRoom'
 
-    When the agent activates the helmet.
-    When the agent continuously uses the terminal <wait> milliseconds.
-    Then the agent health is above <maximum> percentage.
+    When  the agent navigates to the block 'LargeMedicalRoom'
+    And   the agent aims the block 'LargeMedicalRoom'
+    Then  the maximum distance to the block 'LargeMedicalRoom' is 5
 
-    Examples:
-      | blockType        | distance | wait | minimum | maximum |
-      | LargeMedicalRoom | 7        | 5000 | 90.00   | 99.99   |
+    When  the agent removes the helmet 5000 milliseconds
+    And   the agent activates the helmet
+    Then  the agent health is below 90.00
+
+    When  the agent uses the terminal 5000 milliseconds
+    Then  the agent health is above 99.99

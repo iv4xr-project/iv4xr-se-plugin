@@ -18,6 +18,8 @@ import spaceEngineers.controller.SpaceEngineers
 import spaceEngineers.controller.SpaceEngineersTestContext
 import spaceEngineers.iv4xr.goal.GoalBuilder
 import spaceEngineers.iv4xr.goal.TacticLib
+import spaceEngineers.model.Vec3F
+import spaceEngineers.model.extensions.allBlocks
 import java.io.File
 import java.nio.file.Paths
 import kotlin.test.assertTrue
@@ -26,15 +28,19 @@ class SeScenarioStepsDefinition {
 
     private val seScenarioState: SeScenarioState = SeScenarioState()
 
-    @Given("the agent loads the world {string}.")
+    @Given("the agent-id is {string}")
+    fun agentId(agentId: String) {
+        seScenarioState.agentId = agentId
+    }
+
+    @Given("the agent loads the world {string}")
     fun agentLoadsScenario(worldId: String) {
-        seScenarioState.agentId = SpaceEngineers.DEFAULT_AGENT_ID
         val context = SpaceEngineersTestContext()
 
         // Create a controller instance of the SpaceEngineers interface.
         val controllerWrapper =
             ContextControllerWrapper(
-                spaceEngineers = JvmSpaceEngineersBuilder.default().localhost(seScenarioState.agentId!!),
+                spaceEngineers = JvmSpaceEngineersBuilder.default().localhost(seScenarioState.agentId),
                 context = context
             )
 
@@ -57,7 +63,7 @@ class SeScenarioStepsDefinition {
         Thread.sleep(1000)
 
         // Create the iv4XR test agent
-        seScenarioState.seAgentState = SeAgentState(agentId = seScenarioState.agentId!!)
+        seScenarioState.seAgentState = SeAgentState(agentId = seScenarioState.agentId)
         val dataCollector = TestDataCollector()
         seScenarioState.testAgent = TestAgent(seScenarioState.agentId, "goal solving agent")
             .attachState(seScenarioState.seAgentState)
@@ -65,7 +71,7 @@ class SeScenarioStepsDefinition {
             .setTestDataCollector(dataCollector)
     }
 
-    @Given("the agent observes the block type {string}.")
+    @Given("the agent observes the block {string}")
     fun agentObservesBlock(blockType: String) {
         val goalStructure: GoalStructure = SEQ(
             GoalBuilder().blockOfTypeExists(
@@ -78,13 +84,16 @@ class SeScenarioStepsDefinition {
         assertTrue(status.success())
     }
 
-    @When("the agent navigates to the 2x2 block type {string} with a maximum {float}.")
-    fun agentNavigatesTo2x2Block(blockType: String, distance: Float) {
+    @When("the agent navigates to the block {string}")
+    fun agentNavigatesToBlock(blockType: String) {
+        val closestDistance = if (is1x1Block(blockType)) 3f else 5f
+        val distancePathTolerance = if (is1x1Block(blockType)) 1.2f else 3f
+
         val goalStructure: GoalStructure = SEQ(
             GoalBuilder().navigateNearToBlock(
                 blockType,
-                distance,
-                tactic = TacticLib().groundedNavigationNearToBlock(blockType, distance) { it.maxPosition },
+                closestDistance,
+                tactic = TacticLib().navigateToBlock(blockType, closestDistance, distancePathTolerance)
             )
         )
 
@@ -92,7 +101,7 @@ class SeScenarioStepsDefinition {
         assertTrue(status.success())
     }
 
-    @When("the agent aims the block type {string}.")
+    @When("the agent aims the block {string}")
     fun agentAimsTheBlock(blockType: String) {
         val goalStructure: GoalStructure = SEQ(
             GoalBuilder().aimToBlock(
@@ -105,7 +114,7 @@ class SeScenarioStepsDefinition {
         assertTrue(status.success())
     }
 
-    @When("the agent removes the helmet {long} milliseconds.")
+    @When("the agent removes the helmet {long} milliseconds")
     fun agentRemovesHelmet(milliseconds: Long) {
         val goalStructure: GoalStructure = SEQ(
             GoalBuilder().agentHealthIsBelow(
@@ -118,7 +127,7 @@ class SeScenarioStepsDefinition {
         assertTrue(status.success())
     }
 
-    @When("the agent activates the helmet.")
+    @When("the agent activates the helmet")
     fun agentActivatesHelmet() {
         val goalStructure: GoalStructure = SEQ(
             GoalBuilder().alwaysSolved(
@@ -130,7 +139,7 @@ class SeScenarioStepsDefinition {
         assertTrue(status.success())
     }
 
-    @When("the agent continuously uses the terminal {long} milliseconds.")
+    @When("the agent uses the terminal {long} milliseconds")
     fun agentContinuouslyUses(milliseconds: Long) {
         val goalStructure: GoalStructure = SEQ(
             GoalBuilder().alwaysSolved(
@@ -142,7 +151,21 @@ class SeScenarioStepsDefinition {
         assertTrue(status.success())
     }
 
-    @Then("the agent health is below {double} percentage.")
+    @Then("the maximum distance to the block {string} is {float}")
+    fun agentMaximumDistanceToBlock(blockType: String, goalDistance: Float) {
+        val goalStructure: GoalStructure = SEQ(
+            GoalBuilder().navigateNearToBlock(
+                blockType,
+                goalDistance,
+                tactic = TacticLib().doNothing()
+            ),
+        )
+
+        val status = executeGoal(goalStructure)
+        assertTrue(status.success())
+    }
+
+    @Then("the agent health is below {double}")
     fun agentHealthBelow(percentage: Double) {
         val goalStructure: GoalStructure = SEQ(
             GoalBuilder().agentHealthIsBelow(
@@ -155,7 +178,7 @@ class SeScenarioStepsDefinition {
         assertTrue(status.success())
     }
 
-    @Then("the agent health is above {double} percentage.")
+    @Then("the agent health is above {double}")
     fun agentHealthAbove(percentage: Double) {
         val goalStructure: GoalStructure = SEQ(
             GoalBuilder().agentHealthIsAbove(
@@ -168,10 +191,19 @@ class SeScenarioStepsDefinition {
         assertTrue(status.success())
     }
 
+    private fun is1x1Block(blockType: String):Boolean{
+        for (block in seScenarioState.seEnvironment?.controller?.observer?.observeBlocks()?.allBlocks!!) {
+            if (blockType in block.definitionId.toString()) {
+                return block.size == Vec3F(1,1,1)
+            }
+        }
+        return false
+    }
+
     private fun executeGoal(goalStructure: GoalStructure):ProgressStatus{
         seScenarioState.testAgent?.setGoal(goalStructure)
         var i = 0
-        while (goalStructure.status.inProgress() && i <= 5) {
+        while (goalStructure.status.inProgress() && i <= 20) {
             seScenarioState.testAgent?.update()
             println("*** $i, ${seScenarioState.seAgentState?.worldmodel?.agentId} @${seScenarioState.seAgentState?.worldmodel?.position}")
             i++
