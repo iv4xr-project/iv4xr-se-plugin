@@ -460,15 +460,12 @@ public class UUTacticLib {
      * Interact with an object like door
      * @param state
      */
-    public static Tactic interacted(UUSeAgentState state, Block targetBlock) {
+    public static Tactic doorInteracted(UUSeAgentState state, Block targetBlock) {
         return action("Interacting")
                 .do1((UUSeAgentState st) -> {
                     UseObjectExtensions useUtil = new UseObjectExtensions(state.env().getController().getSpaceEngineers()) ;
                     useUtil.openIfNotOpened((DoorBase) targetBlock);
-                    var checkIsOpen  = SEBlockFunctions.findWorldEntity(st.worldmodel,targetBlock.getId()) ;
-                    var isOpen = checkIsOpen.getProperty("isOpen").toString();
-                    if(isOpen.equals("true")) return null;
-                    return true;
+                    return null ;
                 })
                 .on((UUSeAgentState st)  -> {
                     if (st.worldmodel ==null) return null ;
@@ -485,12 +482,11 @@ public class UUTacticLib {
 //        useUtil.openIfNotOpened((DoorBase) targetBlock);
 //    }
 
-    public static Tactic observe(UUSeAgentState state, Block targetBlock){
+    public static Tactic observeIfBlockIsOpen(UUSeAgentState state, Block targetBlock){
         return action("Interacting").do1((UUSeAgentState st) -> {
-        var checkIsOpen  = SEBlockFunctions.findWorldEntity(state.worldmodel,targetBlock.getId()) ;
-        var isOpen =  checkIsOpen.getProperty("isOpen").toString();
-        if(isOpen.equals("true")) return true;
-        return false;
+        var target  = SEBlockFunctions.findWorldEntity(state.worldmodel,targetBlock.getId()) ;
+        var isOpen =  target.getProperty("isOpen").toString();
+        return "true".equals(isOpen) ;
         })
        .lift();
     }

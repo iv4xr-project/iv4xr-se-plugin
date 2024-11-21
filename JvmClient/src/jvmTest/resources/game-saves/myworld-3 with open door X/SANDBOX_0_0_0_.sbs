@@ -10,12 +10,12 @@
       <MyObjectBuilder_GlobalEventBase>
         <SubtypeName>SpawnCargoShip</SubtypeName>
         <Enabled>true</Enabled>
-        <ActivationTimeMs>651176</ActivationTimeMs>
+        <ActivationTimeMs>577176</ActivationTimeMs>
       </MyObjectBuilder_GlobalEventBase>
       <MyObjectBuilder_GlobalEventBase>
         <SubtypeName>MeteorWave</SubtypeName>
         <Enabled>true</Enabled>
-        <ActivationTimeMs>9991545</ActivationTimeMs>
+        <ActivationTimeMs>9917545</ActivationTimeMs>
       </MyObjectBuilder_GlobalEventBase>
     </Events>
   </SectorEvents>
@@ -445,7 +445,7 @@
           <ShowInInventory>true</ShowInInventory>
           <NumberInGrid>1</NumberInGrid>
           <Enabled>true</Enabled>
-          <CurrentStoredPower>0.04994262</CurrentStoredPower>
+          <CurrentStoredPower>0.0499336571</CurrentStoredPower>
           <ProducerEnabled>true</ProducerEnabled>
           <MaxStoredPower>0</MaxStoredPower>
           <SemiautoEnabled>false</SemiautoEnabled>
@@ -664,14 +664,14 @@
       <PersistentFlags>CastShadows InScene</PersistentFlags>
       <Name>79682662949435839</Name>
       <PositionAndOrientation>
-        <Position x="11.488615296540248" y="-5.0025004629806062" z="44.755700675876028" />
-        <Forward x="-0.9996634" y="-6.635817E-06" z="0.0259362459" />
-        <Up x="-5.78271E-06" y="1" z="3.296721E-05" />
+        <Position x="11.488615303059506" y="-5.0024980787948152" z="44.755702550628371" />
+        <Forward x="-0.7093097" y="1.915773E-05" z="-0.704897" />
+        <Up x="-5.79016069E-06" y="1" z="3.30044641E-05" />
         <Orientation>
-          <X>9.43268151E-06</X>
-          <Y>0.716217935</Y>
-          <Z>1.38236664E-05</Z>
-          <W>0.6978767</W>
+          <X>1.41241317E-05</X>
+          <Y>0.384124339</Y>
+          <Z>9.011883E-06</Z>
+          <W>0.9232814</W>
         </Orientation>
       </PositionAndOrientation>
       <LocalPositionAndOrientation xsi:nil="true" />
@@ -710,7 +710,7 @@
                     <SubtypeName>AngleGrinderItem</SubtypeName>
                     <GunEntity xsi:type="MyObjectBuilder_AngleGrinder">
                       <SubtypeName>AngleGrinder</SubtypeName>
-                      <EntityId>75348095161519636</EntityId>
+                      <EntityId>99405186125537829</EntityId>
                       <PersistentFlags>None</PersistentFlags>
                     </GunEntity>
                   </PhysicalContent>
@@ -727,6 +727,11 @@
                   <Amount>1</Amount>
                   <PhysicalContent xsi:type="MyObjectBuilder_PhysicalGunObject">
                     <SubtypeName>WelderItem</SubtypeName>
+                    <GunEntity xsi:type="MyObjectBuilder_Welder">
+                      <SubtypeName>Welder</SubtypeName>
+                      <EntityId>93604333207238960</EntityId>
+                      <PersistentFlags>None</PersistentFlags>
+                    </GunEntity>
                   </PhysicalContent>
                   <ItemId>2</ItemId>
                 </MyObjectBuilder_InventoryItem>
@@ -758,7 +763,7 @@
               <SubtypeName>AngleGrinderItem</SubtypeName>
               <GunEntity xsi:type="MyObjectBuilder_AngleGrinder">
                 <SubtypeName>AngleGrinder</SubtypeName>
-                <EntityId>75348095161519636</EntityId>
+                <EntityId>99405186125537829</EntityId>
                 <PersistentFlags>None</PersistentFlags>
               </GunEntity>
             </PhysicalContent>
@@ -775,6 +780,11 @@
             <Amount>1</Amount>
             <PhysicalContent xsi:type="MyObjectBuilder_PhysicalGunObject">
               <SubtypeName>WelderItem</SubtypeName>
+              <GunEntity xsi:type="MyObjectBuilder_Welder">
+                <SubtypeName>Welder</SubtypeName>
+                <EntityId>93604333207238960</EntityId>
+                <PersistentFlags>None</PersistentFlags>
+              </GunEntity>
             </PhysicalContent>
             <ItemId>2</ItemId>
           </MyObjectBuilder_InventoryItem>
@@ -795,12 +805,12 @@
         <RemoveEntityOnEmpty>false</RemoveEntityOnEmpty>
       </Inventory>
       <Battery>
-        <CurrentCapacity>9.481486E-06</CurrentCapacity>
+        <CurrentCapacity>8.741586E-06</CurrentCapacity>
         <RegenEffects />
       </Battery>
       <LightEnabled>false</LightEnabled>
       <UsingLadder xsi:nil="true" />
-      <HeadAngle x="-12.7799139" y="0" />
+      <HeadAngle x="-7.987444" y="0" />
       <LinearVelocity x="0" y="0" z="0" />
       <AutoenableJetpackDelay>0</AutoenableJetpackDelay>
       <JetpackEnabled>false</JetpackEnabled>
@@ -809,7 +819,7 @@
       <DisplayName>uprime812</DisplayName>
       <IsInFirstPersonView>false</IsInFirstPersonView>
       <EnableBroadcasting>true</EnableBroadcasting>
-      <OxygenLevel>0.7059206</OxygenLevel>
+      <OxygenLevel>0.6594295</OxygenLevel>
       <EnvironmentOxygenLevel>0</EnvironmentOxygenLevel>
       <StoredGases>
         <StoredGas>
@@ -818,7 +828,7 @@
         </StoredGas>
         <StoredGas>
           <Id Type="MyObjectBuilder_GasProperties" Subtype="Oxygen" />
-          <FillLevel>0.7059206</FillLevel>
+          <FillLevel>0.6594295</FillLevel>
         </StoredGas>
       </StoredGases>
       <EnabledComponents>
@@ -863,14 +873,14 @@
       <PersistentFlags>CastShadows InScene</PersistentFlags>
       <Name>84569811659230451</Name>
       <PositionAndOrientation>
-        <Position x="-976.62975838897182" y="1806.1687059871092" z="-1599.7504235845045" />
-        <Forward x="-0.9665247" y="-0.175402969" z="-0.187251747" />
-        <Up x="-0.245452225" y="0.4195879" z="0.8738986" />
+        <Position x="-661.34966805694057" y="1266.9156542292967" z="-2723.0070153813795" />
+        <Forward x="-0.9666356" y="-0.173933923" z="-0.1880489" />
+        <Up x="-0.245505244" y="0.419597566" z="0.873879254" />
         <Orientation>
-          <X>0.282154381</X>
-          <Y>0.571631849</Y>
-          <Z>0.458906233</Z>
-          <W>0.618894935</W>
+          <X>0.282515973</X>
+          <Y>0.5711044</Y>
+          <Z>0.458678484</Z>
+          <W>0.6193856</W>
         </Orientation>
       </PositionAndOrientation>
       <LocalPositionAndOrientation xsi:nil="true" />
@@ -1511,7 +1521,7 @@
           <ShowInInventory>true</ShowInInventory>
           <NumberInGrid>1</NumberInGrid>
           <Enabled>true</Enabled>
-          <CurrentStoredPower>2.83009148</CurrentStoredPower>
+          <CurrentStoredPower>2.79224563</CurrentStoredPower>
           <ProducerEnabled>true</ProducerEnabled>
           <MaxStoredPower>0</MaxStoredPower>
           <SemiautoEnabled>false</SemiautoEnabled>
@@ -2300,7 +2310,7 @@
           <ShowInInventory>true</ShowInInventory>
           <NumberInGrid>2</NumberInGrid>
           <Enabled>true</Enabled>
-          <CurrentStoredPower>2.84548378</CurrentStoredPower>
+          <CurrentStoredPower>2.81071758</CurrentStoredPower>
           <ProducerEnabled>true</ProducerEnabled>
           <MaxStoredPower>0</MaxStoredPower>
           <SemiautoEnabled>false</SemiautoEnabled>
@@ -2501,7 +2511,7 @@
                   <TimerEnabled>true</TimerEnabled>
                   <RemoveEntityOnTimer>false</RemoveEntityOnTimer>
                   <TimerType>Frame10</TimerType>
-                  <FramesFromLastTrigger>30</FramesFromLastTrigger>
+                  <FramesFromLastTrigger>0</FramesFromLastTrigger>
                   <TimerTickInFrames>80</TimerTickInFrames>
                   <IsSessionUpdateEnabled>false</IsSessionUpdateEnabled>
                 </Component>
@@ -3004,7 +3014,7 @@
           <ShowInInventory>true</ShowInInventory>
           <NumberInGrid>3</NumberInGrid>
           <Enabled>true</Enabled>
-          <CurrentStoredPower>2.83639956</CurrentStoredPower>
+          <CurrentStoredPower>2.79716325</CurrentStoredPower>
           <ProducerEnabled>true</ProducerEnabled>
           <MaxStoredPower>0</MaxStoredPower>
           <SemiautoEnabled>false</SemiautoEnabled>
@@ -3028,7 +3038,7 @@
           <ShowInInventory>true</ShowInInventory>
           <NumberInGrid>4</NumberInGrid>
           <Enabled>true</Enabled>
-          <CurrentStoredPower>2.823609</CurrentStoredPower>
+          <CurrentStoredPower>2.78524756</CurrentStoredPower>
           <ProducerEnabled>true</ProducerEnabled>
           <MaxStoredPower>0</MaxStoredPower>
           <SemiautoEnabled>false</SemiautoEnabled>
@@ -3736,8 +3746,8 @@
           <BuiltBy>144115188075855876</BuiltBy>
         </MyObjectBuilder_CubeBlock>
       </CubeBlocks>
-      <LinearVelocity x="4.178915" y="-7.10756874" z="-14.9506721" />
-      <AngularVelocity x="-2.45422325E-05" y="2.92326E-05" z="-5.29402751E-05" />
+      <LinearVelocity x="4.193451" y="-7.067299" z="-14.8008461" />
+      <AngularVelocity x="2.10788266E-06" y="-3.8975777E-05" z="-2.36872961E-06" />
       <ConveyorLines>
         <MyObjectBuilder_ConveyorLine>
           <StartPosition x="0" y="7" z="-1" />
@@ -4095,7 +4105,7 @@
                   <TimerEnabled>true</TimerEnabled>
                   <RemoveEntityOnTimer>false</RemoveEntityOnTimer>
                   <TimerType>Frame10</TimerType>
-                  <FramesFromLastTrigger>50</FramesFromLastTrigger>
+                  <FramesFromLastTrigger>20</FramesFromLastTrigger>
                   <TimerTickInFrames>60</TimerTickInFrames>
                   <IsSessionUpdateEnabled>false</IsSessionUpdateEnabled>
                 </Component>
@@ -5501,7 +5511,7 @@
                 <Component xsi:type="MyObjectBuilder_Inventory">
                   <Items>
                     <MyObjectBuilder_InventoryItem>
-                      <Amount>0.110489</Amount>
+                      <Amount>0.092389</Amount>
                       <PhysicalContent xsi:type="MyObjectBuilder_Ingot">
                         <SubtypeName>Uranium</SubtypeName>
                       </PhysicalContent>
@@ -5526,7 +5536,7 @@
                   <TimerEnabled>true</TimerEnabled>
                   <RemoveEntityOnTimer>false</RemoveEntityOnTimer>
                   <TimerType>Frame100</TimerType>
-                  <FramesFromLastTrigger>700</FramesFromLastTrigger>
+                  <FramesFromLastTrigger>800</FramesFromLastTrigger>
                   <TimerTickInFrames>900</TimerTickInFrames>
                   <IsSessionUpdateEnabled>false</IsSessionUpdateEnabled>
                 </Component>
@@ -5540,7 +5550,7 @@
           <ShowInInventory>true</ShowInInventory>
           <NumberInGrid>1</NumberInGrid>
           <Enabled>true</Enabled>
-          <Capacity>0.110489</Capacity>
+          <Capacity>0.092389</Capacity>
         </MyObjectBuilder_CubeBlock>
         <MyObjectBuilder_CubeBlock xsi:type="MyObjectBuilder_CubeBlock">
           <SubtypeName>LargeBlockArmorBlock</SubtypeName>
@@ -6334,7 +6344,7 @@
                   <TimerEnabled>true</TimerEnabled>
                   <RemoveEntityOnTimer>false</RemoveEntityOnTimer>
                   <TimerType>Frame10</TimerType>
-                  <FramesFromLastTrigger>0</FramesFromLastTrigger>
+                  <FramesFromLastTrigger>40</FramesFromLastTrigger>
                   <TimerTickInFrames>60</TimerTickInFrames>
                   <IsSessionUpdateEnabled>false</IsSessionUpdateEnabled>
                 </Component>
@@ -6732,7 +6742,7 @@
                   <TimerEnabled>true</TimerEnabled>
                   <RemoveEntityOnTimer>false</RemoveEntityOnTimer>
                   <TimerType>Frame10</TimerType>
-                  <FramesFromLastTrigger>0</FramesFromLastTrigger>
+                  <FramesFromLastTrigger>30</FramesFromLastTrigger>
                   <TimerTickInFrames>60</TimerTickInFrames>
                   <IsSessionUpdateEnabled>false</IsSessionUpdateEnabled>
                 </Component>
@@ -7155,7 +7165,7 @@
           <ShowInInventory>true</ShowInInventory>
           <NumberInGrid>1</NumberInGrid>
           <Enabled>true</Enabled>
-          <CurrentStoredPower>2.99999952</CurrentStoredPower>
+          <CurrentStoredPower>2.99972439</CurrentStoredPower>
           <ProducerEnabled>true</ProducerEnabled>
           <MaxStoredPower>0</MaxStoredPower>
           <SemiautoEnabled>false</SemiautoEnabled>
@@ -7207,14 +7217,14 @@
       <PersistentFlags>CastShadows InScene</PersistentFlags>
       <Name>89865392621372493</Name>
       <PositionAndOrientation>
-        <Position x="1009.3221459079032" y="-4468.1367139347658" z="2925.8899572748705" />
-        <Forward x="-0.287201643" y="-0.242026448" z="0.9267891" />
-        <Up x="0.822012365" y="0.434437871" z="0.3681838" />
+        <Position x="576.03827139618443" y="-4834.0683545597658" z="4328.2017248529955" />
+        <Forward x="-0.2887106" y="-0.2427563" z="0.926129341" />
+        <Up x="0.8168893" y="0.4420446" z="0.3705246" />
         <Orientation>
-          <X>0.5001522</X>
-          <Y>0.844536841</Y>
-          <Z>0.1806346</Z>
-          <W>0.06305948</W>
+          <X>0.49617216</X>
+          <Y>0.8466864</Y>
+          <Z>0.181082666</Z>
+          <W>0.064377</W>
         </Orientation>
       </PositionAndOrientation>
       <LocalPositionAndOrientation xsi:nil="true" />
@@ -7683,7 +7693,7 @@
                 <Component xsi:type="MyObjectBuilder_Inventory">
                   <Items>
                     <MyObjectBuilder_InventoryItem>
-                      <Amount>1.010032</Amount>
+                      <Amount>0.790262</Amount>
                       <PhysicalContent xsi:type="MyObjectBuilder_Ingot">
                         <SubtypeName>Uranium</SubtypeName>
                       </PhysicalContent>
@@ -7708,7 +7718,7 @@
                   <TimerEnabled>true</TimerEnabled>
                   <RemoveEntityOnTimer>false</RemoveEntityOnTimer>
                   <TimerType>Frame100</TimerType>
-                  <FramesFromLastTrigger>800</FramesFromLastTrigger>
+                  <FramesFromLastTrigger>0</FramesFromLastTrigger>
                   <TimerTickInFrames>900</TimerTickInFrames>
                   <IsSessionUpdateEnabled>false</IsSessionUpdateEnabled>
                 </Component>
@@ -7722,7 +7732,7 @@
           <ShowInInventory>true</ShowInInventory>
           <NumberInGrid>1</NumberInGrid>
           <Enabled>true</Enabled>
-          <Capacity>1.010032</Capacity>
+          <Capacity>0.790262</Capacity>
         </MyObjectBuilder_CubeBlock>
         <MyObjectBuilder_CubeBlock xsi:type="MyObjectBuilder_CubeBlock">
           <SubtypeName>LargeBlockArmorSlope2Base</SubtypeName>
@@ -8686,7 +8696,7 @@
                 <Component xsi:type="MyObjectBuilder_Inventory">
                   <Items>
                     <MyObjectBuilder_InventoryItem>
-                      <Amount>1.006742</Amount>
+                      <Amount>0.774569</Amount>
                       <PhysicalContent xsi:type="MyObjectBuilder_Ingot">
                         <SubtypeName>Uranium</SubtypeName>
                       </PhysicalContent>
@@ -8711,7 +8721,7 @@
                   <TimerEnabled>true</TimerEnabled>
                   <RemoveEntityOnTimer>false</RemoveEntityOnTimer>
                   <TimerType>Frame100</TimerType>
-                  <FramesFromLastTrigger>800</FramesFromLastTrigger>
+                  <FramesFromLastTrigger>0</FramesFromLastTrigger>
                   <TimerTickInFrames>900</TimerTickInFrames>
                   <IsSessionUpdateEnabled>false</IsSessionUpdateEnabled>
                 </Component>
@@ -8725,7 +8735,7 @@
           <ShowInInventory>true</ShowInInventory>
           <NumberInGrid>2</NumberInGrid>
           <Enabled>true</Enabled>
-          <Capacity>1.006742</Capacity>
+          <Capacity>0.774569</Capacity>
         </MyObjectBuilder_CubeBlock>
         <MyObjectBuilder_CubeBlock xsi:type="MyObjectBuilder_CubeBlock">
           <SubtypeName>LargeBlockArmorSlope2Base</SubtypeName>
@@ -8780,7 +8790,7 @@
                 <Component xsi:type="MyObjectBuilder_Inventory">
                   <Items>
                     <MyObjectBuilder_InventoryItem>
-                      <Amount>1.019244</Amount>
+                      <Amount>0.786606</Amount>
                       <PhysicalContent xsi:type="MyObjectBuilder_Ingot">
                         <SubtypeName>Uranium</SubtypeName>
                       </PhysicalContent>
@@ -8805,7 +8815,7 @@
                   <TimerEnabled>true</TimerEnabled>
                   <RemoveEntityOnTimer>false</RemoveEntityOnTimer>
                   <TimerType>Frame100</TimerType>
-                  <FramesFromLastTrigger>800</FramesFromLastTrigger>
+                  <FramesFromLastTrigger>0</FramesFromLastTrigger>
                   <TimerTickInFrames>900</TimerTickInFrames>
                   <IsSessionUpdateEnabled>false</IsSessionUpdateEnabled>
                 </Component>
@@ -8819,7 +8829,7 @@
           <ShowInInventory>true</ShowInInventory>
           <NumberInGrid>3</NumberInGrid>
           <Enabled>true</Enabled>
-          <Capacity>1.019244</Capacity>
+          <Capacity>0.786606</Capacity>
         </MyObjectBuilder_CubeBlock>
         <MyObjectBuilder_CubeBlock xsi:type="MyObjectBuilder_CubeBlock">
           <SubtypeName>LargeBlockArmorSlope2Base</SubtypeName>
@@ -9214,7 +9224,7 @@
                   <TimerEnabled>true</TimerEnabled>
                   <RemoveEntityOnTimer>false</RemoveEntityOnTimer>
                   <TimerType>Frame10</TimerType>
-                  <FramesFromLastTrigger>50</FramesFromLastTrigger>
+                  <FramesFromLastTrigger>30</FramesFromLastTrigger>
                   <TimerTickInFrames>60</TimerTickInFrames>
                   <IsSessionUpdateEnabled>false</IsSessionUpdateEnabled>
                 </Component>
@@ -9620,7 +9630,7 @@
           <ShowInInventory>true</ShowInInventory>
           <NumberInGrid>1</NumberInGrid>
           <Enabled>true</Enabled>
-          <CurrentStoredPower>2.99762821</CurrentStoredPower>
+          <CurrentStoredPower>2.99827242</CurrentStoredPower>
           <ProducerEnabled>true</ProducerEnabled>
           <MaxStoredPower>0</MaxStoredPower>
           <SemiautoEnabled>false</SemiautoEnabled>
@@ -9654,7 +9664,7 @@
           <ShowInInventory>true</ShowInInventory>
           <NumberInGrid>2</NumberInGrid>
           <Enabled>true</Enabled>
-          <CurrentStoredPower>2.99762654</CurrentStoredPower>
+          <CurrentStoredPower>2.999728</CurrentStoredPower>
           <ProducerEnabled>true</ProducerEnabled>
           <MaxStoredPower>0</MaxStoredPower>
           <SemiautoEnabled>false</SemiautoEnabled>
@@ -9677,7 +9687,7 @@
           <ShowInInventory>true</ShowInInventory>
           <NumberInGrid>3</NumberInGrid>
           <Enabled>true</Enabled>
-          <CurrentStoredPower>2.994518</CurrentStoredPower>
+          <CurrentStoredPower>3</CurrentStoredPower>
           <ProducerEnabled>true</ProducerEnabled>
           <MaxStoredPower>0</MaxStoredPower>
           <SemiautoEnabled>false</SemiautoEnabled>
@@ -9718,7 +9728,7 @@
           <ShowInInventory>true</ShowInInventory>
           <NumberInGrid>4</NumberInGrid>
           <Enabled>true</Enabled>
-          <CurrentStoredPower>2.99628949</CurrentStoredPower>
+          <CurrentStoredPower>2.99783754</CurrentStoredPower>
           <ProducerEnabled>true</ProducerEnabled>
           <MaxStoredPower>0</MaxStoredPower>
           <SemiautoEnabled>false</SemiautoEnabled>
@@ -10854,7 +10864,7 @@
                   <TimerEnabled>true</TimerEnabled>
                   <RemoveEntityOnTimer>false</RemoveEntityOnTimer>
                   <TimerType>Frame10</TimerType>
-                  <FramesFromLastTrigger>50</FramesFromLastTrigger>
+                  <FramesFromLastTrigger>20</FramesFromLastTrigger>
                   <TimerTickInFrames>80</TimerTickInFrames>
                   <IsSessionUpdateEnabled>false</IsSessionUpdateEnabled>
                 </Component>
@@ -10930,7 +10940,7 @@
                   <TimerEnabled>true</TimerEnabled>
                   <RemoveEntityOnTimer>false</RemoveEntityOnTimer>
                   <TimerType>Frame10</TimerType>
-                  <FramesFromLastTrigger>50</FramesFromLastTrigger>
+                  <FramesFromLastTrigger>20</FramesFromLastTrigger>
                   <TimerTickInFrames>80</TimerTickInFrames>
                   <IsSessionUpdateEnabled>false</IsSessionUpdateEnabled>
                 </Component>
@@ -11027,7 +11037,7 @@
                   <TimerEnabled>true</TimerEnabled>
                   <RemoveEntityOnTimer>false</RemoveEntityOnTimer>
                   <TimerType>Frame10</TimerType>
-                  <FramesFromLastTrigger>50</FramesFromLastTrigger>
+                  <FramesFromLastTrigger>30</FramesFromLastTrigger>
                   <TimerTickInFrames>80</TimerTickInFrames>
                   <IsSessionUpdateEnabled>false</IsSessionUpdateEnabled>
                 </Component>
@@ -11091,7 +11101,7 @@
                   <TimerEnabled>true</TimerEnabled>
                   <RemoveEntityOnTimer>false</RemoveEntityOnTimer>
                   <TimerType>Frame10</TimerType>
-                  <FramesFromLastTrigger>70</FramesFromLastTrigger>
+                  <FramesFromLastTrigger>40</FramesFromLastTrigger>
                   <TimerTickInFrames>80</TimerTickInFrames>
                   <IsSessionUpdateEnabled>false</IsSessionUpdateEnabled>
                 </Component>
@@ -12597,7 +12607,7 @@
                   <TimerEnabled>true</TimerEnabled>
                   <RemoveEntityOnTimer>false</RemoveEntityOnTimer>
                   <TimerType>Frame10</TimerType>
-                  <FramesFromLastTrigger>10</FramesFromLastTrigger>
+                  <FramesFromLastTrigger>50</FramesFromLastTrigger>
                   <TimerTickInFrames>60</TimerTickInFrames>
                   <IsSessionUpdateEnabled>false</IsSessionUpdateEnabled>
                 </Component>
@@ -13242,7 +13252,7 @@
                 <Component xsi:type="MyObjectBuilder_Inventory">
                   <Items>
                     <MyObjectBuilder_InventoryItem>
-                      <Amount>0.886592</Amount>
+                      <Amount>0.65195</Amount>
                       <PhysicalContent xsi:type="MyObjectBuilder_Ingot">
                         <SubtypeName>Uranium</SubtypeName>
                       </PhysicalContent>
@@ -13281,7 +13291,7 @@
           <ShowInInventory>true</ShowInInventory>
           <NumberInGrid>4</NumberInGrid>
           <Enabled>true</Enabled>
-          <Capacity>0.886592</Capacity>
+          <Capacity>0.65195</Capacity>
         </MyObjectBuilder_CubeBlock>
         <MyObjectBuilder_CubeBlock xsi:type="MyObjectBuilder_CubeBlock">
           <SubtypeName>LargeBlockArmorSlope2Base</SubtypeName>
@@ -14334,7 +14344,7 @@
                   <TimerEnabled>true</TimerEnabled>
                   <RemoveEntityOnTimer>false</RemoveEntityOnTimer>
                   <TimerType>Frame10</TimerType>
-                  <FramesFromLastTrigger>10</FramesFromLastTrigger>
+                  <FramesFromLastTrigger>50</FramesFromLastTrigger>
                   <TimerTickInFrames>60</TimerTickInFrames>
                   <IsSessionUpdateEnabled>false</IsSessionUpdateEnabled>
                 </Component>
@@ -15364,8 +15374,8 @@
           <BuiltBy>144115188075855876</BuiltBy>
         </MyObjectBuilder_CubeBlock>
       </CubeBlocks>
-      <LinearVelocity x="-5.75342751" y="-4.906069" z="18.6916351" />
-      <AngularVelocity x="-1.833238E-05" y="-3.16186743E-05" z="0.000164986137" />
+      <LinearVelocity x="-5.776697" y="-4.975916" z="18.658165" />
+      <AngularVelocity x="-1.26251325E-06" y="-6.04593079E-05" z="7.41909244E-05" />
       <ConveyorLines>
         <MyObjectBuilder_ConveyorLine>
           <StartPosition x="0" y="17" z="29" />

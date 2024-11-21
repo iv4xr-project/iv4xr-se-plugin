@@ -1,6 +1,5 @@
 package onlineTestCaseGenerator;
 
-import eu.iv4xr.framework.mainConcepts.Iv4xrAgentState;
 import eu.iv4xr.framework.mainConcepts.TestAgent;
 import eu.iv4xr.framework.spatial.Vec3;
 import nl.uu.cs.aplib.mainConcepts.GoalStructure;
@@ -17,7 +16,7 @@ public class Solver {
 
     public GoalStructure use(TestAgent agent, String Type){
         if(Type.contains("Door")){
-            return UUGoalLib.interacted(agent);
+            return UUGoalLib.doorInteracted(agent);
         }else if (Type.contains("Assembler")){
             return SEQ(UUGoalLib.targetBlockOK(agent, e ->
                                     Type.equals(e.getStringProperty("blockType"))

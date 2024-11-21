@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <MyObjectBuilder_Checkpoint xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <CurrentSector x="0" y="0" z="0" />
-  <ElapsedGameTime>93887680000</ElapsedGameTime>
+  <ElapsedGameTime>94617440000</ElapsedGameTime>
   <SessionName>myworld-3 with open door</SessionName>
   <SpectatorPosition>
-    <Position x="18.779428348906475" y="-3.0129752447234388" z="56.906262603949031" />
+    <Position x="18.779428348906475" y="-3.0129752447234424" z="56.906262603949038" />
     <Forward x="0.919225633" y="-0.343728274" z="0.192029014" />
     <Up x="0.0164093282" y="0.520737052" z="0.853559434" />
     <Orientation>
@@ -21,7 +21,7 @@
   <ControlledObject>79682662949435839</ControlledObject>
   <Password />
   <Description />
-  <LastSaveTime>2024-09-28T11:00:05.0982495+02:00</LastSaveTime>
+  <LastSaveTime>2024-11-21T16:04:12.0669314+01:00</LastSaveTime>
   <SpectatorDistance>2.5</SpectatorDistance>
   <WorkshopId xsi:nil="true" />
   <WorkshopId1 xsi:nil="true" />
@@ -33,14 +33,14 @@
         <Index>0</Index>
         <Item />
         <Data xsi:type="MyObjectBuilder_ToolbarItemWeapon">
-          <DefinitionId Type="MyObjectBuilder_PhysicalGunObject" Subtype="WelderItem" />
+          <DefinitionId Type="MyObjectBuilder_PhysicalGunObject" Subtype="AngleGrinderItem" />
         </Data>
       </Slot>
       <Slot>
         <Index>1</Index>
         <Item />
         <Data xsi:type="MyObjectBuilder_ToolbarItemWeapon">
-          <DefinitionId Type="MyObjectBuilder_PhysicalGunObject" Subtype="AngleGrinderItem" />
+          <DefinitionId Type="MyObjectBuilder_PhysicalGunObject" Subtype="WelderItem" />
         </Data>
       </Slot>
       <Slot>
@@ -317,11 +317,11 @@
       <Model>Default_Astronaut_Female</Model>
       <ColorMask x="0.141666666" y="-0.03804356" z="0.5376748" />
       <BlockLimitModifier>0</BlockLimitModifier>
-      <LastLoginTime>2024-09-28T10:58:40.9586459+02:00</LastLoginTime>
+      <LastLoginTime>2024-11-21T16:03:59.2969079+01:00</LastLoginTime>
       <SavedCharacters>
         <long>79682662949435839</long>
       </SavedCharacters>
-      <LastLogoutTime>2024-09-28T11:00:05.0982495+02:00</LastLogoutTime>
+      <LastLogoutTime>2024-11-21T16:04:12.0669314+01:00</LastLogoutTime>
       <RespawnShips />
       <LastDeathPosition>
         <X>22.466330109578646</X>
@@ -336,7 +336,7 @@
       <DisplayName>Space Pirates</DisplayName>
       <CharacterEntityId>0</CharacterEntityId>
       <BlockLimitModifier>0</BlockLimitModifier>
-      <LastLoginTime>2024-09-28T10:58:41.1396472+02:00</LastLoginTime>
+      <LastLoginTime>2024-11-21T16:03:59.4541382+01:00</LastLoginTime>
       <SavedCharacters />
       <LastLogoutTime>0001-01-01T00:00:00</LastLogoutTime>
       <RespawnShips />
@@ -367,14 +367,14 @@
                 <Index>0</Index>
                 <Item />
                 <Data xsi:type="MyObjectBuilder_ToolbarItemWeapon">
-                  <DefinitionId Type="MyObjectBuilder_PhysicalGunObject" Subtype="WelderItem" />
+                  <DefinitionId Type="MyObjectBuilder_PhysicalGunObject" Subtype="AngleGrinderItem" />
                 </Data>
               </Slot>
               <Slot>
                 <Index>1</Index>
                 <Item />
                 <Data xsi:type="MyObjectBuilder_ToolbarItemWeapon">
-                  <DefinitionId Type="MyObjectBuilder_PhysicalGunObject" Subtype="AngleGrinderItem" />
+                  <DefinitionId Type="MyObjectBuilder_PhysicalGunObject" Subtype="WelderItem" />
                 </Data>
               </Slot>
               <Slot>
@@ -433,7 +433,7 @@
             <CameraControllerSettings EntityId="79682662949435839">
               <IsFirstPerson>false</IsFirstPerson>
               <Distance>2.5</Distance>
-              <HeadAngle x="-12.7799139" y="0" />
+              <HeadAngle x="-7.987444" y="0" />
             </CameraControllerSettings>
           </EntityCameraData>
           <BuildColorSlots>
@@ -681,7 +681,7 @@
     </MyObjectBuilder_SessionComponent>
     <MyObjectBuilder_SessionComponent xsi:type="MyObjectBuilder_SectorWeatherComponent">
       <BaseSunDirection x="0.339467347" y="0.709795356" z="-0.617213368" />
-      <SunDirectionNormalized x="-0.939244032" y="-0.2362158" z="-0.249043956" />
+      <SunDirectionNormalized x="-0.9391549" y="-0.2783339" z="-0.20129168" />
       <WeatherPlanetData />
     </MyObjectBuilder_SessionComponent>
     <MyObjectBuilder_SessionComponent xsi:type="MyObjectBuilder_SessionComponentAssetModifiers" />
@@ -699,7 +699,7 @@
       <GPSForRemoval />
       <EntitiesForRemoval>
         <MyEntityForRemoval>
-          <TimeLeft>417</TimeLeft>
+          <TimeLeft>340</TimeLeft>
           <EntityId>77987883117920448</EntityId>
         </MyEntityForRemoval>
       </EntitiesForRemoval>
@@ -6835,35 +6835,17 @@
           <MultilineData>
             <Completed>false</Completed>
             <IsObjective>false</IsObjective>
-            <Data>Your jetpack runs on hydrogen fuel. Be careful not to run out of it while flying.</Data>
-            <CharactersDisplayed>-1</CharactersDisplayed>
-          </MultilineData>
-          <MultilineData>
-            <Completed>true</Completed>
-            <IsObjective>true</IsObjective>
-            <Data>Toggle jetpack with [X].</Data>
+            <Data>You're hurt. You can heal by interacting with the console of a powered medical bay or survival kit.</Data>
             <CharactersDisplayed>-1</CharactersDisplayed>
           </MultilineData>
           <MultilineData>
             <Completed>false</Completed>
             <IsObjective>true</IsObjective>
-            <Data>[Space] and [C] to fly up and down.</Data>
-            <CharactersDisplayed>-1</CharactersDisplayed>
-          </MultilineData>
-          <MultilineData>
-            <Completed>false</Completed>
-            <IsObjective>true</IsObjective>
-            <Data>Use [W] [S] [A] [D] to move and strafe.</Data>
-            <CharactersDisplayed>-1</CharactersDisplayed>
-          </MultilineData>
-          <MultilineData>
-            <Completed>false</Completed>
-            <IsObjective>true</IsObjective>
-            <Data>Press [Q] and [E] to roll.</Data>
-            <CharactersDisplayed>-1</CharactersDisplayed>
+            <Data>Replenish your health.</Data>
+            <CharactersDisplayed>114</CharactersDisplayed>
           </MultilineData>
         </LineData>
-        <Title>Good.bot: Jetpack</Title>
+        <Title>Good.bot: Health</Title>
         <Visible>true</Visible>
         <IsUsedByVisualScripting>false</IsUsedByVisualScripting>
       </Questlog>
@@ -6874,7 +6856,7 @@
     </MyObjectBuilder_SessionComponent>
     <MyObjectBuilder_SessionComponent xsi:type="MyObjectBuilder_AntennaSessionComponent" />
     <MyObjectBuilder_SessionComponent xsi:type="MyObjectBuilder_EnvironmentBotSpawningSystem">
-      <TimeSinceLastEventInMs>111733</TimeSinceLastEventInMs>
+      <TimeSinceLastEventInMs>67716</TimeSinceLastEventInMs>
     </MyObjectBuilder_SessionComponent>
     <MyObjectBuilder_SessionComponent xsi:type="MyObjectBuilder_TradingManager" />
     <MyObjectBuilder_SessionComponent xsi:type="MyObjectBuilder_CoordinateSystem">

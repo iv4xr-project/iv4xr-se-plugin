@@ -57,7 +57,7 @@ public class Test_InteractingWithDoor {
                         20f,
                         0.1f))
                 ,
-                UUGoalLib.interacted(agent)
+                UUGoalLib.doorInteracted(agent)
         );
         Thread.sleep(5000);
         test_Goal(agent, agentAndState.snd, G) ;

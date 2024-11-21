@@ -128,14 +128,16 @@ public class Test_SimpleInteractionsWithSE {
         console(">> velo:" + obs.velocity) ;
 
         int i = 0 ;
-        while(i<20) {
+        while(i<40) {
             //obs = theEnv.moveForward(5f) ;
-            obs = theEnv.moveForward() ;
+            //obs = theEnv.moveForward() ;
             if (i<20) {
+                // rotating the engineer's orientation:
                 theEnv.getController().getCharacter().moveAndRotate(new Vec3F(0,0,0), new Vec2F(0,20),0,1) ;
             }
             else {
-                theEnv.getController().getCharacter().moveAndRotate(new Vec3F(0,0,-36), new Vec2F(0,0),0,1) ;
+                // making it walks (in this case backward):
+                theEnv.getController().getCharacter().moveAndRotate(new Vec3F(0,0,1), new Vec2F(0,0),0,1) ;
             }
             obs = theEnv.observe() ;
             primObs = theEnv.getController().getObserver().observe() ;

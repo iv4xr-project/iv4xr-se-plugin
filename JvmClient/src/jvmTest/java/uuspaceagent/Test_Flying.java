@@ -45,8 +45,8 @@ public class Test_Flying {
         console("*** start test...") ;
         //Thread.sleep(5000);
         //Vec3 dest = new Vec3(10,-5,30) ;
-        Vec3 dest = new Vec3(10,5,53.7f) ;
-        //Vec3 dest = new Vec3(25,-5,60) ;
+        //Vec3 dest = new Vec3(10,5,53.7f) ;
+        Vec3 dest = new Vec3(25,-5,60) ;
         //Vec3 dest = new Vec3(10,3,56) ;
         var agentAndState = deployAgent();
         var agent = agentAndState.fst ;

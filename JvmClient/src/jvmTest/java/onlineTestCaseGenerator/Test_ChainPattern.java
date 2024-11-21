@@ -80,7 +80,7 @@ public class Test_ChainPattern {
                         20f,
                         0.1f))
                 ,
-                UUGoalLib.interacted(agent),
+                UUGoalLib.doorInteracted(agent),
                 //look for the second assembler
                 DEPLOY(agent, UUGoalLib.closeTo(agent,
                         "BasicAssembler",

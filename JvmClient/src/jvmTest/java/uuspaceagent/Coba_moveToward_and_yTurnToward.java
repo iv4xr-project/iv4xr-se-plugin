@@ -71,12 +71,12 @@ public class Coba_moveToward_and_yTurnToward {
 
         console("####  to x+");
         state.updateState(state.agentId);
-        Vec3 destination = new Vec3(10.2f,-5f,54.14f) ;
+        Vec3 destination = new Vec3(11.5f,-5f,54.14f) ;
         moveTo(state, destination) ;
 
         console("####  Moving to z-:");
         state.updateState(state.agentId);
-        destination = new Vec3(10.2f,-5f,53.14f) ;
+        destination = new Vec3(10.2f,-5f,52.15f) ;
         moveTo(state, destination) ;
     }
 

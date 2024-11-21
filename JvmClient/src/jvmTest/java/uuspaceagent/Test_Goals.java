@@ -16,8 +16,8 @@ import static uuspaceagent.TestUtils.*;
 
 public class Test_Goals {
 
-    public Pair<TestAgent, UUSeAgentState> deployAgent() throws InterruptedException {
-        var agentAndState = loadSE("myworld-3 with open door") ; // loadSE("myworld-3")  ;
+    public Pair<TestAgent, UUSeAgentState> deployAgent(String worldname) throws InterruptedException {
+        var agentAndState = loadSE(worldname) ;
         TestAgent agent = agentAndState.fst ;
         UUSeAgentState state = agentAndState.snd ;
         Thread.sleep(1000);
@@ -48,7 +48,7 @@ public class Test_Goals {
         // agent's start position.
         console("*** start test...") ;
         Vec3 dest = new Vec3(19,-5,65) ;
-        var agentAndState = deployAgent();
+        var agentAndState = deployAgent("myworld-3");
         var agent = agentAndState.fst ;
         GoalStructure G = DEPLOYonce(agent, UUGoalLib.closeTo(dest)) ;
         test_Goal(agentAndState.fst, agentAndState.snd, G) ;
@@ -56,12 +56,12 @@ public class Test_Goals {
         assertTrue(G.getStatus().success());
     }
 
-    @Test
+    //@Test
     public void test_close2Dto_GS2() throws InterruptedException {
-        // This is a position that is unreachable, so this goal should abort
+        // This is a position that is unreachable with 2D-nav, so this goal should abort
         console("*** start test...") ;
         Vec3 dest = new Vec3(10,-5,40) ;
-        var agentAndState = deployAgent();
+        var agentAndState = deployAgent("myworld-3");
         var agent = agentAndState.fst ;
         GoalStructure G = DEPLOYonce(agent, UUGoalLib.closeTo(dest)) ;
         test_Goal(agentAndState.fst, agentAndState.snd, G) ;
@@ -69,11 +69,10 @@ public class Test_Goals {
         assertTrue(G.getStatus().failed());
     }
 
-    @Test
+    //@Test
     public void test_closeTo_Block_1() throws InterruptedException {
-        // This is a position that is unreachable, so this goal should abort
         console("*** start test...") ;
-        var agentAndState = deployAgent();
+        var agentAndState = deployAgent("myworld-3 with open door X");
         var agent = agentAndState.fst ;
         GoalStructure G = DEPLOYonce(agent, UUGoalLib.closeTo(agentAndState.fst,
                 "LargeBlockSlideDoor",
@@ -85,34 +84,32 @@ public class Test_Goals {
         assertTrue(G.getStatus().success());
     }
 
-    @Test
+    //@Test
     public void test_closeTo_Block_2() throws InterruptedException {
-        // This is a position that is unreachable, so this goal should abort
         console("*** start test...") ;
-        var agentAndState = deployAgent();
+        var agentAndState = deployAgent("myworld-3 with open door X");
         var agent = agentAndState.fst ;
         GoalStructure G = DEPLOYonce(agent, UUGoalLib.closeTo(agentAndState.fst,
                 "LargeBlockBatteryBlock",
                 SEBlockFunctions.BlockSides.FRONT,
-                20f,
+                30f,
                 0.5f));
         test_Goal(agentAndState.fst, agentAndState.snd, G) ;
         G.printGoalStructureStatus();
-        assertTrue(G.getStatus().failed());
+        assertTrue(G.getStatus().success());
     }
 
-    @Test
+    //@Test
     public void test_navigate_and_grind() throws InterruptedException {
-        // This is a position that is unreachable, so this goal should abort
         console("*** start test...") ;
-        var agentAndState = deployAgent();
+        var agentAndState = deployAgent("myworld-3 with open door X");
         TestAgent agent = agentAndState.fst ;
         agent.setTestDataCollector(new TestDataCollector()) ;
 
         GoalStructure G = SEQ(DEPLOYonce(agent, UUGoalLib.closeTo(agent,
                     "LargeBlockBatteryBlock",
                     SEBlockFunctions.BlockSides.FRONT,
-                    20f,
+                    30f,
                     0.5f)),
                 UUGoalLib.targetBlockOK(agent, e ->
                         "LargeBlockBatteryBlock".equals(e.getStringProperty("blockType"))

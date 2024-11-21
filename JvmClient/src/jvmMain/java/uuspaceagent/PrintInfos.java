@@ -65,7 +65,7 @@ public class PrintInfos {
         var info = wm.elements.get(wm.agentId) ;
         z.append(", hdir:" + info.properties.get("orientationForward")) ;
         z.append(", vdir:" + info.properties.get("orientationUp")) ;
-        z.append(", health:" + info.properties.get("healthRatio")) ;
+        z.append(", health:" + info.properties.get("health")) ;
         z.append(", jet:" + info.properties.get("jetpackRunning")) ;
         return z.toString() ;
     }

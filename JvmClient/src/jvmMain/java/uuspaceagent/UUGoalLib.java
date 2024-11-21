@@ -155,6 +155,21 @@ public class UUGoalLib {
     }
 
 
+    /**
+     * Equip a tool in location k of tool-bar-0
+     */
+    public static GoalStructure toolEquiped(int k) {
+        return lift("Tool equiped",
+                action("equip a tool").do1((UUSeAgentState state) -> {
+                    state.env().equip(new ToolbarLocation(k,0));
+                    return true ;
+                })
+        ) ;
+    }
+    /**
+     * Equip grinder, assuming it is put in location-0 of the tool-bar-0.
+     * @return
+     */
     public static GoalStructure grinderEquiped() {
         return lift("Grinder equiped",
                   action("equip grinder").do1((UUSeAgentState state) -> {
@@ -164,9 +179,12 @@ public class UUGoalLib {
                 ) ;
     }
 
+    /**
+     * Unequip-tool (so switching to bare-hand).
+     */
     public static GoalStructure barehandEquiped() {
-        return lift("Grinder equiped",
-                action("equip grinder").do1((UUSeAgentState state) -> {
+        return lift("Barehand equiped",
+                action("equip barehand").do1((UUSeAgentState state) -> {
                     state.env().equip(new ToolbarLocation(0,9));
                     return true ;
                 })
@@ -212,6 +230,7 @@ public class UUGoalLib {
         Tactic success = action("success").do1((UUSeAgentState state) -> true).lift() ;
 
         return SEQ(
+           // hmm... why should we equip a tool if we just want to check the state of a bloc??
            grinderEquiped(),
            goal("target entity passes a check")
                    .toSolve(b -> true)
@@ -314,7 +333,9 @@ public class UUGoalLib {
             if(blocks.size()>0) return false;
             return true ;
     }
-    public static GoalStructure interacted(TestAgent agent) {
+
+
+    public static GoalStructure doorInteracted(TestAgent agent) {
 
         return  DEPLOY(agent, (UUSeAgentState state) -> {
 
@@ -330,8 +351,8 @@ public class UUGoalLib {
                     })
                     .withTactic(
                             SEQ(
-                            UUTacticLib.interacted( state,targetBlock)
-                            ,UUTacticLib.observe(state,targetBlock)
+                            UUTacticLib.doorInteracted( state,targetBlock)
+                            ,UUTacticLib.observeIfBlockIsOpen(state,targetBlock)
                             )
                     )
                     .lift() ;

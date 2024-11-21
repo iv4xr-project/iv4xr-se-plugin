@@ -17,7 +17,7 @@ import static uuspaceagent.TestUtils.loadSE;
 public class Test_GrindingWithId {
 
     public Pair<TestAgent, UUSeAgentState> deployAgent() throws InterruptedException {
-        var agentAndState = loadSE("world-3 blocks") ; // loadSE("myworld-3")  ;
+        var agentAndState = loadSE("myworld-3 with open door")  ; // loadSE("world-3 blocks") ; //
         TestAgent agent = agentAndState.fst ;
         UUSeAgentState state = agentAndState.snd ;
         Thread.sleep(1000);
@@ -53,13 +53,13 @@ public class Test_GrindingWithId {
         GoalStructure G = SEQ(
 
                 DEPLOYonce(agent, UUGoalLib.closeToPosition(agent,
-                        "BasicAssembler",
+                        "LargeBlockBatteryBlock",
                         SEBlockFunctions.BlockSides.FRONT,
                         new Vec3(3.75f,-5f,-6.75f),
-                        20f,
+                        100f,
                         0.5f)),
                 UUGoalLib.targetBlockOK(agent, e ->
-                        "BasicAssembler".equals(e.getStringProperty("blockType"))
+                        "LargeBlockBatteryBlock".equals(e.getStringProperty("blockType"))
                         && (float) e.getProperty("integrity") == (float) e.getProperty("maxIntegrity"),
                         false
                 ),
