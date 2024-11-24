@@ -6,6 +6,8 @@ import nl.uu.cs.aplib.AplibEDSL
 import nl.uu.cs.aplib.mainConcepts.Tactic
 import spaceEngineers.controller.extensions.distanceTo
 import spaceEngineers.iv4xr.navigation.NavigableSystem
+import spaceEngineers.model.CharacterMovementType
+import spaceEngineers.model.DefinitionId
 import spaceEngineers.model.ToolbarLocation
 import spaceEngineers.model.Vec3F
 
@@ -20,6 +22,18 @@ class TacticLib {
     fun buildBlock(blockType: String): Tactic {
         return AplibEDSL.action("buildBlock($blockType)").do1<SeAgentState, Any> { belief: SeAgentState ->
             belief.apply { seEnv.equipAndPlace(blockType) }
+        }.lift()
+    }
+
+    fun buildAssemblerBlock(blockType: String): Tactic {
+        return AplibEDSL.action("buildAssemblerBlock($blockType)").do1<SeAgentState, Any> { belief: SeAgentState ->
+            belief.apply {
+                val block = DefinitionId.assembler(blockType)
+                val toolbarLocation = ToolbarLocation(1, 0)
+                seEnv.context.blockTypeToToolbarLocation[block.type] = toolbarLocation
+                seEnv.controller.items.setToolbarItem(block, toolbarLocation)
+                seEnv.equipAndPlace(blockType)
+            }
         }.lift()
     }
 
@@ -49,6 +63,17 @@ class TacticLib {
         }.lift()
     }
 
+    fun equip(tool: String): Tactic {
+        return AplibEDSL.action("equip($tool)").do1 { belief: SeAgentState ->
+            belief.apply {
+                val toolId = DefinitionId.physicalGun(tool)
+                val toolbarLocation = ToolbarLocation(1, 0)
+                seEnv.controller.items.setToolbarItem(toolId, toolbarLocation)
+                seEnv.equip(toolbarLocation)
+            }
+        }.lift()
+    }
+
     fun sleep(millis: Long): Tactic {
         return AplibEDSL.action("sleep($millis)").do1 { belief: SeAgentState ->
             belief.apply {
@@ -66,6 +91,18 @@ class TacticLib {
     fun endUsingTool(): Tactic {
         return AplibEDSL.action("endUsingTool()").do1 { belief: SeAgentState ->
             belief.apply { seEnv.endUsingTool() }
+        }.lift()
+    }
+
+    fun useToolTime(
+        waitMillis: Long = 0
+    ): Tactic {
+        return AplibEDSL.action("useToolTime()").do1 { belief: SeAgentState ->
+            belief.apply {
+                seEnv.beginUsingTool()
+                Thread.sleep(waitMillis)
+                seEnv.endUsingTool()
+            }
         }.lift()
     }
 
@@ -100,6 +137,91 @@ class TacticLib {
         }.lift()
     }
 
+    fun dropItem(
+        itemName: String
+    ): Tactic {
+        return AplibEDSL.action("dropItem($itemName)").do1 { belief: SeAgentState ->
+            belief.apply {
+                // Open the inventory to enable the access to the elements
+                Thread.sleep(500)
+                belief.seEnv.controller.character.showInventory()
+                Thread.sleep(500)
+                belief.seEnv.controller.observer.observe()
+
+                // Check if the inventory contains the element
+                var inventory = belief.seEnv.controller.screens.terminal.inventory.data()
+                inventory.leftInventories.forEach { inv ->
+                    inv.items.forEach { item ->
+                        println("item($item)")
+                        if (item.id.toString().contains(itemName)) {
+                            // Select and drop the match item, handling exceptions
+                            // I think there is a BUG in the SE plugin
+                            // The itemId is increasing after first usage instead of restart is position count
+                            // This provokes second time the item is found the itemId is wrong
+                            try {
+                                Thread.sleep(500)
+                                belief.seEnv.controller.screens.terminal.inventory.left.selectItem(item.itemId)
+                                Thread.sleep(500)
+                                belief.seEnv.controller.screens.terminal.inventory.dropSelected()
+                                Thread.sleep(500)
+                            } catch (e: Exception) {
+                                println("Failed to drop item: ${item.itemId}, error: ${e.message}")
+                            }
+                        }
+                    }
+                }
+
+                // Element found, close the inventory terminal
+                belief.seEnv.controller.screens.terminal.close()
+                Thread.sleep(500)
+            }
+        }.lift()
+    }
+
+    fun cleanInventoryItems(
+        inventoryPos: Int = 5
+    ): Tactic {
+        return AplibEDSL.action("cleanInventoryItems()").do1 { belief: SeAgentState ->
+            belief.apply {
+                // Open the inventory to enable the access to the elements
+                Thread.sleep(500)
+                belief.seEnv.controller.character.showInventory()
+                Thread.sleep(500)
+                belief.seEnv.controller.observer.observe()
+
+                // Adjusted logic to repeatedly remove selected item until there are no items
+                var inventory = belief.seEnv.controller.screens.terminal.inventory.data()
+                var itemRemoved: Boolean
+                do {
+                    itemRemoved = false
+                    inventory.leftInventories.forEach { inv ->
+                        val item = inv.items.find { it.itemId > inventoryPos }
+                        if (item != null) {
+                            try {
+                                println("Attempting to remove item(${item.itemId})")
+                                Thread.sleep(500)
+                                belief.seEnv.controller.screens.terminal.inventory.left.selectItem(inventoryPos + 1)
+                                Thread.sleep(500)
+                                belief.seEnv.controller.screens.terminal.inventory.dropSelected()
+                                Thread.sleep(500)
+                                itemRemoved = true
+                            } catch (e: Exception) {
+                                println("Failed to drop item: ${item.itemId}, error: ${e.message}")
+                            }
+                        }
+                    }
+                    // Refresh inventory after each removal
+                    belief.seEnv.controller.observer.observe()
+                    inventory = belief.seEnv.controller.screens.terminal.inventory.data()
+                } while (itemRemoved)
+
+                // Close the inventory terminal
+                belief.seEnv.controller.screens.terminal.close()
+                Thread.sleep(500)
+            }
+        }.lift()
+    }
+
     fun setHelmet(
         enabled: Boolean,
         waitMillis: Long = 0
@@ -115,6 +237,20 @@ class TacticLib {
     fun closeTerminal(): Tactic {
         return AplibEDSL.action("closeTerminal()").do1 { belief: SeAgentState ->
             belief.apply { seEnv.closeTerminal() }
+        }.lift()
+    }
+
+    fun rotateMilliseconds(
+        milliseconds: Long
+    ): Tactic {
+        return AplibEDSL.action("rotateMilliseconds($milliseconds)").do1 { belief: SeAgentState ->
+            belief.apply {
+                val navigableSystem = NavigableSystem(seEnv.controller, seEnv.controller.observer)
+
+                runBlocking {
+                    navigableSystem.rotateMilliseconds(milliseconds)
+                }
+            }
         }.lift()
     }
 
@@ -138,7 +274,8 @@ class TacticLib {
      */
     fun navigateToBlock(
         desiredBlock: String,
-        closestDistance: Float,
+        closestDistance: Float = 3f,
+        movementType: CharacterMovementType = CharacterMovementType.RUN,
         distancePathTolerance: Float = 1.2f
     ): Tactic {
         return AplibEDSL.action("navigateToBlock($desiredBlock)").do1 { belief: SeAgentState ->
@@ -159,7 +296,12 @@ class TacticLib {
                     val navigablePath = navigableSystem.getClosestPathToDesiredBlock(closestDistance)
 
                     runBlocking {
-                        navigableSystem.navigatePath(navigableGraph, navigablePath, distancePathTolerance)
+                        navigableSystem.navigatePath(
+                            navigableGraph = navigableGraph,
+                            navigablePath = navigablePath,
+                            movementType = movementType,
+                            distancePathTolerance = distancePathTolerance
+                        )
                     }
                 }
             }

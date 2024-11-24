@@ -31,6 +31,7 @@ data class DefinitionId(
         const val REACTOR = "Reactor"
         const val GRAVITY_GENERATOR = "GravityGenerator"
         const val MEDICAL_ROOM = "MedicalRoom"
+        const val ASSEMBLER = "Assembler"
 
         fun door(type: String): DefinitionId {
             return create(DOOR, type)
@@ -71,6 +72,10 @@ data class DefinitionId(
 
         fun ingot(type: String): DefinitionId {
             return create(INGOT, type)
+        }
+
+        fun assembler(type: String): DefinitionId {
+            return create(ASSEMBLER, type)
         }
 
         fun create(id: String, type: String): DefinitionId {

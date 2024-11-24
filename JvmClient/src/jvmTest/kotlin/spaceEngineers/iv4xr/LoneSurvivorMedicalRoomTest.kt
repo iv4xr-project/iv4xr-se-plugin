@@ -46,7 +46,11 @@ class LoneSurvivorMedicalRoomTest {
             "MedicalRoom",
             5f, // Maximum distance allowed
             tactic = SEQ(
-                TacticLib().navigateToBlock("MedicalRoom", 5f, 3f),
+                TacticLib().navigateToBlock(
+                    desiredBlock = "MedicalRoom",
+                    closestDistance = 5f,
+                    distancePathTolerance = 3f
+                ),
                 TacticLib().rotateToBlock("MedicalRoom")
             )
         )

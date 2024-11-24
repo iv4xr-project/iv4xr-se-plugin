@@ -3,6 +3,7 @@ package spaceEngineers.iv4xr.navigation
 import eu.iv4xr.framework.extensions.pathfinding.AStar
 import spaceEngineers.controller.Observer
 import spaceEngineers.controller.SpaceEngineers
+import spaceEngineers.controller.extensions.distanceTo
 import spaceEngineers.model.CharacterMovementType
 import spaceEngineers.model.Vec3F
 import spaceEngineers.model.extensions.allBlocks
@@ -19,10 +20,10 @@ class NavigableSystem(
     val observer: Observer
 ) {
 
-    private val navGraph = observer.navigationGraph(observer.observeBlocks().largestGrid().id)
     private var desiredBlockPosition = Vec3F(0, 0, 0)
 
     fun getNavigableGraph(): NavigableGraph {
+        val navGraph = observer.navigationGraph(observer.observeBlocks().largestGrid().id)
         return NavigableGraph(navGraph)
     }
 
@@ -35,11 +36,16 @@ class NavigableSystem(
     ): Vec3F {
         // Reset position values
         desiredBlockPosition = Vec3F(0, 0, 0)
+        var minDistance = Float.MAX_VALUE // Initialize with a very large value
 
         for (block in observer.observeBlocks().allBlocks) {
             if (desiredBlock in block.definitionId.toString()) {
-                desiredBlockPosition = block.position
-                return desiredBlockPosition
+                val distance = observer.distanceTo(block.position)
+                // Check if this block is closer than the previously found one
+                if (distance < minDistance) {
+                    minDistance = distance
+                    desiredBlockPosition = block.position
+                }
             }
         }
 
@@ -53,6 +59,7 @@ class NavigableSystem(
         var reachableNode = ""
         var currentClosestDistance = closestDistance
 
+        val navGraph = observer.navigationGraph(observer.observeBlocks().largestGrid().id)
         val richNavGraph = navGraph.toRichGraph()
         richNavGraph.nodeMap.forEach { entry ->
             val distance = entry.value.data.distanceTo(desiredBlockPosition)
@@ -87,6 +94,18 @@ class NavigableSystem(
         }
     }
 
+    fun rotateMilliseconds(
+        milliseconds: Long
+    ) {
+        val movement = VectorMovement(spaceEngineers)
+        val startTime = System.currentTimeMillis()
+
+        // Continue rotating while within the time limit
+        while ((System.currentTimeMillis() - startTime) < milliseconds) {
+            movement.rotate(RotationDirection.RIGHT, 3)
+        }
+    }
+
     private fun targetBlockFound(
         desiredBlock: String
     ): Boolean {
@@ -96,6 +115,7 @@ class NavigableSystem(
     suspend fun navigatePath(
         navigableGraph: NavigableGraph,
         navigablePath: List<NodeId>,
+        movementType: CharacterMovementType = CharacterMovementType.RUN,
         distancePathTolerance: Float = 1.2f
     ) {
         val navigator = CharacterNavigation(spaceEngineers = spaceEngineers, pathFinder = Iv4XRAStarPathFinder())
@@ -109,7 +129,7 @@ class NavigableSystem(
             println("Next navigatePath node: ${navigableGraph.node(nodeId).data}")
             navigator.moveInLine(
                 navigableGraph.node(nodeId).data,
-                movementType = CharacterMovementType.RUN,
+                movementType = movementType,
                 distanceTolerance = distancePathTolerance,
                 timeout = 10.seconds
             )

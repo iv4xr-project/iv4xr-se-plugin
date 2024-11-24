@@ -14,10 +14,10 @@ import nl.uu.cs.aplib.mainConcepts.GoalStructure
 import nl.uu.cs.aplib.mainConcepts.ProgressStatus
 import spaceEngineers.controller.ContextControllerWrapper
 import spaceEngineers.controller.JvmSpaceEngineersBuilder
-import spaceEngineers.controller.SpaceEngineers
 import spaceEngineers.controller.SpaceEngineersTestContext
 import spaceEngineers.iv4xr.goal.GoalBuilder
 import spaceEngineers.iv4xr.goal.TacticLib
+import spaceEngineers.model.CharacterMovementType
 import spaceEngineers.model.Vec3F
 import spaceEngineers.model.extensions.allBlocks
 import java.io.File
@@ -86,14 +86,35 @@ class SeScenarioStepsDefinition {
 
     @When("the agent navigates to the block {string}")
     fun agentNavigatesToBlock(blockType: String) {
-        val closestDistance = if (is1x1Block(blockType)) 3f else 5f
+        val closestDistance = if (is1x1Block(blockType)) 3.2f else 5f
         val distancePathTolerance = if (is1x1Block(blockType)) 1.2f else 3f
 
         val goalStructure: GoalStructure = SEQ(
             GoalBuilder().navigateNearToBlock(
                 blockType,
                 closestDistance,
-                tactic = TacticLib().navigateToBlock(blockType, closestDistance, distancePathTolerance)
+                tactic = TacticLib().navigateToBlock(
+                    desiredBlock = blockType,
+                    closestDistance = closestDistance,
+                    movementType = CharacterMovementType.RUN,
+                    distancePathTolerance = distancePathTolerance
+                )
+            )
+        )
+
+        val status = executeGoal(goalStructure)
+        assertTrue(status.success())
+    }
+
+    @When("the agent navigates to the assembler block {string}")
+    fun agentNavigatesToAssemblerBlock(blockType: String) {
+        val goalStructure: GoalStructure = SEQ(
+            GoalBuilder().navigateNearToBlock(
+                blockType,
+                tactic = TacticLib().navigateToBlock(
+                    desiredBlock = blockType,
+                    movementType = CharacterMovementType.RUN
+                )
             )
         )
 
@@ -140,10 +161,82 @@ class SeScenarioStepsDefinition {
     }
 
     @When("the agent uses the terminal {long} milliseconds")
-    fun agentContinuouslyUses(milliseconds: Long) {
+    fun agentContinuouslyUsesTerminal(milliseconds: Long) {
         val goalStructure: GoalStructure = SEQ(
             GoalBuilder().alwaysSolved(
                 tactic = TacticLib().continuousUse(milliseconds)
+            ),
+        )
+
+        val status = executeGoal(goalStructure)
+        assertTrue(status.success())
+    }
+
+    @When("the agent equips the tool {string}")
+    fun agentEquipsTool(tool: String) {
+        val goalStructure: GoalStructure = SEQ(
+            GoalBuilder().alwaysSolved(
+                tactic = TacticLib().equip(tool)
+            ),
+        )
+
+        val status = executeGoal(goalStructure)
+        assertTrue(status.success())
+    }
+
+    @When("the agent uses the tool {long} milliseconds")
+    fun agentContinuouslyUsesTool(milliseconds: Long) {
+        val goalStructure: GoalStructure = SEQ(
+            GoalBuilder().alwaysSolved(
+                tactic = TacticLib().useToolTime(milliseconds)
+            ),
+        )
+
+        val status = executeGoal(goalStructure)
+        assertTrue(status.success())
+    }
+
+    @When("the agent drops the item {string} from the inventory")
+    fun agentDropsItemFromInventory(item: String) {
+        val goalStructure: GoalStructure = SEQ(
+            GoalBuilder().alwaysSolved(
+                tactic = TacticLib().dropItem(item)
+            ),
+        )
+
+        val status = executeGoal(goalStructure)
+        assertTrue(status.success())
+    }
+
+    @When("the agent drops all the items from the inventory")
+    fun agentDropsItemFromInventory() {
+        val goalStructure: GoalStructure = SEQ(
+            GoalBuilder().alwaysSolved(
+                tactic = TacticLib().cleanInventoryItems()
+            ),
+        )
+
+        val status = executeGoal(goalStructure)
+        assertTrue(status.success())
+    }
+
+    @When("the agent rotates {long} milliseconds")
+    fun agentRotates(milliseconds: Long) {
+        val goalStructure: GoalStructure = SEQ(
+            GoalBuilder().alwaysSolved(
+                tactic = TacticLib().rotateMilliseconds(milliseconds)
+            ),
+        )
+
+        val status = executeGoal(goalStructure)
+        assertTrue(status.success())
+    }
+
+    @When("the agent builds the assembler block {string}")
+    fun agentBuildsAssemblerBlock(blockType: String) {
+        val goalStructure: GoalStructure = SEQ(
+            GoalBuilder().alwaysSolved(
+                tactic = TacticLib().buildAssemblerBlock(blockType)
             ),
         )
 
@@ -183,6 +276,47 @@ class SeScenarioStepsDefinition {
         val goalStructure: GoalStructure = SEQ(
             GoalBuilder().agentHealthIsAbove(
                 percentage,
+                tactic = TacticLib().doNothing()
+            ),
+        )
+
+        val status = executeGoal(goalStructure)
+        assertTrue(status.success())
+    }
+
+    @Then("the agent inventory contains more than {int} units of the item {string}")
+    fun agentInventoryContainsUnitsItem(units: Int, item: String) {
+        val goalStructure: GoalStructure = SEQ(
+            GoalBuilder().inventoryContainsItem(
+                item,
+                units,
+                tactic = TacticLib().doNothing()
+            ),
+        )
+
+        val status = executeGoal(goalStructure)
+        assertTrue(status.success())
+    }
+
+    @Then("the agent inventory does not contain the item {string}")
+    fun agentInventoryDoesNotContain(item: String) {
+        val goalStructure: GoalStructure = SEQ(
+            GoalBuilder().inventoryDoesNotContainItem(
+                item,
+                tactic = TacticLib().doNothing()
+            ),
+        )
+
+        val status = executeGoal(goalStructure)
+        assertTrue(status.success())
+    }
+
+    @Then("the integrity of block {string} is above {double} percentage")
+    fun blockIntegrityIsAbove(blockType: String, integrity: Double) {
+        val goalStructure: GoalStructure = SEQ(
+            GoalBuilder().typeBuiltBlockIntegrityIsAbove(
+                blockType,
+                integrity / 100,
                 tactic = TacticLib().doNothing()
             ),
         )

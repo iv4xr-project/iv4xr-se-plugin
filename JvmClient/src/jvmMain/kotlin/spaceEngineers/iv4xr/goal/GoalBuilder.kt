@@ -220,7 +220,7 @@ class GoalBuilder(
         tactic: Tactic = tactics.doNothing()
     ): GoalStructure {
         Thread.sleep(500)
-        return Goal("lastBuiltBlockIsAtPercentageIntegrity($percentage)")
+        return Goal("typeBuiltBlockIntegrityCheck($percentage)")
             .toSolve { belief: SeAgentState ->
                 belief.seEnv.run {
                     belief.seEnv.controller.observer.observeBlocks().allBlocks.find { blockType in it.definitionId.toString() }
@@ -261,6 +261,106 @@ class GoalBuilder(
         return goal.lift()
     }
 
+    fun terminalContainsElement(
+        element: String,
+        tactic: Tactic = tactics.doNothing()
+    ): GoalStructure.PrimitiveGoal {
+        val goal = Goal("terminalContainsElement($element)")
+            .toSolve { belief: SeAgentState ->
+                if (belief.seEnv.controller.screens.terminal.inventory != null) {
+                    var inventory = belief.seEnv.controller.screens.terminal.inventory.data()
+                    inventory.rightInventories.forEach { inv ->
+                        inv.items.forEach { item ->
+                            if (item.id.toString().contains(element)) {
+                                return@toSolve true
+                            }
+                        }
+                    }
+                }
+                return@toSolve false
+            }
+            .withTactic(
+                tactic
+            )
+        return goal.lift()
+    }
+
+    fun inventoryContainsItem(
+        itemName: String,
+        numberElements: Int = 1,
+        tactic: Tactic = tactics.doNothing()
+    ): GoalStructure.PrimitiveGoal {
+        val goal = Goal("inventoryContainsItem($itemName) with numberElements($numberElements)")
+            .toSolve { belief: SeAgentState ->
+                // Open the inventory to enable the access to the elements
+                Thread.sleep(500)
+                belief.seEnv.controller.character.showInventory()
+                Thread.sleep(500)
+                belief.seEnv.controller.observer.observe()
+
+                // Check if the inventory contains the element
+                var inventory = belief.seEnv.controller.screens.terminal.inventory.data()
+                inventory.leftInventories.forEach { inv ->
+                    inv.items.forEach { item ->
+                        if (item.id.toString().contains(itemName) && item.amount >= numberElements) {
+                            // Element found, close the inventory terminal and accept goal solved
+                            belief.seEnv.controller.screens.terminal.close()
+                            Thread.sleep(500)
+                            return@toSolve true
+                        }
+                    }
+                }
+
+                // Element not found, close the inventory terminal and discard goal solved
+                belief.seEnv.controller.screens.terminal.close()
+                Thread.sleep(500)
+                return@toSolve false
+            }
+            .withTactic(
+                tactic
+            )
+        return goal.lift()
+    }
+
+    fun inventoryDoesNotContainItem(
+        itemName: String,
+        tactic: Tactic = tactics.doNothing()
+    ): GoalStructure.PrimitiveGoal {
+        val goal = Goal("inventoryDoesNotContainItem($itemName)")
+            .toSolve { belief: SeAgentState ->
+                // Open the inventory to enable access to the elements
+                Thread.sleep(500)
+                belief.seEnv.controller.character.showInventory()
+                Thread.sleep(500)
+                belief.seEnv.controller.observer.observe()
+
+                // Assume the item is not found initially
+                var itemFound = false
+
+                // Check the entire inventory
+                val inventory = belief.seEnv.controller.screens.terminal.inventory.data()
+                inventory.leftInventories.forEach { inv ->
+                    inv.items.forEach { item ->
+                        if (item.id.toString().contains(itemName)) {
+                            // Mark item as found
+                            itemFound = true
+                        }
+                    }
+                }
+
+                // Close the inventory terminal
+                belief.seEnv.controller.screens.terminal.close()
+                Thread.sleep(500)
+
+                // If item was found, the goal is not solved
+                return@toSolve !itemFound
+            }
+            .withTactic(
+                tactic
+            )
+        return goal.lift()
+    }
+
     fun aimToBlock(
         blockType: String,
         tactic: Tactic = tactics.doNothing()
@@ -287,24 +387,29 @@ class GoalBuilder(
 
     fun navigateNearToBlock(
         blockType: String,
-        goalDistance: Float = 3f,
+        goalDistance: Float = 3.2f,
         tactic: Tactic = tactics.doNothing()
     ): GoalStructure.PrimitiveGoal {
         val goal =
             Goal("navigateNearToBlock($blockType)")
                 .toSolve { belief: SeAgentState ->
-                    val foundBlock = belief.seEnv.controller.observer.observeBlocks().allBlocks.find {
+                    // Get all blocks matching the block type
+                    val matchingBlocks = belief.seEnv.controller.observer.observeBlocks().allBlocks.filter {
                         it.definitionId.toString().contains(blockType)
                     }
-                    val blockPosition = foundBlock?.position
-                    if (blockPosition != null) {
-                        val agentIsNearBlock = belief.seEnv.controller.observer.distanceTo(blockPosition) < goalDistance
+
+                    // Check if the agent is near any of the matching blocks
+                    for (block in matchingBlocks) {
+                        val blockPosition = block.position
+                        val agentIsNearBlock = blockPosition != null &&
+                            belief.seEnv.controller.observer.distanceTo(blockPosition) < goalDistance
                         if (agentIsNearBlock) {
-                            // Agent is near the block
+                            // Agent is near one of the blocks
                             return@toSolve true
                         }
                     }
-                    // Block not found or not close enough
+
+                    // No matching block is within the goal distance
                     false
                 }
                 .withTactic(
@@ -315,7 +420,7 @@ class GoalBuilder(
 
     fun navigateAimToBlock(
         blockType: String,
-        goalDistance: Float = 3f,
+        goalDistance: Float = 3.2f,
         tactic: Tactic = tactics.doNothing()
     ): GoalStructure {
         val navigateBlockGoal = navigateNearToBlock(blockType, goalDistance, tactic)

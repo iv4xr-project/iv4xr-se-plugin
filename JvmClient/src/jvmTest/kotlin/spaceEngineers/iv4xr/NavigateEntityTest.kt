@@ -2,13 +2,14 @@ package spaceEngineers.iv4xr
 
 import spaceEngineers.controller.extensions.distanceTo
 import spaceEngineers.iv4xr.navigation.NavigableSystem
+import spaceEngineers.model.CharacterMovementType
 import spaceEngineers.model.Vec3F
 import testhelp.MockOrRealGameTest
 import kotlin.test.Test
 import kotlin.test.assertNotEquals
 
 class NavigateEntityTest : MockOrRealGameTest(
-    inMockResourcesDirectory("NavigateEntityTest.txt") // scenarioId = "small",
+    inMockResourcesDirectory("NavigateEntityTest-navigateMaze.txt") // scenarioId = "small",
     // forceRealGame = true,
     // loadScenario = true
 ) {
@@ -24,7 +25,12 @@ class NavigateEntityTest : MockOrRealGameTest(
         val navigableGraph = navigableSystem.getNavigableGraph()
         val navigablePath = navigableSystem.getClosestPathToDesiredBlock(closestDistance)
 
-        navigableSystem.navigatePath(navigableGraph, navigablePath)
+        navigableSystem.navigatePath(
+            navigableGraph = navigableGraph,
+            navigablePath = navigablePath,
+            movementType = CharacterMovementType.WALK,
+            distancePathTolerance = 0.8f
+        )
 
         val finalDistance = observer.distanceTo(blockPosition)
         println("finalDistance: $finalDistance")
