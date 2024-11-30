@@ -11,19 +11,20 @@ import spaceEngineers.model.ToolbarLocation;
 import static uuspaceagent.TestUtils.loadSE;
 
 /**
- * For trying out grinding directly using primitives from SE.
+ * For trying to open a door directly using primitives from SE.
  */
 public class Coba_DoorInteract {
 
     @Test
     public void test() throws InterruptedException {
 
-        var state = loadSE("islanddswithdoors").snd;
+        //var state = loadSE("islanddswithdoors").snd;
+        var state = loadSE("myworld-3 atdoor").snd;
 
         state.updateState(state.agentId);
 
-        System.out.println("** Equiping grinder");
-        state.env().equip(new ToolbarLocation(0,0));
+        //System.out.println("** Equiping grinder");
+        //state.env().equip(new ToolbarLocation(0,0));
 
         state.updateState(state.agentId);
 
